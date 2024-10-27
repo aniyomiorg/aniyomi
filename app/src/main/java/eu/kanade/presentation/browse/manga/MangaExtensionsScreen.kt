@@ -219,7 +219,9 @@ private fun ExtensionContent(
                         when (it) {
                             is MangaExtension.Available -> onInstallExtension(it)
                             is MangaExtension.Installed -> onOpenExtension(it)
-                            is MangaExtension.Untrusted -> { trustState = it }
+                            is MangaExtension.Untrusted -> {
+                                trustState = it
+                            }
                         }
                     },
                     onLongClickItem = onLongClickItem,

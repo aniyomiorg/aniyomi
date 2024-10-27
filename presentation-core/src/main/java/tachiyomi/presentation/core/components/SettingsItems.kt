@@ -57,6 +57,7 @@ import kotlinx.coroutines.delay
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.core.common.preference.toggle
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.theme.header
@@ -66,8 +67,6 @@ object SettingsItemsPaddings {
     val Horizontal = 24.dp
     val Vertical = 10.dp
 }
-
-private const val DisabledContentAlpha = 0.38f
 
 @Composable
 fun HeadingItem(
@@ -314,7 +313,7 @@ fun TriStateItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.large),
     ) {
-        val stateAlpha = if (enabled && onClick != null) 1f else DisabledContentAlpha
+        val stateAlpha = if (enabled && onClick != null) 1f else DISABLED_ALPHA
 
         Icon(
             imageVector = when (state) {
@@ -327,7 +326,7 @@ fun TriStateItem(
                 MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = stateAlpha)
             } else {
                 when (onClick) {
-                    null -> MaterialTheme.colorScheme.onSurface.copy(alpha = DisabledContentAlpha)
+                    null -> MaterialTheme.colorScheme.onSurface.copy(alpha = DISABLED_ALPHA)
                     else -> MaterialTheme.colorScheme.primary
                 }
             },

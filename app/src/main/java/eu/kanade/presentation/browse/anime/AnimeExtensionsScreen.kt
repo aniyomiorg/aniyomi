@@ -217,7 +217,9 @@ private fun AnimeExtensionContent(
                         when (it) {
                             is AnimeExtension.Available -> onInstallExtension(it)
                             is AnimeExtension.Installed -> onOpenExtension(it)
-                            is AnimeExtension.Untrusted -> { trustState = it }
+                            is AnimeExtension.Untrusted -> {
+                                trustState = it
+                            }
                         }
                     },
                     onLongClickItem = onLongClickItem,

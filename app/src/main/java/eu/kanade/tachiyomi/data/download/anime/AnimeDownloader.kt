@@ -193,7 +193,7 @@ class AnimeDownloader(
     fun clearQueue() {
         cancelDownloaderJob()
 
-        _clearQueue()
+        internalClearQueue()
         notifier.dismissProgress()
     }
 
@@ -949,7 +949,7 @@ class AnimeDownloader(
         while (i < sortedParts.size - 1) {
             val part = sortedParts[i]
             result.add(part)
-            if (part.completed && !sortedParts[i+1].completed) {
+            if (part.completed && !sortedParts[i + 1].completed) {
                 part.completed = false // not completed anymore
                 part.range = sortedParts[i].range.copy(second = sortedParts[i + 1].range.second) // extends range
                 part.request = sortedParts[i + 1].request // Assumes that not completed parts have at least a Request
@@ -1321,7 +1321,7 @@ class AnimeDownloader(
         removeFromQueueIf { it.anime.id == anime.id }
     }
 
-    private fun _clearQueue() {
+    private fun internalClearQueue() {
         _queueState.update {
             it.forEach { download ->
                 if (download.status == AnimeDownload.State.DOWNLOADING ||
@@ -1347,7 +1347,7 @@ class AnimeDownloader(
         val wasRunning = isRunning
 
         pause()
-        _clearQueue()
+        internalClearQueue()
         addAllToQueue(downloads)
 
         if (wasRunning) {

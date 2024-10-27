@@ -83,6 +83,7 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
@@ -179,7 +180,7 @@ fun AnimeActionRow(
     onEditCategory: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
-    val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
+    val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = DISABLED_ALPHA)
 
     // TODO: show something better when using custom interval
     val nextUpdateDays = remember(nextUpdate) {

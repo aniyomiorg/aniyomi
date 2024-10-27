@@ -446,7 +446,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 val constraints = Constraints(
                     requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) {
                         NetworkType.UNMETERED
-                    } else { NetworkType.CONNECTED },
+                    } else {
+                        NetworkType.CONNECTED
+                    },
                     requiresCharging = DEVICE_CHARGING in restrictions,
                     requiresBatteryNotLow = true,
                 )

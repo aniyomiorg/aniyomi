@@ -8,7 +8,7 @@ import uy.kohesive.injekt.api.get
 
 class MangaExtensionRepoRestorer(
     private val mangaHandler: MangaDatabaseHandler = Injekt.get(),
-    private val getExtensionRepos: GetMangaExtensionRepo = Injekt.get()
+    private val getExtensionRepos: GetMangaExtensionRepo = Injekt.get(),
 ) {
 
     suspend operator fun invoke(
@@ -30,7 +30,7 @@ class MangaExtensionRepoRestorer(
                     backupRepo.name,
                     backupRepo.shortName,
                     backupRepo.website,
-                    backupRepo.signingKeyFingerprint
+                    backupRepo.signingKeyFingerprint,
                 )
             }
         }

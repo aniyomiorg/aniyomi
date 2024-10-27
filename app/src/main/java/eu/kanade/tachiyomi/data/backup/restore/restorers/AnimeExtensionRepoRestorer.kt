@@ -30,7 +30,7 @@ class AnimeExtensionRepoRestorer(
                     backupRepo.name,
                     backupRepo.shortName,
                     backupRepo.website,
-                    backupRepo.signingKeyFingerprint
+                    backupRepo.signingKeyFingerprint,
                 )
             }
         }

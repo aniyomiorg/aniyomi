@@ -197,7 +197,7 @@ class MangaDownloader(
     fun clearQueue() {
         cancelDownloaderJob()
 
-        _clearQueue()
+        internalClearQueue()
         notifier.dismissProgress()
     }
 
@@ -466,9 +466,10 @@ class MangaDownloader(
 
         // Try to find the image file
         val imageFile = tmpDir.listFiles()?.firstOrNull {
-            it.name!!.startsWith("$filename.") || it.name!!.startsWith(
-                "${filename}__001",
-            )
+            it.name!!.startsWith("$filename.") ||
+                it.name!!.startsWith(
+                    "${filename}__001",
+                )
         }
 
         try {
@@ -665,7 +666,7 @@ class MangaDownloader(
             chapter,
             urls,
             categories,
-            source.name
+            source.name,
         )
 
         // Remove the old file
@@ -727,7 +728,7 @@ class MangaDownloader(
         removeFromQueueIf { it.manga.id == manga.id }
     }
 
-    private fun _clearQueue() {
+    private fun internalClearQueue() {
         _queueState.update {
             it.forEach { download ->
                 if (download.status == MangaDownload.State.DOWNLOADING ||
@@ -751,7 +752,7 @@ class MangaDownloader(
         }
 
         pause()
-        _clearQueue()
+        internalClearQueue()
         addAllToQueue(downloads)
 
         if (wasRunning) {

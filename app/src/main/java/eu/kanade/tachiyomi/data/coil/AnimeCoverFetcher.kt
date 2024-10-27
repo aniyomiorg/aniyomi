@@ -290,7 +290,9 @@ class AnimeCoverFetcher(
     }
 
     private enum class Type {
-        File, URL, URI
+        File,
+        URL,
+        URI,
     }
 
     class AnimeFactory(

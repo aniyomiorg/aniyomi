@@ -324,7 +324,7 @@ internal object MangaExtensionLoader {
                             val obj = Class.forName(
                                 it,
                                 false,
-                                fallBackClassLoader
+                                fallBackClassLoader,
                             ).getDeclaredConstructor().newInstance()
                         ) {
                             is MangaSource -> {

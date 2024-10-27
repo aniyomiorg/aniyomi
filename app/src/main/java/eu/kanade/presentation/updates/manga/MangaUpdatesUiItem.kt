@@ -44,7 +44,7 @@ import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ListGroupHeader
-import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
@@ -151,7 +151,7 @@ private fun MangaUpdatesUiItem(
     modifier: Modifier = Modifier,
 ) {
     val haptic = LocalHapticFeedback.current
-    val textAlpha = if (update.read) ReadItemAlpha else 1f
+    val textAlpha = if (update.read) DISABLED_ALPHA else 1f
 
     Row(
         modifier = modifier
@@ -225,7 +225,7 @@ private fun MangaUpdatesUiItem(
                     Text(
                         text = readProgress,
                         maxLines = 1,
-                        color = LocalContentColor.current.copy(alpha = ReadItemAlpha),
+                        color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
                         overflow = TextOverflow.Ellipsis,
                     )
                 }

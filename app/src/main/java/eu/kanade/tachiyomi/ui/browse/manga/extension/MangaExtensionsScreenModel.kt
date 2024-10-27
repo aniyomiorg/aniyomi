@@ -41,7 +41,7 @@ class MangaExtensionsScreenModel(
     private val getExtensions: GetMangaExtensionsByType = Injekt.get(),
 ) : StateScreenModel<MangaExtensionsScreenModel.State>(State()) {
 
-    private var _currentDownloads = MutableStateFlow<Map<String, InstallStep>>(hashMapOf())
+    private val currentDownloads = MutableStateFlow<Map<String, InstallStep>>(hashMapOf())
 
     init {
         val context = Injekt.get<Application>()
@@ -90,7 +90,7 @@ class MangaExtensionsScreenModel(
         screenModelScope.launchIO {
             combine(
                 state.map { it.searchQuery }.distinctUntilChanged().debounce(SEARCH_DEBOUNCE_MILLIS),
-                _currentDownloads,
+                currentDownloads,
                 getExtensions.subscribe(),
             ) { query, downloads, (_updates, _installed, _available, _untrusted) ->
                 val searchQuery = query ?: ""
@@ -184,11 +184,11 @@ class MangaExtensionsScreenModel(
     }
 
     private fun addDownloadState(extension: MangaExtension, installStep: InstallStep) {
-        _currentDownloads.update { it + Pair(extension.pkgName, installStep) }
+        currentDownloads.update { it + Pair(extension.pkgName, installStep) }
     }
 
     private fun removeDownloadState(extension: MangaExtension) {
-        _currentDownloads.update { it - extension.pkgName }
+        currentDownloads.update { it - extension.pkgName }
     }
 
     private suspend fun Flow<InstallStep>.collectToInstallUpdate(extension: MangaExtension) =

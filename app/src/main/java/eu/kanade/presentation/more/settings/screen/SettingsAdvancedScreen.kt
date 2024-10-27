@@ -366,7 +366,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                         chooseColorProfile.launch(arrayOf("*/*"))
                     },
                 ),
-            )
+            ),
         )
     }
 

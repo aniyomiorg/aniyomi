@@ -16,8 +16,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import mihon.core.common.archive.archiveReader
 import logcat.LogPriority
+import mihon.core.common.archive.archiveReader
 import nl.adaptivity.xmlutil.core.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
 import tachiyomi.core.common.i18n.stringResource
@@ -58,8 +58,11 @@ actual class LocalMangaSource(
     private val json: Json by injectLazy()
     private val xml: XML by injectLazy()
 
-    private val POPULAR_FILTERS = FilterList(MangaOrderBy.Popular(context))
-    private val LATEST_FILTERS = FilterList(MangaOrderBy.Latest(context))
+    @Suppress("PrivatePropertyName", "ktlint:standard:property-naming")
+    private val PopularFilters = FilterList(MangaOrderBy.Popular(context))
+
+    @Suppress("PrivatePropertyName", "ktlint:standard:property-naming")
+    private val LatestFilters = FilterList(MangaOrderBy.Latest(context))
 
     override val name: String = context.stringResource(MR.strings.local_manga_source)
 
@@ -72,12 +75,12 @@ actual class LocalMangaSource(
     override val supportsLatest: Boolean = true
 
     // Browse related
-    override suspend fun getPopularManga(page: Int) = getSearchManga(page, "", POPULAR_FILTERS)
+    override suspend fun getPopularManga(page: Int) = getSearchManga(page, "", PopularFilters)
 
-    override suspend fun getLatestUpdates(page: Int) = getSearchManga(page, "", LATEST_FILTERS)
+    override suspend fun getLatestUpdates(page: Int) = getSearchManga(page, "", LatestFilters)
 
     override suspend fun getSearchManga(page: Int, query: String, filters: FilterList): MangasPage = withIOContext {
-        val lastModifiedLimit = if (filters === LATEST_FILTERS) {
+        val lastModifiedLimit = if (filters === LatestFilters) {
             System.currentTimeMillis() - LATEST_THRESHOLD
         } else {
             0L

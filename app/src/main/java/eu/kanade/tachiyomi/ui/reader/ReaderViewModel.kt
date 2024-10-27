@@ -164,7 +164,8 @@ class ReaderViewModel @JvmOverloads constructor(
                                 (manga.unreadFilterRaw == Manga.CHAPTER_SHOW_UNREAD && it.read) ||
                                 (
                                     manga.downloadedFilterRaw ==
-                                        Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(
+                                        Manga.CHAPTER_SHOW_DOWNLOADED &&
+                                        !downloadManager.isChapterDownloaded(
                                             it.name,
                                             it.scanlator,
                                             manga.title,
@@ -173,7 +174,8 @@ class ReaderViewModel @JvmOverloads constructor(
                                     ) ||
                                 (
                                     manga.downloadedFilterRaw ==
-                                        Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(
+                                        Manga.CHAPTER_SHOW_NOT_DOWNLOADED &&
+                                        downloadManager.isChapterDownloaded(
                                             it.name,
                                             it.scanlator,
                                             manga.title,

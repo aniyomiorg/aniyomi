@@ -2,8 +2,6 @@ import mihon.buildlogic.getBuildTime
 import mihon.buildlogic.getCommitCount
 import mihon.buildlogic.getGitSha
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.FileInputStream
-import java.util.Properties
 
 plugins {
     id("mihon.android.application")
@@ -15,7 +13,7 @@ plugins {
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
-val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+val supportedAbis = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 android {
     namespace = "eu.kanade.tachiyomi"
@@ -45,7 +43,7 @@ android {
         // buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
         ndk {
-            abiFilters += SUPPORTED_ABIS
+            abiFilters += supportedAbis
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -55,7 +53,7 @@ android {
         abi {
             isEnable = true
             reset()
-            include(*SUPPORTED_ABIS.toTypedArray())
+            include(*supportedAbis.toTypedArray())
             isUniversalApk = true
         }
     }
@@ -246,7 +244,6 @@ dependencies {
     implementation(libs.swipe)
     implementation(libs.compose.webview)
     implementation(libs.compose.grid)
-
 
     // Logging
     implementation(libs.logcat)

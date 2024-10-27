@@ -8,21 +8,28 @@ import tachiyomi.i18n.MR
  * Results of the set as cover feature.
  */
 enum class SetAsCover {
-    Success, AddToLibraryFirst, Error
+    Success,
+    AddToLibraryFirst,
+    Error,
 }
 
 /**
  * Player's inverted playback text handler
  */
 enum class InvertedPlayback {
-    NONE, POSITION, DURATION
+    NONE,
+    POSITION,
+    DURATION,
 }
 
 /**
  * Player's Picture-In-Picture state handler
  */
 enum class PipState {
-    OFF, ON, STARTED;
+    OFF,
+    ON,
+    STARTED,
+    ;
 
     companion object {
         internal var mode: PipState = OFF
@@ -33,7 +40,12 @@ enum class PipState {
  * Player's Seek state handler
  */
 enum class SeekState {
-    DOUBLE_TAP, LOCKED, NONE, SCROLL, SEEKBAR;
+    DOUBLE_TAP,
+    LOCKED,
+    NONE,
+    SCROLL,
+    SEEKBAR,
+    ;
 
     companion object {
         internal var mode = NONE
@@ -66,7 +78,8 @@ enum class HwDecState(val title: String, val mpvValue: String) {
 
     companion object {
         private val isWSA = Build.MODEL == "Subsystem for Android(TM)" ||
-            Build.BRAND == "Windows" || Build.BOARD == "windows"
+            Build.BRAND == "Windows" ||
+            Build.BOARD == "windows"
 
         internal val defaultHwDec = when {
             isWSA -> SW

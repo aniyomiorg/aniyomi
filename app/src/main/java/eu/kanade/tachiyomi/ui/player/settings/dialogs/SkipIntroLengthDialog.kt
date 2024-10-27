@@ -25,7 +25,11 @@ fun SkipIntroLengthDialog(
         titleRes = MR.strings.action_change_intro_length,
         modifier = Modifier.fillMaxWidth(fraction = if (fromPlayer) 0.5F else 0.8F),
         hideSystemBars = fromPlayer,
-        onConfirmRequest = if (fromPlayer) null else { {} },
+        onConfirmRequest = if (fromPlayer) {
+            null
+        } else {
+            {}
+        },
         onDismissRequest = {
             updateSkipIntroLength(newLength.toLong())
             onDismissRequest()

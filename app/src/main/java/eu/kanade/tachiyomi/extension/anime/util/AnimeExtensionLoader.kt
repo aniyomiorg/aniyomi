@@ -314,7 +314,7 @@ internal object AnimeExtensionLoader {
                             val obj = Class.forName(
                                 it,
                                 false,
-                                fallBackClassLoader
+                                fallBackClassLoader,
                             ).getDeclaredConstructor().newInstance()
                         ) {
                             is AnimeSource -> {

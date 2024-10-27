@@ -65,7 +65,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             }
         }.toString().toRequestBody(jsonMime)
         authClient.newCall(
-            POST("$apiUrl/sync/add-to-list", body = payload),
+            POST("$API_URL/sync/add-to-list", body = payload),
         ).awaitSuccess()
     }
 
@@ -83,11 +83,11 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
 
         if (track.score == 0.0) {
             authClient.newCall(
-                POST("$apiUrl/sync/ratings/remove", body = payload),
+                POST("$API_URL/sync/ratings/remove", body = payload),
             ).awaitSuccess()
         } else {
             authClient.newCall(
-                POST("$apiUrl/sync/ratings", body = payload),
+                POST("$API_URL/sync/ratings", body = payload),
             ).awaitSuccess()
         }
     }
@@ -95,11 +95,11 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     private suspend fun updateProgress(track: AnimeTrack) {
         // first remove
         authClient.newCall(
-            POST("$apiUrl/sync/history/remove", body = buildProgressObject(track, false)),
+            POST("$API_URL/sync/history/remove", body = buildProgressObject(track, false)),
         ).awaitSuccess()
         // then add again
         authClient.newCall(
-            POST("$apiUrl/sync/history", body = buildProgressObject(track, true)),
+            POST("$API_URL/sync/history", body = buildProgressObject(track, true)),
         ).awaitSuccess()
     }
 
@@ -149,10 +149,10 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
 
     suspend fun searchAnime(search: String, type: String): List<AnimeTrackSearch> {
         return withIOContext {
-            val searchUrl = "$apiUrl/search/$type".toUri().buildUpon()
+            val searchUrl = "$API_URL/search/$type".toUri().buildUpon()
                 .appendQueryParameter("q", search)
                 .appendQueryParameter("extended", "full")
-                .appendQueryParameter("client_id", clientId)
+                .appendQueryParameter("client_id", CLIENT_ID)
                 .build()
             with(json) {
                 client.newCall(GET(searchUrl.toString()))
@@ -224,7 +224,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             val foundAnime =
                 with(json) {
                     authClient.newCall(
-                        POST("$apiUrl/sync/watched", body = payload),
+                        POST("$API_URL/sync/watched", body = payload),
                     )
                         .awaitSuccess()
                         .parseAs<JsonArray>()
@@ -238,7 +238,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                 .substringAfter("/")
                 .substringBefore("/")
             val queryType = if (type == "tv") "shows" else type
-            val url = "$apiUrl/sync/all-items/$queryType/$status".toUri().buildUpon()
+            val url = "$API_URL/sync/all-items/$queryType/$status".toUri().buildUpon()
                 .appendQueryParameter("date_from", lastWatched)
                 .build()
 
@@ -262,7 +262,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     fun getCurrentUser(): Int {
         return runBlocking {
             with(json) {
-                authClient.newCall(GET("$apiUrl/users/settings"))
+                authClient.newCall(GET("$API_URL/users/settings"))
                     .awaitSuccess()
                     .parseAs<JsonObject>()
                     .let {
@@ -283,32 +283,32 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     }
 
     private fun accessTokenRequest(code: String) = POST(
-        oauthUrl,
+        OAUTH_URL,
         body = buildJsonObject {
             put("code", code)
-            put("client_id", clientId)
-            put("client_secret", clientSecret)
-            put("redirect_uri", redirectUrl)
+            put("client_id", CLIENT_ID)
+            put("client_secret", CLIENT_SECRET)
+            put("redirect_uri", REDIRECT_URL)
             put("grant_type", "authorization_code")
         }.toString().toRequestBody(jsonMime),
     )
 
     companion object {
-        const val clientId = "aa62a7da32518aae5d5049a658b87fa4837c3b739e06ed250b315aab6af82b0e"
-        private const val clientSecret = "2bec9c1d0c00a1e9b0e9e096a71f88d555a6f52da7923df07906df3b21351783"
+        const val CLIENT_ID = "aa62a7da32518aae5d5049a658b87fa4837c3b739e06ed250b315aab6af82b0e"
+        private const val CLIENT_SECRET = "2bec9c1d0c00a1e9b0e9e096a71f88d555a6f52da7923df07906df3b21351783"
 
-        private const val baseUrl = "https://simkl.com"
-        private const val apiUrl = "https://api.simkl.com"
-        private const val oauthUrl = "$apiUrl/oauth/token"
-        private const val loginUrl = "$baseUrl/oauth/authorize"
+        private const val BASE_URL = "https://simkl.com"
+        private const val API_URL = "https://api.simkl.com"
+        private const val OAUTH_URL = "$API_URL/oauth/token"
+        private const val LOGIN_URL = "$BASE_URL/oauth/authorize"
 
-        private const val redirectUrl = "aniyomi://simkl-auth"
+        private const val REDIRECT_URL = "aniyomi://simkl-auth"
 
         fun authUrl(): Uri =
-            loginUrl.toUri().buildUpon()
+            LOGIN_URL.toUri().buildUpon()
                 .appendQueryParameter("response_type", "code")
-                .appendQueryParameter("client_id", clientId)
-                .appendQueryParameter("redirect_uri", redirectUrl)
+                .appendQueryParameter("client_id", CLIENT_ID)
+                .appendQueryParameter("redirect_uri", REDIRECT_URL)
                 .build()
     }
 }

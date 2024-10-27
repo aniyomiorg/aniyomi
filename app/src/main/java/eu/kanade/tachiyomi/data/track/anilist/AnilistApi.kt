@@ -50,10 +50,10 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         return withIOContext {
             val query = """
             |mutation AddManga(${'$'}mangaId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus) {
-                |SaveMediaListEntry (mediaId: ${'$'}mangaId, progress: ${'$'}progress, status: ${'$'}status) { 
-                |   id 
-                |   status 
-                |} 
+                |SaveMediaListEntry (mediaId: ${'$'}mangaId, progress: ${'$'}progress, status: ${'$'}status) {
+                |   id
+                |   status
+                |}
             |}
             |
             """.trimMargin()
@@ -68,7 +68,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             with(json) {
                 authClient.newCall(
                     POST(
-                        apiUrl,
+                        API_URL,
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 )
@@ -112,7 +112,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("completedAt", createDate(track.finished_reading_date))
                 }
             }
-            authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
+            authClient.newCall(POST(API_URL, body = payload.toString().toRequestBody(jsonMime)))
                 .awaitSuccess()
             track
         }
@@ -122,9 +122,9 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         withIOContext {
             val query = """
             |mutation DeleteManga(${'$'}listId: Int) {
-                |DeleteMediaListEntry(id: ${'$'}listId) { 
+                |DeleteMediaListEntry(id: ${'$'}listId) {
                     |deleted
-                |} 
+                |}
             |}
             |
             """.trimMargin()
@@ -134,7 +134,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("listId", track.libraryId)
                 }
             }
-            authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
+            authClient.newCall(POST(API_URL, body = payload.toString().toRequestBody(jsonMime)))
                 .awaitSuccess()
         }
     }
@@ -143,10 +143,10 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         return withIOContext {
             val query = """
             |mutation AddAnime(${'$'}animeId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus) {
-                |SaveMediaListEntry (mediaId: ${'$'}animeId, progress: ${'$'}progress, status: ${'$'}status) { 
-                |   id 
-                |   status 
-                |} 
+                |SaveMediaListEntry (mediaId: ${'$'}animeId, progress: ${'$'}progress, status: ${'$'}status) {
+                |   id
+                |   status
+                |}
             |}
             |
             """.trimMargin()
@@ -161,7 +161,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             with(json) {
                 authClient.newCall(
                     POST(
-                        apiUrl,
+                        API_URL,
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 )
@@ -205,7 +205,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("completedAt", createDate(track.finished_watching_date))
                 }
             }
-            authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
+            authClient.newCall(POST(API_URL, body = payload.toString().toRequestBody(jsonMime)))
                 .awaitSuccess()
             track
         }
@@ -215,9 +215,9 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         return withIOContext {
             val query = """
             |mutation DeleteAnime(${'$'}listId: Int) {
-                |DeleteMediaListEntry(id: ${'$'}listId) { 
+                |DeleteMediaListEntry(id: ${'$'}listId) {
                     |deleted
-                |} 
+                |}
             |}
             |
             """.trimMargin()
@@ -227,7 +227,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("listId", track.libraryId)
                 }
             }
-            authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
+            authClient.newCall(POST(API_URL, body = payload.toString().toRequestBody(jsonMime)))
                 .awaitSuccess()
         }
     }
@@ -269,7 +269,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             with(json) {
                 authClient.newCall(
                     POST(
-                        apiUrl,
+                        API_URL,
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 )
@@ -323,7 +323,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             with(json) {
                 authClient.newCall(
                     POST(
-                        apiUrl,
+                        API_URL,
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 )
@@ -393,7 +393,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             with(json) {
                 authClient.newCall(
                     POST(
-                        apiUrl,
+                        API_URL,
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 )
@@ -463,7 +463,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             with(json) {
                 authClient.newCall(
                     POST(
-                        apiUrl,
+                        API_URL,
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 )
@@ -511,7 +511,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             with(json) {
                 authClient.newCall(
                     POST(
-                        apiUrl,
+                        API_URL,
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 )
@@ -615,22 +615,22 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
     }
 
     companion object {
-        private const val clientId = "5338"
-        private const val apiUrl = "https://graphql.anilist.co/"
-        private const val baseUrl = "https://anilist.co/api/v2/"
-        private const val baseMangaUrl = "https://anilist.co/manga/"
-        private const val baseAnimeUrl = "https://anilist.co/anime/"
+        private const val CLIENT_ID = "5338"
+        private const val API_URL = "https://graphql.anilist.co/"
+        private const val BASE_URL = "https://anilist.co/api/v2/"
+        private const val BASE_MANGA_URL = "https://anilist.co/manga/"
+        private const val BASE_ANIME_URL = "https://anilist.co/anime/"
 
         fun mangaUrl(mediaId: Long): String {
-            return baseMangaUrl + mediaId
+            return BASE_MANGA_URL + mediaId
         }
 
         fun animeUrl(mediaId: Long): String {
-            return baseAnimeUrl + mediaId
+            return BASE_ANIME_URL + mediaId
         }
 
-        fun authUrl(): Uri = "${baseUrl}oauth/authorize".toUri().buildUpon()
-            .appendQueryParameter("client_id", clientId)
+        fun authUrl(): Uri = "${BASE_URL}oauth/authorize".toUri().buildUpon()
+            .appendQueryParameter("client_id", CLIENT_ID)
             .appendQueryParameter("response_type", "token")
             .build()
     }

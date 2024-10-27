@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,8 +45,6 @@ import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import java.time.format.DateTimeFormatter
-
-private const val UnsetStatusTextAlpha = 0.5F
 
 @Composable
 fun AnimeTrackInfoDialogHome(
@@ -204,10 +201,9 @@ private fun TrackInfoItem(
                     if (onScoreClick != null) {
                         VerticalDivider()
                         TrackDetailsItem(
-                            modifier = Modifier
-                                .weight(1f)
-                                .alpha(if (score == null) UnsetStatusTextAlpha else 1f),
-                            text = score ?: stringResource(MR.strings.score),
+                            modifier = Modifier.weight(1f),
+                            text = score,
+                            placeholder = stringResource(MR.strings.score),
                             onClick = onScoreClick,
                         )
                     }
