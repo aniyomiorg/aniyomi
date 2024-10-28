@@ -17,14 +17,3 @@ data class BackupAnimeHistory(
         )
     }
 }
-
-@Deprecated("Replaced with BackupHistory. This is retained for legacy reasons.")
-@Serializable
-data class BrokenBackupAnimeHistory(
-    @ProtoNumber(0) var url: String,
-    @ProtoNumber(1) var lastSeen: Long,
-) {
-    fun toBackupHistory(): BackupAnimeHistory {
-        return BackupAnimeHistory(url, lastSeen)
-    }
-}
