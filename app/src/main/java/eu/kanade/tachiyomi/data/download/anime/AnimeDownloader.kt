@@ -379,7 +379,7 @@ class AnimeDownloader(
             ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname)
         } catch (e: Exception) {
             download.status = AnimeDownload.State.ERROR
-            notifier.onError(e.message, download.episode.name, download.anime.title)
+            notifier.onError(e.message, download.episode.name, download.anime.title, download.anime.id)
         } finally {
             notifier.dismissProgress()
         }
@@ -490,7 +490,12 @@ class AnimeDownloader(
                         httpDownload(download, tmpDir, filename, newThreads, safe)
                     }
                 } catch (e: Exception) {
-                    notifier.onError(e.message + ", retrying..", download.episode.name, download.anime.title)
+                    notifier.onError(
+                        e.message + ", retrying..",
+                        download.episode.name,
+                        download.anime.title,
+                        download.anime.id,
+                    )
                     delay(2 * 1000L)
                     null
                 }
@@ -510,7 +515,7 @@ class AnimeDownloader(
                     httpDownload(download, tmpDir, filename, 1, true)
                 }
             } catch (e: Exception) {
-                notifier.onError(e.message, download.episode.name, download.anime.title)
+                notifier.onError(e.message, download.episode.name, download.anime.title, download.anime.id)
                 throw e
             }
         } else {
