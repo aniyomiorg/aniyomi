@@ -13,7 +13,8 @@ plugins {
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
-val supportedAbis = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+@Suppress("ktlint:standard:property-naming")
+val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 android {
     namespace = "eu.kanade.tachiyomi"
@@ -43,7 +44,7 @@ android {
         // buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
         ndk {
-            abiFilters += supportedAbis
+            abiFilters += SUPPORTED_ABIS
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -53,7 +54,7 @@ android {
         abi {
             isEnable = true
             reset()
-            include(*supportedAbis.toTypedArray())
+            include(*SUPPORTED_ABIS.toTypedArray())
             isUniversalApk = true
         }
     }

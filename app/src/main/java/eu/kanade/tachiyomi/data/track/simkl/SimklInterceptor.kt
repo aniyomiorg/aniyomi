@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track.simkl
 
 import eu.kanade.tachiyomi.BuildConfig
-import eu.kanade.tachiyomi.data.track.simkl.SimklApi.Companion.clientId
+import eu.kanade.tachiyomi.data.track.simkl.SimklApi.Companion.CLIENT_ID
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -20,7 +20,7 @@ class SimklInterceptor(val simkl: Simkl) : Interceptor {
         // Add the authorization header to the original request.
         val authRequest = originalRequest.newBuilder()
             .addHeader("Authorization", "Bearer ${oauth.access_token}")
-            .addHeader("simkl-api-key", clientId)
+            .addHeader("simkl-api-key", CLIENT_ID)
             .header("User-Agent", "Aniyomi v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
             .build()
 
