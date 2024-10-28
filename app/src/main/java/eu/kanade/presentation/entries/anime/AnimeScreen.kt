@@ -427,13 +427,9 @@ private fun AnimeScreenSmallImpl(
                         AnimeInfoBox(
                             isTabletUi = false,
                             appBarPadding = topPadding,
-                            title = state.anime.title,
-                            author = state.anime.author,
-                            artist = state.anime.artist,
+                            anime = state.anime,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
                             isStubSource = remember { state.source is StubAnimeSource },
-                            coverDataProvider = { state.anime },
-                            status = state.anime.status,
                             onCoverClick = onCoverClicked,
                             doSearch = onSearch,
                         )
@@ -708,13 +704,9 @@ fun AnimeScreenLargeImpl(
                         AnimeInfoBox(
                             isTabletUi = true,
                             appBarPadding = contentPadding.calculateTopPadding(),
-                            title = state.anime.title,
-                            author = state.anime.author,
-                            artist = state.anime.artist,
+                            anime = state.anime,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
                             isStubSource = remember { state.source is StubAnimeSource },
-                            coverDataProvider = { state.anime },
-                            status = state.anime.status,
                             onCoverClick = onCoverClicked,
                             doSearch = onSearch,
                         )

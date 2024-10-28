@@ -397,13 +397,9 @@ private fun MangaScreenSmallImpl(
                         MangaInfoBox(
                             isTabletUi = false,
                             appBarPadding = topPadding,
-                            title = state.manga.title,
-                            author = state.manga.author,
-                            artist = state.manga.artist,
+                            manga = state.manga,
                             sourceName = remember { state.source.getNameForMangaInfo() },
                             isStubSource = remember { state.source is StubMangaSource },
-                            coverDataProvider = { state.manga },
-                            status = state.manga.status,
                             onCoverClick = onCoverClicked,
                             doSearch = onSearch,
                         )
@@ -644,13 +640,9 @@ fun MangaScreenLargeImpl(
                         MangaInfoBox(
                             isTabletUi = true,
                             appBarPadding = contentPadding.calculateTopPadding(),
-                            title = state.manga.title,
-                            author = state.manga.author,
-                            artist = state.manga.artist,
+                            manga = state.manga,
                             sourceName = remember { state.source.getNameForMangaInfo() },
                             isStubSource = remember { state.source is StubMangaSource },
-                            coverDataProvider = { state.manga },
-                            status = state.manga.status,
                             onCoverClick = onCoverClicked,
                             doSearch = onSearch,
                         )

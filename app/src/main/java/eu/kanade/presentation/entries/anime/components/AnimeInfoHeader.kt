@@ -75,6 +75,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.entries.components.ItemCover
@@ -100,13 +102,9 @@ private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTIL
 fun AnimeInfoBox(
     isTabletUi: Boolean,
     appBarPadding: Dp,
-    title: String,
-    author: String?,
-    artist: String?,
+    anime: Anime,
     sourceName: String,
     isStubSource: Boolean,
-    coverDataProvider: () -> Anime,
-    status: Long,
     onCoverClick: () -> Unit,
     doSearch: (query: String, global: Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -118,7 +116,10 @@ fun AnimeInfoBox(
             MaterialTheme.colorScheme.background,
         )
         AsyncImage(
-            model = coverDataProvider(),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(anime)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -138,28 +139,20 @@ fun AnimeInfoBox(
             if (!isTabletUi) {
                 AnimeAndSourceTitlesSmall(
                     appBarPadding = appBarPadding,
-                    coverDataProvider = coverDataProvider,
-                    onCoverClick = onCoverClick,
-                    title = title,
-                    doSearch = doSearch,
-                    author = author,
-                    artist = artist,
-                    status = status,
+                    anime = anime,
                     sourceName = sourceName,
                     isStubSource = isStubSource,
+                    onCoverClick = onCoverClick,
+                    doSearch = doSearch,
                 )
             } else {
                 AnimeAndSourceTitlesLarge(
                     appBarPadding = appBarPadding,
-                    coverDataProvider = coverDataProvider,
-                    onCoverClick = onCoverClick,
-                    title = title,
-                    doSearch = doSearch,
-                    author = author,
-                    artist = artist,
-                    status = status,
+                    anime = anime,
                     sourceName = sourceName,
                     isStubSource = isStubSource,
+                    onCoverClick = onCoverClick,
+                    doSearch = doSearch,
                 )
             }
         }
@@ -343,15 +336,11 @@ fun ExpandableAnimeDescription(
 @Composable
 private fun AnimeAndSourceTitlesLarge(
     appBarPadding: Dp,
-    coverDataProvider: () -> Anime,
-    onCoverClick: () -> Unit,
-    title: String,
-    doSearch: (query: String, global: Boolean) -> Unit,
-    author: String?,
-    artist: String?,
-    status: Long,
+    anime: Anime,
     sourceName: String,
     isStubSource: Boolean,
+    onCoverClick: () -> Unit,
+    doSearch: (query: String, global: Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -361,19 +350,22 @@ private fun AnimeAndSourceTitlesLarge(
     ) {
         ItemCover.Book(
             modifier = Modifier.fillMaxWidth(0.65f),
-            data = coverDataProvider(),
+            data = ImageRequest.Builder(LocalContext.current)
+                .data(anime)
+                .crossfade(true)
+                .build(),
             contentDescription = stringResource(MR.strings.manga_cover),
             onClick = onCoverClick,
         )
         Spacer(modifier = Modifier.height(16.dp))
         AnimeContentInfo(
-            title = title,
-            doSearch = doSearch,
-            author = author,
-            artist = artist,
-            status = status,
+            title = anime.title,
+            author = anime.author,
+            artist = anime.artist,
+            status = anime.status,
             sourceName = sourceName,
             isStubSource = isStubSource,
+            doSearch = doSearch,
             textAlign = TextAlign.Center,
         )
     }
@@ -382,15 +374,11 @@ private fun AnimeAndSourceTitlesLarge(
 @Composable
 private fun AnimeAndSourceTitlesSmall(
     appBarPadding: Dp,
-    coverDataProvider: () -> Anime,
-    onCoverClick: () -> Unit,
-    title: String,
-    doSearch: (query: String, global: Boolean) -> Unit,
-    author: String?,
-    artist: String?,
-    status: Long,
+    anime: Anime,
     sourceName: String,
     isStubSource: Boolean,
+    onCoverClick: () -> Unit,
+    doSearch: (query: String, global: Boolean) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -403,7 +391,10 @@ private fun AnimeAndSourceTitlesSmall(
             modifier = Modifier
                 .sizeIn(maxWidth = 100.dp)
                 .align(Alignment.Top),
-            data = coverDataProvider(),
+            data = ImageRequest.Builder(LocalContext.current)
+                .data(anime)
+                .crossfade(true)
+                .build(),
             contentDescription = stringResource(MR.strings.manga_cover),
             onClick = onCoverClick,
         )
@@ -411,13 +402,13 @@ private fun AnimeAndSourceTitlesSmall(
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             AnimeContentInfo(
-                title = title,
-                doSearch = doSearch,
-                author = author,
-                artist = artist,
-                status = status,
+                title = anime.title,
+                author = anime.author,
+                artist = anime.artist,
+                status = anime.status,
                 sourceName = sourceName,
                 isStubSource = isStubSource,
+                doSearch = doSearch,
             )
         }
     }
@@ -426,12 +417,12 @@ private fun AnimeAndSourceTitlesSmall(
 @Composable
 private fun ColumnScope.AnimeContentInfo(
     title: String,
-    doSearch: (query: String, global: Boolean) -> Unit,
     author: String?,
     artist: String?,
     status: Long,
     sourceName: String,
     isStubSource: Boolean,
+    doSearch: (query: String, global: Boolean) -> Unit,
     textAlign: TextAlign? = LocalTextStyle.current.textAlign,
 ) {
     val context = LocalContext.current

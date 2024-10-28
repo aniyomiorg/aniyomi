@@ -277,7 +277,7 @@ class AnimeScreen(
                         sm.editCover(context, it)
                     }
                     AnimeCoverDialog(
-                        coverDataProvider = { anime!! },
+                        anime = anime!!,
                         snackbarHostState = sm.snackbarHostState,
                         isCustomCover = remember(anime) { anime!!.hasCustomCover() },
                         onShareClick = { sm.shareCover(context) },
