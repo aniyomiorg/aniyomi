@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.addOrRemove
@@ -83,8 +85,9 @@ import java.util.Calendar
 import kotlin.math.floor
 
 class AnimeScreenModel(
-    val context: Context,
-    val animeId: Long,
+    private val context: Context,
+    private val lifecycle: Lifecycle,
+    private val animeId: Long,
     private val isFromSource: Boolean,
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
@@ -163,6 +166,7 @@ class AnimeScreenModel(
                 downloadCache.changes,
                 downloadManager.queueState,
             ) { animeAndEpisodes, _, _ -> animeAndEpisodes }
+                .flowWithLifecycle(lifecycle)
                 .collectLatest { (anime, episodes) ->
                     updateSuccessState {
                         it.copy(
@@ -455,6 +459,7 @@ class AnimeScreenModel(
             downloadManager.statusFlow()
                 .filter { it.anime.id == successState?.anime?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
+                .flowWithLifecycle(lifecycle)
                 .collect {
                     withUIContext {
                         updateDownloadState(it)
@@ -466,6 +471,7 @@ class AnimeScreenModel(
             downloadManager.progressFlow()
                 .filter { it.anime.id == successState?.anime?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
+                .flowWithLifecycle(lifecycle)
                 .collect {
                     withUIContext {
                         updateDownloadState(it)
@@ -982,6 +988,7 @@ class AnimeScreenModel(
                 val supportedTrackerTracks = animeTracks.filter { it.trackerId in supportedTrackerIds }
                 supportedTrackerTracks.size to supportedTrackers.isNotEmpty()
             }
+                .flowWithLifecycle(lifecycle)
                 .distinctUntilChanged()
                 .collectLatest { (trackingCount, hasLoggedInTrackers) ->
                     updateSuccessState {
