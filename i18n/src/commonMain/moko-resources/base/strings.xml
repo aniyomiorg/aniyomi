@@ -442,6 +442,7 @@
     <string name="fifth_to_last">Fifth to last read chapter</string>
     <string name="pref_category_auto_download">Auto-download</string>
     <string name="pref_download_new">Download new chapters</string>
+    <string name="pref_download_new_unread_chapters_only">Skip downloading duplicate read chapters</string>
     <string name="pref_download_new_categories_details">Entries in excluded categories will not be downloaded even if they are also in included categories.</string>
     <string name="download_ahead">Download ahead</string>
     <string name="auto_download_while_reading">Auto download while reading</string>
@@ -964,6 +965,7 @@
     <string name="pref_use_external_downloader">Always use external downloader for anime</string>
     <string name="pref_external_downloader_selection">Downloader app preference</string>
     <string name="pref_download_new_episodes">Download new episodes</string>
+    <string name="pref_download_new_unseen_episodes_only">Skip downloading duplicate seen episodes</string>
     <string name="auto_download_while_watching">Auto download while watching</string>
     <string name="download_ahead_info_anime">Only works on entries in library and if the current episode plus the next one are already downloaded</string>
     <string name="pref_auto_update_manga_sync">Update progress after reading/watching</string>

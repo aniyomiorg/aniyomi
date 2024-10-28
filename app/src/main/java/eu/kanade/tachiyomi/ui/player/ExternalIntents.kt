@@ -497,8 +497,10 @@ class ExternalIntents {
             getTracks.await(anime.id)
                 .mapNotNull { track ->
                     val tracker = trackerManager.get(track.trackerId)
-                    if (tracker != null && tracker.isLoggedIn &&
-                        tracker is AnimeTracker && episodeNumber > track.lastEpisodeSeen
+                    if (tracker != null &&
+                        tracker.isLoggedIn &&
+                        tracker is AnimeTracker &&
+                        episodeNumber > track.lastEpisodeSeen
                     ) {
                         val updatedTrack = track.copy(lastEpisodeSeen = episodeNumber)
 

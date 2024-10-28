@@ -215,6 +215,7 @@ object SettingsDownloadScreen : SearchableSettings {
         allMangaCategories: ImmutableList<Category>,
     ): Preference.PreferenceGroup {
         val downloadNewEpisodesPref = downloadPreferences.downloadNewEpisodes()
+        val downloadNewUnseenEpisodesOnlyPref = downloadPreferences.downloadNewUnseenEpisodesOnly()
         val downloadNewEpisodeCategoriesPref = downloadPreferences.downloadNewEpisodeCategories()
         val downloadNewEpisodeCategoriesExcludePref = downloadPreferences.downloadNewEpisodeCategoriesExclude()
 
@@ -245,6 +246,7 @@ object SettingsDownloadScreen : SearchableSettings {
         }
 
         val downloadNewChaptersPref = downloadPreferences.downloadNewChapters()
+        val downloadNewUnreadChaptersOnlyPref = downloadPreferences.downloadNewUnreadChaptersOnly()
         val downloadNewChapterCategoriesPref = downloadPreferences.downloadNewChapterCategories()
         val downloadNewChapterCategoriesExcludePref = downloadPreferences.downloadNewChapterCategoriesExclude()
 
@@ -281,6 +283,11 @@ object SettingsDownloadScreen : SearchableSettings {
                     pref = downloadNewEpisodesPref,
                     title = stringResource(MR.strings.pref_download_new_episodes),
                 ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = downloadNewUnseenEpisodesOnlyPref,
+                    title = stringResource(MR.strings.pref_download_new_unseen_episodes_only),
+                    enabled = downloadNewEpisodes,
+                ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.anime_categories),
                     subtitle = getCategoriesLabel(
@@ -294,6 +301,11 @@ object SettingsDownloadScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = downloadNewChaptersPref,
                     title = stringResource(MR.strings.pref_download_new),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = downloadNewUnreadChaptersOnlyPref,
+                    title = stringResource(MR.strings.pref_download_new_unread_chapters_only),
+                    enabled = downloadNewChapters,
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.manga_categories),

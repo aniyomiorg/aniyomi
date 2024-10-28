@@ -32,7 +32,6 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.AniChartApi
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
-import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
@@ -46,6 +45,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import mihon.domain.items.episode.interactor.FilterEpisodesForDownload
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.preference.CheckboxState
 import tachiyomi.core.common.preference.TriState
@@ -106,6 +106,7 @@ class AnimeScreenModel(
     private val addTracks: AddAnimeTracks = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
     private val animeRepository: AnimeRepository = Injekt.get(),
+    private val filterEpisodesForDownload: FilterEpisodesForDownload = Injekt.get(),
     internal val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
 ) : StateScreenModel<AnimeScreenModel.State>(State.Loading) {
@@ -775,15 +776,11 @@ class AnimeScreenModel(
     private fun downloadNewEpisodes(episodes: List<Episode>) {
         screenModelScope.launchNonCancellable {
             val anime = successState?.anime ?: return@launchNonCancellable
-            val categories = getCategories.await(anime.id).map { it.id }
-            if (episodes.isEmpty() || !anime.shouldDownloadNewEpisodes(
-                    categories,
-                    downloadPreferences,
-                )
-            ) {
-                return@launchNonCancellable
+            val episodesToDownload = filterEpisodesForDownload.await(anime, episodes)
+
+            if (episodesToDownload.isNotEmpty()) {
+                downloadEpisodes(episodesToDownload)
             }
-            downloadEpisodes(episodes)
         }
     }
 
