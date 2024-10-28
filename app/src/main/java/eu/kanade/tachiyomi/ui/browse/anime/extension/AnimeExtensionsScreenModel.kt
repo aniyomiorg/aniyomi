@@ -62,7 +62,8 @@ class AnimeExtensionsScreenModel(
                                 it.name.contains(input, ignoreCase = true) ||
                                     it.baseUrl.contains(input, ignoreCase = true) ||
                                     it.id == input.toLongOrNull()
-                            } || extension.name.contains(input, ignoreCase = true)
+                            } ||
+                                extension.name.contains(input, ignoreCase = true)
                         }
                         is AnimeExtension.Installed -> {
                             extension.sources.any {
@@ -76,7 +77,8 @@ class AnimeExtensionsScreenModel(
                                     } else {
                                         false
                                     }
-                            } || extension.name.contains(input, ignoreCase = true)
+                            } ||
+                                extension.name.contains(input, ignoreCase = true)
                         }
                         is AnimeExtension.Untrusted -> extension.name.contains(
                             input,

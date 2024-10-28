@@ -495,7 +495,8 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L && showNextEpisodeAirTime &&
+                            if (timer > 0L &&
+                                showNextEpisodeAirTime &&
                                 state.anime.status.toInt() != SAnime.COMPLETED
                             ) {
                                 NextEpisodeAiringListItem(
@@ -773,7 +774,8 @@ fun AnimeScreenLargeImpl(
                                             timer -= 1000L
                                         }
                                     }
-                                    if (timer > 0L && showNextEpisodeAirTime &&
+                                    if (timer > 0L &&
+                                        showNextEpisodeAirTime &&
                                         state.anime.status.toInt() != SAnime.COMPLETED
                                     ) {
                                         NextEpisodeAiringListItem(
