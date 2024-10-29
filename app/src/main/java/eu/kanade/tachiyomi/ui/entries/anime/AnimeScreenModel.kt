@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.entries.anime
 
 import android.content.Context
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
@@ -17,6 +18,7 @@ import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
+import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
@@ -94,6 +96,7 @@ class AnimeScreenModel(
     private val trackPreferences: TrackPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
+    private val trackEpisode: TrackEpisode = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
@@ -721,13 +724,32 @@ class AnimeScreenModel(
      * @param seen whether to mark episodes as seen or unseen.
      */
     fun markEpisodesSeen(episodes: List<Episode>, seen: Boolean) {
+        toggleAllSelection(false)
         screenModelScope.launchIO {
             setSeenStatus.await(
                 seen = seen,
                 episodes = episodes.toTypedArray(),
             )
+
+            if (!seen) return@launchIO
+
+            val tracks = getTracks.await(animeId)
+            val maxEpisodeNumber = episodes.maxOf { it.episodeNumber }
+            val shouldPromptTrackingUpdate = tracks.any { track -> maxEpisodeNumber > track.lastEpisodeSeen }
+
+            if (!shouldPromptTrackingUpdate) return@launchIO
+
+            val result = snackbarHostState.showSnackbar(
+                message = context.stringResource(MR.strings.confirm_tracker_update_anime, maxEpisodeNumber.toInt()),
+                actionLabel = context.stringResource(MR.strings.action_ok),
+                duration = SnackbarDuration.Short,
+                withDismissAction = true,
+            )
+
+            if (result == SnackbarResult.ActionPerformed) {
+                trackEpisode.await(context, animeId, maxEpisodeNumber)
+            }
         }
-        toggleAllSelection(false)
     }
 
     /**
