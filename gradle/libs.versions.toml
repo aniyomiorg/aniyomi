@@ -68,12 +68,9 @@ compose-stablemarker = "com.github.skydoves:compose-stable-marker:1.0.5"
 swipe = "me.saket.swipe:swipe:1.3.0"
 
 moko-core = { module = "dev.icerock.moko:resources", version.ref = "moko" }
-moko-gradle = { module = "dev.icerock.moko:resources-generator", version.ref = "moko" }
 
 logcat = "com.squareup.logcat:logcat:0.1"
 
-aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlib_version" }
-aboutLibraries-gradle = { module = "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin", version.ref = "aboutlib_version" }
 aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutlib_version" }
 
 shizuku-api = { module = "dev.rikka.shizuku:api", version.ref = "shizuku_version" }
@@ -86,7 +83,6 @@ sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", ver
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions-jvm", version.ref = "sqldelight" }
 sqldelight-android-paging = { module = "app.cash.sqldelight:androidx-paging3-extensions", version.ref = "sqldelight" }
 sqldelight-dialects-sql = { module = "app.cash.sqldelight:sqlite-3-38-dialect", version.ref = "sqldelight" }
-sqldelight-gradle = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
 junit = "org.junit.jupiter:junit-jupiter:5.11.0"
 kotest-assertions = "io.kotest:kotest-assertions-core:5.9.1"
@@ -107,6 +103,11 @@ truetypeparser = "io.github.yubyf:truetypeparser-light:2.1.4"
 
 spotless-gradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
+
+[plugins]
+aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlib_version" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+moko = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko" }
 
 [bundles]
 okhttp = ["okhttp-core", "okhttp-logging", "okhttp-brotli", "okhttp-dnsoverhttps"]
