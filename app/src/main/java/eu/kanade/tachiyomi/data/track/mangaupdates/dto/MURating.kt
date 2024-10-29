@@ -4,11 +4,11 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Rating(
+data class MURating(
     val rating: Double? = null,
 )
 
-fun Rating.copyTo(track: MangaTrack): MangaTrack {
+fun MURating.copyTo(track: MangaTrack): MangaTrack {
     return track.apply {
         this.score = rating ?: 0.0
     }

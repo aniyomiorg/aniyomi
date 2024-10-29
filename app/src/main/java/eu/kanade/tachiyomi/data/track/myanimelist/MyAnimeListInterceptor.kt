@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.data.track.myanimelist
 
 import eu.kanade.tachiyomi.BuildConfig
+import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALOAuth
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -12,7 +13,7 @@ class MyAnimeListInterceptor(private val myanimelist: MyAnimeList) : Interceptor
 
     private val json: Json by injectLazy()
 
-    private var oauth: OAuth? = myanimelist.loadOAuth()
+    private var oauth: MALOAuth? = myanimelist.loadOAuth()
     private val tokenExpired get() = myanimelist.getIfAuthExpired()
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -31,7 +32,7 @@ class MyAnimeListInterceptor(private val myanimelist: MyAnimeList) : Interceptor
 
         // Add the authorization header to the original request
         val authRequest = originalRequest.newBuilder()
-            .addHeader("Authorization", "Bearer ${oauth!!.access_token}")
+            .addHeader("Authorization", "Bearer ${oauth!!.accessToken}")
             .header("User-Agent", "Aniyomi v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
             .build()
 
@@ -42,12 +43,12 @@ class MyAnimeListInterceptor(private val myanimelist: MyAnimeList) : Interceptor
      * Called when the user authenticates with MyAnimeList for the first time. Sets the refresh token
      * and the oauth object.
      */
-    fun setAuth(oauth: OAuth?) {
+    fun setAuth(oauth: MALOAuth?) {
         this.oauth = oauth
         myanimelist.saveOAuth(oauth)
     }
 
-    private fun refreshToken(chain: Interceptor.Chain): OAuth = synchronized(this) {
+    private fun refreshToken(chain: Interceptor.Chain): MALOAuth = synchronized(this) {
         if (tokenExpired) throw MALTokenExpired()
         oauth?.takeUnless { it.isExpired() }?.let { return@synchronized it }
 
@@ -64,7 +65,7 @@ class MyAnimeListInterceptor(private val myanimelist: MyAnimeList) : Interceptor
 
         return runCatching {
             if (response.isSuccessful) {
-                with(json) { response.parseAs<OAuth>() }
+                with(json) { response.parseAs<MALOAuth>() }
             } else {
                 response.close()
                 null

@@ -1,10 +1,15 @@
 package eu.kanade.tachiyomi.data.track.simkl
 
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
-import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.data.track.simkl.dto.SimklOAuth
+import eu.kanade.tachiyomi.data.track.simkl.dto.SimklSearchResult
+import eu.kanade.tachiyomi.data.track.simkl.dto.SimklSyncResult
+import eu.kanade.tachiyomi.data.track.simkl.dto.SimklSyncWatched
+import eu.kanade.tachiyomi.data.track.simkl.dto.SimklUser
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -12,21 +17,9 @@ import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.addJsonObject
-import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.double
-import kotlinx.serialization.json.int
-import kotlinx.serialization.json.intOrNull
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.long
-import kotlinx.serialization.json.longOrNull
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import kotlinx.serialization.json.putJsonObject
@@ -157,56 +150,9 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             with(json) {
                 client.newCall(GET(searchUrl.toString()))
                     .awaitSuccess()
-                    .parseAs<JsonArray>()
-                    .let { response ->
-                        response.map {
-                            jsonToAnimeSearch(it.jsonObject, type)
-                        }
-                    }
+                    .parseAs<List<SimklSearchResult>>()
+                    .map { it.toTrackSearch(type) }
             }
-        }
-    }
-
-    private fun jsonToAnimeSearch(obj: JsonObject, type: String): AnimeTrackSearch {
-        return AnimeTrackSearch.create(TrackerManager.SIMKL).apply {
-            remote_id = obj["ids"]!!.jsonObject["simkl_id"]!!.jsonPrimitive.long
-            title = obj["title_romaji"]?.jsonPrimitive?.content ?: obj["title"]!!.jsonPrimitive.content
-            total_episodes = obj["ep_count"]?.jsonPrimitive?.longOrNull ?: 1
-            cover_url = "https://simkl.in/posters/" + obj["poster"]!!.jsonPrimitive.content + "_m.webp"
-            summary = obj["all_titles"]?.jsonArray
-                ?.joinToString("\n", "All titles:\n") { it.jsonPrimitive.content } ?: ""
-
-            tracking_url = obj["url"]!!.jsonPrimitive.content
-            publishing_status = obj["status"]?.jsonPrimitive?.content ?: "ended"
-            publishing_type = obj["type"]?.jsonPrimitive?.content ?: type
-            start_date = obj["year"]?.jsonPrimitive?.intOrNull?.toString() ?: ""
-        }
-    }
-
-    private fun jsonToAnimeTrack(
-        obj: JsonObject,
-        typeName: String,
-        type: String,
-        statusString: String,
-    ): AnimeTrack {
-        return AnimeTrack.create(TrackerManager.SIMKL).apply {
-            title = obj[typeName]!!.jsonObject["title"]!!.jsonPrimitive.content
-            val id = obj[typeName]!!.jsonObject["ids"]!!.jsonObject["simkl"]!!.jsonPrimitive.long
-            remote_id = id
-            if (typeName != "movie") {
-                total_episodes =
-                    obj["total_episodes_count"]!!
-                        .jsonPrimitive.long
-                last_episode_seen =
-                    obj["watched_episodes_count"]!!
-                        .jsonPrimitive.double
-            } else {
-                total_episodes = 1
-                last_episode_seen = if (statusString == "completed") 1.0 else 0.0
-            }
-            score = obj["user_rating"]!!.jsonPrimitive.intOrNull?.toDouble() ?: 0.0
-            status = toTrackStatus(statusString)
-            tracking_url = "/$type/$id"
         }
     }
 
@@ -221,19 +167,20 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                     put("simkl", track.remote_id)
                 }
             }.toString().toRequestBody(jsonMime)
-            val foundAnime =
-                with(json) {
-                    authClient.newCall(
-                        POST("$API_URL/sync/watched", body = payload),
-                    )
-                        .awaitSuccess()
-                        .parseAs<JsonArray>()
-                        .firstOrNull()?.jsonObject ?: return@withIOContext null
-                }
+            val foundAnime = with(json) {
+                authClient.newCall(
+                    POST("$API_URL/sync/watched", body = payload),
+                )
+                    .awaitSuccess()
+                    .parseAs<List<SimklSyncWatched>>()
+                    .firstOrNull() ?: return@withIOContext null
+            }
 
-            if (foundAnime["result"]?.jsonPrimitive?.booleanOrNull != true) return@withIOContext null
-            val lastWatched = foundAnime["last_watched"]?.jsonPrimitive?.contentOrNull ?: return@withIOContext null
-            val status = foundAnime["list"]!!.jsonPrimitive.content
+            Log.i("SOMETHING-IDK", foundAnime.toString())
+
+            if (foundAnime.result != true) return@withIOContext null
+            val lastWatched = foundAnime.lastWatched ?: return@withIOContext null
+            val status = foundAnime.list ?: return@withIOContext null
             val type = track.tracking_url
                 .substringAfter("/")
                 .substringBefore("/")
@@ -243,19 +190,17 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                 .build()
 
             val typeName = if (type == "movies") "movie" else "show"
-            val listAnime =
-                with(json) {
-                    authClient.newCall(GET(url.toString()))
-                        .awaitSuccess()
-                        .parseAs<JsonObject>()[queryType]!!.jsonArray
-                        .firstOrNull {
-                            it.jsonObject[typeName]
-                                ?.jsonObject?.get("ids")
-                                ?.jsonObject?.get("simkl")
-                                ?.jsonPrimitive?.long == track.remote_id
-                        }?.jsonObject ?: return@withIOContext null
-                }
-            jsonToAnimeTrack(listAnime, typeName, type, status)
+            val listAnime = with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<SimklSyncResult>()
+                    .getFromType(queryType)
+                    ?.firstOrNull { item ->
+                        item.getFromType(typeName).ids.simkl == track.remote_id
+                    } ?: return@withIOContext null
+            }
+
+            listAnime.toAnimeTrack(typeName, type, status)
         }
     }
 
@@ -264,15 +209,13 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             with(json) {
                 authClient.newCall(GET("$API_URL/users/settings"))
                     .awaitSuccess()
-                    .parseAs<JsonObject>()
-                    .let {
-                        it["account"]!!.jsonObject["id"]!!.jsonPrimitive.int
-                    }
+                    .parseAs<SimklUser>()
+                    .account.id
             }
         }
     }
 
-    suspend fun accessToken(code: String): OAuth {
+    suspend fun accessToken(code: String): SimklOAuth {
         return withIOContext {
             with(json) {
                 client.newCall(accessTokenRequest(code))
@@ -301,6 +244,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         private const val API_URL = "https://api.simkl.com"
         private const val OAUTH_URL = "$API_URL/oauth/token"
         private const val LOGIN_URL = "$BASE_URL/oauth/authorize"
+        const val POSTERS_URL = "https://simkl.in/posters/"
 
         private const val REDIRECT_URL = "aniyomi://simkl-auth"
 

@@ -6,6 +6,11 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.shikimori.dto.SMAddEntryResponse
+import eu.kanade.tachiyomi.data.track.shikimori.dto.SMEntry
+import eu.kanade.tachiyomi.data.track.shikimori.dto.SMOAuth
+import eu.kanade.tachiyomi.data.track.shikimori.dto.SMUser
+import eu.kanade.tachiyomi.data.track.shikimori.dto.SMUserListEntry
 import eu.kanade.tachiyomi.network.DELETE
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
@@ -13,15 +18,7 @@ import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.double
-import kotlinx.serialization.json.int
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.long
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import okhttp3.FormBody
@@ -61,10 +58,9 @@ class ShikimoriApi(
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 ).awaitSuccess()
-                    .parseAs<JsonObject>()
+                    .parseAs<SMAddEntryResponse>()
                     .let {
-                        track.library_id =
-                            it["id"]!!.jsonPrimitive.long // save id of the entry for possible future delete request
+                        track.library_id = it.id
                     }
                 track
             }
@@ -103,10 +99,9 @@ class ShikimoriApi(
                         body = payload.toString().toRequestBody(jsonMime),
                     ),
                 ).awaitSuccess()
-                    .parseAs<JsonObject>()
+                    .parseAs<SMAddEntryResponse>()
                     .let {
-                        track.library_id =
-                            it["id"]!!.jsonPrimitive.long // save id of the entry for possible future delete request
+                        track.library_id = it.id
                     }
                 track
             }
@@ -136,12 +131,8 @@ class ShikimoriApi(
             with(json) {
                 authClient.newCall(GET(url.toString()))
                     .awaitSuccess()
-                    .parseAs<JsonArray>()
-                    .let { response ->
-                        response.map {
-                            jsonToSearch(it.jsonObject)
-                        }
-                    }
+                    .parseAs<List<SMEntry>>()
+                    .map { it.toMangaTrack(trackId) }
             }
         }
     }
@@ -156,69 +147,9 @@ class ShikimoriApi(
             with(json) {
                 authClient.newCall(GET(url.toString()))
                     .awaitSuccess()
-                    .parseAs<JsonArray>()
-                    .let { response ->
-                        response.map {
-                            jsonToAnimeSearch(it.jsonObject)
-                        }
-                    }
+                    .parseAs<List<SMEntry>>()
+                    .map { it.toAnimeTrack(trackId) }
             }
-        }
-    }
-
-    private fun jsonToSearch(obj: JsonObject): MangaTrackSearch {
-        return MangaTrackSearch.create(trackId).apply {
-            remote_id = obj["id"]!!.jsonPrimitive.long
-            title = obj["name"]!!.jsonPrimitive.content
-            total_chapters = obj["chapters"]!!.jsonPrimitive.long
-            cover_url = BASE_URL + obj["image"]!!.jsonObject["preview"]!!.jsonPrimitive.content
-            summary = ""
-            score = obj["score"]!!.jsonPrimitive.double
-            tracking_url = BASE_URL + obj["url"]!!.jsonPrimitive.content
-            publishing_status = obj["status"]!!.jsonPrimitive.content
-            publishing_type = obj["kind"]!!.jsonPrimitive.content
-            start_date = obj["aired_on"]!!.jsonPrimitive.contentOrNull ?: ""
-        }
-    }
-
-    private fun jsonToAnimeSearch(obj: JsonObject): AnimeTrackSearch {
-        return AnimeTrackSearch.create(trackId).apply {
-            remote_id = obj["id"]!!.jsonPrimitive.long
-            title = obj["name"]!!.jsonPrimitive.content
-            total_episodes = obj["episodes"]!!.jsonPrimitive.long
-            cover_url = BASE_URL + obj["image"]!!.jsonObject["preview"]!!.jsonPrimitive.content
-            summary = ""
-            score = obj["score"]!!.jsonPrimitive.double
-            tracking_url = BASE_URL + obj["url"]!!.jsonPrimitive.content
-            publishing_status = obj["status"]!!.jsonPrimitive.content
-            publishing_type = obj["kind"]!!.jsonPrimitive.content
-            start_date = obj.get("aired_on")!!.jsonPrimitive.contentOrNull ?: ""
-        }
-    }
-
-    private fun jsonToTrack(obj: JsonObject, mangas: JsonObject): MangaTrack {
-        return MangaTrack.create(trackId).apply {
-            title = mangas["name"]!!.jsonPrimitive.content
-            remote_id = obj["id"]!!.jsonPrimitive.long
-            total_chapters = mangas["chapters"]!!.jsonPrimitive.long
-            library_id = obj["id"]!!.jsonPrimitive.long
-            last_chapter_read = obj["chapters"]!!.jsonPrimitive.double
-            score = obj["score"]!!.jsonPrimitive.int.toDouble()
-            status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
-            tracking_url = BASE_URL + mangas["url"]!!.jsonPrimitive.content
-        }
-    }
-
-    private fun jsonToAnimeTrack(obj: JsonObject, animes: JsonObject): AnimeTrack {
-        return AnimeTrack.create(trackId).apply {
-            title = animes["name"]!!.jsonPrimitive.content
-            remote_id = obj["id"]!!.jsonPrimitive.long
-            total_episodes = animes["episodes"]!!.jsonPrimitive.long
-            library_id = obj["id"]!!.jsonPrimitive.long
-            last_episode_seen = obj["episodes"]!!.jsonPrimitive.double
-            score = obj["score"]!!.jsonPrimitive.int.toDouble()
-            status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
-            tracking_url = BASE_URL + animes["url"]!!.jsonPrimitive.content
         }
     }
 
@@ -227,10 +158,10 @@ class ShikimoriApi(
             val urlMangas = "$API_URL/mangas".toUri().buildUpon()
                 .appendPath(track.remote_id.toString())
                 .build()
-            val mangas = with(json) {
+            val manga = with(json) {
                 authClient.newCall(GET(urlMangas.toString()))
                     .awaitSuccess()
-                    .parseAs<JsonObject>()
+                    .parseAs<SMEntry>()
             }
 
             val url = "$API_URL/v2/user_rates".toUri().buildUpon()
@@ -241,15 +172,14 @@ class ShikimoriApi(
             with(json) {
                 authClient.newCall(GET(url.toString()))
                     .awaitSuccess()
-                    .parseAs<JsonArray>()
-                    .let { response ->
-                        if (response.size > 1) {
-                            throw Exception("Too much mangas in response")
+                    .parseAs<List<SMUserListEntry>>()
+                    .let { entries ->
+                        if (entries.size > 1) {
+                            throw Exception("Too many manga in response")
                         }
-                        val entry = response.map {
-                            jsonToTrack(it.jsonObject, mangas)
-                        }
-                        entry.firstOrNull()
+                        entries
+                            .map { it.toMangaTrack(trackId, manga) }
+                            .firstOrNull()
                     }
             }
         }
@@ -260,10 +190,10 @@ class ShikimoriApi(
             val urlAnimes = "$API_URL/animes".toUri().buildUpon()
                 .appendPath(track.remote_id.toString())
                 .build()
-            val animes = with(json) {
+            val anime = with(json) {
                 authClient.newCall(GET(urlAnimes.toString()))
                     .awaitSuccess()
-                    .parseAs<JsonObject>()
+                    .parseAs<SMEntry>()
             }
 
             val url = "$API_URL/v2/user_rates".toUri().buildUpon()
@@ -274,15 +204,14 @@ class ShikimoriApi(
             with(json) {
                 authClient.newCall(GET(url.toString()))
                     .awaitSuccess()
-                    .parseAs<JsonArray>()
-                    .let { response ->
-                        if (response.size > 1) {
-                            throw Exception("Too much animes in response")
+                    .parseAs<List<SMUserListEntry>>()
+                    .let { entries ->
+                        if (entries.size > 1) {
+                            throw Exception("Too many manga in response")
                         }
-                        val entry = response.map {
-                            jsonToAnimeTrack(it.jsonObject, animes)
-                        }
-                        entry.firstOrNull()
+                        entries
+                            .map { it.toAnimeTrack(trackId, anime) }
+                            .firstOrNull()
                     }
             }
         }
@@ -292,14 +221,12 @@ class ShikimoriApi(
         return with(json) {
             authClient.newCall(GET("$API_URL/users/whoami"))
                 .awaitSuccess()
-                .parseAs<JsonObject>()
-                .let {
-                    it["id"]!!.jsonPrimitive.int
-                }
+                .parseAs<SMUser>()
+                .id
         }
     }
 
-    suspend fun accessToken(code: String): OAuth {
+    suspend fun accessToken(code: String): SMOAuth {
         return withIOContext {
             with(json) {
                 client.newCall(accessTokenRequest(code))
@@ -321,15 +248,15 @@ class ShikimoriApi(
     )
 
     companion object {
-        private const val CLIENT_ID = "aOAYRqOLwxpA8skpcQIXetNy4cw2rn2fRzScawlcQ5U"
-        private const val CLIENT_SECRET = "jqjmORn6bh2046ulkm4lHEwJ3OA1RmO3FD2sR9f6Clw"
-
-        private const val BASE_URL = "https://shikimori.one"
+        const val BASE_URL = "https://shikimori.one"
         private const val API_URL = "$BASE_URL/api"
         private const val OAUTH_URL = "$BASE_URL/oauth/token"
         private const val LOGIN_URL = "$BASE_URL/oauth/authorize"
 
         private const val REDIRECT_URL = "aniyomi://shikimori-auth"
+
+        private const val CLIENT_ID = "aOAYRqOLwxpA8skpcQIXetNy4cw2rn2fRzScawlcQ5U"
+        private const val CLIENT_SECRET = "jqjmORn6bh2046ulkm4lHEwJ3OA1RmO3FD2sR9f6Clw"
 
         fun authUrl(): Uri = LOGIN_URL.toUri().buildUpon()
             .appendQueryParameter("client_id", CLIENT_ID)

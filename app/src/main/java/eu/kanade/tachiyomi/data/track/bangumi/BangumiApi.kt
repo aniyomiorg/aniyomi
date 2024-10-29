@@ -4,6 +4,10 @@ import android.net.Uri
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMCollectionResponse
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMOAuth
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMSearchItem
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMSearchResult
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
@@ -11,14 +15,6 @@ import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.int
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.long
 import okhttp3.CacheControl
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -42,7 +38,7 @@ class BangumiApi(
         return withIOContext {
             val body = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
+                .add("status", track.toApiStatus())
                 .build()
             authClient.newCall(POST("$API_URL/collection/${track.remote_id}/update", body = body))
                 .awaitSuccess()
@@ -54,7 +50,7 @@ class BangumiApi(
         return withIOContext {
             val body = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
+                .add("status", track.toApiStatus())
                 .build()
             authClient.newCall(POST("$API_URL/collection/${track.remote_id}/update", body = body))
                 .awaitSuccess()
@@ -67,7 +63,7 @@ class BangumiApi(
             // read status update
             val sbody = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
+                .add("status", track.toApiStatus())
                 .build()
             authClient.newCall(POST("$API_URL/collection/${track.remote_id}/update", body = sbody))
                 .awaitSuccess()
@@ -77,10 +73,7 @@ class BangumiApi(
                 .add("watched_eps", track.last_chapter_read.toInt().toString())
                 .build()
             authClient.newCall(
-                POST(
-                    "$API_URL/subject/${track.remote_id}/update/watched_eps",
-                    body = body,
-                ),
+                POST("$API_URL/subject/${track.remote_id}/update/watched_eps", body = body),
             ).awaitSuccess()
 
             track
@@ -92,7 +85,7 @@ class BangumiApi(
             // read status update
             val sbody = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
+                .add("status", track.toApiStatus())
                 .build()
             authClient.newCall(POST("$API_URL/collection/${track.remote_id}/update", body = sbody))
                 .awaitSuccess()
@@ -102,10 +95,7 @@ class BangumiApi(
                 .add("watched_eps", track.last_episode_seen.toInt().toString())
                 .build()
             authClient.newCall(
-                POST(
-                    "$API_URL/subject/${track.remote_id}/update/watched_eps",
-                    body = body,
-                ),
+                POST("$API_URL/subject/${track.remote_id}/update/watched_eps", body = body),
             ).awaitSuccess()
 
             track
@@ -122,20 +112,19 @@ class BangumiApi(
                 .buildUpon()
                 .appendQueryParameter("max_results", "20")
                 .build()
-            authClient.newCall(GET(url.toString()))
-                .awaitSuccess()
-                .use {
-                    var responseBody = it.body.string()
-                    if (responseBody.isEmpty()) {
-                        throw Exception("Null Response")
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<BGMSearchResult>()
+                    .let { result ->
+                        if (result.code == 404) emptyList<MangaTrackSearch>()
+
+                        result.list
+                            ?.filter { it.type == 1 }
+                            ?.map { it.toMangaTrackSearch(trackId) }
+                            .orEmpty()
                     }
-                    if (responseBody.contains("\"code\":404")) {
-                        responseBody = "{\"results\":0,\"list\":[]}"
-                    }
-                    val response = json.decodeFromString<JsonObject>(responseBody)["list"]?.jsonArray
-                    response?.filter { it.jsonObject["type"]?.jsonPrimitive?.int == 1 }
-                        ?.map { jsonToSearch(it.jsonObject) }.orEmpty()
-                }
+            }
         }
     }
 
@@ -149,69 +138,19 @@ class BangumiApi(
                 .buildUpon()
                 .appendQueryParameter("max_results", "20")
                 .build()
-            authClient.newCall(GET(url.toString()))
-                .awaitSuccess()
-                .use {
-                    var responseBody = it.body?.string().orEmpty()
-                    if (responseBody.isEmpty()) {
-                        throw Exception("Null Response")
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<BGMSearchResult>()
+                    .let { result ->
+                        if (result.code == 404) emptyList<AnimeTrackSearch>()
+
+                        result.list
+                            ?.filter { it.type == 1 }
+                            ?.map { it.toAnimeTrackSearch(trackId) }
+                            .orEmpty()
                     }
-                    if (responseBody.contains("\"code\":404")) {
-                        responseBody = "{\"results\":0,\"list\":[]}"
-                    }
-                    val response = json.decodeFromString<JsonObject>(responseBody)["list"]?.jsonArray
-                    response?.filter { it.jsonObject["type"]?.jsonPrimitive?.int == 1 }
-                        ?.map { jsonToSearchAnime(it.jsonObject) }.orEmpty()
-                }
-        }
-    }
-
-    private fun jsonToSearch(obj: JsonObject): MangaTrackSearch {
-        val coverUrl = if (obj["images"] is JsonObject) {
-            obj["images"]?.jsonObject?.get("common")?.jsonPrimitive?.contentOrNull ?: ""
-        } else {
-            // Sometimes JsonNull
-            ""
-        }
-        val totalChapters = if (obj["eps_count"] != null) {
-            obj["eps_count"]!!.jsonPrimitive.long
-        } else {
-            0
-        }
-        val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.doubleOrNull ?: -1.0
-        return MangaTrackSearch.create(trackId).apply {
-            remote_id = obj["id"]!!.jsonPrimitive.long
-            title = obj["name_cn"]!!.jsonPrimitive.content
-            cover_url = coverUrl
-            summary = obj["name"]!!.jsonPrimitive.content
-            score = rating
-            tracking_url = obj["url"]!!.jsonPrimitive.content
-            total_chapters = totalChapters
-        }
-    }
-
-    private fun jsonToSearchAnime(obj: JsonObject): AnimeTrackSearch {
-        val coverUrl = if (obj["images"] is JsonObject) {
-            obj["images"]?.jsonObject?.get("common")?.jsonPrimitive?.contentOrNull ?: ""
-        } else {
-            // Sometimes JsonNull
-            ""
-        }
-        val totalChapters = if (obj["eps_count"] != null) {
-            obj["eps_count"]!!.jsonPrimitive.long
-        } else {
-            0
-        }
-
-        val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.doubleOrNull ?: -1.0
-        return AnimeTrackSearch.create(trackId).apply {
-            remote_id = obj["id"]!!.jsonPrimitive.long
-            title = obj["name_cn"]!!.jsonPrimitive.content
-            cover_url = coverUrl
-            score = rating
-            summary = obj["name"]!!.jsonPrimitive.content
-            tracking_url = obj["url"]!!.jsonPrimitive.content
-            total_episodes = totalChapters
+            }
         }
     }
 
@@ -220,8 +159,8 @@ class BangumiApi(
             with(json) {
                 authClient.newCall(GET("$API_URL/subject/${track.remote_id}"))
                     .awaitSuccess()
-                    .parseAs<JsonObject>()
-                    .let { jsonToSearch(it) }
+                    .parseAs<BGMSearchItem>()
+                    .toMangaTrackSearch(trackId)
             }
         }
     }
@@ -231,8 +170,8 @@ class BangumiApi(
             with(json) {
                 authClient.newCall(GET("$API_URL/subject/${track.remote_id}"))
                     .awaitSuccess()
-                    .parseAs<JsonObject>()
-                    .let { jsonToSearchAnime(it) }
+                    .parseAs<BGMSearchItem>()
+                    .toAnimeTrackSearch(trackId)
             }
         }
     }
@@ -247,20 +186,18 @@ class BangumiApi(
                 .build()
 
             // TODO: get user readed chapter here
-            val response = authClient.newCall(requestUserRead).awaitSuccess()
-            val responseBody = response.body.string()
-            if (responseBody.isEmpty()) {
-                throw Exception("Null Response")
-            }
-            if (responseBody.contains("\"code\":400")) {
-                null
-            } else {
-                json.decodeFromString<Collection>(responseBody).let {
-                    track.status = it.status?.id!!
-                    track.last_chapter_read = it.ep_status!!.toDouble()
-                    track.score = it.rating!!
-                    track
-                }
+            with(json) {
+                authClient.newCall(requestUserRead)
+                    .awaitSuccess()
+                    .parseAs<BGMCollectionResponse>()
+                    .let {
+                        if (it.code == 400) return@let null
+
+                        track.status = it.status?.id!!
+                        track.last_chapter_read = it.epStatus!!.toDouble()
+                        track.score = it.rating!!
+                        track
+                    }
             }
         }
     }
@@ -275,25 +212,23 @@ class BangumiApi(
                 .build()
 
             // TODO: get user readed chapter here
-            var response = authClient.newCall(requestUserRead).awaitSuccess()
-            var responseBody = response.body?.string().orEmpty()
-            if (responseBody.isEmpty()) {
-                throw Exception("Null Response")
-            }
-            if (responseBody.contains("\"code\":400")) {
-                null
-            } else {
-                json.decodeFromString<Collection>(responseBody).let {
-                    track.status = it.status?.id!!
-                    track.last_episode_seen = it.ep_status!!.toDouble()
-                    track.score = it.rating!!
-                    track
-                }
+            with(json) {
+                authClient.newCall(requestUserRead)
+                    .awaitSuccess()
+                    .parseAs<BGMCollectionResponse>()
+                    .let {
+                        if (it.code == 400) return@let null
+
+                        track.status = it.status?.id!!
+                        track.last_episode_seen = it.epStatus!!.toDouble()
+                        track.score = it.rating!!
+                        track
+                    }
             }
         }
     }
 
-    suspend fun accessToken(code: String): OAuth {
+    suspend fun accessToken(code: String): BGMOAuth {
         return withIOContext {
             with(json) {
                 client.newCall(accessTokenRequest(code))

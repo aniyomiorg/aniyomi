@@ -8,6 +8,7 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMOAuth
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.collections.immutable.ImmutableList
@@ -135,8 +136,8 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
     }
 
     override suspend fun refresh(track: MangaTrack): MangaTrack {
-        val remoteStatusTrack = api.statusLibManga(track)
-        track.copyPersonalFrom(remoteStatusTrack!!)
+        val remoteStatusTrack = api.statusLibManga(track) ?: throw Exception("Could not find manga")
+        track.copyPersonalFrom(remoteStatusTrack)
         api.findLibManga(track)?.let { remoteTrack ->
             track.total_chapters = remoteTrack.total_chapters
         }
@@ -144,8 +145,8 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
     }
 
     override suspend fun refresh(track: AnimeTrack): AnimeTrack {
-        val remoteStatusTrack = api.statusLibAnime(track)
-        track.copyPersonalFrom(remoteStatusTrack!!)
+        val remoteStatusTrack = api.statusLibAnime(track) ?: throw Exception("Could not find anime")
+        track.copyPersonalFrom(remoteStatusTrack)
         api.findLibAnime(track)?.let { remoteTrack ->
             track.total_episodes = remoteTrack.total_episodes
         }
@@ -198,19 +199,19 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
         try {
             val oauth = api.accessToken(code)
             interceptor.newAuth(oauth)
-            saveCredentials(oauth.user_id.toString(), oauth.access_token)
+            saveCredentials(oauth.userId.toString(), oauth.accessToken)
         } catch (e: Throwable) {
             logout()
         }
     }
 
-    fun saveToken(oauth: OAuth?) {
+    fun saveToken(oauth: BGMOAuth?) {
         trackPreferences.trackToken(this).set(json.encodeToString(oauth))
     }
 
-    fun restoreToken(): OAuth? {
+    fun restoreToken(): BGMOAuth? {
         return try {
-            json.decodeFromString<OAuth>(trackPreferences.trackToken(this).get())
+            json.decodeFromString<BGMOAuth>(trackPreferences.trackToken(this).get())
         } catch (e: Exception) {
             null
         }

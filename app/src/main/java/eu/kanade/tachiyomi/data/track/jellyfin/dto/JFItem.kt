@@ -1,22 +1,22 @@
-package eu.kanade.tachiyomi.data.track.jellyfin
+package eu.kanade.tachiyomi.data.track.jellyfin.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ItemDto(
+data class JFItem(
     @SerialName("Name") val name: String,
     @SerialName("Id") val id: String,
-    @SerialName("UserData") val userData: UserDataDto,
+    @SerialName("UserData") val userData: JFUserData,
     @SerialName("IndexNumber") val indexNumber: Long? = null,
 )
 
 @Serializable
-data class UserDataDto(
+data class JFUserData(
     @SerialName("Played") val played: Boolean,
 )
 
 @Serializable
-data class ItemsDto(
-    @SerialName("Items") val items: List<ItemDto>,
+data class JFItemList(
+    @SerialName("Items") val items: List<JFItem>,
 )
