@@ -136,7 +136,6 @@ class PlayerSettingsScreenModel(
 
         PlayerDialog(
             titleRes = MR.strings.player_reset_subtitles,
-            hideSystemBars = true,
             modifier = Modifier
                 .fillMaxWidth(fraction = 0.6F)
                 .padding(MaterialTheme.padding.medium),

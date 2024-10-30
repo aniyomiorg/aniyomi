@@ -88,7 +88,6 @@ fun PlayerSettingsSheet(
     }
 
     AdaptiveSheet(
-        hideSystemBars = true,
         onDismissRequest = onDismissRequest,
     ) {
         Column(
