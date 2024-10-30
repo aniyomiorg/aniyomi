@@ -1051,7 +1051,6 @@
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
     <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
-    <string name="licensed_manga_chapters_error">Licensed - No items to show</string>
     <string name="no_next_episode">Next Episode not found!</string>
     <string name="label_storage">Storage</string>
     <string name="label_history">Manga</string>
