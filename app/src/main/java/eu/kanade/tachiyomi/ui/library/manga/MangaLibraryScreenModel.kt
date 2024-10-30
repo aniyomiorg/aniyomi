@@ -72,7 +72,6 @@ import tachiyomi.domain.track.manga.model.MangaTrack
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Collections
 
 /**
  * Typealias for the library manga, using the category as keys, and list of manga as values.
@@ -115,10 +114,8 @@ class MangaLibraryScreenModel(
                     .applySort(tracks, trackingFilter.keys)
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
-                            // Filter query
                             value.filter { it.matches(searchQuery) }
                         } else {
-                            // Don't do anything
                             value
                         }
                     }
@@ -173,9 +170,6 @@ class MangaLibraryScreenModel(
             .launchIn(screenModelScope)
     }
 
-    /**
-     * Applies library filters to the given map of manga.
-     */
     private suspend fun MangaLibraryMap.applyFilters(
         trackMap: Map<Long, List<MangaTrack>>,
         trackingFilter: Map<Long, TriState>,
@@ -251,14 +245,10 @@ class MangaLibraryScreenModel(
                 filterFnTracking(it)
         }
 
-        return this.mapValues { entry -> entry.value.fastFilter(filterFn) }
+        return mapValues { (_, value) -> value.fastFilter(filterFn) }
     }
 
-    /**
-     * Applies library sorting to the given map of manga.
-     */
     private fun MangaLibraryMap.applySort(
-        // Map<MangaId, List<Track>>
         trackMap: Map<Long, List<MangaTrack>>,
         loggedInTrackerIds: Set<Long>,
     ): MangaLibraryMap {
@@ -280,9 +270,8 @@ class MangaLibraryScreenModel(
             }
         }
 
-        val sortFn: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
-            val sort = keys.find { it.id == i1.libraryManga.category }!!.sort
-            when (sort.type) {
+        fun MangaLibrarySort.comparator(): Comparator<MangaLibraryItem> = Comparator { i1, i2 ->
+            when (this.type) {
                 MangaLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
                 }
@@ -295,8 +284,8 @@ class MangaLibraryScreenModel(
                 MangaLibrarySort.Type.UnreadCount -> when {
                     // Ensure unread content comes first
                     i1.libraryManga.unreadCount == i2.libraryManga.unreadCount -> 0
-                    i1.libraryManga.unreadCount == 0L -> if (sort.isAscending) 1 else -1
-                    i2.libraryManga.unreadCount == 0L -> if (sort.isAscending) -1 else 1
+                    i1.libraryManga.unreadCount == 0L -> if (this.isAscending) 1 else -1
+                    i2.libraryManga.unreadCount == 0L -> if (this.isAscending) -1 else 1
                     else -> i1.libraryManga.unreadCount.compareTo(i2.libraryManga.unreadCount)
                 }
                 MangaLibrarySort.Type.TotalChapters -> {
@@ -319,14 +308,12 @@ class MangaLibraryScreenModel(
             }
         }
 
-        return this.mapValues { entry ->
-            val comparator = if (keys.find { it.id == entry.key.id }!!.sort.isAscending) {
-                Comparator(sortFn)
-            } else {
-                Collections.reverseOrder(sortFn)
-            }
+        return mapValues { (key, value) ->
+            val comparator = key.sort.comparator()
+                .let { if (key.sort.isAscending) it else it.reversed() }
+                .thenComparator(sortAlphabetically)
 
-            entry.value.sortedWith(comparator.thenComparator(sortAlphabetically))
+            value.sortedWith(comparator)
         }
     }
 
