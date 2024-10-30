@@ -4,7 +4,7 @@ import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMapIndexedNotNull
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import eu.kanade.core.util.insertSeparators
+import eu.kanade.core.util.insertSeparatorsReversed
 import eu.kanade.tachiyomi.util.lang.toLocalDate
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
@@ -33,7 +33,7 @@ class UpcomingAnimeScreenModel(
                     val upcomingItems = it.toUpcomingAnimeUIModels()
                     state.copy(
                         items = upcomingItems,
-                        events = it.toEvents(),
+                        events = upcomingItems.toEvents(),
                         headerIndexes = upcomingItems.getHeaderIndexes(),
                     )
                 }
@@ -42,13 +42,16 @@ class UpcomingAnimeScreenModel(
     }
 
     private fun List<Anime>.toUpcomingAnimeUIModels(): ImmutableList<UpcomingAnimeUIModel> {
+        var animeCount = 0
         return fastMap { UpcomingAnimeUIModel.Item(it) }
-            .insertSeparators { before, after ->
+            .insertSeparatorsReversed { before, after ->
+                if (after != null) animeCount++
+
                 val beforeDate = before?.anime?.expectedNextUpdate?.toLocalDate()
                 val afterDate = after?.anime?.expectedNextUpdate?.toLocalDate()
 
                 if (beforeDate != afterDate && afterDate != null) {
-                    UpcomingAnimeUIModel.Header(afterDate)
+                    UpcomingAnimeUIModel.Header(afterDate, animeCount).also { animeCount = 0 }
                 } else {
                     null
                 }
@@ -56,9 +59,9 @@ class UpcomingAnimeScreenModel(
             .toImmutableList()
     }
 
-    private fun List<Anime>.toEvents(): ImmutableMap<LocalDate, Int> {
-        return groupBy { it.expectedNextUpdate?.toLocalDate() ?: LocalDate.MAX }
-            .mapValues { it.value.size }
+    private fun List<UpcomingAnimeUIModel>.toEvents(): ImmutableMap<LocalDate, Int> {
+        return filterIsInstance<UpcomingAnimeUIModel.Header>()
+            .associate { it.date to it.animeCount }
             .toImmutableMap()
     }
 
