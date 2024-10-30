@@ -26,7 +26,7 @@ data class KitsuListSearchResult(
             title = manga.canonicalTitle
             total_chapters = manga.chapterCount ?: 0
             cover_url = manga.posterImage?.original ?: ""
-            summary = manga.synopsis
+            summary = manga.synopsis ?: ""
             tracking_url = KitsuApi.mangaUrl(remote_id)
             publishing_status = manga.status
             publishing_type = manga.mangaType ?: ""
@@ -59,7 +59,7 @@ data class KitsuListSearchResult(
             title = anime.canonicalTitle
             total_episodes = anime.episodeCount ?: 0
             cover_url = anime.posterImage?.original ?: ""
-            summary = anime.synopsis
+            summary = anime.synopsis ?: ""
             tracking_url = KitsuApi.animeUrl(remote_id)
             publishing_status = anime.status
             publishing_type = anime.showType ?: ""
@@ -109,7 +109,7 @@ data class KitsuListSearchItemIncludedAttributes(
     val mangaType: String?,
     val showType: String?,
     val posterImage: KitsuSearchItemCover?,
-    val synopsis: String,
+    val synopsis: String?,
     val startDate: String?,
     val status: String,
 )
