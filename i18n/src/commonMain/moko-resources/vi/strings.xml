@@ -648,7 +648,7 @@
     <string name="download_notifier_cache_renewal">Đang kiểm tra những truyện đã tải xuống</string>
     <string name="crash_screen_description">%s đã có lỗi. Bạn nên chia sẻ tệp báo lỗi tạm ở trong kênh hỗ trợ của chúng tôi trên Discord.</string>
     <string name="action_update_category">Cập nhật danh mục</string>
-    <string name="confirm_add_duplicate_manga">Truyện này đã có sẵn trong thư viện bạn. 
+    <string name="confirm_add_duplicate_manga">Truyện này đã có sẵn trong thư viện bạn.
 \n
 \nBạn có muốn thêm lại không\?</string>
     <string name="copied_to_clipboard_plain">Đã sao chép vào bảng tạm</string>
