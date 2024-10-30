@@ -90,7 +90,7 @@ class AnimeExtensionManager(
             ?: return null
 
         return iconMap[pkgName] ?: iconMap.getOrPut(pkgName) {
-            AnimeExtensionLoader.getAnimeExtensionPackageInfoFromPkgName(context, pkgName)!!.applicationInfo
+            AnimeExtensionLoader.getAnimeExtensionPackageInfoFromPkgName(context, pkgName)!!.applicationInfo!!
                 .loadIcon(context.packageManager)
         }
     }

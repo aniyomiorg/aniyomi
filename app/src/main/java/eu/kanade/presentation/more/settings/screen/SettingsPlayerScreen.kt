@@ -374,7 +374,7 @@ object SettingsPlayerScreen : SearchableSettings {
 
         val packageNames = supportedPlayers.map { it.packageName }
         val packageNamesReadable = supportedPlayers
-            .map { pm.getApplicationLabel(it.applicationInfo).toString() }
+            .map { pm.getApplicationLabel(it.applicationInfo!!).toString() }
 
         val packageNamesMap: Map<String, String> =
             packageNames.zip(packageNamesReadable)

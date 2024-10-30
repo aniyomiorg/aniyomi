@@ -382,7 +382,7 @@ object SettingsDownloadScreen : SearchableSettings {
         }
         val packageNames = supportedDownloaders.map { it.packageName }
         val packageNamesReadable = supportedDownloaders
-            .map { pm.getApplicationLabel(it.applicationInfo).toString() }
+            .map { pm.getApplicationLabel(it.applicationInfo!!).toString() }
 
         val packageNamesMap: Map<String, String> =
             mapOf("" to "None") + packageNames.zip(packageNamesReadable).toMap()

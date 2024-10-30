@@ -87,7 +87,7 @@ class MangaExtensionManager(
             ?: return null
 
         return iconMap[pkgName] ?: iconMap.getOrPut(pkgName) {
-            MangaExtensionLoader.getMangaExtensionPackageInfoFromPkgName(context, pkgName)!!.applicationInfo
+            MangaExtensionLoader.getMangaExtensionPackageInfoFromPkgName(context, pkgName)!!.applicationInfo!!
                 .loadIcon(context.packageManager)
         }
     }
