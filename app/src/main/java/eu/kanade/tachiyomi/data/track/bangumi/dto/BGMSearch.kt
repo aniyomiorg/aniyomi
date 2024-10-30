@@ -18,6 +18,7 @@ data class BGMSearchItem(
     val nameCn: String,
     val name: String,
     val type: Int,
+    val summary: String?,
     val images: BGMSearchItemCovers?,
     @SerialName("eps_count")
     val epsCount: Long?,
@@ -26,9 +27,13 @@ data class BGMSearchItem(
 ) {
     fun toMangaTrackSearch(trackId: Long): MangaTrackSearch = MangaTrackSearch.create(trackId).apply {
         remote_id = this@BGMSearchItem.id
-        title = nameCn
-        cover_url = images?.common ?: ""
-        summary = this@BGMSearchItem.name
+        title = nameCn.ifBlank { name }
+        cover_url = images?.common.orEmpty()
+        summary = if (nameCn.isNotBlank()) {
+            "作品原名：$name" + this@BGMSearchItem.summary?.let { "\n$it" }.orEmpty()
+        } else {
+            this@BGMSearchItem.summary.orEmpty()
+        }
         score = rating?.score ?: -1.0
         tracking_url = url
         total_chapters = epsCount ?: 0
@@ -36,9 +41,13 @@ data class BGMSearchItem(
 
     fun toAnimeTrackSearch(trackId: Long): AnimeTrackSearch = AnimeTrackSearch.create(trackId).apply {
         remote_id = this@BGMSearchItem.id
-        title = nameCn
-        cover_url = images?.common ?: ""
-        summary = this@BGMSearchItem.name
+        title = nameCn.ifBlank { name }
+        cover_url = images?.common.orEmpty()
+        summary = if (nameCn.isNotBlank()) {
+            "作品原名：$name" + this@BGMSearchItem.summary?.let { "\n$it" }.orEmpty()
+        } else {
+            this@BGMSearchItem.summary.orEmpty()
+        }
         score = rating?.score ?: -1.0
         tracking_url = url
         total_episodes = epsCount ?: 0

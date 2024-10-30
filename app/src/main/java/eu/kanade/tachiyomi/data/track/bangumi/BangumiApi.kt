@@ -110,6 +110,8 @@ class BangumiApi(
             )}"
                 .toUri()
                 .buildUpon()
+                .appendQueryParameter("type", "1")
+                .appendQueryParameter("responseGroup", "large")
                 .appendQueryParameter("max_results", "20")
                 .build()
             with(json) {
@@ -120,7 +122,6 @@ class BangumiApi(
                         if (result.code == 404) emptyList<MangaTrackSearch>()
 
                         result.list
-                            ?.filter { it.type == 1 }
                             ?.map { it.toMangaTrackSearch(trackId) }
                             .orEmpty()
                     }
@@ -136,6 +137,8 @@ class BangumiApi(
             )}"
                 .toUri()
                 .buildUpon()
+                .appendQueryParameter("type", "2")
+                .appendQueryParameter("responseGroup", "large")
                 .appendQueryParameter("max_results", "20")
                 .build()
             with(json) {
@@ -146,7 +149,6 @@ class BangumiApi(
                         if (result.code == 404) emptyList<AnimeTrackSearch>()
 
                         result.list
-                            ?.filter { it.type == 1 }
                             ?.map { it.toAnimeTrackSearch(trackId) }
                             .orEmpty()
                     }
