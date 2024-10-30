@@ -1136,7 +1136,7 @@
     <string name="pref_flash_page_interval">Işık çakma aralığı:</string>
     <string name="pref_flash_style_black">Siyah</string>
     <string name="pref_flash_style_white_black">Beyaz ve siyah</string>
-    <string name="label_upcoming">Gelecek bölüm</string>
+    <string name="label_upcoming">Yakında</string>
     <string name="action_replace_repo_message">%1$s deposu, %2$s ile aynı İmza Anahtarı Parmak İzine sahip.
 \nBöyle olması gerekiyorsa %2$s , %1$s ile değiştirilecektir. Aksi takdirde depo yöneticinizle iletişime geçin.</string>
     <string name="action_replace_repo">Değiştir</string>

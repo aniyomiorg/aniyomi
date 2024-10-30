@@ -494,8 +494,8 @@
     <string name="enhanced_services">Servicios de seguimiento mejorados</string>
     <string name="tracking_guide">Guía de seguimiento</string>
     <string name="automatic_background">Automático</string>
-    <string name="off">No</string>
-    <string name="on">Sí</string>
+    <string name="off">Apagar</string>
+    <string name="on">Encender</string>
     <string name="categorized_display_settings">Establecer el tipo de orden para cada categoría</string>
     <string name="label_background_activity">Actividad en segundo plano</string>
     <string name="action_track">Seguir</string>
