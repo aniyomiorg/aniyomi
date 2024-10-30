@@ -14,9 +14,9 @@ class LibraryFlagsTest {
     @Test
     fun `Check the amount of flags`() {
         LibraryDisplayMode.values.size shouldBe 4
-        MangaLibrarySort.types.size shouldBe 9
+        MangaLibrarySort.types.size shouldBe 10
         MangaLibrarySort.directions.size shouldBe 2
-        AnimeLibrarySort.types.size shouldBe 10
+        AnimeLibrarySort.types.size shouldBe 11
         AnimeLibrarySort.directions.size shouldBe 2
     }
 

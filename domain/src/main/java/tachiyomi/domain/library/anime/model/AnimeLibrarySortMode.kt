@@ -34,6 +34,7 @@ data class AnimeLibrarySort(
         data object DateAdded : Type(0b00011100)
         data object TrackerMean : Type(0b000100000)
         data object AiringTime : Type(0b00110000)
+        data object Random : Type(0b00111100)
 
         companion object {
             fun valueOf(flag: Long): Type {
@@ -81,6 +82,7 @@ data class AnimeLibrarySort(
                 Type.DateAdded,
                 Type.TrackerMean,
                 Type.AiringTime,
+                Type.Random,
             )
         }
         val directions by lazy { setOf(Direction.Ascending, Direction.Descending) }
@@ -109,6 +111,7 @@ data class AnimeLibrarySort(
                     "DATE_ADDED" -> Type.DateAdded
                     "TRACKER_MEAN" -> Type.TrackerMean
                     "AIRING_TIME" -> Type.AiringTime
+                    "RANDOM" -> Type.Random
                     else -> Type.Alphabetical
                 }
                 val ascending = if (values[1] == "ASCENDING") Direction.Ascending else Direction.Descending
@@ -131,6 +134,7 @@ data class AnimeLibrarySort(
             Type.DateAdded -> "DATE_ADDED"
             Type.TrackerMean -> "TRACKER_MEAN"
             Type.AiringTime -> "AIRING_TIME"
+            Type.Random -> "RANDOM"
         }
         val direction = if (direction == Direction.Ascending) "ASCENDING" else "DESCENDING"
         return "$type,$direction"

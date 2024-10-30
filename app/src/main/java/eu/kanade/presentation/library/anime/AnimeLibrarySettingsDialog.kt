@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.BaseSortItem
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.SettingsChipRow
@@ -183,7 +186,19 @@ private fun ColumnScope.SortPage(
         MR.strings.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
         MR.strings.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
         MR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
+        MR.strings.action_sort_random to AnimeLibrarySort.Type.Random,
     ).plus(trackerSortOption).map { (titleRes, mode) ->
+        if (mode == AnimeLibrarySort.Type.Random) {
+            BaseSortItem(
+                label = stringResource(titleRes),
+                icon = Icons.Default.Refresh
+                    .takeIf { sortingMode == AnimeLibrarySort.Type.Random },
+                onClick = {
+                    screenModel.setSort(category, mode, AnimeLibrarySort.Direction.Ascending)
+                },
+            )
+            return@map
+        }
         SortItem(
             label = stringResource(titleRes),
             sortDescending = sortDescending.takeIf { sortingMode == mode },

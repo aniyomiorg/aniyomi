@@ -72,6 +72,7 @@ import tachiyomi.domain.track.anime.model.AnimeTrack
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import kotlin.random.Random
 
 /**
  * Typealias for the library anime, using the category as keys, and list of anime as values.
@@ -314,10 +315,17 @@ class AnimeLibraryScreenModel(
                         )
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
+                AnimeLibrarySort.Type.Random -> {
+                    error("Why Are We Still Here? Just To Suffer?")
+                }
             }
         }
 
         return mapValues { (key, value) ->
+            if (key.sort.type == AnimeLibrarySort.Type.Random) {
+                return@mapValues value.shuffled(Random(libraryPreferences.randomAnimeSortSeed().get()))
+            }
+
             val comparator = key.sort.comparator()
                 .let { if (key.sort.isAscending) it else it.reversed() }
                 .thenComparator(sortAlphabetically)
