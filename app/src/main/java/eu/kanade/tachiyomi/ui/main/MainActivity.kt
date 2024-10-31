@@ -321,12 +321,13 @@ class MainActivity : BaseActivity() {
     @Composable
     private fun HandleOnNewIntent(context: Context, navigator: Navigator) {
         LaunchedEffect(Unit) {
-            callbackFlow<Intent> {
+            callbackFlow {
                 val componentActivity = context as ComponentActivity
                 val consumer = Consumer<Intent> { trySend(it) }
                 componentActivity.addOnNewIntentListener(consumer)
                 awaitClose { componentActivity.removeOnNewIntentListener(consumer) }
-            }.collectLatest { handleIntentAction(it, navigator) }
+            }
+                .collectLatest { handleIntentAction(it, navigator) }
         }
     }
 
@@ -383,6 +384,7 @@ class MainActivity : BaseActivity() {
      * When custom animation is used, status and navigation bar color will be set to transparent and will be restored
      * after the animation is finished.
      */
+    @Suppress("Deprecation")
     private fun setSplashScreenExitAnimation(splashScreen: SplashScreen?) {
         val root = findViewById<View>(android.R.id.content)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S && splashScreen != null) {
