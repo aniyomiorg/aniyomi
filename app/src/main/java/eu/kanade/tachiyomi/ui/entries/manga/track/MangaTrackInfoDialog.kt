@@ -847,7 +847,11 @@ private data class TrackerMangaRemoveScreen(
 
         fun deleteMangaFromService() {
             screenModelScope.launchNonCancellable {
-                (tracker as DeletableMangaTracker).delete(track)
+                try {
+                    (tracker as DeletableMangaTracker).delete(track)
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR, e) { "Failed to delete manga entry from service" }
+                }
             }
         }
 

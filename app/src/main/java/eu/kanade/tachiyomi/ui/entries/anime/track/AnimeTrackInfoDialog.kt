@@ -847,7 +847,11 @@ private data class TrackerAnimeRemoveScreen(
 
         fun deleteAnimeFromService() {
             screenModelScope.launchNonCancellable {
-                (tracker as DeletableAnimeTracker).delete(track)
+                try {
+                    (tracker as DeletableAnimeTracker).delete(track)
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR, e) { "Failed to delete anime entry from service" }
+                }
             }
         }
 
