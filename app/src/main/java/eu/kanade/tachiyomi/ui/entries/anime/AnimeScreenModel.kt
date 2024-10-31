@@ -743,7 +743,9 @@ class AnimeScreenModel(
             if (trackPreferences.autoUpdateTrackOnMarkRead().get()) {
                 trackEpisode.await(context, animeId, maxEpisodeNumber)
                 withUIContext {
-                    context.toast(context.stringResource(MR.strings.trackers_updated_summary_anime, maxEpisodeNumber.toInt()))
+                    context.toast(
+                        context.stringResource(MR.strings.trackers_updated_summary_anime, maxEpisodeNumber.toInt()),
+                    )
                 }
                 return@launchIO
             }

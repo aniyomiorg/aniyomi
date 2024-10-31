@@ -48,10 +48,10 @@ actual class LocalAnimeSource(
 
     private val json: Json by injectLazy()
 
-    @Suppress("PrivatePropertyName", "ktlint:standard:property-naming")
+    @Suppress("PrivatePropertyName")
     private val PopularFilters = AnimeFilterList(AnimeOrderBy.Popular(context))
 
-    @Suppress("PrivatePropertyName", "ktlint:standard:property-naming")
+    @Suppress("PrivatePropertyName")
     private val LatestFilters = AnimeFilterList(AnimeOrderBy.Latest(context))
 
     override val name = context.stringResource(MR.strings.local_anime_source)

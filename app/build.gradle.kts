@@ -13,7 +13,7 @@ plugins {
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
-@Suppress("ktlint:standard:property-naming")
+@Suppress("PropertyName")
 val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 android {

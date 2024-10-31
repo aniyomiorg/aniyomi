@@ -58,10 +58,10 @@ actual class LocalMangaSource(
     private val json: Json by injectLazy()
     private val xml: XML by injectLazy()
 
-    @Suppress("PrivatePropertyName", "ktlint:standard:property-naming")
+    @Suppress("PrivatePropertyName")
     private val PopularFilters = FilterList(MangaOrderBy.Popular(context))
 
-    @Suppress("PrivatePropertyName", "ktlint:standard:property-naming")
+    @Suppress("PrivatePropertyName")
     private val LatestFilters = FilterList(MangaOrderBy.Latest(context))
 
     override val name: String = context.stringResource(MR.strings.local_manga_source)

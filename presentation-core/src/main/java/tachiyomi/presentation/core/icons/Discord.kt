@@ -81,5 +81,5 @@ val CustomIcons.Discord: ImageVector
         return _discord!!
     }
 
-@Suppress("ObjectPropertyName", "ktlint:standard:backing-property-naming")
+@Suppress("ObjectPropertyName")
 private var _discord: ImageVector? = null

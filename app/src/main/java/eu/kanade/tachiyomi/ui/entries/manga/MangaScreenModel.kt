@@ -764,7 +764,9 @@ class MangaScreenModel(
             if (trackPreferences.autoUpdateTrackOnMarkRead().get()) {
                 trackChapter.await(context, mangaId, maxChapterNumber)
                 withUIContext {
-                    context.toast(context.stringResource(MR.strings.trackers_updated_summary_manga, maxChapterNumber.toInt()))
+                    context.toast(
+                        context.stringResource(MR.strings.trackers_updated_summary_manga, maxChapterNumber.toInt()),
+                    )
                 }
                 return@launchIO
             }

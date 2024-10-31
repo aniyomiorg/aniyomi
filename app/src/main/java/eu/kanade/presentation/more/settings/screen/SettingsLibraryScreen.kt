@@ -25,7 +25,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.ResetMangaCategoryFlags
