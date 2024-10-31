@@ -145,6 +145,10 @@ object SettingsTrackingScreen : SearchableSettings {
                 pref = trackPreferences.showNextEpisodeAiringTime(),
                 title = stringResource(MR.strings.pref_show_next_episode_airing_time),
             ),
+            Preference.PreferenceItem.SwitchPreference(
+                pref = trackPreferences.autoUpdateTrackOnMarkRead(),
+                title = stringResource(MR.strings.pref_auto_update_manga_on_mark_read),
+            ),
             Preference.PreferenceGroup(
                 title = stringResource(MR.strings.services),
                 preferenceItems = persistentListOf(

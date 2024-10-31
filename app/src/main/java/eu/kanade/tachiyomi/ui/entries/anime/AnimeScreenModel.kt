@@ -36,6 +36,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.AniChartApi
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
@@ -738,6 +739,14 @@ class AnimeScreenModel(
             val shouldPromptTrackingUpdate = tracks.any { track -> maxEpisodeNumber > track.lastEpisodeSeen }
 
             if (!shouldPromptTrackingUpdate) return@launchIO
+
+            if (trackPreferences.autoUpdateTrackOnMarkRead().get()) {
+                trackEpisode.await(context, animeId, maxEpisodeNumber)
+                withUIContext {
+                    context.toast(context.stringResource(MR.strings.trackers_updated_summary_anime, maxEpisodeNumber.toInt()))
+                }
+                return@launchIO
+            }
 
             val result = snackbarHostState.showSnackbar(
                 message = context.stringResource(MR.strings.confirm_tracker_update_anime, maxEpisodeNumber.toInt()),

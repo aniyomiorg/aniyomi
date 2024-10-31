@@ -649,6 +649,9 @@
     <string name="no_scanlators_found">No scanlators found</string>
     <string name="confirm_tracker_update">Update trackers to chapter %d?</string>
     <string name="confirm_tracker_update_anime">Update trackers to episode %d?</string>
+    <string name="trackers_updated_summary_manga">Trackers updated to chapter %d</string>
+    <string name="trackers_updated_summary_anime">Trackers updated to episode %d</string>
+
     <string name="manga_tracking_tab">Tracking</string>
     <string name="add_tracking">Add tracking</string>
     <string name="unread">Unread</string>
@@ -975,6 +978,7 @@
     <string name="auto_download_while_watching">Auto download while watching</string>
     <string name="download_ahead_info_anime">Only works on entries in library and if the current episode plus the next one are already downloaded</string>
     <string name="pref_auto_update_manga_sync">Update progress after reading/watching</string>
+    <string name="pref_auto_update_manga_on_mark_read">Update progress when marked as read</string>
     <string name="pref_track_on_add_library">Open track menu on adding to library</string>
     <string name="pref_show_next_episode_airing_time">Show next episode\'s airing time </string>
     <string name="pref_backup_flags_summary">What information to include in the backup file</string>

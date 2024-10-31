@@ -39,6 +39,7 @@ import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.removeCovers
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
@@ -93,8 +94,8 @@ class MangaScreenModel(
     private val mangaId: Long,
     private val isFromSource: Boolean,
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
-    readerPreferences: ReaderPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
+    readerPreferences: ReaderPreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
     private val trackChapter: TrackChapter = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
@@ -759,6 +760,15 @@ class MangaScreenModel(
             val maxChapterNumber = chapters.maxOf { it.chapterNumber }
             val shouldPromptTrackingUpdate = tracks.any { track -> maxChapterNumber > track.lastChapterRead }
             if (!shouldPromptTrackingUpdate) return@launchIO
+
+            if (trackPreferences.autoUpdateTrackOnMarkRead().get()) {
+                trackChapter.await(context, mangaId, maxChapterNumber)
+                withUIContext {
+                    context.toast(context.stringResource(MR.strings.trackers_updated_summary_manga, maxChapterNumber.toInt()))
+                }
+                return@launchIO
+            }
+
             val result = snackbarHostState.showSnackbar(
                 message = context.stringResource(MR.strings.confirm_tracker_update, maxChapterNumber.toInt()),
                 actionLabel = context.stringResource(MR.strings.action_ok),

@@ -42,4 +42,6 @@ class TrackPreferences(
         "show_next_episode_airing_time",
         true,
     )
+
+    fun autoUpdateTrackOnMarkRead() = preferenceStore.getBoolean("pref_auto_update_manga_on_mark_read", true)
 }
