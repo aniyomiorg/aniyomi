@@ -734,10 +734,7 @@ class AnimeScreenModel(
                 episodes = episodes.toTypedArray(),
             )
 
-            if (
-                successState?.hasLoggedInTrackers == false ||
-                !seen || autoTrackState == AutoTrackState.NEVER
-            ) {
+            if (!seen || successState?.hasLoggedInTrackers == false || autoTrackState == AutoTrackState.NEVER) {
                 return@launchIO
             }
 
