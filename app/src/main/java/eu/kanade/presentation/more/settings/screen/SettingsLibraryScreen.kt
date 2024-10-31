@@ -54,11 +54,9 @@ object SettingsLibraryScreen : SearchableSettings {
     @Composable
     override fun getPreferences(): List<Preference> {
         val getCategories = remember { Injekt.get<GetMangaCategories>() }
-        val allCategories by getCategories.subscribe()
-            .collectAsState(initial = runBlocking { getCategories.await() })
+        val allCategories by getCategories.subscribe().collectAsState(initial = emptyList())
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
-        val allAnimeCategories by getAnimeCategories.subscribe()
-            .collectAsState(initial = runBlocking { getAnimeCategories.await() })
+        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = emptyList())
         val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
 
         return listOf(

@@ -54,13 +54,9 @@ object SettingsDownloadScreen : SearchableSettings {
     @Composable
     override fun getPreferences(): List<Preference> {
         val getMangaCategories = remember { Injekt.get<GetMangaCategories>() }
-        val allMangaCategories by getMangaCategories.subscribe().collectAsState(
-            initial = runBlocking { getMangaCategories.await() },
-        )
+        val allMangaCategories by getMangaCategories.subscribe().collectAsState(initial = emptyList())
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
-        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(
-            initial = runBlocking { getAnimeCategories.await() },
-        )
+        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = emptyList())
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
         val speedLimit by downloadPreferences.downloadSpeedLimit().collectAsState()
