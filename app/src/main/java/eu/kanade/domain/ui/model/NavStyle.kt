@@ -25,7 +25,7 @@ enum class NavStyle(
     MOVE_MANGA_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_manga, moreTab = MangaLibraryTab),
     MOVE_UPDATES_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_updates, moreTab = UpdatesTab),
     MOVE_HISTORY_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_history, moreTab = HistoriesTab),
-    MOVE_BROWSE_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_browse, moreTab = BrowseTab()),
+    MOVE_BROWSE_TO_MORE(titleRes = MR.strings.pref_bottom_nav_no_browse, moreTab = BrowseTab),
     ;
 
     val moreIcon: ImageVector
@@ -44,7 +44,7 @@ enum class NavStyle(
                 MangaLibraryTab,
                 UpdatesTab,
                 HistoriesTab,
-                BrowseTab(),
+                BrowseTab,
                 MoreTab,
             ).apply { remove(this@NavStyle.moreTab) }
         }

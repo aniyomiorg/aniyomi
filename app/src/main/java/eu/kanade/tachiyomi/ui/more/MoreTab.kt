@@ -40,7 +40,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-object MoreTab : Tab() {
+data object MoreTab : Tab {
 
     override val options: TabOptions
         @Composable
@@ -74,10 +74,10 @@ object MoreTab : Tab() {
             isFDroid = context.isInstalledFromFDroid(),
             navStyle = navStyle,
             onClickAlt = { navigator.push(navStyle.moreTab) },
-            onClickDownloadQueue = { navigator.push(DownloadsTab()) },
-            onClickCategories = { navigator.push(CategoriesTab()) },
-            onClickStats = { navigator.push(StatsTab()) },
-            onClickStorage = { navigator.push(StorageTab()) },
+            onClickDownloadQueue = { navigator.push(DownloadsTab) },
+            onClickCategories = { navigator.push(CategoriesTab) },
+            onClickStats = { navigator.push(StatsTab) },
+            onClickStorage = { navigator.push(StorageTab) },
             onClickDataAndStorage = { navigator.push(SettingsScreen(SettingsScreen.Destination.DataAndStorage)) },
             onClickSettings = { navigator.push(SettingsScreen()) },
             onClickAbout = { navigator.push(SettingsScreen(SettingsScreen.Destination.About)) },

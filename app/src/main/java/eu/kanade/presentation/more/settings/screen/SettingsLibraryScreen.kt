@@ -103,7 +103,7 @@ object SettingsLibraryScreen : SearchableSettings {
                         count = userAnimeCategoriesCount,
                         userAnimeCategoriesCount,
                     ),
-                    onClick = { navigator.push(CategoriesTab(false)) },
+                    onClick = { navigator.push(CategoriesTab) },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultAnimeCategory(),
@@ -117,7 +117,10 @@ object SettingsLibraryScreen : SearchableSettings {
                         count = userCategoriesCount,
                         userCategoriesCount,
                     ),
-                    onClick = { navigator.push(CategoriesTab(true)) },
+                    onClick = {
+                        navigator.push(CategoriesTab)
+                        CategoriesTab.showMangaCategory()
+                    },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultMangaCategory(),

@@ -173,7 +173,12 @@ object HomeScreen : Screen() {
                             is Tab.Library -> MangaLibraryTab
                             is Tab.Updates -> UpdatesTab
                             is Tab.History -> HistoriesTab
-                            is Tab.Browse -> BrowseTab(it.toExtensions)
+                            is Tab.Browse -> {
+                                if (it.toExtensions) {
+                                    BrowseTab.showExtension()
+                                }
+                                BrowseTab
+                            }
                             is Tab.More -> MoreTab
                         }
 
@@ -184,7 +189,7 @@ object HomeScreen : Screen() {
                             navigator.push(MangaScreen(it.mangaIdToOpen))
                         }
                         if (it is Tab.More && it.toDownloads) {
-                            navigator.push(DownloadsTab())
+                            navigator.push(DownloadsTab)
                         }
                     }
                 }

@@ -36,10 +36,8 @@ val LocalBackPress: ProvidableCompositionLocal<(() -> Unit)?> = staticCompositio
 
 private val uiPreferences: UiPreferences = Injekt.get()
 
-abstract class Tab : cafe.adriel.voyager.navigator.tab.Tab {
-
-    override val key: ScreenKey = uniqueScreenKey
-    open suspend fun onReselect(navigator: Navigator) {}
+interface Tab : cafe.adriel.voyager.navigator.tab.Tab {
+    suspend fun onReselect(navigator: Navigator) {}
 
     @Composable
     fun currentNavigationStyle(): NavStyle = uiPreferences.navStyle().collectAsState().value

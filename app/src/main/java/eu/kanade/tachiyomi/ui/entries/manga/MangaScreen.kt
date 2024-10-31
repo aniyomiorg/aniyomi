@@ -189,7 +189,10 @@ class MangaScreen(
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
                     onDismissRequest = onDismissRequest,
-                    onEditCategories = { navigator.push(CategoriesTab(true)) },
+                    onEditCategories = {
+                        navigator.push(CategoriesTab)
+                        CategoriesTab.showMangaCategory()
+                    },
                     onConfirm = { include, _ ->
                         screenModel.moveMangaToCategoriesAndAddToLibrary(dialog.manga, include)
                     },

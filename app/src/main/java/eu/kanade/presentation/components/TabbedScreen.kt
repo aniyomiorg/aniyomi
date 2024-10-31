@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
@@ -36,23 +37,16 @@ fun TabbedScreen(
     titleRes: StringResource?,
     tabs: ImmutableList<TabContent>,
     modifier: Modifier = Modifier,
-    startIndex: Int? = null,
+    state: PagerState = rememberPagerState { tabs.size },
     mangaSearchQuery: String? = null,
     onChangeMangaSearchQuery: (String?) -> Unit = {},
     scrollable: Boolean = false,
     animeSearchQuery: String? = null,
     onChangeAnimeSearchQuery: (String?) -> Unit = {},
 
-) {
+    ) {
     val scope = rememberCoroutineScope()
-    val state = rememberPagerState { tabs.size }
     val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(startIndex) {
-        if (startIndex != null) {
-            state.scrollToPage(startIndex)
-        }
-    }
 
     Scaffold(
         topBar = {

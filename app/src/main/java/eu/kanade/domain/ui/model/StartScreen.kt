@@ -14,5 +14,5 @@ enum class StartScreen(val titleRes: StringResource, val tab: Tab) {
     MANGA(MR.strings.manga, MangaLibraryTab),
     UPDATES(MR.strings.label_recent_updates, UpdatesTab),
     HISTORY(MR.strings.label_recent_manga, HistoriesTab),
-    BROWSE(MR.strings.browse, BrowseTab()),
+    BROWSE(MR.strings.browse, BrowseTab),
 }

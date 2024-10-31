@@ -208,7 +208,7 @@ class AnimeScreen(
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
                     onDismissRequest = onDismissRequest,
-                    onEditCategories = { navigator.push(CategoriesTab(false)) },
+                    onEditCategories = { navigator.push(CategoriesTab) },
                     onConfirm = { include, _ ->
                         screenModel.moveAnimeToCategoriesAndAddToLibrary(dialog.anime, include)
                     },
