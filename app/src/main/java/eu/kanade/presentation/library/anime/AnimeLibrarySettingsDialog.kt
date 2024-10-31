@@ -170,24 +170,28 @@ private fun ColumnScope.SortPage(
     val sortingMode = category.sort.type
     val sortDescending = !category.sort.isAscending
 
-    val trackerSortOption = if (trackers.isEmpty()) {
-        emptyList()
-    } else {
-        listOf(MR.strings.action_sort_tracker_score to AnimeLibrarySort.Type.TrackerMean)
+    val options = remember(trackers.isEmpty()) {
+        val trackerMeanPair = if (trackers.isNotEmpty()) {
+            MR.strings.action_sort_tracker_score to AnimeLibrarySort.Type.TrackerMean
+        } else {
+            null
+        }
+        listOfNotNull(
+            MR.strings.action_sort_alpha to AnimeLibrarySort.Type.Alphabetical,
+            MR.strings.action_sort_total to AnimeLibrarySort.Type.TotalEpisodes,
+            MR.strings.action_sort_last_read to AnimeLibrarySort.Type.LastSeen,
+            MR.strings.action_sort_last_manga_update to AnimeLibrarySort.Type.LastUpdate,
+            MR.strings.action_sort_unread_count to AnimeLibrarySort.Type.UnseenCount,
+            MR.strings.action_sort_latest_chapter to AnimeLibrarySort.Type.LatestEpisode,
+            MR.strings.action_sort_chapter_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
+            MR.strings.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
+            trackerMeanPair,
+            MR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
+            MR.strings.action_sort_random to AnimeLibrarySort.Type.Random,
+        )
     }
 
-    listOf(
-        MR.strings.action_sort_alpha to AnimeLibrarySort.Type.Alphabetical,
-        MR.strings.action_sort_total_episodes to AnimeLibrarySort.Type.TotalEpisodes,
-        MR.strings.action_sort_last_seen to AnimeLibrarySort.Type.LastSeen,
-        MR.strings.action_sort_last_anime_update to AnimeLibrarySort.Type.LastUpdate,
-        MR.strings.action_sort_unseen_count to AnimeLibrarySort.Type.UnseenCount,
-        MR.strings.action_sort_latest_episode to AnimeLibrarySort.Type.LatestEpisode,
-        MR.strings.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
-        MR.strings.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
-        MR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
-        MR.strings.action_sort_random to AnimeLibrarySort.Type.Random,
-    ).plus(trackerSortOption).map { (titleRes, mode) ->
+    options.map { (titleRes, mode) ->
         if (mode == AnimeLibrarySort.Type.Random) {
             BaseSortItem(
                 label = stringResource(titleRes),

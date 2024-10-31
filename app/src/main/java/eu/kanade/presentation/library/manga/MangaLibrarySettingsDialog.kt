@@ -170,23 +170,27 @@ private fun ColumnScope.SortPage(
     val sortingMode = category.sort.type
     val sortDescending = !category.sort.isAscending
 
-    val trackerSortOption = if (trackers.isEmpty()) {
-        emptyList()
-    } else {
-        listOf(MR.strings.action_sort_tracker_score to MangaLibrarySort.Type.TrackerMean)
+    val options = remember(trackers.isEmpty()) {
+        val trackerMeanPair = if (trackers.isNotEmpty()) {
+            MR.strings.action_sort_tracker_score to MangaLibrarySort.Type.TrackerMean
+        } else {
+            null
+        }
+        listOfNotNull(
+            MR.strings.action_sort_alpha to MangaLibrarySort.Type.Alphabetical,
+            MR.strings.action_sort_total to MangaLibrarySort.Type.TotalChapters,
+            MR.strings.action_sort_last_read to MangaLibrarySort.Type.LastRead,
+            MR.strings.action_sort_last_manga_update to MangaLibrarySort.Type.LastUpdate,
+            MR.strings.action_sort_unread_count to MangaLibrarySort.Type.UnreadCount,
+            MR.strings.action_sort_latest_chapter to MangaLibrarySort.Type.LatestChapter,
+            MR.strings.action_sort_chapter_fetch_date to MangaLibrarySort.Type.ChapterFetchDate,
+            MR.strings.action_sort_date_added to MangaLibrarySort.Type.DateAdded,
+            trackerMeanPair,
+            MR.strings.action_sort_random to MangaLibrarySort.Type.Random,
+        )
     }
 
-    listOf(
-        MR.strings.action_sort_alpha to MangaLibrarySort.Type.Alphabetical,
-        MR.strings.action_sort_total to MangaLibrarySort.Type.TotalChapters,
-        MR.strings.action_sort_last_read to MangaLibrarySort.Type.LastRead,
-        MR.strings.action_sort_last_manga_update to MangaLibrarySort.Type.LastUpdate,
-        MR.strings.action_sort_unread_count to MangaLibrarySort.Type.UnreadCount,
-        MR.strings.action_sort_latest_chapter to MangaLibrarySort.Type.LatestChapter,
-        MR.strings.action_sort_chapter_fetch_date to MangaLibrarySort.Type.ChapterFetchDate,
-        MR.strings.action_sort_date_added to MangaLibrarySort.Type.DateAdded,
-        MR.strings.action_sort_random to MangaLibrarySort.Type.Random,
-    ).plus(trackerSortOption).map { (titleRes, mode) ->
+    options.map { (titleRes, mode) ->
         if (mode == MangaLibrarySort.Type.Random) {
             BaseSortItem(
                 label = stringResource(titleRes),
