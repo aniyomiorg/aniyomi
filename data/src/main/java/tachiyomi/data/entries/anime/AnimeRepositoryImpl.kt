@@ -49,6 +49,10 @@ class AnimeRepositoryImpl(
         return handler.awaitList { animesQueries.getFavorites(AnimeMapper::mapAnime) }
     }
 
+    override suspend fun getWatchedAnimeNotInLibrary(): List<Anime> {
+        return handler.awaitList { animesQueries.getWatchedAnimeNotInLibrary(AnimeMapper::mapAnime) }
+    }
+
     override suspend fun getLibraryAnime(): List<LibraryAnime> {
         return handler.awaitList { animelibViewQueries.animelib(AnimeMapper::mapLibraryAnime) }
     }

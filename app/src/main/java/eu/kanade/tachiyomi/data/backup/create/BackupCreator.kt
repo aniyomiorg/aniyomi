@@ -35,8 +35,10 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.repository.MangaRepository
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -54,6 +56,8 @@ class BackupCreator(
     private val getAnimeFavorites: GetAnimeFavorites = Injekt.get(),
     private val getMangaFavorites: GetMangaFavorites = Injekt.get(),
     private val backupPreferences: BackupPreferences = Injekt.get(),
+    private val mangaRepository: MangaRepository = Injekt.get(),
+    private val animeRepository: AnimeRepository = Injekt.get(),
 
     private val animeCategoriesBackupCreator: AnimeCategoriesBackupCreator = AnimeCategoriesBackupCreator(),
     private val mangaCategoriesBackupCreator: MangaCategoriesBackupCreator = MangaCategoriesBackupCreator(),
@@ -89,8 +93,19 @@ class BackupCreator(
                 throw IllegalStateException(context.stringResource(MR.strings.create_backup_file_error))
             }
 
-            val backupAnime = backupAnimes(getAnimeFavorites.await(), options)
-            val backupManga = backupMangas(getMangaFavorites.await(), options)
+            val nonFavoriteAnime = if (options.readEntries) {
+                animeRepository.getWatchedAnimeNotInLibrary()
+            } else {
+                emptyList()
+            }
+            val backupAnime = backupAnimes(getAnimeFavorites.await() + nonFavoriteAnime, options)
+            val nonFavoriteManga = if (options.readEntries) {
+                mangaRepository.getReadMangaNotInLibrary()
+            } else {
+                emptyList()
+            }
+            val backupManga = backupMangas(getMangaFavorites.await() + nonFavoriteManga, options)
+
             val backup = Backup(
                 backupManga = backupManga,
                 backupCategories = backupMangaCategories(options),
