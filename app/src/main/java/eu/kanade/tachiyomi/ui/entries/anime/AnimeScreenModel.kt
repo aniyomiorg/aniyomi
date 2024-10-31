@@ -19,6 +19,7 @@ import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
+import eu.kanade.domain.track.model.AutoTrackState
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
@@ -135,6 +136,7 @@ class AnimeScreenModel(
 
     val episodeSwipeStartAction = libraryPreferences.swipeEpisodeEndAction().get()
     val episodeSwipeEndAction = libraryPreferences.swipeEpisodeStartAction().get()
+    var autoTrackState = trackPreferences.autoUpdateTrackOnMarkRead().get()
 
     val showNextEpisodeAirTime = trackPreferences.showNextEpisodeAiringTime().get()
     val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
@@ -732,7 +734,12 @@ class AnimeScreenModel(
                 episodes = episodes.toTypedArray(),
             )
 
-            if (!seen) return@launchIO
+            if (
+                successState?.hasLoggedInTrackers == false ||
+                !seen || autoTrackState == AutoTrackState.NEVER
+            ) {
+                return@launchIO
+            }
 
             val tracks = getTracks.await(animeId)
             val maxEpisodeNumber = episodes.maxOf { it.episodeNumber }
@@ -740,7 +747,7 @@ class AnimeScreenModel(
 
             if (!shouldPromptTrackingUpdate) return@launchIO
 
-            if (trackPreferences.autoUpdateTrackOnMarkRead().get()) {
+            if (autoTrackState == AutoTrackState.ALWAYS) {
                 trackEpisode.await(context, animeId, maxEpisodeNumber)
                 withUIContext {
                     context.toast(
