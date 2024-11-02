@@ -35,4 +35,6 @@ class BasePreferences(
     }
 
     fun displayProfile() = preferenceStore.getString("pref_display_profile_key", "")
+
+    fun alwaysUseSSIVToDecode() = preferenceStore.getBoolean("pref_always_use_ssiv_to_decode", false)
 }
