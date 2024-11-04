@@ -689,7 +689,6 @@
     <string name="information_cloudflare_help">Нажмите здесь, чтобы получить помощь с Cloudflare</string>
     <string name="download_cache_invalidated">Индекс загрузок недействителен</string>
     <string name="create_backup_file_error">Не удалось создать файл резервной копии</string>
-    <string name="licensed_manga_chapters_error">Лицензировано - Нет глав</string>
     <string name="track_activity_name">Вход в сервис отслеживания</string>
     <string name="exception_http">HTTP %d, проверьте сайт в WebView</string>
     <string name="exception_offline">Нет подключения к интернету</string>
@@ -874,7 +873,6 @@
     <string name="delete_confirmation">Вы уверены, что хотите удалить «%s»?</string>
     <string name="label_storage">Хранилище</string>
     <string name="label_watched_duration">Длительность просмотра</string>
-    <string name="licensed_manga_chapters_error">Лицензировано – нет элементов для отображения</string>
     <string name="no_episodes_error">Эпизоды не найдены</string>
     <string name="pref_pip_episode_toasts">Показывать уведомление эпизода при переходе на другой эпизод в режиме PiP</string>
     <string name="pref_category_external_player">Внешний плеер</string>

@@ -1014,7 +1014,6 @@
     <string name="channel_new_chapters_episodes">অধ্যায়/এপিচ\'ড আপডেট</string>
     <string name="pref_invalidate_download_cache_summary">এপ্লিকেচনক ডাউনলোড কৰা অধ্যায় আৰু এপিচ\'ড পুনৰ পৰীক্ষা কৰিবলৈ মন্না কৰক</string>
     <string name="player_controls_skip_intro_text">+%1$d ছ</string>
-    <string name="licensed_manga_chapters_error">লাইচেন্সযুক্ত - দেখুৱাবলৈ কোনো বস্তু নাই</string>
     <string name="no_next_episode">পৰৱৰ্তী এপিচ\'ড পোৱা নগ\'ল!</string>
     <string name="label_storage">ষ্ট\'ৰেজ</string>
     <string name="label_history">মাংগা</string>
