@@ -5,10 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.entries.anime.model.Anime
 
-@Suppress(
-    "DEPRECATION",
-    "MagicNumber",
-)
+@Suppress("DEPRECATION")
 @Serializable
 data class BackupAnime(
     // in 1.x some of these values have different names
@@ -34,7 +31,7 @@ data class BackupAnime(
     // Bump by 100 for values that are not saved/implemented in 1.x but are used in 0.x
     @ProtoNumber(100) var favorite: Boolean = true,
     @ProtoNumber(101) var episodeFlags: Int = 0,
-    @ProtoNumber(102) var brokenHistory: List<BrokenBackupAnimeHistory> = emptyList(),
+    // @ProtoNumber(102) var brokenHistory, legacy history model with non-compliant proto number
     @ProtoNumber(103) var viewer_flags: Int = 0,
     @ProtoNumber(104) var history: List<BackupAnimeHistory> = emptyList(),
     @ProtoNumber(105) var updateStrategy: AnimeUpdateStrategy = AnimeUpdateStrategy.ALWAYS_UPDATE,

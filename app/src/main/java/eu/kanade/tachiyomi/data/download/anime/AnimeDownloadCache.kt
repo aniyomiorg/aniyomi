@@ -53,7 +53,6 @@ import tachiyomi.domain.storage.service.StorageManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 
@@ -98,13 +97,13 @@ class AnimeDownloadCache(
     private val diskCacheFile: File
         get() = File(context.cacheDir, "dl_index_cache_v3")
 
-    private val rootDownloadsDirLock = Mutex()
+    private val rootDownloadsDirMutex = Mutex()
     private var rootDownloadsDir = RootDirectory(storageManager.getDownloadsDirectory())
 
     init {
         // Attempt to read cache file
         scope.launch {
-            rootDownloadsDirLock.withLock {
+            rootDownloadsDirMutex.withLock {
                 try {
                     if (diskCacheFile.exists()) {
                         val diskCache = diskCacheFile.inputStream().use {
@@ -225,7 +224,7 @@ class AnimeDownloadCache(
      * @param anime the anime of the episode.
      */
     suspend fun addEpisode(episodeDirName: String, animeUniFile: UniFile, anime: Anime) {
-        rootDownloadsDirLock.withLock {
+        rootDownloadsDirMutex.withLock {
             // Retrieve the cached source directory or cache a new one
             var sourceDir = rootDownloadsDir.sourceDirs[anime.source]
             if (sourceDir == null) {
@@ -257,7 +256,7 @@ class AnimeDownloadCache(
      * @param anime the anime of the episode.
      */
     suspend fun removeEpisode(episode: Episode, anime: Anime) {
-        rootDownloadsDirLock.withLock {
+        rootDownloadsDirMutex.withLock {
             val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
             val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(anime.title)] ?: return
             provider.getValidEpisodeDirNames(episode.name, episode.scanlator).forEach {
@@ -277,7 +276,7 @@ class AnimeDownloadCache(
      * @param anime the anime of the episode.
      */
     suspend fun removeEpisodes(episodes: List<Episode>, anime: Anime) {
-        rootDownloadsDirLock.withLock {
+        rootDownloadsDirMutex.withLock {
             val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
             val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(anime.title)] ?: return
             episodes.forEach { episode ->
@@ -298,7 +297,7 @@ class AnimeDownloadCache(
      * @param anime the anime to remove.
      */
     suspend fun removeAnime(anime: Anime) {
-        rootDownloadsDirLock.withLock {
+        rootDownloadsDirMutex.withLock {
             val sourceDir = rootDownloadsDir.sourceDirs[anime.source] ?: return
             val animeDirName = provider.getAnimeDirName(anime.title)
             if (sourceDir.animeDirs.containsKey(animeDirName)) {
@@ -310,7 +309,7 @@ class AnimeDownloadCache(
     }
 
     suspend fun removeSource(source: AnimeSource) {
-        rootDownloadsDirLock.withLock {
+        rootDownloadsDirMutex.withLock {
             rootDownloadsDir.sourceDirs -= source.id
         }
 
@@ -351,10 +350,10 @@ class AnimeDownloadCache(
                 provider.getSourceDirName(it).lowercase() to it.id
             }
 
-            rootDownloadsDirLock.withLock {
-                rootDownloadsDir = RootDirectory(storageManager.getDownloadsDirectory())
+            rootDownloadsDirMutex.withLock {
+                val updatedRootDir = RootDirectory(storageManager.getDownloadsDirectory())
 
-                val sourceDirs = rootDownloadsDir.dir?.listFiles().orEmpty()
+                updatedRootDir.sourceDirs = updatedRootDir.dir?.listFiles().orEmpty()
                     .filter { it.isDirectory && !it.name.isNullOrBlank() }
                     .mapNotNull { dir ->
                         val sourceId = sourceMap[dir.name!!.lowercase()]
@@ -362,40 +361,36 @@ class AnimeDownloadCache(
                     }
                     .toMap()
 
-                rootDownloadsDir.sourceDirs = sourceDirs
-
-                sourceDirs.values
-                    .map { sourceDir ->
-                        async {
-                            val animeDirs = sourceDir.dir?.listFiles().orEmpty()
-                                .filter { it.isDirectory && !it.name.isNullOrBlank() }
-                                .associate { it.name!! to AnimeDirectory(it) }
-
-                            sourceDir.animeDirs = ConcurrentHashMap(animeDirs)
-
-                            sourceDir.animeDirs.values.forEach { animeDir ->
-                                val episodeDirs = animeDir.dir?.listFiles().orEmpty()
-                                    .mapNotNull {
-                                        when {
-                                            // Ignore incomplete downloads
-                                            it.name?.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) == true -> null
-                                            // Folder of videos
-                                            it.isDirectory -> it.name
-                                            // MP4 files
-                                            it.isFile && it.extension == "mp4" -> it.nameWithoutExtension
-                                            // MKV files
-                                            it.isFile && it.extension == "mkv" -> it.nameWithoutExtension
-                                            // Anything else is irrelevant
-                                            else -> null
-                                        }
+                updatedRootDir.sourceDirs.values.map { sourceDir ->
+                    async {
+                        sourceDir.animeDirs = sourceDir.dir?.listFiles().orEmpty()
+                            .filter { it.isDirectory && !it.name.isNullOrBlank() }
+                            .associate { it.name!! to AnimeDirectory(it) }
+                        sourceDir.animeDirs.values.forEach { animeDir ->
+                            val episodeDirs = animeDir.dir?.listFiles().orEmpty()
+                                .mapNotNull {
+                                    when {
+                                        // Ignore incomplete downloads
+                                        it.name?.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) == true -> null
+                                        // Folder of videos
+                                        it.isDirectory -> it.name
+                                        // MP4 files
+                                        it.isFile && it.extension == "mp4" -> it.nameWithoutExtension
+                                        // MKV files
+                                        it.isFile && it.extension == "mkv" -> it.nameWithoutExtension
+                                        // Anything else is irrelevant
+                                        else -> null
                                     }
-                                    .toMutableSet()
+                                }
+                                .toMutableSet()
 
-                                animeDir.episodeDirs = episodeDirs
-                            }
+                            animeDir.episodeDirs = episodeDirs
                         }
                     }
+                }
                     .awaitAll()
+
+                rootDownloadsDir = updatedRootDir
             }
 
             _isInitializing.emit(false)
@@ -426,7 +421,6 @@ class AnimeDownloadCache(
 
     private var updateDiskCacheJob: Job? = null
 
-    @Suppress("MagicNumber")
     private fun updateDiskCache() {
         updateDiskCacheJob?.cancel()
         updateDiskCacheJob = scope.launchIO {

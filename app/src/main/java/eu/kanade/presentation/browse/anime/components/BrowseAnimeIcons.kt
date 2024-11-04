@@ -130,7 +130,7 @@ private fun AnimeExtension.getIcon(density: Int = DisplayMetrics.DENSITY_DEFAULT
                 val appInfo = AnimeExtensionLoader.getAnimeExtensionPackageInfoFromPkgName(
                     context,
                     pkgName,
-                )!!.applicationInfo
+                )!!.applicationInfo!!
                 val appResources = context.packageManager.getResourcesForApplication(appInfo)
                 Result.Success(
                     appResources.getDrawableForDensity(appInfo.icon, density, null)!!

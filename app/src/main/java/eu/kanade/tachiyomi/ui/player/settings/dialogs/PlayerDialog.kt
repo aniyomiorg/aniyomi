@@ -13,8 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.view.WindowInsetsControllerCompat
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.TextButton
@@ -27,7 +25,6 @@ import tachiyomi.presentation.core.i18n.stringResource
 fun PlayerDialog(
     titleRes: StringResource,
     modifier: Modifier = Modifier,
-    hideSystemBars: Boolean = true,
     onConfirmRequest: (() -> Unit)? = null,
     onDismissRequest: () -> Unit,
     content: @Composable (() -> Unit)? = null,
@@ -52,13 +49,6 @@ fun PlayerDialog(
             modifier = Modifier.fillMaxWidth(),
             tonalElevation = 1.dp,
         ) {
-            if (hideSystemBars) {
-                rememberSystemUiController().apply {
-                    isSystemBarsVisible = false
-                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                }
-            }
-
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = stringResource(titleRes),

@@ -252,28 +252,19 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param anime the anime to update.
      * @return the chapters for the manga.
-     * @throws LicensedEntryItemsException if a anime is licensed and therefore no episodes are available.
      */
     @Suppress("DEPRECATION")
     override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
-        if (anime.status == SAnime.LICENSED) {
-            throw LicensedEntryItemsException()
-        }
-
         return fetchEpisodeList(anime).awaitSingle()
     }
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getEpisodeList"))
     override fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> {
-        return if (anime.status != SAnime.LICENSED) {
-            client.newCall(episodeListRequest(anime))
-                .asObservableSuccess()
-                .map { response ->
-                    episodeListParse(response)
-                }
-        } else {
-            Observable.error(LicensedEntryItemsException())
-        }
+        return client.newCall(episodeListRequest(anime))
+            .asObservableSuccess()
+            .map { response ->
+                episodeListParse(response)
+            }
     }
 
     /**
@@ -535,5 +526,3 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      */
     override fun getFilterList() = AnimeFilterList()
 }
-
-class LicensedEntryItemsException : RuntimeException()

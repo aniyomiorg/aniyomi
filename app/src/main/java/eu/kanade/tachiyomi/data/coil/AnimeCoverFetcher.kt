@@ -45,7 +45,6 @@ import java.io.IOException
  * Available request parameter:
  * - [USE_CUSTOM_COVER_KEY]: Use custom cover if set by user, default is true
  */
-@Suppress("LongParameterList")
 class AnimeCoverFetcher(
     private val url: String?,
     private val isLibraryAnime: Boolean,
@@ -291,7 +290,9 @@ class AnimeCoverFetcher(
     }
 
     private enum class Type {
-        File, URL, URI
+        File,
+        URL,
+        URI,
     }
 
     class AnimeFactory(

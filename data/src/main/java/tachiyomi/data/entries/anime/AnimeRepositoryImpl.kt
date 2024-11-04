@@ -49,6 +49,10 @@ class AnimeRepositoryImpl(
         return handler.awaitList { animesQueries.getFavorites(AnimeMapper::mapAnime) }
     }
 
+    override suspend fun getWatchedAnimeNotInLibrary(): List<Anime> {
+        return handler.awaitList { animesQueries.getWatchedAnimeNotInLibrary(AnimeMapper::mapAnime) }
+    }
+
     override suspend fun getLibraryAnime(): List<LibraryAnime> {
         return handler.awaitList { animelibViewQueries.animelib(AnimeMapper::mapLibraryAnime) }
     }
@@ -67,7 +71,6 @@ class AnimeRepositoryImpl(
         }
     }
 
-    @Suppress("MagicNumber")
     override suspend fun getUpcomingAnime(statuses: Set<Long>): Flow<List<Anime>> {
         val epochMillis = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
         return handler.subscribeToList {

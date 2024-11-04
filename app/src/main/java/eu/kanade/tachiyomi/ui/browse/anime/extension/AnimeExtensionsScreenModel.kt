@@ -41,7 +41,7 @@ class AnimeExtensionsScreenModel(
     private val getExtensions: GetAnimeExtensionsByType = Injekt.get(),
 ) : StateScreenModel<AnimeExtensionsScreenModel.State>(State()) {
 
-    private var _currentDownloads = MutableStateFlow<Map<String, InstallStep>>(hashMapOf())
+    private val currentDownloads = MutableStateFlow<Map<String, InstallStep>>(hashMapOf())
 
     init {
         val context = Injekt.get<Application>()
@@ -62,7 +62,8 @@ class AnimeExtensionsScreenModel(
                                 it.name.contains(input, ignoreCase = true) ||
                                     it.baseUrl.contains(input, ignoreCase = true) ||
                                     it.id == input.toLongOrNull()
-                            } || extension.name.contains(input, ignoreCase = true)
+                            } ||
+                                extension.name.contains(input, ignoreCase = true)
                         }
                         is AnimeExtension.Installed -> {
                             extension.sources.any {
@@ -76,7 +77,8 @@ class AnimeExtensionsScreenModel(
                                     } else {
                                         false
                                     }
-                            } || extension.name.contains(input, ignoreCase = true)
+                            } ||
+                                extension.name.contains(input, ignoreCase = true)
                         }
                         is AnimeExtension.Untrusted -> extension.name.contains(
                             input,
@@ -90,7 +92,7 @@ class AnimeExtensionsScreenModel(
         screenModelScope.launchIO {
             combine(
                 state.map { it.searchQuery }.distinctUntilChanged().debounce(SEARCH_DEBOUNCE_MILLIS),
-                _currentDownloads,
+                currentDownloads,
                 getExtensions.subscribe(),
             ) { query, downloads, (_updates, _installed, _available, _untrusted) ->
                 val searchQuery = query ?: ""
@@ -183,11 +185,11 @@ class AnimeExtensionsScreenModel(
     }
 
     private fun addDownloadState(extension: AnimeExtension, installStep: InstallStep) {
-        _currentDownloads.update { it + Pair(extension.pkgName, installStep) }
+        currentDownloads.update { it + Pair(extension.pkgName, installStep) }
     }
 
     private fun removeDownloadState(extension: AnimeExtension) {
-        _currentDownloads.update { it - extension.pkgName }
+        currentDownloads.update { it - extension.pkgName }
     }
 
     private suspend fun Flow<InstallStep>.collectToInstallUpdate(extension: AnimeExtension) =

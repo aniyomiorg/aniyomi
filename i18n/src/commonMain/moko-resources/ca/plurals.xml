@@ -108,4 +108,9 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
+    <plurals name="pref_pages">
+        <item quantity="one">1 pàgina</item>
+        <item quantity="many">%1$s pàgines</item>
+        <item quantity="other">%1$s pàgines</item>
+    </plurals>
 </resources>

@@ -7,12 +7,16 @@ import eu.kanade.tachiyomi.data.backup.BackupNotifier
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
 import eu.kanade.tachiyomi.data.backup.models.BackupExtension
+import eu.kanade.tachiyomi.data.backup.models.BackupExtensionRepos
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSourcePreferences
+import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeCategoriesRestorer
+import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeExtensionRepoRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeRestorer
-import eu.kanade.tachiyomi.data.backup.restore.restorers.CategoriesRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.ExtensionsRestorer
+import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaCategoriesRestorer
+import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaExtensionRepoRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.MangaRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.PreferenceRestorer
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -32,8 +36,11 @@ class BackupRestorer(
     private val notifier: BackupNotifier,
     private val isSync: Boolean,
 
-    private val categoriesRestorer: CategoriesRestorer = CategoriesRestorer(),
+    private val animeCategoriesRestorer: AnimeCategoriesRestorer = AnimeCategoriesRestorer(),
+    private val mangaCategoriesRestorer: MangaCategoriesRestorer = MangaCategoriesRestorer(),
     private val preferenceRestorer: PreferenceRestorer = PreferenceRestorer(context),
+    private val animeExtensionRepoRestorer: AnimeExtensionRepoRestorer = AnimeExtensionRepoRestorer(),
+    private val mangaExtensionRepoRestorer: MangaExtensionRepoRestorer = MangaExtensionRepoRestorer(),
     private val animeRestorer: AnimeRestorer = AnimeRestorer(),
     private val mangaRestorer: MangaRestorer = MangaRestorer(),
     private val extensionsRestorer: ExtensionsRestorer = ExtensionsRestorer(context),
@@ -71,16 +78,22 @@ class BackupRestorer(
         val backup = BackupDecoder(context).decode(uri)
 
         // Store source mapping for error messages
-        val backupAnimeMaps = backup.backupAnimeSources + backup.backupBrokenAnimeSources.map { it.toBackupSource() }
+        val backupAnimeMaps = backup.backupAnimeSources
         mangaSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
-        val backupMangaMaps = backup.backupSources + backup.backupBrokenSources.map { it.toBackupSource() }
+        val backupMangaMaps = backup.backupSources
         mangaSourceMapping = backupMangaMaps.associate { it.sourceId to it.name }
 
-        if (options.library) {
-            restoreAmount += backup.backupManga.size + backup.backupAnime.size + 2 // +2 for anime and manga categories
+        if (options.libraryEntries) {
+            restoreAmount += backup.backupManga.size + backup.backupAnime.size
+        }
+        if (options.categories) {
+            restoreAmount += 2 // +2 for anime and manga categories
         }
         if (options.appSettings) {
             restoreAmount += 1
+        }
+        if (options.extensionRepoSettings) {
+            restoreAmount += backup.backupAnimeExtensionRepo.size + backup.backupMangaExtensionRepo.size
         }
         if (options.sourceSettings) {
             restoreAmount += 1
@@ -90,7 +103,7 @@ class BackupRestorer(
         }
 
         coroutineScope {
-            if (options.library) {
+            if (options.categories) {
                 restoreCategories(
                     backupAnimeCategories = backup.backupAnimeCategories,
                     backupMangaCategories = backup.backupCategories,
@@ -102,9 +115,12 @@ class BackupRestorer(
             if (options.sourceSettings) {
                 restoreSourcePreferences(backup.backupSourcePreferences)
             }
-            if (options.library) {
-                restoreAnime(backup.backupAnime, backup.backupAnimeCategories)
-                restoreManga(backup.backupManga, backup.backupCategories)
+            if (options.libraryEntries) {
+                restoreAnime(backup.backupAnime, if (options.categories) backup.backupAnimeCategories else emptyList())
+                restoreManga(backup.backupManga, if (options.categories) backup.backupCategories else emptyList())
+            }
+            if (options.extensionRepoSettings) {
+                restoreExtensionRepos(backup.backupAnimeExtensionRepo, backup.backupMangaExtensionRepo)
             }
             if (options.extensions) {
                 restoreExtensions(backup.backupExtensions)
@@ -119,8 +135,8 @@ class BackupRestorer(
         backupMangaCategories: List<BackupCategory>,
     ) = launch {
         ensureActive()
-        categoriesRestorer.restoreAnimeCategories(backupAnimeCategories)
-        categoriesRestorer.restoreMangaCategories(backupMangaCategories)
+        animeCategoriesRestorer(backupAnimeCategories)
+        mangaCategoriesRestorer(backupMangaCategories)
 
         restoreProgress += 1
         notifier.showRestoreProgress(
@@ -140,7 +156,7 @@ class BackupRestorer(
                 ensureActive()
 
                 try {
-                    animeRestorer.restoreAnime(it, backupAnimeCategories)
+                    animeRestorer.restore(it, backupAnimeCategories)
                 } catch (e: Exception) {
                     val sourceName = animeSourceMapping[it.source] ?: it.source.toString()
                     errors.add(Date() to "${it.title} [$sourceName]: ${e.message}")
@@ -160,7 +176,7 @@ class BackupRestorer(
                 ensureActive()
 
                 try {
-                    mangaRestorer.restoreManga(it, backupMangaCategories)
+                    mangaRestorer.restore(it, backupMangaCategories)
                 } catch (e: Exception) {
                     val sourceName = mangaSourceMapping[it.source] ?: it.source.toString()
                     errors.add(Date() to "${it.title} [$sourceName]: ${e.message}")
@@ -173,7 +189,7 @@ class BackupRestorer(
 
     private fun CoroutineScope.restoreAppPreferences(preferences: List<BackupPreference>) = launch {
         ensureActive()
-        preferenceRestorer.restoreAppPreferences(preferences)
+        preferenceRestorer.restoreApp(preferences)
 
         restoreProgress += 1
         notifier.showRestoreProgress(
@@ -186,7 +202,7 @@ class BackupRestorer(
 
     private fun CoroutineScope.restoreSourcePreferences(preferences: List<BackupSourcePreferences>) = launch {
         ensureActive()
-        preferenceRestorer.restoreSourcePreferences(preferences)
+        preferenceRestorer.restoreSource(preferences)
 
         restoreProgress += 1
         notifier.showRestoreProgress(
@@ -195,6 +211,49 @@ class BackupRestorer(
             restoreAmount,
             isSync,
         )
+    }
+
+    private fun CoroutineScope.restoreExtensionRepos(
+        backupAnimeExtensionRepo: List<BackupExtensionRepos>,
+        backupMangaExtensionRepo: List<BackupExtensionRepos>,
+    ) = launch {
+        backupAnimeExtensionRepo
+            .forEach {
+                ensureActive()
+
+                try {
+                    animeExtensionRepoRestorer(it)
+                } catch (e: Exception) {
+                    errors.add(Date() to "Error Adding Anime Repo: ${it.name} : ${e.message}")
+                }
+
+                restoreProgress += 1
+                notifier.showRestoreProgress(
+                    context.stringResource(MR.strings.extensionRepo_settings),
+                    restoreProgress,
+                    restoreAmount,
+                    isSync,
+                )
+            }
+
+        backupMangaExtensionRepo
+            .forEach {
+                ensureActive()
+
+                try {
+                    mangaExtensionRepoRestorer(it)
+                } catch (e: Exception) {
+                    errors.add(Date() to "Error Adding Manga Repo: ${it.name} : ${e.message}")
+                }
+
+                restoreProgress += 1
+                notifier.showRestoreProgress(
+                    context.stringResource(MR.strings.extensionRepo_settings),
+                    restoreProgress,
+                    restoreAmount,
+                    isSync,
+                )
+            }
     }
 
     private fun CoroutineScope.restoreExtensions(extensions: List<BackupExtension>) = launch {
@@ -213,7 +272,7 @@ class BackupRestorer(
     private fun writeErrorLog(): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = context.createFileInCacheDir("tachiyomi_restore.txt")
+                val file = context.createFileInCacheDir("aniyomi_restore_error.txt")
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
 
                 file.bufferedWriter().use { out ->

@@ -4,6 +4,10 @@ import android.net.Uri
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMCollectionResponse
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMOAuth
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMSearchItem
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMSearchResult
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
@@ -11,14 +15,6 @@ import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.int
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.long
 import okhttp3.CacheControl
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -42,9 +38,9 @@ class BangumiApi(
         return withIOContext {
             val body = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
+                .add("status", track.toApiStatus())
                 .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.remote_id}/update", body = body))
+            authClient.newCall(POST("$API_URL/collection/${track.remote_id}/update", body = body))
                 .awaitSuccess()
             track
         }
@@ -54,9 +50,9 @@ class BangumiApi(
         return withIOContext {
             val body = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
+                .add("status", track.toApiStatus())
                 .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.remote_id}/update", body = body))
+            authClient.newCall(POST("$API_URL/collection/${track.remote_id}/update", body = body))
                 .awaitSuccess()
             track
         }
@@ -67,9 +63,9 @@ class BangumiApi(
             // read status update
             val sbody = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
+                .add("status", track.toApiStatus())
                 .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.remote_id}/update", body = sbody))
+            authClient.newCall(POST("$API_URL/collection/${track.remote_id}/update", body = sbody))
                 .awaitSuccess()
 
             // chapter update
@@ -77,10 +73,7 @@ class BangumiApi(
                 .add("watched_eps", track.last_chapter_read.toInt().toString())
                 .build()
             authClient.newCall(
-                POST(
-                    "$apiUrl/subject/${track.remote_id}/update/watched_eps",
-                    body = body,
-                ),
+                POST("$API_URL/subject/${track.remote_id}/update/watched_eps", body = body),
             ).awaitSuccess()
 
             track
@@ -92,9 +85,9 @@ class BangumiApi(
             // read status update
             val sbody = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
+                .add("status", track.toApiStatus())
                 .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.remote_id}/update", body = sbody))
+            authClient.newCall(POST("$API_URL/collection/${track.remote_id}/update", body = sbody))
                 .awaitSuccess()
 
             // chapter update
@@ -102,10 +95,7 @@ class BangumiApi(
                 .add("watched_eps", track.last_episode_seen.toInt().toString())
                 .build()
             authClient.newCall(
-                POST(
-                    "$apiUrl/subject/${track.remote_id}/update/watched_eps",
-                    body = body,
-                ),
+                POST("$API_URL/subject/${track.remote_id}/update/watched_eps", body = body),
             ).awaitSuccess()
 
             track
@@ -114,114 +104,65 @@ class BangumiApi(
 
     suspend fun search(search: String): List<MangaTrackSearch> {
         return withIOContext {
-            val url = "$apiUrl/search/subject/${URLEncoder.encode(
+            val url = "$API_URL/search/subject/${URLEncoder.encode(
                 search,
                 StandardCharsets.UTF_8.name(),
             )}"
                 .toUri()
                 .buildUpon()
+                .appendQueryParameter("type", "1")
+                .appendQueryParameter("responseGroup", "large")
                 .appendQueryParameter("max_results", "20")
                 .build()
-            authClient.newCall(GET(url.toString()))
-                .awaitSuccess()
-                .use {
-                    var responseBody = it.body.string()
-                    if (responseBody.isEmpty()) {
-                        throw Exception("Null Response")
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<BGMSearchResult>()
+                    .let { result ->
+                        if (result.code == 404) emptyList<MangaTrackSearch>()
+
+                        result.list
+                            ?.map { it.toMangaTrackSearch(trackId) }
+                            .orEmpty()
                     }
-                    if (responseBody.contains("\"code\":404")) {
-                        responseBody = "{\"results\":0,\"list\":[]}"
-                    }
-                    val response = json.decodeFromString<JsonObject>(responseBody)["list"]?.jsonArray
-                    response?.filter { it.jsonObject["type"]?.jsonPrimitive?.int == 1 }
-                        ?.map { jsonToSearch(it.jsonObject) }.orEmpty()
-                }
+            }
         }
     }
 
     suspend fun searchAnime(search: String): List<AnimeTrackSearch> {
         return withIOContext {
-            val url = "$apiUrl/search/subject/${URLEncoder.encode(
+            val url = "$API_URL/search/subject/${URLEncoder.encode(
                 search,
                 StandardCharsets.UTF_8.name(),
             )}"
                 .toUri()
                 .buildUpon()
+                .appendQueryParameter("type", "2")
+                .appendQueryParameter("responseGroup", "large")
                 .appendQueryParameter("max_results", "20")
                 .build()
-            authClient.newCall(GET(url.toString()))
-                .awaitSuccess()
-                .use {
-                    var responseBody = it.body?.string().orEmpty()
-                    if (responseBody.isEmpty()) {
-                        throw Exception("Null Response")
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<BGMSearchResult>()
+                    .let { result ->
+                        if (result.code == 404) emptyList<AnimeTrackSearch>()
+
+                        result.list
+                            ?.map { it.toAnimeTrackSearch(trackId) }
+                            .orEmpty()
                     }
-                    if (responseBody.contains("\"code\":404")) {
-                        responseBody = "{\"results\":0,\"list\":[]}"
-                    }
-                    val response = json.decodeFromString<JsonObject>(responseBody)["list"]?.jsonArray
-                    response?.filter { it.jsonObject["type"]?.jsonPrimitive?.int == 1 }
-                        ?.map { jsonToSearchAnime(it.jsonObject) }.orEmpty()
-                }
-        }
-    }
-
-    private fun jsonToSearch(obj: JsonObject): MangaTrackSearch {
-        val coverUrl = if (obj["images"] is JsonObject) {
-            obj["images"]?.jsonObject?.get("common")?.jsonPrimitive?.contentOrNull ?: ""
-        } else {
-            // Sometimes JsonNull
-            ""
-        }
-        val totalChapters = if (obj["eps_count"] != null) {
-            obj["eps_count"]!!.jsonPrimitive.long
-        } else {
-            0
-        }
-        val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.doubleOrNull ?: -1.0
-        return MangaTrackSearch.create(trackId).apply {
-            remote_id = obj["id"]!!.jsonPrimitive.long
-            title = obj["name_cn"]!!.jsonPrimitive.content
-            cover_url = coverUrl
-            summary = obj["name"]!!.jsonPrimitive.content
-            score = rating
-            tracking_url = obj["url"]!!.jsonPrimitive.content
-            total_chapters = totalChapters
-        }
-    }
-
-    private fun jsonToSearchAnime(obj: JsonObject): AnimeTrackSearch {
-        val coverUrl = if (obj["images"] is JsonObject) {
-            obj["images"]?.jsonObject?.get("common")?.jsonPrimitive?.contentOrNull ?: ""
-        } else {
-            // Sometimes JsonNull
-            ""
-        }
-        val totalChapters = if (obj["eps_count"] != null) {
-            obj["eps_count"]!!.jsonPrimitive.long
-        } else {
-            0
-        }
-
-        val rating = obj["rating"]?.jsonObject?.get("score")?.jsonPrimitive?.doubleOrNull ?: -1.0
-        return AnimeTrackSearch.create(trackId).apply {
-            remote_id = obj["id"]!!.jsonPrimitive.long
-            title = obj["name_cn"]!!.jsonPrimitive.content
-            cover_url = coverUrl
-            score = rating
-            summary = obj["name"]!!.jsonPrimitive.content
-            tracking_url = obj["url"]!!.jsonPrimitive.content
-            total_episodes = totalChapters
+            }
         }
     }
 
     suspend fun findLibManga(track: MangaTrack): MangaTrack? {
         return withIOContext {
             with(json) {
-                authClient.newCall(GET("$apiUrl/subject/${track.remote_id}"))
+                authClient.newCall(GET("$API_URL/subject/${track.remote_id}"))
                     .awaitSuccess()
-                    .parseAs<JsonObject>()
-                    .let { jsonToSearch(it) }
+                    .parseAs<BGMSearchItem>()
+                    .toMangaTrackSearch(trackId)
             }
         }
     }
@@ -229,17 +170,17 @@ class BangumiApi(
     suspend fun findLibAnime(track: AnimeTrack): AnimeTrack? {
         return withIOContext {
             with(json) {
-                authClient.newCall(GET("$apiUrl/subject/${track.remote_id}"))
+                authClient.newCall(GET("$API_URL/subject/${track.remote_id}"))
                     .awaitSuccess()
-                    .parseAs<JsonObject>()
-                    .let { jsonToSearchAnime(it) }
+                    .parseAs<BGMSearchItem>()
+                    .toAnimeTrackSearch(trackId)
             }
         }
     }
 
     suspend fun statusLibManga(track: MangaTrack): MangaTrack? {
         return withIOContext {
-            val urlUserRead = "$apiUrl/collection/${track.remote_id}"
+            val urlUserRead = "$API_URL/collection/${track.remote_id}"
             val requestUserRead = Request.Builder()
                 .url(urlUserRead)
                 .cacheControl(CacheControl.FORCE_NETWORK)
@@ -247,27 +188,25 @@ class BangumiApi(
                 .build()
 
             // TODO: get user readed chapter here
-            val response = authClient.newCall(requestUserRead).awaitSuccess()
-            val responseBody = response.body.string()
-            if (responseBody.isEmpty()) {
-                throw Exception("Null Response")
-            }
-            if (responseBody.contains("\"code\":400")) {
-                null
-            } else {
-                json.decodeFromString<Collection>(responseBody).let {
-                    track.status = it.status?.id!!
-                    track.last_chapter_read = it.ep_status!!.toDouble()
-                    track.score = it.rating!!
-                    track
-                }
+            with(json) {
+                authClient.newCall(requestUserRead)
+                    .awaitSuccess()
+                    .parseAs<BGMCollectionResponse>()
+                    .let {
+                        if (it.code == 400) return@let null
+
+                        track.status = it.status?.id!!
+                        track.last_chapter_read = it.epStatus!!.toDouble()
+                        track.score = it.rating!!
+                        track
+                    }
             }
         }
     }
 
     suspend fun statusLibAnime(track: AnimeTrack): AnimeTrack? {
         return withIOContext {
-            val urlUserRead = "$apiUrl/collection/${track.remote_id}"
+            val urlUserRead = "$API_URL/collection/${track.remote_id}"
             val requestUserRead = Request.Builder()
                 .url(urlUserRead)
                 .cacheControl(CacheControl.FORCE_NETWORK)
@@ -275,25 +214,23 @@ class BangumiApi(
                 .build()
 
             // TODO: get user readed chapter here
-            var response = authClient.newCall(requestUserRead).awaitSuccess()
-            var responseBody = response.body?.string().orEmpty()
-            if (responseBody.isEmpty()) {
-                throw Exception("Null Response")
-            }
-            if (responseBody.contains("\"code\":400")) {
-                null
-            } else {
-                json.decodeFromString<Collection>(responseBody).let {
-                    track.status = it.status?.id!!
-                    track.last_episode_seen = it.ep_status!!.toDouble()
-                    track.score = it.rating!!
-                    track
-                }
+            with(json) {
+                authClient.newCall(requestUserRead)
+                    .awaitSuccess()
+                    .parseAs<BGMCollectionResponse>()
+                    .let {
+                        if (it.code == 400) return@let null
+
+                        track.status = it.status?.id!!
+                        track.last_episode_seen = it.epStatus!!.toDouble()
+                        track.score = it.rating!!
+                        track
+                    }
             }
         }
     }
 
-    suspend fun accessToken(code: String): OAuth {
+    suspend fun accessToken(code: String): BGMOAuth {
         return withIOContext {
             with(json) {
                 client.newCall(accessTokenRequest(code))
@@ -304,41 +241,41 @@ class BangumiApi(
     }
 
     private fun accessTokenRequest(code: String) = POST(
-        oauthUrl,
+        OAUTH_URL,
         body = FormBody.Builder()
             .add("grant_type", "authorization_code")
-            .add("client_id", clientId)
-            .add("client_secret", clientSecret)
+            .add("client_id", CLIENT_ID)
+            .add("client_secret", CLIENT_SECRET)
             .add("code", code)
-            .add("redirect_uri", redirectUrl)
+            .add("redirect_uri", REDIRECT_URL)
             .build(),
     )
 
     companion object {
-        private const val clientId = "bgm293165b66d7e58156"
-        private const val clientSecret = "21d5f5c19ac24b4bc9c855ffa2387030"
+        private const val CLIENT_ID = "bgm293165b66d7e58156"
+        private const val CLIENT_SECRET = "21d5f5c19ac24b4bc9c855ffa2387030"
 
-        private const val apiUrl = "https://api.bgm.tv"
-        private const val oauthUrl = "https://bgm.tv/oauth/access_token"
-        private const val loginUrl = "https://bgm.tv/oauth/authorize"
+        private const val API_URL = "https://api.bgm.tv"
+        private const val OAUTH_URL = "https://bgm.tv/oauth/access_token"
+        private const val LOGIN_URL = "https://bgm.tv/oauth/authorize"
 
-        private const val redirectUrl = "aniyomi://bangumi-auth"
+        private const val REDIRECT_URL = "aniyomi://bangumi-auth"
 
         fun authUrl(): Uri =
-            loginUrl.toUri().buildUpon()
-                .appendQueryParameter("client_id", clientId)
+            LOGIN_URL.toUri().buildUpon()
+                .appendQueryParameter("client_id", CLIENT_ID)
                 .appendQueryParameter("response_type", "code")
-                .appendQueryParameter("redirect_uri", redirectUrl)
+                .appendQueryParameter("redirect_uri", REDIRECT_URL)
                 .build()
 
         fun refreshTokenRequest(token: String) = POST(
-            oauthUrl,
+            OAUTH_URL,
             body = FormBody.Builder()
                 .add("grant_type", "refresh_token")
-                .add("client_id", clientId)
-                .add("client_secret", clientSecret)
+                .add("client_id", CLIENT_ID)
+                .add("client_secret", CLIENT_SECRET)
                 .add("refresh_token", token)
-                .add("redirect_uri", redirectUrl)
+                .add("redirect_uri", REDIRECT_URL)
                 .build(),
         )
     }

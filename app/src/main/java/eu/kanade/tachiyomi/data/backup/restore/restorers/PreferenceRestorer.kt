@@ -23,7 +23,7 @@ class PreferenceRestorer(
     private val preferenceStore: PreferenceStore = Injekt.get(),
 ) {
 
-    fun restoreAppPreferences(preferences: List<BackupPreference>) {
+    fun restoreApp(preferences: List<BackupPreference>) {
         restorePreferences(preferences, preferenceStore)
 
         AnimeLibraryUpdateJob.setupTask(context)
@@ -31,7 +31,7 @@ class PreferenceRestorer(
         BackupCreateJob.setupTask(context)
     }
 
-    fun restoreSourcePreferences(preferences: List<BackupSourcePreferences>) {
+    fun restoreSource(preferences: List<BackupSourcePreferences>) {
         preferences.forEach {
             val sourcePrefs = AndroidPreferenceStore(context, sourcePreferences(it.sourceKey))
             restorePreferences(it.prefs, sourcePrefs)

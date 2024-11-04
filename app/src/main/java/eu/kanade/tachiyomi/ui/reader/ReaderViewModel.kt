@@ -164,7 +164,8 @@ class ReaderViewModel @JvmOverloads constructor(
                                 (manga.unreadFilterRaw == Manga.CHAPTER_SHOW_UNREAD && it.read) ||
                                 (
                                     manga.downloadedFilterRaw ==
-                                        Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(
+                                        Manga.CHAPTER_SHOW_DOWNLOADED &&
+                                        !downloadManager.isChapterDownloaded(
                                             it.name,
                                             it.scanlator,
                                             manga.title,
@@ -173,7 +174,8 @@ class ReaderViewModel @JvmOverloads constructor(
                                     ) ||
                                 (
                                     manga.downloadedFilterRaw ==
-                                        Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(
+                                        Manga.CHAPTER_SHOW_NOT_DOWNLOADED &&
+                                        downloadManager.isChapterDownloaded(
                                             it.name,
                                             it.scanlator,
                                             manga.title,
@@ -819,7 +821,7 @@ class ReaderViewModel @JvmOverloads constructor(
      * get a path to the file and it has to be decompressed somewhere first. Only the last shared
      * image will be kept so it won't be taking lots of internal disk space.
      */
-    fun shareImage() {
+    fun shareImage(copyToClipboard: Boolean) {
         val page = (state.value.dialog as? Dialog.PageActions)?.page
         if (page?.status != Page.State.READY) return
         val manga = manga ?: return
@@ -839,7 +841,7 @@ class ReaderViewModel @JvmOverloads constructor(
                         location = Location.Cache,
                     ),
                 )
-                eventChannel.send(Event.ShareImage(uri, page))
+                eventChannel.send(if (copyToClipboard) Event.CopyImage(uri) else Event.ShareImage(uri, page))
             }
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e)
@@ -962,5 +964,6 @@ class ReaderViewModel @JvmOverloads constructor(
 
         data class SavedImage(val result: SaveImageResult) : Event
         data class ShareImage(val uri: Uri, val page: ReaderPage) : Event
+        data class CopyImage(val uri: Uri) : Event
     }
 }

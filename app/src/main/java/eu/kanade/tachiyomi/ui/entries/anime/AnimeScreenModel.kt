@@ -1,9 +1,12 @@
 package eu.kanade.tachiyomi.ui.entries.anime
 
 import android.content.Context
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.addOrRemove
@@ -15,6 +18,8 @@ import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
+import eu.kanade.domain.track.anime.interactor.TrackEpisode
+import eu.kanade.domain.track.model.AutoTrackState
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
@@ -32,7 +37,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.AniChartApi
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
-import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
@@ -46,6 +51,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import mihon.domain.items.episode.interactor.FilterEpisodesForDownload
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.preference.CheckboxState
 import tachiyomi.core.common.preference.TriState
@@ -83,14 +89,16 @@ import java.util.Calendar
 import kotlin.math.floor
 
 class AnimeScreenModel(
-    val context: Context,
-    val animeId: Long,
+    private val context: Context,
+    private val lifecycle: Lifecycle,
+    private val animeId: Long,
     private val isFromSource: Boolean,
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
+    private val trackEpisode: TrackEpisode = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
@@ -106,6 +114,7 @@ class AnimeScreenModel(
     private val addTracks: AddAnimeTracks = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
     private val animeRepository: AnimeRepository = Injekt.get(),
+    private val filterEpisodesForDownload: FilterEpisodesForDownload = Injekt.get(),
     internal val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
 ) : StateScreenModel<AnimeScreenModel.State>(State.Loading) {
@@ -127,6 +136,7 @@ class AnimeScreenModel(
 
     val episodeSwipeStartAction = libraryPreferences.swipeEpisodeEndAction().get()
     val episodeSwipeEndAction = libraryPreferences.swipeEpisodeStartAction().get()
+    var autoTrackState = trackPreferences.autoUpdateTrackOnMarkRead().get()
 
     val showNextEpisodeAirTime = trackPreferences.showNextEpisodeAiringTime().get()
     val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
@@ -162,6 +172,7 @@ class AnimeScreenModel(
                 downloadCache.changes,
                 downloadManager.queueState,
             ) { animeAndEpisodes, _, _ -> animeAndEpisodes }
+                .flowWithLifecycle(lifecycle)
                 .collectLatest { (anime, episodes) ->
                     updateSuccessState {
                         it.copy(
@@ -454,6 +465,7 @@ class AnimeScreenModel(
             downloadManager.statusFlow()
                 .filter { it.anime.id == successState?.anime?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
+                .flowWithLifecycle(lifecycle)
                 .collect {
                     withUIContext {
                         updateDownloadState(it)
@@ -465,6 +477,7 @@ class AnimeScreenModel(
             downloadManager.progressFlow()
                 .filter { it.anime.id == successState?.anime?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
+                .flowWithLifecycle(lifecycle)
                 .collect {
                     withUIContext {
                         updateDownloadState(it)
@@ -714,13 +727,44 @@ class AnimeScreenModel(
      * @param seen whether to mark episodes as seen or unseen.
      */
     fun markEpisodesSeen(episodes: List<Episode>, seen: Boolean) {
+        toggleAllSelection(false)
         screenModelScope.launchIO {
             setSeenStatus.await(
                 seen = seen,
                 episodes = episodes.toTypedArray(),
             )
+
+            if (!seen || successState?.hasLoggedInTrackers == false || autoTrackState == AutoTrackState.NEVER) {
+                return@launchIO
+            }
+
+            val tracks = getTracks.await(animeId)
+            val maxEpisodeNumber = episodes.maxOf { it.episodeNumber }
+            val shouldPromptTrackingUpdate = tracks.any { track -> maxEpisodeNumber > track.lastEpisodeSeen }
+
+            if (!shouldPromptTrackingUpdate) return@launchIO
+
+            if (autoTrackState == AutoTrackState.ALWAYS) {
+                trackEpisode.await(context, animeId, maxEpisodeNumber)
+                withUIContext {
+                    context.toast(
+                        context.stringResource(MR.strings.trackers_updated_summary_anime, maxEpisodeNumber.toInt()),
+                    )
+                }
+                return@launchIO
+            }
+
+            val result = snackbarHostState.showSnackbar(
+                message = context.stringResource(MR.strings.confirm_tracker_update_anime, maxEpisodeNumber.toInt()),
+                actionLabel = context.stringResource(MR.strings.action_ok),
+                duration = SnackbarDuration.Short,
+                withDismissAction = true,
+            )
+
+            if (result == SnackbarResult.ActionPerformed) {
+                trackEpisode.await(context, animeId, maxEpisodeNumber)
+            }
         }
-        toggleAllSelection(false)
     }
 
     /**
@@ -775,15 +819,11 @@ class AnimeScreenModel(
     private fun downloadNewEpisodes(episodes: List<Episode>) {
         screenModelScope.launchNonCancellable {
             val anime = successState?.anime ?: return@launchNonCancellable
-            val categories = getCategories.await(anime.id).map { it.id }
-            if (episodes.isEmpty() || !anime.shouldDownloadNewEpisodes(
-                    categories,
-                    downloadPreferences,
-                )
-            ) {
-                return@launchNonCancellable
+            val episodesToDownload = filterEpisodesForDownload.await(anime, episodes)
+
+            if (episodesToDownload.isNotEmpty()) {
+                downloadEpisodes(episodesToDownload)
             }
-            downloadEpisodes(episodes)
         }
     }
 
@@ -985,6 +1025,7 @@ class AnimeScreenModel(
                 val supportedTrackerTracks = animeTracks.filter { it.trackerId in supportedTrackerIds }
                 supportedTrackerTracks.size to supportedTrackers.isNotEmpty()
             }
+                .flowWithLifecycle(lifecycle)
                 .distinctUntilChanged()
                 .collectLatest { (trackingCount, hasLoggedInTrackers) ->
                     updateSuccessState {

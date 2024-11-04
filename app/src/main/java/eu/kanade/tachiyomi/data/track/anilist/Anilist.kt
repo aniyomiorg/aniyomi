@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.DeletableAnimeTracker
 import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
+import eu.kanade.tachiyomi.data.track.anilist.dto.ALOAuth
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.collections.immutable.ImmutableList
@@ -38,12 +39,12 @@ class Anilist(id: Long) :
         const val READING = 1L
         const val WATCHING = 11L
         const val COMPLETED = 2L
-        const val PAUSED = 3L
+        const val ON_HOLD = 3L
         const val DROPPED = 4L
-        const val PLANNING = 5L
-        const val PLANNING_ANIME = 15L
-        const val REPEATING = 6L
-        const val REPEATING_ANIME = 16L
+        const val PLAN_TO_READ = 5L
+        const val PLAN_TO_WATCH = 15L
+        const val REREADING = 6L
+        const val REWATCHING = 16L
 
         const val POINT_100 = "POINT_100"
         const val POINT_10 = "POINT_10"
@@ -77,29 +78,29 @@ class Anilist(id: Long) :
     override fun getLogoColor() = Color.rgb(18, 25, 35)
 
     override fun getStatusListManga(): List<Long> {
-        return listOf(READING, PLANNING, COMPLETED, REPEATING, PAUSED, DROPPED)
+        return listOf(READING, PLAN_TO_READ, COMPLETED, REREADING, ON_HOLD, DROPPED)
     }
 
     override fun getStatusListAnime(): List<Long> {
-        return listOf(WATCHING, PLANNING_ANIME, COMPLETED, REPEATING_ANIME, PAUSED, DROPPED)
+        return listOf(WATCHING, PLAN_TO_WATCH, COMPLETED, REWATCHING, ON_HOLD, DROPPED)
     }
 
     override fun getStatusForManga(status: Long): StringResource? = when (status) {
         READING -> MR.strings.reading
-        PLANNING -> MR.strings.plan_to_read
+        PLAN_TO_READ -> MR.strings.plan_to_read
         COMPLETED -> MR.strings.completed
-        REPEATING -> MR.strings.repeating
-        PAUSED -> MR.strings.paused
+        REREADING -> MR.strings.repeating
+        ON_HOLD -> MR.strings.paused
         DROPPED -> MR.strings.dropped
         else -> null
     }
 
     override fun getStatusForAnime(status: Long): StringResource? = when (status) {
         WATCHING -> MR.strings.watching
-        PLANNING_ANIME -> MR.strings.plan_to_watch
+        PLAN_TO_WATCH -> MR.strings.plan_to_watch
         COMPLETED -> MR.strings.completed
-        REPEATING_ANIME -> MR.strings.repeating_anime
-        PAUSED -> MR.strings.paused
+        REWATCHING -> MR.strings.repeating_anime
+        ON_HOLD -> MR.strings.paused
         DROPPED -> MR.strings.dropped
         else -> null
     }
@@ -108,9 +109,9 @@ class Anilist(id: Long) :
 
     override fun getWatchingStatus(): Long = WATCHING
 
-    override fun getRereadingStatus(): Long = REPEATING
+    override fun getRereadingStatus(): Long = REREADING
 
-    override fun getRewatchingStatus(): Long = REPEATING_ANIME
+    override fun getRewatchingStatus(): Long = REWATCHING
 
     override fun getCompletionStatus(): Long = COMPLETED
 
@@ -176,7 +177,7 @@ class Anilist(id: Long) :
                 score <= 60 -> "😐"
                 else -> "😊"
             }
-            else -> track.toAnilistScore()
+            else -> track.toApiScore()
         }
     }
 
@@ -194,7 +195,7 @@ class Anilist(id: Long) :
                 score <= 60 -> "😐"
                 else -> "😊"
             }
-            else -> track.toAnilistScore()
+            else -> track.toApiScore()
         }
     }
 
@@ -219,7 +220,7 @@ class Anilist(id: Long) :
                 if (track.last_chapter_read.toLong() == track.total_chapters && track.total_chapters > 0) {
                     track.status = COMPLETED
                     track.finished_reading_date = System.currentTimeMillis()
-                } else if (track.status != REPEATING) {
+                } else if (track.status != REREADING) {
                     track.status = READING
                     if (track.last_chapter_read == 1.0) {
                         track.started_reading_date = System.currentTimeMillis()
@@ -244,7 +245,7 @@ class Anilist(id: Long) :
                 if (track.last_episode_seen.toLong() == track.total_episodes && track.total_episodes > 0) {
                     track.status = COMPLETED
                     track.finished_watching_date = System.currentTimeMillis()
-                } else if (track.status != REPEATING_ANIME) {
+                } else if (track.status != REWATCHING) {
                     track.status = WATCHING
                     if (track.last_episode_seen == 1.0) {
                         track.started_watching_date = System.currentTimeMillis()
@@ -281,14 +282,14 @@ class Anilist(id: Long) :
             track.library_id = remoteTrack.library_id
 
             if (track.status != COMPLETED) {
-                val isRereading = track.status == REPEATING
+                val isRereading = track.status == REREADING
                 track.status = if (!isRereading && hasReadChapters) READING else track.status
             }
 
             update(track)
         } else {
             // Set default fields if it's not found in the list
-            track.status = if (hasReadChapters) READING else PLANNING
+            track.status = if (hasReadChapters) READING else PLAN_TO_READ
             track.score = 0.0
             add(track)
         }
@@ -301,14 +302,14 @@ class Anilist(id: Long) :
             track.library_id = remoteTrack.library_id
 
             if (track.status != COMPLETED) {
-                val isRereading = track.status == REPEATING_ANIME
+                val isRereading = track.status == REWATCHING
                 track.status = if (!isRereading && hasReadChapters) WATCHING else track.status
             }
 
             update(track)
         } else {
             // Set default fields if it's not found in the list
-            track.status = if (hasReadChapters) WATCHING else PLANNING_ANIME
+            track.status = if (hasReadChapters) WATCHING else PLAN_TO_WATCH
             track.score = 0.0
             add(track)
         }
@@ -346,7 +347,7 @@ class Anilist(id: Long) :
             interceptor.setAuth(oauth)
             val (username, scoreType) = api.getCurrentUser()
             scorePreference.set(scoreType)
-            saveCredentials(username.toString(), oauth.access_token)
+            saveCredentials(username.toString(), oauth.accessToken)
         } catch (e: Throwable) {
             logout()
         }
@@ -358,13 +359,13 @@ class Anilist(id: Long) :
         interceptor.setAuth(null)
     }
 
-    fun saveOAuth(oAuth: OAuth?) {
-        trackPreferences.trackToken(this).set(json.encodeToString(oAuth))
+    fun saveOAuth(alOAuth: ALOAuth?) {
+        trackPreferences.trackToken(this).set(json.encodeToString(alOAuth))
     }
 
-    fun loadOAuth(): OAuth? {
+    fun loadOAuth(): ALOAuth? {
         return try {
-            json.decodeFromString<OAuth>(trackPreferences.trackToken(this).get())
+            json.decodeFromString<ALOAuth>(trackPreferences.trackToken(this).get())
         } catch (e: Exception) {
             null
         }

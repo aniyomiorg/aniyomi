@@ -1,6 +1,5 @@
 package eu.kanade.presentation.util
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
@@ -33,15 +32,12 @@ import uy.kohesive.injekt.api.get
 /**
  * For invoking back press to the parent activity
  */
-@SuppressLint("ComposeCompositionLocalUsage")
 val LocalBackPress: ProvidableCompositionLocal<(() -> Unit)?> = staticCompositionLocalOf { null }
 
 private val uiPreferences: UiPreferences = Injekt.get()
 
-abstract class Tab : cafe.adriel.voyager.navigator.tab.Tab {
-
-    override val key: ScreenKey = uniqueScreenKey
-    open suspend fun onReselect(navigator: Navigator) {}
+interface Tab : cafe.adriel.voyager.navigator.tab.Tab {
+    suspend fun onReselect(navigator: Navigator) {}
 
     @Composable
     fun currentNavigationStyle(): NavStyle = uiPreferences.navStyle().collectAsState().value
@@ -69,7 +65,10 @@ interface AssistContentScreen {
 }
 
 @Composable
-fun DefaultNavigatorScreenTransition(navigator: Navigator) {
+fun DefaultNavigatorScreenTransition(
+    navigator: Navigator,
+    modifier: Modifier = Modifier,
+) {
     val slideDistance = rememberSlideDistance()
     ScreenTransition(
         navigator = navigator,
@@ -79,6 +78,7 @@ fun DefaultNavigatorScreenTransition(navigator: Navigator) {
                 slideDistance = slideDistance,
             )
         },
+        modifier = modifier,
     )
 }
 

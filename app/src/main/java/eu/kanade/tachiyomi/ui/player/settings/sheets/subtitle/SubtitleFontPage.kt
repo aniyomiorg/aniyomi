@@ -36,7 +36,7 @@ import tachiyomi.core.common.storage.extension
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.OutlinedNumericChooser
-import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -126,7 +126,7 @@ private fun SubtitleFont(
                 onValueChanged = onSizeChanged,
             )
 
-            val boldAlpha = if (boldSubtitles) 1f else ReadItemAlpha
+            val boldAlpha = if (boldSubtitles) 1f else DISABLED_ALPHA
             Icon(
                 imageVector = Icons.Outlined.FormatBold,
                 contentDescription = null,
@@ -136,7 +136,7 @@ private fun SubtitleFont(
                     .clickable(onClick = updateBold),
             )
 
-            val italicAlpha = if (italicSubtitles) 1f else ReadItemAlpha
+            val italicAlpha = if (italicSubtitles) 1f else DISABLED_ALPHA
             Icon(
                 imageVector = Icons.Outlined.FormatItalic,
                 contentDescription = null,

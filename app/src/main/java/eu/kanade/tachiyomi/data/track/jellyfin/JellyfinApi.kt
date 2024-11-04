@@ -1,6 +1,8 @@
 package eu.kanade.tachiyomi.data.track.jellyfin
 
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.track.jellyfin.dto.JFItem
+import eu.kanade.tachiyomi.data.track.jellyfin.dto.JFItemList
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
@@ -34,7 +36,7 @@ class JellyfinApi(
                 val track = with(json) {
                     client.newCall(GET(url))
                         .awaitSuccess()
-                        .parseAs<ItemDto>()
+                        .parseAs<JFItem>()
                         .toTrack()
                 }.apply { tracking_url = url }
 
@@ -50,7 +52,7 @@ class JellyfinApi(
             }
         }
 
-    private fun ItemDto.toTrack(): AnimeTrackSearch = AnimeTrackSearch.create(
+    private fun JFItem.toTrack(): AnimeTrackSearch = AnimeTrackSearch.create(
         trackId,
     ).also {
         it.title = name
@@ -87,7 +89,7 @@ class JellyfinApi(
         val episodes = with(json) {
             client.newCall(GET(episodesUrl))
                 .awaitSuccess()
-                .parseAs<ItemsDto>()
+                .parseAs<JFItemList>()
         }.items
 
         val totalEpisodes = episodes.last().indexNumber!!
@@ -129,7 +131,7 @@ class JellyfinApi(
             val episodes = with(json) {
                 client.newCall(GET(episodesUrl))
                     .awaitSuccess()
-                    .parseAs<ItemsDto>()
+                    .parseAs<JFItemList>()
             }.items
 
             episodes.firstOrNull {

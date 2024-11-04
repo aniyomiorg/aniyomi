@@ -43,8 +43,12 @@ class QueryPagingAnimeSource<RowType : Any>(
             }
 
             val (prevKey, nextKey) = when (params) {
-                is LoadParams.Append -> { offset - loadSize to offset + loadSize }
-                else -> { offset to offset + loadSize }
+                is LoadParams.Append -> {
+                    offset - loadSize to offset + loadSize
+                }
+                else -> {
+                    offset to offset + loadSize
+                }
             }
 
             return LoadResult.Page(

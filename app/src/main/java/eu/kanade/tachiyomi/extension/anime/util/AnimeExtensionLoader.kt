@@ -145,7 +145,7 @@ internal object AnimeExtensionLoader {
 
                 val path = it.absolutePath
                 pkgManager.getPackageArchiveInfo(path, PACKAGE_FLAGS)
-                    ?.apply { applicationInfo.fixBasePaths(path) }
+                    ?.apply { applicationInfo!!.fixBasePaths(path) }
             }
             ?.filter { isPackageAnExtension(it) }
             ?.map { AnimeExtensionInfo(packageInfo = it, isShared = false) }
@@ -202,7 +202,7 @@ internal object AnimeExtensionLoader {
             )
                 ?.takeIf { isPackageAnExtension(it) }
                 ?.let {
-                    it.applicationInfo.fixBasePaths(privateExtensionFile.absolutePath)
+                    it.applicationInfo!!.fixBasePaths(privateExtensionFile.absolutePath)
                     AnimeExtensionInfo(
                         packageInfo = it,
                         isShared = false,
@@ -234,12 +234,11 @@ internal object AnimeExtensionLoader {
      * @param context The application context.
      * @param extensionInfo The extension to load.
      */
-    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
     private suspend fun loadExtension(context: Context, extensionInfo: AnimeExtensionInfo): AnimeLoadResult {
         val pkgManager = context.packageManager
 
         val pkgInfo = extensionInfo.packageInfo
-        val appInfo = pkgInfo.applicationInfo
+        val appInfo = pkgInfo.applicationInfo!!
         val pkgName = pkgInfo.packageName
 
         val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Aniyomi: ")
@@ -315,7 +314,7 @@ internal object AnimeExtensionLoader {
                             val obj = Class.forName(
                                 it,
                                 false,
-                                fallBackClassLoader
+                                fallBackClassLoader,
                             ).getDeclaredConstructor().newInstance()
                         ) {
                             is AnimeSource -> {
@@ -398,7 +397,7 @@ internal object AnimeExtensionLoader {
      */
     private fun getSignatures(pkgInfo: PackageInfo): List<String>? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val signingInfo = pkgInfo.signingInfo
+            val signingInfo = pkgInfo.signingInfo!!
             if (signingInfo.hasMultipleSigners()) {
                 signingInfo.apkContentsSigners
             } else {

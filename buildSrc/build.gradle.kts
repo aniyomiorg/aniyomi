@@ -6,7 +6,7 @@ dependencies {
     implementation(androidx.gradle)
     implementation(kotlinx.gradle)
     implementation(kotlinx.compose.compiler.gradle)
-    implementation(libs.detekt.gradlePlugin)
+    implementation(libs.spotless.gradle)
     implementation(gradleApi())
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))

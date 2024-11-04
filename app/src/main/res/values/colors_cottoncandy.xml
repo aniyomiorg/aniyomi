@@ -23,6 +23,5 @@
     <color name="cottoncandy_inverseOnSurface">#FAEEEF</color>
     <color name="cottoncandy_inverseSurface">#352F30</color>
     <color name="cottoncandy_primaryInverse">#FFB1C1</color>
-    <color name="cottoncandy_elevationOverlay">@color/cottoncandy_primary</color>    
+    <color name="cottoncandy_elevationOverlay">@color/cottoncandy_primary</color>
 </resources>
-

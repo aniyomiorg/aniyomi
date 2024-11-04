@@ -2,6 +2,7 @@ package eu.kanade.presentation.entries.anime.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
@@ -74,6 +75,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.entries.components.ItemCover
@@ -82,6 +85,7 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
@@ -98,13 +102,9 @@ private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTIL
 fun AnimeInfoBox(
     isTabletUi: Boolean,
     appBarPadding: Dp,
-    title: String,
-    author: String?,
-    artist: String?,
+    anime: Anime,
     sourceName: String,
     isStubSource: Boolean,
-    coverDataProvider: () -> Anime,
-    status: Long,
     onCoverClick: () -> Unit,
     doSearch: (query: String, global: Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -116,7 +116,10 @@ fun AnimeInfoBox(
             MaterialTheme.colorScheme.background,
         )
         AsyncImage(
-            model = coverDataProvider(),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(anime)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -136,28 +139,20 @@ fun AnimeInfoBox(
             if (!isTabletUi) {
                 AnimeAndSourceTitlesSmall(
                     appBarPadding = appBarPadding,
-                    coverDataProvider = coverDataProvider,
-                    onCoverClick = onCoverClick,
-                    title = title,
-                    doSearch = doSearch,
-                    author = author,
-                    artist = artist,
-                    status = status,
+                    anime = anime,
                     sourceName = sourceName,
                     isStubSource = isStubSource,
+                    onCoverClick = onCoverClick,
+                    doSearch = doSearch,
                 )
             } else {
                 AnimeAndSourceTitlesLarge(
                     appBarPadding = appBarPadding,
-                    coverDataProvider = coverDataProvider,
-                    onCoverClick = onCoverClick,
-                    title = title,
-                    doSearch = doSearch,
-                    author = author,
-                    artist = artist,
-                    status = status,
+                    anime = anime,
                     sourceName = sourceName,
                     isStubSource = isStubSource,
+                    onCoverClick = onCoverClick,
+                    doSearch = doSearch,
                 )
             }
         }
@@ -178,7 +173,7 @@ fun AnimeActionRow(
     onEditCategory: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
-    val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
+    val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = DISABLED_ALPHA)
 
     // TODO: show something better when using custom interval
     val nextUpdateDays = remember(nextUpdate) {
@@ -276,7 +271,8 @@ fun ExpandableAnimeDescription(
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .padding(vertical = 12.dp)
-                    .animateContentSize(),
+                    .animateContentSize(animationSpec = spring())
+                    .fillMaxWidth(),
             ) {
                 var showMenu by remember { mutableStateOf(false) }
                 var tagSelected by remember { mutableStateOf("") }
@@ -340,15 +336,11 @@ fun ExpandableAnimeDescription(
 @Composable
 private fun AnimeAndSourceTitlesLarge(
     appBarPadding: Dp,
-    coverDataProvider: () -> Anime,
-    onCoverClick: () -> Unit,
-    title: String,
-    doSearch: (query: String, global: Boolean) -> Unit,
-    author: String?,
-    artist: String?,
-    status: Long,
+    anime: Anime,
     sourceName: String,
     isStubSource: Boolean,
+    onCoverClick: () -> Unit,
+    doSearch: (query: String, global: Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -358,19 +350,22 @@ private fun AnimeAndSourceTitlesLarge(
     ) {
         ItemCover.Book(
             modifier = Modifier.fillMaxWidth(0.65f),
-            data = coverDataProvider(),
+            data = ImageRequest.Builder(LocalContext.current)
+                .data(anime)
+                .crossfade(true)
+                .build(),
             contentDescription = stringResource(MR.strings.manga_cover),
             onClick = onCoverClick,
         )
         Spacer(modifier = Modifier.height(16.dp))
         AnimeContentInfo(
-            title = title,
-            doSearch = doSearch,
-            author = author,
-            artist = artist,
-            status = status,
+            title = anime.title,
+            author = anime.author,
+            artist = anime.artist,
+            status = anime.status,
             sourceName = sourceName,
             isStubSource = isStubSource,
+            doSearch = doSearch,
             textAlign = TextAlign.Center,
         )
     }
@@ -379,15 +374,11 @@ private fun AnimeAndSourceTitlesLarge(
 @Composable
 private fun AnimeAndSourceTitlesSmall(
     appBarPadding: Dp,
-    coverDataProvider: () -> Anime,
-    onCoverClick: () -> Unit,
-    title: String,
-    doSearch: (query: String, global: Boolean) -> Unit,
-    author: String?,
-    artist: String?,
-    status: Long,
+    anime: Anime,
     sourceName: String,
     isStubSource: Boolean,
+    onCoverClick: () -> Unit,
+    doSearch: (query: String, global: Boolean) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -400,7 +391,10 @@ private fun AnimeAndSourceTitlesSmall(
             modifier = Modifier
                 .sizeIn(maxWidth = 100.dp)
                 .align(Alignment.Top),
-            data = coverDataProvider(),
+            data = ImageRequest.Builder(LocalContext.current)
+                .data(anime)
+                .crossfade(true)
+                .build(),
             contentDescription = stringResource(MR.strings.manga_cover),
             onClick = onCoverClick,
         )
@@ -408,13 +402,13 @@ private fun AnimeAndSourceTitlesSmall(
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             AnimeContentInfo(
-                title = title,
-                doSearch = doSearch,
-                author = author,
-                artist = artist,
-                status = status,
+                title = anime.title,
+                author = anime.author,
+                artist = anime.artist,
+                status = anime.status,
                 sourceName = sourceName,
                 isStubSource = isStubSource,
+                doSearch = doSearch,
             )
         }
     }
@@ -423,12 +417,12 @@ private fun AnimeAndSourceTitlesSmall(
 @Composable
 private fun ColumnScope.AnimeContentInfo(
     title: String,
-    doSearch: (query: String, global: Boolean) -> Unit,
     author: String?,
     artist: String?,
     status: Long,
     sourceName: String,
     isStubSource: Boolean,
+    doSearch: (query: String, global: Boolean) -> Unit,
     textAlign: TextAlign? = LocalTextStyle.current.textAlign,
 ) {
     val context = LocalContext.current

@@ -39,7 +39,7 @@ import eu.kanade.tachiyomi.util.lang.toRelativeString
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.VerticalFastScroller
-import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import java.time.Instant
@@ -131,9 +131,9 @@ private fun EpisodeListItem(
     var textHeight by remember { mutableStateOf(0) }
 
     val bookmarkIcon = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.Bookmark
-    val bookmarkAlpha = if (isBookmarked) 1f else ReadItemAlpha
+    val bookmarkAlpha = if (isBookmarked) 1f else DISABLED_ALPHA
     val episodeColor = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-    val textAlpha = if (episode.seen) ReadItemAlpha else 1f
+    val textAlpha = if (episode.seen) DISABLED_ALPHA else 1f
     val textWeight = if (isCurrentEpisode) FontWeight.Bold else FontWeight.Normal
     val textStyle = if (isCurrentEpisode) FontStyle.Italic else FontStyle.Normal
 

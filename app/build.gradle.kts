@@ -2,19 +2,18 @@ import mihon.buildlogic.getBuildTime
 import mihon.buildlogic.getCommitCount
 import mihon.buildlogic.getGitSha
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.FileInputStream
-import java.util.Properties
 
 plugins {
     id("mihon.android.application")
     id("mihon.android.application.compose")
-    id("com.mikepenz.aboutlibraries.plugin")
     id("com.github.zellius.shortcut-helper")
     kotlin("plugin.serialization")
+    alias(libs.plugins.aboutLibraries)
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
+@Suppress("PropertyName")
 val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 android {
@@ -23,7 +22,7 @@ android {
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 125
+        versionCode = 126
         versionName = "0.16.4.3"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -115,13 +114,16 @@ android {
     packaging {
         resources.excludes.addAll(
             listOf(
+                "kotlin-tooling-metadata.json",
                 "META-INF/DEPENDENCIES",
                 "LICENSE.txt",
                 "META-INF/LICENSE",
-                "META-INF/LICENSE.txt",
+                "META-INF/**/LICENSE.txt",
+                "META-INF/*.properties",
+                "META-INF/**/*.properties",
                 "META-INF/README.md",
                 "META-INF/NOTICE",
-                "META-INF/*.kotlin_module",
+                "META-INF/*.version",
             ),
         )
     }
@@ -148,6 +150,7 @@ android {
 
 dependencies {
     implementation(projects.i18n)
+    implementation(projects.core.archive)
     implementation(projects.core.common)
     implementation(projects.coreMetadata)
     implementation(projects.sourceApi)
@@ -167,7 +170,6 @@ dependencies {
     debugImplementation(compose.ui.tooling)
     implementation(compose.ui.tooling.preview)
     implementation(compose.ui.util)
-    implementation(compose.accompanist.systemuicontroller)
 
     implementation(androidx.interpolator)
 
@@ -246,7 +248,6 @@ dependencies {
     implementation(libs.swipe)
     implementation(libs.compose.webview)
     implementation(libs.compose.grid)
-
 
     // Logging
     implementation(libs.logcat)

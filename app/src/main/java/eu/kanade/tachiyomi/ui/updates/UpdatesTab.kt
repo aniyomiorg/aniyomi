@@ -21,7 +21,7 @@ import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
-object UpdatesTab : Tab() {
+data object UpdatesTab : Tab {
 
     override val options: TabOptions
         @Composable
@@ -41,7 +41,7 @@ object UpdatesTab : Tab() {
             )
         }
     override suspend fun onReselect(navigator: Navigator) {
-        navigator.push(DownloadsTab())
+        navigator.push(DownloadsTab)
     }
 
     @Composable

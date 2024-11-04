@@ -954,7 +954,7 @@
     <string name="onboarding_permission_ignore_battery_opts_description">Evite interrupções em atualizações de bibliotecas, downloads e restaurações de backup de longa duração.</string>
     <string name="pref_library_update_smart_update">Atualização inteligente</string>
     <string name="onboarding_guides_new_user">Novo em %s? Recomendamos verificar o guia de primeiros passos.</string>
-    <string name="untrusted_extension_message">Extensões maliciosas podem ler quaisquer credenciais de login armazenadas ou executar código arbitrário. 
+    <string name="untrusted_extension_message">Extensões maliciosas podem ler quaisquer credenciais de login armazenadas ou executar código arbitrário.
 \n
 \nAo confiar nesta extensão, você aceita esses riscos.</string>
     <string name="ext_permission_install_apps_warning">Permissões são necessárias para instalar extensões. Clique aqui para permitir.</string>
@@ -1042,7 +1042,7 @@
     <string name="pref_category_player_advanced_subtitle">Espalhar, mpv.conf... etc</string>
     <string name="pref_debanding_title">Debandar</string>
     <string name="data_saver_image_quality_summary">Valores mais altos significam que uma porcentagem maior da qualidade da imagem é salva, mas também significa que o tamanho do arquivo é maior, 80% é uma boa mediana entre o tamanho do arquivo e a qualidade da imagem</string>
-    <string name="data_saver_image_format_summary_on">O tamanho do arquivo Jpeg é consideravelmente menor do que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade. 
+    <string name="data_saver_image_format_summary_on">O tamanho do arquivo Jpeg é consideravelmente menor do que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
 \nAtualmente comprimido para Jpeg</string>
     <string name="pref_debanding_disabled">Desabilitado</string>
     <string name="pref_debanding_cpu">CPU</string>

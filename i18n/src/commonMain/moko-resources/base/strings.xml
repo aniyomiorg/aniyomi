@@ -58,6 +58,7 @@
     <string name="action_sort_chapter_fetch_date">Chapter fetch date</string>
     <string name="action_sort_date_added">Date added</string>
     <string name="action_sort_tracker_score">Tracker score</string>
+    <string name="action_sort_random">Random</string>
     <string name="action_sort_airing_time">Airing time</string>
     <string name="action_search">Search</string>
     <string name="action_search_hint">Search…</string>
@@ -99,6 +100,7 @@
     <string name="action_resume">Resume</string>
     <string name="action_open_in_browser">Open in browser</string>
     <string name="action_copy_to_clipboard">Copy to clipboard</string>
+    <string name="action_copy_link">Copy link</string>
     <string name="action_open_in_web_view">Open in WebView</string>
     <string name="action_web_view" translatable="false">WebView</string>
     <string name="action_migrate">Migrate</string>
@@ -281,10 +283,13 @@
     <string name="ext_trust">Trust</string>
     <string name="ext_untrusted">Untrusted</string>
     <string name="ext_uninstall">Uninstall</string>
+    <string name="ext_remove">Remove</string>
+    <string name="ext_confirm_remove">Remove Extension?</string>
     <string name="ext_app_info">App info</string>
     <string name="untrusted_extension">Untrusted extension</string>
     <string name="untrusted_extension_message">Malicious extensions can read any stored login credentials or execute arbitrary code.\n\nBy trusting this extension, you accept these risks.</string>
     <string name="obsolete_extension_message">This extension is no longer available. It may not function properly and can cause issues with the app. Uninstalling it is recommended.</string>
+    <string name="remove_private_extension_message">Do you really want to remove \"%s\" extension?</string>
     <string name="extension_api_error">Failed to fetch available extensions</string>
     <string name="ext_info_version">Version</string>
     <string name="ext_info_language">Language</string>
@@ -311,6 +316,7 @@
     <string name="action_delete_repo">Delete repo</string>
     <string name="invalid_repo_name">Invalid repo URL</string>
     <string name="delete_repo_confirmation">Do you wish to delete the repo \"%s\"?</string>
+    <string name="add_repo_confirmation">Do you wish to add the repo \"%s\"?</string>
     <string name="action_open_repo">Open source repo</string>
     <string name="action_replace_repo">Replace</string>
     <string name="action_replace_repo_title">Signing Key Fingerprint Already Exists</string>
@@ -441,6 +447,7 @@
     <string name="fifth_to_last">Fifth to last read chapter</string>
     <string name="pref_category_auto_download">Auto-download</string>
     <string name="pref_download_new">Download new chapters</string>
+    <string name="pref_download_new_unread_chapters_only">Skip downloading duplicate read chapters</string>
     <string name="pref_download_new_categories_details">Entries in excluded categories will not be downloaded even if they are also in included categories.</string>
     <string name="download_ahead">Download ahead</string>
     <string name="auto_download_while_reading">Auto download while reading</string>
@@ -470,6 +477,8 @@
     <string name="invalid_backup_file">Invalid backup file:</string>
     <string name="invalid_backup_file_error">Full error:</string>
     <string name="invalid_backup_file_missing_manga">Backup does not contain any library entries.</string>
+    <string name="invalid_backup_file_json">JSON backup not supported</string>
+    <string name="invalid_backup_file_unknown">Backup file is corrupted</string>
     <string name="backup_restore_missing_sources">Missing sources:</string>
     <string name="backup_restore_missing_trackers">Trackers not logged into:</string>
     <string name="backup_restore_content_full">You may need to install any missing extensions and log in to tracking services afterwards to use them.</string>
@@ -479,7 +488,9 @@
     <string name="backup_choice">What do you want to backup?</string>
     <string name="app_settings">App settings</string>
     <string name="source_settings">Source settings</string>
+    <string name="extensionRepo_settings">Extension repos</string>
     <string name="private_settings">Include sensitive settings (e.g., tracker login tokens)</string>
+    <string name="non_library_settings">All read/watched entries</string>
     <string name="creating_backup">Creating backup</string>
     <string name="creating_backup_error">Backup failed</string>
     <string name="missing_storage_permission">Storage permissions not granted</string>
@@ -509,7 +520,7 @@
     <string name="pref_reset_user_agent_string">Reset default user agent string</string>
     <string name="requires_app_restart">Requires app restart to take effect</string>
     <string name="cookies_cleared">Cookies cleared</string>
-    <string name="pref_invalidate_download_cache">Invalidate downloads index</string>
+    <string name="pref_invalidate_download_cache">Reindex downloads</string>
     <string name="download_cache_invalidated">Downloads index invalidated</string>
     <string name="pref_clear_database">Clear database</string>
     <string name="pref_clear_database_summary">Delete history for entries that are not saved in your library</string>
@@ -636,6 +647,11 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="exclude_scanlators">Exclude scanlators</string>
     <string name="no_scanlators_found">No scanlators found</string>
+    <string name="confirm_tracker_update">Update trackers to chapter %d?</string>
+    <string name="confirm_tracker_update_anime">Update trackers to episode %d?</string>
+    <string name="trackers_updated_summary_manga">Trackers updated to chapter %d</string>
+    <string name="trackers_updated_summary_anime">Trackers updated to episode %d</string>
+
     <string name="manga_tracking_tab">Tracking</string>
     <string name="add_tracking">Add tracking</string>
     <string name="unread">Unread</string>
@@ -958,9 +974,11 @@
     <string name="pref_use_external_downloader">Always use external downloader for anime</string>
     <string name="pref_external_downloader_selection">Downloader app preference</string>
     <string name="pref_download_new_episodes">Download new episodes</string>
+    <string name="pref_download_new_unseen_episodes_only">Skip downloading duplicate seen episodes</string>
     <string name="auto_download_while_watching">Auto download while watching</string>
     <string name="download_ahead_info_anime">Only works on entries in library and if the current episode plus the next one are already downloaded</string>
     <string name="pref_auto_update_manga_sync">Update progress after reading/watching</string>
+    <string name="pref_auto_update_manga_on_mark_read">Update progress when marked as read/watched</string>
     <string name="pref_track_on_add_library">Open track menu on adding to library</string>
     <string name="pref_show_next_episode_airing_time">Show next episode\'s airing time </string>
     <string name="pref_backup_flags_summary">What information to include in the backup file</string>
@@ -1042,7 +1060,6 @@
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
     <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
-    <string name="licensed_manga_chapters_error">Licensed - No items to show</string>
     <string name="no_next_episode">Next Episode not found!</string>
     <string name="label_storage">Storage</string>
     <string name="label_history">Manga</string>

@@ -48,8 +48,11 @@ actual class LocalAnimeSource(
 
     private val json: Json by injectLazy()
 
-    private val POPULAR_FILTERS = AnimeFilterList(AnimeOrderBy.Popular(context))
-    private val LATEST_FILTERS = AnimeFilterList(AnimeOrderBy.Latest(context))
+    @Suppress("PrivatePropertyName")
+    private val PopularFilters = AnimeFilterList(AnimeOrderBy.Popular(context))
+
+    @Suppress("PrivatePropertyName")
+    private val LatestFilters = AnimeFilterList(AnimeOrderBy.Latest(context))
 
     override val name = context.stringResource(MR.strings.local_anime_source)
 
@@ -62,16 +65,16 @@ actual class LocalAnimeSource(
     override val supportsLatest = true
 
     // Browse related
-    override suspend fun getPopularAnime(page: Int) = getSearchAnime(page, "", POPULAR_FILTERS)
+    override suspend fun getPopularAnime(page: Int) = getSearchAnime(page, "", PopularFilters)
 
-    override suspend fun getLatestUpdates(page: Int) = getSearchAnime(page, "", LATEST_FILTERS)
+    override suspend fun getLatestUpdates(page: Int) = getSearchAnime(page, "", LatestFilters)
 
     override suspend fun getSearchAnime(
         page: Int,
         query: String,
         filters: AnimeFilterList,
     ): AnimesPage = withIOContext {
-        val lastModifiedLimit = if (filters === LATEST_FILTERS) {
+        val lastModifiedLimit = if (filters === LatestFilters) {
             System.currentTimeMillis() - LATEST_THRESHOLD
         } else {
             0L
@@ -140,10 +143,10 @@ actual class LocalAnimeSource(
     // TODO: Should be replaced when Anime Extensions get to 1.15
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getPopularAnime"))
-    override fun fetchPopularAnime(page: Int) = fetchSearchAnime(page, "", POPULAR_FILTERS)
+    override fun fetchPopularAnime(page: Int) = fetchSearchAnime(page, "", PopularFilters)
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getLatestUpdates"))
-    override fun fetchLatestUpdates(page: Int) = fetchSearchAnime(page, "", LATEST_FILTERS)
+    override fun fetchLatestUpdates(page: Int) = fetchSearchAnime(page, "", LatestFilters)
 
     @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getSearchAnime"))
     override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
