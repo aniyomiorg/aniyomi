@@ -699,7 +699,6 @@
     <string name="download_cache_invalidated">Napawalang-bisa ang indise ng mga download</string>
     <string name="create_backup_file_error">Hindi makalikha ng backup file</string>
     <string name="track_activity_name">Pag-login sa tracker</string>
-    <string name="licensed_manga_chapters_error">Lisensyado - Walang mapakitang kabanata</string>
     <string name="unlock_app_title">I-unlock ang Aniyomi</string>
     <string name="exception_offline">Walang koneksyon sa Internet</string>
     <string name="exception_http">HTTP %d, tignan ang website sa WebView</string>

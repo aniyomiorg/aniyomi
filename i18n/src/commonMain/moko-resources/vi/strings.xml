@@ -709,7 +709,6 @@
     <string name="scanlator">Máy quét</string>
     <string name="onboarding_action_skip">Bỏ qua</string>
     <string name="pref_flash_page">Làm mới khi đổi trang</string>
-    <string name="licensed_manga_chapters_error">Được cấp phép - Không có chương nào để hiển thị</string>
     <string name="onboarding_permission_ignore_battery_opts_description">Tránh gián đoạn quá trình cập nhật thư viện, tải xuống và khôi phục bản sao lưu trong thời gian dài.</string>
     <string name="exception_offline">Mất kết nối mạng</string>
     <string name="pref_storage_usage">Kho chứa chiếm dụng</string>

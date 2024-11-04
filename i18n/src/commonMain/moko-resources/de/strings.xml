@@ -1053,7 +1053,6 @@
     <string name="bandwidth_hero">Bandwidth Hero (erfordert einen Bandwidth Hero Proxy-Server)</string>
     <string name="pref_pip_replace_with_previous">Ersetzt den 10-Sekunden-überspringen-Knopf mit \"Vorherige Folge\"</string>
     <string name="data_saver_stop_exclude">Nicht vom Datensparer ausschließen</string>
-    <string name="licensed_manga_chapters_error">Lizenziert - Keine Einträge anzuzeigen</string>
     <string name="theme_mocha">Mokka</string>
     <string name="player_audio_remember_delay">Tonverzögerung merken</string>
     <string name="delete_confirmation">Sind Sie sicher, dass Sie \"%s\" löschen möchten?</string>

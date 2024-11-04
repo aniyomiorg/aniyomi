@@ -689,7 +689,6 @@
     <string name="has_results">Sonuç var</string>
     <string name="delete_downloaded">İndirilenleri sil</string>
     <string name="create_backup_file_error">Yedekleme dosyası oluşturulamadı</string>
-    <string name="licensed_manga_chapters_error">Lisanslı - Gösterilecek bölüm yok</string>
     <string name="download_cache_invalidated">İndirilenler dizini geçersiz kılındı</string>
     <string name="information_cloudflare_help">Cloudflare ile ilgili yardım için buraya dokunun</string>
     <string name="exception_unknown_host">%s verisine erişilemedi</string>
@@ -1073,7 +1072,6 @@
     <string name="pref_pip_replace_with_previous">10 saniye atlama seçeneğini önceki bölüme geç seçeneği ile değiştirir</string>
     <string name="pref_anime_storage_usage">Anime Depolama kullanımı</string>
     <string name="pref_manga_storage_usage">Manga Depolama kullanımı</string>
-    <string name="licensed_manga_chapters_error">Lisanslanmış - Gösterilecek bir şey yok</string>
     <string name="settings_dialog_header">Oynatıcı ayarları</string>
     <string name="player_subtitle_settings_font_tab">Font</string>
     <string name="player_subtitle_settings">Alt yazı ayarları</string>
