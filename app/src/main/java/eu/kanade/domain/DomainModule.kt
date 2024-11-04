@@ -58,6 +58,8 @@ import mihon.domain.extensionrepo.manga.interactor.ReplaceMangaExtensionRepo
 import mihon.domain.extensionrepo.manga.interactor.UpdateMangaExtensionRepo
 import mihon.domain.extensionrepo.manga.repository.MangaExtensionRepoRepository
 import mihon.domain.extensionrepo.service.ExtensionRepoService
+import mihon.domain.items.chapter.interactor.FilterChaptersForDownload
+import mihon.domain.items.episode.interactor.FilterEpisodesForDownload
 import mihon.domain.upcoming.anime.interactor.GetUpcomingAnime
 import mihon.domain.upcoming.manga.interactor.GetUpcomingManga
 import tachiyomi.data.category.anime.AnimeCategoryRepositoryImpl
@@ -284,6 +286,7 @@ class DomainModule : InjektModule {
         addFactory { SetSeenStatus(get(), get(), get(), get()) }
         addFactory { ShouldUpdateDbEpisode() }
         addFactory { SyncEpisodesWithSource(get(), get(), get(), get(), get(), get(), get()) }
+        addFactory { FilterEpisodesForDownload(get(), get(), get()) }
 
         addSingletonFactory<ChapterRepository> { ChapterRepositoryImpl(get()) }
         addFactory { GetChapter(get()) }
@@ -294,6 +297,7 @@ class DomainModule : InjektModule {
         addFactory { ShouldUpdateDbChapter() }
         addFactory { SyncChaptersWithSource(get(), get(), get(), get(), get(), get(), get(), get()) }
         addFactory { GetAvailableScanlators(get()) }
+        addFactory { FilterChaptersForDownload(get(), get(), get()) }
 
         addSingletonFactory<AnimeHistoryRepository> { AnimeHistoryRepositoryImpl(get()) }
         addFactory { GetAnimeHistory(get()) }

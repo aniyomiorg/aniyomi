@@ -1,3 +1,5 @@
+@file:Suppress("PropertyName")
+
 package eu.kanade.tachiyomi.data.database.models.anime
 
 import java.io.Serializable

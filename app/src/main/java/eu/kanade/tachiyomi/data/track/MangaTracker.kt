@@ -73,7 +73,8 @@ interface MangaTracker {
 
     suspend fun setRemoteLastChapterRead(track: MangaTrack, chapterNumber: Int) {
         if (track.last_chapter_read == 0.0 &&
-            track.last_chapter_read < chapterNumber && track.status != getRereadingStatus()
+            track.last_chapter_read < chapterNumber &&
+            track.status != getRereadingStatus()
         ) {
             track.status = getReadingStatus()
         }

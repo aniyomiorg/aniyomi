@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,8 +46,6 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import java.time.format.DateTimeFormatter
 
-private const val UnsetStatusTextAlpha = 0.5F
-
 @Composable
 fun AnimeTrackInfoDialogHome(
     trackItems: List<AnimeTrackItem>,
@@ -61,6 +58,7 @@ fun AnimeTrackInfoDialogHome(
     onNewSearch: (AnimeTrackItem) -> Unit,
     onOpenInBrowser: (AnimeTrackItem) -> Unit,
     onRemoved: (AnimeTrackItem) -> Unit,
+    onCopyLink: (AnimeTrackItem) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -109,6 +107,7 @@ fun AnimeTrackInfoDialogHome(
                     onNewSearch = { onNewSearch(item) },
                     onOpenInBrowser = { onOpenInBrowser(item) },
                     onRemoved = { onRemoved(item) },
+                    onCopyLink = { onCopyLink(item) },
                 )
             } else {
                 TrackInfoItemEmpty(
@@ -137,6 +136,7 @@ private fun TrackInfoItem(
     onNewSearch: () -> Unit,
     onOpenInBrowser: () -> Unit,
     onRemoved: () -> Unit,
+    onCopyLink: () -> Unit,
 ) {
     val context = LocalContext.current
     Column {
@@ -146,6 +146,7 @@ private fun TrackInfoItem(
             TrackLogoIcon(
                 tracker = tracker,
                 onClick = onOpenInBrowser,
+                onLongClick = onCopyLink,
             )
             Box(
                 modifier = Modifier
@@ -172,6 +173,7 @@ private fun TrackInfoItem(
             TrackInfoItemMenu(
                 onOpenInBrowser = onOpenInBrowser,
                 onRemoved = onRemoved,
+                onCopyLink = onCopyLink,
             )
         }
 
@@ -199,10 +201,9 @@ private fun TrackInfoItem(
                     if (onScoreClick != null) {
                         VerticalDivider()
                         TrackDetailsItem(
-                            modifier = Modifier
-                                .weight(1f)
-                                .alpha(if (score == null) UnsetStatusTextAlpha else 1f),
-                            text = score ?: stringResource(MR.strings.score),
+                            modifier = Modifier.weight(1f),
+                            text = score,
+                            placeholder = stringResource(MR.strings.score),
                             onClick = onScoreClick,
                         )
                     }

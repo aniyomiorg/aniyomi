@@ -65,7 +65,7 @@ import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.injectLazy
 
-object AnimeLibraryTab : Tab() {
+data object AnimeLibraryTab : Tab {
 
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
@@ -252,7 +252,7 @@ object AnimeLibraryTab : Tab() {
                     onDismissRequest = onDismissRequest,
                     onEditCategories = {
                         screenModel.clearSelection()
-                        navigator.push(CategoriesTab(false))
+                        navigator.push(CategoriesTab)
                     },
                     onConfirm = { include, exclude ->
                         screenModel.clearSelection()

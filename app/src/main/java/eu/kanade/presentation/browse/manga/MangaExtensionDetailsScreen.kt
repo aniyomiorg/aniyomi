@@ -242,7 +242,7 @@ private fun DetailsHeader(
                                 Update available: ${extension.hasUpdate}
                                 Obsolete: ${extension.isObsolete}
                                 Shared: ${extension.isShared}
-                                Repository: ${extension.repoUrl} 
+                                Repository: ${extension.repoUrl}
                                 """.trimIndent(),
                             )
                         }

@@ -71,8 +71,8 @@ object HomeScreen : Screen() {
     private val openTabEvent = Channel<Tab>()
     private val showBottomNavEvent = Channel<Boolean>()
 
-    private const val TabFadeDuration = 200
-    private const val TabNavigatorKey = "HomeTabs"
+    private const val TAB_FADE_DURATION = 200
+    private const val TAB_NAVIGATOR_KEY = "HomeTabs"
 
     private val uiPreferences: UiPreferences by injectLazy()
     private val defaultTab = uiPreferences.startScreen().get().tab
@@ -84,7 +84,7 @@ object HomeScreen : Screen() {
         val navigator = LocalNavigator.currentOrThrow
         TabNavigator(
             tab = defaultTab,
-            key = TabNavigatorKey,
+            key = TAB_NAVIGATOR_KEY,
         ) { tabNavigator ->
             // Provide usable navigator to content screen
             CompositionLocalProvider(LocalNavigator provides navigator) {
@@ -128,9 +128,9 @@ object HomeScreen : Screen() {
                             transitionSpec = {
                                 materialFadeThroughIn(
                                     initialScale = 1f,
-                                    durationMillis = TabFadeDuration,
+                                    durationMillis = TAB_FADE_DURATION,
                                 ) togetherWith
-                                    materialFadeThroughOut(durationMillis = TabFadeDuration)
+                                    materialFadeThroughOut(durationMillis = TAB_FADE_DURATION)
                             },
                             label = "tabContent",
                         ) {
@@ -173,7 +173,12 @@ object HomeScreen : Screen() {
                             is Tab.Library -> MangaLibraryTab
                             is Tab.Updates -> UpdatesTab
                             is Tab.History -> HistoriesTab
-                            is Tab.Browse -> BrowseTab(it.toExtensions)
+                            is Tab.Browse -> {
+                                if (it.toExtensions) {
+                                    BrowseTab.showExtension()
+                                }
+                                BrowseTab
+                            }
                             is Tab.More -> MoreTab
                         }
 
@@ -184,7 +189,7 @@ object HomeScreen : Screen() {
                             navigator.push(MangaScreen(it.mangaIdToOpen))
                         }
                         if (it is Tab.More && it.toDownloads) {
-                            navigator.push(DownloadsTab())
+                            navigator.push(DownloadsTab)
                         }
                     }
                 }

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.BaseSortItem
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.SettingsChipRow
@@ -167,22 +170,38 @@ private fun ColumnScope.SortPage(
     val sortingMode = category.sort.type
     val sortDescending = !category.sort.isAscending
 
-    val trackerSortOption = if (trackers.isEmpty()) {
-        emptyList()
-    } else {
-        listOf(MR.strings.action_sort_tracker_score to MangaLibrarySort.Type.TrackerMean)
+    val options = remember(trackers.isEmpty()) {
+        val trackerMeanPair = if (trackers.isNotEmpty()) {
+            MR.strings.action_sort_tracker_score to MangaLibrarySort.Type.TrackerMean
+        } else {
+            null
+        }
+        listOfNotNull(
+            MR.strings.action_sort_alpha to MangaLibrarySort.Type.Alphabetical,
+            MR.strings.action_sort_total to MangaLibrarySort.Type.TotalChapters,
+            MR.strings.action_sort_last_read to MangaLibrarySort.Type.LastRead,
+            MR.strings.action_sort_last_manga_update to MangaLibrarySort.Type.LastUpdate,
+            MR.strings.action_sort_unread_count to MangaLibrarySort.Type.UnreadCount,
+            MR.strings.action_sort_latest_chapter to MangaLibrarySort.Type.LatestChapter,
+            MR.strings.action_sort_chapter_fetch_date to MangaLibrarySort.Type.ChapterFetchDate,
+            MR.strings.action_sort_date_added to MangaLibrarySort.Type.DateAdded,
+            trackerMeanPair,
+            MR.strings.action_sort_random to MangaLibrarySort.Type.Random,
+        )
     }
 
-    listOf(
-        MR.strings.action_sort_alpha to MangaLibrarySort.Type.Alphabetical,
-        MR.strings.action_sort_total to MangaLibrarySort.Type.TotalChapters,
-        MR.strings.action_sort_last_read to MangaLibrarySort.Type.LastRead,
-        MR.strings.action_sort_last_manga_update to MangaLibrarySort.Type.LastUpdate,
-        MR.strings.action_sort_unread_count to MangaLibrarySort.Type.UnreadCount,
-        MR.strings.action_sort_latest_chapter to MangaLibrarySort.Type.LatestChapter,
-        MR.strings.action_sort_chapter_fetch_date to MangaLibrarySort.Type.ChapterFetchDate,
-        MR.strings.action_sort_date_added to MangaLibrarySort.Type.DateAdded,
-    ).plus(trackerSortOption).map { (titleRes, mode) ->
+    options.map { (titleRes, mode) ->
+        if (mode == MangaLibrarySort.Type.Random) {
+            BaseSortItem(
+                label = stringResource(titleRes),
+                icon = Icons.Default.Refresh
+                    .takeIf { sortingMode == MangaLibrarySort.Type.Random },
+                onClick = {
+                    screenModel.setSort(category, mode, MangaLibrarySort.Direction.Ascending)
+                },
+            )
+            return@map
+        }
         SortItem(
             label = stringResource(titleRes),
             sortDescending = sortDescending.takeIf { sortingMode == mode },

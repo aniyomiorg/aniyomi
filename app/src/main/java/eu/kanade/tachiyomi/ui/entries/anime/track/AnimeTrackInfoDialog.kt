@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ButtonDefaults
@@ -28,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
@@ -55,6 +55,7 @@ import eu.kanade.tachiyomi.data.track.Tracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
+import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.ImmutableList
@@ -175,6 +176,7 @@ data class AnimeTrackInfoDialogHomeScreen(
                     ),
                 )
             },
+            onCopyLink = { context.copyTrackerLink(it) },
         )
     }
 
@@ -185,6 +187,13 @@ data class AnimeTrackInfoDialogHomeScreen(
         val url = trackItem.track?.remoteUrl ?: return
         if (url.isNotBlank()) {
             context.openInBrowser(url)
+        }
+    }
+
+    private fun Context.copyTrackerLink(trackItem: AnimeTrackItem) {
+        val url = trackItem.track?.remoteUrl ?: return
+        if (url.isNotBlank()) {
+            copyToClipboard(url, url)
         }
     }
 
@@ -681,11 +690,10 @@ data class TrackServiceSearchScreen(
 
         val state by screenModel.state.collectAsState()
 
-        var textFieldValue by remember { mutableStateOf(TextFieldValue(initialQuery)) }
+        val textFieldState = rememberTextFieldState(initialQuery)
         AnimeTrackerSearch(
-            query = textFieldValue,
-            onQueryChange = { textFieldValue = it },
-            onDispatchQuery = { screenModel.trackingSearch(textFieldValue.text) },
+            state = textFieldState,
+            onDispatchQuery = { screenModel.trackingSearch(textFieldState.text.toString()) },
             queryResult = state.queryResult,
             selected = state.selected,
             onSelectedChange = screenModel::updateSelection,
@@ -839,7 +847,11 @@ private data class TrackerAnimeRemoveScreen(
 
         fun deleteAnimeFromService() {
             screenModelScope.launchNonCancellable {
-                (tracker as DeletableAnimeTracker).delete(track)
+                try {
+                    (tracker as DeletableAnimeTracker).delete(track)
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR, e) { "Failed to delete anime entry from service" }
+                }
             }
         }
 

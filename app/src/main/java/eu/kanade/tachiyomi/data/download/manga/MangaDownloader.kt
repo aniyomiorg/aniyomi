@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
-import mihon.core.common.archive.ZipWriter
+import mihon.core.archive.ZipWriter
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.Response
 import okio.Throttler
@@ -197,7 +197,7 @@ class MangaDownloader(
     fun clearQueue() {
         cancelDownloaderJob()
 
-        _clearQueue()
+        internalClearQueue()
         notifier.dismissProgress()
     }
 
@@ -340,6 +340,7 @@ class MangaDownloader(
                 context.stringResource(MR.strings.download_insufficient_space),
                 download.chapter.name,
                 download.manga.title,
+                download.manga.id,
             )
             return
         }
@@ -435,7 +436,7 @@ class MangaDownloader(
             // If the page list threw, it will resume here
             logcat(LogPriority.ERROR, error)
             download.status = MangaDownload.State.ERROR
-            notifier.onError(error.message, download.chapter.name, download.manga.title)
+            notifier.onError(error.message, download.chapter.name, download.manga.title, download.manga.id)
         }
     }
 
@@ -466,9 +467,10 @@ class MangaDownloader(
 
         // Try to find the image file
         val imageFile = tmpDir.listFiles()?.firstOrNull {
-            it.name!!.startsWith("$filename.") || it.name!!.startsWith(
-                "${filename}__001",
-            )
+            it.name!!.startsWith("$filename.") ||
+                it.name!!.startsWith(
+                    "${filename}__001",
+                )
         }
 
         try {
@@ -493,7 +495,7 @@ class MangaDownloader(
             // Mark this page as error and allow to download the remaining
             page.progress = 0
             page.status = Page.State.ERROR
-            notifier.onError(e.message, download.chapter.name, download.manga.title)
+            notifier.onError(e.message, download.chapter.name, download.manga.title, download.manga.id)
         }
     }
 
@@ -665,7 +667,7 @@ class MangaDownloader(
             chapter,
             urls,
             categories,
-            source.name
+            source.name,
         )
 
         // Remove the old file
@@ -727,7 +729,7 @@ class MangaDownloader(
         removeFromQueueIf { it.manga.id == manga.id }
     }
 
-    private fun _clearQueue() {
+    private fun internalClearQueue() {
         _queueState.update {
             it.forEach { download ->
                 if (download.status == MangaDownload.State.DOWNLOADING ||
@@ -751,7 +753,7 @@ class MangaDownloader(
         }
 
         pause()
-        _clearQueue()
+        internalClearQueue()
         addAllToQueue(downloads)
 
         if (wasRunning) {

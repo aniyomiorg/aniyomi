@@ -427,13 +427,9 @@ private fun AnimeScreenSmallImpl(
                         AnimeInfoBox(
                             isTabletUi = false,
                             appBarPadding = topPadding,
-                            title = state.anime.title,
-                            author = state.anime.author,
-                            artist = state.anime.artist,
+                            anime = state.anime,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
                             isStubSource = remember { state.source is StubAnimeSource },
-                            coverDataProvider = { state.anime },
-                            status = state.anime.status,
                             onCoverClick = onCoverClicked,
                             doSearch = onSearch,
                         )
@@ -499,7 +495,8 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L && showNextEpisodeAirTime &&
+                            if (timer > 0L &&
+                                showNextEpisodeAirTime &&
                                 state.anime.status.toInt() != SAnime.COMPLETED
                             ) {
                                 NextEpisodeAiringListItem(
@@ -708,13 +705,9 @@ fun AnimeScreenLargeImpl(
                         AnimeInfoBox(
                             isTabletUi = true,
                             appBarPadding = contentPadding.calculateTopPadding(),
-                            title = state.anime.title,
-                            author = state.anime.author,
-                            artist = state.anime.artist,
+                            anime = state.anime,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
                             isStubSource = remember { state.source is StubAnimeSource },
-                            coverDataProvider = { state.anime },
-                            status = state.anime.status,
                             onCoverClick = onCoverClicked,
                             doSearch = onSearch,
                         )
@@ -781,7 +774,8 @@ fun AnimeScreenLargeImpl(
                                             timer -= 1000L
                                         }
                                     }
-                                    if (timer > 0L && showNextEpisodeAirTime &&
+                                    if (timer > 0L &&
+                                        showNextEpisodeAirTime &&
                                         state.anime.status.toInt() != SAnime.COMPLETED
                                     ) {
                                         NextEpisodeAiringListItem(

@@ -33,4 +33,3 @@
     <color name="cloudflare_primaryInverse">#D6BAFF</color>
     <color name="cloudflare_elevationOverlay">@color/cloudflare_primary</color>
 </resources>
-

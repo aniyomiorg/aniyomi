@@ -138,4 +138,10 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
+    <plurals name="pref_pages">
+        <item quantity="one">1 страница</item>
+        <item quantity="few">%1$s страницы</item>
+        <item quantity="many">%1$s страниц</item>
+        <item quantity="other">%1$s страниц</item>
+    </plurals>
 </resources>

@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import eu.kanade.presentation.components.relativeDateTimeText
 import eu.kanade.presentation.history.anime.components.AnimeHistoryItem
 import eu.kanade.presentation.theme.TachiyomiPreviewTheme
+import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.i18n.MR
@@ -84,14 +85,14 @@ private fun AnimeHistoryScreenContent(
             when (item) {
                 is AnimeHistoryUiModel.Header -> {
                     ListGroupHeader(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier.animateItemFastScroll(),
                         text = relativeDateTimeText(item.date),
                     )
                 }
                 is AnimeHistoryUiModel.Item -> {
                     val value = item.item
                     AnimeHistoryItem(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier.animateItemFastScroll(),
                         history = value,
                         onClickCover = { onClickCover(value) },
                         onClickResume = { onClickResume(value) },

@@ -117,7 +117,6 @@ class EpisodeRepositoryImpl(
         }
     }
 
-    @Suppress("LongParameterList")
     private fun mapEpisode(
         id: Long,
         animeId: Long,

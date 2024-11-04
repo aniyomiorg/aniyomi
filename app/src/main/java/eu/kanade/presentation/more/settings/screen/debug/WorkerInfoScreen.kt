@@ -49,7 +49,7 @@ import java.time.ZoneId
 class WorkerInfoScreen : Screen() {
 
     companion object {
-        const val title = "Worker info"
+        const val TITLE = "Worker info"
     }
 
     @Composable
@@ -65,7 +65,7 @@ class WorkerInfoScreen : Screen() {
         Scaffold(
             topBar = {
                 AppBar(
-                    title = title,
+                    title = TITLE,
                     navigateUp = navigator::pop,
                     actions = {
                         AppBarActions(
@@ -75,7 +75,7 @@ class WorkerInfoScreen : Screen() {
                                     icon = Icons.Default.ContentCopy,
                                     onClick = {
                                         context.copyToClipboard(
-                                            title,
+                                            TITLE,
                                             enqueued + finished + running,
                                         )
                                     },

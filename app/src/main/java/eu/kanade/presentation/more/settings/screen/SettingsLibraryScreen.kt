@@ -25,7 +25,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.ResetMangaCategoryFlags
@@ -54,11 +53,9 @@ object SettingsLibraryScreen : SearchableSettings {
     @Composable
     override fun getPreferences(): List<Preference> {
         val getCategories = remember { Injekt.get<GetMangaCategories>() }
-        val allCategories by getCategories.subscribe()
-            .collectAsState(initial = runBlocking { getCategories.await() })
+        val allCategories by getCategories.subscribe().collectAsState(initial = emptyList())
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
-        val allAnimeCategories by getAnimeCategories.subscribe()
-            .collectAsState(initial = runBlocking { getAnimeCategories.await() })
+        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = emptyList())
         val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
 
         return listOf(
@@ -85,12 +82,6 @@ object SettingsLibraryScreen : SearchableSettings {
         val userCategoriesCount = allCategories.filterNot(Category::isSystemCategory).size
         val userAnimeCategoriesCount = allAnimeCategories.filterNot(Category::isSystemCategory).size
 
-        val defaultCategory by libraryPreferences.defaultMangaCategory().collectAsState()
-        val selectedCategory = allCategories.find { it.id == defaultCategory.toLong() }
-        val defaultAnimeCategory by libraryPreferences.defaultAnimeCategory().collectAsState()
-        val selectedAnimeCategory =
-            allAnimeCategories.find { it.id == defaultAnimeCategory.toLong() }
-
         // For default category
         val mangaIds = listOf(libraryPreferences.defaultMangaCategory().defaultValue()) +
             allCategories.fastMap { it.id.toInt() }
@@ -112,13 +103,11 @@ object SettingsLibraryScreen : SearchableSettings {
                         count = userAnimeCategoriesCount,
                         userAnimeCategoriesCount,
                     ),
-                    onClick = { navigator.push(CategoriesTab(false)) },
+                    onClick = { navigator.push(CategoriesTab) },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultAnimeCategory(),
                     title = stringResource(MR.strings.default_anime_category),
-                    subtitle = selectedAnimeCategory?.visualName
-                        ?: stringResource(MR.strings.default_category_summary),
                     entries = animeIds.zip(animeLabels).toMap().toImmutableMap(),
                 ),
                 Preference.PreferenceItem.TextPreference(
@@ -128,12 +117,14 @@ object SettingsLibraryScreen : SearchableSettings {
                         count = userCategoriesCount,
                         userCategoriesCount,
                     ),
-                    onClick = { navigator.push(CategoriesTab(true)) },
+                    onClick = {
+                        navigator.push(CategoriesTab)
+                        CategoriesTab.showMangaCategory()
+                    },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultMangaCategory(),
                     title = stringResource(MR.strings.default_manga_category),
-                    subtitle = selectedCategory?.visualName ?: stringResource(MR.strings.default_category_summary),
                     entries = mangaIds.zip(mangaLabels).toMap().toImmutableMap(),
                 ),
                 Preference.PreferenceItem.SwitchPreference(

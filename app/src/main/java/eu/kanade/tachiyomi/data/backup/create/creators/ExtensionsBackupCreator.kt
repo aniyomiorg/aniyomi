@@ -15,7 +15,7 @@ class ExtensionsBackupCreator(
     private val mangaExtensionManager: MangaExtensionManager = Injekt.get(),
 ) {
 
-    fun backupExtensions(): List<BackupExtension> {
+    operator fun invoke(): List<BackupExtension> {
         val installedExtensions = mutableListOf<BackupExtension>()
         animeExtensionManager.installedExtensionsFlow.value.forEach {
             val packageName = it.pkgName

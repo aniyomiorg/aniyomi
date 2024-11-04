@@ -1,7 +1,7 @@
 package eu.kanade.presentation.track.manga
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
@@ -13,8 +13,7 @@ internal class MangaTrackerSearchPreviewProvider : PreviewParameterProvider<@Com
     private val fullPageWithSecondSelected = @Composable {
         val items = someTrackSearches().take(30).toList()
         MangaTrackerSearch(
-            query = TextFieldValue(text = "search text"),
-            onQueryChange = {},
+            state = TextFieldState(initialText = "search text"),
             onDispatchQuery = {},
             queryResult = Result.success(items),
             selected = items[1],
@@ -25,8 +24,7 @@ internal class MangaTrackerSearchPreviewProvider : PreviewParameterProvider<@Com
     }
     private val fullPageWithoutSelected = @Composable {
         MangaTrackerSearch(
-            query = TextFieldValue(text = ""),
-            onQueryChange = {},
+            state = TextFieldState(),
             onDispatchQuery = {},
             queryResult = Result.success(someTrackSearches().take(30).toList()),
             selected = null,
@@ -37,8 +35,7 @@ internal class MangaTrackerSearchPreviewProvider : PreviewParameterProvider<@Com
     }
     private val loading = @Composable {
         MangaTrackerSearch(
-            query = TextFieldValue(),
-            onQueryChange = {},
+            state = TextFieldState(),
             onDispatchQuery = {},
             queryResult = null,
             selected = null,

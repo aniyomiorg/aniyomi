@@ -417,7 +417,9 @@ open class ReaderPageImageView @JvmOverloads constructor(
     )
 
     enum class ZoomStartPosition {
-        LEFT, CENTER, RIGHT
+        LEFT,
+        CENTER,
+        RIGHT,
     }
 }
 
