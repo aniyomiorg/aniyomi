@@ -1011,7 +1011,7 @@
     <string name="player_hwdec_mode">Donanım kod çözme modu</string>
     <string name="label_migration_manga">Manga\'yı Taşı</string>
     <string name="label_migration_anime">Anime\'yi Taşı</string>
-    <string name="chapter_dialog_header">Bölüm ara</string>
+    <string name="chapter_dialog_header">Bölüme atla</string>
     <string name="action_save_screenshot">Ekran görüntüsünü kaydet</string>
     <string name="pref_media_control_chapter_seeking_summary">Etkinleştirildiğinde sıradaki bölüm butonu eğer sırada bölüm yoksa giriş atlama butonu işlevini yapar</string>
     <string name="go_to_next_chapter">Sıradaki bölüm</string>
