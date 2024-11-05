@@ -30,6 +30,7 @@
     <!-- Preferences -->
     <string name="pref_category_cast">Cast Settings</string>
     <string name="pref_enable_cast">Enable or disable Cast</string>
+    <string name="action_cast">Send to Cast</string>
     <string name="pref_show_downloaded_episode_file_size">Show downloaded episode file size</string>
     <!-- Subsections -->
     <string name="pref_category_fork">Fork Settings</string>
