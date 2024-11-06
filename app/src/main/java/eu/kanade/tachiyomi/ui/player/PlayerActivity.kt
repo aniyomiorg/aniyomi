@@ -559,18 +559,17 @@ class PlayerActivity : BaseActivity() {
             IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY),
         )
 
-        isCastApiAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        isCastApiAvailable =
+            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
         try {
             if (isCastApiAvailable) {
-
-        mCastContext = CastContext.getSharedInstance(this)
-        mCastSession = mCastContext!!.sessionManager.currentCastSession
-            setupCastListener()
-                }
+                mCastContext = CastContext.getSharedInstance(this)
+                mCastSession = mCastContext!!.sessionManager.currentCastSession
+                setupCastListener()
+            }
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e) { "Service the google play services not available" }
         }
-
     }
     private fun copyAssets(configDir: String) {
         val assetManager = this.assets
@@ -809,7 +808,6 @@ class PlayerActivity : BaseActivity() {
         verticalScrollLeft(0F)
     }
 
-    @Suppress("ReturnCount")
     private fun getMaxBrightness(): Float {
         val powerManager = getSystemService(POWER_SERVICE) as? PowerManager ?: return MAX_BRIGHTNESS
         val brightnessField = powerManager.javaClass.declaredFields.find {
@@ -1003,14 +1001,15 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        isCastApiAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        isCastApiAvailable =
+            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
         try {
             if (isCastApiAvailable) {
-        mCastContext!!.sessionManager.addSessionManagerListener(
-            mSessionManagerListener!!,
-            CastSession::class.java,
-        )
-        isInCastMode = mCastSession != null && mCastSession!!.isConnected
+                mCastContext!!.sessionManager.addSessionManagerListener(
+                    mSessionManagerListener!!,
+                    CastSession::class.java,
+                )
+                isInCastMode = mCastSession != null && mCastSession!!.isConnected
             }
         } catch (_: Exception) {
         }
@@ -1021,13 +1020,14 @@ class PlayerActivity : BaseActivity() {
 
     override fun onPause() {
         viewModel.saveCurrentEpisodeWatchingProgress()
-        isCastApiAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        isCastApiAvailable =
+            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
         try {
             if (isCastApiAvailable) {
-        mCastContext!!.sessionManager.removeSessionManagerListener(
-            mSessionManagerListener!!,
-            CastSession::class.java,
-        )
+                mCastContext!!.sessionManager.removeSessionManagerListener(
+                    mSessionManagerListener!!,
+                    CastSession::class.java,
+                )
             }
         } catch (_: Exception) {
         }
@@ -2119,10 +2119,10 @@ class PlayerActivity : BaseActivity() {
             "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
             "time-pos" -> {
                 playerControls.updatePlaybackPos(value.toInt())
-                //value is in milliseconds
+                // value is in milliseconds
                 Log.d("PlayerActivity", "time-pos valuetoInt: ${value.toInt()}")
-                Log.d("PlayerActivity", "time-pos value: ${value}")
-                Log.d("PlayerActivity", "time-pos value1000 ${value* 1000}")
+                Log.d("PlayerActivity", "time-pos value: $value")
+                Log.d("PlayerActivity", "time-pos value1000 ${value * 1000}")
                 viewModel.viewModelScope.launchUI { aniSkipStuff(value) }
                 updatePlaybackState()
             }
@@ -2205,7 +2205,7 @@ class PlayerActivity : BaseActivity() {
 
     // -- CAST --
 
-     private fun setupCastListener() {
+    private fun setupCastListener() {
         mSessionManagerListener = object : SessionManagerListener<CastSession> {
             override fun onSessionEnded(session: CastSession, error: Int) {
                 onApplicationDisconnected()
@@ -2272,7 +2272,7 @@ class PlayerActivity : BaseActivity() {
         return currentVideoList?.getOrNull(0)?.videoUrl!!.let {
             MediaInfo.Builder(it)
                 .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                //agrega varios tipos de videos
+                // agrega varios tipos de videos
                 .setContentType("video/mp4")
                 .setContentUrl(it)
                 .setMetadata(movieMetadata)

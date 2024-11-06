@@ -79,7 +79,7 @@ import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Collections
+import kotlin.random.Random
 
 /**
  * Typealias for the library manga, using the category as keys, and list of manga as values.
@@ -139,10 +139,8 @@ class MangaLibraryScreenModel(
                     .applySort(tracks, sort.takeIf { groupType != MangaLibraryGroup.BY_DEFAULT }, trackingFilter.keys)
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
-                            // Filter query
                             value.filter { it.matches(searchQuery) }
                         } else {
-                            // Don't do anything
                             value
                         }
                     }
@@ -207,10 +205,6 @@ class MangaLibraryScreenModel(
         // SY <--
     }
 
-    /**
-     * Applies library filters to the given map of manga.
-     */
-    @Suppress("LongMethod", "CyclomaticComplexMethod")
     private suspend fun MangaLibraryMap.applyFilters(
         trackMap: Map<Long, List<MangaTrack>>,
         trackingFilter: Map<Long, TriState>,
@@ -286,15 +280,10 @@ class MangaLibraryScreenModel(
                 filterFnTracking(it)
         }
 
-        return this.mapValues { entry -> entry.value.fastFilter(filterFn) }
+        return mapValues { (_, value) -> value.fastFilter(filterFn) }
     }
 
-    /**
-     * Applies library sorting to the given map of manga.
-     */
-    @Suppress("LongMethod", "CyclomaticComplexMethod")
     private fun MangaLibraryMap.applySort(
-        // Map<MangaId, List<Track>>
         trackMap: Map<Long, List<MangaTrack>>,
         groupSort: MangaLibrarySort? = null,
         loggedInTrackerIds: Set<Long>,
@@ -317,11 +306,11 @@ class MangaLibraryScreenModel(
             }
         }
 
-        val sortFn: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
+        fun MangaLibrarySort.comparator(): Comparator<MangaLibraryItem> = Comparator { i1, i2 ->
             // SY -->
             val sort = groupSort ?: keys.find { it.id == i1.libraryManga.category }!!.sort
             // SY <--
-            when (sort.type) {
+            when (this.type) {
                 MangaLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
                 }
@@ -334,8 +323,8 @@ class MangaLibraryScreenModel(
                 MangaLibrarySort.Type.UnreadCount -> when {
                     // Ensure unread content comes first
                     i1.libraryManga.unreadCount == i2.libraryManga.unreadCount -> 0
-                    i1.libraryManga.unreadCount == 0L -> if (sort.isAscending) 1 else -1
-                    i2.libraryManga.unreadCount == 0L -> if (sort.isAscending) -1 else 1
+                    i1.libraryManga.unreadCount == 0L -> if (this.isAscending) 1 else -1
+                    i2.libraryManga.unreadCount == 0L -> if (this.isAscending) -1 else 1
                     else -> i1.libraryManga.unreadCount.compareTo(i2.libraryManga.unreadCount)
                 }
                 MangaLibrarySort.Type.TotalChapters -> {
@@ -355,20 +344,22 @@ class MangaLibraryScreenModel(
                     val item2Score = trackerScores[i2.libraryManga.id] ?: defaultTrackerScoreSortValue
                     item1Score.compareTo(item2Score)
                 }
+                MangaLibrarySort.Type.Random -> {
+                    error("Why Are We Still Here? Just To Suffer?")
+                }
             }
         }
 
-        return this.mapValues { entry ->
-            // SY -->
-            val isAscending = groupSort?.isAscending ?: keys.find { it.id == entry.key.id }!!.sort.isAscending
-            // SY <--
-            val comparator = if (isAscending) {
-                Comparator(sortFn)
-            } else {
-                Collections.reverseOrder(sortFn)
+        return mapValues { (key, value) ->
+            if (key.sort.type == MangaLibrarySort.Type.Random) {
+                return@mapValues value.shuffled(Random(libraryPreferences.randomMangaSortSeed().get()))
             }
 
-            entry.value.sortedWith(comparator.thenComparator(sortAlphabetically))
+            val comparator = key.sort.comparator()
+                .let { if (key.sort.isAscending) it else it.reversed() }
+                .thenComparator(sortAlphabetically)
+
+            value.sortedWith(comparator)
         }
     }
 
@@ -883,8 +874,7 @@ class MangaLibraryScreenModel(
                     item.libraryManga.manga.genre?.distinct() ?: emptyList()
                 }
                 libraryManga.flatMap { item ->
-                    item.libraryManga.manga.genre?.distinct()?.map {
-                            genre ->
+                    item.libraryManga.manga.genre?.distinct()?.map { genre ->
                         Pair(genre, item)
                     } ?: emptyList()
                 }.groupBy({ it.first }, { it.second }).filterValues { it.size > 3 }

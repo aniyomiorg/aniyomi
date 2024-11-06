@@ -56,7 +56,7 @@ import tachiyomi.presentation.core.util.clickableNoIndication
 
 @Composable
 fun AnimeCoverDialog(
-    coverDataProvider: () -> Anime,
+    anime: Anime,
     isCustomCover: Boolean,
     snackbarHostState: SnackbarHostState,
     onShareClick: () -> Unit,
@@ -168,7 +168,7 @@ fun AnimeCoverDialog(
                     },
                     update = { view ->
                         val request = ImageRequest.Builder(view.context)
-                            .data(coverDataProvider())
+                            .data(anime)
                             .size(Size.ORIGINAL)
                             .memoryCachePolicy(CachePolicy.DISABLED)
                             .target { image ->

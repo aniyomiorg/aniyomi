@@ -6,9 +6,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("mihon.android.application")
     id("mihon.android.application.compose")
-    id("com.mikepenz.aboutlibraries.plugin")
     id("com.github.zellius.shortcut-helper")
     kotlin("plugin.serialization")
+    alias(libs.plugins.aboutLibraries)
+}
+
+if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
+    apply<com.google.gms.googleservices.GoogleServicesPlugin>()
 }
 
 if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
@@ -17,6 +21,7 @@ if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
+@Suppress("PropertyName")
 val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 android {
@@ -106,13 +111,16 @@ android {
     packaging {
         resources.excludes.addAll(
             listOf(
+                "kotlin-tooling-metadata.json",
                 "META-INF/DEPENDENCIES",
                 "LICENSE.txt",
                 "META-INF/LICENSE",
-                "META-INF/LICENSE.txt",
+                "META-INF/**/LICENSE.txt",
+                "META-INF/*.properties",
+                "META-INF/**/*.properties",
                 "META-INF/README.md",
                 "META-INF/NOTICE",
-                "META-INF/*.kotlin_module",
+                "META-INF/*.version",
             ),
         )
     }
@@ -139,6 +147,7 @@ android {
 
 dependencies {
     implementation(projects.i18n)
+    implementation(projects.core.archive)
     implementation(projects.core.common)
     implementation(projects.coreMetadata)
     implementation(projects.sourceApi)
@@ -158,7 +167,6 @@ dependencies {
     debugImplementation(compose.ui.tooling)
     implementation(compose.ui.tooling.preview)
     implementation(compose.ui.util)
-    implementation(compose.accompanist.systemuicontroller)
 
     implementation(compose.colorpicker)
     implementation(androidx.interpolator)
@@ -246,7 +254,6 @@ dependencies {
     implementation(libs.compose.webview)
     implementation(libs.compose.grid)
 
-
     implementation(libs.google.api.services.drive)
     implementation(libs.google.api.client.oauth)
 
@@ -279,7 +286,7 @@ dependencies {
     // true type parser
     implementation(libs.truetypeparser)
     // torrserver
-	implementation(libs.torrentserver)
+    implementation(libs.torrentserver)
     // Cast
     implementation(libs.bundles.cast)
 }

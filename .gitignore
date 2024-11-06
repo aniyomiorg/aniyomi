@@ -1,20 +1,17 @@
+# Build files
 .gradle
 .kotlin
-/local.properties
-/acra.properties
-/.idea/workspace.xml
-.DS_Store
+build
+
+# IDE files
+*.iml
 .idea/*
 !.idea/icon.png
-*iml
-*.iml
+/captures
 app/**/assets/client_secrets.json
 
-# Built files
-*/build
-/build
-*.apk
-app/**/output.json
+# Configuration files
+local.properties
 
-# Unnecessary file
-*.swp
+# macOS specific files
+.DS_Store

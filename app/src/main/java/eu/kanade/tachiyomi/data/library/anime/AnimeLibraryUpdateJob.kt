@@ -29,7 +29,6 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.data.track.TrackStatus
-import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
@@ -44,13 +43,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
+import mihon.domain.items.episode.interactor.FilterEpisodesForDownload
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.preference.getAndSet
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.logcat
-import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.model.Category
-import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
@@ -86,17 +84,16 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     CoroutineWorker(context, workerParams) {
 
     private val sourceManager: AnimeSourceManager = Injekt.get()
-    private val downloadPreferences: DownloadPreferences = Injekt.get()
     private val libraryPreferences: LibraryPreferences = Injekt.get()
     private val downloadManager: AnimeDownloadManager = Injekt.get()
     private val coverCache: AnimeCoverCache = Injekt.get()
     private val getLibraryAnime: GetLibraryAnime = Injekt.get()
     private val getAnime: GetAnime = Injekt.get()
     private val updateAnime: UpdateAnime = Injekt.get()
-    private val getCategories: GetAnimeCategories = Injekt.get()
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get()
     private val getTracks: GetAnimeTracks = Injekt.get()
     private val animeFetchInterval: AnimeFetchInterval = Injekt.get()
+    private val filterEpisodesForDownload: FilterEpisodesForDownload = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
 
@@ -350,21 +347,21 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     anime,
                                 ) {
                                     try {
-                                        val newChapters = updateAnime(anime, fetchWindow)
+                                        val newEpisodes = updateAnime(anime, fetchWindow)
                                             .sortedByDescending { it.sourceOrder }
 
-                                        if (newChapters.isNotEmpty()) {
-                                            val categoryIds = getCategories.await(anime.id).map { it.id }
-                                            if (anime.shouldDownloadNewEpisodes(categoryIds, downloadPreferences)) {
-                                                downloadEpisodes(anime, newChapters)
+                                        if (newEpisodes.isNotEmpty()) {
+                                            val episodesToDownload = filterEpisodesForDownload.await(anime, newEpisodes)
+
+                                            if (episodesToDownload.isNotEmpty()) {
                                                 hasDownloads.set(true)
                                             }
 
                                             libraryPreferences.newAnimeUpdatesCount()
-                                                .getAndSet { it + newChapters.size }
+                                                .getAndSet { it + newEpisodes.size }
 
-                                            // Convert to the manga that contains new chapters
-                                            newUpdates.add(anime to newChapters.toTypedArray())
+                                            // Convert to the anime that contains new episodes
+                                            newUpdates.add(anime to newEpisodes.toTypedArray())
                                         }
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {
@@ -532,7 +529,9 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 val constraints = Constraints(
                     requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) {
                         NetworkType.UNMETERED
-                    } else { NetworkType.CONNECTED },
+                    } else {
+                        NetworkType.CONNECTED
+                    },
                     requiresCharging = DEVICE_CHARGING in restrictions,
                     requiresBatteryNotLow = true,
                 )

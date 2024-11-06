@@ -109,13 +109,15 @@ class SyncManager(
         )
 
         logcat(LogPriority.DEBUG) { "Begin create backup" }
+        val backupManga = backupCreator.backupMangas(databaseManga, backupOptions)
+        val backupAnime = backupCreator.backupAnimes(databaseAnime, backupOptions)
         val backup = Backup(
-            backupManga = backupCreator.backupMangas(databaseManga, backupOptions),
+            backupManga = backupManga,
             backupCategories = backupCreator.backupMangaCategories(backupOptions),
-            backupAnime = backupCreator.backupAnimes(databaseAnime, backupOptions),
+            backupAnime = backupAnime,
             backupAnimeCategories = backupCreator.backupAnimeCategories(backupOptions),
-            backupSources = backupCreator.backupMangaSources(databaseManga),
-            backupAnimeSources = backupCreator.backupAnimeSources(databaseAnime),
+            backupSources = backupCreator.backupMangaSources(backupManga),
+            backupAnimeSources = backupCreator.backupAnimeSources(backupAnime),
             backupPreferences = backupCreator.backupAppPreferences(backupOptions),
             backupSourcePreferences = backupCreator.backupSourcePreferences(backupOptions),
         )
@@ -214,7 +216,7 @@ class SyncManager(
                 options = RestoreOptions(
                     appSettings = true,
                     sourceSettings = true,
-                    library = true,
+                    libraryEntries = true, // Correct parameter name
                 ),
             )
 

@@ -38,7 +38,6 @@ fun VideoChaptersSheet(
     var currentTimePosition by remember { mutableStateOf(timePosition) }
 
     AdaptiveSheet(
-        hideSystemBars = true,
         onDismissRequest = onDismissRequest,
     ) {
         Column(

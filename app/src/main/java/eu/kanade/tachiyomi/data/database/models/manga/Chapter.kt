@@ -1,3 +1,5 @@
+@file:Suppress("PropertyName")
+
 package eu.kanade.tachiyomi.data.database.models.manga
 
 import eu.kanade.tachiyomi.source.model.SChapter

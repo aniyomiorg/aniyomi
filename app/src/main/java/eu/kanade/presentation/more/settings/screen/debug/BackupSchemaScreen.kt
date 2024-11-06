@@ -28,7 +28,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 class BackupSchemaScreen : Screen() {
 
     companion object {
-        const val title = "Backup file schema"
+        const val TITLE = "Backup file schema"
     }
 
     @Composable
@@ -45,7 +45,7 @@ class BackupSchemaScreen : Screen() {
         Scaffold(
             topBar = {
                 AppBar(
-                    title = title,
+                    title = TITLE,
                     navigateUp = navigator::pop,
                     actions = {
                         AppBarActions(
@@ -54,7 +54,7 @@ class BackupSchemaScreen : Screen() {
                                     title = stringResource(MR.strings.action_copy_to_clipboard),
                                     icon = Icons.Default.ContentCopy,
                                     onClick = {
-                                        context.copyToClipboard(title, schema)
+                                        context.copyToClipboard(TITLE, schema)
                                     },
                                 ),
                             ),

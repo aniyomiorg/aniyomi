@@ -13,11 +13,10 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import tachiyomi.source.local.entries.anime.isLocal
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
-
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 /**
  * This class is used to provide the directories where the downloads should be saved.
@@ -211,7 +210,7 @@ class AnimeDownloadProvider(
         if (animeSource == null) return null
         return if (animeSource.isLocal()) {
             val (animeDirName, episodeDirName) = episodeUrl?.split('/', limit = 2) ?: return null
-            localFileSystem.getBaseDirectory()?.findFile(animeDirName )?.findFile(episodeDirName)?.size()
+            localFileSystem.getBaseDirectory()?.findFile(animeDirName)?.findFile(episodeDirName)?.size()
         } else {
             findEpisodeDir(episodeName, episodeScanlator, animeTitle, animeSource)?.size()
         }

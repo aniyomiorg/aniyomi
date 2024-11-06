@@ -211,7 +211,7 @@ object ImageUtil {
     fun addHorizontalCenterMargin(
         imageSource: BufferedSource,
         viewHeight: Int,
-        backgroundContext: Context
+        backgroundContext: Context,
     ): BufferedSource {
         val imageBitmap = ImageDecoder.newInstance(imageSource.inputStream())?.decode()!!
         val height = imageBitmap.height
@@ -246,7 +246,7 @@ object ImageUtil {
      * @return true if the height:width ratio is greater than 3.
      */
     private fun isTallImage(
-        imageSource: BufferedSource
+        imageSource: BufferedSource,
     ): Boolean {
         val options = extractImageOptions(imageSource)
 
@@ -260,11 +260,11 @@ object ImageUtil {
     fun splitTallImage(
         tmpDir: UniFile,
         imageFile: UniFile,
-        filenamePrefix: String
+        filenamePrefix: String,
     ): Boolean {
         val imageSource = imageFile.openInputStream().use { Buffer().readFrom(it) }
         if (isAnimatedAndSupported(imageSource) || !isTallImage(
-                imageSource
+                imageSource,
             )
         ) {
             return true

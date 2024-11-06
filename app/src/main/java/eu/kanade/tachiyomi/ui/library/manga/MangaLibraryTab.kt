@@ -68,7 +68,7 @@ import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.source.local.entries.manga.isLocal
 
-object MangaLibraryTab : Tab() {
+data object MangaLibraryTab : Tab {
 
     @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
@@ -303,7 +303,8 @@ object MangaLibraryTab : Tab() {
                     onDismissRequest = onDismissRequest,
                     onEditCategories = {
                         screenModel.clearSelection()
-                        navigator.push(CategoriesTab(true))
+                        navigator.push(CategoriesTab)
+                        CategoriesTab.showMangaCategory()
                     },
                     onConfirm = { include, exclude ->
                         screenModel.clearSelection()

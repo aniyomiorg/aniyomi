@@ -38,6 +38,7 @@ import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.entries.components.ItemCover
+import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -48,7 +49,7 @@ import tachiyomi.domain.storage.service.StoragePreferences
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ListGroupHeader
-import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
@@ -61,7 +62,7 @@ internal fun LazyListScope.animeUpdatesLastUpdatedItem(
     item(key = "animeUpdates-lastUpdated") {
         Box(
             modifier = Modifier
-                .animateItem()
+                .animateItem(fadeInSpec = null, fadeOutSpec = null)
                 .padding(
                     horizontal = MaterialTheme.padding.medium,
                     vertical = MaterialTheme.padding.small,
@@ -101,14 +102,14 @@ internal fun LazyListScope.animeUpdatesUiItems(
         when (item) {
             is AnimeUpdatesUiModel.Header -> {
                 ListGroupHeader(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItemFastScroll(),
                     text = relativeDateText(item.date),
                 )
             }
             is AnimeUpdatesUiModel.Item -> {
                 val updatesItem = item.item
                 AnimeUpdatesUiItem(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItemFastScroll(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
                     watchProgress = updatesItem.update.lastSecondSeen
@@ -167,7 +168,7 @@ private fun AnimeUpdatesUiItem(
     modifier: Modifier = Modifier,
 ) {
     val haptic = LocalHapticFeedback.current
-    val textAlpha = if (update.seen) ReadItemAlpha else 1f
+    val textAlpha = if (update.seen) DISABLED_ALPHA else 1f
 
     Row(
         modifier = modifier
@@ -242,7 +243,7 @@ private fun AnimeUpdatesUiItem(
                     Text(
                         text = watchProgress,
                         maxLines = 1,
-                        color = LocalContentColor.current.copy(alpha = ReadItemAlpha),
+                        color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
@@ -270,7 +271,6 @@ private fun AnimeUpdatesUiItem(
             }
         }
         // <-- AM (FILE_SIZE)
-
 
         EpisodeDownloadIndicator(
             enabled = onDownloadEpisode != null,
@@ -304,6 +304,7 @@ private fun formatProgress(milliseconds: Long): String {
         )
     }
 }
+
 // AM (FILE_SIZE) -->
 private val storagePreferences: StoragePreferences by injectLazy()
 private val animeDownloadProvider: AnimeDownloadProvider by injectLazy()

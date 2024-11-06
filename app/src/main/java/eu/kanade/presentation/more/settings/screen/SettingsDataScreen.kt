@@ -81,7 +81,6 @@ import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-
 @Suppress("TooManyFunctions")
 object SettingsDataScreen : SearchableSettings {
 
@@ -334,7 +333,7 @@ object SettingsDataScreen : SearchableSettings {
                     title = stringResource(MR.strings.label_storage),
                     icon = Icons.Outlined.Storage,
                     onClick = {
-                        navigator.push(StorageTab())
+                        navigator.push(StorageTab)
                     },
                 ),
 

@@ -47,12 +47,10 @@ fun TabbedDialog(
     tabOverflowMenuContent: (@Composable ColumnScope.(() -> Unit) -> Unit)? = null,
     onOverflowMenuClicked: (() -> Unit)? = null,
     overflowIcon: ImageVector? = null,
-    hideSystemBars: Boolean = false,
     pagerState: PagerState = rememberPagerState { tabTitles.size },
     content: @Composable (Int) -> Unit,
 ) {
     AdaptiveSheet(
-        hideSystemBars = hideSystemBars,
         modifier = modifier,
         onDismissRequest = onDismissRequest,
     ) {

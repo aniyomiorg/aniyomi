@@ -691,7 +691,6 @@
     <string name="information_cloudflare_help">Trykk her for å få hjelp med Cloudflare</string>
     <string name="download_cache_invalidated">Nedlastingsindeksen er ugyldiggjort</string>
     <string name="create_backup_file_error">Kunne ikke opprette en backup-fil</string>
-    <string name="licensed_manga_chapters_error">Lisensiert - Ingen kapitler å vise</string>
     <string name="track_activity_name">Sporerinnlogging</string>
     <string name="unlock_app_title">Lås opp %s</string>
     <string name="action_move_to_bottom_all_for_series">Flytt serien til bunnen</string>

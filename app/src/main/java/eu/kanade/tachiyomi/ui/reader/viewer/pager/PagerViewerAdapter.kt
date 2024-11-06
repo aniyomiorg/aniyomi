@@ -110,7 +110,8 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
         // Add next chapter transition and pages.
         nextTransition = ChapterTransition.Next(chapters.currChapter, chapters.nextChapter)
             .also {
-                if (nextHasMissingChapters || forceTransition ||
+                if (nextHasMissingChapters ||
+                    forceTransition ||
                     chapters.nextChapter?.state !is ReaderChapter.State.Loaded
                 ) {
                     newItems.add(it)
@@ -307,8 +308,10 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
                     if (items[itemIndex]?.fullPage == true || items[itemIndex]?.shiftedPage == true) {
                         // Add a 'blank' page after each full page. It will be used when chunked to solo a page
                         items.add(itemIndex + 1, null)
-                        if (items[itemIndex]?.fullPage == true && itemIndex > 0 &&
-                            items[itemIndex - 1] != null && (itemIndex - 1) % 2 == 0
+                        if (items[itemIndex]?.fullPage == true &&
+                            itemIndex > 0 &&
+                            items[itemIndex - 1] != null &&
+                            (itemIndex - 1) % 2 == 0
                         ) {
                             // If a page is a full page, check if the previous page needs to be isolated
                             // we should check if it's an even or odd page, since even pages need shifting

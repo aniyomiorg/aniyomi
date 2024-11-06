@@ -46,9 +46,11 @@ class SubtitleSelect(private val playerPreferences: PlayerPreferences) {
     private fun containsLang(title: String, locale: Locale): Boolean {
         val localName = locale.getDisplayName(locale)
         val englishName = locale.getDisplayName(Locale.ENGLISH).substringBefore(" (")
-        val langRegex = Regex("""\b${locale.getISO3Language()}\b""", RegexOption.IGNORE_CASE)
+        val langRegex = Regex("""\b${locale.isO3Language}|${locale.language}\b""", RegexOption.IGNORE_CASE)
 
-        return title.contains(localName) || title.contains(englishName) || langRegex.find(title) != null
+        return title.contains(localName, true) ||
+            title.contains(englishName, true) ||
+            langRegex.find(title) != null
     }
 
     @Serializable

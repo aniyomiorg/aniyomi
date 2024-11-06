@@ -10,7 +10,6 @@ class RemoveReaderTapMigration : Migration {
     override val version = 77f
 
     // Remove reader tapping option in favor of disabled nav layouts
-    @Suppress("MagicNumber")
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<App>() ?: return false
         val readerPreferences = migrationContext.get<ReaderPreferences>() ?: return false

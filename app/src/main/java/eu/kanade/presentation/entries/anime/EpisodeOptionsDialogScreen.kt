@@ -2,7 +2,6 @@ package eu.kanade.presentation.entries.anime
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -61,14 +60,13 @@ import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.cast.MediaStatus
 import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.cast.framework.CastSession
-import com.google.android.gms.cast.framework.SessionManagerListener
 import com.google.android.gms.common.images.WebImage
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -87,7 +85,6 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 private val playerPreferences = Injekt.get<PlayerPreferences>()
 
 class EpisodeOptionsDialogScreen(
@@ -286,17 +283,24 @@ private fun VideoList(
                             )
                         }
                     },
-                    //start tail cast
+                    // start tail cast
                     onCastClicked = {
                         scope.launch {
                             if (playerPreferences.enableCast().get()) {
-                                sendChaptersToCast(context, anime.title, episode.name, episode.lastSecondSeen, anime.thumbnailUrl.orEmpty(), selectedVideo.videoUrl!!)
+                                sendChaptersToCast(
+                                    context,
+                                    anime.title,
+                                    episode.name,
+                                    episode.lastSecondSeen,
+                                    anime.thumbnailUrl.orEmpty(),
+                                    selectedVideo.videoUrl!!,
+                                )
                             } else {
                                 context.toast("Cast is disabled")
                             }
                         }
                     },
-                    //end tail cast
+                    // end tail cast
                 )
             }
         }
@@ -387,7 +391,6 @@ private fun QualityOptions(
             },
         )
     }
-
 }
 
 @Composable
@@ -436,7 +439,14 @@ private fun ClickableRow(
 
 // Start tail cast
 
-private fun sendChaptersToCast(context: Context, title: String, episode: String, lastSecondSeen: Long, image: String, videoUrl: String) {
+private fun sendChaptersToCast(
+    context: Context,
+    title: String,
+    episode: String,
+    lastSecondSeen: Long,
+    image: String,
+    videoUrl: String,
+) {
     val castSession = CastContext.getSharedInstance(context).sessionManager.currentCastSession
     val remoteMediaClient = castSession?.remoteMediaClient
     if (castSession == null || !castSession.isConnected) {
@@ -475,4 +485,4 @@ private fun sendChaptersToCast(context: Context, title: String, episode: String,
     }
 }
 
-// End tail cast
+// End tail cast0

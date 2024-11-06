@@ -33,7 +33,9 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
 private enum class State {
-    CHECKED, INVERSED, UNCHECKED
+    CHECKED,
+    INVERSED,
+    UNCHECKED,
 }
 
 @SuppressLint("ComposeParameterOrder")

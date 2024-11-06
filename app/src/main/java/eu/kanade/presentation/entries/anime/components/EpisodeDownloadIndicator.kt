@@ -251,7 +251,7 @@ private fun DownloadedIndicator(
 // AM (FILE_SIZE) -->
 private fun formatFileSize(fileSize: Long): String {
     val megaByteSize = fileSize / 1000.0 / 1000.0
-    return if (megaByteSize > 900){
+    return if (megaByteSize > 900) {
         val gigaByteSize = megaByteSize / 1000.0
         "${BigDecimal(gigaByteSize).setScale(2, RoundingMode.HALF_EVEN)} GB"
     } else {
@@ -259,7 +259,6 @@ private fun formatFileSize(fileSize: Long): String {
     }
 }
 // <-- AM (FILE_SIZE)
-
 
 @Composable
 private fun ErrorIndicator(

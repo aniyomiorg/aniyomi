@@ -29,7 +29,6 @@ import eu.kanade.tachiyomi.data.track.TrackStatus
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import eu.kanade.tachiyomi.util.shouldDownloadNewChapters
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.isConnectedToWifi
@@ -44,13 +43,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
+import mihon.domain.items.chapter.interactor.FilterChaptersForDownload
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.preference.getAndSet
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.logcat
-import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
-import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.interactor.MangaFetchInterval
@@ -86,17 +84,16 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     CoroutineWorker(context, workerParams) {
 
     private val sourceManager: MangaSourceManager = Injekt.get()
-    private val downloadPreferences: DownloadPreferences = Injekt.get()
     private val libraryPreferences: LibraryPreferences = Injekt.get()
     private val downloadManager: MangaDownloadManager = Injekt.get()
     private val coverCache: MangaCoverCache = Injekt.get()
     private val getLibraryManga: GetLibraryManga = Injekt.get()
     private val getManga: GetManga = Injekt.get()
     private val updateManga: UpdateManga = Injekt.get()
-    private val getCategories: GetMangaCategories = Injekt.get()
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get()
     private val getTracks: GetMangaTracks = Injekt.get()
     private val mangaFetchInterval: MangaFetchInterval = Injekt.get()
+    private val filterChaptersForDownload: FilterChaptersForDownload = Injekt.get()
 
     private val notifier = MangaLibraryUpdateNotifier(context)
 
@@ -353,9 +350,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                             .sortedByDescending { it.sourceOrder }
 
                                         if (newChapters.isNotEmpty()) {
-                                            val categoryIds = getCategories.await(manga.id).map { it.id }
-                                            if (manga.shouldDownloadNewChapters(categoryIds, downloadPreferences)) {
-                                                downloadChapters(manga, newChapters)
+                                            val chaptersToDownload = filterChaptersForDownload.await(manga, newChapters)
+                                            if (chaptersToDownload.isNotEmpty()) {
+                                                downloadChapters(manga, chaptersToDownload)
                                                 hasDownloads.set(true)
                                             }
                                             libraryPreferences.newMangaUpdatesCount()
@@ -529,7 +526,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 val constraints = Constraints(
                     requiredNetworkType = if (DEVICE_NETWORK_NOT_METERED in restrictions) {
                         NetworkType.UNMETERED
-                    } else { NetworkType.CONNECTED },
+                    } else {
+                        NetworkType.CONNECTED
+                    },
                     requiresCharging = DEVICE_CHARGING in restrictions,
                     requiresBatteryNotLow = true,
                 )

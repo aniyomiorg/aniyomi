@@ -20,7 +20,8 @@ class GetApplicationRelease(
         val now = Instant.now()
 
         // Limit checks to once every 1 days at most
-        if (!arguments.forceCheck && now.isBefore(
+        if (!arguments.forceCheck &&
+            now.isBefore(
                 Instant.ofEpochMilli(lastChecked.get()).plus(1, ChronoUnit.DAYS),
             )
         ) {

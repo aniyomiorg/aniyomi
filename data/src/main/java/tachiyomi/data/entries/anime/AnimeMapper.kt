@@ -4,7 +4,6 @@ import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.library.anime.LibraryAnime
 object AnimeMapper {
-    @Suppress("LongParameterList")
     fun mapAnime(
         id: Long,
         source: Long,
@@ -59,7 +58,6 @@ object AnimeMapper {
         version = version,
     )
 
-    @Suppress("LongParameterList")
     fun mapLibraryAnime(
         id: Long,
         source: Long,

@@ -112,7 +112,8 @@ private class WsrvNlDataSaver(preferences: SourcePreferences) : DataSaver {
 
     private fun getUrl(imageUrl: String): String {
         // Network Request sent to wsrv
-        return "https://wsrv.nl/?url=$imageUrl" + if (imageUrl.contains(".webp", true) || imageUrl.contains(
+        return "https://wsrv.nl/?url=$imageUrl" + if (imageUrl.contains(".webp", true) ||
+            imageUrl.contains(
                 ".gif",
                 true,
             )

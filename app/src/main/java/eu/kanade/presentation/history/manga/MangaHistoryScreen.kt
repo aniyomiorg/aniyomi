@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import eu.kanade.presentation.components.relativeDateTimeText
 import eu.kanade.presentation.history.manga.components.MangaHistoryItem
 import eu.kanade.presentation.theme.TachiyomiPreviewTheme
+import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
 import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import tachiyomi.i18n.MR
@@ -84,14 +85,14 @@ private fun MangaHistoryScreenContent(
             when (item) {
                 is MangaHistoryUiModel.Header -> {
                     ListGroupHeader(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier.animateItemFastScroll(),
                         text = relativeDateTimeText(item.date),
                     )
                 }
                 is MangaHistoryUiModel.Item -> {
                     val value = item.item
                     MangaHistoryItem(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier.animateItemFastScroll(),
                         history = value,
                         onClickCover = { onClickCover(value) },
                         onClickResume = { onClickResume(value) },

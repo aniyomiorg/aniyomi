@@ -678,7 +678,6 @@
     <string name="syncing_library">Synchronisation de la bibliothèque</string>
     <string name="intervals_header">Intervalles</string>
     <string name="library_sync_complete">Synchronisation de la bibliothèque complété</string>
-    <string name="licensed_manga_chapters_error">Licenciés - Aucun chapitres à montrer</string>
     <string name="exception_offline">Aucune connexion internet</string>
     <string name="download_cache_invalidated">Indice de téléchargement invalidé</string>
     <string name="skipped_reason_not_in_release_period">Ignoré car aucune sortie n\'était attendue aujourd\'hui</string>

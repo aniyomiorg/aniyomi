@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.category
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
@@ -21,13 +22,14 @@ import eu.kanade.tachiyomi.ui.category.manga.mangaCategoryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
-data class CategoriesTab(
-    private val isManga: Boolean = false,
-) : Tab() {
+data object CategoriesTab : Tab {
 
     override val options: TabOptions
         @Composable
@@ -41,6 +43,12 @@ data class CategoriesTab(
             )
         }
 
+    private val switchToMangaCategoryTabChannel = Channel<Unit>(1, BufferOverflow.DROP_OLDEST)
+
+    fun showMangaCategory() {
+        switchToMangaCategoryTabChannel.trySend(Unit)
+    }
+
     @Composable
     override fun Content() {
         val context = LocalContext.current
@@ -48,14 +56,22 @@ data class CategoriesTab(
         val animeCategoryScreenModel = rememberScreenModel { AnimeCategoryScreenModel() }
         val mangaCategoryScreenModel = rememberScreenModel { MangaCategoryScreenModel() }
 
+        val tabs = persistentListOf(
+            animeCategoryTab(),
+            mangaCategoryTab(),
+        )
+
+        val state = rememberPagerState { tabs.size }
+
         TabbedScreen(
             titleRes = MR.strings.general_categories,
-            tabs = persistentListOf(
-                animeCategoryTab(),
-                mangaCategoryTab(),
-            ),
-            startIndex = 1.takeIf { isManga },
+            tabs = tabs,
+            state = state,
         )
+        LaunchedEffect(Unit) {
+            switchToMangaCategoryTabChannel.receiveAsFlow()
+                .collectLatest { state.scrollToPage(1) }
+        }
 
         LaunchedEffect(Unit) {
             (context as? MainActivity)?.ready = true

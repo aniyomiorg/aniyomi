@@ -41,7 +41,6 @@ class JellyfinInterceptor : Interceptor {
         return chain.proceed(authRequest)
     }
 
-    @Suppress("MagicNumber")
     private fun getId(suffix: Int): Long {
         val key = "jellyfin" + (if (suffix == 1) "" else " ($suffix)") + "/all/$JELLYFIN_VERSION_ID"
         val bytes = MessageDigest.getInstance("MD5").digest(key.toByteArray())

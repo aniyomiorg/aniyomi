@@ -85,6 +85,11 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                     context.stringResource(MR.strings.action_pause),
                     NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context),
                 )
+                addAction(
+                    R.drawable.ic_book_24dp,
+                    context.stringResource(MR.strings.action_show_anime),
+                    NotificationReceiver.openAnimeEntryPendingActivity(context, download.anime.id),
+                )
             }
 
             val downloadingProgressText = if (download.progress == 0) {
@@ -164,8 +169,10 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      * Called when the downloader receives a warning.
      *
      * @param reason the text to show.
+     * @param timeout duration after which to automatically dismiss the notification.
+     * @param animeId the id of the entry being warned about
      */
-    fun onWarning(reason: String, timeout: Long? = null, contentIntent: PendingIntent? = null) {
+    fun onWarning(reason: String, timeout: Long? = null, contentIntent: PendingIntent? = null, animeId: Long? = null) {
         with(errorNotificationBuilder) {
             setContentTitle(context.stringResource(MR.strings.download_notifier_downloader_title))
             setStyle(NotificationCompat.BigTextStyle().bigText(reason))
@@ -173,6 +180,13 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             setAutoCancel(true)
             clearActions()
             setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
+            if (animeId != null) {
+                addAction(
+                    R.drawable.ic_book_24dp,
+                    context.stringResource(MR.strings.action_show_anime),
+                    NotificationReceiver.openAnimeEntryPendingActivity(context, animeId),
+                )
+            }
             setProgress(0, 0, false)
             timeout?.let { setTimeoutAfter(it) }
             contentIntent?.let { setContentIntent(it) }
@@ -190,8 +204,9 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      *
      * @param error string containing error information.
      * @param episode string containing episode title.
+     * @param animeId the id of the entry that the error occurred on
      */
-    fun onError(error: String? = null, episode: String? = null, animeTitle: String? = null) {
+    fun onError(error: String? = null, episode: String? = null, animeTitle: String? = null, animeId: Long? = null) {
         // Create notification
         with(errorNotificationBuilder) {
             setContentTitle(
@@ -203,6 +218,13 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             clearActions()
             setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
+            if (animeId != null) {
+                addAction(
+                    R.drawable.ic_book_24dp,
+                    context.stringResource(MR.strings.action_show_anime),
+                    NotificationReceiver.openAnimeEntryPendingActivity(context, animeId),
+                )
+            }
             setProgress(0, 0, false)
 
             show(Notifications.ID_DOWNLOAD_EPISODE_ERROR)

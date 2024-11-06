@@ -54,7 +54,7 @@ class AnimeRestorer(
             )
     }
 
-    suspend fun restoreAnime(
+    suspend fun restore(
         backupAnime: BackupAnime,
         backupCategories: List<BackupCategory>,
     ) {
@@ -72,7 +72,7 @@ class AnimeRestorer(
                 episodes = backupAnime.episodes,
                 categories = backupAnime.categories,
                 backupCategories = backupCategories,
-                history = backupAnime.history + backupAnime.brokenHistory.map { it.toBackupHistory() },
+                history = backupAnime.history,
                 tracks = backupAnime.tracking,
             )
 
