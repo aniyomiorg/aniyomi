@@ -689,7 +689,6 @@
     <string name="has_results">Sonuç var</string>
     <string name="delete_downloaded">İndirilenleri sil</string>
     <string name="create_backup_file_error">Yedekleme dosyası oluşturulamadı</string>
-    <string name="licensed_manga_chapters_error">Lisanslı - Gösterilecek bölüm yok</string>
     <string name="download_cache_invalidated">İndirilenler dizini geçersiz kılındı</string>
     <string name="information_cloudflare_help">Cloudflare ile ilgili yardım için buraya dokunun</string>
     <string name="exception_unknown_host">%s verisine erişilemedi</string>
@@ -1011,7 +1010,7 @@
     <string name="player_hwdec_mode">Donanım kod çözme modu</string>
     <string name="label_migration_manga">Manga\'yı Taşı</string>
     <string name="label_migration_anime">Anime\'yi Taşı</string>
-    <string name="chapter_dialog_header">Bölüm ara</string>
+    <string name="chapter_dialog_header">Bölüme atla</string>
     <string name="action_save_screenshot">Ekran görüntüsünü kaydet</string>
     <string name="pref_media_control_chapter_seeking_summary">Etkinleştirildiğinde sıradaki bölüm butonu eğer sırada bölüm yoksa giriş atlama butonu işlevini yapar</string>
     <string name="go_to_next_chapter">Sıradaki bölüm</string>
@@ -1073,7 +1072,6 @@
     <string name="pref_pip_replace_with_previous">10 saniye atlama seçeneğini önceki bölüme geç seçeneği ile değiştirir</string>
     <string name="pref_anime_storage_usage">Anime Depolama kullanımı</string>
     <string name="pref_manga_storage_usage">Manga Depolama kullanımı</string>
-    <string name="licensed_manga_chapters_error">Lisanslanmış - Gösterilecek bir şey yok</string>
     <string name="settings_dialog_header">Oynatıcı ayarları</string>
     <string name="player_subtitle_settings_font_tab">Font</string>
     <string name="player_subtitle_settings">Alt yazı ayarları</string>

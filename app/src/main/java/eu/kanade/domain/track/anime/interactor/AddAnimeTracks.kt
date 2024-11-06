@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import eu.kanade.tachiyomi.data.track.Tracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.util.lang.convertEpochMillisZone
 import logcat.LogPriority
 import tachiyomi.core.common.util.lang.withIOContext
@@ -15,17 +16,16 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.history.anime.interactor.GetAnimeHistory
 import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
-import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.time.ZoneOffset
 
 class AddAnimeTracks(
-    private val getTracks: GetAnimeTracks,
     private val insertTrack: InsertAnimeTrack,
     private val syncChapterProgressWithTrack: SyncEpisodeProgressWithTrack,
     private val getEpisodesByAnimeId: GetEpisodesByAnimeId,
+    private val trackerManager: TrackerManager,
 ) {
 
     // TODO: update all trackers based on common data
@@ -80,7 +80,7 @@ class AddAnimeTracks(
 
     suspend fun bindEnhancedTrackers(anime: Anime, source: AnimeSource) = withNonCancellableContext {
         withIOContext {
-            getTracks.await(anime.id)
+            trackerManager.loggedInTrackers()
                 .filterIsInstance<EnhancedAnimeTracker>()
                 .filter { it.accept(source) }
                 .forEach { service ->
@@ -88,11 +88,11 @@ class AddAnimeTracks(
                         service.match(anime)?.let { track ->
                             track.anime_id = anime.id
                             (service as Tracker).animeService.bind(track)
-                            insertTrack.await(track.toDomainTrack()!!)
+                            insertTrack.await(track.toDomainTrack(idRequired = false)!!)
 
                             syncChapterProgressWithTrack.await(
                                 anime.id,
-                                track.toDomainTrack()!!,
+                                track.toDomainTrack(idRequired = false)!!,
                                 service.animeService,
                             )
                         }

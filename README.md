@@ -46,7 +46,7 @@ Features include:
     * Local reading/watching of downloaded content
     * A configurable reader with multiple viewers, reading directions and other settings.
     * A configurable player built on mpv-android with multiple options and settings
-    * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
+    * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.app/), [MangaUpdates](https://mangaupdates.com), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
     * Categories to organize your library
     * Light and dark themes
     * Create backups locally to read/watch offline or to your desired cloud service

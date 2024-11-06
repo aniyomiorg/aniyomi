@@ -33,14 +33,14 @@ data class AnimeDownload(
         }
 
     @Transient
-    private val _progressFlow = MutableStateFlow(0)
+    private val progressStateFlow = MutableStateFlow(0)
 
     @Transient
-    val progressFlow = _progressFlow.asStateFlow()
+    val progressFlow = progressStateFlow.asStateFlow()
     var progress: Int
-        get() = _progressFlow.value
+        get() = progressStateFlow.value
         set(value) {
-            _progressFlow.value = value
+            progressStateFlow.value = value
         }
 
     @Transient
@@ -48,20 +48,20 @@ data class AnimeDownload(
     var totalContentLength: Long = 0L
 
     @Transient
-    private val _bytesDownloadedFlow = MutableStateFlow(0L)
+    private val bytesDownloadedFlow = MutableStateFlow(0L)
 
     var bytesDownloaded: Long
-        get() = _bytesDownloadedFlow.value
+        get() = bytesDownloadedFlow.value
         set(value) {
-            _bytesDownloadedFlow.value += value
+            bytesDownloadedFlow.value += value
         }
 
     /**
      * resets the internal progress state of download
      */
     fun resetProgress() {
-        _bytesDownloadedFlow.value = 0L
-        _progressFlow.value = 0
+        bytesDownloadedFlow.value = 0L
+        progressStateFlow.value = 0
     }
 
     /**

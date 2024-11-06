@@ -48,6 +48,7 @@ import eu.kanade.presentation.browse.manga.components.MangaExtensionIcon
 import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.entries.components.DotSeparatorNoSpaceText
 import eu.kanade.presentation.more.settings.screen.browse.MangaExtensionReposScreen
+import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.presentation.util.rememberRequestPackageInstallsPermissionState
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -187,14 +188,14 @@ private fun ExtensionContent(
                             }
                         ExtensionHeader(
                             textRes = header.textRes,
-                            modifier = Modifier.animateItem(),
+                            modifier = Modifier.animateItemFastScroll(),
                             action = action,
                         )
                     }
                     is MangaExtensionUiModel.Header.Text -> {
                         ExtensionHeader(
                             text = header.text,
-                            modifier = Modifier.animateItem(),
+                            modifier = Modifier.animateItemFastScroll(),
                         )
                     }
                 }
@@ -212,13 +213,15 @@ private fun ExtensionContent(
                 },
             ) { item ->
                 ExtensionItem(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItemFastScroll(),
                     item = item,
                     onClickItem = {
                         when (it) {
                             is MangaExtension.Available -> onInstallExtension(it)
                             is MangaExtension.Installed -> onOpenExtension(it)
-                            is MangaExtension.Untrusted -> { trustState = it }
+                            is MangaExtension.Untrusted -> {
+                                trustState = it
+                            }
                         }
                     },
                     onLongClickItem = onLongClickItem,

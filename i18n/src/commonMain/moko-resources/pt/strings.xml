@@ -878,7 +878,7 @@
     <string name="pref_library_anime_columns">Anime por fileira</string>
     <string name="action_sort_unseen_count">Itens não vistos</string>
     <string name="action_sort_episode_fetch_date">Data de episódios</string>
-    <string name="pref_search_pinned_anime_sources_only">Pesquisar apenas fontes de anime fixadas na pesquisa global</string>
+    <string name="pref_search_pinned_anime_sources_only">Pesquisar apenas em fontes de anime fixadas na pesquisa global</string>
     <string name="pref_default_home_tab_library">Definir o ecrã inicial para o separador Mangá</string>
     <string name="pref_intro_length">Tamanho do salto de abertura</string>
     <string name="download_ahead_info_anime">Funciona apenas em entradas na biblioteca e se o episódio atual e o próximo já estiverem descarregados</string>
@@ -886,7 +886,7 @@
     <string name="download_unseen">Não visto</string>
     <string name="action_global_manga_search">Pesquisa Global de Mangás</string>
     <string name="action_global_anime_search">Pesquisa Global de Animes</string>
-    <string name="pref_search_pinned_manga_sources_only">Pesquisar apenas fontes de manga fixadas na pesquisa global</string>
+    <string name="pref_search_pinned_manga_sources_only">Pesquisar apenas em fontes de manga fixadas na pesquisa global</string>
     <string name="pref_bottom_nav_style">Estilo de navegação inferior</string>
     <string name="rotation_reverse_landscape">Paisagem reversa</string>
     <string name="rotation_sensor_portrait">Retrato (Sensor)</string>
@@ -950,11 +950,11 @@
     <string name="onboarding_permission_install_apps">Permissão de instalação</string>
     <string name="theme_sapphire">Safira</string>
     <string name="theme_doom">Vermelho</string>
-    <string name="theme_matrix">Verde</string>
+    <string name="theme_matrix">Matrix</string>
     <string name="onboarding_permission_ignore_battery_opts_description">Evite interrupções em atualizações de bibliotecas, downloads e restaurações de backup de longa duração.</string>
     <string name="pref_library_update_smart_update">Atualização inteligente</string>
     <string name="onboarding_guides_new_user">Novo em %s? Recomendamos verificar o guia de primeiros passos.</string>
-    <string name="untrusted_extension_message">Extensões maliciosas podem ler quaisquer credenciais de login armazenadas ou executar código arbitrário. 
+    <string name="untrusted_extension_message">Extensões maliciosas podem ler quaisquer credenciais de login armazenadas ou executar código arbitrário.
 \n
 \nAo confiar nesta extensão, você aceita esses riscos.</string>
     <string name="ext_permission_install_apps_warning">Permissões são necessárias para instalar extensões. Clique aqui para permitir.</string>
@@ -976,7 +976,7 @@
     <string name="download_cache_invalidated">Índice de downloads invalidado</string>
     <string name="manga_interval_expected_update_soon">Em breve</string>
     <string name="manga_interval_custom_amount">Frequência de atualização personalizada:</string>
-    <string name="exclude_scanlators">Restringir a scanners</string>
+    <string name="exclude_scanlators">Excluir tradutores</string>
     <string name="no_scanlators_found">Nenhuma scanner encontrada</string>
     <string name="track_delete_title">Remover o rastreamento de %s?</string>
     <string name="exception_http">HTTP %d, verifique o site no WebView</string>
@@ -1033,7 +1033,6 @@
     <string name="pref_pip_replace_with_previous">Substitui a opção Pular 10 segundos pelo episódio anterior</string>
     <string name="pref_anime_storage_usage">Uso de armazenamento de anime</string>
     <string name="pref_manga_storage_usage">Uso de armazenamento de mangá</string>
-    <string name="licensed_manga_chapters_error">Licenciado - Nenhum item para mostrar</string>
     <string name="pref_episode_swipe">passar de episódio</string>
     <string name="pref_episode_swipe_end">deslize para a direita</string>
     <string name="data_saver_image_format_summary_off">O tamanho do arquivo Jpeg é consideravelmente menor do que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
@@ -1042,7 +1041,7 @@
     <string name="pref_category_player_advanced_subtitle">Espalhar, mpv.conf... etc</string>
     <string name="pref_debanding_title">Debandar</string>
     <string name="data_saver_image_quality_summary">Valores mais altos significam que uma porcentagem maior da qualidade da imagem é salva, mas também significa que o tamanho do arquivo é maior, 80% é uma boa mediana entre o tamanho do arquivo e a qualidade da imagem</string>
-    <string name="data_saver_image_format_summary_on">O tamanho do arquivo Jpeg é consideravelmente menor do que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade. 
+    <string name="data_saver_image_format_summary_on">O tamanho do arquivo Jpeg é consideravelmente menor do que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
 \nAtualmente comprimido para Jpeg</string>
     <string name="pref_debanding_disabled">Desabilitado</string>
     <string name="pref_debanding_cpu">CPU</string>
@@ -1063,7 +1062,7 @@
     <string name="pref_show_next_episode_airing_time">Mostrar horário de exibição do próximo episódio</string>
     <string name="theme_mocha">Café</string>
     <string name="label_recent_anime_updates">Atualizações de anime</string>
-    <string name="scanlator">Scanner</string>
+    <string name="scanlator">Tradutores</string>
     <string name="confirm_exit">Pressione Voltar para sair</string>
     <string name="action_filter_started">Começar</string>
     <string name="action_sort_airing_time">No ar</string>
@@ -1083,7 +1082,7 @@
     <string name="onboarding_guides_returning_user">Reinstalar %s?</string>
     <string name="pref_general_summary">Linguagem do aplicativo, notificações</string>
     <string name="theme_nord">Azulado</string>
-    <string name="theme_cloudflare">Núvem</string>
+    <string name="theme_cloudflare">Cloudflare</string>
     <string name="pref_relative_format">Carimbos de data e hora relativos</string>
     <string name="pref_relative_format_summary">\"%1$s\" em vez de \"%2$s\"</string>
     <string name="information_empty_repos">Você não tem repositórios definidos.</string>
@@ -1093,7 +1092,7 @@
     <string name="invalid_repo_name">URL de repositório inválido</string>
     <string name="delete_repo_confirmation">Deseja excluir o repositório \"%s\"?</string>
     <string name="action_open_repo">Repositório de código-aberto</string>
-    <string name="pref_flash_page">Flash na mudança de página</string>
+    <string name="pref_flash_page">Piscar na mudança de página</string>
     <string name="pref_flash_page_summ">Reduz problemas gráficos em telas e-ink</string>
     <string name="pref_create_folder_per_manga">Salvar páginas em pastas separadas</string>
     <string name="pref_create_folder_per_manga_summary">Criar pastas de acordo com o título das entradas</string>
@@ -1119,4 +1118,17 @@
     <string name="pref_player_audio_channels_reverse_stereo">Estéreo Invertido</string>
     <string name="pref_mpv_scripts">Habilitar Scripts MPV</string>
     <string name="action_add_anyway">Adicionar de qualquer maneira</string>
+    <string name="relative_time_now">Novo</string>
+    <string name="action_replace_repo_title">A impressão digital da chave de assinatura já existe</string>
+    <string name="action_replace_repo_message">O repositório %1$s tem a mesma impressão digital de assinatura da chave que %2$s.
+\nSe isso for esperado, %2$s será substituído, caso contrário, entre em contato com o mantenedor do seu repositório.</string>
+    <string name="pref_flash_duration">Duração da piscada</string>
+    <string name="pref_flash_page_interval">Piscar sempre</string>
+    <string name="pref_flash_style_white">Branco</string>
+    <string name="pref_flash_style_white_black">Branco e preto</string>
+    <string name="pref_flash_with">Piscar com</string>
+    <string name="pref_flash_style_black">Preto</string>
+    <string name="label_upcoming">Por vir</string>
+    <string name="action_migrate_duplicate">Migrar entrada existente</string>
+    <string name="action_replace_repo">Substituir</string>
 </resources>

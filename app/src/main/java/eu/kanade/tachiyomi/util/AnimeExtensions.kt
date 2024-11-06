@@ -5,7 +5,6 @@ import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.source.local.entries.anime.isLocal
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
@@ -48,31 +47,6 @@ fun Anime.removeCovers(coverCache: AnimeCoverCache = Injekt.get()): Anime {
     } else {
         this
     }
-}
-
-fun Anime.shouldDownloadNewEpisodes(dbCategories: List<Long>, preferences: DownloadPreferences): Boolean {
-    if (!favorite) return false
-
-    val categories = dbCategories.ifEmpty { listOf(0L) }
-
-    // Boolean to determine if user wants to automatically download new episodes.
-    val downloadNewEpisodes = preferences.downloadNewEpisodes().get()
-    if (!downloadNewEpisodes) return false
-
-    val includedCategories = preferences.downloadNewEpisodeCategories().get().map { it.toLong() }
-    val excludedCategories = preferences.downloadNewEpisodeCategoriesExclude().get().map { it.toLong() }
-
-    // Default: Download from all categories
-    if (includedCategories.isEmpty() && excludedCategories.isEmpty()) return true
-
-    // In excluded category
-    if (categories.any { it in excludedCategories }) return false
-
-    // Included category not selected
-    if (includedCategories.isEmpty()) return true
-
-    // In included category
-    return categories.any { it in includedCategories }
 }
 
 suspend fun Anime.editCover(

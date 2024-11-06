@@ -59,7 +59,6 @@ fun SubtitleSettingsSheet(
             stringResource(MR.strings.player_subtitle_settings_font_tab),
             stringResource(MR.strings.player_subtitle_settings_color_tab),
         ),
-        hideSystemBars = true,
     ) { page ->
         Column(
             modifier = Modifier

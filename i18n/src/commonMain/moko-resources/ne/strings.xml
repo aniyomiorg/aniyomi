@@ -691,7 +691,6 @@
     <string name="information_cloudflare_help">Cloudflare सम्बन्धित मद्दतको लागि यहाँ ट्याप गर्नुहोस्</string>
     <string name="track_activity_name">ट्र्याकर लगइन</string>
     <string name="create_backup_file_error">ब्याकअप फाइल सिर्जना गर्न असफल भयो</string>
-    <string name="licensed_manga_chapters_error">लाइसेन्स प्राप्त - देखाउन को लागि कुनै अध्याय छैन</string>
     <string name="exception_offline">इन्टरनेट जडान छैन</string>
     <string name="exception_unknown_host">%s मा पुग्न सकिएन</string>
     <string name="exception_http">HTTP %d, WebView मा वेबसाइट जाँच गर्नुहोस्</string>

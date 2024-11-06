@@ -10,6 +10,7 @@ class StoragePreferences(
 ) {
 
     fun baseStorageDirectory() = preferenceStore.getString(Preference.appStateKey("storage_dir"), folderProvider.path())
+
     // AM (FILE_SIZE) -->
     fun showEpisodeFileSize() = preferenceStore.getBoolean("pref_show_downloaded_episode_size", true)
     // <-- AM (FILE_SIZE)

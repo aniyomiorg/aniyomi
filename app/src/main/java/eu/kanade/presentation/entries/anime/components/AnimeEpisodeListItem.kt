@@ -44,8 +44,8 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import me.saket.swipe.SwipeableActionsBox
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.ReadItemAlpha
-import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
+import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
 
@@ -139,7 +139,7 @@ fun AnimeEpisodeListItem(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         onTextLayout = { textHeight = it.size.height },
-                        color = LocalContentColor.current.copy(alpha = if (seen) ReadItemAlpha else 1f),
+                        color = LocalContentColor.current.copy(alpha = if (seen) DISABLED_ALPHA else 1f),
                     )
                 }
 
@@ -147,7 +147,7 @@ fun AnimeEpisodeListItem(
                     val subtitleStyle = MaterialTheme.typography.bodySmall
                         .merge(
                             color = LocalContentColor.current
-                                .copy(alpha = if (seen) ReadItemAlpha else SecondaryItemAlpha)
+                                .copy(alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA),
                         )
                     ProvideTextStyle(value = subtitleStyle) {
                         if (date != null) {
@@ -163,7 +163,7 @@ fun AnimeEpisodeListItem(
                                 text = watchProgress,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                color = LocalContentColor.current.copy(alpha = ReadItemAlpha),
+                                color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
                             )
                             if (scanlator != null) DotSeparatorText()
                         }
@@ -244,12 +244,12 @@ fun NextEpisodeAiringListItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },
-                    modifier = Modifier.alpha(SecondaryItemAlpha),
+                    modifier = Modifier.alpha(SECONDARY_ALPHA),
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
             Spacer(modifier = Modifier.height(6.dp))
-            Row(modifier = Modifier.alpha(SecondaryItemAlpha)) {
+            Row(modifier = Modifier.alpha(SECONDARY_ALPHA)) {
                 ProvideTextStyle(
                     value = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                 ) {

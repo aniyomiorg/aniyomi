@@ -40,7 +40,6 @@ fun ScreenshotOptionsSheet(
     val showSubtitles by remember { mutableStateOf(screenModel.preferences.screenshotSubtitles()) }
 
     AdaptiveSheet(
-        hideSystemBars = true,
         onDismissRequest = onDismissRequest,
     ) {
         Column {

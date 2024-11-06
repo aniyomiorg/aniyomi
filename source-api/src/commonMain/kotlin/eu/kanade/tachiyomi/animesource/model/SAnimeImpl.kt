@@ -1,3 +1,5 @@
+@file:Suppress("PropertyName")
+
 package eu.kanade.tachiyomi.animesource.model
 
 class SAnimeImpl : SAnime {

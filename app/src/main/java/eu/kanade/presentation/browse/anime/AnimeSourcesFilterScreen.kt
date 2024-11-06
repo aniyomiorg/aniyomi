@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
+import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesFilterScreenModel
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.anime.model.AnimeSource
@@ -68,7 +69,7 @@ private fun AnimeSourcesFilterContent(
                 contentType = "source-filter-header",
             ) {
                 AnimeSourcesFilterHeader(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItemFastScroll(),
                     language = language,
                     enabled = enabled,
                     onClickItem = onClickLanguage,
@@ -81,7 +82,7 @@ private fun AnimeSourcesFilterContent(
                     contentType = { "source-filter-item" },
                 ) { source ->
                     AnimeSourcesFilterItem(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier.animateItemFastScroll(),
                         source = source,
                         isEnabled = "${source.id}" !in state.disabledSources,
                         onClickItem = onClickSource,

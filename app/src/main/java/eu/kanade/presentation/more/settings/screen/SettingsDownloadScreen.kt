@@ -31,7 +31,6 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
-import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
@@ -54,13 +53,9 @@ object SettingsDownloadScreen : SearchableSettings {
     @Composable
     override fun getPreferences(): List<Preference> {
         val getMangaCategories = remember { Injekt.get<GetMangaCategories>() }
-        val allMangaCategories by getMangaCategories.subscribe().collectAsState(
-            initial = runBlocking { getMangaCategories.await() },
-        )
+        val allMangaCategories by getMangaCategories.subscribe().collectAsState(initial = emptyList())
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
-        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(
-            initial = runBlocking { getAnimeCategories.await() },
-        )
+        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = emptyList())
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
         val speedLimit by downloadPreferences.downloadSpeedLimit().collectAsState()
@@ -215,6 +210,7 @@ object SettingsDownloadScreen : SearchableSettings {
         allMangaCategories: ImmutableList<Category>,
     ): Preference.PreferenceGroup {
         val downloadNewEpisodesPref = downloadPreferences.downloadNewEpisodes()
+        val downloadNewUnseenEpisodesOnlyPref = downloadPreferences.downloadNewUnseenEpisodesOnly()
         val downloadNewEpisodeCategoriesPref = downloadPreferences.downloadNewEpisodeCategories()
         val downloadNewEpisodeCategoriesExcludePref = downloadPreferences.downloadNewEpisodeCategoriesExclude()
 
@@ -245,6 +241,7 @@ object SettingsDownloadScreen : SearchableSettings {
         }
 
         val downloadNewChaptersPref = downloadPreferences.downloadNewChapters()
+        val downloadNewUnreadChaptersOnlyPref = downloadPreferences.downloadNewUnreadChaptersOnly()
         val downloadNewChapterCategoriesPref = downloadPreferences.downloadNewChapterCategories()
         val downloadNewChapterCategoriesExcludePref = downloadPreferences.downloadNewChapterCategoriesExclude()
 
@@ -281,6 +278,11 @@ object SettingsDownloadScreen : SearchableSettings {
                     pref = downloadNewEpisodesPref,
                     title = stringResource(MR.strings.pref_download_new_episodes),
                 ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = downloadNewUnseenEpisodesOnlyPref,
+                    title = stringResource(MR.strings.pref_download_new_unseen_episodes_only),
+                    enabled = downloadNewEpisodes,
+                ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.anime_categories),
                     subtitle = getCategoriesLabel(
@@ -294,6 +296,11 @@ object SettingsDownloadScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = downloadNewChaptersPref,
                     title = stringResource(MR.strings.pref_download_new),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = downloadNewUnreadChaptersOnlyPref,
+                    title = stringResource(MR.strings.pref_download_new_unread_chapters_only),
+                    enabled = downloadNewChapters,
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.manga_categories),
@@ -370,7 +377,7 @@ object SettingsDownloadScreen : SearchableSettings {
         }
         val packageNames = supportedDownloaders.map { it.packageName }
         val packageNamesReadable = supportedDownloaders
-            .map { pm.getApplicationLabel(it.applicationInfo).toString() }
+            .map { pm.getApplicationLabel(it.applicationInfo!!).toString() }
 
         val packageNamesMap: Map<String, String> =
             mapOf("" to "None") + packageNames.zip(packageNamesReadable).toMap()

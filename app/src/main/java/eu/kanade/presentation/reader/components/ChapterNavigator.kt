@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,26 +17,30 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.theme.TachiyomiPreviewTheme
 import eu.kanade.presentation.util.isTabletUi
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.material.Slider
 import tachiyomi.presentation.core.i18n.stringResource
-import kotlin.math.roundToInt
 
 @Composable
 @Suppress("LongMethod")
@@ -50,10 +55,10 @@ fun ChapterNavigator(
     currentPageText: String,
     // SY <--
     totalPages: Int,
-    onSliderValueChange: (Int) -> Unit,
+    onPageIndexChange: (Int) -> Unit,
 ) {
     val isTabletUi = isTabletUi()
-    val horizontalPadding = if (isTabletUi) 24.dp else 16.dp
+    val horizontalPadding = if (isTabletUi) 24.dp else 8.dp
     val layoutDirection = if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
     val haptic = LocalHapticFeedback.current
 
@@ -98,8 +103,12 @@ fun ChapterNavigator(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         // SY -->
-                        Text(text = currentPageText)
-                        // SY <--
+                        Box(contentAlignment = Alignment.CenterEnd) {
+                            Text(text = currentPageText)
+                            // SY <--
+                            // Taking up full length so the slider doesn't shift when 'currentPage' length changes
+                            Text(text = totalPages.toString(), color = Color.Transparent)
+                        }
 
                         val interactionSource = remember { MutableInteractionSource() }
                         val sliderDragged by interactionSource.collectIsDraggedAsState()
@@ -113,11 +122,11 @@ fun ChapterNavigator(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(horizontal = 8.dp),
-                            value = currentPage.toFloat(),
-                            valueRange = 1f..totalPages.toFloat(),
-                            steps = totalPages - 2,
-                            onValueChange = {
-                                onSliderValueChange(it.roundToInt() - 1)
+                            value = currentPage,
+                            valueRange = 1..totalPages,
+                            onValueChange = f@{
+                                if (it == currentPage) return@f
+                                onPageIndexChange(it - 1)
                             },
                             interactionSource = interactionSource,
                         )
@@ -142,5 +151,24 @@ fun ChapterNavigator(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ChapterNavigatorPreview() {
+    var currentPage by remember { mutableIntStateOf(1) }
+    TachiyomiPreviewTheme {
+        ChapterNavigator(
+            isRtl = false,
+            onNextChapter = {},
+            enabledNext = true,
+            onPreviousChapter = {},
+            enabledPrevious = true,
+            currentPage = currentPage,
+            currentPageText = currentPage.toString(),
+            totalPages = 10,
+            onPageIndexChange = { currentPage = (it + 1) },
+        )
     }
 }

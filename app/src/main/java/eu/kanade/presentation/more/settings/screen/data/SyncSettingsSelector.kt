@@ -48,7 +48,7 @@ class SyncSettingsSelector : Screen() {
             LazyColumnWithAction(
                 contentPadding = contentPadding,
                 actionLabel = stringResource(MR.strings.label_sync),
-                actionEnabled = state.options.anyEnabled(),
+                actionEnabled = state.options.canCreate(),
                 onClickAction = {
                     if (!SyncDataJob.isRunning(context)) {
                         model.syncNow(context)

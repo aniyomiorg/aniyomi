@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.browse
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,12 +29,14 @@ import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.migrateMangaSourceT
 import eu.kanade.tachiyomi.ui.browse.manga.source.mangaSourcesTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
-data class BrowseTab(
-    private val toExtensions: Boolean = false,
-) : Tab() {
+data object BrowseTab : Tab {
 
     override val options: TabOptions
         @Composable
@@ -52,6 +55,12 @@ data class BrowseTab(
         navigator.push(GlobalAnimeSearchScreen())
     }
 
+    private val switchToExtensionTabChannel = Channel<Unit>(1, BufferOverflow.DROP_OLDEST)
+
+    fun showExtension() {
+        switchToExtensionTabChannel.trySend(Unit)
+    }
+
     @Composable
     override fun Content() {
         val context = LocalContext.current
@@ -63,23 +72,31 @@ data class BrowseTab(
         val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
         val animeExtensionsState by animeExtensionsScreenModel.state.collectAsState()
 
+        val tabs = persistentListOf(
+            animeSourcesTab(),
+            mangaSourcesTab(),
+            animeExtensionsTab(animeExtensionsScreenModel),
+            mangaExtensionsTab(mangaExtensionsScreenModel),
+            migrateAnimeSourceTab(),
+            migrateMangaSourceTab(),
+        )
+
+        val state = rememberPagerState { tabs.size }
+
         TabbedScreen(
             titleRes = MR.strings.browse,
-            tabs = persistentListOf(
-                animeSourcesTab(),
-                mangaSourcesTab(),
-                animeExtensionsTab(animeExtensionsScreenModel),
-                mangaExtensionsTab(mangaExtensionsScreenModel),
-                migrateAnimeSourceTab(),
-                migrateMangaSourceTab(),
-            ),
-            startIndex = 2.takeIf { toExtensions },
+            tabs = tabs,
+            state = state,
             mangaSearchQuery = mangaExtensionsState.searchQuery,
             onChangeMangaSearchQuery = mangaExtensionsScreenModel::search,
             animeSearchQuery = animeExtensionsState.searchQuery,
             onChangeAnimeSearchQuery = animeExtensionsScreenModel::search,
             scrollable = true,
         )
+        LaunchedEffect(Unit) {
+            switchToExtensionTabChannel.receiveAsFlow()
+                .collectLatest { state.scrollToPage(1) }
+        }
 
         LaunchedEffect(Unit) {
             (context as? MainActivity)?.ready = true

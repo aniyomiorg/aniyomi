@@ -233,11 +233,7 @@
     <string name="ext_untrusted">Tidak terpercaya</string>
     <string name="ext_uninstall">Lepas</string>
     <string name="untrusted_extension">Ekstensi tidak terpercaya</string>
-    <string name="untrusted_extension_message">Ekstensi ini ditandatangani oleh author yang tidak dikenal dan tidak dimuat.
-\n
-\nEkstensi berbahaya dapat membaca semua kredensial login yang disimpan atau menjalankan kode berbahaya.
-\n
-\nDengan mempercayai sertifikat ekstensi ini, Anda menerima risiko ini.</string>
+    <string name="untrusted_extension_message">Ekstensi berbahaya dapat membaca semua kredensial login yang disimpan atau menjalankan kode berbahaya.\n\nDengan mempercayai ekstensi ini, Anda menerima risiko ini.</string>
     <string name="pref_double_tap_anim_speed">Kecepatan animasi ketukan dua kali</string>
     <string name="double_tap_anim_speed_0">Tanpa animasi</string>
     <string name="double_tap_anim_speed_normal">Normal</string>
@@ -448,7 +444,7 @@
     <string name="exclude">Kecuali: %s</string>
     <string name="include">Termasuk: %s</string>
     <string name="pref_dual_page_split">Membagi halaman lebar</string>
-    <string name="cancel_all_for_series">Batal semua untuk seri ini</string>
+    <string name="cancel_all_for_series">Batalkan semua untuk seri ini</string>
     <string name="update_check_eol">Versi Android ini tidak lagi didukung</string>
     <string name="clipboard_copy_error">Gagal menyalin ke papan klip</string>
     <string name="pref_dns_over_https">DNS melalui HTTPS (DoH)</string>
@@ -605,7 +601,7 @@
     <string name="download_ahead_info">Hanya berfungsi jika bab saat ini + bab berikutnya sudah diunduh.</string>
     <string name="remove_manga">Kamu akan menghapus \"%s\" dari pustaka</string>
     <string name="updates_last_update_info">Pustaka terakhir diperbarui: %s</string>
-    <string name="multi_lang">banyak</string>
+    <string name="multi_lang">Semua</string>
     <string name="are_you_sure">Apa kamu yakin\?</string>
     <string name="popular">Populer</string>
     <string name="missing_storage_permission">Izin penyimpanan tidak diberikan</string>
@@ -699,7 +695,6 @@
     <string name="download_cache_invalidated">Indeks unduhan tidak valid</string>
     <string name="track_activity_name">Pelacak login</string>
     <string name="create_backup_file_error">Tidak dapat membuat file cadangan</string>
-    <string name="licensed_manga_chapters_error">Lisensi - Tidak ada chapter untuk ditampilkan</string>
     <string name="unlock_app_title">Buka kunci %s</string>
     <string name="exception_offline">Tidak ada koneksi Internet</string>
     <string name="exception_http">HTTP %d, periksa situs web di WebView</string>
@@ -726,7 +721,7 @@
     <string name="action_sort_tracker_score">Skor pelacak</string>
     <string name="label_data_storage">Data dan penyimpanan</string>
     <string name="exclude_scanlators">Kecualikan pemindai</string>
-    <string name="action_menu_overflow_description">Opsi lebih lanjut</string>
+    <string name="action_menu_overflow_description">Opsi lainnya</string>
     <string name="selected">Dipilih</string>
     <string name="not_selected">Tidak dipilih</string>
     <string name="action_bar_up_description">Navigasi ke atas</string>
@@ -746,7 +741,7 @@
     <string name="onboarding_action_next">Selanjutnya</string>
     <string name="onboarding_permission_ignore_battery_opts">Penggunaan baterai di latar belakang</string>
     <string name="onboarding_permission_install_apps_description">Untuk memasang ekstensi.</string>
-    <string name="onboarding_description">Mari kita atur beberapa hal terlebih dahulu. Anda juga selalu dapat mengubahnya di menu pengaturan nanti.</string>
+    <string name="onboarding_description">Mari kita atur beberapa hal terlebih dahulu. Anda juga selalu dapat mengubahnya di pengaturan nanti.</string>
     <string name="no_location_set">Lokasi penyimpanan belum ditentukan</string>
     <string name="onboarding_permission_notifications_description">Dapatkan notifikasi untuk pembaruan pustaka dan sebagainya.</string>
     <string name="onboarding_permission_action_grant">Izinkan</string>
@@ -1122,4 +1117,5 @@
     <string name="download_threads_number_summary">Jumlah thread yang digunakan untuk mengunduh, IP kamu mungkin akan terblokir jika terlalu tinggi, biasanya 4 adalah jumlah yang bagus untuk menghindari server sumber yang terlalu berat.</string>
     <string name="safe_download">Mode unduhan aman untuk anime</string>
     <string name="safe_download_summary">Izinkan thread tunggal dan mode pengunduhan no range</string>
+    <string name="label_upcoming">Yang akan datang</string>
 </resources>

@@ -58,8 +58,6 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import java.time.format.DateTimeFormatter
 
-private const val UnsetStatusTextAlpha = 0.5F
-
 @Composable
 fun MangaTrackInfoDialogHome(
     trackItems: List<MangaTrackItem>,
@@ -72,6 +70,7 @@ fun MangaTrackInfoDialogHome(
     onNewSearch: (MangaTrackItem) -> Unit,
     onOpenInBrowser: (MangaTrackItem) -> Unit,
     onRemoved: (MangaTrackItem) -> Unit,
+    onCopyLink: (MangaTrackItem) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -120,6 +119,7 @@ fun MangaTrackInfoDialogHome(
                     onNewSearch = { onNewSearch(item) },
                     onOpenInBrowser = { onOpenInBrowser(item) },
                     onRemoved = { onRemoved(item) },
+                    onCopyLink = { onCopyLink(item) },
                 )
             } else {
                 TrackInfoItemEmpty(
@@ -148,6 +148,7 @@ private fun TrackInfoItem(
     onNewSearch: () -> Unit,
     onOpenInBrowser: () -> Unit,
     onRemoved: () -> Unit,
+    onCopyLink: () -> Unit,
 ) {
     val context = LocalContext.current
     Column {
@@ -157,6 +158,7 @@ private fun TrackInfoItem(
             TrackLogoIcon(
                 tracker = tracker,
                 onClick = onOpenInBrowser,
+                onLongClick = onCopyLink,
             )
             Box(
                 modifier = Modifier
@@ -183,6 +185,7 @@ private fun TrackInfoItem(
             TrackInfoItemMenu(
                 onOpenInBrowser = onOpenInBrowser,
                 onRemoved = onRemoved,
+                onCopyLink = onCopyLink,
             )
         }
 
@@ -210,10 +213,9 @@ private fun TrackInfoItem(
                     if (onScoreClick != null) {
                         VerticalDivider()
                         TrackDetailsItem(
-                            modifier = Modifier
-                                .weight(1f)
-                                .alpha(if (score == null) UnsetStatusTextAlpha else 1f),
-                            text = score ?: stringResource(MR.strings.score),
+                            modifier = Modifier.weight(1f),
+                            text = score,
+                            placeholder = stringResource(MR.strings.score),
                             onClick = onScoreClick,
                         )
                     }
@@ -242,6 +244,8 @@ private fun TrackInfoItem(
     }
 }
 
+private const val UNSET_TEXT_ALPHA = 0.5F
+
 @Composable
 fun TrackDetailsItem(
     text: String?,
@@ -262,7 +266,7 @@ fun TrackDetailsItem(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (text == null) UnsetStatusTextAlpha else 1f),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (text == null) UNSET_TEXT_ALPHA else 1f),
         )
     }
 }
@@ -291,6 +295,7 @@ private fun TrackInfoItemEmpty(
 fun TrackInfoItemMenu(
     onOpenInBrowser: () -> Unit,
     onRemoved: () -> Unit,
+    onCopyLink: () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
@@ -308,6 +313,13 @@ fun TrackInfoItemMenu(
                 text = { Text(stringResource(MR.strings.action_open_in_browser)) },
                 onClick = {
                     onOpenInBrowser()
+                    expanded = false
+                },
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(MR.strings.action_copy_link)) },
+                onClick = {
+                    onCopyLink()
                     expanded = false
                 },
             )

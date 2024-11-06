@@ -47,6 +47,7 @@ fun ReaderAppBars(
     bookmarked: Boolean,
     onToggleBookmarked: () -> Unit,
     onOpenInWebView: (() -> Unit)?,
+    onOpenInBrowser: (() -> Unit)?,
     onShare: (() -> Unit)?,
 
     viewer: Viewer?,
@@ -56,7 +57,7 @@ fun ReaderAppBars(
     enabledPrevious: Boolean,
     currentPage: Int,
     totalPages: Int,
-    onSliderValueChange: (Int) -> Unit,
+    onPageIndexChange: (Int) -> Unit,
 
     readingMode: ReadingMode,
     onClickReadingMode: () -> Unit,
@@ -136,6 +137,14 @@ fun ReaderAppBars(
                                         ),
                                     )
                                 }
+                                onOpenInBrowser?.let {
+                                    add(
+                                        AppBar.OverflowAction(
+                                            title = stringResource(MR.strings.action_open_in_browser),
+                                            onClick = it,
+                                        ),
+                                    )
+                                }
                                 onShare?.let {
                                     add(
                                         AppBar.OverflowAction(
@@ -176,10 +185,9 @@ fun ReaderAppBars(
                     enabledPrevious = enabledPrevious,
                     currentPage = currentPage,
                     totalPages = totalPages,
-                    onSliderValueChange = onSliderValueChange,
+                    onPageIndexChange = onPageIndexChange,
                     currentPageText = currentPageText,
                 )
-
                 BottomReaderBar(
                     // SY -->
                     enabledButtons = enabledButtons,

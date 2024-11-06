@@ -16,6 +16,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.core.net.toUri
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -92,9 +94,11 @@ class AnimeScreen(
         val context = LocalContext.current
         val haptic = LocalHapticFeedback.current
         val scope = rememberCoroutineScope()
-        val screenModel = rememberScreenModel { AnimeScreenModel(context, animeId, fromSource) }
+        val lifecycleOwner = LocalLifecycleOwner.current
+        val screenModel =
+            rememberScreenModel { AnimeScreenModel(context, lifecycleOwner.lifecycle, animeId, fromSource) }
 
-        val state by screenModel.state.collectAsState()
+        val state by screenModel.state.collectAsStateWithLifecycle()
 
         if (state is AnimeScreenModel.State.Loading) {
             LoadingScreen()
@@ -219,7 +223,7 @@ class AnimeScreen(
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
                     onDismissRequest = onDismissRequest,
-                    onEditCategories = { navigator.push(CategoriesTab(false)) },
+                    onEditCategories = { navigator.push(CategoriesTab) },
                     onConfirm = { include, _ ->
                         screenModel.moveAnimeToCategoriesAndAddToLibrary(dialog.anime, include)
                     },
@@ -289,7 +293,7 @@ class AnimeScreen(
                         sm.editCover(context, it)
                     }
                     AnimeCoverDialog(
-                        coverDataProvider = { anime!! },
+                        anime = anime!!,
                         snackbarHostState = sm.snackbarHostState,
                         isCustomCover = remember(anime) { anime!!.hasCustomCover() },
                         onShareClick = { sm.shareCover(context) },

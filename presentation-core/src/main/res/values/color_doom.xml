@@ -33,4 +33,3 @@
     <color name="doom_primaryInverse">#6D0D0B</color>
     <color name="doom_elevationOverlay">@color/doom_primary</color>
 </resources>
-

@@ -21,6 +21,7 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.serialization.json.Json
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
@@ -30,7 +31,6 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.ceil
 import kotlin.math.floor
-import kotlinx.serialization.json.Json
 
 class DiscordRPCService : Service() {
 
@@ -237,11 +237,17 @@ class DiscordRPCService : Service() {
                     allowStructuredMapKeys = true
                     ignoreUnknownKeys = true
                 }
-                val rpcExternalAsset = RPCExternalAsset(applicationId = RICH_PRESENCE_APPLICATION_ID, token = connectionsPreferences.connectionsToken(connectionsManager.discord).get(), client = client, json = json)
+                val rpcExternalAsset =
+                    RPCExternalAsset(
+                        applicationId = RICH_PRESENCE_APPLICATION_ID,
+                        token = connectionsPreferences.connectionsToken(connectionsManager.discord).get(),
+                        client = client,
+                        json = json,
+                    )
 
                 val discordUri = if (!discordIncognito) {
                     try {
-                      rpcExternalAsset.getDiscordUri(playerData.thumbnailUrl)
+                        rpcExternalAsset.getDiscordUri(playerData.thumbnailUrl)
                     } catch (e: Throwable) {
                         null
                     }
@@ -263,7 +269,6 @@ class DiscordRPCService : Service() {
                 )
             }
         }
-
 
         @Suppress("SwallowedException", "TooGenericExceptionCaught", "CyclomaticComplexMethod")
         internal suspend fun setReaderActivity(
@@ -303,8 +308,14 @@ class DiscordRPCService : Service() {
                 val connectionsManager: ConnectionsManager by injectLazy()
                 val networkService: NetworkHelper by injectLazy()
                 val client = networkService.client
-                val json = Json { ignoreUnknownKeys = true }  // Configura el JSON parser si es necesario
-                val rpcExternalAsset = RPCExternalAsset(applicationId = RICH_PRESENCE_APPLICATION_ID , token = connectionsPreferences.connectionsToken(connectionsManager.discord).get(), client = client, json = json)
+                val json = Json { ignoreUnknownKeys = true } // Configura el JSON parser si es necesario
+                val rpcExternalAsset =
+                    RPCExternalAsset(
+                        applicationId = RICH_PRESENCE_APPLICATION_ID,
+                        token = connectionsPreferences.connectionsToken(connectionsManager.discord).get(),
+                        client = client,
+                        json = json,
+                    )
 
                 val discordUri = if (!discordIncognito) {
                     try {

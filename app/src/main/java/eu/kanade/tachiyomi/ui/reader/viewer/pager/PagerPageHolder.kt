@@ -50,7 +50,7 @@ class PagerPageHolder(
     /**
      * Loading progress bar to indicate the current progress.
      */
-    private val progressIndicator: ReaderProgressIndicator = ReaderProgressIndicator(readerThemedContext)
+    private var progressIndicator: ReaderProgressIndicator? = null // = ReaderProgressIndicator(readerThemedContext)
 
     /**
      * Error layout to show when the image fails to load.
@@ -70,7 +70,6 @@ class PagerPageHolder(
     private var extraLoadJob: Job? = null
 
     init {
-        addView(progressIndicator)
         loadJob = scope.launch { loadPageAndProcessStatus(1) }
         extraLoadJob = scope.launch { loadPageAndProcessStatus(2) }
     }
@@ -85,6 +84,13 @@ class PagerPageHolder(
         loadJob = null
         extraLoadJob?.cancel()
         extraLoadJob = null
+    }
+
+    private fun initProgressIndicator() {
+        if (progressIndicator == null) {
+            progressIndicator = ReaderProgressIndicator(context)
+            addView(progressIndicator)
+        }
     }
 
     /**
@@ -111,7 +117,7 @@ class PagerPageHolder(
                     Page.State.DOWNLOAD_IMAGE -> {
                         setDownloading()
                         page.progressFlow.collectLatest { value ->
-                            progressIndicator.setProgress(value)
+                            progressIndicator?.setProgress(value)
                         }
                     }
                     Page.State.READY -> setImage()
@@ -125,7 +131,8 @@ class PagerPageHolder(
      * Called when the page is queued.
      */
     private fun setQueued() {
-        progressIndicator.show()
+        initProgressIndicator()
+        progressIndicator?.show()
         removeErrorLayout()
     }
 
@@ -133,7 +140,8 @@ class PagerPageHolder(
      * Called when the page is loading.
      */
     private fun setLoading() {
-        progressIndicator.show()
+        initProgressIndicator()
+        progressIndicator?.show()
         removeErrorLayout()
     }
 
@@ -141,7 +149,8 @@ class PagerPageHolder(
      * Called when the page is downloading.
      */
     private fun setDownloading() {
-        progressIndicator.show()
+        initProgressIndicator()
+        progressIndicator?.show()
         removeErrorLayout()
     }
 
@@ -151,9 +160,9 @@ class PagerPageHolder(
     @Suppress("MagicNumber", "LongMethod")
     private suspend fun setImage() {
         if (extraPage == null) {
-            progressIndicator.setProgress(0)
+            progressIndicator?.setProgress(0)
         } else {
-            progressIndicator.setProgress(95)
+            progressIndicator?.setProgress(95)
         }
 
         val streamFn = page.stream ?: return
@@ -223,7 +232,7 @@ class PagerPageHolder(
             return splitInHalf(imageSource)
         }
         val isDoublePage = ImageUtil.isWideImage(
-            imageSource
+            imageSource,
         )
         if (!isDoublePage) {
             return imageSource
@@ -236,7 +245,7 @@ class PagerPageHolder(
 
     private fun rotateDualPage(imageSource: BufferedSource): BufferedSource {
         val isDoublePage = ImageUtil.isWideImage(
-            imageSource
+            imageSource,
         )
         return if (isDoublePage) {
             val rotation = if (viewer.config.dualPageRotateToFitInvert) -90f else 90f
@@ -252,7 +261,7 @@ class PagerPageHolder(
         "MagicNumber",
         "LongMethod",
         "CyclomaticComplexMethod",
-        "ComplexCondition"
+        "ComplexCondition",
     )
     private fun mergePages(imageSource: BufferedSource, imageSource2: BufferedSource?): BufferedSource {
         // Handle adding a center margin to wide images if requested
@@ -281,7 +290,7 @@ class PagerPageHolder(
             return imageSource
         }
 
-        scope.launch { progressIndicator.setProgress(96) }
+        scope.launch { progressIndicator?.setProgress(96) }
         if (imageBitmap.height < imageBitmap.width) {
             imageSource2.close()
             page.fullPage = true
@@ -299,7 +308,7 @@ class PagerPageHolder(
             return imageSource
         }
 
-        scope.launch { progressIndicator.setProgress(97) }
+        scope.launch { progressIndicator?.setProgress(97) }
         if (imageBitmap2.height < imageBitmap2.width) {
             imageSource2.close()
             extraPage?.fullPage = true
@@ -359,9 +368,9 @@ class PagerPageHolder(
     private fun updateProgress(progress: Int) {
         scope.launch {
             if (progress == 100) {
-                progressIndicator.hide()
+                progressIndicator?.hide()
             } else {
-                progressIndicator.setProgress(progress)
+                progressIndicator?.setProgress(progress)
             }
         }
     }
@@ -398,7 +407,8 @@ class PagerPageHolder(
                 viewer.config.centerMarginType and PagerConfig.CenterMarginType
                     .DOUBLE_PAGE_CENTER_MARGIN
                 ) > 0 &&
-            viewer.config.doublePages && !viewer.config.imageCropBorders
+            viewer.config.doublePages &&
+            !viewer.config.imageCropBorders
         ) {
             48
         } else {
@@ -417,13 +427,13 @@ class PagerPageHolder(
      * Called when the page has an error.
      */
     private fun setError() {
-        progressIndicator.hide()
+        progressIndicator?.hide()
         showErrorLayout()
     }
 
     override fun onImageLoaded() {
         super.onImageLoaded()
-        progressIndicator.hide()
+        progressIndicator?.hide()
     }
 
     /**

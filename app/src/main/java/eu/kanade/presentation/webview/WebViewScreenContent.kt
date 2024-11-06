@@ -99,6 +99,17 @@ fun WebViewScreenContent(
                 request: WebResourceRequest?,
             ): Boolean {
                 request?.let {
+                    // Don't attempt to open blobs as webpages
+                    if (it.url.toString().startsWith("blob:http")) {
+                        return false
+                    }
+
+                    // Ignore intents urls
+                    if (it.url.toString().startsWith("intent://")) {
+                        return true
+                    }
+
+                    // Continue with request, but with custom headers
                     view?.loadUrl(it.url.toString(), headers)
                 }
                 return super.shouldOverrideUrlLoading(view, request)

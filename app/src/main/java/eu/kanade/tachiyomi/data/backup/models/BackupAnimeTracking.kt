@@ -74,8 +74,7 @@ data class BackupAnimeTracking(
 
 val backupAnimeTrackMapper = {
         _id: Long,
-        anime_id:
-        Long,
+        anime_id: Long,
         syncId: Long,
         mediaId: Long,
         libraryId: Long?,

@@ -629,7 +629,7 @@
     <string name="download_notifier_cache_renewal">Reindexando descargas</string>
     <string name="action_open_random_manga">Abrir un elemento al azar</string>
     <string name="information_no_entries_found">Parece que esta categoría está vacía</string>
-    <string name="fdroid_warning">No damos soporte oficial a las versiones de F-Droid. 
+    <string name="fdroid_warning">No damos soporte oficial a las versiones de F-Droid.
 \nToca para más información.</string>
     <string name="track_remove_start_date_conf_text">Al hacer esto %s ya no aparecerá como empezado ese día</string>
     <string name="track_remove_date_conf_title">¿Quieres quitar esta fecha\?</string>
@@ -699,7 +699,6 @@
     <string name="download_cache_invalidated">Se ha borrado el índice de descargas</string>
     <string name="track_activity_name">Iniciar sesión en el servicio</string>
     <string name="create_backup_file_error">No se ha podido crear un archivo de respaldo</string>
-    <string name="licensed_manga_chapters_error">Con licencia oficial, sin capítulos que mostrar</string>
     <string name="exception_unknown_host">No se ha podido acceder a %s</string>
     <string name="exception_http">HTTP %d, comprueba la página web en WebView</string>
     <string name="exception_offline">Sin conexión a Internet</string>
@@ -1080,7 +1079,6 @@
     <string name="pref_anime_storage_usage">Uso del espacio de almacenamiento del anime</string>
     <string name="pref_manga_storage_usage">Uso del espacio de almacenamiento del manga</string>
     <string name="delete_confirmation">¿Seguro que desea borrar \"%s\"?</string>
-    <string name="licensed_manga_chapters_error">Con licencia - No hay artículos para mostrar</string>
     <string name="video_custom_screen">Relación del aspecto personalizada</string>
     <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
     <string name="player_subtitle_delay">Retraso de los subtítulos</string>

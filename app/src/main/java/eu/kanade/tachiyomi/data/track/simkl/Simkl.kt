@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.data.track.simkl.dto.SimklOAuth
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.encodeToString
@@ -122,19 +123,19 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
             val oauth = api.accessToken(code)
             interceptor.newAuth(oauth)
             val user = api.getCurrentUser()
-            saveCredentials(user.toString(), oauth.access_token)
+            saveCredentials(user.toString(), oauth.accessToken)
         } catch (e: Throwable) {
             logout()
         }
     }
 
-    fun saveToken(oauth: OAuth?) {
+    fun saveToken(oauth: SimklOAuth?) {
         trackPreferences.trackToken(this).set(json.encodeToString(oauth))
     }
 
-    fun restoreToken(): OAuth? {
+    fun restoreToken(): SimklOAuth? {
         return try {
-            json.decodeFromString<OAuth>(trackPreferences.trackToken(this).get())
+            json.decodeFromString<SimklOAuth>(trackPreferences.trackToken(this).get())
         } catch (e: Exception) {
             null
         }

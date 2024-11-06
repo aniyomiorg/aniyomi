@@ -77,6 +77,15 @@ SELECT *
 FROM animes
 WHERE favorite = 1;
 
+getWatchedAnimeNotInLibrary:
+SELECT *
+FROM animes
+WHERE favorite = 0 AND _id IN (
+    SELECT DISTINCT episodes.anime_id
+    FROM episodes
+    WHERE seen = 1 OR last_second_seen != 0
+);
+
 getAllAnime:
 SELECT *
 FROM animes;

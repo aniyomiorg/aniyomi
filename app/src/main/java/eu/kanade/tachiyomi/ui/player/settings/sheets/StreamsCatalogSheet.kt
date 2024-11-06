@@ -65,7 +65,6 @@ fun StreamsCatalogSheet(
         tabTitles = tabTitles.toImmutableList(),
         onOverflowMenuClicked = onSettingsClicked,
         overflowIcon = Icons.Outlined.Settings,
-        hideSystemBars = true,
     ) { page ->
         Column(
             modifier = Modifier

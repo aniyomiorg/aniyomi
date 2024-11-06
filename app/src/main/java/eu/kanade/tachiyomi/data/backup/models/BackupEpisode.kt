@@ -4,7 +4,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 import tachiyomi.domain.items.episode.model.Episode
 
-@Suppress("MagicNumber")
 @Serializable
 data class BackupEpisode(
     // in 1.x some of these values have different names

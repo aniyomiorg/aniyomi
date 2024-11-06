@@ -25,7 +25,7 @@ open class CastOptionsProvider : OptionsProvider {
     private fun getReceiverApplicationId(context: Context): String {
         return try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_META_DATA)
-            packageInfo.applicationInfo.metaData.getString(context.getString(R.string.app_cast_id))
+            packageInfo.applicationInfo?.metaData?.getString(context.getString(R.string.app_cast_id))
                 ?: CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID
         } catch (e: PackageManager.NameNotFoundException) {
             CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID

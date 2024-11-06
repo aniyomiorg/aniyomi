@@ -11,14 +11,14 @@ import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
-import eu.kanade.tachiyomi.util.storage.EpubFile
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
-import mihon.core.common.archive.archiveReader
 import logcat.LogPriority
+import mihon.core.archive.archiveReader
+import mihon.core.archive.epubReader
 import nl.adaptivity.xmlutil.core.AndroidXmlReader
 import nl.adaptivity.xmlutil.serialization.XML
 import tachiyomi.core.common.i18n.stringResource
@@ -60,8 +60,11 @@ actual class LocalMangaSource(
     private val json: Json by injectLazy()
     private val xml: XML by injectLazy()
 
-    private val POPULAR_FILTERS = FilterList(MangaOrderBy.Popular(context))
-    private val LATEST_FILTERS = FilterList(MangaOrderBy.Latest(context))
+    @Suppress("PrivatePropertyName")
+    private val PopularFilters = FilterList(MangaOrderBy.Popular(context))
+
+    @Suppress("PrivatePropertyName")
+    private val LatestFilters = FilterList(MangaOrderBy.Latest(context))
 
     override val name: String = context.stringResource(MR.strings.local_manga_source)
 
@@ -74,12 +77,12 @@ actual class LocalMangaSource(
     override val supportsLatest: Boolean = true
 
     // Browse related
-    override suspend fun getPopularManga(page: Int) = getSearchManga(page, "", POPULAR_FILTERS)
+    override suspend fun getPopularManga(page: Int) = getSearchManga(page, "", PopularFilters)
 
-    override suspend fun getLatestUpdates(page: Int) = getSearchManga(page, "", LATEST_FILTERS)
+    override suspend fun getLatestUpdates(page: Int) = getSearchManga(page, "", LatestFilters)
 
     override suspend fun getSearchManga(page: Int, query: String, filters: FilterList): MangasPage = withIOContext {
-        val lastModifiedLimit = if (filters === LATEST_FILTERS) {
+        val lastModifiedLimit = if (filters === LatestFilters) {
             System.currentTimeMillis() - LATEST_THRESHOLD
         } else {
             0L
@@ -286,7 +289,7 @@ actual class LocalMangaSource(
 
                     val format = Format.valueOf(chapterFile)
                     if (format is Format.Epub) {
-                        EpubFile(format.file.archiveReader(context)).use { epub ->
+                        format.file.epubReader(context).use { epub ->
                             epub.fillMetadata(manga, this)
                         }
                     }
@@ -375,7 +378,7 @@ actual class LocalMangaSource(
                     }
                 }
                 is Format.Epub -> {
-                    EpubFile(format.file.archiveReader(context)).use { epub ->
+                    format.file.epubReader(context).use { epub ->
                         val entry = epub.getImagesFromPages().firstOrNull()
 
                         entry?.let { coverManager.update(manga, epub.getInputStream(it)!!) }

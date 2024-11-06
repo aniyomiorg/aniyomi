@@ -3,6 +3,8 @@ package eu.kanade.tachiyomi.ui.reader
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.assist.AssistContent
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -30,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.core.transition.doOnEnd
@@ -82,6 +85,7 @@ import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerViewer
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.hasDisplayCutout
 import eu.kanade.tachiyomi.util.system.isNightMode
+import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
@@ -256,6 +260,9 @@ class ReaderActivity : BaseActivity() {
                     }
                     is ReaderViewModel.Event.ShareImage -> {
                         onShareImageResult(event.uri, event.page, event.secondPage)
+                    }
+                    is ReaderViewModel.Event.CopyImage -> {
+                        onCopyImageResult(event.uri)
                     }
                     is ReaderViewModel.Event.SetCoverResult -> {
                         onSetAsCoverResult(event.result)
@@ -433,6 +440,7 @@ class ReaderActivity : BaseActivity() {
                 bookmarked = state.bookmarked,
                 onToggleBookmarked = viewModel::toggleChapterBookmark,
                 onOpenInWebView = ::openChapterInWebView.takeIf { isHttpSource },
+                onOpenInBrowser = ::openChapterInBrowser.takeIf { isHttpSource },
                 onShare = ::shareChapter.takeIf { isHttpSource },
 
                 viewer = state.viewer,
@@ -442,7 +450,7 @@ class ReaderActivity : BaseActivity() {
                 enabledPrevious = state.viewerChapters?.prevChapter != null,
                 currentPage = state.currentPage,
                 totalPages = state.totalPages,
-                onSliderValueChange = {
+                onPageIndexChange = {
                     isScrollingThroughPages = true
                     moveToPageIndex(it)
                 },
@@ -688,6 +696,12 @@ class ReaderActivity : BaseActivity() {
         }
     }
 
+    private fun openChapterInBrowser() {
+        assistUrl?.let {
+            openInBrowser(it.toUri(), forceDefaultBrowser = false)
+        }
+    }
+
     private fun shareChapter() {
         assistUrl?.let {
             val intent = it.toUri().toShareIntent(this, type = "text/plain")
@@ -897,6 +911,12 @@ class ReaderActivity : BaseActivity() {
         startActivity(Intent.createChooser(intent, stringResource(MR.strings.action_share)))
     }
 
+    private fun onCopyImageResult(uri: Uri) {
+        val clipboardManager = applicationContext.getSystemService<ClipboardManager>() ?: return
+        val clipData = ClipData.newUri(applicationContext.contentResolver, "", uri)
+        clipboardManager.setPrimaryClip(clipData)
+    }
+
     /**
      * Called from the presenter when a page is saved or fails. It shows a message or logs the
      * event depending on the [result].
@@ -1042,12 +1062,13 @@ class ReaderActivity : BaseActivity() {
                 .onEach {
                     if (viewModel.state.value.viewer !is PagerViewer) return@onEach
                     reloadChapters(
-                        !it && when (readerPreferences.pageLayout().get()) {
-                            PagerConfig.PageLayout.DOUBLE_PAGES -> true
-                            PagerConfig.PageLayout.AUTOMATIC ->
-                                resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-                            else -> false
-                        },
+                        !it &&
+                            when (readerPreferences.pageLayout().get()) {
+                                PagerConfig.PageLayout.DOUBLE_PAGES -> true
+                                PagerConfig.PageLayout.AUTOMATIC ->
+                                    resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+                                else -> false
+                            },
                         true,
                     )
                 }

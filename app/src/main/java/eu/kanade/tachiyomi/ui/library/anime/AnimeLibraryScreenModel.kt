@@ -79,7 +79,7 @@ import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Collections
+import kotlin.random.Random
 
 /**
  * Typealias for the library anime, using the category as keys, and list of anime as values.
@@ -139,10 +139,8 @@ class AnimeLibraryScreenModel(
                     .applySort(tracks, sort.takeIf { groupType != AnimeLibraryGroup.BY_DEFAULT }, trackingFilter.keys)
                     .mapValues { (_, value) ->
                         if (searchQuery != null) {
-                            // Filter query
                             value.filter { it.matches(searchQuery) }
                         } else {
-                            // Don't do anything
                             value
                         }
                     }
@@ -207,10 +205,6 @@ class AnimeLibraryScreenModel(
         // SY <--
     }
 
-    /**
-     * Applies library filters to the given map of anime.
-     */
-    @Suppress("LongMethod", "CyclomaticComplexMethod")
     private suspend fun AnimeLibraryMap.applyFilters(
         trackMap: Map<Long, List<AnimeTrack>>,
         trackingFilter: Map<Long, TriState>,
@@ -286,15 +280,10 @@ class AnimeLibraryScreenModel(
                 filterFnTracking(it)
         }
 
-        return this.mapValues { entry -> entry.value.fastFilter(filterFn) }
+        return mapValues { (_, value) -> value.fastFilter(filterFn) }
     }
 
-    /**
-     * Applies library sorting to the given map of anime.
-     */
-    @Suppress("LongMethod", "CyclomaticComplexMethod")
     private fun AnimeLibraryMap.applySort(
-        // Map<MangaId, List<Track>>
         trackMap: Map<Long, List<AnimeTrack>>,
         groupSort: AnimeLibrarySort? = null,
         loggedInTrackerIds: Set<Long>,
@@ -317,11 +306,11 @@ class AnimeLibraryScreenModel(
             }
         }
 
-        val sortFn: (AnimeLibraryItem, AnimeLibraryItem) -> Int = { i1, i2 ->
+        fun AnimeLibrarySort.comparator(): Comparator<AnimeLibraryItem> = Comparator { i1, i2 ->
             // SY -->
             val sort = groupSort ?: keys.find { it.id == i1.libraryAnime.category }!!.sort
             // SY <--
-            when (sort.type) {
+            when (this.type) {
                 AnimeLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
                 }
@@ -334,8 +323,8 @@ class AnimeLibraryScreenModel(
                 AnimeLibrarySort.Type.UnseenCount -> when {
                     // Ensure unseen content comes first
                     i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> 0
-                    i1.libraryAnime.unseenCount == 0L -> if (sort.isAscending) 1 else -1
-                    i2.libraryAnime.unseenCount == 0L -> if (sort.isAscending) -1 else 1
+                    i1.libraryAnime.unseenCount == 0L -> if (this.isAscending) 1 else -1
+                    i2.libraryAnime.unseenCount == 0L -> if (this.isAscending) -1 else 1
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
                 AnimeLibrarySort.Type.TotalEpisodes -> {
@@ -356,28 +345,30 @@ class AnimeLibraryScreenModel(
                     item1Score.compareTo(item2Score)
                 }
                 AnimeLibrarySort.Type.AiringTime -> when {
-                    i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) 1 else -1
-                    i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) -1 else 1
+                    i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (this.isAscending) 1 else -1
+                    i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (this.isAscending) -1 else 1
                     i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount ->
                         i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(
                             i2.libraryAnime.anime.nextEpisodeAiringAt,
                         )
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
+                AnimeLibrarySort.Type.Random -> {
+                    error("Why Are We Still Here? Just To Suffer?")
+                }
             }
         }
 
-        return this.mapValues { entry ->
-            // SY -->
-            val isAscending = groupSort?.isAscending ?: keys.find { it.id == entry.key.id }!!.sort.isAscending
-            // SY <--
-            val comparator = if (isAscending) {
-                Comparator(sortFn)
-            } else {
-                Collections.reverseOrder(sortFn)
+        return mapValues { (key, value) ->
+            if (key.sort.type == AnimeLibrarySort.Type.Random) {
+                return@mapValues value.shuffled(Random(libraryPreferences.randomAnimeSortSeed().get()))
             }
 
-            entry.value.sortedWith(comparator.thenComparator(sortAlphabetically))
+            val comparator = key.sort.comparator()
+                .let { if (key.sort.isAscending) it else it.reversed() }
+                .thenComparator(sortAlphabetically)
+
+            value.sortedWith(comparator)
         }
     }
 
@@ -890,8 +881,7 @@ class AnimeLibraryScreenModel(
                     item.libraryAnime.anime.genre?.distinct() ?: emptyList()
                 }
                 libraryAnime.flatMap { item ->
-                    item.libraryAnime.anime.genre?.distinct()?.map {
-                            genre ->
+                    item.libraryAnime.anime.genre?.distinct()?.map { genre ->
                         Pair(genre, item)
                     } ?: emptyList()
                 }.groupBy({ it.first }, { it.second }).filterValues { it.size > 3 }

@@ -47,11 +47,11 @@ enum class TrackStatus(val int: Long, @StringRes val res: Int) {
                     when (statusLong) {
                         Anilist.READING -> READING
                         Anilist.WATCHING -> WATCHING
-                        Anilist.REPEATING_ANIME -> REWATCHING
-                        Anilist.PLANNING -> PLAN_TO_READ
-                        Anilist.PLANNING_ANIME -> PLAN_TO_WATCH
-                        Anilist.REPEATING -> REPEATING
-                        Anilist.PAUSED -> PAUSED
+                        Anilist.REWATCHING -> REWATCHING
+                        Anilist.PLAN_TO_READ -> PLAN_TO_READ
+                        Anilist.PLAN_TO_WATCH -> PLAN_TO_WATCH
+                        Anilist.REREADING -> REPEATING
+                        Anilist.ON_HOLD -> PAUSED
                         Anilist.COMPLETED -> COMPLETED
                         Anilist.DROPPED -> DROPPED
                         else -> null

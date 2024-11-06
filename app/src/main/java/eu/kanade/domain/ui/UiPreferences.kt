@@ -21,7 +21,11 @@ class UiPreferences(
 
     fun appTheme() = preferenceStore.getEnum(
         "pref_app_theme",
-        if (DeviceUtil.isDynamicColorAvailable) { AppTheme.MONET } else { AppTheme.DEFAULT },
+        if (DeviceUtil.isDynamicColorAvailable) {
+            AppTheme.MONET
+        } else {
+            AppTheme.DEFAULT
+        },
     )
 
     fun colorTheme() = preferenceStore.getInt("pref_color_theme", 0)

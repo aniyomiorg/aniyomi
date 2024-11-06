@@ -168,22 +168,28 @@ class PlayerViewModel @JvmOverloads constructor(
             ?: error("Requested episode of id $episodeId not found in episode list")
 
         val episodesForPlayer = episodes.filterNot {
-            anime.unseenFilterRaw == Anime.EPISODE_SHOW_SEEN && !it.seen ||
-                anime.unseenFilterRaw == Anime.EPISODE_SHOW_UNSEEN && it.seen ||
-                anime.downloadedFilterRaw == Anime.EPISODE_SHOW_DOWNLOADED && !downloadManager.isEpisodeDownloaded(
+            anime.unseenFilterRaw == Anime.EPISODE_SHOW_SEEN &&
+                !it.seen ||
+                anime.unseenFilterRaw == Anime.EPISODE_SHOW_UNSEEN &&
+                it.seen ||
+                anime.downloadedFilterRaw == Anime.EPISODE_SHOW_DOWNLOADED &&
+                !downloadManager.isEpisodeDownloaded(
                     it.name,
                     it.scanlator,
                     anime.title,
                     anime.source,
                 ) ||
-                anime.downloadedFilterRaw == Anime.EPISODE_SHOW_NOT_DOWNLOADED && downloadManager.isEpisodeDownloaded(
+                anime.downloadedFilterRaw == Anime.EPISODE_SHOW_NOT_DOWNLOADED &&
+                downloadManager.isEpisodeDownloaded(
                     it.name,
                     it.scanlator,
                     anime.title,
                     anime.source,
                 ) ||
-                anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_BOOKMARKED && !it.bookmark ||
-                anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_NOT_BOOKMARKED && it.bookmark
+                anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_BOOKMARKED &&
+                !it.bookmark ||
+                anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_NOT_BOOKMARKED &&
+                it.bookmark
         }.toMutableList()
 
         if (episodesForPlayer.all { it.id != episodeId }) {
@@ -324,10 +330,11 @@ class PlayerViewModel @JvmOverloads constructor(
     fun isEpisodeOnline(): Boolean? {
         val anime = currentAnime ?: return null
         val episode = currentEpisode ?: return null
-        return currentSource is AnimeHttpSource && !EpisodeLoader.isDownload(
-            episode.toDomainEpisode()!!,
-            anime,
-        )
+        return currentSource is AnimeHttpSource &&
+            !EpisodeLoader.isDownload(
+                episode.toDomainEpisode()!!,
+                anime,
+            )
     }
 
     suspend fun loadEpisode(episodeId: Long?): Pair<List<Video>?, String>? {

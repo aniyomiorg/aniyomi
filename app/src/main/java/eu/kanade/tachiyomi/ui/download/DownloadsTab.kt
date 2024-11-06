@@ -74,9 +74,7 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.TabText
 import tachiyomi.presentation.core.i18n.stringResource
 
-data class DownloadsTab(
-    private val isManga: Boolean = false,
-) : Tab() {
+data object DownloadsTab : Tab {
 
     override val options: TabOptions
         @Composable

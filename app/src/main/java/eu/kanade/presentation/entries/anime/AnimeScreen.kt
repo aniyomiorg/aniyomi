@@ -68,9 +68,9 @@ import eu.kanade.presentation.entries.components.EntryToolbar
 import eu.kanade.presentation.entries.components.ItemHeader
 import eu.kanade.presentation.entries.components.MissingItemCountListItem
 import eu.kanade.presentation.util.formatEpisodeNumber
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
@@ -461,13 +461,9 @@ private fun AnimeScreenSmallImpl(
                         AnimeInfoBox(
                             isTabletUi = false,
                             appBarPadding = topPadding,
-                            title = state.anime.title,
-                            author = state.anime.author,
-                            artist = state.anime.artist,
+                            anime = state.anime,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
                             isStubSource = remember { state.source is StubAnimeSource },
-                            coverDataProvider = { state.anime },
-                            status = state.anime.status,
                             onCoverClick = onCoverClicked,
                             doSearch = onSearch,
                         )
@@ -533,7 +529,8 @@ private fun AnimeScreenSmallImpl(
                                     timer -= 1000L
                                 }
                             }
-                            if (timer > 0L && showNextEpisodeAirTime &&
+                            if (timer > 0L &&
+                                showNextEpisodeAirTime &&
                                 state.anime.status.toInt() != SAnime.COMPLETED
                             ) {
                                 NextEpisodeAiringListItem(
@@ -756,13 +753,9 @@ fun AnimeScreenLargeImpl(
                         AnimeInfoBox(
                             isTabletUi = true,
                             appBarPadding = contentPadding.calculateTopPadding(),
-                            title = state.anime.title,
-                            author = state.anime.author,
-                            artist = state.anime.artist,
+                            anime = state.anime,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
                             isStubSource = remember { state.source is StubAnimeSource },
-                            coverDataProvider = { state.anime },
-                            status = state.anime.status,
                             onCoverClick = onCoverClicked,
                             doSearch = onSearch,
                         )
@@ -829,7 +822,8 @@ fun AnimeScreenLargeImpl(
                                             timer -= 1000L
                                         }
                                     }
-                                    if (timer > 0L && showNextEpisodeAirTime &&
+                                    if (timer > 0L &&
+                                        showNextEpisodeAirTime &&
                                         state.anime.status.toInt() != SAnime.COMPLETED
                                     ) {
                                         NextEpisodeAiringListItem(
@@ -1069,6 +1063,7 @@ private fun formatTime(milliseconds: Long, useDayFormat: Boolean = false): Strin
         )
     }
 }
+
 // AM (FILE_SIZE) -->
 private val animeDownloadProvider: AnimeDownloadProvider by injectLazy()
 // <-- AM (FILE_SIZE)

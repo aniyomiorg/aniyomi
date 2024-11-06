@@ -31,11 +31,11 @@ class DebugInfoScreen : Screen() {
             itemsProvider = {
                 listOf(
                     Preference.PreferenceItem.TextPreference(
-                        title = WorkerInfoScreen.title,
+                        title = WorkerInfoScreen.TITLE,
                         onClick = { navigator.push(WorkerInfoScreen()) },
                     ),
                     Preference.PreferenceItem.TextPreference(
-                        title = BackupSchemaScreen.title,
+                        title = BackupSchemaScreen.TITLE,
                         onClick = { navigator.push(BackupSchemaScreen()) },
                     ),
                     getAppInfoGroup(),
@@ -79,7 +79,7 @@ class DebugInfoScreen : Screen() {
             val result = ProfileVerifier.getCompilationStatusAsync().await().profileInstallResultCode
             value = when (result) {
                 ProfileVerifier.CompilationStatus
-                    .RESULT_CODE_NO_PROFILE,
+                    .RESULT_CODE_NO_PROFILE_INSTALLED,
                 -> "No profile installed"
                 ProfileVerifier.CompilationStatus
                     .RESULT_CODE_COMPILED_WITH_PROFILE,
@@ -100,6 +100,7 @@ class DebugInfoScreen : Screen() {
                 ProfileVerifier.CompilationStatus
                     .RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION,
                 -> "Pending compilation"
+                ProfileVerifier.CompilationStatus.RESULT_CODE_ERROR_NO_PROFILE_EMBEDDED -> "No profile embedded"
                 else -> "Unknown code $result"
             }
         }

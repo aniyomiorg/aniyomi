@@ -93,6 +93,11 @@ class LibraryPreferences(
 
     fun autoClearItemCache() = preferenceStore.getBoolean("auto_clear_chapter_cache", false)
 
+    // Random Sort Seed
+
+    fun randomAnimeSortSeed() = preferenceStore.getInt("library_random_anime_sort_seed", 0)
+    fun randomMangaSortSeed() = preferenceStore.getInt("library_random_manga_sort_seed", 0)
+
     // Mixture Columns
 
     fun animePortraitColumns() = preferenceStore.getInt("pref_animelib_columns_portrait_key", 0)

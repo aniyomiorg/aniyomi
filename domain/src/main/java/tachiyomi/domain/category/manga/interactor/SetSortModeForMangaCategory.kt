@@ -7,6 +7,7 @@ import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.model.plus
 import tachiyomi.domain.library.service.LibraryPreferences
+import kotlin.random.Random
 
 class SetSortModeForMangaCategory(
     private val preferences: LibraryPreferences,
@@ -26,6 +27,9 @@ class SetSortModeForMangaCategory(
         // SY <--
         val category = categoryId?.let { categoryRepository.getMangaCategory(it) }
         val flags = (category?.flags ?: 0) + type + direction
+        if (type == MangaLibrarySort.Type.Random) {
+            preferences.randomMangaSortSeed().set(Random.nextInt())
+        }
         if (category != null && preferences.categorizedDisplaySettings().get()) {
             categoryRepository.updatePartialMangaCategory(
                 CategoryUpdate(
