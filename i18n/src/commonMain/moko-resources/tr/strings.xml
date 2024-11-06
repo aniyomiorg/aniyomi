@@ -630,7 +630,7 @@
     <string name="track_remove_date_conf_title">Tarih kaldırılsın mı\?</string>
     <string name="track_remove_start_date_conf_text">Bu, daha önce seçtiğiniz başlangıç tarihini şuradan kaldıracak: %s</string>
     <string name="track_remove_finish_date_conf_text">Bu, daha önce seçtiğiniz %s bitiş tarihini kaldıracak</string>
-    <string name="pref_invalidate_download_cache">İndirmeler dizinini geçersiz kıl</string>
+    <string name="pref_invalidate_download_cache">İndirmeleri tekrar kontrol et</string>
     <string name="label_stats">İstatistikler</string>
     <string name="label_started">Başladı</string>
     <string name="label_downloaded">İndirilen</string>
@@ -1158,4 +1158,21 @@
     <string name="pref_player_audio_channels_auto_safe">Oto-güvenli</string>
     <string name="anime_interval_expected_update_null">Bu anime ya tamamlanmış ya da tahmin edilen bir yayınlanma tarihi yok.</string>
     <string name="pref_display_profile">Özel görüntüleme profili</string>
+    <string name="ext_confirm_remove">Eklentiyi Kaldır?</string>
+    <string name="action_sort_random">Rastgele</string>
+    <string name="add_repo_confirmation">\"%s\" deposunu eklemek istediğinize emin misiniz?</string>
+    <string name="ext_remove">Kaldır</string>
+    <string name="remove_private_extension_message">\"%s\" eklentisini kaldırmak istediğinize emin misiniz?</string>
+    <string name="action_copy_link">Bağlantıyı kopyala</string>
+    <string name="pref_download_new_unread_chapters_only">Birden fazla olan bölümlerin indirilmesini atla</string>
+    <string name="invalid_backup_file_json">JSON yedeği desteklenmiyor</string>
+    <string name="invalid_backup_file_unknown">Yedek dosyası bozuk</string>
+    <string name="extensionRepo_settings">Eklenti depoları</string>
+    <string name="non_library_settings">Tüm okunmuş/izlenmiş girdiler</string>
+    <string name="confirm_tracker_update">İzleyicileri %d. bölüme güncelle?</string>
+    <string name="confirm_tracker_update_anime">İzleyicileri %d. bölüme güncelle?</string>
+    <string name="trackers_updated_summary_manga">İzleyiciler %d. bölüme güncellendi</string>
+    <string name="trackers_updated_summary_anime">İzleyiciler %d. bölüme güncellendi</string>
+    <string name="pref_download_new_unseen_episodes_only">Birden fazla olan izlenmiş bölümlerin indirilmesini atla</string>
+    <string name="pref_auto_update_manga_on_mark_read">Okundu/izlendi olarak işaretlenince ilerlemeyi güncelle</string>
 </resources>
