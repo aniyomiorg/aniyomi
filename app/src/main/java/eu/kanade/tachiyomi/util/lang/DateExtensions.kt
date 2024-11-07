@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.util.lang
 
 import android.content.Context
-import eu.kanade.tachiyomi.R
 import tachiyomi.core.common.i18n.pluralStringResource
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
@@ -40,16 +39,8 @@ fun Long.toLocalDate(): LocalDate {
     return LocalDate.ofInstant(Instant.ofEpochMilli(this), ZoneId.systemDefault())
 }
 
-fun Long.toLocalDateTime(): LocalDateTime {
-    return LocalDateTime.ofInstant(Instant.ofEpochMilli(this), ZoneId.systemDefault())
-}
-
 fun Instant.toLocalDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate {
     return LocalDate.ofInstant(this, zoneId)
-}
-
-fun Instant.toLocalDateTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalDateTime {
-    return LocalDateTime.ofInstant(this, zoneId)
 }
 
 fun LocalDate.toRelativeString(
@@ -70,8 +61,8 @@ fun LocalDate.toRelativeString(
             difference.toInt().absoluteValue,
         )
         difference < 1 -> context.stringResource(MR.strings.relative_time_today)
-        difference < 7 -> context.resources.getQuantityString(
-            R.plurals.relative_time,
+        difference < 7 -> context.pluralStringResource(
+            MR.plurals.relative_time,
             difference.toInt(),
             difference.toInt(),
         )
@@ -79,6 +70,7 @@ fun LocalDate.toRelativeString(
     }
 }
 
+// For use in chapter/episode release time
 fun LocalDateTime.toRelativeString(
     context: Context,
     relative: Boolean = true,
@@ -128,8 +120,8 @@ fun LocalDateTime.toRelativeString(
                 )
             }
         }
-        timeDifference < 7 -> context.resources.getQuantityString(
-            R.plurals.relative_time,
+        timeDifference < 7 -> context.pluralStringResource(
+            MR.plurals.relative_time,
             dateDifference.toInt(),
             dateDifference.toInt(),
         )
