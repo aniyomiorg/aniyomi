@@ -547,7 +547,7 @@
     <string name="rotation_reverse_portrait">Портретная наоборот</string>
     <string name="action_move_to_top_all_for_series">Переместить серию в начало</string>
     <string name="disabled_nav">Отключено</string>
-    <string name="update_check_fdroid_migration_info">Новая версия доступна на оф. странице Aniyomi. Нажмите, чтобы узнать, как перенестись с неофициальной версии из F-Droid.</string>
+    <string name="update_check_fdroid_migration_info">Новая версия доступна на оф. странице Animetail. Нажмите, чтобы узнать, как перенестись с неофициальной версии из F-Droid.</string>
     <string name="error_saving_picture">Не удалось сохранить изображение</string>
     <string name="empty_backup_error">Нет элементов в библиотеке для резервирования</string>
     <string name="update_check_open">Открыть в GitHub</string>
@@ -754,7 +754,7 @@
     <string name="error_repo_exists">Этот репозиторий уже существует!</string>
     <string name="pref_library_update_smart_update">Умное обновление</string>
     <string name="invalid_repo_name">Недопустимый URL-адрес репозитория</string>
-    <string name="action_add_repo_message">Добавить дополнительные репозиторий в Aniyomi. Это должны быть URL-адреса которые заканчиваться на \"index.min.json\".</string>
+    <string name="action_add_repo_message">Добавить дополнительные репозиторий в Animetail. Это должны быть URL-адреса которые заканчиваться на \"index.min.json\".</string>
     <string name="delete_repo_confirmation">Хотите ли вы удалить репозиторий \"%s\"?</string>
     <string name="action_delete_repo">Удалить репозиторий</string>
     <string name="action_add_repo">Добавить репозиторий</string>
@@ -794,7 +794,7 @@
     <string name="also_set_chapter_settings_for_library">Также применить для всей манги в моей библиотеке</string>
     <string name="dialog_with_checkbox_reset">Сбросить все главы для этой манги</string>
     <string name="download_insufficient_space">Не удалось загрузить из-за нехватки места для хранения</string>
-    <string name="download_queue_size_warning">Предупреждение: большие объемы загрузки могут привести к замедлению работы источников и/или блокировке Aniyomi. Нажмите, чтобы узнать больше.</string>
+    <string name="download_queue_size_warning">Предупреждение: большие объемы загрузки могут привести к замедлению работы источников и/или блокировке Animetail. Нажмите, чтобы узнать больше.</string>
     <string name="information_webview_required">Для работы приложения требуется WebView</string>
     <string name="download_notifier_download_paused_chapters">Загрузка главы приостановлена</string>
     <string name="channel_new_chapters_episodes">Обновления глав/эпизодов</string>

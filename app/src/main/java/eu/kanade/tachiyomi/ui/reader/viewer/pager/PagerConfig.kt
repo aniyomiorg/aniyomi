@@ -1,5 +1,7 @@
 package eu.kanade.tachiyomi.ui.reader.viewer.pager
 
+import android.graphics.Color
+import androidx.annotation.ColorInt
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerConfig
@@ -33,6 +35,8 @@ class PagerConfig(
 
     var dualPageSplitChangedListener: ((Boolean) -> Unit)? = null
 
+    var reloadChapterListener: ((Boolean) -> Unit)? = null
+
     var imageScaleType = 1
         private set
 
@@ -47,6 +51,31 @@ class PagerConfig(
 
     var landscapeZoom = false
         private set
+
+    // SY -->
+    var usePageTransitions = false
+
+    var shiftDoublePage = false
+
+    var doublePages = readerPreferences.pageLayout().get() == PageLayout.DOUBLE_PAGES &&
+        !readerPreferences.dualPageSplitPaged().get()
+        set(value) {
+            field = value
+            if (!value) {
+                shiftDoublePage = false
+            }
+        }
+
+    var invertDoublePages = false
+
+    var autoDoublePages = readerPreferences.pageLayout().get() == PageLayout.AUTOMATIC
+
+    @ColorInt
+    var pageCanvasColor = Color.WHITE
+
+    var centerMarginType = CenterMarginType.NONE
+
+    // SY <--
 
     init {
         readerPreferences.readerTheme()
@@ -106,6 +135,43 @@ class PagerConfig(
                 { dualPageRotateToFitInvert = it },
                 { imagePropertyChangedListener?.invoke() },
             )
+
+        // SY -->
+        readerPreferences.pageTransitionsPager()
+            .register({ usePageTransitions = it }, { imagePropertyChangedListener?.invoke() })
+        readerPreferences.readerTheme()
+            .register(
+                {
+                    themeToColor(it)
+                },
+                {
+                    themeToColor(it)
+                    reloadChapterListener?.invoke(doublePages)
+                },
+            )
+        readerPreferences.pageLayout()
+            .register(
+                {
+                    autoDoublePages = it == PageLayout.AUTOMATIC
+                    if (!autoDoublePages) {
+                        doublePages = it == PageLayout.DOUBLE_PAGES && dualPageSplit == false
+                    }
+                },
+                {
+                    autoDoublePages = it == PageLayout.AUTOMATIC
+                    if (!autoDoublePages) {
+                        doublePages = it == PageLayout.DOUBLE_PAGES && dualPageSplit == false
+                    }
+                    reloadChapterListener?.invoke(doublePages)
+                },
+            )
+
+        readerPreferences.centerMarginType()
+            .register({ centerMarginType = it }, { imagePropertyChangedListener?.invoke() })
+
+        readerPreferences.invertDoublePages()
+            .register({ invertDoublePages = it && dualPageSplit == false }, { imagePropertyChangedListener?.invoke() })
+        // SY <--
     }
 
     private fun zoomTypeFromPreference(value: Int) {
@@ -148,5 +214,27 @@ class PagerConfig(
             else -> defaultNavigation()
         }
         navigationModeChangedListener?.invoke()
+    }
+
+    object CenterMarginType {
+        const val NONE = 0
+        const val DOUBLE_PAGE_CENTER_MARGIN = 1
+        const val WIDE_PAGE_CENTER_MARGIN = 2
+        const val DOUBLE_AND_WIDE_CENTER_MARGIN = 3
+    }
+
+    object PageLayout {
+        const val SINGLE_PAGE = 0
+        const val DOUBLE_PAGES = 1
+        const val AUTOMATIC = 2
+    }
+
+    @Suppress("MagicNumber")
+    fun themeToColor(theme: Int) {
+        pageCanvasColor = when (theme) {
+            1 -> Color.BLACK
+            2 -> 0x202125
+            else -> Color.WHITE
+        }
     }
 }

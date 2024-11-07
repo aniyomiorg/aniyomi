@@ -129,9 +129,22 @@
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Tracks"
                 android:src="@drawable/ic_video_settings_20dp"
-                app:layout_constraintLeft_toRightOf="@id/toggleAutoplay"
+                app:layout_constraintLeft_toRightOf="@id/castBtn"
                 app:layout_constraintRight_toLeftOf="@id/settingsBtn"
                 app:layout_constraintTop_toTopOf="@id/settingsBtn"
+                app:tint="?attr/colorOnPrimarySurface" />
+
+            <androidx.mediarouter.app.MediaRouteButton
+                android:id="@+id/castBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="Cast"
+                android:mediaRouteTypes="user"
+                android:src="@drawable/ic_cast_20dp"
+                app:layout_constraintLeft_toRightOf="@id/toggleAutoplay"
+                app:layout_constraintRight_toLeftOf="@id/streamsBtn"
+                app:layout_constraintTop_toTopOf="@id/streamsBtn"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -140,8 +153,8 @@
                 android:layout_height="50dp"
                 tools:checked="true"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/streamsBtn"
-                app:layout_constraintTop_toTopOf="@id/streamsBtn" />
+                app:layout_constraintRight_toLeftOf="@id/castBtn"
+                app:layout_constraintTop_toTopOf="@id/castBtn" />
 
             <!-- Audio -->
 

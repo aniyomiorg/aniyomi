@@ -16,12 +16,17 @@ import androidx.work.WorkInfo
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import aniyomi.util.nullIfBlank
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.sync.SyncPreferences
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.sync.SyncDataJob
+import eu.kanade.tachiyomi.data.track.TrackStatus
+import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -34,6 +39,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
@@ -50,6 +56,8 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.manga.model.MangaGroupLibraryMode
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
@@ -60,6 +68,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_V
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
 import tachiyomi.domain.source.manga.model.SourceNotInstalledException
 import tachiyomi.domain.source.manga.service.MangaSourceManager
+import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -82,6 +91,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val getManga: GetManga = Injekt.get()
     private val updateManga: UpdateManga = Injekt.get()
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get()
+    private val getTracks: GetMangaTracks = Injekt.get()
     private val mangaFetchInterval: MangaFetchInterval = Injekt.get()
     private val filterChaptersForDownload: FilterChaptersForDownload = Injekt.get()
 
@@ -112,7 +122,11 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         libraryPreferences.lastUpdatedTimestamp().set(Instant.now().toEpochMilli())
 
         val categoryId = inputData.getLong(KEY_CATEGORY, -1L)
-        addMangaToQueue(categoryId)
+        // SY -->
+        val group = inputData.getInt(KEY_GROUP, MangaLibraryGroup.BY_DEFAULT)
+        val groupExtra = inputData.getString(KEY_GROUP_EXTRA)
+        // SY <--
+        addMangaToQueue(categoryId, group, groupExtra)
 
         return withIOContext {
             try {
@@ -150,12 +164,24 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @param categoryId the ID of the category to update, or -1 if no category specified.
      */
-    private suspend fun addMangaToQueue(categoryId: Long) {
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod", "ComplexCondition")
+    private suspend fun addMangaToQueue(categoryId: Long, group: Int, groupExtra: String?) {
         val libraryManga = getLibraryManga.await()
+
+        // SY -->
+        val groupMangaLibraryUpdateType = libraryPreferences.groupMangaLibraryUpdateType().get()
+        // SY <--
 
         val listToUpdate = if (categoryId != -1L) {
             libraryManga.filter { it.category == categoryId }
-        } else {
+        } else if (
+            group == MangaLibraryGroup.BY_DEFAULT ||
+            groupMangaLibraryUpdateType == MangaGroupLibraryMode.GLOBAL ||
+            (
+                groupMangaLibraryUpdateType == MangaGroupLibraryMode.ALL_BUT_UNGROUPED &&
+                    group == MangaLibraryGroup.UNGROUPED
+                )
+        ) {
             val categoriesToUpdate = libraryPreferences.mangaUpdateCategories().get().map { it.toLong() }
             val includedManga = if (categoriesToUpdate.isNotEmpty()) {
                 libraryManga.filter { it.category in categoriesToUpdate }
@@ -172,7 +198,45 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
             includedManga
                 .filterNot { it.manga.id in excludedMangaIds }
-                .distinctBy { it.manga.id }
+        } else {
+            when (group) {
+                MangaLibraryGroup.BY_TRACK_STATUS -> {
+                    val trackingExtra = groupExtra?.toIntOrNull() ?: -1
+                    val tracks = runBlocking { getTracks.await() }.groupBy { it.mangaId }
+
+                    libraryManga.filter { (manga) ->
+                        val status = tracks[manga.id]?.firstNotNullOfOrNull { track ->
+                            TrackStatus.parseTrackerStatus(track.trackerId, track.status)
+                        } ?: TrackStatus.OTHER
+                        status.int == trackingExtra.toLong()
+                    }
+                }
+                MangaLibraryGroup.BY_SOURCE -> {
+                    val sourceExtra = groupExtra?.nullIfBlank()?.toIntOrNull()
+                    val source = libraryManga.map { it.manga.source }
+                        .distinct()
+                        .sorted()
+                        .getOrNull(sourceExtra ?: -1)
+
+                    if (source != null) libraryManga.filter { it.manga.source == source } else emptyList()
+                }
+                MangaLibraryGroup.BY_TAG -> {
+                    val tagExtra = groupExtra?.nullIfBlank()?.toIntOrNull()
+                    val tag = libraryManga.map { it.manga.genre }
+                        .distinct()
+                        .getOrNull(tagExtra ?: -1)
+                    if (tag != null) libraryManga.filter { it.manga.genre == tag } else emptyList()
+                }
+                MangaLibraryGroup.BY_STATUS -> {
+                    val statusExtra = groupExtra?.toLongOrNull() ?: -1
+                    libraryManga.filter {
+                        it.manga.status == statusExtra
+                    }
+                }
+                MangaLibraryGroup.UNGROUPED -> libraryManga
+                else -> libraryManga
+            }
+            // SY <--
         }
 
         val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
@@ -180,6 +244,9 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val (_, fetchWindowUpperBound) = mangaFetchInterval.getWindow(ZonedDateTime.now())
 
         mangaToUpdate = listToUpdate
+            // SY -->
+            .distinctBy { it.manga.id }
+            // SY <--
             .filter {
                 when {
                     it.manga.updateStrategy != UpdateStrategy.ALWAYS_UPDATE -> {
@@ -221,7 +288,14 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             }
             .sortedBy { it.manga.title }
 
-        notifier.showQueueSizeWarningNotificationIfNeeded(mangaToUpdate)
+        // Warn when excessively checking a single source
+        val maxUpdatesFromSource = mangaToUpdate
+            .groupBy { it.manga.source + (0..4).random() }
+            .filterKeys { sourceManager.get(it) !is UnmeteredSource }
+            .maxOfOrNull { it.value.size } ?: 0
+        if (maxUpdatesFromSource > MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
+            notifier.showQueueSizeWarningNotificationIfNeeded(mangaToUpdate)
+        }
 
         if (skippedUpdates.isNotEmpty()) {
             // TODO: surface skipped reasons to user?
@@ -242,6 +316,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
      *
      * @return an observable delivering the progress of each update.
      */
+    @Suppress("MagicNumber", "LongMethod")
     private suspend fun updateChapterList() {
         val semaphore = Semaphore(5)
         val progressCount = AtomicInteger(0)
@@ -252,7 +327,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         val fetchWindow = mangaFetchInterval.getWindow(ZonedDateTime.now())
 
         coroutineScope {
-            mangaToUpdate.groupBy { it.manga.source }.values
+            mangaToUpdate.groupBy { it.manga.source + (0..4).random() }.values
                 .map { mangaInSource ->
                     async {
                         semaphore.withPermit {
@@ -428,6 +503,14 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
          */
         private const val KEY_CATEGORY = "category"
 
+        // SY -->
+        /**
+         * Key for group to update.
+         */
+        const val KEY_GROUP = "group"
+        const val KEY_GROUP_EXTRA = "group_extra"
+        // SY <--
+
         fun cancelAllWorks(context: Context) {
             context.workManager.cancelAllWorkByTag(TAG)
         }
@@ -472,11 +555,17 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
             }
         }
 
+        @Suppress("ReturnCount")
         fun startNow(
             context: Context,
             category: Category? = null,
+            // SY -->
+            group: Int = MangaLibraryGroup.BY_DEFAULT,
+            groupExtra: String? = null,
+            // SY <--
         ): Boolean {
             val wm = context.workManager
+            // Check if the LibraryUpdateJob is already running
             if (wm.isRunning(TAG)) {
                 // Already running either as a scheduled or manual job
                 return false
@@ -484,13 +573,46 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
             val inputData = workDataOf(
                 KEY_CATEGORY to category?.id,
+                // SY -->
+                KEY_GROUP to group,
+                KEY_GROUP_EXTRA to groupExtra,
+                // SY <--
             )
-            val request = OneTimeWorkRequestBuilder<MangaLibraryUpdateJob>()
-                .addTag(TAG)
-                .addTag(WORK_NAME_MANUAL)
-                .setInputData(inputData)
-                .build()
-            wm.enqueueUniqueWork(WORK_NAME_MANUAL, ExistingWorkPolicy.KEEP, request)
+
+            val syncPreferences: SyncPreferences = Injekt.get()
+
+            // Always sync the data before library update if syncing is enabled.
+            if (syncPreferences.isSyncEnabled()) {
+                // Check if SyncDataJob is already running
+                if (SyncDataJob.isRunning(context)) {
+                    // SyncDataJob is already running
+                    return false
+                }
+
+                // Define the SyncDataJob
+                val syncDataJob = OneTimeWorkRequestBuilder<SyncDataJob>()
+                    .addTag(SyncDataJob.TAG_MANUAL)
+                    .build()
+
+                // Chain SyncDataJob to run before LibraryUpdateJob
+                val libraryUpdateJob = OneTimeWorkRequestBuilder<MangaLibraryUpdateJob>()
+                    .addTag(TAG)
+                    .addTag(WORK_NAME_MANUAL)
+                    .setInputData(inputData)
+                    .build()
+
+                wm.beginUniqueWork(WORK_NAME_MANUAL, ExistingWorkPolicy.KEEP, syncDataJob)
+                    .then(libraryUpdateJob)
+                    .enqueue()
+            } else {
+                val request = OneTimeWorkRequestBuilder<MangaLibraryUpdateJob>()
+                    .addTag(TAG)
+                    .addTag(WORK_NAME_MANUAL)
+                    .setInputData(inputData)
+                    .build()
+
+                wm.enqueueUniqueWork(WORK_NAME_MANUAL, ExistingWorkPolicy.KEEP, request)
+            }
 
             return true
         }

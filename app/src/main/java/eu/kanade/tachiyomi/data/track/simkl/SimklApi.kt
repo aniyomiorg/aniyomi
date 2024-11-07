@@ -237,8 +237,8 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     )
 
     companion object {
-        const val CLIENT_ID = "aa62a7da32518aae5d5049a658b87fa4837c3b739e06ed250b315aab6af82b0e"
-        private const val CLIENT_SECRET = "2bec9c1d0c00a1e9b0e9e096a71f88d555a6f52da7923df07906df3b21351783"
+        const val CLIENT_ID = "15b6dd71be6df203b390a6cd7d9633d000f1828536380f0ba9df2dda69348a9a"
+        private const val CLIENT_SECRET = "f4aaa510f00ce5e08109d6e37015606be0199c439ce3a25761562f6efbd0921c"
 
         private const val BASE_URL = "https://simkl.com"
         private const val API_URL = "https://api.simkl.com"
@@ -246,7 +246,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         private const val LOGIN_URL = "$BASE_URL/oauth/authorize"
         const val POSTERS_URL = "https://simkl.in/posters/"
 
-        private const val REDIRECT_URL = "aniyomi://simkl-auth"
+        private const val REDIRECT_URL = "animetail://simkl-auth"
 
         fun authUrl(): Uri =
             LOGIN_URL.toUri().buildUpon()

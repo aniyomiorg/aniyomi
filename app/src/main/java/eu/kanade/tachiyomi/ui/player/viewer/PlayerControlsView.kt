@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.google.android.gms.cast.framework.CastButtonFactory
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
@@ -167,6 +168,12 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.titleSecondaryTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
         binding.episodeListBtn.setOnClickListener { activity.viewModel.showEpisodeList() }
+
+        if (playerPreferences.enableCast().get()) {
+            CastButtonFactory.setUpMediaRouteButton(activity.applicationContext, binding.castBtn)
+        } else {
+            binding.castBtn.visibility = View.GONE
+        }
     }
 
     private fun switchEpisode(previous: Boolean) {
@@ -437,6 +444,12 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         when {
             player.paused!! -> animationHandler.removeCallbacks(fadeOutControlsRunnable)
             binding.unlockedView.isVisible -> showAndFadeControls()
+        }
+
+        if (player.paused == true) {
+            activity.mCastSession?.remoteMediaClient?.pause()
+        } else {
+            activity.mCastSession?.remoteMediaClient?.play()
         }
     }
 

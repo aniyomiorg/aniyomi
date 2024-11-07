@@ -1,12 +1,12 @@
 name: ⭐ Feature request
-description: Suggest a feature to improve Aniyomi
+description: Suggest a feature to improve Animetail
 labels: [Feature request]
 body:
   - type: textarea
     id: feature-description
     attributes:
       label: Describe your suggested feature
-      description: How can Aniyomi be improved?
+      description: How can Animetail be improved?
       placeholder: |
         Example:
           "It should work like this..."
@@ -32,7 +32,7 @@ body:
           required: true
         - label: If this is a request regarding an extension, I should be opening an issue in the extension's repository.
           required: true
-        - label: I have updated the app to version **[0.16.4.3](https://github.com/aniyomiorg/aniyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.16.4.3](https://github.com/dark25/animetail2/releases/latest)**.
           required: true
         - label: I will fill out all of the requested information in this form.
           required: true

@@ -28,60 +28,37 @@ class GetApplicationRelease(
             return Result.NoNewUpdate
         }
 
-        val release = service.latest(arguments.repository)
-
+        val release = service.latest(arguments.repoUrl)
         lastChecked.set(now.toEpochMilli())
 
-        // Check if latest version is different from current version
-        val isNewVersion = isNewVersion(
-            arguments.isPreview,
-            arguments.commitCount,
-            arguments.versionName,
-            release.version,
-        )
-        return when {
-            isNewVersion && arguments.isThirdParty -> Result.ThirdPartyInstallation
-            isNewVersion -> Result.NewUpdate(release)
-            else -> Result.NoNewUpdate
+        return if (isNewVersion(arguments, release.version)) {
+            Result.NewUpdate(release)
+        } else {
+            Result.NoNewUpdate
         }
     }
 
-    private fun isNewVersion(
-        isPreview: Boolean,
-        commitCount: Int,
-        versionName: String,
-        versionTag: String,
-    ): Boolean {
-        // Removes prefixes like "r" or "v"
+    private fun isNewVersion(arguments: Arguments, versionTag: String): Boolean {
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
-        return if (isPreview) {
-            // Preview builds: based on releases in "tachiyomiorg/tachiyomi-preview" repo
-            // tagged as something like "r1234"
-            newVersion.toInt() > commitCount
+
+        if (arguments.isPreview) {
+            // For preview builds, compare commit counts
+            return newVersion.toInt() > arguments.commitCount
         } else {
-            // Release builds: based on releases in "tachiyomiorg/tachiyomi" repo
-            // tagged as something like "v0.1.2"
-            val oldVersion = versionName.replace("[^\\d.]".toRegex(), "")
+            // For release builds, compare semantic versioning
+            val oldVersion = arguments.versionName.replace("[^\\d.]".toRegex(), "")
+            val newSemVer = newVersion.split(".").map(String::toInt)
+            val oldSemVer = oldVersion.split(".").map(String::toInt)
 
-            val newSemVer = newVersion.split(".").map { it.toInt() }
-            val oldSemVer = oldVersion.split(".").map { it.toInt() }
-
-            oldSemVer.mapIndexed { index, i ->
-                if (newSemVer[index] > i) {
-                    return true
-                }
-            }
-
-            false
+            return newSemVer.zip(oldSemVer).any { (new, old) -> new > old }
         }
     }
 
     data class Arguments(
         val isPreview: Boolean,
-        val isThirdParty: Boolean,
         val commitCount: Int,
         val versionName: String,
-        val repository: String,
+        val repoUrl: String,
         val forceCheck: Boolean = false,
     )
 
@@ -89,6 +66,5 @@ class GetApplicationRelease(
         data class NewUpdate(val release: Release) : Result
         data object NoNewUpdate : Result
         data object OsTooOld : Result
-        data object ThirdPartyInstallation : Result
     }
 }

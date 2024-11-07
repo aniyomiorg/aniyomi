@@ -18,9 +18,12 @@ import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -46,6 +49,7 @@ import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -88,7 +92,25 @@ class ExternalIntents {
 
         val pkgName = playerPreferences.externalPlayerPreference().get()
 
-        return if (pkgName.isEmpty()) {
+        // AM (DISCORD) -->
+        withIOContext {
+            DiscordRPCService.setPlayerActivity(
+                context = context,
+                playerData = PlayerData(
+                    incognitoMode = source.isNsfw() || basePreferences.incognitoMode().get(),
+                    animeId = anime.id,
+                    // AM (CU)>
+                    animeTitle = anime.ogTitle,
+                    episodeNumber = episode.episodeNumber.toString(),
+                    thumbnailUrl = anime.thumbnailUrl,
+                ),
+            )
+        }
+        // <-- AM (DISCORD)
+
+        return if (videoUrl.toString().startsWith("magnet:")) {
+            torrentIntentForPackage(context, videoUrl, video)
+        } else if (pkgName.isEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndTypeAndNormalize(videoUrl, getMime(videoUrl))
                 addExtrasAndFlags(false, this)
@@ -107,7 +129,7 @@ class ExternalIntents {
      */
     private suspend fun getVideoUrl(context: Context, video: Video): Uri? {
         if (video.videoUrl == null) {
-            makeErrorToast(context, Exception("Video URL is null."))
+            makeErrorToast(context, Exception("Video URL is null. Instead watch Suavemente!"))
             return null
         } else {
             val uri = video.videoUrl!!.toUri()
@@ -241,6 +263,31 @@ class ExternalIntents {
     }
 
     /**
+     * Returns the [Intent] with added data to send to the given torrent external player.
+     *
+     * @param context the application context.
+     * @param uri the path data of the video.
+     * @param video the video being sent to the external player.
+     */
+    @Suppress("MagicNumber")
+    private suspend fun torrentIntentForPackage(context: Context, uri: Uri, video: Video): Intent {
+        return Intent(Intent.ACTION_VIEW).apply {
+            if (isPackageInstalled(AMNIS, context.packageManager)) {
+                if (uri.toString().startsWith("magnet:")) {
+                    component = getComponent(AMNIS)
+                }
+            } else {
+                withUIContext {
+                    context.toast(MR.strings.install_amnis, 8)
+                }
+            }
+            data = uri
+            addExtrasAndFlags(true, this)
+            addVideoHeaders(true, video, this)
+        }
+    }
+
+    /**
      * Adds extras and flags to the given [Intent].
      *
      * @param isSupportedPlayer is it a supported external player.
@@ -311,6 +358,7 @@ class ExternalIntents {
             JUST_PLAYER -> ComponentName(packageName, "$packageName.PlayerActivity")
             NEXT_PLAYER -> ComponentName(packageName, "$packageName.feature.player.PlayerActivity")
             X_PLAYER -> ComponentName(packageName, "com.inshot.xplayer.activities.PlayerActivity")
+            AMNIS -> ComponentName(packageName, "$packageName.gui.player.PlayerActivity")
             else -> null
         }
     }
@@ -337,7 +385,7 @@ class ExternalIntents {
      */
     @OptIn(DelicateCoroutinesApi::class)
     @Suppress("DEPRECATION")
-    fun onActivityResult(intent: Intent?) {
+    fun onActivityResult(context: Context, intent: Intent?) {
         val data = intent ?: return
         val anime = anime
         val currentExtEpisode = episode
@@ -371,6 +419,9 @@ class ExternalIntents {
 
         // Update the episode's progress and history
         launchIO {
+            // AM (DISCORD) -->
+            DiscordRPCService.setAnimeScreen(context, DiscordRPCService.lastUsedScreen)
+            // <-- AM (DISCORD)
             if (cause == "playback_completion" || (currentPosition == duration && duration == 0L)) {
                 saveEpisodeProgress(
                     currentExtEpisode,
@@ -574,3 +625,4 @@ const val JUST_PLAYER = "com.brouken.player"
 const val NEXT_PLAYER = "dev.anilbeesetti.nextplayer"
 const val X_PLAYER = "video.player.videoplayer"
 const val WEB_VIDEO_CASTER = "com.instantbits.cast.webvideo"
+const val AMNIS = "com.amnis"
