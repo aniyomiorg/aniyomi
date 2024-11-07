@@ -93,13 +93,6 @@ class PagerPageHolder(
         }
     }
 
-    private fun initProgressIndicator() {
-        if (progressIndicator == null) {
-            progressIndicator = ReaderProgressIndicator(context)
-            addView(progressIndicator)
-        }
-    }
-
     /**
      * Loads the page and processes changes to the page's status.
      *

@@ -168,16 +168,16 @@ class BackupCreator(
         return mangaBackupCreator(mangas, options)
     }
 
-    private suspend fun backupAnimes(animes: List<Anime>, options: BackupOptions): List<BackupAnime> {
+     suspend fun backupAnimes(animes: List<Anime>, options: BackupOptions): List<BackupAnime> {
         if (!options.libraryEntries) return emptyList()
 
         return animeBackupCreator(animes, options)
     }
 
-    private fun backupAnimeSources(animes: List<BackupAnime>): List<BackupAnimeSource> {
+     fun backupAnimeSources(animes: List<BackupAnime>): List<BackupAnimeSource> {
         return animeSourcesBackupCreator(animes)
     }
-    private fun backupMangaSources(mangas: List<BackupManga>): List<BackupSource> {
+     fun backupMangaSources(mangas: List<BackupManga>): List<BackupSource> {
         return mangaSourcesBackupCreator(mangas)
     }
 
@@ -185,18 +185,6 @@ class BackupCreator(
         if (!options.appSettings) return emptyList()
 
         return preferenceBackupCreator.createApp(includePrivatePreferences = options.privateSettings)
-    }
-
-    private suspend fun backupAnimeExtensionRepos(options: BackupOptions): List<BackupExtensionRepos> {
-        if (!options.extensionRepoSettings) return emptyList()
-
-        return animeExtensionRepoBackupCreator()
-    }
-
-    private suspend fun backupMangaExtensionRepos(options: BackupOptions): List<BackupExtensionRepos> {
-        if (!options.extensionRepoSettings) return emptyList()
-
-        return mangaExtensionRepoBackupCreator()
     }
 
     private suspend fun backupAnimeExtensionRepos(options: BackupOptions): List<BackupExtensionRepos> {
