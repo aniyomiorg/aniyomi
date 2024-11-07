@@ -264,6 +264,9 @@ class ReaderActivity : BaseActivity() {
                     is ReaderViewModel.Event.CopyImage -> {
                         onCopyImageResult(event.uri)
                     }
+                    is ReaderViewModel.Event.CopyImage -> {
+                        onCopyImageResult(event.uri)
+                    }
                     is ReaderViewModel.Event.SetCoverResult -> {
                         onSetAsCoverResult(event.result)
                     }

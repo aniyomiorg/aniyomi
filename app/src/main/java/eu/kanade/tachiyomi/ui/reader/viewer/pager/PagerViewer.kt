@@ -128,7 +128,8 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
         }
         pager.longTapListener = f@{
             if (activity.viewModel.state.value.menuVisible || config.longTapEnabled) {
-                val item = adapter.joinedItems.getOrNull(pager.currentItem)
+                val item = adapter
+                    .joinedItems.getOrNull(pager.currentItem)
                 val firstPage = item?.first as? ReaderPage
                 val secondPage = item?.second as? ReaderPage
                 if (firstPage is ReaderPage) {
@@ -290,9 +291,10 @@ abstract class PagerViewer(val activity: ReaderActivity) : Viewer {
      * Sets the active [chapters] on this pager.
      */
     private fun setChaptersInternal(chapters: ViewerChapters) {
-        val forceTransition =
-            config.alwaysShowChapterTransition ||
-                adapter.joinedItems.getOrNull(pager.currentItem)?.first is ChapterTransition
+        val forceTransition = config.alwaysShowChapterTransition ||
+            adapter.items.getOrNull(
+                pager.currentItem,
+            ) is ChapterTransition
         adapter.setChapters(chapters, forceTransition)
 
         // Layout the pager once a chapter is being set
