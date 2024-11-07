@@ -1082,7 +1082,6 @@ class PlayerActivity : BaseActivity() {
             if (player.paused == false && playerPreferences.pipOnExit().get()) {
                 updatePip(true)
             } else {
-                finishAndRemoveTask()
                 super.onBackPressed()
             }
         } else {
