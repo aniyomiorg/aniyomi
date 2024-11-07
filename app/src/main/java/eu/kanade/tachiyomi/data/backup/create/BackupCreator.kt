@@ -168,16 +168,16 @@ class BackupCreator(
         return mangaBackupCreator(mangas, options)
     }
 
-     suspend fun backupAnimes(animes: List<Anime>, options: BackupOptions): List<BackupAnime> {
+    suspend fun backupAnimes(animes: List<Anime>, options: BackupOptions): List<BackupAnime> {
         if (!options.libraryEntries) return emptyList()
 
         return animeBackupCreator(animes, options)
     }
 
-     fun backupAnimeSources(animes: List<BackupAnime>): List<BackupAnimeSource> {
+    fun backupAnimeSources(animes: List<BackupAnime>): List<BackupAnimeSource> {
         return animeSourcesBackupCreator(animes)
     }
-     fun backupMangaSources(mangas: List<BackupManga>): List<BackupSource> {
+    fun backupMangaSources(mangas: List<BackupManga>): List<BackupSource> {
         return mangaSourcesBackupCreator(mangas)
     }
 

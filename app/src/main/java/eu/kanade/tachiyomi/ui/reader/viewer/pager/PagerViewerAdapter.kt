@@ -24,7 +24,6 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
     var items: MutableList<Any> = mutableListOf()
         private set
 
-
     /**
      * Paired list of currently set items.
      */
