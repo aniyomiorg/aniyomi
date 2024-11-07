@@ -18,9 +18,12 @@ import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.connection.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connection.discord.PlayerData
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -72,11 +75,11 @@ class ExternalIntents {
      */
     suspend fun getExternalIntent(
         context: Context,
-        animeId: Long?,
-        episodeId: Long?,
+        animeId: Long,
+        episodeId: Long,
         chosenVideo: Video?,
     ): Intent? {
-        anime = getAnime.await(animeId!!) ?: return null
+        anime = getAnime.await(animeId) ?: return null
         source = sourceManager.get(anime.source) ?: return null
         episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
 
@@ -87,6 +90,25 @@ class ExternalIntents {
         val videoUrl = getVideoUrl(context, video) ?: return null
 
         val pkgName = playerPreferences.externalPlayerPreference().get()
+
+        // AM (DISCORD_RPC) -->
+        with(DiscordRPCService) {
+            discordScope.launchIO {
+                setPlayerActivity(
+                    context = context,
+                    playerData = PlayerData(
+                        incognitoMode = source.isNsfw() || basePreferences.incognitoMode().get(),
+                        animeId = anime.id,
+                        // AM (CUSTOM_INFORMATION) -->
+                        animeTitle = anime.ogTitle,
+                        // <-- AM (CUSTOM_INFORMATION)
+                        episodeNumber = episode.episodeNumber.toString(),
+                        thumbnailUrl = anime.thumbnailUrl,
+                    ),
+                )
+            }
+        }
+        // <-- AM (DISCORD_RPC)
 
         return if (pkgName.isEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
@@ -118,7 +140,9 @@ class ExternalIntents {
                 downloadManager.isEpisodeDownloaded(
                     episodeName = episode.name,
                     episodeScanlator = episode.scanlator,
-                    animeTitle = anime.title,
+                    // AM (CUSTOM_INFORMATION) -->
+                    animeTitle = anime.ogTitle,
+                    // <-- AM (CUSTOM_INFORMATION)
                     sourceId = anime.source,
                     skipCache = true,
                 )
@@ -335,9 +359,11 @@ class ExternalIntents {
      *
      * @param intent the [Intent] that contains the episode's position and duration.
      */
+    // AM (DISCORD_RPC) -->
     @OptIn(DelicateCoroutinesApi::class)
     @Suppress("DEPRECATION")
-    fun onActivityResult(intent: Intent?) {
+    fun onActivityResult(context: Context, intent: Intent?) {
+        // <-- AM (DISCORD_RPC)
         val data = intent ?: return
         val anime = anime
         val currentExtEpisode = episode
@@ -368,6 +394,12 @@ class ExternalIntents {
                 duration = data.getIntExtra("duration", 0).toLong()
             }
         }
+
+        // AM (DISCORD_RPC) -->
+        with(DiscordRPCService) {
+            discordScope.launchIO { setScreen(context.applicationContext, lastUsedScreen) }
+        }
+        // <-- AM (DISCORD_RPC)
 
         // Update the episode's progress and history
         launchIO {
@@ -438,12 +470,15 @@ class ExternalIntents {
                     id = currEp.id,
                     seen = seen,
                     bookmark = currEp.bookmark,
+                    // AM (FILLERMARK) -->
+                    fillermark = currEp.fillermark,
+                    // <-- AM (FILLERMARK)
                     lastSecondSeen = lastSecondSeen,
                     totalSeconds = totalSeconds,
                 ),
             )
             if (trackPreferences.autoUpdateTrack().get() && currEp.seen) {
-                updateTrackEpisodeSeen(currEp.episodeNumber.toDouble(), anime)
+                updateTrackEpisodeSeen(currEp.episodeNumber, anime)
             }
             if (seen) {
                 deleteEpisodeIfNeeded(currentEpisode, anime)
@@ -471,7 +506,7 @@ class ExternalIntents {
             .sortedWith { e1, e2 -> sortFunction(e1, e2) }
 
         val currentEpisodePosition = episodes.indexOf(episode)
-        val removeAfterSeenSlots = downloadPreferences.removeAfterReadSlots().get()
+        val removeAfterSeenSlots = downloadPreferences.removeAfterSeenSlots().get()
         val episodeToDelete = episodes.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
 
         // Check if deleting option is enabled and episode exists
@@ -555,7 +590,7 @@ class ExternalIntents {
          * @param animeId the id of the anime.
          * @param episodeId the id of the episode.
          */
-        suspend fun newIntent(context: Context, animeId: Long?, episodeId: Long?, video: Video?): Intent? {
+        suspend fun newIntent(context: Context, animeId: Long, episodeId: Long, video: Video?): Intent? {
             return externalIntents.getExternalIntent(context, animeId, episodeId, video)
         }
     }
