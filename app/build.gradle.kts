@@ -253,7 +253,6 @@ dependencies {
     implementation(libs.swipe)
     implementation(libs.compose.webview)
     implementation(libs.compose.grid)
-
     implementation(libs.google.api.services.drive)
     implementation(libs.google.api.client.oauth)
 

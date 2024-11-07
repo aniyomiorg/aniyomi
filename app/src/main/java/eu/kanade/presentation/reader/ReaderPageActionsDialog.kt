@@ -73,35 +73,6 @@ fun ReaderPageActionsDialog(
             )
             ActionButton(
                 modifier = Modifier.weight(1f),
-                title = stringResource(MR.strings.action_copy_to_clipboard),
-                icon = Icons.Outlined.ContentCopy,
-                onClick = {
-                    onShare(true, false)
-                    onDismissRequest()
-                },
-            )
-            ActionButton(
-                modifier = Modifier.weight(1f),
-                title = stringResource(
-                    // SY -->
-                    if (hasExtraPage) {
-                        MR.strings.action_share_first_page
-                    } else {
-                        MR.strings.action_share
-                    },
-                    // SY <--
-                ),
-                icon = Icons.Outlined.Share,
-                onClick = {
-                    // SY -->
-                    onShare(false, false)
-                    // SY <--
-                    onDismissRequest()
-                },
-            )
-
-            ActionButton(
-                modifier = Modifier.weight(1f),
                 title = stringResource(
                     // SY -->
                     if (hasExtraPage) {

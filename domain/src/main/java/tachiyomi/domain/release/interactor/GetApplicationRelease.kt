@@ -19,10 +19,10 @@ class GetApplicationRelease(
     suspend fun await(arguments: Arguments): Result {
         val now = Instant.now()
 
-        // Limit checks to once every 1 days at most
+        // Limit checks to once every 3 days at most
         if (!arguments.forceCheck &&
             now.isBefore(
-                Instant.ofEpochMilli(lastChecked.get()).plus(1, ChronoUnit.DAYS),
+                Instant.ofEpochMilli(lastChecked.get()).plus(3, ChronoUnit.DAYS),
             )
         ) {
             return Result.NoNewUpdate
