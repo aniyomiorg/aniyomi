@@ -237,8 +237,8 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     )
 
     companion object {
-        const val CLIENT_ID = "15b6dd71be6df203b390a6cd7d9633d000f1828536380f0ba9df2dda69348a9a"
-        private const val CLIENT_SECRET = "f4aaa510f00ce5e08109d6e37015606be0199c439ce3a25761562f6efbd0921c"
+        const val CLIENT_ID = "125476f936eaf8029970919c3c77b63b9ecb1aa5d34f55c9255602e52042f5c2"
+        private const val CLIENT_SECRET = "2f8200f7ec4c3743bd9efbb7f004a53d0d2f8551d7668750e37bbb88b8c4069c"
 
         private const val BASE_URL = "https://simkl.com"
         private const val API_URL = "https://api.simkl.com"
