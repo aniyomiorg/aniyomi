@@ -572,19 +572,22 @@ class PlayerActivity : BaseActivity() {
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e) { "Service the google play services not available" }
         }
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (supportedAndEnabled) {
-                    if (player.paused == false && playerPreferences.pipOnExit().get()) {
-                        updatePip(true)
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (supportedAndEnabled) {
+                        if (player.paused == false && playerPreferences.pipOnExit().get()) {
+                            updatePip(true)
+                        } else {
+                            finishAndRemoveTask()
+                        }
                     } else {
                         finishAndRemoveTask()
                     }
-                } else {
-                    finishAndRemoveTask()
                 }
-            }
-        })
+            },
+        )
     }
     private fun copyAssets(configDir: String) {
         val assetManager = this.assets
@@ -1090,7 +1093,6 @@ class PlayerActivity : BaseActivity() {
         // <-- AM (DISCORD)
         super.onDestroy()
     }
-
 
     override fun onUserLeaveHint() {
         if (player.paused == false &&
