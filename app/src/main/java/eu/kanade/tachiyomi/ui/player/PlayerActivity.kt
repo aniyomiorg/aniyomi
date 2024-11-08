@@ -25,6 +25,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.GestureDetector
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -32,11 +33,11 @@ import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
@@ -167,6 +168,7 @@ class PlayerActivity : BaseActivity() {
     private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
     // <-- AM (CONNECTIONS)
 
+    @SuppressLint("MissingSuperCall")
     override fun onNewIntent(intent: Intent) {
         val animeId = intent.extras!!.getLong("animeId", -1)
         val episodeId = intent.extras!!.getLong("episodeId", -1)
@@ -570,6 +572,19 @@ class PlayerActivity : BaseActivity() {
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e) { "Service the google play services not available" }
         }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (supportedAndEnabled) {
+                    if (player.paused == false && playerPreferences.pipOnExit().get()) {
+                        updatePip(true)
+                    } else {
+                        finishAndRemoveTask()
+                    }
+                } else {
+                    finishAndRemoveTask()
+                }
+            }
+        })
     }
     private fun copyAssets(configDir: String) {
         val assetManager = this.assets
@@ -1076,19 +1091,6 @@ class PlayerActivity : BaseActivity() {
         super.onDestroy()
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        if (supportedAndEnabled) {
-            if (player.paused == false && playerPreferences.pipOnExit().get()) {
-                updatePip(true)
-            } else {
-                super.onBackPressed()
-            }
-        } else {
-            finishAndRemoveTask()
-            super.onBackPressed()
-        }
-    }
 
     override fun onUserLeaveHint() {
         if (player.paused == false &&
@@ -1167,7 +1169,7 @@ class PlayerActivity : BaseActivity() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupGestures() {
         val gestures = GestureHandler(this, deviceWidth.toFloat(), deviceHeight.toFloat())
-        val mDetector = GestureDetectorCompat(this, gestures)
+        val mDetector = GestureDetector(this, gestures)
         player.setOnTouchListener { v, event ->
             gestures.onTouch(v, event)
             mDetector.onTouchEvent(event)
