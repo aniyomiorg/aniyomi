@@ -17,6 +17,7 @@ data class SimklSyncResult(
             "anime" -> anime
             "tv" -> tv
             "movies" -> movies
+            "shows" -> tv
             else -> throw Exception("Unknown type: $type")
         }
     }
