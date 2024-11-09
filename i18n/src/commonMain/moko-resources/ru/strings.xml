@@ -1130,4 +1130,9 @@
     <string name="player_filters_gamma">Гамма</string>
     <string name="player_filters_hue">Цветовой тон</string>
     <string name="player_filters_warning">Некоторые фильтры могут не работать с текущим видео драйвером</string>
+    <string name="ext_remove">Удалить</string>
+    <string name="ext_confirm_remove">Удалить расширение?</string>
+    <string name="action_sort_random">Случайно</string>
+    <string name="action_copy_link">Копировать ссылку</string>
+    <string name="remove_private_extension_message">Вы точно хотите удалить расширение \"%s\"?</string>
 </resources>
