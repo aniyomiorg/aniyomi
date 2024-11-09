@@ -97,35 +97,33 @@ class PlayerPreferences(
     fun mediaPlayPauseGesture() = preferenceStore.getEnum("pref_media_playpause", SingleActionGesture.PlayPause)
     fun mediaNextGesture() = preferenceStore.getEnum("pref_media_next", SingleActionGesture.Switch)
 
-    // Decoder
+    // ==== Decoder ====
 
     fun tryHWDecoding() = preferenceStore.getBoolean("pref_try_hwdec", true)
     fun gpuNext() = preferenceStore.getBoolean("pref_gpu_next", false)
-
-    // TODO - migration
     fun videoDebanding() = preferenceStore.getEnum("pref_video_debanding", VideoDebanding.NONE)
     fun useYUV420P() = preferenceStore.getBoolean("use_yuv420p", true)
 
-    // Subtitle
+    // ==== Subtitle ====
 
     fun preferredSubLanguages() = preferenceStore.getString("pref_subtitle_lang", "")
     fun subtitleWhitelist() = preferenceStore.getString("pref_subtitle_whitelist", "")
     fun subtitleBlacklist() = preferenceStore.getString("pref_subtitle_blacklist", "")
 
-    // Audio
+    // ==== Audio ====
 
     fun preferredAudioLanguages() = preferenceStore.getString("pref_audio_lang", "")
     fun enablePitchCorrection() = preferenceStore.getBoolean("pref_audio_pitch_correction", true)
     fun audioChannels() = preferenceStore.getEnum("pref_audio_config", AudioChannels.AutoSafe)
     fun volumeBoostCap() = preferenceStore.getInt("pref_audio_volume_boost_cap", 30)
 
-    // Advanced
+    // ==== Advanced ====
 
     fun mpvScripts() = preferenceStore.getBoolean("mpv_scripts", false)
     fun mpvConf() = preferenceStore.getString("pref_mpv_conf", "")
     fun mpvInput() = preferenceStore.getString("pref_mpv_input", "")
 
-    // Non-preferences
+    // ==== Non-preferences ====
 
     fun autoplayEnabled() = preferenceStore.getBoolean("pref_auto_play_enabled", false)
 
