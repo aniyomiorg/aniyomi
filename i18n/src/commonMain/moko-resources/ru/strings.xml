@@ -1012,7 +1012,6 @@
     <string name="enable_volume_brightness_gestures">Включить Жесты Громкости и Яркости</string>
     <string name="pref_category_player_advanced">Расширенные настройки плеера</string>
     <string name="pref_category_player_advanced_subtitle">Отладка, mpv.conf… и т.д</string>
-    <string name="pref_debanding_disabled">Выключено</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="go_to_after_opening">Пропустить опеннинг</string>
     <string name="toggle_player_statistics_page">Страница статистики</string>
