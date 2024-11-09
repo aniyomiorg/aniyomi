@@ -1,6 +1,6 @@
 package mihon.core.migration.migrations
 
-import eu.kanade.tachiyomi.App
+import android.app.Application
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import mihon.core.migration.Migration
@@ -11,7 +11,7 @@ class UseWorkManagerMigration : Migration {
 
     // Fully utilize WorkManager for library updates
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
-        val context = migrationContext.get<App>() ?: return false
+        val context = migrationContext.get<Application>() ?: return false
 
         MangaLibraryUpdateJob.cancelAllWorks(context)
         AnimeLibraryUpdateJob.cancelAllWorks(context)
