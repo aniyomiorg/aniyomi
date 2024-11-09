@@ -1043,7 +1043,6 @@
     <string name="data_saver_image_quality_summary">Valores mais altos significam que uma porcentagem maior da qualidade da imagem é salva, mas também significa que o tamanho do arquivo é maior, 80% é uma boa mediana entre o tamanho do arquivo e a qualidade da imagem</string>
     <string name="data_saver_image_format_summary_on">O tamanho do arquivo Jpeg é consideravelmente menor do que o Webp (o que significa que mais dados são salvos), mas também faz com que as imagens percam mais qualidade.
 \nAtualmente comprimido para Jpeg</string>
-    <string name="pref_debanding_disabled">Desabilitado</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="video_custom_screen">Proporção personalizada</string>

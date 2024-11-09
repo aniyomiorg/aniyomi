@@ -1048,7 +1048,6 @@
     <string name="action_hide">Gizle</string>
     <string name="label_recent_anime_updates">Anime güncellemeleri</string>
     <string name="download_slots_info">Aynı anda indirmeler yalnızca tarifesiz veya kendinde barındırılan kaynaklardan yapılacaktır</string>
-    <string name="pref_debanding_disabled">Devre dışı</string>
     <string name="pref_category_hide_hidden">Gizli kategorileri kategoriler menüsünde ve depolama ekranında gizle</string>
     <string name="pref_category_player_advanced">Gelişmiş oynatıcı ayarları</string>
     <string name="theme_cottoncandy">Pamuk şekeri</string>
