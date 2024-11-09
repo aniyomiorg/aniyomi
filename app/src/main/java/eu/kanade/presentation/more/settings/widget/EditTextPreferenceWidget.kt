@@ -1,5 +1,6 @@
 package eu.kanade.presentation.more.settings.widget
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
@@ -7,6 +8,7 @@ import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,6 +31,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 fun EditTextPreferenceWidget(
     title: String,
     subtitle: String?,
+    dialogSubtitle: String? = null,
     icon: ImageVector?,
     value: String,
     onConfirm: suspend (String) -> Boolean,
@@ -52,7 +55,14 @@ fun EditTextPreferenceWidget(
         }
         AlertDialog(
             onDismissRequest = onDismissRequest,
-            title = { Text(text = title) },
+            title = {
+                Column {
+                    Text(text = title)
+                    if (dialogSubtitle != null) {
+                        Text(text = dialogSubtitle, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            },
             text = {
                 OutlinedTextField(
                     value = textFieldValue,

@@ -47,7 +47,7 @@ class EnumsMigration : Migration {
 
             preferenceStore.getEnum("pref_inverted_playback", InvertedPlayback.NONE).set(invertedPlayback)
             preferenceStore.getEnum("pref_hardware_decoding", HwDecState.defaultHwDec).set(hardwareDecoding)
-            preferenceStore.getEnum("pref_video_debanding", VideoDebanding.DISABLED).set(videoDebanding)
+            preferenceStore.getEnum("pref_video_debanding", VideoDebanding.NONE).set(videoDebanding)
             preferenceStore.getEnum("pref_player_aspect_state", AspectState.FIT).set(aspectState)
             preferenceStore.getBoolean("pref_gpu_next", false).set(gpuNext.get())
         }

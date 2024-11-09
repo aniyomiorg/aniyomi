@@ -624,8 +624,7 @@ class PlayerActivity : BaseActivity() {
         when (playerPreferences.videoDebanding().get()) {
             VideoDebanding.CPU -> MPVLib.setOptionString("vf", "gradfun=radius=12")
             VideoDebanding.GPU -> MPVLib.setOptionString("deband", "yes")
-            VideoDebanding.YUV420P -> MPVLib.setOptionString("vf", "format=yuv420p")
-            VideoDebanding.DISABLED -> {}
+            VideoDebanding.NONE -> {}
         }
 
         val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()

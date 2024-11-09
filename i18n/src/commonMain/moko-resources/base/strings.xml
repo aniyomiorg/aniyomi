@@ -178,6 +178,119 @@
     <string name="onboarding_guides_new_user">New to %s? We recommend checking out the getting started guide.</string>
     <string name="onboarding_guides_returning_user">Reinstalling %s?</string>
     <!-- Preferences -->
+
+    <!-- Player settings -->
+    <string name="label_player_settings">Player settings</string>
+    <string name="action_search_player_settings">Search player settings</string>
+
+    <!-- Player settings - internal player -->
+    <string name="pref_player_internal">Internal player</string>
+    <string name="pref_player_internal_summary">Progress, controls, orientation</string>
+    <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
+    <string name="pref_progress_70" translatable="false">70%</string>
+    <string name="pref_progress_75" translatable="false">75%</string>
+    <string name="pref_progress_80" translatable="false">80%</string>
+    <string name="pref_progress_85" translatable="false">85%</string>
+    <string name="pref_progress_90" translatable="false">90%</string>
+    <string name="pref_progress_95" translatable="false">95%</string>
+    <string name="pref_progress_100" translatable="false">100%</string>
+    <string name="pref_preserve_watching_position">Preserve watch position on seen episodes</string>
+    <string name="pref_player_fullscreen">Show content in display cutout</string>
+    <string name="pref_player_hide_controls">Hide player controls when opening the player</string>
+
+    <string name="pref_category_volume_brightness">Volume and Brightness</string>
+    <string name="enable_volume_brightness_gestures">Enable Volume and Brightness Gestures</string>
+    <string name="pref_remember_brightness">Remember and switch to the last used brightness</string>
+    <string name="pref_remember_volume">Remember and switch to the last used volume</string>
+
+    <string name="pref_category_player_orientation">Orientation</string>
+    <string name="pref_default_player_orientation">Default orientation</string>
+    <string name="pref_adjust_orientation_video_dimensions">Adjust the orientation based on a video\'s dimensions</string>
+    <string name="pref_default_portrait_orientation">Default portrait</string>
+    <string name="pref_default_landscape_orientation">Default landscape</string>
+    <string name="rotation_reverse_landscape">Reverse landscape</string>
+    <string name="rotation_sensor_portrait">Sensor portrait</string>
+    <string name="rotation_sensor_landscape">Sensor landscape</string>
+
+    <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
+    <string name="pref_enable_pip">Enable the use of PiP mode</string>
+    <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
+    <string name="pref_pip_on_exit">Automatically switch to PiP mode on exiting the player</string>
+    <string name="pref_pip_replace_with_previous">Replaces the "Skip 10 seconds" option with "Previous episode"</string>
+
+    <string name="pref_category_external_player">External player</string>
+    <string name="pref_always_use_external_player">Always use external player</string>
+    <string name="pref_external_player_preference">External player preference</string>
+
+    <!-- Player Settings - Gestures -->
+    <string name="pref_player_gestures">Gestures</string>
+    <string name="pref_player_gestures_summary">Seeking, double tap, media controls</string>
+
+    <string name="pref_category_double_tap">Double tap</string>
+    <string name="pref_left_double_tap">Double tap (left)</string>
+    <string name="pref_center_double_tap">Double tap (center)</string>
+    <string name="pref_right_double_tap">Double tap (right)</string>
+    <string name="pref_double_tap_info">When a tap gesture is set to "Custom", it can be bound through input.conf. The key codes are 0x10001 for left, 0x10002 for center, and 0x10003 for right.</string>
+    <string name="single_action_none">None</string>
+    <string name="single_action_seek">Seek</string>
+    <string name="single_action_playpause">Play/Pause</string>
+    <string name="single_action_switch">Switch episode</string>
+    <string name="single_action_custom">Custom</string>
+
+    <string name="pref_category_media_controls">Media controls</string>
+    <string name="pref_media_previous">Previous</string>
+    <string name="pref_media_playpause">Play/Pause</string>
+    <string name="pref_media_next">Next</string>
+    <string name="pref_media_info">When a media control is set to "Custom", it can be bound through input.conf. The key codes are 0x10004 for previous, 0x10005 for play/pause, and 0x10006 for next.</string>
+
+    <!-- Player Settings - Decoder -->
+    <string name="pref_player_decoder">Decoder</string>
+    <string name="pref_player_decoder_summary">Hardware decoding, pixel format, debanding</string>
+    <string name="pref_try_hw">Try hardware decoding</string>
+    <string name="pref_gpu_next_title">Enable gpu-next</string>
+    <string name="pref_gpu_next_subtitle">A new video rendering backend</string>
+    <string name="pref_debanding_title">Debanding</string>
+    <string name="pref_debanding_none">None</string>
+    <string name="pref_debanding_cpu">CPU</string>
+    <string name="pref_debanding_gpu">GPU</string>
+    <string name="pref_debanding_yuv420p">YUV420P</string>
+    <string name="pref_use_yuv420p_title">Use YUV420P pixel format</string>
+    <string name="pref_use_yuv420p_subtitle">May fix black screens on some video codecs, can also improve performance at the cost of quality</string>
+
+    <!-- Player settings - Subtitles -->
+    <string name="pref_player_subtitle">Subtitles</string>
+    <string name="pref_player_subtitle_summary">Preferred languages, whitelist, blacklist</string>
+    <string name="pref_player_subtitle_lang">Preferred languages</string>
+    <string name="pref_player_subtitle_lang_info">Subtitle language(s) to be selected by default on a video with multiple subtitles, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
+    <string name="pref_player_subtitle_whitelist">Whitelist</string>
+    <string name="pref_player_subtitle_whitelist_info">Whitelist for subtitles. If a whitelist is defined, the first subtitle that contains a whitelisted word will be used. Multiple values can be delimited by a comma.</string>
+    <string name="pref_player_subtitle_blacklist">Blacklist</string>
+    <string name="pref_player_subtitle_blacklist_info">Blacklist for subtitles. If a blacklist is defined, all subtitles that contains a blacklisted word will be filtered out. Multiple values can be delimited by a comma.</string>
+
+    <!-- Player settings - Audio -->
+    <string name="pref_player_audio">Audio</string>
+    <string name="pref_player_audio_summary">Preferred languages, pitch correction, audio channels</string>
+    <string name="pref_player_audio_lang">Preferred languages</string>
+    <string name="pref_player_audio_lang_info">Audio language(s) to be selected by default on a video with multiple audio streams, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
+    <string name="pref_player_audio_pitch_correction">Enable audio pitch correction</string>
+    <string name="pref_player_audio_pitch_correction_summary">Prevents the audio from becoming high-pitched at faster speeds and low-pitched at slower speeds</string>
+    <string name="pref_player_audio_channels">Audio channels</string>
+    <string name="pref_player_audio_channels_auto_safe">Auto-safe</string>
+    <string name="pref_player_audio_channels_auto">Auto</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_stereo">Stereo</string>
+    <string name="pref_player_audio_channels_reverse_stereo">Reverse stereo</string>
+    <string name="pref_player_audio_boost_cap">Volume boost cap</string>
+
+    <!-- Player settings - Advanced -->
+    <string name="pref_player_advanced">Advanced</string>
+    <string name="pref_player_advanced_summary">Scripts, mpv.conf, input.conf</string>
+    <string name="pref_mpv_scripts">Enable MPV scripts</string>
+    <string name="pref_mpv_scripts_summary">Needs external storage permission.</string>
+    <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
+    <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
+    <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
+
     <!-- Subsections -->
     <string name="pref_category_general">General</string>
     <string name="pref_category_appearance">Appearance</string>
@@ -900,28 +1013,10 @@
     <string name="pref_manga_library_update_categories_details">Manga in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="pref_anime_library_update_categories_details">Anime in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="unofficial_extension_message_aniyomi">This extension is not from the official list.</string>
-    <string name="rotation_reverse_landscape">Reverse landscape</string>
-    <string name="rotation_sensor_portrait">Sensor portrait</string>
-    <string name="rotation_sensor_landscape">Sensor landscape</string>
     <string name="unofficial_anime_extension_message">This extension is not from the official list.</string>
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
-    <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
-    <string name="pref_progress_70" translatable="false">70%</string>
-    <string name="pref_progress_75" translatable="false">75%</string>
-    <string name="pref_progress_80" translatable="false">80%</string>
-    <string name="pref_progress_85" translatable="false">85%</string>
-    <string name="pref_progress_90" translatable="false">90%</string>
-    <string name="pref_progress_95" translatable="false">95%</string>
-    <string name="pref_progress_100" translatable="false">100%</string>
-    <string name="pref_preserve_watching_position">Preserve watch position on seen episodes</string>
-    <string name="pref_category_player_orientation">Orientation</string>
-    <string name="pref_default_player_orientation">Default orientation</string>
-    <string name="pref_adjust_orientation_video_dimensions">Adjust the orientation based on a video\'s dimensions</string>
-    <string name="pref_default_portrait_orientation">Default portrait</string>
-    <string name="pref_default_landscape_orientation">Default landscape</string>
     <string name="pref_category_internal_player">Internal player</string>
-    <string name="pref_category_volume_brightness">Volume and Brightness</string>
     <string name="pref_category_player_seeking">Seeking</string>
     <string name="pref_default_intro_length">Default skip intro length</string>
     <string name="pref_intro_length">Skip intro length</string>
@@ -940,28 +1035,7 @@
     <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
     <string name="pref_player_smooth_seek">Enable precise seeking</string>
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
-    <string name="pref_player_fullscreen">Show content in display cutout</string>
-    <string name="pref_player_hide_controls">Hide player controls when opening the player</string>
-    <string name="pref_player_audio_channels">Audio channels</string>
-    <string name="pref_player_audio_channels_auto_safe">Auto-safe</string>
-    <string name="pref_player_audio_channels_auto">Auto</string>
-    <string name="pref_player_audio_channels_mono">Mono</string>
-    <string name="pref_player_audio_channels_stereo">Stereo</string>
-    <string name="pref_player_audio_channels_reverse_stereo">Reverse stereo</string>
-    <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
-    <string name="pref_enable_pip">Enable the use of PiP mode</string>
-    <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
-    <string name="pref_pip_on_exit">Automatically switch to PiP mode on exiting the player</string>
-    <string name="pref_pip_replace_with_previous">Replaces the "Skip 10 seconds" option with "Previous episode"</string>
-    <string name="pref_remember_brightness">Remember and switch to the last used brightness</string>
-    <string name="pref_remember_volume">Remember and switch to the last used volume</string>
-    <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
-    <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
-    <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
     <string name="pref_sub_select_conf">Edit advanced subtitle track select configuration</string>
-    <string name="pref_category_external_player">External player</string>
-    <string name="pref_always_use_external_player">Always use external player</string>
-    <string name="pref_external_player_preference">External player preference</string>
     <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Delete chapters/episodes</string>
@@ -1032,7 +1106,6 @@
     <string name="episode_progress_no_total">Progress: %1$s</string>
     <string name="screenshot_header">Take screenshot</string>
     <string name="screenshot_show_subs">Include Subtitles</string>
-    <string name="enable_volume_brightness_gestures">Enable Volume and Brightness Gestures</string>
     <string name="enable_horizontal_seek_gesture">Enable Horizontal Seek Gesture</string>
     <string name="toggle_player_statistics_page">Toggle statistics page</string>
     <string name="player_statistics_page_1">Page 1</string>
@@ -1040,13 +1113,6 @@
     <string name="player_statistics_page_3">Page 3</string>
     <string name="pref_category_player_advanced">Advanced player settings</string>
     <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… etc</string>
-    <string name="pref_gpu_next_title">Enable gpu-next</string>
-    <string name="pref_gpu_next_subtitle">A new video rendering backend</string>
-    <string name="pref_debanding_title">Debanding</string>
-    <string name="pref_debanding_disabled">Disabled</string>
-    <string name="pref_debanding_cpu">CPU</string>
-    <string name="pref_debanding_gpu">GPU</string>
-    <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
     <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
@@ -1182,6 +1248,4 @@
     <string name="download_threads_number_summary">Number of threads to use for downloading, might get your IP blocked if too high, usually 4 is a good number to avoid heavy load on source servers.</string>
     <string name="download_speed_limit">Download speed limit</string>
     <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
-    <string name="pref_mpv_scripts">Enable MPV scripts</string>
-    <string name="pref_mpv_scripts_summary">Needs external storage permission.</string>
 </resources>
