@@ -72,11 +72,11 @@ class ExternalIntents {
      */
     suspend fun getExternalIntent(
         context: Context,
-        animeId: Long?,
-        episodeId: Long?,
+        animeId: Long,
+        episodeId: Long,
         chosenVideo: Video?,
     ): Intent? {
-        anime = getAnime.await(animeId!!) ?: return null
+        anime = getAnime.await(animeId) ?: return null
         source = sourceManager.get(anime.source) ?: return null
         episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
 
@@ -555,7 +555,7 @@ class ExternalIntents {
          * @param animeId the id of the anime.
          * @param episodeId the id of the episode.
          */
-        suspend fun newIntent(context: Context, animeId: Long?, episodeId: Long?, video: Video?): Intent? {
+        suspend fun newIntent(context: Context, animeId: Long, episodeId: Long, video: Video?): Intent? {
             return externalIntents.getExternalIntent(context, animeId, episodeId, video)
         }
     }

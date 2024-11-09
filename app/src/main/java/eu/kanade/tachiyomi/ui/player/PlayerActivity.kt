@@ -147,10 +147,10 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onNewIntent(intent: Intent) {
-        val animeId = intent.extras!!.getLong("animeId", -1)
-        val episodeId = intent.extras!!.getLong("episodeId", -1)
-        val vidList = intent.extras!!.getString("vidList", "")
-        val vidIndex = intent.extras!!.getInt("vidIndex", 0)
+        val animeId = intent.extras?.getLong("animeId") ?: -1
+        val episodeId = intent.extras?.getLong("episodeId") ?: -1
+        val vidList = intent.extras?.getString("vidList") ?: ""
+        val vidIndex = intent.extras?.getInt("vidIndex") ?: 0
         if (animeId == -1L || episodeId == -1L) {
             finish()
             return
