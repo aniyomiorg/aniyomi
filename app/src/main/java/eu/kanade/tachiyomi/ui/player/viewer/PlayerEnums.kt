@@ -103,10 +103,32 @@ enum class PlayerStatsPage(val stringRes: StringResource) {
  * Player's debanding handler
  */
 enum class VideoDebanding(val stringRes: StringResource) {
-    DISABLED(stringRes = MR.strings.pref_debanding_disabled),
+    NONE(stringRes = MR.strings.pref_debanding_none),
     CPU(stringRes = MR.strings.pref_debanding_cpu),
     GPU(stringRes = MR.strings.pref_debanding_gpu),
-    YUV420P(stringRes = MR.strings.pref_debanding_yuv420p),
+}
+
+/**
+ * Action performed by a button, like double tap or media controls
+ */
+enum class SingleActionGesture(val stringRes: StringResource) {
+    None(stringRes = MR.strings.single_action_none),
+    Seek(stringRes = MR.strings.single_action_seek),
+    PlayPause(stringRes = MR.strings.single_action_playpause),
+    Switch(stringRes = MR.strings.single_action_switch),
+    Custom(stringRes = MR.strings.single_action_custom),
+}
+
+/**
+ * Key codes sent through the `Custom` option in gestures
+ */
+enum class CustomKeyCodes(val keyCode: String) {
+    DoubleTapLeft("0x10001"),
+    DoubleTapCenter("0x10002"),
+    DoubleTapRight("0x10003"),
+    MediaPrevious("0x10004"),
+    MediaPlay("0x10005"),
+    MediaNext("0x10006"),
 }
 
 enum class AudioChannels(val propertyName: String, val propertyValue: String, val textRes: StringResource) {

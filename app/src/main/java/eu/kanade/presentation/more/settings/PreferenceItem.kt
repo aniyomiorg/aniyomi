@@ -185,6 +185,23 @@ internal fun PreferenceItem(
                     canBeBlank = item.canBeBlank,
                 )
             }
+            is Preference.PreferenceItem.EditTextInfoPreference -> {
+                val values by item.pref.collectAsState()
+                EditTextPreferenceWidget(
+                    title = item.title,
+                    subtitle = item.subtitle,
+                    dialogSubtitle = item.dialogSubtitle,
+                    icon = item.icon,
+                    value = values,
+                    onConfirm = {
+                        val accepted = item.onValueChanged(it)
+                        if (accepted) item.pref.set(it)
+                        accepted
+                    },
+                    singleLine = true,
+                    canBeBlank = true,
+                )
+            }
             is Preference.PreferenceItem.TrackerPreference -> {
                 val isLoggedIn by item.tracker.let { tracker ->
                     tracker.isLoggedInFlow.collectAsState(tracker.isLoggedIn)
