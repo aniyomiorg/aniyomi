@@ -5,7 +5,7 @@ import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import java.time.Instant
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.Date
 import kotlin.random.Random
@@ -72,10 +72,10 @@ class AnimeHistoryScreenModelStateProvider : PreviewParameterProvider<AnimeHisto
     private object HistoryUiModelExamples {
         val headerToday = header()
         val headerTomorrow =
-            AnimeHistoryUiModel.Header(LocalDateTime.now().plusDays(1))
+            AnimeHistoryUiModel.Header(LocalDate.now().plusDays(1))
 
         fun header(instantBuilder: (Instant) -> Instant = { it }) =
-            AnimeHistoryUiModel.Header(LocalDateTime.from(instantBuilder(Instant.now())))
+            AnimeHistoryUiModel.Header(LocalDate.from(instantBuilder(Instant.now())))
 
         fun items() = sequence {
             var count = 1

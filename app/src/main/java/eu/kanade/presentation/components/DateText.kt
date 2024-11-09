@@ -27,6 +27,7 @@ fun relativeDateText(
     )
 }
 
+// For use in chapter/episode release time
 @Composable
 fun relativeDateTimeText(
     dateEpochMillis: Long,
@@ -58,6 +59,7 @@ fun relativeDateText(
         ?: stringResource(MR.strings.not_applicable)
 }
 
+// For use in chapter/episode release time
 @Composable
 fun relativeDateTimeText(
     localDateTime: LocalDateTime?,
