@@ -1075,7 +1075,6 @@
     <string name="pref_gpu_next_title">Activa gpu-next</string>
     <string name="pref_gpu_next_subtitle">Un nou backend de renderització de vídeo</string>
     <string name="pref_debanding_title">Debanding</string>
-    <string name="pref_debanding_disabled">Desactivat</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="video_custom_screen">Relació d\'aspecte personalitzada</string>

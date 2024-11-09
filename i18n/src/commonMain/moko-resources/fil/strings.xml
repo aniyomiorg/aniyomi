@@ -1052,7 +1052,6 @@
     <string name="action_hide">Itago</string>
     <string name="label_recent_anime_updates">Mga Update sa Anime</string>
     <string name="go_to_after_opening">Laktawan ang opening</string>
-    <string name="pref_debanding_disabled">Di pinagana</string>
     <string name="pref_category_hide_hidden">Itago ang nakatagong kategorya mula sa screen ng mga kategorya</string>
     <string name="pref_category_player_advanced">Mga setting sa Advanced player</string>
     <string name="go_to_previous_chapter">Nakaraang kabanata</string>

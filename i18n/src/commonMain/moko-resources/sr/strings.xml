@@ -949,7 +949,6 @@
     <string name="repeating_anime">Поново гледам</string>
     <string name="pref_anime_library_update_categories_details">Аниме у искљученим категоријама неће бити ажурирани чак и ако су такође у укљученим категоријама.</string>
     <string name="snack_add_to_anime_library">Додати аниме у библиотеку?</string>
-    <string name="pref_debanding_disabled">Онемогућено</string>
     <string name="data_saver_color_bw">Претвори у црно-бело</string>
     <string name="data_saver_image_format">Компресуј у Jpeg</string>
     <string name="data_saver_server_summary">Унесите Bandwidth Hero Proxy сервер URL овде</string>

@@ -1054,7 +1054,6 @@
     <string name="delete_confirmation">Êtes-vous sûr de vouloir supprimer \"%s\" ?</string>
     <string name="copied_video_link_to_clipboard">Lien de qualité vidéo copié vers le presse-papiers</string>
     <string name="pref_category_player_advanced">Paramètres supplémentaires du lecteur</string>
-    <string name="pref_debanding_disabled">Désactiver</string>
     <string name="theme_cottoncandy">Barbe à papa</string>
     <string name="theme_mocha">Mocha</string>
     <string name="pref_hide_in_anime_library_items">Cacher les entrées d\'animes déjà dans la bibliothèque</string>

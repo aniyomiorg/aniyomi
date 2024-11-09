@@ -1019,7 +1019,6 @@
     <string name="action_hide">إخفاء</string>
     <string name="label_recent_anime_updates">تحديثات الأنمي</string>
     <string name="download_slots_info">سيتم تنزيل الملفات بشكل متزامن فقط من مصادر مستضافة ذاتية أو غير محدودة في استهلاك البيانات</string>
-    <string name="pref_debanding_disabled">معطّل</string>
     <string name="pref_category_hide_hidden">إخفاء الفئات المخفية من شاشة الفئات</string>
     <string name="pref_category_player_advanced">إعدادات المشغل المتقدمة</string>
     <string name="theme_cottoncandy">حلوى القطن</string>

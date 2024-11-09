@@ -1067,7 +1067,6 @@
     <string name="player_subtitle_settings">Untertitel-Einstellungen</string>
     <string name="player_add_external_subtitles">Externe Untertitel hinzufügen</string>
     <string name="go_to_after_opening">Intro übersprungen</string>
-    <string name="pref_debanding_disabled">Deaktiviert</string>
     <string name="data_saver_summary">Bilder komprimieren, bevor sie heruntergeladen oder im Leser angezeigt werden</string>
     <string name="player_subtitle_text_color">Text</string>
     <string name="pref_manga_storage_usage">Manga-Speicherverbrauch</string>

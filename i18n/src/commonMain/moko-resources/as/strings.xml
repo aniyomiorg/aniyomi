@@ -1000,7 +1000,6 @@
     <string name="pref_category_player_advanced">অগ্ৰণী প্লেয়াৰ স্থিতি</string>
     <string name="pref_gpu_next_subtitle">এটা নতুন ভিডিঅ\' ৰেণ্ডাৰিং বেকএণ্ড</string>
     <string name="pref_debanding_title">ডেবেণ্ডিং</string>
-    <string name="pref_debanding_disabled">নিষ্ক্ৰিয়</string>
     <string name="recent_anime_time">এপিচ\'ড %1$s - %2$s</string>
     <string name="download_insufficient_space">নিৰ্ধাৰিত স্থলাভাবে ডাউনলোড কৰিব পৰা নগ\'ল</string>
     <string name="download_queue_size_warning">সতর্কতা: বৃহৎ মাচৰ ডাউনলোডে উৎসবোৰ ধীৰ আৰু/অথবা Aniyomi বন্ধ কৰিব পাৰে। অধিক জানিবলৈ টেপ কৰক।</string>

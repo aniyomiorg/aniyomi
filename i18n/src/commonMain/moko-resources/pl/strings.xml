@@ -928,7 +928,6 @@
     <string name="audio_dialog_header">Dźwięk</string>
     <string name="episode_not_found">Odcinek nie znaleziony</string>
     <string name="notification_episodes_single">Odcinek %1$s</string>
-    <string name="pref_debanding_disabled">Wyłączone</string>
     <string name="pref_external_player_preference">Preferencja zewnętrznego odtwarzacza</string>
     <string name="data_saver_summary">Kompresuj obrazy przed pobraniem lub załadowaniem do czytnika</string>
     <string name="disable_auto_play">Auto-play jest wyłączone</string>

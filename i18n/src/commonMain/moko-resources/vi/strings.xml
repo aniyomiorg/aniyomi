@@ -1144,7 +1144,6 @@
     <string name="playback_speed_dialog_reset">Đặt lại</string>
     <string name="pref_category_player_advanced_subtitle">Khử dải màu, mpv.conf... v.v</string>
     <string name="pref_debanding_title">Khử dải màu</string>
-    <string name="pref_debanding_disabled">Tắt</string>
     <string name="label_manga_extensions">Manga Extensions</string>
     <string name="label_migration_manga">Di chuyển Manga</string>
     <string name="copied_video_link_to_clipboard">Đã sao chép liên kết chất lượng video vào bảng nhớ tạm</string>

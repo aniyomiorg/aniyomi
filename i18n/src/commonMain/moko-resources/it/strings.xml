@@ -1006,7 +1006,6 @@
     <string name="data_saver">Risparmio dati</string>
     <string name="pref_episode_swipe_end">Azione swipe verso destra</string>
     <string name="go_to_after_opening">Sigla saltata</string>
-    <string name="pref_debanding_disabled">Disabilitato</string>
     <string name="extension_settings">Impostazioni dell\'estensione</string>
     <string name="go_to_next_chapter">Capitolo successivo</string>
     <string name="pref_category_hide_hidden">Nasconi le categorie nascoste dalla schermata delle categorie</string>

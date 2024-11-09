@@ -992,7 +992,6 @@
     <string name="pref_debanding_gpu">GPU</string>
     <string name="pref_category_player_advanced_subtitle">Налагодження, mpv.conf… та ін.</string>
     <string name="action_hide">Приховати</string>
-    <string name="pref_debanding_disabled">Вимкнено</string>
     <string name="pref_category_hide_hidden">Сховати приховані категорії з екрану категорій</string>
     <string name="pref_category_player_advanced">Розширені налаштування плеєра</string>
     <string name="theme_mocha">Моча</string>

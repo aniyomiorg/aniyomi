@@ -1035,7 +1035,6 @@
     <string name="video_custom_screen">自定义画面比例</string>
     <string name="pref_debanding_title">去除色带</string>
     <string name="pref_debanding_gpu">GPU</string>
-    <string name="pref_debanding_disabled">关闭</string>
     <string name="delete_confirmation">确定删除\"%s\"？</string>
     <string name="player_subtitle_settings">字幕设置</string>
     <string name="player_subtitle_empty_warning">视频中没有载入任何字幕所以无效</string>

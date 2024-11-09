@@ -1038,7 +1038,6 @@
     <string name="pref_waiting_time_aniskip_10">10 秒</string>
     <string name="player_aniskip_dontskip">不要跳過</string>
     <string name="pref_debanding_cpu">CPU</string>
-    <string name="pref_debanding_disabled">已停用</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="toggle_player_statistics_page">切換統計頁面</string>
     <string name="label_storage">存儲</string>
