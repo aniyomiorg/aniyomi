@@ -86,6 +86,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                 playerPreferences = playerPreferences,
                 basePreferences = basePreferences,
             ),
+            getTorrentServerGroup(torrentServerPreferences),
         )
     }
 
