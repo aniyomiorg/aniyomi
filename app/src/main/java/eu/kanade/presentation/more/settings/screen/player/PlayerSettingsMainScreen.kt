@@ -1,4 +1,4 @@
-package eu.kanade.presentation.more.settings.screen
+package eu.kanade.presentation.more.settings.screen.player
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -8,18 +8,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ChromeReaderMode
+import androidx.compose.material.icons.outlined.Audiotrack
 import androidx.compose.material.icons.outlined.Code
-import androidx.compose.material.icons.outlined.CollectionsBookmark
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.GetApp
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Link
-import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Gesture
+import androidx.compose.material.icons.outlined.Memory
+import androidx.compose.material.icons.outlined.PlayCircleOutline
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.Storage
-import androidx.compose.material.icons.outlined.Sync
+import androidx.compose.material.icons.outlined.Subtitles
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
@@ -41,7 +36,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
-import eu.kanade.presentation.more.settings.screen.about.AboutScreen
+import eu.kanade.presentation.more.settings.screen.SettingsSearchScreen
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.util.LocalBackPress
 import eu.kanade.presentation.util.Screen
@@ -51,7 +46,7 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
-object SettingsMainScreen : Screen() {
+object PlayerSettingsMainScreen : Screen() {
     @Composable
     override fun Content() {
         Content(twoPane = false)
@@ -84,7 +79,7 @@ object SettingsMainScreen : Screen() {
             topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState),
             topBar = { scrollBehavior ->
                 AppBar(
-                    title = stringResource(MR.strings.label_settings),
+                    title = stringResource(MR.strings.label_player_settings),
                     navigateUp = backPress::invoke,
                     actions = {
                         AppBarActions(
@@ -92,7 +87,7 @@ object SettingsMainScreen : Screen() {
                                 AppBar.Action(
                                     title = stringResource(MR.strings.action_search),
                                     icon = Icons.Outlined.Search,
-                                    onClick = { navigator.navigate(SettingsSearchScreen(), twoPane) },
+                                    onClick = { navigator.navigate(SettingsSearchScreen(true), twoPane) },
                                 ),
                             ),
                         )
@@ -175,76 +170,40 @@ object SettingsMainScreen : Screen() {
 
     private val items = listOf(
         Item(
-            titleRes = MR.strings.pref_category_appearance,
-            subtitleRes = MR.strings.pref_appearance_summary,
-            icon = Icons.Outlined.Palette,
-            screen = SettingsAppearanceScreen,
+            titleRes = MR.strings.pref_player_internal,
+            subtitleRes = MR.strings.pref_player_internal_summary,
+            icon = Icons.Outlined.PlayCircleOutline,
+            screen = PlayerSettingsPlayerScreen,
         ),
         Item(
-            titleRes = MR.strings.pref_category_library,
-            subtitleRes = MR.strings.pref_library_summary,
-            icon = Icons.Outlined.CollectionsBookmark,
-            screen = SettingsLibraryScreen,
+            titleRes = MR.strings.pref_player_gestures,
+            subtitleRes = MR.strings.pref_player_gestures_summary,
+            icon = Icons.Outlined.Gesture,
+            screen = PlayerSettingsGesturesScreen,
         ),
         Item(
-            titleRes = MR.strings.pref_category_reader,
-            subtitleRes = MR.strings.pref_reader_summary,
-            icon = Icons.AutoMirrored.Outlined.ChromeReaderMode,
-            screen = SettingsReaderScreen,
+            titleRes = MR.strings.pref_player_decoder,
+            subtitleRes = MR.strings.pref_player_decoder_summary,
+            icon = Icons.Outlined.Memory,
+            screen = PlayerSettingsDecoderScreen,
         ),
         Item(
-            titleRes = MR.strings.pref_category_downloads,
-            subtitleRes = MR.strings.pref_downloads_summary,
-            icon = Icons.Outlined.GetApp,
-            screen = SettingsDownloadScreen,
+            titleRes = MR.strings.pref_player_subtitle,
+            subtitleRes = MR.strings.pref_player_subtitle_summary,
+            icon = Icons.Outlined.Subtitles,
+            screen = PlayerSettingsSubtitleScreen,
         ),
         Item(
-            titleRes = MR.strings.pref_category_tracking,
-            subtitleRes = MR.strings.pref_tracking_summary,
-            icon = Icons.Outlined.Sync,
-            screen = SettingsTrackingScreen,
-        ),
-        // AM (CONNECTIONS) -->
-        Item(
-            titleRes = MR.strings.pref_category_connections,
-            subtitleRes = MR.strings.pref_connections_summary,
-            icon = Icons.Outlined.Link,
-            screen = SettingsConnectionsScreen,
-        ),
-        // <-- AM (CONNECTIONS)
-        Item(
-            titleRes = MR.strings.browse,
-            subtitleRes = MR.strings.pref_browse_summary,
-            icon = Icons.Outlined.Explore,
-            screen = SettingsBrowseScreen,
+            titleRes = MR.strings.pref_player_audio,
+            subtitleRes = MR.strings.pref_player_audio_summary,
+            icon = Icons.Outlined.Audiotrack,
+            screen = PlayerSettingsAudioScreen,
         ),
         Item(
-            titleRes = MR.strings.label_data_storage,
-            subtitleRes = MR.strings.pref_backup_summary,
-            icon = Icons.Outlined.Storage,
-            screen = SettingsDataScreen,
-        ),
-        Item(
-            titleRes = MR.strings.pref_category_security,
-            subtitleRes = MR.strings.pref_security_summary,
-            icon = Icons.Outlined.Security,
-            screen = SettingsSecurityScreen,
-        ),
-        Item(
-            titleRes = MR.strings.pref_category_advanced,
-            subtitleRes = MR.strings.pref_advanced_summary,
+            titleRes = MR.strings.pref_player_advanced,
+            subtitleRes = MR.strings.pref_player_advanced_summary,
             icon = Icons.Outlined.Code,
-            screen = SettingsAdvancedScreen,
-        ),
-        Item(
-            titleRes = MR.strings.pref_category_about,
-            formatSubtitle = {
-                "${stringResource(MR.strings.app_name)} ${AboutScreen.getVersionName(
-                    withBuildDate = false,
-                )}"
-            },
-            icon = Icons.Outlined.Info,
-            screen = AboutScreen,
+            screen = PlayerSettingsAdvancedScreen,
         ),
     )
 }

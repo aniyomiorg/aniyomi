@@ -1,6 +1,6 @@
 package mihon.core.migration.migrations
 
-import eu.kanade.tachiyomi.App
+import android.app.Application
 import mihon.core.migration.Migration
 import mihon.core.migration.MigrationContext
 import java.io.File
@@ -10,7 +10,7 @@ class CoverToExternalFileMigration : Migration {
 
     // Move covers to external files dir.
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
-        val context = migrationContext.get<App>() ?: return false
+        val context = migrationContext.get<Application>() ?: return false
 
         val oldDir = File(context.externalCacheDir, "cover_disk_cache")
         if (oldDir.exists()) {

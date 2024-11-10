@@ -50,6 +50,12 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.UpIcon
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsAdvancedScreen
+import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsAudioScreen
+import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsDecoderScreen
+import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsGesturesScreen
+import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsPlayerScreen
+import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsSubtitleScreen
 import eu.kanade.presentation.util.Screen
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -58,7 +64,9 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.util.runOnEnterKeyPressed
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
-class SettingsSearchScreen : Screen() {
+class SettingsSearchScreen(
+    val isPlayer: Boolean = false,
+) : Screen() {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -115,7 +123,13 @@ class SettingsSearchScreen : Screen() {
                                 decorator = {
                                     if (textFieldState.text.isEmpty()) {
                                         Text(
-                                            text = stringResource(MR.strings.action_search_settings),
+                                            text = stringResource(
+                                                resource = if (isPlayer) {
+                                                    MR.strings.action_search_player_settings
+                                                } else {
+                                                    MR.strings.action_search_settings
+                                                },
+                                            ),
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             style = MaterialTheme.typography.bodyLarge,
                                         )
@@ -142,6 +156,7 @@ class SettingsSearchScreen : Screen() {
         ) { contentPadding ->
             SearchResult(
                 searchKey = textFieldState.text.toString(),
+                isPlayer = isPlayer,
                 listState = listState,
                 contentPadding = contentPadding,
             ) { result ->
@@ -155,6 +170,7 @@ class SettingsSearchScreen : Screen() {
 @Composable
 private fun SearchResult(
     searchKey: String,
+    isPlayer: Boolean,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(),
@@ -164,7 +180,7 @@ private fun SearchResult(
 
     val isLtr = LocalLayoutDirection.current == LayoutDirection.Ltr
 
-    val index = getIndex()
+    val index = if (isPlayer) getPlayerIndex() else getIndex()
     val result by produceState<List<SearchResultItem>?>(initialValue = null, searchKey) {
         value = index.asSequence()
             .flatMap { settingsData ->
@@ -271,6 +287,17 @@ private fun getIndex() = settingScreens
         )
     }
 
+@Composable
+@NonRestartableComposable
+private fun getPlayerIndex() = playerSettingScreens
+    .map { screen ->
+        SettingsData(
+            title = stringResource(screen.getTitleRes()),
+            route = screen,
+            contents = screen.getPreferences(),
+        )
+    }
+
 private fun getLocalizedBreadcrumb(path: String, node: String?, isLtr: Boolean): String {
     return if (node == null) {
         path
@@ -285,11 +312,19 @@ private fun getLocalizedBreadcrumb(path: String, node: String?, isLtr: Boolean):
     }
 }
 
+private val playerSettingScreens = listOf(
+    PlayerSettingsPlayerScreen,
+    PlayerSettingsGesturesScreen,
+    PlayerSettingsDecoderScreen,
+    PlayerSettingsSubtitleScreen,
+    PlayerSettingsAudioScreen,
+    PlayerSettingsAdvancedScreen,
+)
+
 private val settingScreens = listOf(
     SettingsAppearanceScreen,
     SettingsLibraryScreen,
     SettingsReaderScreen,
-    SettingsPlayerScreen,
     SettingsDownloadScreen,
     SettingsTrackingScreen,
     // AM (CONNECTIONS) -->

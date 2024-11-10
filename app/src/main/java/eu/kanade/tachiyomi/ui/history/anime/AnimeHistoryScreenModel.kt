@@ -5,7 +5,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.presentation.history.anime.AnimeHistoryUiModel
-import eu.kanade.tachiyomi.util.lang.toLocalDateTime
+import eu.kanade.tachiyomi.util.lang.toLocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -69,8 +69,8 @@ class AnimeHistoryScreenModel(
     private fun List<AnimeHistoryWithRelations>.toAnimeHistoryUiModels(): List<AnimeHistoryUiModel> {
         return map { AnimeHistoryUiModel.Item(it) }
             .insertSeparators { before, after ->
-                val beforeDate = before?.item?.seenAt?.time?.toLocalDateTime()
-                val afterDate = after?.item?.seenAt?.time?.toLocalDateTime()
+                val beforeDate = before?.item?.seenAt?.time?.toLocalDate()
+                val afterDate = after?.item?.seenAt?.time?.toLocalDate()
                 when {
                     beforeDate != afterDate && afterDate != null -> AnimeHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.

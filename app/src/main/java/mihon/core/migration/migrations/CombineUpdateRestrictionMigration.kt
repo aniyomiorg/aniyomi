@@ -1,7 +1,7 @@
 package mihon.core.migration.migrations
 
+import android.app.Application
 import androidx.preference.PreferenceManager
-import eu.kanade.tachiyomi.App
 import mihon.core.migration.Migration
 import mihon.core.migration.MigrationContext
 import tachiyomi.core.common.preference.minusAssign
@@ -13,7 +13,7 @@ class CombineUpdateRestrictionMigration : Migration {
 
     // Combine global update item restrictions
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
-        val context = migrationContext.get<App>() ?: return false
+        val context = migrationContext.get<Application>() ?: return false
         val libraryPreferences = migrationContext.get<LibraryPreferences>() ?: return false
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 

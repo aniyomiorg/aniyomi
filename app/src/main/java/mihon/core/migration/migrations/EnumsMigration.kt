@@ -1,8 +1,8 @@
 package mihon.core.migration.migrations
 
+import android.app.Application
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import eu.kanade.tachiyomi.App
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.InvertedPlayback
@@ -17,7 +17,7 @@ class EnumsMigration : Migration {
 
     // refactor(player): Implement more enums
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
-        val context = migrationContext.get<App>() ?: return false
+        val context = migrationContext.get<Application>() ?: return false
         val preferenceStore = migrationContext.get<PreferenceStore>() ?: return false
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -47,7 +47,7 @@ class EnumsMigration : Migration {
 
             preferenceStore.getEnum("pref_inverted_playback", InvertedPlayback.NONE).set(invertedPlayback)
             preferenceStore.getEnum("pref_hardware_decoding", HwDecState.defaultHwDec).set(hardwareDecoding)
-            preferenceStore.getEnum("pref_video_debanding", VideoDebanding.DISABLED).set(videoDebanding)
+            preferenceStore.getEnum("pref_video_debanding", VideoDebanding.NONE).set(videoDebanding)
             preferenceStore.getEnum("pref_player_aspect_state", AspectState.FIT).set(aspectState)
             preferenceStore.getBoolean("pref_gpu_next", false).set(gpuNext.get())
         }
