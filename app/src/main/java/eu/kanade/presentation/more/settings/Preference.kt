@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import eu.kanade.core.preference.asState
-import eu.kanade.tachiyomi.data.connections.ConnectionsService
 import eu.kanade.presentation.more.settings.Preference.PreferenceItem
+import eu.kanade.tachiyomi.data.connections.ConnectionsService
 import eu.kanade.tachiyomi.data.track.Tracker
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
