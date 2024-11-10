@@ -1,8 +1,8 @@
 package mihon.core.migration.migrations
 
+import android.app.Application
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import eu.kanade.tachiyomi.App
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import mihon.core.migration.Migration
@@ -13,7 +13,7 @@ class DOHMigration : Migration {
 
     // Migrate DNS over HTTPS setting
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
-        val context = migrationContext.get<App>() ?: return false
+        val context = migrationContext.get<Application>() ?: return false
         val networkPreferences = migrationContext.get<NetworkPreferences>() ?: return false
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 

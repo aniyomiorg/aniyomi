@@ -1,9 +1,9 @@
 package mihon.core.migration.migrations
 
+import android.app.Application
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.tachiyomi.App
 import mihon.core.migration.Migration
 import mihon.core.migration.MigrationContext
 
@@ -12,7 +12,7 @@ class SplitPreferencesMigration : Migration {
 
     // Split the rest of the preferences in PreferencesHelper
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
-        val context = migrationContext.get<App>() ?: return false
+        val context = migrationContext.get<Application>() ?: return false
         val uiPreferences = migrationContext.get<UiPreferences>() ?: return false
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 

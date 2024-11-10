@@ -170,10 +170,10 @@ class PlayerActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onNewIntent(intent: Intent) {
-        val animeId = intent.extras!!.getLong("animeId", -1)
-        val episodeId = intent.extras!!.getLong("episodeId", -1)
-        val vidList = intent.extras!!.getString("vidList", "")
-        val vidIndex = intent.extras!!.getInt("vidIndex", 0)
+        val animeId = intent.extras?.getLong("animeId") ?: -1
+        val episodeId = intent.extras?.getLong("episodeId") ?: -1
+        val vidList = intent.extras?.getString("vidList") ?: ""
+        val vidIndex = intent.extras?.getInt("vidIndex") ?: 0
         if (animeId == -1L || episodeId == -1L) {
             finish()
             return
@@ -681,8 +681,7 @@ class PlayerActivity : BaseActivity() {
         when (playerPreferences.videoDebanding().get()) {
             VideoDebanding.CPU -> MPVLib.setOptionString("vf", "gradfun=radius=12")
             VideoDebanding.GPU -> MPVLib.setOptionString("deband", "yes")
-            VideoDebanding.YUV420P -> MPVLib.setOptionString("vf", "format=yuv420p")
-            VideoDebanding.DISABLED -> {}
+            VideoDebanding.NONE -> {}
         }
 
         val currentPlayerStatisticsPage = playerPreferences.playerStatisticsPage().get()
