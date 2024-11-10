@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.GetApp
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Security
@@ -203,6 +204,14 @@ object SettingsMainScreen : Screen() {
             icon = Icons.Outlined.Sync,
             screen = SettingsTrackingScreen,
         ),
+        // AM (CONNECTIONS) -->
+        Item(
+            titleRes = MR.strings.pref_category_connections,
+            subtitleRes = MR.strings.pref_connections_summary,
+            icon = Icons.Outlined.Link,
+            screen = SettingsConnectionsScreen,
+        ),
+        // <-- AM (CONNECTIONS)
         Item(
             titleRes = MR.strings.browse,
             subtitleRes = MR.strings.pref_browse_summary,

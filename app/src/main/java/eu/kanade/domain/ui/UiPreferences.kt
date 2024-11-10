@@ -28,6 +28,8 @@ class UiPreferences(
         },
     )
 
+    fun colorTheme() = preferenceStore.getInt("pref_color_theme", 0)
+
     fun themeDarkAmoled() = preferenceStore.getBoolean("pref_theme_dark_amoled_key", false)
 
     fun relativeTime() = preferenceStore.getBoolean("relative_time_v2", true)

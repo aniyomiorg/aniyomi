@@ -5,6 +5,7 @@ import logcat.LogPriority
 import tachiyomi.core.common.util.lang.toLong
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.data.items.chapter.ChapterMapper.mapChapter
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.repository.ChapterRepository

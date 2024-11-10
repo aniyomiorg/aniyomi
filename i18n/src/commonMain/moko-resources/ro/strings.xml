@@ -746,8 +746,8 @@
     <string name="also_set_chapter_settings_for_library">De asemenea, se aplică la toate manga în biblioteca mea</string>
     <string name="dialog_with_checkbox_reset">Resetează toate capitolele pentru acest manga</string>
     <string name="download_insufficient_space">Nu s-au putut descărca capitole din cauza spațiului de stocare redus</string>
-    <string name="download_queue_size_warning">Atentie : actualizarile mari la gramada vor face sursele mai incete si pot/vor bloca Aniyomi. Apasa pentru mai multe informatii.</string>
-    <string name="information_webview_required">WebView este necesar pentru Aniyomi</string>
+    <string name="download_queue_size_warning">Atentie : actualizarile mari la gramada vor face sursele mai incete si pot/vor bloca Animetail. Apasa pentru mai multe informatii.</string>
+    <string name="information_webview_required">WebView este necesar pentru Animetail</string>
     <string name="download_notifier_download_paused_chapters">Descărcare întreruptă</string>
     <string name="channel_new_chapters_episodes">Actualizări de capitole</string>
 </resources>

@@ -1,5 +1,8 @@
 package eu.kanade.presentation.entries.anime
 
+import android.content.Context
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.slideInHorizontally
@@ -19,6 +22,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Cast
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Input
@@ -50,11 +54,19 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.core.screen.Screen
+import com.google.android.gms.cast.MediaInfo
+import com.google.android.gms.cast.MediaLoadRequestData
+import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.cast.MediaQueueItem
+import com.google.android.gms.cast.MediaStatus
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.common.images.WebImage
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -73,6 +85,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+private val playerPreferences = Injekt.get<PlayerPreferences>()
 
 class EpisodeOptionsDialogScreen(
     private val useExternalDownloader: Boolean,
@@ -254,6 +267,7 @@ private fun VideoList(
                                 episode.id,
                                 true,
                                 selectedVideo,
+                                videoList,
                             )
                         }
                     },
@@ -269,6 +283,24 @@ private fun VideoList(
                             )
                         }
                     },
+                    // start tail cast
+                    onCastClicked = {
+                        scope.launch {
+                            if (playerPreferences.enableCast().get()) {
+                                sendChaptersToCast(
+                                    context,
+                                    anime.title,
+                                    episode.name,
+                                    episode.lastSecondSeen,
+                                    anime.thumbnailUrl.orEmpty(),
+                                    selectedVideo.videoUrl!!,
+                                )
+                            } else {
+                                context.toast("Cast is disabled")
+                            }
+                        }
+                    },
+                    // end tail cast
                 )
             }
         }
@@ -303,6 +335,7 @@ private fun QualityOptions(
     onCopyClicked: () -> Unit = {},
     onExtPlayerClicked: () -> Unit = {},
     onIntPlayerClicked: () -> Unit = {},
+    onCastClicked: () -> Unit = {},
 ) {
     val closeMenu = { EpisodeOptionsDialogScreen.onDismissDialog() }
 
@@ -347,6 +380,15 @@ private fun QualityOptions(
                 onIntPlayerClicked()
                 closeMenu()
             },
+
+        )
+        ClickableRow(
+            text = stringResource(MR.strings.action_cast), // Texto para la nueva opción
+            icon = Icons.Outlined.Cast, // Icono para la nueva opción
+            onClick = {
+                onCastClicked()
+                closeMenu()
+            },
         )
     }
 }
@@ -384,7 +426,6 @@ private fun ClickableRow(
             modifier = Modifier.padding(vertical = textPadding),
             style = MaterialTheme.typography.bodyMedium,
         )
-
         if (showDropdownArrow) {
             Icon(
                 imageVector = Icons.Outlined.NavigateNext,
@@ -395,3 +436,53 @@ private fun ClickableRow(
         }
     }
 }
+
+// Start tail cast
+
+private fun sendChaptersToCast(
+    context: Context,
+    title: String,
+    episode: String,
+    lastSecondSeen: Long,
+    image: String,
+    videoUrl: String,
+) {
+    val castSession = CastContext.getSharedInstance(context).sessionManager.currentCastSession
+    val remoteMediaClient = castSession?.remoteMediaClient
+    if (castSession == null || !castSession.isConnected) {
+        Toast.makeText(context, "Cast is not connected", Toast.LENGTH_SHORT).show()
+        return
+    }
+    if (remoteMediaClient != null) {
+        val mediaMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE).apply {
+            putString(MediaMetadata.KEY_TITLE, title)
+            putString(MediaMetadata.KEY_SUBTITLE, episode)
+            addImage(WebImage(Uri.parse(image)))
+        }
+        val mediaInfo = MediaInfo.Builder(videoUrl)
+            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+            .setContentType("video/mp4")
+            .setMetadata(mediaMetadata)
+            .build()
+        val mediaQueueItem = MediaQueueItem.Builder(mediaInfo)
+            .setAutoplay(true)
+            .setStartTime(lastSecondSeen.toDouble() / 1000)
+            .build()
+        val mediaStatus = remoteMediaClient.mediaStatus
+        if (mediaStatus != null && mediaStatus.playerState == MediaStatus.PLAYER_STATE_PLAYING) {
+            // Si hay un video reproduciéndose, agregar el nuevo video a la cola
+            remoteMediaClient.queueAppendItem(mediaQueueItem, null)
+        } else {
+            // Si no hay un video reproduciéndose, cargar el video directamente
+            val mediaLoadRequestData = MediaLoadRequestData.Builder()
+                .setMediaInfo(mediaInfo)
+                .setCurrentTime(lastSecondSeen)
+                .build()
+            remoteMediaClient.load(mediaLoadRequestData)
+        }
+    } else {
+        Toast.makeText(context, "remoteMediaClient is null", Toast.LENGTH_SHORT).show()
+    }
+}
+
+// End tail cast0

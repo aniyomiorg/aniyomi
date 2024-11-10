@@ -16,14 +16,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.util.fastForEach
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibrarySettingsScreenModel
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import eu.kanade.tachiyomi.util.system.isPreviewBuildType
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
@@ -32,6 +37,7 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.BaseSortItem
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
+import tachiyomi.presentation.core.components.IconItem
 import tachiyomi.presentation.core.components.SettingsChipRow
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
@@ -40,10 +46,14 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
 @Composable
+@Suppress("MagicNumber")
 fun MangaLibrarySettingsDialog(
     onDismissRequest: () -> Unit,
     screenModel: MangaLibrarySettingsScreenModel,
     category: Category?,
+    // SY -->
+    hasCategories: Boolean,
+    // SY <--
 ) {
     TabbedDialog(
         onDismissRequest = onDismissRequest,
@@ -51,6 +61,9 @@ fun MangaLibrarySettingsDialog(
             stringResource(MR.strings.action_filter),
             stringResource(MR.strings.action_sort),
             stringResource(MR.strings.action_display),
+            // SY -->
+            stringResource(MR.strings.group),
+            // SY <--
         ),
     ) { page ->
         Column(
@@ -69,6 +82,12 @@ fun MangaLibrarySettingsDialog(
                 2 -> DisplayPage(
                     screenModel = screenModel,
                 )
+                // SY -->
+                3 -> GroupPage(
+                    screenModel = screenModel,
+                    hasCategories = hasCategories,
+                )
+                // SY <--
             }
         }
     }
@@ -167,8 +186,19 @@ private fun ColumnScope.SortPage(
     screenModel: MangaLibrarySettingsScreenModel,
 ) {
     val trackers by screenModel.trackersFlow.collectAsState()
-    val sortingMode = category.sort.type
-    val sortDescending = !category.sort.isAscending
+    // SY -->
+    val globalSortMode by screenModel.libraryPreferences.mangaSortingMode().collectAsState()
+    val sortingMode = if (screenModel.grouping == MangaLibraryGroup.BY_DEFAULT) {
+        category.sort.type
+    } else {
+        globalSortMode.type
+    }
+    val sortDescending = if (screenModel.grouping == MangaLibraryGroup.BY_DEFAULT) {
+        category.sort.isAscending
+    } else {
+        globalSortMode.isAscending
+    }.not()
+    // SY <--
 
     val options = remember(trackers.isEmpty()) {
         val trackerMeanPair = if (trackers.isNotEmpty()) {
@@ -298,4 +328,61 @@ private fun ColumnScope.DisplayPage(
         label = stringResource(MR.strings.action_display_show_number_of_items),
         pref = screenModel.libraryPreferences.categoryNumberOfItems(),
     )
+}
+
+data class GroupMode(
+    val int: Int,
+    val nameRes: Int,
+    val drawableRes: Int,
+)
+
+private fun groupTypeDrawableRes(type: Int): Int {
+    return when (type) {
+        MangaLibraryGroup.BY_STATUS -> R.drawable.ic_progress_clock_24dp
+        MangaLibraryGroup.BY_TRACK_STATUS -> R.drawable.ic_sync_24dp
+        MangaLibraryGroup.BY_SOURCE -> R.drawable.ic_browse_filled_24dp
+        MangaLibraryGroup.BY_TAG -> R.drawable.ic_tag_24dp
+        MangaLibraryGroup.UNGROUPED -> R.drawable.ic_ungroup_24dp
+        else -> R.drawable.ic_label_24dp
+    }
+}
+
+@Composable
+private fun ColumnScope.GroupPage(
+    screenModel: MangaLibrarySettingsScreenModel,
+    hasCategories: Boolean,
+) {
+    val trackers by screenModel.trackersFlow.collectAsState()
+
+    val groups = remember(hasCategories, trackers) {
+        buildList {
+            add(MangaLibraryGroup.BY_DEFAULT)
+            add(MangaLibraryGroup.BY_SOURCE)
+            add(MangaLibraryGroup.BY_TAG)
+            add(MangaLibraryGroup.BY_STATUS)
+            if (trackers.isNotEmpty()) {
+                add(MangaLibraryGroup.BY_TRACK_STATUS)
+            }
+            if (hasCategories) {
+                add(MangaLibraryGroup.UNGROUPED)
+            }
+        }.map {
+            GroupMode(
+                it,
+                MangaLibraryGroup.groupTypeStringRes(it, hasCategories),
+                groupTypeDrawableRes(it),
+            )
+        }
+    }
+
+    groups.fastForEach {
+        IconItem(
+            label = stringResource(it.nameRes),
+            icon = painterResource(it.drawableRes),
+            selected = it.int == screenModel.grouping,
+            onClick = {
+                screenModel.setGrouping(it.int)
+            },
+        )
+    }
 }
