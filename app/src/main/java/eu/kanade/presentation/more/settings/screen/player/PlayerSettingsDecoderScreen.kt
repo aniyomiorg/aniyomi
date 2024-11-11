@@ -5,7 +5,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import kotlinx.collections.immutable.toImmutableMap
 import tachiyomi.i18n.MR
@@ -21,12 +21,12 @@ object PlayerSettingsDecoderScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
+        val decoderPreferences = remember { Injekt.get<DecoderPreferences>() }
 
-        val tryHw = playerPreferences.tryHWDecoding()
-        val useGpuNext = playerPreferences.gpuNext()
-        val debanding = playerPreferences.videoDebanding()
-        val yuv420p = playerPreferences.useYUV420P()
+        val tryHw = decoderPreferences.tryHWDecoding()
+        val useGpuNext = decoderPreferences.gpuNext()
+        val debanding = decoderPreferences.videoDebanding()
+        val yuv420p = decoderPreferences.useYUV420P()
 
         return listOf(
             Preference.PreferenceItem.SwitchPreference(

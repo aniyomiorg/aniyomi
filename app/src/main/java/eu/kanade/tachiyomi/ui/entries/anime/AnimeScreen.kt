@@ -313,7 +313,7 @@ class AnimeScreen(
                 }
                 SkipIntroLengthDialog(
                     currentSkipIntroLength = successState.anime.skipIntroLength,
-                    defaultSkipIntroLength = screenModel.playerPreferences.defaultIntroLength().get(),
+                    defaultSkipIntroLength = screenModel.gesturePreferences.defaultIntroLength().get(),
                     fromPlayer = false,
                     updateSkipIntroLength = ::updateSkipIntroLength,
                     onDismissRequest = onDismissRequest,

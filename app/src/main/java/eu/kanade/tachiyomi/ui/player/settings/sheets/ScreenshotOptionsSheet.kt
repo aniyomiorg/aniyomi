@@ -37,7 +37,7 @@ fun ScreenshotOptionsSheet(
     onDismissRequest: () -> Unit,
 ) {
     var showSetCoverDialog by remember { mutableStateOf(false) }
-    val showSubtitles by remember { mutableStateOf(screenModel.preferences.screenshotSubtitles()) }
+    val showSubtitles by remember { mutableStateOf(screenModel.subtitlePreferences.screenshotSubtitles()) }
 
     AdaptiveSheet(
         onDismissRequest = onDismissRequest,

@@ -28,7 +28,7 @@ fun FiltersPage(
     screenModel: PlayerSettingsScreenModel,
     modifier: Modifier = Modifier,
 ) {
-    if (!screenModel.preferences.gpuNext().get()) {
+    if (!screenModel.decoderPreferences.gpuNext().get()) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,

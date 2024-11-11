@@ -27,8 +27,8 @@ fun StreamsDelayPage(
     screenModel: PlayerSettingsScreenModel,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall)) {
-        val audioDelay by remember { mutableStateOf(screenModel.preferences.rememberAudioDelay()) }
-        val subDelay by remember { mutableStateOf(screenModel.preferences.rememberSubtitlesDelay()) }
+        val audioDelay by remember { mutableStateOf(screenModel.audioPreferences.rememberAudioDelay()) }
+        val subDelay by remember { mutableStateOf(screenModel.subtitlePreferences.rememberSubtitlesDelay()) }
         var currentSubDelay by rememberSaveable {
             mutableStateOf(
                 (MPVLib.getPropertyDouble(Streams.SUBTITLES.mpvProperty) * 1000)
@@ -60,7 +60,7 @@ fun StreamsDelayPage(
                 step = 100,
                 onValueChanged = {
                     MPVLib.setPropertyDouble(Streams.AUDIO.mpvProperty, it / 1000.0)
-                    screenModel.preferences.audioDelay().set(it)
+                    screenModel.audioPreferences.audioDelay().set(it)
                     currentAudioDelay = it
                 },
             )
@@ -87,7 +87,7 @@ fun StreamsDelayPage(
                 step = 100,
                 onValueChanged = {
                     MPVLib.setPropertyDouble(Streams.SUBTITLES.mpvProperty, it / 1000.0)
-                    screenModel.preferences.subtitlesDelay().set(it)
+                    screenModel.subtitlePreferences.subtitlesDelay().set(it)
                     currentSubDelay = it
                 },
             )

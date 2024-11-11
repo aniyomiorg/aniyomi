@@ -41,12 +41,12 @@ fun PlayerSettingsSheet(
     }
     val horizontalGesture by remember {
         mutableStateOf(
-            screenModel.preferences.gestureHorizontalSeek(),
+            screenModel.gesturePreferences.gestureHorizontalSeek(),
         )
     }
     var audioChannel by remember {
         mutableStateOf(
-            screenModel.preferences.audioChannels().get(),
+            screenModel.audioPreferences.audioChannels().get(),
         )
     }
     var statisticsPage by remember {
@@ -54,11 +54,11 @@ fun PlayerSettingsSheet(
             screenModel.preferences.playerStatisticsPage().get(),
         )
     }
-    var decoder by remember { mutableStateOf(screenModel.preferences.hardwareDecoding().get()) }
+    var decoder by remember { mutableStateOf(screenModel.decoderPreferences.hardwareDecoding().get()) }
 
     val changeAudioChannel: (AudioChannels) -> Unit = { channel ->
         audioChannel = channel
-        screenModel.preferences.audioChannels().set(channel)
+        screenModel.audioPreferences.audioChannels().set(channel)
         if (channel == AudioChannels.ReverseStereo) {
             // clean the `audio-channels` property when using reverse stereo
             MPVLib.setPropertyString(AudioChannels.Auto.propertyName, AudioChannels.Auto.propertyName)
@@ -84,7 +84,7 @@ fun PlayerSettingsSheet(
     val togglePlayerDecoder: (HwDecState) -> Unit = { hwDecState ->
         MPVLib.setOptionString("hwdec", hwDecState.mpvValue)
         decoder = hwDecState
-        screenModel.preferences.hardwareDecoding().set(hwDecState)
+        screenModel.decoderPreferences.hardwareDecoding().set(hwDecState)
     }
 
     AdaptiveSheet(

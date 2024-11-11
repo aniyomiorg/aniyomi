@@ -260,6 +260,7 @@
     <!-- Player settings - Subtitles -->
     <string name="pref_player_subtitle">Subtitles</string>
     <string name="pref_player_subtitle_summary">Preferred languages, whitelist, blacklist</string>
+    <string name="player_subtitle_remember_delay">Remember subtitle delay</string>
     <string name="pref_player_subtitle_lang">Preferred languages</string>
     <string name="pref_player_subtitle_lang_info">Subtitle language(s) to be selected by default on a video with multiple subtitles, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
     <string name="pref_player_subtitle_whitelist">Whitelist</string>
@@ -270,6 +271,7 @@
     <!-- Player settings - Audio -->
     <string name="pref_player_audio">Audio</string>
     <string name="pref_player_audio_summary">Preferred languages, pitch correction, audio channels</string>
+    <string name="player_audio_remember_delay">Remember audio delay</string>
     <string name="pref_player_audio_lang">Preferred languages</string>
     <string name="pref_player_audio_lang_info">Audio language(s) to be selected by default on a video with multiple audio streams, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
     <string name="pref_player_audio_pitch_correction">Enable audio pitch correction</string>
@@ -290,6 +292,14 @@
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
     <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
     <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
+
+    <!-- Player -->
+
+    <!-- Sheets -->
+    <!-- Sheets - Subtitles -->
+    <string name="player_sheets_subtitles_border_style_outline_and_shadow">Outline and shadow</string>
+    <string name="player_sheets_subtitles_border_style_opaque_box">Opaque box</string>
+    <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
 
     <!-- Subsections -->
     <string name="pref_category_general">General</string>
@@ -1210,9 +1220,7 @@
     <string name="player_override_ass_subtitles">Override ASS subtitles</string>
     <string name="player_reset_subtitles">Reset subtitles to default</string>
     <string name="player_subtitle_delay">Subtitle delay</string>
-    <string name="player_subtitle_remember_delay">Remember subtitle delay</string>
     <string name="player_audio_delay">Audio delay</string>
-    <string name="player_audio_remember_delay">Remember audio delay</string>
     <string name="player_track_delay_text_field">Delay(s)</string>
     <string name="player_font_size_text_field">Font size</string>
     <string name="player_subtitle_text_color">Text</string>

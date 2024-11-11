@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -18,7 +19,7 @@ class VideoPlayerPreferenceMigration : Migration {
 
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<Application>() ?: return false
-        val playerPreferences = migrationContext.get<PlayerPreferences>() ?: return false
+        val subtitlePreferences = migrationContext.get<SubtitlePreferences>() ?: return false
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         val subtitleConf = prefs.getString("pref_sub_select_conf", "")!!
@@ -29,9 +30,9 @@ class VideoPlayerPreferenceMigration : Migration {
         }
 
         prefs.edit {
-            putString(playerPreferences.preferredSubLanguages().key(), subtitleData.lang.joinToString(","))
-            putString(playerPreferences.subtitleWhitelist().key(), subtitleData.whitelist.joinToString(","))
-            putString(playerPreferences.subtitleBlacklist().key(), subtitleData.blacklist.joinToString(","))
+            putString(subtitlePreferences.preferredSubLanguages().key(), subtitleData.lang.joinToString(","))
+            putString(subtitlePreferences.subtitleWhitelist().key(), subtitleData.whitelist.joinToString(","))
+            putString(subtitlePreferences.subtitleBlacklist().key(), subtitleData.blacklist.joinToString(","))
         }
 
         return true

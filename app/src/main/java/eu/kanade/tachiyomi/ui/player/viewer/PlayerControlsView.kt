@@ -36,6 +36,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private val activity: PlayerActivity = context.getActivity()!!
 
     private val playerPreferences = activity.playerPreferences
+    private val gesturePreferences = activity.gesturePreferences
 
     private val player get() = activity.player
 
@@ -70,7 +71,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun onValueChangeFinished(value: Float) {
         if (SeekState.mode == SeekState.SEEKBAR) {
-            if (playerPreferences.playerSmoothSeek().get()) {
+            if (gesturePreferences.playerSmoothSeek().get()) {
                 player.timePos = value.toInt()
             } else {
                 MPVLib.command(

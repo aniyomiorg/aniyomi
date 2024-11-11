@@ -12,7 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
@@ -26,13 +26,13 @@ object PlayerSettingsAdvancedScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
+        val advancedPlayerPreferences = remember { Injekt.get<AdvancedPlayerPreferences>() }
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
 
-        val enableScripts = playerPreferences.mpvScripts()
-        val mpvConf = playerPreferences.mpvConf()
-        val mpvInput = playerPreferences.mpvInput()
+        val enableScripts = advancedPlayerPreferences.mpvScripts()
+        val mpvConf = advancedPlayerPreferences.mpvConf()
+        val mpvInput = advancedPlayerPreferences.mpvInput()
 
         return listOf(
             Preference.PreferenceItem.SwitchPreference(

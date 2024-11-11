@@ -46,6 +46,10 @@ val sheetDialogPadding = PaddingValues(
 
 class PlayerSettingsScreenModel(
     val preferences: PlayerPreferences = Injekt.get(),
+    val decoderPreferences: DecoderPreferences = Injekt.get(),
+    val gesturePreferences: GesturePreferences = Injekt.get(),
+    val subtitlePreferences: SubtitlePreferences = Injekt.get(),
+    val audioPreferences: AudioPreferences = Injekt.get(),
     val hasSubTracks: Boolean = true,
 ) : ScreenModel {
 

@@ -5,6 +5,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
@@ -19,8 +20,9 @@ class GestureHandler(
     private val trigger = width.coerceAtMost(height) / 25
 
     private val preferences: PlayerPreferences by injectLazy()
+    private val gesturePreferences: GesturePreferences by injectLazy()
 
-    val interval = preferences.skipLengthPreference().get()
+    val interval = gesturePreferences.skipLengthPreference().get()
 
     override fun onDown(event: MotionEvent): Boolean {
         return true
@@ -144,7 +146,7 @@ class GestureHandler(
                 STATE_HORIZONTAL -> {
                     val diff = 150F * -dx / width
                     scrollDiff = diff
-                    if (preferences.gestureHorizontalSeek().get()) activity.horizontalScroll(diff)
+                    if (gesturePreferences.gestureHorizontalSeek().get()) activity.horizontalScroll(diff)
                 }
             }
         }
@@ -156,7 +158,7 @@ class GestureHandler(
         if (event.action == MotionEvent.ACTION_UP) {
             if (scrollState == STATE_HORIZONTAL) {
                 scrollDiff?.let {
-                    if (preferences.gestureHorizontalSeek().get()) {
+                    if (gesturePreferences.gestureHorizontalSeek().get()) {
                         activity.horizontalScroll(
                             it,
                             final = true,

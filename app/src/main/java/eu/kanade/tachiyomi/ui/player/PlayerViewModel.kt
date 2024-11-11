@@ -29,6 +29,7 @@ import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
@@ -72,6 +73,7 @@ import java.io.InputStream
 import java.util.Date
 
 class PlayerViewModel @JvmOverloads constructor(
+    private val activity: PlayerActivity,
     private val savedState: SavedStateHandle,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
@@ -88,6 +90,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     internal val networkPreferences: NetworkPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
+    internal val gesturePreferences: GesturePreferences = Injekt.get(),
     private val basePreferences: BasePreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
@@ -631,7 +634,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * Returns the skipIntroLength used by this anime or the default one.
      */
     fun getAnimeSkipIntroLength(resolveDefault: Boolean = true): Int {
-        val default = playerPreferences.defaultIntroLength().get()
+        val default = gesturePreferences.defaultIntroLength().get()
         val anime = currentAnime ?: return default
         val skipIntroLength = anime.skipIntroLength
         return when {
