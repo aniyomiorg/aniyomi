@@ -141,4 +141,10 @@
     <string name="action_show_errors">വിശദാംശങ്ങൾ കാണാൻ ടാപ്പുചെയ്യുക</string>
     <string name="action_start_downloading_now">ഇപ്പോൾ ഡൗൺലോഡ് ചെയ്യാൻ ആരംഭിക്കുക</string>
     <string name="action_not_now">ഇപ്പോൾ വേണ്ട</string>
+    <string name="action_copy_link">ലിങ്ക് പകര്‍ത്തുക</string>
+    <string name="action_restore">പുനഃസ്ഥാപിക്കുക</string>
+    <string name="action_migrate_duplicate">നിലവിലുള്ള എൻട്രി മാറ്റുക</string>
+    <string name="loading">ലോഡുചെയ്യുന്നു…</string>
+    <string name="internal_error">ആന്തരിക തെറ്റു: കൂടുതൽ വിവരങ്ങൾക്കായി ക്രാഷ് ലോഗുകൾ പരിശോധിക്കുക</string>
+    <string name="app_not_available">അപ്ലിക്കേഷൻ ലഭ്യമല്ല</string>
 </resources>
