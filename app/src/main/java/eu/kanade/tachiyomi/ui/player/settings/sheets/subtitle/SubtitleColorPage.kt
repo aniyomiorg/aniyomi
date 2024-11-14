@@ -33,8 +33,8 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import dev.icerock.moko.resources.StringResource
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
+import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.getAndSet
@@ -62,11 +62,11 @@ private fun SubtitleColors(
         subsColor = if (newColor != subsColor) newColor else SubsColor.NONE
     }
 
-    val textColorPref = screenModel.preferences.textColorSubtitles()
-    val borderColorPref = screenModel.preferences.borderColorSubtitles()
-    val backgroundColorPref = screenModel.preferences.backgroundColorSubtitles()
+    val textColorPref = screenModel.subtitlePreferences.textColorSubtitles()
+    val borderColorPref = screenModel.subtitlePreferences.borderColorSubtitles()
+    val backgroundColorPref = screenModel.subtitlePreferences.backgroundColorSubtitles()
 
-    val font by screenModel.preferences.subtitleFont().collectAsState()
+    val font by screenModel.subtitlePreferences.subtitleFont().collectAsState()
 
     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
         SubtitleColorSelector(
@@ -92,8 +92,8 @@ private fun SubtitleColors(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         SubtitlePreview(
             font = font,
-            isBold = screenModel.preferences.boldSubtitles().collectAsState().value,
-            isItalic = screenModel.preferences.italicSubtitles().collectAsState().value,
+            isBold = screenModel.subtitlePreferences.boldSubtitles().collectAsState().value,
+            isItalic = screenModel.subtitlePreferences.italicSubtitles().collectAsState().value,
             textColor = Color(textColorPref.collectAsState().value),
             borderColor = Color(borderColorPref.collectAsState().value),
             backgroundColor = Color(backgroundColorPref.collectAsState().value),
@@ -105,25 +105,25 @@ private fun SubtitleColors(
             SubtitleColorSlider(
                 argb = ARGBValue.RED,
                 subsColor = subsColor,
-                preference = subsColor.preference(screenModel.preferences),
+                preference = subsColor.preference(screenModel.subtitlePreferences),
             )
 
             SubtitleColorSlider(
                 argb = ARGBValue.GREEN,
                 subsColor = subsColor,
-                preference = subsColor.preference(screenModel.preferences),
+                preference = subsColor.preference(screenModel.subtitlePreferences),
             )
 
             SubtitleColorSlider(
                 argb = ARGBValue.BLUE,
                 subsColor = subsColor,
-                preference = subsColor.preference(screenModel.preferences),
+                preference = subsColor.preference(screenModel.subtitlePreferences),
             )
 
             SubtitleColorSlider(
                 argb = ARGBValue.ALPHA,
                 subsColor = subsColor,
-                preference = subsColor.preference(screenModel.preferences),
+                preference = subsColor.preference(screenModel.subtitlePreferences),
             )
         }
     }
@@ -232,12 +232,12 @@ private fun SubtitleColorSlider(
 
 private enum class SubsColor(
     val mpvProperty: String,
-    val preference: (PlayerPreferences) -> Preference<Int>,
+    val preference: (SubtitlePreferences) -> Preference<Int>,
 ) {
-    NONE("", PlayerPreferences::textColorSubtitles),
-    TEXT("sub-color", PlayerPreferences::textColorSubtitles),
-    BORDER("sub-border-color", PlayerPreferences::borderColorSubtitles),
-    BACKGROUND("sub-back-color", PlayerPreferences::backgroundColorSubtitles),
+    NONE("", SubtitlePreferences::textColorSubtitles),
+    TEXT("sub-color", SubtitlePreferences::textColorSubtitles),
+    BORDER("sub-border-color", SubtitlePreferences::borderColorSubtitles),
+    BACKGROUND("sub-back-color", SubtitlePreferences::backgroundColorSubtitles),
 }
 
 private enum class ARGBValue(

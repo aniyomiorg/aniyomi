@@ -50,6 +50,7 @@ class PlayerSettingsScreenModel(
     val gesturePreferences: GesturePreferences = Injekt.get(),
     val subtitlePreferences: SubtitlePreferences = Injekt.get(),
     val audioPreferences: AudioPreferences = Injekt.get(),
+    val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get(),
     val hasSubTracks: Boolean = true,
 ) : ScreenModel {
 
@@ -88,12 +89,12 @@ class PlayerSettingsScreenModel(
     fun OverrideSubtitlesSwitch(
         content: @Composable () -> Unit,
     ) {
-        val overrideSubsASS by preferences.overrideSubsASS().collectAsState()
+        val overrideSubsASS by subtitlePreferences.overrideSubsASS().collectAsState()
 
         val updateOverrideASS = {
-            val newOverrideValue = togglePreference(PlayerPreferences::overrideSubsASS)
-            val overrideType = if (newOverrideValue) "force" else "scale"
-            MPVLib.setPropertyString("sub-ass-override", overrideType)
+            // val newOverrideValue = togglePreference(SubtitlePreferences::overrideSubsASS)
+            // val overrideType = if (newOverrideValue) "force" else "scale"
+            // MPVLib.setPropertyString("sub-ass-override", overrideType)
         }
 
         var showDialog by rememberSaveable { mutableStateOf(false) }
@@ -125,7 +126,7 @@ class PlayerSettingsScreenModel(
         onDismissRequest: () -> Unit,
     ) {
         val resetSubtitles = {
-            with(preferences) {
+            with(subtitlePreferences) {
                 overrideSubsASS().delete()
 
                 subtitleFontSize().delete()

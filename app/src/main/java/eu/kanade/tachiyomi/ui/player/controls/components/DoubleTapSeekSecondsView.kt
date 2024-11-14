@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.viewer.components
+package eu.kanade.tachiyomi.ui.player.controls.components
 
 import android.animation.Animator
 import android.animation.ValueAnimator
@@ -15,7 +15,7 @@ import tachiyomi.i18n.MR
 /**
  * View that shows the arrows animation when double tapping to seek
  */
-class DoubleTapSecondsView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+class DoubleTapSeekSecondsView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
     var binding: PlayerDoubleTapSeekViewBinding
 

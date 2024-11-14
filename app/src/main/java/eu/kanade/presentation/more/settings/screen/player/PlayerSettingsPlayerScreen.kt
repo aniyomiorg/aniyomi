@@ -18,6 +18,7 @@ import eu.kanade.tachiyomi.ui.player.MX_PLAYER
 import eu.kanade.tachiyomi.ui.player.MX_PLAYER_FREE
 import eu.kanade.tachiyomi.ui.player.MX_PLAYER_PRO
 import eu.kanade.tachiyomi.ui.player.NEXT_PLAYER
+import eu.kanade.tachiyomi.ui.player.PlayerOrientation
 import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
 import eu.kanade.tachiyomi.ui.player.WEB_VIDEO_CASTER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
@@ -30,6 +31,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.NumberFormat
 
 object PlayerSettingsPlayerScreen : SearchableSettings {
 
@@ -61,17 +63,15 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                 pref = playerPreferences.preserveWatchingPosition(),
                 title = stringResource(MR.strings.pref_preserve_watching_position),
             ),
-            Preference.PreferenceItem.SwitchPreference(
-                pref = playerPreferences.playerFullscreen(),
-                title = stringResource(MR.strings.pref_player_fullscreen),
-                enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P,
+            Preference.PreferenceItem.ListPreference(
+                pref = playerPreferences.defaultPlayerOrientationType(),
+                title = stringResource(MR.strings.pref_category_player_orientation),
+                entries = PlayerOrientation.entries.associateWith {
+                    stringResource(it.titleRes)
+                }.toPersistentMap(),
             ),
-            Preference.PreferenceItem.SwitchPreference(
-                pref = playerPreferences.hideControls(),
-                title = stringResource(MR.strings.pref_player_hide_controls),
-            ),
-            getVolumeAndBrightnessGroup(playerPreferences = playerPreferences),
-            getOrientationGroup(playerPreferences = playerPreferences),
+            getControlsGroup(playerPreferences = playerPreferences),
+            getDisplayGroup(playerPreferences = playerPreferences),
             if (deviceSupportsPip) getPipGroup(playerPreferences = playerPreferences) else null,
             getExternalPlayerGroup(
                 playerPreferences = playerPreferences,
@@ -81,17 +81,43 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getVolumeAndBrightnessGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+    private fun getControlsGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val allowGestures = playerPreferences.allowGestures()
+        val displayVol = playerPreferences.displayVolPer()
+        val swapVol = playerPreferences.swapVolumeBrightness()
+        val showLoading = playerPreferences.showLoadingCircle()
+        val showChapter = playerPreferences.showCurrentChapter()
         val enableVolumeBrightnessGestures = playerPreferences.gestureVolumeBrightness()
         val rememberPlayerBrightness = playerPreferences.rememberPlayerBrightness()
         val rememberPlayerVolume = playerPreferences.rememberPlayerVolume()
 
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_category_volume_brightness),
+            title = stringResource(MR.strings.pref_category_controls),
             preferenceItems = persistentListOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = allowGestures,
+                    title = stringResource(MR.strings.pref_controls_allow_gestures_in_panels),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = showLoading,
+                    title = stringResource(MR.strings.pref_controls_show_loading),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = showChapter,
+                    title = stringResource(MR.strings.pref_controls_show_chapter_indicator),
+                    subtitle = stringResource(MR.strings.pref_controls_show_chapter_indicator_info),
+                ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableVolumeBrightnessGestures,
                     title = stringResource(MR.strings.enable_volume_brightness_gestures),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = displayVol,
+                    title = stringResource(MR.strings.pref_controls_display_volume_percentage),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = swapVol,
+                    title = stringResource(MR.strings.pref_controls_swap_vol_brightness),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = rememberPlayerBrightness,
@@ -106,77 +132,56 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getOrientationGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
-        val defaultPlayerOrientationType = playerPreferences.defaultPlayerOrientationType()
-        val adjustOrientationVideoDimensions = playerPreferences.adjustOrientationVideoDimensions()
-        val defaultPlayerOrientationPortrait = playerPreferences.defaultPlayerOrientationPortrait()
-        val defaultPlayerOrientationLandscape = playerPreferences.defaultPlayerOrientationLandscape()
+    private fun getDisplayGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val fullScreen = playerPreferences.playerFullscreen()
+        val hideControls = playerPreferences.hideControls()
+        val showSystemBar = playerPreferences.showSystemStatusBar()
+        val reduceMotion = playerPreferences.reduceMotion()
+        val hideTime = playerPreferences.playerTimeToDisappear()
+
+        val panelOpacityPref = playerPreferences.panelOpacity()
+        val panelOpacity by panelOpacityPref.collectAsState()
+        val numberFormat = remember { NumberFormat.getPercentInstance() }
 
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_category_player_orientation),
+            title = stringResource(MR.strings.pref_category_display),
             preferenceItems = persistentListOf(
-                Preference.PreferenceItem.ListPreference(
-                    pref = defaultPlayerOrientationType,
-                    title = stringResource(MR.strings.pref_default_player_orientation),
-                    entries = persistentMapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR to stringResource(
-                            MR.strings.rotation_free,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
-                            MR.strings.rotation_portrait,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(
-                            MR.strings.rotation_reverse_portrait,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
-                            MR.strings.rotation_landscape,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(
-                            MR.strings.rotation_reverse_landscape,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(
-                            MR.strings.rotation_sensor_portrait,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(
-                            MR.strings.rotation_sensor_landscape,
-                        ),
-                    ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = fullScreen,
+                    title = stringResource(MR.strings.pref_player_fullscreen),
+                    enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = adjustOrientationVideoDimensions,
-                    title = stringResource(MR.strings.pref_adjust_orientation_video_dimensions),
+                    pref = hideControls,
+                    title = stringResource(MR.strings.pref_player_hide_controls),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = showSystemBar,
+                    title = stringResource(MR.strings.pref_show_system_bar),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = reduceMotion,
+                    title = stringResource(MR.strings.pref_reduce_motion),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = defaultPlayerOrientationPortrait,
-                    title = stringResource(MR.strings.pref_default_portrait_orientation),
-                    entries = persistentMapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to stringResource(
-                            MR.strings.rotation_portrait,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT to stringResource(
-                            MR.strings.rotation_reverse_portrait,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT to stringResource(
-                            MR.strings.rotation_sensor_portrait,
-                        ),
-                    ),
+                    pref = hideTime,
+                    title = stringResource(MR.strings.pref_player_time_to_disappear),
+                    entries = listOf(500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000).associateWith {
+                        stringResource(MR.strings.pref_player_time_to_disappear_summary, it)
+                    }.toPersistentMap(),
                 ),
-                Preference.PreferenceItem.ListPreference(
-                    pref = defaultPlayerOrientationLandscape,
-                    title = stringResource(MR.strings.pref_default_landscape_orientation),
-                    entries = persistentMapOf(
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(
-                            MR.strings.rotation_landscape,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(
-                            MR.strings.rotation_reverse_landscape,
-                        ),
-                        ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(
-                            MR.strings.rotation_sensor_landscape,
-                        ),
-                    ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = panelOpacity,
+                    title = stringResource(MR.strings.pref_panel_opacity),
+                    subtitle = numberFormat.format(panelOpacity / 100f),
+                    min = 0,
+                    max = 100,
+                    onValueChanged = {
+                        panelOpacityPref.set(it)
+                        true
+                    },
                 ),
-            ),
+            )
         )
     }
 

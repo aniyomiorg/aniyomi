@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.yubyf.truetypeparser.TTFFile
 import eu.kanade.presentation.components.DropdownMenu
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.common.storage.extension
@@ -54,34 +53,34 @@ fun SubtitleFontPage(screenModel: PlayerSettingsScreenModel) {
 private fun SubtitleFont(
     screenModel: PlayerSettingsScreenModel,
 ) {
-    val font by screenModel.preferences.subtitleFont().collectAsState()
-    val boldSubtitles by screenModel.preferences.boldSubtitles().collectAsState()
-    val italicSubtitles by screenModel.preferences.italicSubtitles().collectAsState()
-    val subtitleFontSize by screenModel.preferences.subtitleFontSize().collectAsState()
-    val textColor by screenModel.preferences.textColorSubtitles().collectAsState()
-    val borderColor by screenModel.preferences.borderColorSubtitles().collectAsState()
-    val backgroundColor by screenModel.preferences.backgroundColorSubtitles().collectAsState()
+    val font by screenModel.subtitlePreferences.subtitleFont().collectAsState()
+    val boldSubtitles by screenModel.subtitlePreferences.boldSubtitles().collectAsState()
+    val italicSubtitles by screenModel.subtitlePreferences.italicSubtitles().collectAsState()
+    val subtitleFontSize by screenModel.subtitlePreferences.subtitleFontSize().collectAsState()
+    val textColor by screenModel.subtitlePreferences.textColorSubtitles().collectAsState()
+    val borderColor by screenModel.subtitlePreferences.borderColorSubtitles().collectAsState()
+    val backgroundColor by screenModel.subtitlePreferences.backgroundColorSubtitles().collectAsState()
 
     val updateBold = {
         val toBold = if (boldSubtitles) "no" else "yes"
-        screenModel.togglePreference(PlayerPreferences::boldSubtitles)
+        // screenModel.togglePreference(SubtitlePreferences::boldSubtitles)
         MPVLib.setPropertyString("sub-bold", toBold)
     }
 
     val updateItalic = {
         val toItalicize = if (italicSubtitles) "no" else "yes"
-        screenModel.togglePreference(PlayerPreferences::italicSubtitles)
+        // screenModel.togglePreference(SubtitlePreferences::italicSubtitles)
         MPVLib.setPropertyString("sub-italic", toItalicize)
     }
 
     val onSizeChanged: (Int) -> Unit = {
         MPVLib.setPropertyInt("sub-font-size", it)
-        screenModel.preferences.subtitleFontSize().set(it)
+        screenModel.subtitlePreferences.subtitleFontSize().set(it)
     }
 
     val updateFont: (String) -> Unit = {
         MPVLib.setPropertyString("sub-font", it)
-        screenModel.preferences.subtitleFont().set(it)
+        screenModel.subtitlePreferences.subtitleFont().set(it)
     }
 
     val fontList by remember {

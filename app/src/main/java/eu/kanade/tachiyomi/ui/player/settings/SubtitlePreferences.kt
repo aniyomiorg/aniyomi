@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
-import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
 import androidx.compose.material.icons.automirrored.filled.FormatAlignRight
@@ -10,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.tachiyomi.ui.player.controls.components.panels.SubtitlesBorderStyle
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
 import tachiyomi.i18n.MR
@@ -40,9 +40,15 @@ class SubtitlePreferences(
     fun textColorSubtitles() = preferenceStore.getInt("pref_text_color_subtitles", Color.White.toArgb())
 
     fun borderColorSubtitles() = preferenceStore.getInt("pref_border_color_subtitles", Color.Black.toArgb())
-    fun borderStyleSubtitles() = preferenceStore.getEnum("pref_border_style_subtitles", SubtitlesBorderStyle.OutlineAndShadow)
+    fun borderStyleSubtitles() = preferenceStore.getEnum(
+        "pref_border_style_subtitles",
+        SubtitlesBorderStyle.OutlineAndShadow,
+    )
     fun shadowOffsetSubtitles() = preferenceStore.getInt("sub_shadow_offset", 0)
-    fun backgroundColorSubtitles() = preferenceStore.getInt("pref_background_color_subtitles", Color.Transparent.toArgb())
+    fun backgroundColorSubtitles() = preferenceStore.getInt(
+        "pref_background_color_subtitles",
+        Color.Transparent.toArgb(),
+    )
 
     fun subtitleJustification() = preferenceStore.getEnum("pref_sub_justify", SubtitleJustification.Auto)
     fun subtitlePos() = preferenceStore.getInt("pref_sub_pos", 0)
@@ -54,21 +60,12 @@ class SubtitlePreferences(
     fun subtitlesSecondaryDelay() = preferenceStore.getInt("pref_subtitles_secondary_delay", 0)
 }
 
-enum class SubtitlesBorderStyle(
-    val value: String,
-    val titleRes: StringResource,
-) {
-    OutlineAndShadow("outline-and-shadow", MR.strings.player_sheets_subtitles_border_style_outline_and_shadow),
-    OpaqueBox("opaque-box", MR.strings.player_sheets_subtitles_border_style_opaque_box),
-    BackgroundBox("background-box", MR.strings.player_sheets_subtitles_border_style_background_box)
-}
-
 enum class SubtitleJustification(
     val value: String,
-    val icon: ImageVector
+    val icon: ImageVector,
 ) {
     Left("left", Icons.AutoMirrored.Default.FormatAlignLeft),
     Center("center", Icons.Default.FormatAlignCenter),
     Right("right", Icons.AutoMirrored.Default.FormatAlignRight),
-    Auto("auto", Icons.Default.FormatAlignJustify)
+    Auto("auto", Icons.Default.FormatAlignJustify),
 }

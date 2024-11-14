@@ -22,8 +22,6 @@ class MovePlayerPreferencesMigration : Migration {
 
         listOf(
             playerPreferences.defaultPlayerOrientationType(),
-            playerPreferences.defaultPlayerOrientationLandscape(),
-            playerPreferences.defaultPlayerOrientationPortrait(),
             gesturePreferences.skipLengthPreference(),
         ).forEach { pref ->
             if (pref.isSet()) {

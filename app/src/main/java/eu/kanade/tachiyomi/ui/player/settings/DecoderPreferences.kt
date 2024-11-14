@@ -16,4 +16,9 @@ class DecoderPreferences(
     // Non-preferences
 
     fun hardwareDecoding() = preferenceStore.getEnum("pref_hardware_decoding", HwDecState.defaultHwDec)
+    fun brightnessFilter() = preferenceStore.getInt("pref_player_filter_brightness")
+    fun saturationFilter() = preferenceStore.getInt("pref_player_filter_saturation")
+    fun contrastFilter() = preferenceStore.getInt("pref_player_filter_contrast")
+    fun gammaFilter() = preferenceStore.getInt("pref_player_filter_gamma")
+    fun hueFilter() = preferenceStore.getInt("pref_player_filter_hue")
 }

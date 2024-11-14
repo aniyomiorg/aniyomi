@@ -52,6 +52,7 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
     private fun getSeekingGroup(gesturePreferences: GesturePreferences): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
         val enableHorizontalSeekGesture = gesturePreferences.gestureHorizontalSeek()
+        val showSeekbar = gesturePreferences.showSeekBar()
         val defaultSkipIntroLength by gesturePreferences.defaultIntroLength().stateIn(scope).collectAsState()
         val skipLengthPreference = gesturePreferences.skipLengthPreference()
         val playerSmoothSeek = gesturePreferences.playerSmoothSeek()
@@ -83,6 +84,10 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableHorizontalSeekGesture,
                     title = stringResource(MR.strings.enable_horizontal_seek_gesture),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = showSeekbar,
+                    title = stringResource(MR.strings.pref_show_seekbar),
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_default_intro_length),

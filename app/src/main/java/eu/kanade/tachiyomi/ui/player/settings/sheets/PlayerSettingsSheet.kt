@@ -51,7 +51,7 @@ fun PlayerSettingsSheet(
     }
     var statisticsPage by remember {
         mutableIntStateOf(
-            screenModel.preferences.playerStatisticsPage().get(),
+            screenModel.advancedPlayerPreferences.playerStatisticsPage().get(),
         )
     }
     var decoder by remember { mutableStateOf(screenModel.decoderPreferences.hardwareDecoding().get()) }
@@ -78,7 +78,7 @@ fun PlayerSettingsSheet(
             MPVLib.command(arrayOf("script-binding", "stats/display-page-$page"))
         }
         statisticsPage = page
-        screenModel.preferences.playerStatisticsPage().set(page)
+        screenModel.advancedPlayerPreferences.playerStatisticsPage().set(page)
     }
 
     val togglePlayerDecoder: (HwDecState) -> Unit = { hwDecState ->

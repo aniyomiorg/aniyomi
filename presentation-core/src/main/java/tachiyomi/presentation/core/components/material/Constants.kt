@@ -17,6 +17,8 @@ class Padding {
 
     val medium = 16.dp
 
+    val mediumSmall = 12.dp
+
     val small = 8.dp
 
     val extraSmall = 4.dp
@@ -24,3 +26,25 @@ class Padding {
 
 val MaterialTheme.padding: Padding
     get() = Padding()
+
+// Used to make merging from mpvkt easier
+class MPVKtSpacing {
+    val extraSmall = 4.dp
+
+    val smaller = 8.dp
+
+    val small = 12.dp
+
+    val medium = 16.dp
+
+    val large = 24.dp
+
+    val larger = 32.dp
+
+    val extraLarge = 48.dp
+
+    val largest = 64.dp
+}
+
+val MaterialTheme.MPVKtSpacing: MPVKtSpacing
+    get() = MPVKtSpacing()

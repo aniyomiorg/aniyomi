@@ -1,11 +1,22 @@
 package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
+import android.content.pm.ActivityInfo
+import android.media.AudioManager
 import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import android.util.DisplayMetrics
+import android.widget.Toast
 import androidx.compose.runtime.Immutable
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import dev.vivvvek.seeker.Segment
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
@@ -29,9 +40,11 @@ import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
+import eu.kanade.tachiyomi.ui.player.viewer.SingleActionGesture
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.Stamp
@@ -41,18 +54,25 @@ import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
+import eu.kanade.tachiyomi.util.system.toast
+import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.withIOContext
+import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnime
@@ -66,11 +86,20 @@ import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.service.getEpisodeSort
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream
 import java.util.Date
+
+class PlayerViewModelProviderFactory(
+    private val activity: PlayerActivity,
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+        return PlayerViewModel(activity, extras.createSavedStateHandle()) as T
+    }
+}
 
 class PlayerViewModel @JvmOverloads constructor(
     private val activity: PlayerActivity,
@@ -91,9 +120,445 @@ class PlayerViewModel @JvmOverloads constructor(
     internal val networkPreferences: NetworkPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
+    internal val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get(),
     private val basePreferences: BasePreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
+
+    private val _currentDecoder = MutableStateFlow(getDecoderFromValue(MPVLib.getPropertyString("hwdec")))
+    val currentDecoder = _currentDecoder.asStateFlow()
+
+    val mediaTitle = MutableStateFlow("")
+
+    val isLoading = MutableStateFlow(true)
+    val playbackSpeed = MutableStateFlow(playerPreferences.playerSpeed().get())
+
+    private val _subtitleTracks = MutableStateFlow<List<Track>>(emptyList())
+    val subtitleTracks = _subtitleTracks.asStateFlow()
+    private val _selectedSubtitles = MutableStateFlow(Pair(-1, -1))
+    val selectedSubtitles = _selectedSubtitles.asStateFlow()
+
+    private val _audioTracks = MutableStateFlow<List<Track>>(emptyList())
+    val audioTracks = _audioTracks.asStateFlow()
+    private val _selectedAudio = MutableStateFlow(-1)
+    val selectedAudio = _selectedAudio.asStateFlow()
+
+    var chapters: List<Segment> = listOf()
+    private val _currentChapter = MutableStateFlow<Segment?>(null)
+    val currentChapter = _currentChapter.asStateFlow()
+
+    private val _pos = MutableStateFlow(0f)
+    val pos = _pos.asStateFlow()
+
+    val duration = MutableStateFlow(0f)
+
+    private val _readAhead = MutableStateFlow(0f)
+    val readAhead = _readAhead.asStateFlow()
+
+    private val _paused = MutableStateFlow(false)
+    val paused = _paused.asStateFlow()
+
+    private val _controlsShown = MutableStateFlow(true)
+    val controlsShown = _controlsShown.asStateFlow()
+    private val _seekBarShown = MutableStateFlow(true)
+    val seekBarShown = _seekBarShown.asStateFlow()
+    private val _areControlsLocked = MutableStateFlow(false)
+    val areControlsLocked = _areControlsLocked.asStateFlow()
+
+    val playerUpdate = MutableStateFlow<PlayerUpdates>(PlayerUpdates.None)
+    val isBrightnessSliderShown = MutableStateFlow(false)
+    val isVolumeSliderShown = MutableStateFlow(false)
+    val currentBrightness = MutableStateFlow(
+        runCatching {
+            Settings.System.getFloat(activity.contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+                .normalize(0f, 255f, 0f, 1f)
+        }.getOrElse { 0f },
+    )
+    val currentVolume = MutableStateFlow(activity.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
+    val currentMPVVolume = MutableStateFlow(MPVLib.getPropertyInt("volume"))
+    var volumeBoostCap: Int = MPVLib.getPropertyInt("volume-max")
+
+    // Pair(startingPosition, seekAmount)
+    val gestureSeekAmount = MutableStateFlow<Pair<Int, Int>?>(null)
+
+    val sheetShown = MutableStateFlow(Sheets.None)
+    val panelShown = MutableStateFlow(Panels.None)
+
+    private val _doubleTapSeekAmount = MutableStateFlow(0)
+    val doubleTapSeekAmount = _doubleTapSeekAmount.asStateFlow()
+    private val _isSeekingForwards = MutableStateFlow(false)
+    val isSeekingForwards = _isSeekingForwards.asStateFlow()
+
+    private var timerJob: Job? = null
+    private val _remainingTime = MutableStateFlow(0)
+    val remainingTime = _remainingTime.asStateFlow()
+
+    fun startTimer(seconds: Int) {
+        timerJob?.cancel()
+        _remainingTime.value = seconds
+        if (seconds < 1) return
+        timerJob = viewModelScope.launch {
+            for (time in seconds downTo 0) {
+                _remainingTime.value = time
+                delay(1000)
+            }
+            pause()
+            withUIContext { Injekt.get<Application>().toast(MR.strings.toast_sleep_timer_ended) }
+        }
+    }
+
+    fun getDecoder() {
+        _currentDecoder.update { getDecoderFromValue(activity.player.hwdecActive) }
+    }
+
+    fun cycleDecoders() {
+        MPVLib.setPropertyString(
+            "hwdec",
+            when (currentDecoder.value) {
+                Decoder.HWPlus -> Decoder.HW.value
+                Decoder.HW -> Decoder.SW.value
+                Decoder.SW -> Decoder.HWPlus.value
+                Decoder.AutoCopy -> Decoder.SW.value
+                Decoder.Auto -> Decoder.SW.value
+            },
+        )
+        val newDecoder = activity.player.hwdecActive
+        if (newDecoder != currentDecoder.value.value) {
+            _currentDecoder.update { getDecoderFromValue(newDecoder) }
+        }
+    }
+
+    fun updateDecoder(decoder: Decoder) {
+        MPVLib.setPropertyString("hwdec", decoder.value)
+    }
+
+    fun loadChapters() {
+        val chapters = mutableListOf<Segment>()
+        val count = MPVLib.getPropertyInt("chapter-list/count")!!
+        for (i in 0 until count) {
+            val title = MPVLib.getPropertyString("chapter-list/$i/title")
+            val time = MPVLib.getPropertyInt("chapter-list/$i/time")!!
+            chapters.add(
+                Segment(
+                    name = title,
+                    start = time.toFloat(),
+                ),
+            )
+        }
+        this.chapters = chapters.sortedBy { it.start }
+    }
+
+    fun selectChapter(index: Int) {
+        val time = chapters[index].start
+        seekTo(time.toInt())
+    }
+
+    fun updateChapter(index: Long) {
+        if (chapters.isEmpty() || index == -1L) return
+        _currentChapter.update { chapters.getOrNull(index.toInt()) ?: return }
+    }
+
+    fun addAudio(uri: Uri) {
+        val url = uri.toString()
+        val path = if (url.startsWith("content://")) {
+            Uri.parse(url).openContentFd(activity)
+        } else {
+            url
+        } ?: return
+        MPVLib.command(arrayOf("audio-add", path, "cached"))
+    }
+
+    fun selectAudio(id: Int) {
+        activity.player.aid = id
+    }
+
+    fun updateAudio(id: Int) {
+        _selectedAudio.update { id }
+    }
+
+    fun addSubtitle(uri: Uri) {
+        val url = uri.toString()
+        val path = if (url.startsWith("content://")) {
+            Uri.parse(url).openContentFd(activity)
+        } else {
+            url
+        } ?: return
+        MPVLib.command(arrayOf("sub-add", path, "cached"))
+    }
+
+    fun selectSub(id: Int) {
+        val selectedSubs = selectedSubtitles.value
+        _selectedSubtitles.update {
+            when (id) {
+                selectedSubs.first -> Pair(selectedSubs.second, -1)
+                selectedSubs.second -> Pair(selectedSubs.first, -1)
+                else -> {
+                    if (selectedSubs.first != -1) {
+                        Pair(selectedSubs.first, id)
+                    } else {
+                        Pair(id, -1)
+                    }
+                }
+            }
+        }
+        activity.player.secondarySid = _selectedSubtitles.value.second
+        activity.player.sid = _selectedSubtitles.value.first
+    }
+
+    fun updateSubtitle(sid: Int, secondarySid: Int) {
+        _selectedSubtitles.update { Pair(sid, secondarySid) }
+    }
+
+    fun updatePlayBackPos(pos: Float) {
+        _pos.update { pos }
+    }
+
+    fun updateReadAhead(value: Long) {
+        _readAhead.update { value.toFloat() }
+    }
+
+    fun pauseUnpause() {
+        if (paused.value) {
+            unpause()
+        } else {
+            pause()
+        }
+    }
+
+    fun pause() {
+        activity.player.paused = true
+        _paused.update { true }
+        runCatching {
+            activity.setPictureInPictureParams(activity.createPipParams())
+        }
+    }
+
+    fun unpause() {
+        activity.player.paused = false
+        _paused.update { false }
+    }
+
+    private val showStatusBar = playerPreferences.showSystemStatusBar().get()
+    fun showControls() {
+        if (sheetShown.value != Sheets.None || panelShown.value != Panels.None) return
+        if (showStatusBar) {
+            activity.windowInsetsController.show(WindowInsetsCompat.Type.statusBars())
+        }
+        _controlsShown.update { true }
+    }
+
+    fun hideControls() {
+        activity.windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+        _controlsShown.update { false }
+    }
+
+    fun hideSeekBar() {
+        _seekBarShown.update { false }
+    }
+
+    fun showSeekBar() {
+        if (sheetShown.value != Sheets.None) return
+        _seekBarShown.update { true }
+    }
+
+    fun lockControls() {
+        _areControlsLocked.update { true }
+    }
+
+    fun unlockControls() {
+        _areControlsLocked.update { false }
+    }
+
+    fun seekBy(offset: Int, precise: Boolean = false) {
+        MPVLib.command(arrayOf("seek", offset.toString(), if (precise) "relative+exact" else "relative"))
+    }
+
+    fun seekTo(position: Int, precise: Boolean = true) {
+        if (position !in 0..(activity.player.duration ?: 0)) return
+        MPVLib.command(arrayOf("seek", position.toString(), if (precise) "absolute" else "absolute+keyframes"))
+    }
+
+    fun changeBrightnessBy(change: Float) {
+        changeBrightnessTo(currentBrightness.value + change)
+    }
+
+    fun changeBrightnessTo(
+        brightness: Float,
+    ) {
+        activity.window.attributes = activity.window.attributes.apply {
+            screenBrightness = brightness.coerceIn(0f, 1f).also {
+                currentBrightness.update { _ -> it }
+            }
+        }
+    }
+
+    fun displayBrightnessSlider() {
+        isBrightnessSliderShown.update { true }
+    }
+
+    val maxVolume = activity.audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+    fun changeVolumeBy(change: Int) {
+        val mpvVolume = MPVLib.getPropertyInt("volume")
+        if (volumeBoostCap > 0 && currentVolume.value == maxVolume) {
+            if (mpvVolume == 100 && change < 0) changeVolumeTo(currentVolume.value + change)
+            val finalMPVVolume = (mpvVolume + change).coerceAtLeast(100)
+            if (finalMPVVolume in 100..volumeBoostCap + 100) {
+                changeMPVVolumeTo(finalMPVVolume)
+                return
+            }
+        }
+        changeVolumeTo(currentVolume.value + change)
+    }
+
+    fun changeVolumeTo(volume: Int) {
+        val newVolume = volume.coerceIn(0..maxVolume)
+        activity.audioManager.setStreamVolume(
+            AudioManager.STREAM_MUSIC,
+            newVolume,
+            0,
+        )
+        currentVolume.update { newVolume }
+    }
+
+    fun changeMPVVolumeTo(volume: Int) {
+        MPVLib.setPropertyInt("volume", volume)
+    }
+
+    fun setMPVVolume(volume: Int) {
+        if (volume != currentMPVVolume.value) displayVolumeSlider()
+        currentMPVVolume.update { volume }
+    }
+
+    fun displayVolumeSlider() {
+        isVolumeSliderShown.update { true }
+    }
+
+    fun changeVideoAspect(aspect: VideoAspect) {
+        var ratio = -1.0
+        var pan = 1.0
+        when (aspect) {
+            VideoAspect.Crop -> {
+                pan = 1.0
+            }
+
+            VideoAspect.Fit -> {
+                pan = 0.0
+                MPVLib.setPropertyDouble("panscan", 0.0)
+            }
+
+            VideoAspect.Stretch -> {
+                val dm = DisplayMetrics()
+                activity.windowManager.defaultDisplay.getRealMetrics(dm)
+                ratio = dm.widthPixels / dm.heightPixels.toDouble()
+                pan = 0.0
+            }
+        }
+        MPVLib.setPropertyDouble("panscan", pan)
+        MPVLib.setPropertyDouble("video-aspect-override", ratio)
+        playerPreferences.aspectState().set(aspect)
+        playerUpdate.update { PlayerUpdates.AspectRatio }
+    }
+
+    fun cycleScreenRotations() {
+        activity.requestedOrientation = when (activity.requestedOrientation) {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,
+            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
+                -> {
+                playerPreferences.defaultPlayerOrientationType().set(PlayerOrientation.SensorPortrait)
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            }
+
+            else -> {
+                playerPreferences.defaultPlayerOrientationType().set(PlayerOrientation.SensorLandscape)
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            }
+        }
+    }
+
+    private val doubleTapToSeekDuration = gesturePreferences.skipLengthPreference().get()
+
+    fun updateSeekAmount(amount: Int) {
+        _doubleTapSeekAmount.update { _ -> amount }
+    }
+
+    fun leftSeek() {
+        if (pos.value > 0) {
+            _doubleTapSeekAmount.value -= doubleTapToSeekDuration
+        }
+        _isSeekingForwards.value = false
+        seekBy(-doubleTapToSeekDuration)
+        if (gesturePreferences.showSeekBar().get()) showSeekBar()
+    }
+
+    fun rightSeek() {
+        if (pos.value < duration.value) {
+            _doubleTapSeekAmount.value += doubleTapToSeekDuration
+        }
+        _isSeekingForwards.value = true
+        seekBy(doubleTapToSeekDuration)
+        if (gesturePreferences.showSeekBar().get()) showSeekBar()
+    }
+
+    fun handleLeftDoubleTap() {
+        when (gesturePreferences.leftDoubleTapGesture().get()) {
+            SingleActionGesture.Seek -> {
+                leftSeek()
+            }
+            SingleActionGesture.PlayPause -> {
+                pauseUnpause()
+            }
+            SingleActionGesture.Custom -> {
+                MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapLeft.keyCode))
+            }
+            SingleActionGesture.None -> {}
+            SingleActionGesture.Switch -> TODO()
+        }
+    }
+
+    fun handleCenterDoubleTap() {
+        when (gesturePreferences.centerDoubleTapGesture().get()) {
+            SingleActionGesture.PlayPause -> {
+                pauseUnpause()
+            }
+            SingleActionGesture.Custom -> {
+                MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapCenter.keyCode))
+            }
+            SingleActionGesture.Seek -> {}
+            SingleActionGesture.None -> {}
+            SingleActionGesture.Switch -> TODO()
+        }
+    }
+
+    fun handleRightDoubleTap() {
+        when (gesturePreferences.rightDoubleTapGesture().get()) {
+            SingleActionGesture.Seek -> {
+                rightSeek()
+            }
+            SingleActionGesture.PlayPause -> {
+                pauseUnpause()
+            }
+            SingleActionGesture.Custom -> {
+                MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapRight.keyCode))
+            }
+            SingleActionGesture.None -> {}
+            SingleActionGesture.Switch -> TODO()
+        }
+    }
+
+    override fun onCleared() {
+        if (currentEpisode != null) {
+            saveWatchingProgress(currentEpisode!!)
+            episodeToDownload?.let {
+                downloadManager.addDownloadsToStartOfQueue(listOf(it))
+            }
+        }
+
+        super.onCleared()
+        viewModelScope.cancel()
+    }
+
+    // ====== OLD ======
 
     val mutableState = MutableStateFlow(State())
     val state = mutableState.asStateFlow()
@@ -213,6 +678,7 @@ class PlayerViewModel @JvmOverloads constructor(
         }
     }
 
+    /*
     override fun onCleared() {
         if (currentEpisode != null) {
             saveWatchingProgress(currentEpisode!!)
@@ -221,6 +687,8 @@ class PlayerViewModel @JvmOverloads constructor(
             }
         }
     }
+
+     */
 
     /**
      * Called when the activity is saved and not changing configurations. It updates the database
@@ -268,7 +736,6 @@ class PlayerViewModel @JvmOverloads constructor(
                 mutableState.update { it.copy(episode = episode, anime = anime, source = source) }
 
                 val currentEp = currentEpisode ?: throw Exception("No episode loaded.")
-
                 if (vidList.isNotBlank()) {
                     currentVideoList = vidList.toVideoList().ifEmpty {
                         currentVideoList = null
@@ -778,4 +1245,8 @@ class PlayerViewModel @JvmOverloads constructor(
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
     }
+}
+
+fun Float.normalize(inMin: Float, inMax: Float, outMin: Float, outMax: Float): Float {
+    return (this - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
 }
