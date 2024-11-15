@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.ui.player.settings
 
 import eu.kanade.tachiyomi.ui.player.PlayerOrientation
 import eu.kanade.tachiyomi.ui.player.VideoAspect
-import eu.kanade.tachiyomi.ui.player.viewer.InvertedPlayback
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
 
@@ -72,6 +71,4 @@ class PlayerPreferences(
     // Old
 
     fun autoplayEnabled() = preferenceStore.getBoolean("pref_auto_play_enabled", false)
-    fun invertedPlayback() = preferenceStore.getEnum("pref_inverted_playback", InvertedPlayback.NONE)
-
 }

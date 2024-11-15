@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.DisplayMetrics
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
@@ -43,8 +44,6 @@ import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
-import eu.kanade.tachiyomi.ui.player.viewer.SingleActionGesture
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.Stamp
@@ -117,7 +116,6 @@ class PlayerViewModel @JvmOverloads constructor(
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
-    internal val networkPreferences: NetworkPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
     internal val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get(),
@@ -268,8 +266,9 @@ class PlayerViewModel @JvmOverloads constructor(
         MPVLib.command(arrayOf("audio-add", path, "cached"))
     }
 
-    fun selectAudio(id: Int) {
-        activity.player.aid = id
+    // TODO(videolist)
+    fun selectAudio(id: String) {
+        // activity.player.aid = id
     }
 
     fun updateAudio(id: Int) {
@@ -286,8 +285,10 @@ class PlayerViewModel @JvmOverloads constructor(
         MPVLib.command(arrayOf("sub-add", path, "cached"))
     }
 
-    fun selectSub(id: Int) {
+    // TODO(videolist)
+    fun selectSub(id: String) {
         val selectedSubs = selectedSubtitles.value
+        /*
         _selectedSubtitles.update {
             when (id) {
                 selectedSubs.first -> Pair(selectedSubs.second, -1)
@@ -301,6 +302,8 @@ class PlayerViewModel @JvmOverloads constructor(
                 }
             }
         }
+
+         */
         activity.player.secondarySid = _selectedSubtitles.value.second
         activity.player.sid = _selectedSubtitles.value.first
     }
@@ -329,7 +332,8 @@ class PlayerViewModel @JvmOverloads constructor(
         activity.player.paused = true
         _paused.update { true }
         runCatching {
-            activity.setPictureInPictureParams(activity.createPipParams())
+            // TODO(pip)
+            // activity.setPictureInPictureParams(activity.createPipParams())
         }
     }
 

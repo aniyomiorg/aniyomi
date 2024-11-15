@@ -45,7 +45,7 @@ fun SubtitlesMiscellaneousCard(modifier: Modifier = Modifier) {
         title = {
             Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium)) {
                 Icon(Icons.Default.Tune, null)
-                Text(stringResource(MR.strings.player_sheets_sub_misc_card_title))
+                Text(stringResource(MR.strings.player_sheets_sub_misc_title))
             }
         },
         onExpand = { isExpanded = !isExpanded },

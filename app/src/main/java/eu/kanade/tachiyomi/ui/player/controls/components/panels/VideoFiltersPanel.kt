@@ -121,7 +121,7 @@ fun FiltersCard(
                     horizontalAlignment = Alignment.Start,
                 ) {
                     Icon(Icons.Outlined.Info, null)
-                    Text(stringResource(MR.strings.player_filters_warning))
+                    Text(stringResource(MR.strings.player_sheets_filters_warning))
                 }
             }
         }

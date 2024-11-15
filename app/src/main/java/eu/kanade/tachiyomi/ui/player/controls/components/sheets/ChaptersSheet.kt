@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -18,6 +17,7 @@ import `is`.xyz.mpv.Utils
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun ChaptersSheet(

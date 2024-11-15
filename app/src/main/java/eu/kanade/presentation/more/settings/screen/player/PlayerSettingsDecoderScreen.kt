@@ -5,8 +5,8 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
+import eu.kanade.tachiyomi.ui.player.Debanding
 import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
-import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import kotlinx.collections.immutable.toImmutableMap
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
@@ -41,8 +41,9 @@ object PlayerSettingsDecoderScreen : SearchableSettings {
             Preference.PreferenceItem.ListPreference(
                 pref = debanding,
                 title = stringResource(MR.strings.pref_debanding_title),
-                entries = VideoDebanding.entries.associateWith {
-                    stringResource(it.stringRes)
+                entries = Debanding.entries.associateWith {
+                    it.name
+                    // stringResource(it.)
                 }.toImmutableMap(),
             ),
             Preference.PreferenceItem.SwitchPreference(

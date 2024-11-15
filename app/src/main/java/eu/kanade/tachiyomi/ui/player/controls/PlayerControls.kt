@@ -498,9 +498,13 @@ fun PlayerControls(
                 ) {
                     val activity = LocalContext.current as PlayerActivity
                     BottomRightPlayerControls(
+                        // TODO(customButton)
                         // customButton = customButton,
                         isPipAvailable = activity.isPipSupported,
-                        onPipClick = { activity.enterPictureInPictureMode(activity.createPipParams()) },
+                        onPipClick = {
+                            // TODO(pip)
+                            // activity.enterPictureInPictureMode(activity.createPipParams())
+                        },
                         onAspectClick = {
                             viewModel.changeVideoAspect(
                                 when (aspectRatio) {
@@ -562,11 +566,15 @@ fun PlayerControls(
         PlayerSheets(
             sheetShown = sheetShown,
             subtitles = subtitles.toImmutableList(),
-            selectedSubtitles = selectedSubtitles.toList().toImmutableList(),
+            // TODO(videolist)
+            // selectedSubtitles = selectedSubtitles.toList().toImmutableList(),
+            selectedSubtitles = emptyList<String>().toImmutableList(),
             onAddSubtitle = viewModel::addSubtitle,
             onSelectSubtitle = viewModel::selectSub,
             audioTracks = audioTracks.toImmutableList(),
-            selectedAudio = selectedAudio,
+            // TODO(videolist)
+            // selectedAudio = selectedAudio,
+            selectedAudio = "",
             onAddAudio = viewModel::addAudio,
             onSelectAudio = viewModel::selectAudio,
             chapter = currentChapter,

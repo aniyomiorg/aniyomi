@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
-import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.jsonMime
@@ -61,6 +60,8 @@ class AniSkipApi {
             .toLongOrNull() ?: 0
     }
 
+    // TODO(aniskip)
+    /*
     class PlayerUtils(
         private val binding: PlayerActivityBinding,
         private val aniSkipResponse: List<Stamp>,
@@ -141,6 +142,7 @@ class AniSkipApi {
             MPVLib.command(arrayOf("seek", time.toString(), "absolute"))
         }
     }
+    */
 }
 
 @Serializable

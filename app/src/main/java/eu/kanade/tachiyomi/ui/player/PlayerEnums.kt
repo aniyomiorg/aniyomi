@@ -14,6 +14,20 @@ enum class SetAsCover {
     Error,
 }
 
+/**
+ * Player's Picture-In-Picture state handler
+ */
+enum class PipState {
+    OFF,
+    ON,
+    STARTED,
+    ;
+
+    companion object {
+        internal var mode: PipState = OFF
+    }
+}
+
 enum class PlayerOrientation(val titleRes: StringResource) {
     Free(MR.strings.rotation_free),
     Video(MR.strings.rotation_video),
@@ -65,6 +79,12 @@ enum class Decoder(val title: String, val value: String) {
 
 fun getDecoderFromValue(value: String): Decoder {
     return Decoder.entries.first { it.value == value }
+}
+
+enum class Debanding {
+    None,
+    CPU,
+    GPU,
 }
 
 enum class Sheets {

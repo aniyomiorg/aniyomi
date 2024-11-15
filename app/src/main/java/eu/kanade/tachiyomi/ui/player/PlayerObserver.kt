@@ -1,13 +1,9 @@
 package eu.kanade.tachiyomi.ui.player
 
 import android.widget.Toast
-import androidx.lifecycle.viewModelScope
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import logcat.LogPriority
-import tachiyomi.core.common.util.lang.launchIO
-import tachiyomi.core.common.util.lang.launchUI
-import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.logcat
 
 class PlayerObserver(val activity: PlayerActivity) :
@@ -15,32 +11,21 @@ class PlayerObserver(val activity: PlayerActivity) :
     MPVLib.LogObserver {
 
     override fun eventProperty(property: String) {
-        activity.runOnUiThread { activity.eventPropertyUi(property) }
+        activity.runOnUiThread { activity.onObserverEvent(property) }
     }
 
     override fun eventProperty(property: String, value: Boolean) {
-        activity.runOnUiThread { activity.eventPropertyUi(property, value) }
+        activity.runOnUiThread { activity.onObserverEvent(property, value) }
     }
 
     override fun eventProperty(property: String, value: Long) {
-        activity.runOnUiThread { activity.eventPropertyUi(property, value) }
+        activity.runOnUiThread { activity.onObserverEvent(property, value) }
     }
 
     override fun eventProperty(property: String, value: String) {}
 
     override fun event(eventId: Int) {
-        when (eventId) {
-            MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED ->
-                activity.viewModel.viewModelScope.launchIO { activity.fileLoaded() }
-            MPVLib.mpvEventId.MPV_EVENT_START_FILE ->
-                activity.viewModel.viewModelScope.launchUI {
-                    activity.player.paused = false
-                    activity.refreshUi()
-                    // Fixes a minor Ui bug but I have no idea why
-                    val isEpisodeOnline = withIOContext { activity.viewModel.isEpisodeOnline() != true }
-                    if (isEpisodeOnline) activity.showLoadingIndicator(false)
-                }
-        }
+        activity.runOnUiThread { activity.event(eventId) }
     }
 
     override fun efEvent(err: String?) {
@@ -65,9 +50,7 @@ class PlayerObserver(val activity: PlayerActivity) :
             MPVLib.mpvLogLevel.MPV_LOG_LEVEL_INFO -> LogPriority.INFO
             else -> LogPriority.VERBOSE
         }
-        if (logPriority != null) {
-            if (text.contains("HTTP error")) httpError = text
-            logcat.logcat("mpv/$prefix", logPriority) { text }
-        }
+        if (text.contains("HTTP error")) httpError = text
+        logcat.logcat("mpv/$prefix", logPriority) { text }
     }
 }

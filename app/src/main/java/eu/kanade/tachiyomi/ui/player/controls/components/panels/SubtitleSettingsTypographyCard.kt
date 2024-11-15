@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.player.controls.components.panels
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement

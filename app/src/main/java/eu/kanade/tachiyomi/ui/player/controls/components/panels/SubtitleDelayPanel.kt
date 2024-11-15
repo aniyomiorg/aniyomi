@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.presentation.player.components.OutlinedNumericChooser
 import eu.kanade.tachiyomi.ui.player.controls.CARDS_MAX_WIDTH
 import eu.kanade.tachiyomi.ui.player.controls.panelCardsColors
@@ -174,7 +175,7 @@ fun SubtitleDelayCard(
 }
 
 enum class SubtitleDelayType(
-    @StringRes val title: Int,
+    val title: StringResource,
 ) {
     Primary(MR.strings.player_sheets_sub_delay_subtitle_type_primary),
     Secondary(MR.strings.player_sheets_sub_delay_subtitle_type_secondary),
@@ -210,7 +211,7 @@ fun DelayCard(
         ) {
             title()
             OutlinedNumericChooser(
-                label = { Text(stringResource(MR.strings.player_sheets_sub_delay_card_delay)) },
+                label = { Text(stringResource(MR.strings.player_sheets_sub_delay_delay)) },
                 value = delay,
                 onChange = onDelayChange,
                 step = 50,

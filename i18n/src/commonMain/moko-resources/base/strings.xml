@@ -377,6 +377,7 @@
     <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
 
     <!-- Sheets - Miscellaneous -->
+    <string name="player_sheets_sub_misc_title">Miscellaneous</string>
     <string name="player_sheets_sub_override_ass">Override ASS/SSA subtitles</string>
     <string name="player_sheets_sub_scale">Scale</string>
     <string name="player_sheets_sub_position">Position</string>

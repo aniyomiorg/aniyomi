@@ -13,8 +13,6 @@ import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
-import eu.kanade.tachiyomi.ui.player.settings.sheets.subtitle.VideoFilters
-import eu.kanade.tachiyomi.ui.player.viewer.VideoDebanding
 import `is`.xyz.mpv.MPVLib
 import logcat.LogPriority
 import logcat.logcat
@@ -97,9 +95,9 @@ class AniyomiMPVView(context: Context, attributes: AttributeSet) : BaseMPVView(c
         MPVLib.setOptionString("profile", "fast")
         MPVLib.setOptionString("hwdec", if (decoderPreferences.tryHWDecoding().get()) "auto" else "no")
         when (decoderPreferences.videoDebanding().get()) {
-            VideoDebanding.NONE -> {}
-            VideoDebanding.CPU -> MPVLib.setOptionString("vf", "gradfun=radius=12")
-            VideoDebanding.GPU -> MPVLib.setOptionString("deband", "yes")
+            Debanding.None -> {}
+            Debanding.CPU -> MPVLib.setOptionString("vf", "gradfun=radius=12")
+            Debanding.GPU -> MPVLib.setOptionString("deband", "yes")
         }
 
         if (decoderPreferences.useYUV420P().get()) {
@@ -123,7 +121,7 @@ class AniyomiMPVView(context: Context, attributes: AttributeSet) : BaseMPVView(c
         MPVLib.setOptionString("screenshot-directory", screenshotDir.path)
 
         VideoFilters.entries.forEach {
-            MPVLib.setOptionString(it.mpvProperty, it.preference(playerPreferences).get().toString())
+            MPVLib.setOptionString(it.mpvProperty, it.preference(decoderPreferences).get().toString())
         }
 
         MPVLib.setOptionString("speed", playerPreferences.playerSpeed().get().toString())

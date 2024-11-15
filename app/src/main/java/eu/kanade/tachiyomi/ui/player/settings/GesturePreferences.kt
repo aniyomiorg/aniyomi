@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
-import eu.kanade.tachiyomi.ui.player.viewer.SingleActionGesture
+import eu.kanade.tachiyomi.ui.player.SingleActionGesture
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
 
