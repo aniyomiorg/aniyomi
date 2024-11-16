@@ -6,6 +6,7 @@ import android.media.AudioManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
+import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -63,6 +64,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.withIOContext
@@ -113,7 +115,6 @@ class PlayerViewModel @JvmOverloads constructor(
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
-    internal val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get(),
     private val basePreferences: BasePreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
@@ -147,18 +148,18 @@ class PlayerViewModel @JvmOverloads constructor(
     val isLoading = MutableStateFlow(true)
     val playbackSpeed = MutableStateFlow(playerPreferences.playerSpeed().get())
 
-    private val _subtitleTracks = MutableStateFlow<List<Track>>(emptyList())
+    private val _subtitleTracks = MutableStateFlow<List<VideoTrack>>(emptyList())
     val subtitleTracks = _subtitleTracks.asStateFlow()
     private val _selectedSubtitles = MutableStateFlow(Pair(-1, -1))
     val selectedSubtitles = _selectedSubtitles.asStateFlow()
 
-    private val _audioTracks = MutableStateFlow<List<Track>>(emptyList())
+    private val _audioTracks = MutableStateFlow<List<VideoTrack>>(emptyList())
     val audioTracks = _audioTracks.asStateFlow()
     private val _selectedAudio = MutableStateFlow(-1)
     val selectedAudio = _selectedAudio.asStateFlow()
 
-    private val _videoTracks = MutableStateFlow<List<Video>>(emptyList())
-    val videoTracks = _videoTracks.asStateFlow()
+    private val _videoList = MutableStateFlow<List<Video>>(emptyList())
+    val videoList = _videoList.asStateFlow()
     private val _selectedVideoIndex = MutableStateFlow(-1)
     val selectedVideoIndex = _selectedVideoIndex.asStateFlow()
 
@@ -260,6 +261,68 @@ class PlayerViewModel @JvmOverloads constructor(
         MPVLib.setPropertyString("hwdec", decoder.value)
     }
 
+    val getTrackLanguage: (Int) -> String = {
+        if (it != -1) {
+            MPVLib.getPropertyString("track-list/$it/lang") ?: ""
+        } else {
+            activity.stringResource(MR.strings.off)
+        }
+    }
+    val getTrackTitle: (Int) -> String = {
+        if (it != -1) {
+            MPVLib.getPropertyString("track-list/$it/title") ?: ""
+        } else {
+            activity.stringResource(MR.strings.off)
+        }
+    }
+    val getTrackMPVId: (Int) -> Int = {
+        if (it != -1) {
+            MPVLib.getPropertyInt("track-list/$it/id")
+        } else {
+            -1
+        }
+    }
+    val getTrackType: (Int) -> String? = {
+        MPVLib.getPropertyString("track-list/$it/type")
+    }
+
+
+    private var trackLoadingJob: Job? = null
+    fun loadTracks() {
+        trackLoadingJob?.cancel()
+        trackLoadingJob = viewModelScope.launch {
+            val possibleTrackTypes = listOf("audio", "sub")
+            val subTracks = mutableListOf<VideoTrack>()
+            val audioTracks = mutableListOf(
+                VideoTrack(-1, activity.stringResource(MR.strings.off), null)
+            )
+            try {
+                val tracksCount = MPVLib.getPropertyInt("track-list/count") ?: 0
+                for (i in 0..<tracksCount) {
+                    val type = getTrackType(i)
+                    if (!possibleTrackTypes.contains(type) || type == null) continue
+                    when (type) {
+                        "sub" -> subTracks.add(VideoTrack(getTrackMPVId(i), getTrackTitle(i), getTrackLanguage(i)))
+                        "audio" -> audioTracks.add(VideoTrack(getTrackMPVId(i), getTrackTitle(i), getTrackLanguage(i)))
+                        else -> error("Unrecognized track type")
+                    }
+                }
+            } catch (e: NullPointerException) {
+                logcat(LogPriority.ERROR) { "Couldn't load tracks, probably cause mpv was destroyed" }
+                return@launch
+            }
+            _subtitleTracks.update { subTracks }
+            _audioTracks.update { audioTracks }
+        }
+    }
+
+    @Immutable
+    data class VideoTrack(
+        val id: Int,
+        val name: String,
+        val language: String?,
+    )
+
     fun loadChapters() {
         val chapters = mutableListOf<Segment>()
         val count = MPVLib.getPropertyInt("chapter-list/count")!!
@@ -286,14 +349,13 @@ class PlayerViewModel @JvmOverloads constructor(
         _currentChapter.update { chapters.getOrNull(index.toInt()) ?: return }
     }
 
-    fun updateVideoTracks(videoList: List<Video>) {
-        _videoTracks.update { _ -> videoList }
+    fun updateVideoList(videoList: List<Video>) {
+        _videoList.update { _ -> videoList }
     }
 
     fun selectVideo(idx: Int) {
         _selectedVideoIndex.update { _ -> idx }
     }
-
 
     fun addAudio(uri: Uri) {
         val url = uri.toString()
@@ -305,9 +367,8 @@ class PlayerViewModel @JvmOverloads constructor(
         MPVLib.command(arrayOf("audio-add", path, "cached"))
     }
 
-    // TODO(videolist)
-    fun selectAudio(id: String) {
-        // activity.player.aid = id
+    fun selectAudio(id: Int) {
+        activity.player.aid = id
     }
 
     fun updateAudio(id: Int) {
@@ -325,9 +386,8 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     // TODO(videolist)
-    fun selectSub(id: String) {
+    fun selectSub(id: Int) {
         val selectedSubs = selectedSubtitles.value
-        /*
         _selectedSubtitles.update {
             when (id) {
                 selectedSubs.first -> Pair(selectedSubs.second, -1)
@@ -341,8 +401,6 @@ class PlayerViewModel @JvmOverloads constructor(
                 }
             }
         }
-
-         */
         activity.player.secondarySid = _selectedSubtitles.value.second
         activity.player.sid = _selectedSubtitles.value.first
     }

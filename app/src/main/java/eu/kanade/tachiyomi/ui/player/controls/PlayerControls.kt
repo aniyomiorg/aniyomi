@@ -571,15 +571,11 @@ fun PlayerControls(
         PlayerSheets(
             sheetShown = sheetShown,
             subtitles = subtitles.toImmutableList(),
-            // TODO(videolist)
-            // selectedSubtitles = selectedSubtitles.toList().toImmutableList(),
-            selectedSubtitles = emptyList<String>().toImmutableList(),
+            selectedSubtitles = selectedSubtitles.toList().toImmutableList(),
             onAddSubtitle = viewModel::addSubtitle,
             onSelectSubtitle = viewModel::selectSub,
             audioTracks = audioTracks.toImmutableList(),
-            // TODO(videolist)
-            // selectedAudio = selectedAudio,
-            selectedAudio = "",
+            selectedAudio = selectedAudio,
             onAddAudio = viewModel::addAudio,
             onSelectAudio = viewModel::selectAudio,
             chapter = currentChapter,

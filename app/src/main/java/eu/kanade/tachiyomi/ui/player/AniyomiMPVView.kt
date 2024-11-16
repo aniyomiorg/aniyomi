@@ -220,8 +220,6 @@ class AniyomiMPVView(context: Context, attributes: AttributeSet) : BaseMPVView(c
     }
 
     private fun setupSubtitlesOptions() {
-        MPVLib.setOptionString("slang", subtitlePreferences.preferredSubLanguages().get())
-
         MPVLib.setOptionString("sub-delay", (subtitlePreferences.subtitlesDelay().get() / 1000.0).toString())
         MPVLib.setOptionString("sub-speed", subtitlePreferences.subtitlesSpeed().get().toString())
         MPVLib.setOptionString(

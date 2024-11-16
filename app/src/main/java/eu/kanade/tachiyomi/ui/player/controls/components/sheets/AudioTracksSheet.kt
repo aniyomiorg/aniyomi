@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import eu.kanade.tachiyomi.animesource.model.Track
+import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
@@ -25,9 +25,9 @@ import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun AudioTracksSheet(
-    tracks: ImmutableList<Track>,
-    selectedUrl: String,
-    onSelect: (String) -> Unit,
+    tracks: ImmutableList<VideoTrack>,
+    selectedId: Int,
+    onSelect: (Int) -> Unit,
     onAddAudioTrack: () -> Unit,
     onOpenDelayPanel: () -> Unit,
     onDismissRequest: () -> Unit,
@@ -50,8 +50,8 @@ fun AudioTracksSheet(
         track = {
             AudioTrackRow(
                 title = getTrackTitle(it),
-                isSelected = selectedUrl == it.url,
-                onClick = { onSelect(it.url) },
+                isSelected = selectedId == it.id,
+                onClick = { onSelect(it.id) },
             )
         },
         modifier = modifier

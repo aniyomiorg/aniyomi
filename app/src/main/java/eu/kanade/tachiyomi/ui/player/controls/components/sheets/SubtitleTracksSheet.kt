@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import eu.kanade.tachiyomi.animesource.model.Track
+import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
@@ -29,9 +29,9 @@ import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun SubtitlesSheet(
-    tracks: ImmutableList<Track>,
-    selectedTracks: ImmutableList<String>,
-    onSelect: (String) -> Unit,
+    tracks: ImmutableList<VideoTrack>,
+    selectedTracks: ImmutableList<Int>,
+    onSelect: (Int) -> Unit,
     onAddSubtitle: () -> Unit,
     onOpenSubtitleSettings: () -> Unit,
     onOpenSubtitleDelay: () -> Unit,
@@ -58,13 +58,15 @@ fun SubtitlesSheet(
         track = { track ->
             SubtitleTrackRow(
                 title = getTrackTitle(track),
-                selected = selectedTracks.indexOf(track.url),
-                onClick = { onSelect(track.url) },
+                selected = selectedTracks.indexOf(track.id),
+                onClick = { onSelect(track.id) },
             )
         },
         footer = {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = modifier
+                    .padding(MaterialTheme.MPVKtSpacing.medium)
+                    .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium),
                 horizontalAlignment = Alignment.Start,
             ) {

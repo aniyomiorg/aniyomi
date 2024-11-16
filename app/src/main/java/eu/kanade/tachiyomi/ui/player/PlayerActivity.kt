@@ -128,10 +128,13 @@ class PlayerActivity : BaseActivity() {
     private var mediaSession: MediaSession? = null
     internal val playerPreferences: PlayerPreferences = Injekt.get()
     internal val gesturePreferences: GesturePreferences = Injekt.get()
+    internal val subtitlePreferences: SubtitlePreferences = Injekt.get()
     internal val audioPreferences: AudioPreferences = Injekt.get()
     internal val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
     internal val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
+
+    private val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
 
     private var audioFocusRequest: AudioFocusRequestCompat? = null
     private var restoreAudioFocus: () -> Unit = {}
@@ -544,7 +547,7 @@ class PlayerActivity : BaseActivity() {
                 viewModel.updateChapter(0)
             }
             // TODO(tracklist)
-            // "track-list" -> viewModel.loadTracks()
+            "track-list" -> viewModel.loadTracks()
         }
     }
 
@@ -851,13 +854,13 @@ class PlayerActivity : BaseActivity() {
         // aniskipStamps = emptyList()
 
         lifecycleScope.launch {
-            // viewModel.mutableState.update { it.copy(isLoadingEpisode = true) }
+            viewModel.updateIsLoadingEpisode(true)
 
             val pipEpisodeToasts = playerPreferences.pipEpisodeToasts().get()
 
             when (val switchMethod = viewModel.loadEpisode(episodeId)) {
                 null -> {
-                    if (viewModel.currentAnime != null && !autoPlay) {
+                    if (viewModel.currentAnime.value != null && !autoPlay) {
                         launchUI { toast(MR.strings.no_next_episode) }
                     }
                     viewModel.isLoading.update { _ -> false }
@@ -869,10 +872,8 @@ class PlayerActivity : BaseActivity() {
                             switchMethod.first!!.isEmpty() -> setInitialEpisodeError(
                                 Exception("Video list is empty."),
                             )
-                            // TODO(videolist)
-                            // setVideoList(qualityIndex = 0, switchMethod.first!!)
                             else -> {
-
+                                setVideoList(qualityIndex = 0, switchMethod.first!!)
                             }
                         }
                     } else {
@@ -894,7 +895,7 @@ class PlayerActivity : BaseActivity() {
         position: Long? = null,
     ) {
         if (player.isExiting) return
-        viewModel.updateVideoTracks(videos ?: emptyList())
+        viewModel.updateVideoList(videos ?: emptyList())
         if (videos == null) return
 
         videos.getOrNull(qualityIndex)?.let {
@@ -919,35 +920,6 @@ class PlayerActivity : BaseActivity() {
 
             MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
         }
-
-        /*
-        currentVideoList = videos
-        currentVideoList?.getOrNull(qualityIndex)?.let {
-            streams.quality.index = qualityIndex
-            setHttpOptions(it)
-            if (viewModel.state.value.isLoadingEpisode) {
-                viewModel.currentEpisode?.let { episode ->
-                    val preservePos = playerPreferences.preserveWatchingPosition().get()
-                    val resumePosition = position
-                        ?: if ((episode.seen && !preservePos) || fromStart) {
-                            0L
-                        } else {
-                            episode.last_second_seen
-                        }
-                    MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
-                    playerControls.updatePlaybackDuration(resumePosition.toInt() / 1000)
-                }
-            } else {
-                player.timePos?.let {
-                    MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
-                }
-            }
-            streams.subtitle.tracks = arrayOf(Track("nothing", "None")) + it.subtitleTracks.toTypedArray()
-            streams.audio.tracks = arrayOf(Track("nothing", "None")) + it.audioTracks.toTypedArray()
-            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
-        }
-
-         */
     }
 
     /**
@@ -960,13 +932,11 @@ class PlayerActivity : BaseActivity() {
         finish()
     }
 
-    // TODO(videolist)
     private fun parseVideoUrl(videoUrl: String?): String? {
         return Uri.parse(videoUrl).resolveUri(this)
             ?: videoUrl
     }
 
-    // TODO(videolist)
     private fun setHttpOptions(video: Video) {
         if (viewModel.isEpisodeOnline() != true) return
         val source = viewModel.currentSource as AnimeHttpSource
@@ -1065,156 +1035,12 @@ class PlayerActivity : BaseActivity() {
     }
     */
 
-    /**
-     * Updates the player UI text and controls in a separate thread
-    internal fun refreshUi() {
-        viewModel.viewModelScope.launchUI {
-            setVisibilities()
-            player.timePos?.let { playerControls.updatePlaybackPos(it) }
-            player.duration?.let { playerControls.updatePlaybackDuration(it) }
-            updatePlaybackStatus(player.paused ?: return@launchUI)
-            updatePip(start = false)
-            playerControls.updateEpisodeText()
-            playerControls.updatePlaylistButtons()
-            playerControls.updateSpeedButton()
-        }
-    }
-    */
-
-    // TODO: Move into function once compose is implemented
-
-    /*
-    val supportedAndEnabled = Injekt.get<BasePreferences>().deviceHasPip() && playerPreferences.enablePip().get()
-    internal fun updatePip(start: Boolean) {
-        val anime = viewModel.currentAnime ?: return
-        val episode = viewModel.currentEpisode ?: return
-        val paused = player.paused ?: return
-        val videoAspect = player.videoAspect ?: return
-        if (supportedAndEnabled) {
-            PictureInPictureHandler().update(
-                context = this,
-                title = anime.title,
-                subtitle = episode.name,
-                paused = paused,
-                replaceWithPrevious = playerPreferences.pipReplaceWithPrevious().get(),
-                pipOnExit = playerPreferences.pipOnExit().get() && !paused,
-                videoAspect = videoAspect * 10000,
-                playlistCount = viewModel.getCurrentEpisodeIndex(),
-                playlistPosition = viewModel.currentPlaylist.size,
-            ).let {
-                setPictureInPictureParams(it)
-                if (PipState.mode == PipState.OFF && start) {
-                    PipState.mode = PipState.STARTED
-                    playerControls.hideControls(hide = true)
-                    enterPictureInPictureMode(it)
-                }
-            }
-        }
-    }
-
-    */
-
-    /*
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
-        if (!isInPictureInPictureMode) {
-            pipReceiver?.let {
-                unregisterReceiver(pipReceiver)
-                pipReceiver = null
-            }
-            super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-            return
-        }
-        setPictureInPictureParams(createPipParams())
-        viewModel.hideControls()
-        viewModel.hideSeekBar()
-        viewModel.isBrightnessSliderShown.update { false }
-        viewModel.isVolumeSliderShown.update { false }
-        viewModel.sheetShown.update { Sheets.None }
-        pipReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent == null || intent.action != PIP_INTENTS_FILTER) return
-                when (intent.getIntExtra(PIP_INTENT_ACTION, 0)) {
-                    PIP_PAUSE -> viewModel.pause()
-                    PIP_PLAY -> viewModel.unpause()
-                    PIP_NEXT -> viewModel.handleRightDoubleTap()
-                    PIP_PREVIOUS -> viewModel.handleLeftDoubleTap()
-                }
-                setPictureInPictureParams(createPipParams())
-            }
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(pipReceiver, IntentFilter(PIP_INTENTS_FILTER), RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(pipReceiver, IntentFilter(PIP_INTENTS_FILTER))
-        }
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-    }
-    */
-
-    /*
-    @Deprecated("Deprecated in Java")
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
-        PipState.mode = if (isInPictureInPictureMode) PipState.ON else PipState.OFF
-
-        playerControls.lockControls(locked = PipState.mode == PipState.ON)
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode)
-
-        if (PipState.mode == PipState.ON) {
-            // On Android TV it is required to hide controller in this PIP change callback
-            playerControls.hideControls(true)
-            binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
-            mReceiver = object : BroadcastReceiver() {
-                override fun onReceive(context: Context?, intent: Intent?) {
-                    if (intent == null || ACTION_MEDIA_CONTROL != intent.action) {
-                        return
-                    }
-                    when (intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)) {
-                        PIP_PLAY -> {
-                            player.paused = false
-                        }
-                        PIP_PAUSE -> {
-                            player.paused = true
-                        }
-                        PIP_PREVIOUS -> {
-                            changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
-                        }
-                        PIP_NEXT -> {
-                            changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
-                        }
-                        PIP_SKIP -> {
-                            doubleTapSeek(time = 10)
-                        }
-                    }
-                }
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL), RECEIVER_NOT_EXPORTED)
-            } else {
-                registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
-            }
-        } else {
-            if (player.paused!!) playerControls.hideControls(false)
-            binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize * 2
-            if (mReceiver != null) {
-                unregisterReceiver(mReceiver)
-                mReceiver = null
-            }
-        }
-    }
-
-     */
-
-    // TODO(videolist)
-    /*
     private fun clearTracks() {
         val count = MPVLib.getPropertyInt("track-list/count")!!
         // Note that because events are async, properties might disappear at any moment
         // so use ?: continue instead of !!
         for (i in 0 until count) {
             val type = MPVLib.getPropertyString("track-list/$i/type") ?: continue
-            if (!player.tracks.containsKey(type)) {
-                continue
-            }
             val mpvId = MPVLib.getPropertyInt("track-list/$i/id") ?: continue
             when (type) {
                 "video" -> MPVLib.command(arrayOf("video-remove", "$mpvId"))
@@ -1223,31 +1049,6 @@ class PlayerActivity : BaseActivity() {
             }
         }
     }
-
-     */
-
-    // TODO(videolist)
-    /*
-    private val subtitleSelect = SubtitleSelect(subtitlePreferences)
-    private fun selectSubtitle(subtitleTracks: List<Track>, index: Int, embedded: Boolean = false) {
-        val offset = if (embedded) 0 else 1
-        streams.subtitle.index = index + offset
-        val tracks = player.tracks.getValue("sub")
-        val selectedLoadedTrack = tracks.firstOrNull {
-            it.name == subtitleTracks[index].url ||
-                it.mpvId.toString() == subtitleTracks[index].url
-        }
-        selectedLoadedTrack?.let { player.sid = it.mpvId }
-            ?: MPVLib.command(
-                arrayOf(
-                    "sub-add",
-                    subtitleTracks[index].url,
-                    "select",
-                    subtitleTracks[index].url,
-                ),
-            )
-    }
-    */
 
     // TODO: exception java.util.ConcurrentModificationException:
     //  UPDATE: MAY HAVE BEEN FIXED
@@ -1258,11 +1059,9 @@ class PlayerActivity : BaseActivity() {
     internal suspend fun fileLoaded() {
         setMpvMediaTitle()
         setupPlayerOrientation()
-        // TODO(videolist)
-        // clearTracks()
-        // player.loadTracks()
-        //setupSubtitleTracks()
-        //setupAudioTracks()
+        clearTracks()
+        setupSubtitleTracks()
+        setupAudioTracks()
 
         /*
         viewModel.viewModelScope.launchUI {
@@ -1303,77 +1102,29 @@ class PlayerActivity : BaseActivity() {
          */
     }
 
-    // TODO(videolist)
-    /*
     private fun setupSubtitleTracks() {
-        streams.subtitle.tracks += player.tracks.getOrElse("sub") { emptyList() }
-            .drop(1).map { track ->
-                Track(track.mpvId.toString(), track.name)
-            }.toTypedArray()
-        if (hadPreviousSubs) {
-            streams.subtitle.tracks.getOrNull(streams.subtitle.index)?.let { sub ->
-                MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
-            }
-            return
-        }
-        val subtitleTracks = currentVideoList?.getOrNull(streams.quality.index)
+        val subtitleTracks = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
             ?.subtitleTracks?.takeIf { it.isNotEmpty() }
 
-        subtitleTracks?.let { tracks ->
-            val preferredIndex = subtitleSelect.getPreferredSubtitleIndex(tracks) ?: 0
-            hadPreviousSubs = true
-            selectSubtitle(tracks, preferredIndex)
-        } ?: let {
-            val tracks = streams.subtitle.tracks.toList()
-            val preferredIndex = subtitleSelect.getPreferredSubtitleIndex(tracks)
-                ?: let {
-                    val mpvSub = player.tracks["sub"]?.toTypedArray()?.firstOrNull { player.sid == it.mpvId }
-                    mpvSub?.let {
-                        streams.subtitle.tracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
-                    }?.coerceAtLeast(0) ?: 0
-                }
-            selectSubtitle(tracks, preferredIndex, embedded = true)
+        subtitleTracks?.forEach { sub ->
+            MPVLib.command(arrayOf("sub-add", sub.url, "auto", sub.lang))
+        }
+
+        val preferredSubtitle = subtitleSelect.getPreferredSubtitleIndex(viewModel.subtitleTracks.value)
+        preferredSubtitle?.let {
+            player.sid = it.id
+            player.secondarySid = -1
         }
     }
 
-     */
-
-    // TODO(videolist)
-    /*
     private fun setupAudioTracks() {
-        val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
+        val audioTracks = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
+            ?.audioTracks?.takeIf { it.isNotEmpty() }
 
-        streams.audio.tracks += player.tracks.getOrElse("audio") { emptyList() }
-            .drop(1).map { track ->
-                Track(track.mpvId.toString(), track.name)
-            }.toTypedArray()
-
-        if (hadPreviousAudio) {
-            streams.audio.tracks.getOrNull(streams.audio.index)?.let { audio ->
-                MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
-            }
-        } else {
-            currentVideoList?.getOrNull(streams.quality.index)
-                ?.audioTracks?.let { tracks ->
-                    val langIndex = tracks.indexOfFirst {
-                        it.lang.contains(localLangName)
-                    }
-                    val requestedLanguage = if (langIndex == -1) 0 else langIndex
-                    tracks.getOrNull(requestedLanguage)?.let { audio ->
-                        hadPreviousAudio = true
-                        streams.audio.index = requestedLanguage + 1
-                        MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
-                    }
-                } ?: run {
-                val mpvAudio = player.tracks["audio"]?.toTypedArray()?.firstOrNull { player.aid == it.mpvId }
-                streams.audio.index = mpvAudio?.let {
-                    streams.audio.tracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
-                }?.coerceAtLeast(0) ?: 0
-            }
+        audioTracks?.forEach { audio ->
+            MPVLib.command(arrayOf("audio-add", audio.url, "auto", audio.lang))
         }
     }
-
-     */
 
     private fun setMpvMediaTitle() {
         val anime = viewModel.currentAnime.value ?: return

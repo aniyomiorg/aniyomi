@@ -8,6 +8,7 @@ import dev.vivvvek.seeker.Segment
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.ui.player.Decoder
 import eu.kanade.tachiyomi.ui.player.Panels
+import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.AudioTracksSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.ChaptersSheet
@@ -23,16 +24,16 @@ fun PlayerSheets(
     sheetShown: Sheets,
 
     // subtitles sheet
-    subtitles: ImmutableList<Track>,
-    selectedSubtitles: ImmutableList<String>,
+    subtitles: ImmutableList<VideoTrack>,
+    selectedSubtitles: ImmutableList<Int>,
     onAddSubtitle: (Uri) -> Unit,
-    onSelectSubtitle: (String) -> Unit,
+    onSelectSubtitle: (Int) -> Unit,
 
     // audio sheet
-    audioTracks: ImmutableList<Track>,
-    selectedAudio: String,
+    audioTracks: ImmutableList<VideoTrack>,
+    selectedAudio: Int,
     onAddAudio: (Uri) -> Unit,
-    onSelectAudio: (String) -> Unit,
+    onSelectAudio: (Int) -> Unit,
 
     // chapters sheet
     chapter: Segment?,
@@ -85,7 +86,7 @@ fun PlayerSheets(
             }
             AudioTracksSheet(
                 tracks = audioTracks,
-                selectedUrl = selectedAudio,
+                selectedId = selectedAudio,
                 onSelect = onSelectAudio,
                 onAddAudioTrack = { audioPicker.launch(arrayOf("*/*")) },
                 onOpenDelayPanel = { onOpenPanel(Panels.AudioDelay) },

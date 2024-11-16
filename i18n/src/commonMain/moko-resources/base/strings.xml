@@ -337,6 +337,9 @@
     <!-- Sheets -->
 
     <string name="player_sheets_delay_set_as_default">Set as default</string>
+    <string name="player_sheets_track_title_w_lang" translatable="false">#%d: %s (%s)</string>
+    <string name="player_sheets_track_title_wo_lang" translatable="false">#%d: %s</string>
+    <string name="player_sheets_track_lang_wo_title" translatable="false">#%d: %s</string>
 
     <!-- Sheets - Audio delay -->
     <string name="player_sheets_audio_delay_title">Audio delay</string>
@@ -400,9 +403,6 @@
 
     <!-- Sheets - Audio tracks -->
     <string name="player_sheets_add_ext_audio">Add external audio tracks</string>
-
-    <!-- Sheets - Chapters -->
-    <string name="player_sheets_track_title_wo_lang" translatable="false">#%d: %s</string>
 
     <!-- Sheets - Decoders -->
     <string name="player_sheets_decoder_formatted">%s (%s)</string>

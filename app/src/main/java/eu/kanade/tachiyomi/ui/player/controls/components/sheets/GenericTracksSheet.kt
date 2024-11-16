@@ -20,12 +20,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.player.components.PlayerSheet
-import eu.kanade.tachiyomi.animesource.model.Track
+import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
+import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.i18n.stringResource
 
 
 @Composable
@@ -88,27 +89,24 @@ fun AddTrackRow(
 }
 
 @Composable
-fun getTrackTitle(track: Track): String {
-    return track.lang
-    /*
+fun getTrackTitle(track: VideoTrack): String {
     return when {
         track.id == -1 -> {
             track.name
         }
 
         track.language.isNullOrBlank() && track.name.isNotBlank() -> {
-            stringResource(R.string.player_sheets_track_title_wo_lang, track.id, track.name)
+            stringResource(MR.strings.player_sheets_track_title_wo_lang, track.id, track.name)
         }
 
         !track.language.isNullOrBlank() && track.name.isNotBlank() -> {
-            stringResource(R.string.player_sheets_track_title_w_lang, track.id, track.name, track.language)
+            stringResource(MR.strings.player_sheets_track_title_w_lang, track.id, track.name, track.language)
         }
 
         !track.language.isNullOrBlank() && track.name.isBlank() -> {
-            stringResource(R.string.player_sheets_track_lang_wo_title, track.id, track.language)
+            stringResource(MR.strings.player_sheets_track_lang_wo_title, track.id, track.language)
         }
 
-        else -> stringResource(R.string.player_sheets_track_title_wo_lang, track.id, track.name)
+        else -> stringResource(MR.strings.player_sheets_track_title_wo_lang, track.id, track.name)
     }
-    */
 }
