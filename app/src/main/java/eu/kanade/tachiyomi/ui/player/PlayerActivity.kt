@@ -377,6 +377,7 @@ class PlayerActivity : BaseActivity() {
             cacheDir = applicationContext.cacheDir.path,
             logLvl = logLevel,
         )
+        MPVLib.addLogObserver(playerObserver)
         MPVLib.addObserver(playerObserver)
     }
 
