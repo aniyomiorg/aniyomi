@@ -331,6 +331,8 @@
     <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
     <string name="numeric_chooser_value_too_big">Value too big</string>
     <string name="numeric_chooser_value_too_small">Value too small</string>
+    <string name="enable_auto_play">Auto-play is on</string>
+    <string name="disable_auto_play">Auto-play is off</string>
 
     <!-- Sheets -->
 
@@ -1257,8 +1259,6 @@
     <string name="label_updates">Manga</string>
     <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Back</string>
-    <string name="enable_auto_play">Auto-play is on</string>
-    <string name="disable_auto_play">Auto-play is off</string>
     <string name="video_custom_screen">Custom aspect ratio</string>
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>

@@ -110,6 +110,7 @@ sealed class PlayerUpdates {
     data object DoubleSpeed : PlayerUpdates()
     data object AspectRatio : PlayerUpdates()
     data class ShowText(val value: String) : PlayerUpdates()
+    data class ShowTextResource(val textResource: StringResource) : PlayerUpdates()
 }
 
 enum class VideoFilters(

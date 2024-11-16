@@ -15,9 +15,10 @@ fun SwitchPreference(
     value: Boolean,
     onValueChange: (Boolean) -> Unit,
     content: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .toggleable(value, true, Role.Switch, onValueChange)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

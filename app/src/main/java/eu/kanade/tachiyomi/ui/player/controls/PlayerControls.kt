@@ -314,6 +314,9 @@ fun PlayerControls(
                         // is PlayerUpdates.DoubleSpeed -> DoubleSpeedPlayerUpdate()
                         is PlayerUpdates.AspectRatio -> TextPlayerUpdate(stringResource(aspectRatio.titleRes))
                         is PlayerUpdates.ShowText -> TextPlayerUpdate((currentPlayerUpdate as PlayerUpdates.ShowText).value)
+                        is PlayerUpdates.ShowTextResource -> TextPlayerUpdate(
+                            stringResource((currentPlayerUpdate as PlayerUpdates.ShowTextResource).textResource)
+                        )
                         else -> {}
                     }
                 }
@@ -417,6 +420,7 @@ fun PlayerControls(
                     )
                 }
                 val mediaTitle by viewModel.mediaTitle.collectAsState()
+                val animeTitle by viewModel.animeTitle.collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
                     enter = if (!reduceMotion) {
@@ -439,12 +443,13 @@ fun PlayerControls(
                     },
                 ) {
                     TopLeftPlayerControls(
+                        animeTitle = animeTitle,
                         mediaTitle = mediaTitle,
                         onBackClick = onBackPress,
                     )
                 }
                 // Top right controls
-                val decoder by viewModel.currentDecoder.collectAsState()
+                val autoPlayEnabled by playerPreferences.autoplayEnabled().collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
                     enter = if (!reduceMotion) {
@@ -465,13 +470,13 @@ fun PlayerControls(
                     },
                 ) {
                     TopRightPlayerControls(
-                        decoder = decoder,
-                        onDecoderClick = { viewModel.cycleDecoders() },
-                        onDecoderLongClick = { onOpenSheet(Sheets.Decoders) },
+                        autoPlayEnabled = autoPlayEnabled,
+                        onToggleAutoPlay = { viewModel.setAutoPlay(it) },
                         onSubtitlesClick = { onOpenSheet(Sheets.SubtitleTracks) },
                         onSubtitlesLongClick = { onOpenPanel(Panels.SubtitleSettings) },
                         onAudioClick = { onOpenSheet(Sheets.AudioTracks) },
                         onAudioLongClick = { onOpenPanel(Panels.AudioDelay) },
+                        onQualityClick = {},
                         onMoreClick = { onOpenSheet(Sheets.More) },
                         onMoreLongClick = { onOpenPanel(Panels.VideoFilters) },
                     )

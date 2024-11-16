@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import eu.kanade.presentation.player.components.PlayerSheet
 import eu.kanade.presentation.player.components.SliderItem
 import eu.kanade.presentation.player.components.SwitchPreference
@@ -120,7 +121,9 @@ fun PlaybackSpeedSheet(
                     MPVLib.setPropertyBoolean("audio-pitch-correction", it)
                 },
                 content = {
-                    Column {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                    ) {
                         Text(text = stringResource(MR.strings.pref_audio_pitch_correction_title))
                         Text(
                             text = stringResource(MR.strings.pref_audio_pitch_correction_summary),
@@ -128,6 +131,8 @@ fun PlaybackSpeedSheet(
                         )
                     }
                 },
+                modifier = Modifier
+                    .padding(MaterialTheme.MPVKtSpacing.medium),
             )
             Row(
                 modifier = Modifier

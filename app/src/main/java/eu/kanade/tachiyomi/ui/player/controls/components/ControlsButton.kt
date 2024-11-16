@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.ui.player.controls.LocalPlayerButtonsClickEvent
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
@@ -32,6 +33,7 @@ fun ControlsButton(
     onLongClick: () -> Unit = {},
     title: String? = null,
     color: Color = Color.White,
+    horizontalSpacing: Dp = MaterialTheme.MPVKtSpacing.medium,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -52,7 +54,10 @@ fun ControlsButton(
                 interactionSource,
                 ripple(),
             )
-            .padding(MaterialTheme.MPVKtSpacing.medium),
+            .padding(
+                vertical = MaterialTheme.MPVKtSpacing.medium,
+                horizontal = horizontalSpacing
+            ),
     ) {
         Icon(
             icon,

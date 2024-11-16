@@ -4,12 +4,8 @@ import android.app.Application
 import android.content.pm.ActivityInfo
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -39,7 +35,6 @@ import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
-import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
@@ -122,11 +117,32 @@ class PlayerViewModel @JvmOverloads constructor(
     private val basePreferences: BasePreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
+    private val _episodeList = MutableStateFlow<List<Episode>>(emptyList())
+    val episodeList = _episodeList.asStateFlow()
+
+    private val _currentPlaylist = MutableStateFlow<List<Episode>>(emptyList())
+    val currentPlaylist = _currentPlaylist.asStateFlow()
+
+    private val _currentEpisode = MutableStateFlow<Episode?>(null)
+    val currentEpisode = _currentEpisode.asStateFlow()
+
+    private val _currentAnime = MutableStateFlow<Anime?>(null)
+    val currentAnime = _currentAnime.asStateFlow()
+
+    private val _currentSource = MutableStateFlow<AnimeSource?>(null)
+    val currentSource = _currentSource.asStateFlow()
+
+    private val _videoStreams = MutableStateFlow(VideoStreams())
+    val videoStreams = _videoStreams.asStateFlow()
+
+    private val _isLoadingEpisode = MutableStateFlow(false)
+    val isLoadingEpisode = _isLoadingEpisode.asStateFlow()
 
     private val _currentDecoder = MutableStateFlow(getDecoderFromValue(MPVLib.getPropertyString("hwdec")))
     val currentDecoder = _currentDecoder.asStateFlow()
 
     val mediaTitle = MutableStateFlow("")
+    val animeTitle = MutableStateFlow("")
 
     val isLoading = MutableStateFlow(true)
     val playbackSpeed = MutableStateFlow(playerPreferences.playerSpeed().get())
@@ -140,6 +156,11 @@ class PlayerViewModel @JvmOverloads constructor(
     val audioTracks = _audioTracks.asStateFlow()
     private val _selectedAudio = MutableStateFlow(-1)
     val selectedAudio = _selectedAudio.asStateFlow()
+
+    private val _videoTracks = MutableStateFlow<List<Video>>(emptyList())
+    val videoTracks = _videoTracks.asStateFlow()
+    private val _selectedVideoIndex = MutableStateFlow(-1)
+    val selectedVideoIndex = _selectedVideoIndex.asStateFlow()
 
     var chapters: List<Segment> = listOf()
     private val _currentChapter = MutableStateFlow<Segment?>(null)
@@ -205,6 +226,15 @@ class PlayerViewModel @JvmOverloads constructor(
         }
     }
 
+    fun updateIsLoadingEpisode(value: Boolean) {
+        _isLoadingEpisode.update { _ -> value }
+    }
+
+    fun updateEpisodeList(episodeList: List<Episode>) {
+        _episodeList.update { _ -> episodeList }
+        _currentPlaylist.update { _ -> filterEpisodeList(episodeList) }
+    }
+
     fun getDecoder() {
         _currentDecoder.update { getDecoderFromValue(activity.player.hwdecActive) }
     }
@@ -255,6 +285,15 @@ class PlayerViewModel @JvmOverloads constructor(
         if (chapters.isEmpty() || index == -1L) return
         _currentChapter.update { chapters.getOrNull(index.toInt()) ?: return }
     }
+
+    fun updateVideoTracks(videoList: List<Video>) {
+        _videoTracks.update { _ -> videoList }
+    }
+
+    fun selectVideo(idx: Int) {
+        _selectedVideoIndex.update { _ -> idx }
+    }
+
 
     fun addAudio(uri: Uri) {
         val url = uri.toString()
@@ -437,6 +476,16 @@ class PlayerViewModel @JvmOverloads constructor(
         isVolumeSliderShown.update { true }
     }
 
+    fun setAutoPlay(value: Boolean) {
+        val textRes = if (value) {
+            MR.strings.enable_auto_play
+        } else {
+            MR.strings.disable_auto_play
+        }
+        playerUpdate.update { PlayerUpdates.ShowTextResource(textRes) }
+        playerPreferences.autoplayEnabled().set(value)
+    }
+
     fun changeVideoAspect(aspect: VideoAspect) {
         var ratio = -1.0
         var pan = 1.0
@@ -551,8 +600,8 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     override fun onCleared() {
-        if (currentEpisode != null) {
-            saveWatchingProgress(currentEpisode!!)
+        if (currentEpisode.value != null) {
+            saveWatchingProgress(currentEpisode.value!!)
             episodeToDownload?.let {
                 downloadManager.addDownloadsToStartOfQueue(listOf(it))
             }
@@ -564,9 +613,6 @@ class PlayerViewModel @JvmOverloads constructor(
 
     // ====== OLD ======
 
-    val mutableState = MutableStateFlow(State())
-    val state = mutableState.asStateFlow()
-
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
@@ -575,30 +621,6 @@ class PlayerViewModel @JvmOverloads constructor(
 
     internal val relativeTime = uiPreferences.relativeTime().get()
     internal val dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get())
-
-    /**
-     * The episode playlist loaded in the player. It can be empty when instantiated for a short time.
-     */
-    val currentPlaylist: List<Episode>
-        get() = filterEpisodeList(state.value.episodeList)
-
-    /**
-     * The episode loaded in the player. It can be null when instantiated for a short time.
-     */
-    val currentEpisode: Episode?
-        get() = state.value.episode
-
-    /**
-     * The anime loaded in the player. It can be null when instantiated for a short time.
-     */
-    val currentAnime: Anime?
-        get() = state.value.anime
-
-    /**
-     * The source used. It can be null when instantiated for a short time.
-     */
-    val currentSource: AnimeSource?
-        get() = state.value.source
 
     /**
      * The position in the current video. Used to restore from process kill.
@@ -632,7 +654,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private var currentVideoList: List<Video>? = null
 
     private fun filterEpisodeList(episodes: List<Episode>): List<Episode> {
-        val anime = currentAnime ?: return episodes
+        val anime = currentAnime.value ?: return episodes
         val selectedEpisode = episodes.find { it.id == episodeId }
             ?: error("Requested episode of id $episodeId not found in episode list")
 
@@ -668,19 +690,22 @@ class PlayerViewModel @JvmOverloads constructor(
         return episodesForPlayer
     }
 
+
     fun getCurrentEpisodeIndex(): Int {
-        return this.currentPlaylist.indexOfFirst { currentEpisode?.id == it.id }
+        return currentPlaylist.value.indexOfFirst { currentEpisode.value?.id == it.id }
     }
+
 
     fun getAdjacentEpisodeId(previous: Boolean): Long {
         val newIndex = if (previous) getCurrentEpisodeIndex() - 1 else getCurrentEpisodeIndex() + 1
 
         return when {
             previous && getCurrentEpisodeIndex() == 0 -> -1L
-            !previous && this.currentPlaylist.lastIndex == getCurrentEpisodeIndex() -> -1L
-            else -> this.currentPlaylist[newIndex].id ?: -1L
+            !previous && currentPlaylist.value.lastIndex == getCurrentEpisodeIndex() -> -1L
+            else -> currentPlaylist.value[newIndex].id ?: -1L
         }
     }
+
 
     /*
     override fun onCleared() {
@@ -699,7 +724,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * to persist the current progress of the active episode.
      */
     fun onSaveInstanceStateNonConfigurationChange() {
-        val currentEpisode = currentEpisode ?: return
+        val currentEpisode = currentEpisode.value ?: return
         viewModelScope.launchNonCancellable {
             saveEpisodeProgress(currentEpisode)
         }
@@ -709,7 +734,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * Whether this presenter is initialized yet.
      */
     private fun needsInit(): Boolean {
-        return currentAnime == null || currentEpisode == null
+        return currentAnime.value == null || currentEpisode.value == null
     }
 
     /**
@@ -727,19 +752,23 @@ class PlayerViewModel @JvmOverloads constructor(
         return try {
             val anime = getAnime.await(animeId)
             if (anime != null) {
+                animeTitle.update { _ -> anime.title }
                 sourceManager.isInitialized.first { it }
                 if (episodeId == -1L) episodeId = initialEpisodeId
 
                 checkTrackers(anime)
 
-                mutableState.update { it.copy(episodeList = initEpisodeList(anime)) }
-                val episode = this.currentPlaylist.first { it.id == episodeId }
+                updateEpisodeList(initEpisodeList(anime))
+                val episode = currentPlaylist.value.first { it.id == episodeId }
+                mediaTitle.update { _ -> episode.name }
 
                 val source = sourceManager.getOrStub(anime.source)
 
-                mutableState.update { it.copy(episode = episode, anime = anime, source = source) }
+                _currentEpisode.update { _ -> episode }
+                _currentAnime.update { _ -> anime }
+                _currentSource.update { _ -> source }
 
-                val currentEp = currentEpisode ?: throw Exception("No episode loaded.")
+                val currentEp = currentEpisode.value ?: throw Exception("No episode loaded.")
                 if (vidList.isNotBlank()) {
                     currentVideoList = vidList.toVideoList().ifEmpty {
                         currentVideoList = null
@@ -799,8 +828,8 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     fun isEpisodeOnline(): Boolean? {
-        val anime = currentAnime ?: return null
-        val episode = currentEpisode ?: return null
+        val anime = currentAnime.value ?: return null
+        val episode = currentEpisode.value ?: return null
         return currentSource is AnimeHttpSource &&
             !EpisodeLoader.isDownload(
                 episode.toDomainEpisode()!!,
@@ -809,16 +838,16 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     suspend fun loadEpisode(episodeId: Long?): Pair<List<Video>?, String>? {
-        val anime = currentAnime ?: return null
+        val anime = currentAnime.value ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
-        val chosenEpisode = this.currentPlaylist.firstOrNull { ep -> ep.id == episodeId } ?: return null
+        val chosenEpisode = currentPlaylist.value.firstOrNull { ep -> ep.id == episodeId } ?: return null
 
-        mutableState.update { it.copy(episode = chosenEpisode) }
+        _currentEpisode.update { _ -> chosenEpisode }
 
         return withIOContext {
             try {
-                val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
+                val currentEpisode = currentEpisode.value ?: throw Exception("No episode loaded.")
                 currentVideoList = EpisodeLoader.getLinks(
                     currentEpisode.toDomainEpisode()!!,
                     anime,
@@ -838,8 +867,8 @@ class PlayerViewModel @JvmOverloads constructor(
      * seen, update tracking services, enqueue downloaded episode deletion and download next episode.
      */
     fun onSecondReached(position: Int, duration: Int) {
-        if (state.value.isLoadingEpisode) return
-        val currentEp = currentEpisode ?: return
+        if (isLoadingEpisode.value) return
+        val currentEp = currentEpisode.value ?: return
         if (episodeId == -1L) return
 
         val seconds = position * 1000L
@@ -868,13 +897,13 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private fun downloadNextEpisodes() {
         if (downloadAheadAmount == 0) return
-        val anime = currentAnime ?: return
+        val anime = currentAnime.value ?: return
 
         // Only download ahead if current + next episode is already downloaded too to avoid jank
-        if (getCurrentEpisodeIndex() == this.currentPlaylist.lastIndex) return
-        val currentEpisode = currentEpisode ?: return
+        if (getCurrentEpisodeIndex() == currentPlaylist.value.lastIndex) return
+        val currentEpisode = currentEpisode.value ?: return
 
-        val nextEpisode = this.currentPlaylist[getCurrentEpisodeIndex() + 1]
+        val nextEpisode = currentPlaylist.value[getCurrentEpisodeIndex() + 1]
         val episodesAreDownloaded =
             EpisodeLoader.isDownload(currentEpisode.toDomainEpisode()!!, anime) &&
                 EpisodeLoader.isDownload(nextEpisode.toDomainEpisode()!!, anime)
@@ -896,9 +925,9 @@ class PlayerViewModel @JvmOverloads constructor(
      */
     private fun deleteEpisodeIfNeeded(chosenEpisode: Episode) {
         // Determine which episode should be deleted and enqueue
-        val currentEpisodePosition = this.currentPlaylist.indexOf(chosenEpisode)
+        val currentEpisodePosition = currentPlaylist.value.indexOf(chosenEpisode)
         val removeAfterSeenSlots = downloadPreferences.removeAfterReadSlots().get()
-        val episodeToDelete = this.currentPlaylist.getOrNull(
+        val episodeToDelete = currentPlaylist.value.getOrNull(
             currentEpisodePosition - removeAfterSeenSlots,
         )
         // If episode is completely seen no need to download it
@@ -911,7 +940,7 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     fun saveCurrentEpisodeWatchingProgress() {
-        currentEpisode?.let { saveWatchingProgress(it) }
+        currentEpisode.value?.let { saveWatchingProgress(it) }
     }
 
     /**
@@ -974,7 +1003,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * There's also a notification to allow sharing the image somewhere else or deleting it.
      */
     fun saveImage(imageStream: () -> InputStream, timePos: Int?) {
-        val anime = currentAnime ?: return
+        val anime = currentAnime.value ?: return
 
         val context = Injekt.get<Application>()
         val notifier = SaveImageNotifier(context)
@@ -1013,7 +1042,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * image will be kept so it won't be taking lots of internal disk space.
      */
     fun shareImage(imageStream: () -> InputStream, timePos: Int?) {
-        val anime = currentAnime ?: return
+        val anime = currentAnime.value ?: return
 
         val context = Injekt.get<Application>()
         val destDir = context.cacheImageDir
@@ -1042,7 +1071,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * Sets the screenshot as cover and notifies the UI of the result.
      */
     fun setAsCover(imageStream: () -> InputStream) {
-        val anime = currentAnime ?: return
+        val anime = currentAnime.value ?: return
 
         viewModelScope.launchNonCancellable {
             val result = try {
@@ -1071,7 +1100,7 @@ class PlayerViewModel @JvmOverloads constructor(
         if (basePreferences.incognitoMode().get() || !hasTrackers) return
         if (!trackPreferences.autoUpdateTrack().get()) return
 
-        val anime = currentAnime ?: return
+        val anime = currentAnime.value ?: return
         val context = Injekt.get<Application>()
 
         viewModelScope.launchNonCancellable {
@@ -1085,7 +1114,7 @@ class PlayerViewModel @JvmOverloads constructor(
      */
     private fun enqueueDeleteSeenEpisodes(episode: Episode) {
         if (!episode.seen) return
-        val anime = currentAnime ?: return
+        val anime = currentAnime.value ?: return
         viewModelScope.launchNonCancellable {
             downloadManager.enqueueEpisodesToDelete(listOf(episode.toDomainEpisode()!!), anime)
         }
@@ -1106,7 +1135,7 @@ class PlayerViewModel @JvmOverloads constructor(
      */
     fun getAnimeSkipIntroLength(resolveDefault: Boolean = true): Int {
         val default = gesturePreferences.defaultIntroLength().get()
-        val anime = currentAnime ?: return default
+        val anime = currentAnime.value ?: return default
         val skipIntroLength = anime.skipIntroLength
         return when {
             resolveDefault && skipIntroLength <= 0 -> default
@@ -1118,15 +1147,11 @@ class PlayerViewModel @JvmOverloads constructor(
      * Updates the skipIntroLength for the open anime.
      */
     fun setAnimeSkipIntroLength(skipIntroLength: Long) {
-        val anime = currentAnime ?: return
+        val anime = currentAnime.value ?: return
         viewModelScope.launchIO {
             setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength)
             logcat(LogPriority.INFO) { "New Skip Intro Length is ${anime.skipIntroLength}" }
-            mutableState.update {
-                it.copy(
-                    anime = getAnime.await(anime.id),
-                )
-            }
+            _currentAnime.update { _ -> getAnime.await(anime.id) }
             eventChannel.send(Event.SetAnimeSkipIntro(getAnimeSkipIntroLength()))
         }
     }
@@ -1138,7 +1163,7 @@ class PlayerViewModel @JvmOverloads constructor(
         anime: Anime,
         timePos: String,
     ): String? {
-        val episode = currentEpisode ?: return null
+        val episode = currentEpisode.value ?: return null
         val filenameSuffix = " - $timePos"
         return DiskUtil.buildValidFilename(
             "${anime.title} - ${episode.name}".takeBytes(
@@ -1152,10 +1177,10 @@ class PlayerViewModel @JvmOverloads constructor(
      * just works if tracking is enabled.
      */
     suspend fun aniSkipResponse(playerDuration: Int?): List<Stamp>? {
-        val animeId = currentAnime?.id ?: return null
+        val animeId = currentAnime.value?.id ?: return null
         val trackerManager = Injekt.get<TrackerManager>()
         var malId: Long?
-        val episodeNumber = currentEpisode?.episode_number?.toInt() ?: return null
+        val episodeNumber = currentEpisode.value?.episode_number?.toInt() ?: return null
         if (getTracks.await(animeId).isEmpty()) {
             logcat { "AniSkip: No tracks found for anime $animeId" }
             return null
@@ -1175,54 +1200,6 @@ class PlayerViewModel @JvmOverloads constructor(
         }
         return null
     }
-
-    fun showEpisodeList() {
-        mutableState.update { it.copy(dialog = Dialog.EpisodeList) }
-    }
-
-    fun showSpeedPicker() {
-        mutableState.update { it.copy(dialog = Dialog.SpeedPicker) }
-    }
-
-    fun showSkipIntroLength() {
-        mutableState.update { it.copy(dialog = Dialog.SkipIntroLength) }
-    }
-
-    fun showSubtitleSettings() {
-        mutableState.update { it.copy(sheet = Sheet.SubtitleSettings) }
-    }
-
-    fun showScreenshotOptions() {
-        mutableState.update { it.copy(sheet = Sheet.ScreenshotOptions) }
-    }
-
-    fun showPlayerSettings() {
-        mutableState.update { it.copy(sheet = Sheet.PlayerSettings) }
-    }
-
-    fun showVideoChapters() {
-        mutableState.update { it.copy(sheet = Sheet.VideoChapters) }
-    }
-
-    fun showStreamsCatalog() {
-        mutableState.update { it.copy(sheet = Sheet.StreamsCatalog) }
-    }
-
-    fun closeDialogSheet() {
-        mutableState.update { it.copy(dialog = null, sheet = null) }
-    }
-
-    @Immutable
-    data class State(
-        val episodeList: List<Episode> = emptyList(),
-        val episode: Episode? = null,
-        val anime: Anime? = null,
-        val source: AnimeSource? = null,
-        val videoStreams: VideoStreams = VideoStreams(),
-        val isLoadingEpisode: Boolean = false,
-        val dialog: Dialog? = null,
-        val sheet: Sheet? = null,
-    )
 
     class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
         constructor() : this(Stream(), Stream(), Stream())

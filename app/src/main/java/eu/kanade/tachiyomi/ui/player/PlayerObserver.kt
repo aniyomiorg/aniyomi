@@ -14,21 +14,24 @@ class PlayerObserver(val activity: PlayerActivity) :
         activity.runOnUiThread { activity.onObserverEvent(property) }
     }
 
-    override fun eventProperty(property: String, value: Boolean) {
-        activity.runOnUiThread { activity.onObserverEvent(property, value) }
-    }
-
     override fun eventProperty(property: String, value: Long) {
         activity.runOnUiThread { activity.onObserverEvent(property, value) }
     }
 
-    override fun eventProperty(property: String, value: String) {}
+    override fun eventProperty(property: String, value: Boolean) {
+        activity.runOnUiThread { activity.onObserverEvent(property, value) }
+    }
+
+    override fun eventProperty(property: String, value: String) {
+        activity.runOnUiThread { activity.onObserverEvent(property, value) }
+    }
 
     override fun event(eventId: Int) {
         activity.runOnUiThread { activity.event(eventId) }
     }
 
     override fun efEvent(err: String?) {
+
         var errorMessage = err ?: "Error: File ended"
         if (!httpError.isNullOrEmpty()) {
             errorMessage += ": $httpError"
@@ -36,7 +39,7 @@ class PlayerObserver(val activity: PlayerActivity) :
         }
         logcat(LogPriority.ERROR) { errorMessage }
         activity.runOnUiThread {
-            activity.showLoadingIndicator(false)
+            // activity.showLoadingIndicator(false)
             activity.toast(errorMessage, Toast.LENGTH_LONG)
         }
     }
