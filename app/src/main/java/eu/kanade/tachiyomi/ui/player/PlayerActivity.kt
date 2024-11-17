@@ -2182,7 +2182,7 @@ class PlayerActivity : BaseActivity() {
             viewModel.viewModelScope.launchIO {
                 if (!exitingPlayer) {
                     val currentPosition = (player.timePos!!).toLong() * 1000
-                    val startTimestamp =  Calendar.getInstance().apply {
+                    val startTimestamp = Calendar.getInstance().apply {
                         timeInMillis = System.currentTimeMillis() - currentPosition
                     }
                     val durationInSeconds = player.duration ?: 1440
