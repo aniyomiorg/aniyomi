@@ -869,4 +869,5 @@
     <string name="action_hide">隠す</string>
     <string name="label_category">カテゴリー</string>
     <string name="label_recent_anime_updates">アニメの更新(直近)</string>
+    <string name="action_sort_random">ランダム</string>
 </resources>
