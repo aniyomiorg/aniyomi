@@ -64,6 +64,7 @@ data class Activity(
     @Serializable
     data class Timestamps(
         val start: Long? = null,
+        val end: Long? = null,
         val stop: Long? = null,
     )
 }
@@ -162,6 +163,8 @@ data class PlayerData(
     val animeTitle: String? = null,
     val episodeNumber: String? = null,
     val thumbnailUrl: String? = null,
+    val startTimestamp: Long? = null,
+    val endTimestamp: Long? = null,
 )
 
 data class ReaderData(

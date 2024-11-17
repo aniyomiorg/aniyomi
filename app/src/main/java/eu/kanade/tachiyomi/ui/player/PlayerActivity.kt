@@ -130,6 +130,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.Calendar
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -2180,20 +2181,34 @@ class PlayerActivity : BaseActivity() {
         if (connectionsPreferences.enableDiscordRPC().get()) {
             viewModel.viewModelScope.launchIO {
                 if (!exitingPlayer) {
+                    val currentPosition = (player.timePos!!).toLong() * 1000
+                    val startTimestamp =  Calendar.getInstance().apply {
+                        timeInMillis = System.currentTimeMillis() - currentPosition
+                    }
+                    val durationInSeconds = player.duration ?: 1440
+                    val endTimestamp = Calendar.getInstance().apply {
+                        timeInMillis = startTimestamp.timeInMillis
+                        add(Calendar.SECOND, durationInSeconds)
+                    }
+                    Log.d("PlayerActivity", "player.timePos: ${player.timePos}")
+                    Log.d("PlayerActivity", "startTimestamp: $startTimestamp")
+                    Log.d("PlayerActivity", "endTimestamp: $endTimestamp")
+                    Log.d("PlayerActivity", "durationInSeconds: $durationInSeconds")
+
                     DiscordRPCService.setPlayerActivity(
                         context = this@PlayerActivity,
                         PlayerData(
                             incognitoMode = viewModel.currentSource.isNsfw() || viewModel.incognitoMode,
                             animeId = viewModel.currentAnime?.id,
-                            // AM (CU)>
                             animeTitle = viewModel.currentAnime?.ogTitle,
                             thumbnailUrl = viewModel.currentAnime?.thumbnailUrl,
-                            episodeNumber =
-                            if (connectionsPreferences.useChapterTitles().get()) {
+                            episodeNumber = if (connectionsPreferences.useChapterTitles().get()) {
                                 viewModel.currentEpisode?.name.toString()
                             } else {
                                 viewModel.state.value.episode?.episode_number.toString()
                             },
+                            startTimestamp = startTimestamp.timeInMillis,
+                            endTimestamp = endTimestamp.timeInMillis,
                         ),
                     )
                 } else {

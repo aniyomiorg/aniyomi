@@ -142,6 +142,8 @@ class DiscordRPCService : Service() {
             val state = playerData.episodeNumber ?: context.resources.getString(discordScreen.text)
 
             val imageUrl = playerData.thumbnailUrl ?: discordScreen.imageUrl
+            val since = playerData.startTimestamp
+            val end = playerData.endTimestamp
 
             rpc!!.updateRPC(
                 activity = Activity(
@@ -149,14 +151,13 @@ class DiscordRPCService : Service() {
                     details = details,
                     state = state,
                     type = 3,
-                    timestamps = Activity.Timestamps(start = since),
+                    timestamps = Activity.Timestamps(start = since, end = end),
                     assets = Activity.Assets(
                         largeImage = "mp:$imageUrl",
                         smallImage = "mp:${DiscordScreen.APP.imageUrl}",
                         smallText = context.resources.getString(DiscordScreen.APP.text),
                     ),
                 ),
-                since = since,
             )
         }
 
@@ -257,6 +258,8 @@ class DiscordRPCService : Service() {
                 val animeThumbnail = discordUri?.takeIf { !it.contains("external/Not Found") }
                     ?.substringAfter("\"id\": \"")?.substringBefore("\"}")
                     ?.split("external/")?.getOrNull(1)?.let { "external/$it" }
+                val startTime = playerData.startTimestamp ?: System.currentTimeMillis()
+                val end = playerData.endTimestamp
 
                 setAnimeScreen(
                     context = context,
@@ -265,6 +268,8 @@ class DiscordRPCService : Service() {
                         animeTitle = animeTitle,
                         episodeNumber = episodeNumber,
                         thumbnailUrl = animeThumbnail,
+                        startTimestamp = startTime,
+                        endTimestamp = end,
                     ),
                 )
             }
