@@ -1063,29 +1063,8 @@ class PlayerActivity : BaseActivity() {
         clearTracks()
         setupSubtitleTracks()
         setupAudioTracks()
+        viewModel.updateIsLoadingEpisode(false)
 
-        /*
-        viewModel.viewModelScope.launchUI {
-            if (playerPreferences.adjustOrientationVideoDimensions().get()) {
-                if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
-                    this@PlayerActivity.requestedOrientation =
-                        playerPreferences.defaultPlayerOrientationLandscape().get()
-
-                    switchControlsOrientation(true)
-                } else {
-                    this@PlayerActivity.requestedOrientation =
-                        playerPreferences.defaultPlayerOrientationPortrait().get()
-
-                    switchControlsOrientation(false)
-                }
-            }
-
-            viewModel.mutableState.update {
-                it.copy(isLoadingEpisode = false)
-            }
-        }
-
-         */
         // aniSkip stuff
         // TODO(aniskip)
         /*

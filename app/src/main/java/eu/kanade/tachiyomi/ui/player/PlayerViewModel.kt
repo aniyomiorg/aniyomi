@@ -437,6 +437,7 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     fun updatePlayBackPos(pos: Float) {
+        onSecondReached(pos.toInt(), duration.value.toInt())
         _pos.update { pos }
     }
 
