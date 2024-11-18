@@ -5,7 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import dev.vivvvek.seeker.Segment
-import eu.kanade.tachiyomi.animesource.model.Track
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.ui.player.Decoder
 import eu.kanade.tachiyomi.ui.player.Panels
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.ui.player.controls.components.sheets.ChaptersSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.DecodersSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.MoreSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.PlaybackSpeedSheet
+import eu.kanade.tachiyomi.ui.player.controls.components.sheets.QualitySheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.SubtitlesSheet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -34,6 +35,11 @@ fun PlayerSheets(
     selectedAudio: Int,
     onAddAudio: (Uri) -> Unit,
     onSelectAudio: (Int) -> Unit,
+
+    // video sheet
+    videoList: ImmutableList<Video>,
+    currentVideo: Video?,
+    onSelectVideo: (Video) -> Unit,
 
     // chapters sheet
     chapter: Segment?,
@@ -91,6 +97,16 @@ fun PlayerSheets(
                 onAddAudioTrack = { audioPicker.launch(arrayOf("*/*")) },
                 onOpenDelayPanel = { onOpenPanel(Panels.AudioDelay) },
                 onDismissRequest,
+            )
+        }
+
+        Sheets.QualityTracks -> {
+            if (videoList.isEmpty()) return
+            QualitySheet(
+                videoList = videoList,
+                currentVideo = currentVideo,
+                onClick = onSelectVideo,
+                onDismissRequest = onDismissRequest,
             )
         }
 

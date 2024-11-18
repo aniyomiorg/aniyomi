@@ -92,6 +92,7 @@ enum class Sheets {
     PlaybackSpeed,
     SubtitleTracks,
     AudioTracks,
+    QualityTracks,
     Chapters,
     Decoders,
     More,

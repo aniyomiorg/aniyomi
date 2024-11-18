@@ -476,7 +476,8 @@ fun PlayerControls(
                         onSubtitlesLongClick = { onOpenPanel(Panels.SubtitleSettings) },
                         onAudioClick = { onOpenSheet(Sheets.AudioTracks) },
                         onAudioLongClick = { onOpenPanel(Panels.AudioDelay) },
-                        onQualityClick = {},
+                        onQualityClick = { onOpenSheet(Sheets.QualityTracks) },
+                        isEpisodeOnline = viewModel.isEpisodeOnline(),
                         onMoreClick = { onOpenSheet(Sheets.More) },
                         onMoreLongClick = { onOpenPanel(Panels.VideoFilters) },
                     )
@@ -562,6 +563,8 @@ fun PlayerControls(
         val selectedSubtitles by viewModel.selectedSubtitles.collectAsState()
         val audioTracks by viewModel.audioTracks.collectAsState()
         val selectedAudio by viewModel.selectedAudio.collectAsState()
+        val videoList by viewModel.videoList.collectAsState()
+        val selectedVideoIndex by viewModel.selectedVideoIndex.collectAsState()
         val decoder by viewModel.currentDecoder.collectAsState()
         val speed by viewModel.playbackSpeed.collectAsState()
         val sleepTimerTimeRemaining by viewModel.remainingTime.collectAsState()
@@ -578,6 +581,11 @@ fun PlayerControls(
             selectedAudio = selectedAudio,
             onAddAudio = viewModel::addAudio,
             onSelectAudio = viewModel::selectAudio,
+
+            videoList = videoList.toImmutableList(),
+            currentVideo = videoList.getOrNull(selectedVideoIndex),
+            onSelectVideo = { viewModel.selectVideo(it) },
+
             chapter = currentChapter,
             chapters = viewModel.chapters.toImmutableList(),
             onSeekToChapter = {

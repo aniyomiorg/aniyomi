@@ -227,6 +227,17 @@ class PlayerViewModel @JvmOverloads constructor(
         }
     }
 
+    fun isEpisodeOnline(): Boolean? {
+        val anime = currentAnime.value ?: return null
+        val episode = currentEpisode.value ?: return null
+        val source = currentSource.value ?: return null
+        return source is AnimeHttpSource &&
+            !EpisodeLoader.isDownload(
+                episode.toDomainEpisode()!!,
+                anime,
+            )
+    }
+
     fun updateIsLoadingEpisode(value: Boolean) {
         _isLoadingEpisode.update { _ -> value }
     }
@@ -353,8 +364,19 @@ class PlayerViewModel @JvmOverloads constructor(
         _videoList.update { _ -> videoList }
     }
 
-    fun selectVideo(idx: Int) {
+    fun setVideoIndex(idx: Int) {
         _selectedVideoIndex.update { _ -> idx }
+    }
+
+    fun selectVideo(video: Video) {
+        val idx = videoList.value.indexOf(video)
+
+        activity.setVideoList(
+            qualityIndex = idx,
+            videos = videoList.value,
+        )
+
+        sheetShown.update { _ -> Sheets.None }
     }
 
     fun addAudio(uri: Uri) {
@@ -883,16 +905,6 @@ class PlayerViewModel @JvmOverloads constructor(
     private val checkTrackers: (Anime) -> Unit = { anime ->
         val tracks = runBlocking { getTracks.await(anime.id) }
         hasTrackers = tracks.isNotEmpty()
-    }
-
-    fun isEpisodeOnline(): Boolean? {
-        val anime = currentAnime.value ?: return null
-        val episode = currentEpisode.value ?: return null
-        return currentSource is AnimeHttpSource &&
-            !EpisodeLoader.isDownload(
-                episode.toDomainEpisode()!!,
-                anime,
-            )
     }
 
     suspend fun loadEpisode(episodeId: Long?): Pair<List<Video>?, String>? {

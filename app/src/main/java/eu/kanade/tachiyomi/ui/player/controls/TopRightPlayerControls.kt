@@ -39,6 +39,7 @@ fun TopRightPlayerControls(
 
     // video
     onQualityClick: () -> Unit,
+    isEpisodeOnline: Boolean?,
 
     // more
     onMoreClick: () -> Unit,
@@ -70,12 +71,14 @@ fun TopRightPlayerControls(
             onLongClick = onAudioLongClick,
             horizontalSpacing = MaterialTheme.MPVKtSpacing.small,
         )
-        ControlsButton(
-            Icons.Default.HighQuality,
-            onClick = onQualityClick,
-            onLongClick = onQualityClick,
-            horizontalSpacing = MaterialTheme.MPVKtSpacing.small,
-        )
+        if (isEpisodeOnline == true) {
+            ControlsButton(
+                Icons.Default.HighQuality,
+                onClick = onQualityClick,
+                onLongClick = onQualityClick,
+                horizontalSpacing = MaterialTheme.MPVKtSpacing.small,
+            )
+        }
         ControlsButton(
             Icons.Default.MoreVert,
             onClick = onMoreClick,

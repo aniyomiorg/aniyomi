@@ -889,7 +889,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private fun setVideoList(
+    fun setVideoList(
         qualityIndex: Int,
         videos: List<Video>?,
         fromStart: Boolean = false,
@@ -900,7 +900,7 @@ class PlayerActivity : BaseActivity() {
         if (videos == null) return
 
         videos.getOrNull(qualityIndex)?.let {
-            viewModel.selectVideo(qualityIndex)
+            viewModel.setVideoIndex(qualityIndex)
             setHttpOptions(it)
             if (viewModel.isLoadingEpisode.value) {
                 viewModel.currentEpisode.value?.let { episode ->
@@ -940,7 +940,7 @@ class PlayerActivity : BaseActivity() {
 
     private fun setHttpOptions(video: Video) {
         if (viewModel.isEpisodeOnline() != true) return
-        val source = viewModel.currentSource as AnimeHttpSource
+        val source = viewModel.currentSource.value as? AnimeHttpSource ?: return
 
         val headers = (video.headers ?: source.headers)
             .toMultimap()
