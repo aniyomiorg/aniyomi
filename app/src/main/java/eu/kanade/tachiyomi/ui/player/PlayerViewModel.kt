@@ -381,12 +381,15 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun addAudio(uri: Uri) {
         val url = uri.toString()
-        val path = if (url.startsWith("content://")) {
-            Uri.parse(url).openContentFd(activity)
+        val isContentUri = url.startsWith("content://")
+        val path = (if (isContentUri) uri.openContentFd(activity) else url)
+            ?: return
+        val name = if (isContentUri) uri.getFileName(activity) else null
+        if (name == null) {
+            MPVLib.command(arrayOf("audio-add", path, "cached"))
         } else {
-            url
-        } ?: return
-        MPVLib.command(arrayOf("audio-add", path, "cached"))
+            MPVLib.command(arrayOf("audio-add", path, "cached", name))
+        }
     }
 
     fun selectAudio(id: Int) {
@@ -399,15 +402,17 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun addSubtitle(uri: Uri) {
         val url = uri.toString()
-        val path = if (url.startsWith("content://")) {
-            Uri.parse(url).openContentFd(activity)
+        val isContentUri = url.startsWith("content://")
+        val path = (if (isContentUri) uri.openContentFd(activity) else url)
+            ?: return
+        val name = if (isContentUri) uri.getFileName(activity) else null
+        if (name == null) {
+            MPVLib.command(arrayOf("sub-add", path, "cached"))
         } else {
-            url
-        } ?: return
-        MPVLib.command(arrayOf("sub-add", path, "cached"))
+            MPVLib.command(arrayOf("sub-add", path, "cached", name))
+        }
     }
 
-    // TODO(videolist)
     fun selectSub(id: Int) {
         val selectedSubs = selectedSubtitles.value
         _selectedSubtitles.update {
@@ -686,9 +691,6 @@ class PlayerViewModel @JvmOverloads constructor(
                 downloadManager.addDownloadsToStartOfQueue(listOf(it))
             }
         }
-
-        super.onCleared()
-        viewModelScope.cancel()
     }
 
     // ====== OLD ======

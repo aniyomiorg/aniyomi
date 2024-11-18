@@ -272,6 +272,7 @@ class PlayerActivity : BaseActivity() {
             noisyReceiver.initialized = false
         }
 
+        player.isExiting = true
         MPVLib.removeLogObserver(playerObserver)
         MPVLib.removeObserver(playerObserver)
         player.destroy()
@@ -290,7 +291,6 @@ class PlayerActivity : BaseActivity() {
     override fun onStop() {
         viewModel.pause()
         viewModel.saveCurrentEpisodeWatchingProgress()
-        player.isExiting = true
         window.attributes.screenBrightness.let {
             if (playerPreferences.rememberPlayerBrightness().get() && it != -1f) {
                 playerPreferences.playerBrightnessValue().set(it)
