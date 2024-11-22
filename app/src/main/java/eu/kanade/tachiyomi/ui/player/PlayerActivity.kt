@@ -1064,7 +1064,7 @@ class PlayerActivity : BaseActivity() {
         setupSubtitleTracks()
         setupAudioTracks()
         viewModel.updateIsLoadingEpisode(false)
-
+        viewModel.unpause()
         // aniSkip stuff
         // TODO(aniskip)
         /*

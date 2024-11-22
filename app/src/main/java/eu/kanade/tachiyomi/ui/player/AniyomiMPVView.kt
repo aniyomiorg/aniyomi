@@ -92,6 +92,7 @@ class AniyomiMPVView(context: Context, attributes: AttributeSet) : BaseMPVView(c
 
     override fun initOptions() {
         setVo(if (decoderPreferences.gpuNext().get()) "gpu-next" else "gpu")
+        MPVLib.setPropertyBoolean("pause", true)
         MPVLib.setOptionString("profile", "fast")
         MPVLib.setOptionString("hwdec", if (decoderPreferences.tryHWDecoding().get()) "auto" else "no")
         when (decoderPreferences.videoDebanding().get()) {

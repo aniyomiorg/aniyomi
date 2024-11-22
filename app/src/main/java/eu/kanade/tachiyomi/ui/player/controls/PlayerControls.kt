@@ -105,6 +105,7 @@ fun PlayerControls(
     val areControlsLocked by viewModel.areControlsLocked.collectAsState()
     val seekBarShown by viewModel.seekBarShown.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val isLoadingEpisode by viewModel.isLoadingEpisode.collectAsState()
     val duration by viewModel.duration.collectAsState()
     val position by viewModel.pos.collectAsState()
     val paused by viewModel.paused.collectAsState()
@@ -336,7 +337,7 @@ fun PlayerControls(
                     )
                 }
                 AnimatedVisibility(
-                    visible = (controlsShown && !areControlsLocked || gestureSeekAmount != null) || isLoading,
+                    visible = (controlsShown && !areControlsLocked || gestureSeekAmount != null) || isLoading || isLoadingEpisode,
                     enter = fadeIn(playerControlsEnterAnimationSpec()),
                     exit = fadeOut(playerControlsExitAnimationSpec()),
                     modifier = Modifier.constrainAs(playerPauseButton) {
@@ -366,7 +367,7 @@ fun PlayerControls(
                             )
                         }
 
-                        isLoading && showLoadingCircle -> CircularProgressIndicator(Modifier.size(96.dp))
+                        (isLoading || isLoadingEpisode) && showLoadingCircle -> CircularProgressIndicator(Modifier.size(96.dp))
                         controlsShown && !areControlsLocked -> Image(
                             painter = rememberAnimatedVectorPainter(icon, !paused),
                             modifier = Modifier
