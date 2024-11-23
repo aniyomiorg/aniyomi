@@ -86,6 +86,7 @@ import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 import java.io.InputStream
 import java.util.Date
 
@@ -210,6 +211,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
     val sheetShown = MutableStateFlow(Sheets.None)
     val panelShown = MutableStateFlow(Panels.None)
+    val dialogShown = MutableStateFlow(Dialogs.None)
 
     private val _doubleTapSeekAmount = MutableStateFlow(0)
     val doubleTapSeekAmount = _doubleTapSeekAmount.asStateFlow()
@@ -219,6 +221,8 @@ class PlayerViewModel @JvmOverloads constructor(
     private var timerJob: Job? = null
     private val _remainingTime = MutableStateFlow(0)
     val remainingTime = _remainingTime.asStateFlow()
+
+    val cachePath = activity.cacheDir.path
 
     fun startTimer(seconds: Int) {
         timerJob?.cancel()
@@ -475,7 +479,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private val showStatusBar = playerPreferences.showSystemStatusBar().get()
     fun showControls() {
-        if (sheetShown.value != Sheets.None || panelShown.value != Panels.None) return
+        if (sheetShown.value != Sheets.None || panelShown.value != Panels.None || dialogShown.value != Dialogs.None) return
         if (showStatusBar) {
             activity.windowInsetsController.show(WindowInsetsCompat.Type.statusBars())
         }
@@ -1101,6 +1105,19 @@ class PlayerViewModel @JvmOverloads constructor(
                 ),
             )
         }
+    }
+
+    fun takeScreenshot(cachePath: String, showSubtitles: Boolean): InputStream? {
+        val filename = cachePath + "/${System.currentTimeMillis()}_mpv_screenshot_tmp.png"
+        val subtitleFlag = if (showSubtitles) "subtitles" else "video"
+
+        MPVLib.command(arrayOf("screenshot-to-file", filename, subtitleFlag))
+        val tempFile = File(filename).takeIf { it.exists() } ?: return null
+        val newFile = File("$cachePath/mpv_screenshot.png")
+
+        newFile.delete()
+        tempFile.renameTo(newFile)
+        return newFile.takeIf { it.exists() }?.inputStream()
     }
 
     /**

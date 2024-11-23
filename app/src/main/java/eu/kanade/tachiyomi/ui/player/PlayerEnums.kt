@@ -95,6 +95,7 @@ enum class Sheets {
     QualityTracks,
     Chapters,
     More,
+    Screenshot,
 }
 
 enum class Panels {
@@ -103,6 +104,11 @@ enum class Panels {
     SubtitleDelay,
     AudioDelay,
     VideoFilters,
+}
+
+enum class Dialogs {
+    None,
+    EpisodeList,
 }
 
 sealed class PlayerUpdates {

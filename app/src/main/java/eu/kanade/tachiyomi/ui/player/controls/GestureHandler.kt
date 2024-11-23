@@ -40,6 +40,7 @@ import eu.kanade.presentation.theme.playerRippleConfiguration
 import eu.kanade.tachiyomi.ui.player.Panels
 import eu.kanade.tachiyomi.ui.player.PlayerUpdates
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
+import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.controls.components.DoubleTapSeekSecondsView
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
@@ -128,12 +129,11 @@ fun GestureHandler(
                     },
                     onLongPress = {
                         if (areControlsLocked) return@detectTapGestures
-                        if (!isLongPressing && !viewModel.paused.value) {
-                            originalSpeed = viewModel.playbackSpeed.value
+                        if (!isLongPressing) {
                             haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                             isLongPressing = true
-                            MPVLib.setPropertyDouble("speed", 2.0)
-                            viewModel.playerUpdate.update { PlayerUpdates.DoubleSpeed }
+                            viewModel.pause()
+                            viewModel.sheetShown.update { Sheets.Screenshot }
                         }
                     },
                 )

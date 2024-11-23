@@ -12,13 +12,14 @@ import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.AudioTracksSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.ChaptersSheet
-import eu.kanade.tachiyomi.ui.player.controls.components.sheets.DecodersSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.MoreSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.PlaybackSpeedSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.QualitySheet
+import eu.kanade.tachiyomi.ui.player.controls.components.sheets.ScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.SubtitlesSheet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import java.io.InputStream
 
 @Composable
 fun PlayerSheets(
@@ -59,6 +60,16 @@ fun PlayerSheets(
     onStartSleepTimer: (Int) -> Unit,
     // TODO(customButtons)
     // buttons: ImmutableList<CustomButtonEntity>,
+
+    // Screenshot sheet
+    showSubtitles: Boolean,
+    onToggleShowSubtitles: (Boolean) -> Unit,
+    cachePath: String,
+    onSetAsCover: (() -> InputStream) -> Unit,
+    onShare: (() -> InputStream) -> Unit,
+    onSave: (() -> InputStream) -> Unit,
+    takeScreenshot: (String, Boolean) -> InputStream?,
+    onDismissScreenshot: () -> Unit,
 
     onOpenPanel: (Panels) -> Unit,
     onDismissRequest: () -> Unit,
@@ -138,6 +149,20 @@ fun PlayerSheets(
                 speed,
                 onSpeedChange = onSpeedChange,
                 onDismissRequest = onDismissRequest
+            )
+        }
+
+        Sheets.Screenshot -> {
+            ScreenshotSheet(
+                hasSubTracks = subtitles.isNotEmpty(),
+                showSubtitles = showSubtitles,
+                onToggleShowSubtitles = onToggleShowSubtitles,
+                cachePath = cachePath,
+                onSetAsCover = onSetAsCover,
+                onShare = onShare,
+                onSave = onSave,
+                takeScreenshot = takeScreenshot,
+                onDismissRequest = onDismissScreenshot,
             )
         }
     }

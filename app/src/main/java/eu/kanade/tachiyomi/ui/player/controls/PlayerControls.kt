@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.controls
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
@@ -60,6 +61,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import eu.kanade.presentation.theme.playerRippleConfiguration
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.Dialogs
 import eu.kanade.tachiyomi.ui.player.Panels
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.PlayerUpdates
@@ -75,6 +77,7 @@ import eu.kanade.tachiyomi.ui.player.controls.components.sheets.toFixed
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
 import kotlinx.collections.immutable.toImmutableList
@@ -101,6 +104,7 @@ fun PlayerControls(
     val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
     val gesturePreferences = remember { Injekt.get<GesturePreferences>() }
     val audioPreferences = remember { Injekt.get<AudioPreferences>() }
+    val subtitlePreferences = remember { Injekt.get<SubtitlePreferences>() }
     val interactionSource = remember { MutableInteractionSource() }
 
     val controlsShown by viewModel.controlsShown.collectAsState()
@@ -126,6 +130,7 @@ fun PlayerControls(
         } else {
             viewModel.hideControls()
             viewModel.panelShown.update { Panels.None }
+            viewModel.dialogShown.update { Dialogs.None }
         }
     }
     val onOpenPanel: (Panels) -> Unit = {
@@ -135,6 +140,17 @@ fun PlayerControls(
         } else {
             viewModel.hideControls()
             viewModel.sheetShown.update { Sheets.None }
+            viewModel.dialogShown.update { Dialogs.None }
+        }
+    }
+    val onOpenDialog: (Dialogs) -> Unit = {
+        viewModel.dialogShown.update { _ -> it }
+        if (it == Dialogs.None) {
+            viewModel.showControls()
+        } else {
+            viewModel.hideControls()
+            viewModel.sheetShown.update { Sheets.None }
+            viewModel.panelShown.update { Panels.None }
         }
     }
 
@@ -432,6 +448,7 @@ fun PlayerControls(
                     TopLeftPlayerControls(
                         animeTitle = animeTitle,
                         mediaTitle = mediaTitle,
+                        onTitleClick = { onOpenDialog(Dialogs.EpisodeList) },
                         onBackClick = onBackPress,
                     )
                 }
@@ -556,6 +573,7 @@ fun PlayerControls(
         val decoder by viewModel.currentDecoder.collectAsState()
         val speed by viewModel.playbackSpeed.collectAsState()
         val sleepTimerTimeRemaining by viewModel.remainingTime.collectAsState()
+        val showSubtitles by subtitlePreferences.screenshotSubtitles().collectAsState()
 
         PlayerSheets(
             sheetShown = sheetShown,
@@ -586,6 +604,19 @@ fun PlayerControls(
             onStartSleepTimer = viewModel::startTimer,
             // TODO(customButtons)
             // buttons = customButtons.getButtons().toImmutableList(),
+
+            showSubtitles = showSubtitles,
+            onToggleShowSubtitles = { subtitlePreferences.screenshotSubtitles().set(it) },
+            cachePath = viewModel.cachePath,
+            onSetAsCover = viewModel::setAsCover,
+            onShare = { viewModel.shareImage(it, viewModel.pos.value.toInt()) },
+            onSave = { viewModel.saveImage(it, viewModel.pos.value.toInt()) },
+            takeScreenshot = viewModel::takeScreenshot,
+            onDismissScreenshot = {
+                onOpenSheet(Sheets.None)
+                viewModel.unpause()
+            },
+
             onOpenPanel = onOpenPanel,
             onDismissRequest = { onOpenSheet(Sheets.None) },
         )
@@ -593,6 +624,28 @@ fun PlayerControls(
         PlayerPanels(
             panelShown = panel,
             onDismissRequest = { onOpenPanel(Panels.None) },
+        )
+
+        val activity = LocalContext.current as PlayerActivity
+        val dialog by viewModel.dialogShown.collectAsState()
+        val anime by viewModel.currentAnime.collectAsState()
+        val playlist by viewModel.currentPlaylist.collectAsState()
+
+        PlayerDialogs(
+            dialogShown = dialog,
+
+            episodeDisplayMode = anime!!.displayMode,
+            episodeList = playlist,
+            currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
+            dateRelativeTime = viewModel.relativeTime,
+            dateFormat = viewModel.dateFormat,
+            onBookmarkClicked = viewModel::bookmarkEpisode,
+            onEpisodeClicked = {
+                onOpenDialog(Dialogs.None)
+                activity.changeEpisode(it)
+            },
+
+            onDismissRequest = { onOpenDialog(Dialogs.None) }
         )
     }
 }

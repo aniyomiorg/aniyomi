@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.controls
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import tachiyomi.presentation.core.components.material.MPVKtSpacing
 fun TopLeftPlayerControls(
     animeTitle: String,
     mediaTitle: String,
+    onTitleClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -35,7 +37,9 @@ fun TopLeftPlayerControls(
             onClick = onBackClick,
         )
         Column(
-            verticalArrangement = Arrangement.spacedBy(-MaterialTheme.MPVKtSpacing.extraSmall)
+            verticalArrangement = Arrangement.spacedBy(-MaterialTheme.MPVKtSpacing.extraSmall),
+            modifier = Modifier
+                .clickable(onClick = onTitleClick)
         ) {
             Text(
                 animeTitle,
@@ -64,6 +68,7 @@ fun TopLeftPlayerControlsPreview() {
     TopLeftPlayerControls(
         animeTitle = "Bleach",
         mediaTitle = "Episode 1 - A Shinigami is born",
+        onTitleClick = {},
         onBackClick = {}
     )
 }
