@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
@@ -45,6 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -193,10 +195,12 @@ fun PlayerControls(
                 val (volumeSlider, brightnessSlider) = createRefs()
                 val unlockControlsButton = createRef()
                 val (bottomRightControls, bottomLeftControls) = createRefs()
-                val playerPauseButton = createRef()
+                val centerControls = createRef()
                 val seekbar = createRef()
                 val (playerUpdates) = createRefs()
 
+                val hasPreviousEpisode by viewModel.hasPreviousEpisode.collectAsState()
+                val hasNextEpisode by viewModel.hasNextEpisode.collectAsState()
                 val isBrightnessSliderShown by viewModel.isBrightnessSliderShown.collectAsState()
                 val isVolumeSliderShown by viewModel.isVolumeSliderShown.collectAsState()
                 val brightness by viewModel.currentBrightness.collectAsState()
@@ -340,7 +344,7 @@ fun PlayerControls(
                     visible = (controlsShown && !areControlsLocked || gestureSeekAmount != null) || isLoading || isLoadingEpisode,
                     enter = fadeIn(playerControlsEnterAnimationSpec()),
                     exit = fadeOut(playerControlsExitAnimationSpec()),
-                    modifier = Modifier.constrainAs(playerPauseButton) {
+                    modifier = Modifier.constrainAs(centerControls) {
                         end.linkTo(parent.absoluteRight)
                         start.linkTo(parent.absoluteLeft)
                         top.linkTo(parent.top)
@@ -348,40 +352,22 @@ fun PlayerControls(
                     },
                 ) {
                     val showLoadingCircle by playerPreferences.showLoadingCircle().collectAsState()
-                    val icon = AnimatedImageVector.animatedVectorResource(R.drawable.anim_play_to_pause)
-                    val interaction = remember { MutableInteractionSource() }
-                    when {
-                        gestureSeekAmount != null -> {
-                            Text(
-                                stringResource(
-                                    MR.strings.player_gesture_seek_indicator,
-                                    if (gestureSeekAmount!!.second >= 0) '+' else '-',
-                                    Utils.prettyTime(abs(gestureSeekAmount!!.second)),
-                                    Utils.prettyTime(gestureSeekAmount!!.first + gestureSeekAmount!!.second),
-                                ),
-                                style = MaterialTheme.typography.headlineMedium.copy(
-                                    shadow = Shadow(Color.Black, blurRadius = 5f),
-                                ),
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
-                            )
-                        }
-
-                        (isLoading || isLoadingEpisode) && showLoadingCircle -> CircularProgressIndicator(Modifier.size(96.dp))
-                        controlsShown && !areControlsLocked -> Image(
-                            painter = rememberAnimatedVectorPainter(icon, !paused),
-                            modifier = Modifier
-                                .size(96.dp)
-                                .clip(CircleShape)
-                                .clickable(
-                                    interaction,
-                                    ripple(),
-                                    onClick = viewModel::pauseUnpause,
-                                )
-                                .padding(MaterialTheme.MPVKtSpacing.medium),
-                            contentDescription = null,
-                        )
-                    }
+                    MiddlePlayerControls(
+                        hasPrevious = hasPreviousEpisode,
+                        onSkipPrevious = { viewModel.switchEpisode(true) },
+                        hasNext = hasNextEpisode,
+                        onSkipNext = { viewModel.switchEpisode(false) },
+                        isLoading = isLoading,
+                        isLoadingEpisode = isLoadingEpisode,
+                        controlsShown = controlsShown,
+                        areControlsLocked = areControlsLocked,
+                        showLoadingCircle = showLoadingCircle,
+                        paused = paused,
+                        gestureSeekAmount = gestureSeekAmount,
+                        onPlayPauseClick = viewModel::pauseUnpause,
+                        enter = fadeIn(playerControlsEnterAnimationSpec()),
+                        exit = fadeOut(playerControlsExitAnimationSpec()),
+                    )
                 }
                 AnimatedVisibility(
                     visible = (controlsShown || seekBarShown) && !areControlsLocked,

@@ -887,6 +887,13 @@ class PlayerActivity : BaseActivity() {
                 }
             }
         }
+
+        viewModel.updateHasPreviousEpisode(
+            viewModel.getCurrentEpisodeIndex() != 0
+        )
+        viewModel.updateHasNextEpisode(
+            viewModel.getCurrentEpisodeIndex() != viewModel.currentPlaylist.value.size - 1
+        )
     }
 
     fun setVideoList(
@@ -1110,6 +1117,9 @@ class PlayerActivity : BaseActivity() {
         val anime = viewModel.currentAnime.value ?: return
         val episode = viewModel.currentEpisode.value ?: return
 
+        viewModel.animeTitle.update { _ -> anime.title }
+        viewModel.mediaTitle.update { _ -> episode.name }
+
         val epNumber = episode.episode_number.let { number ->
             if (ceil(number) == floor(number)) number.toInt() else number
         }.toString().padStart(2, '0')
@@ -1245,11 +1255,7 @@ class PlayerActivity : BaseActivity() {
 
     private fun endFile(eofReached: Boolean) {
         if (eofReached && playerPreferences.autoplayEnabled().get()) {
-            // delay(1000L)
-            changeEpisode(
-                viewModel.getAdjacentEpisodeId(previous = false),
-                autoPlay = true,
-            )
+            viewModel.switchEpisode(previous = false, autoPlay = true)
         }
     }
 }

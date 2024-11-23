@@ -124,6 +124,12 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _currentPlaylist = MutableStateFlow<List<Episode>>(emptyList())
     val currentPlaylist = _currentPlaylist.asStateFlow()
 
+    private val _hasPreviousEpisode = MutableStateFlow(false)
+    val hasPreviousEpisode = _hasPreviousEpisode.asStateFlow()
+
+    private val _hasNextEpisode = MutableStateFlow(false)
+    val hasNextEpisode = _hasNextEpisode.asStateFlow()
+
     private val _currentEpisode = MutableStateFlow<Episode?>(null)
     val currentEpisode = _currentEpisode.asStateFlow()
 
@@ -639,6 +645,20 @@ class PlayerViewModel @JvmOverloads constructor(
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
     }
 
+    fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
+        if (previous && !hasPreviousEpisode.value) {
+            activity.toast(activity.stringResource(MR.strings.no_prev_episode))
+            return
+        }
+
+        if (!previous && !hasNextEpisode.value) {
+            activity.toast(activity.stringResource(MR.strings.no_next_episode))
+            return
+        }
+
+        activity.changeEpisode(getAdjacentEpisodeId(previous = previous), autoPlay = autoPlay)
+    }
+
     fun handleLeftDoubleTap() {
         when (gesturePreferences.leftDoubleTapGesture().get()) {
             SingleActionGesture.Seek -> {
@@ -651,7 +671,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapLeft.keyCode))
             }
             SingleActionGesture.None -> {}
-            SingleActionGesture.Switch -> TODO()
+            SingleActionGesture.Switch -> switchEpisode(true)
         }
     }
 
@@ -665,7 +685,7 @@ class PlayerViewModel @JvmOverloads constructor(
             }
             SingleActionGesture.Seek -> {}
             SingleActionGesture.None -> {}
-            SingleActionGesture.Switch -> TODO()
+            SingleActionGesture.Switch -> {}
         }
     }
 
@@ -681,7 +701,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapRight.keyCode))
             }
             SingleActionGesture.None -> {}
-            SingleActionGesture.Switch -> TODO()
+            SingleActionGesture.Switch -> switchEpisode(false)
         }
     }
 
@@ -785,8 +805,16 @@ class PlayerViewModel @JvmOverloads constructor(
         return when {
             previous && getCurrentEpisodeIndex() == 0 -> -1L
             !previous && currentPlaylist.value.lastIndex == getCurrentEpisodeIndex() -> -1L
-            else -> currentPlaylist.value[newIndex].id ?: -1L
+            else -> currentPlaylist.value.getOrNull(newIndex)?.id ?: -1L
         }
+    }
+
+    fun updateHasNextEpisode(value: Boolean) {
+        _hasNextEpisode.update { _ -> value }
+    }
+
+    fun updateHasPreviousEpisode(value: Boolean) {
+        _hasPreviousEpisode.update { _ -> value }
     }
 
 
@@ -842,6 +870,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 checkTrackers(anime)
 
                 updateEpisodeList(initEpisodeList(anime))
+
                 val episode = currentPlaylist.value.first { it.id == episodeId }
                 mediaTitle.update { _ -> episode.name }
 
@@ -850,6 +879,9 @@ class PlayerViewModel @JvmOverloads constructor(
                 _currentEpisode.update { _ -> episode }
                 _currentAnime.update { _ -> anime }
                 _currentSource.update { _ -> source }
+
+                _hasPreviousEpisode.update { _ -> getCurrentEpisodeIndex() != 0 }
+                _hasNextEpisode.update { _ -> getCurrentEpisodeIndex() != currentPlaylist.value.size - 1 }
 
                 val currentEp = currentEpisode.value ?: throw Exception("No episode loaded.")
                 if (vidList.isNotBlank()) {

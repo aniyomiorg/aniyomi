@@ -333,6 +333,8 @@
     <string name="numeric_chooser_value_too_small">Value too small</string>
     <string name="enable_auto_play">Auto-play is on</string>
     <string name="disable_auto_play">Auto-play is off</string>
+    <string name="no_next_episode">Next Episode not found!</string>
+    <string name="no_prev_episode">Previous Episode not found!</string>
 
     <!-- Sheets -->
 
@@ -1252,7 +1254,6 @@
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
     <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
-    <string name="no_next_episode">Next Episode not found!</string>
     <string name="label_storage">Storage</string>
     <string name="label_history">Manga</string>
     <string name="label_anime_history">Anime</string>

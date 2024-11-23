@@ -23,24 +23,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.ui.player.controls.LocalPlayerButtonsClickEvent
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
 
 @Composable
 fun ControlsButton(
     icon: ImageVector,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     onLongClick: () -> Unit = {},
     title: String? = null,
     color: Color = Color.White,
     horizontalSpacing: Dp = MaterialTheme.MPVKtSpacing.medium,
+    iconSize: Dp = 20.dp,
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-
     val clickEvent = LocalPlayerButtonsClickEvent.current
+    val iconColor = if (enabled) color else color.copy(alpha = DISABLED_ALPHA)
+
     Box(
         modifier = modifier
             .combinedClickable(
+                enabled = enabled,
                 onClick = {
                     clickEvent()
                     onClick()
@@ -62,8 +67,8 @@ fun ControlsButton(
         Icon(
             icon,
             title,
-            tint = color,
-            modifier = Modifier.size(20.dp),
+            tint = iconColor,
+            modifier = Modifier.size(iconSize),
         )
     }
 }
