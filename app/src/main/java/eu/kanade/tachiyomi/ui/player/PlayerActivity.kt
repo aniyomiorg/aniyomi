@@ -745,7 +745,7 @@ class PlayerActivity : BaseActivity() {
                                 MPVLib.command(arrayOf("keypress", CustomKeyCodes.MediaPlay.keyCode))
                             }
 
-                            SingleActionGesture.Switch -> TODO()
+                            SingleActionGesture.Switch -> {}
                         }
                     }
 
@@ -762,7 +762,7 @@ class PlayerActivity : BaseActivity() {
                                 MPVLib.command(arrayOf("keypress", CustomKeyCodes.MediaPlay.keyCode))
                             }
 
-                            SingleActionGesture.Switch -> TODO()
+                            SingleActionGesture.Switch -> {}
                         }
                     }
 
@@ -779,7 +779,7 @@ class PlayerActivity : BaseActivity() {
                                 MPVLib.command(arrayOf("keypress", CustomKeyCodes.MediaPrevious.keyCode))
                             }
 
-                            SingleActionGesture.Switch -> TODO()
+                            SingleActionGesture.Switch -> viewModel.changeEpisode(true)
                         }
                     }
 
@@ -796,7 +796,7 @@ class PlayerActivity : BaseActivity() {
                                 MPVLib.command(arrayOf("keypress", CustomKeyCodes.MediaNext.keyCode))
                             }
 
-                            SingleActionGesture.Switch -> TODO()
+                            SingleActionGesture.Switch -> viewModel.changeEpisode(false)
                         }
                     }
 
@@ -1255,7 +1255,7 @@ class PlayerActivity : BaseActivity() {
 
     private fun endFile(eofReached: Boolean) {
         if (eofReached && playerPreferences.autoplayEnabled().get()) {
-            viewModel.switchEpisode(previous = false, autoPlay = true)
+            viewModel.changeEpisode(previous = false, autoPlay = true)
         }
     }
 }

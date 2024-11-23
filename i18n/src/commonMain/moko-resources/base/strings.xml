@@ -256,7 +256,7 @@
     <string name="single_action_none">None</string>
     <string name="single_action_seek">Seek</string>
     <string name="single_action_playpause">Play/Pause</string>
-    <string name="single_action_switch">Switch episode</string>
+    <string name="single_action_switch">Change episode</string>
     <string name="single_action_custom">Custom</string>
 
     <string name="pref_category_media_controls">Media controls</string>

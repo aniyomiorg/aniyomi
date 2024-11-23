@@ -354,9 +354,9 @@ fun PlayerControls(
                     val showLoadingCircle by playerPreferences.showLoadingCircle().collectAsState()
                     MiddlePlayerControls(
                         hasPrevious = hasPreviousEpisode,
-                        onSkipPrevious = { viewModel.switchEpisode(true) },
+                        onSkipPrevious = { viewModel.changeEpisode(true) },
                         hasNext = hasNextEpisode,
-                        onSkipNext = { viewModel.switchEpisode(false) },
+                        onSkipNext = { viewModel.changeEpisode(false) },
                         isLoading = isLoading,
                         isLoadingEpisode = isLoadingEpisode,
                         controlsShown = controlsShown,

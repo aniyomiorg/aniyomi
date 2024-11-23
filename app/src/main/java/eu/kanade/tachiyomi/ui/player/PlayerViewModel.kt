@@ -628,7 +628,7 @@ class PlayerViewModel @JvmOverloads constructor(
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
     }
 
-    fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
+    fun changeEpisode(previous: Boolean, autoPlay: Boolean = false) {
         if (previous && !hasPreviousEpisode.value) {
             activity.toast(activity.stringResource(MR.strings.no_prev_episode))
             return
@@ -654,7 +654,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapLeft.keyCode))
             }
             SingleActionGesture.None -> {}
-            SingleActionGesture.Switch -> switchEpisode(true)
+            SingleActionGesture.Switch -> changeEpisode(true)
         }
     }
 
@@ -684,7 +684,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapRight.keyCode))
             }
             SingleActionGesture.None -> {}
-            SingleActionGesture.Switch -> switchEpisode(false)
+            SingleActionGesture.Switch -> changeEpisode(false)
         }
     }
 
