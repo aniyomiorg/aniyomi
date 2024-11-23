@@ -158,6 +158,7 @@ class PlayerViewModel @JvmOverloads constructor(
     val subtitleTracks = _subtitleTracks.asStateFlow()
     private val _selectedSubtitles = MutableStateFlow(Pair(-1, -1))
     val selectedSubtitles = _selectedSubtitles.asStateFlow()
+    val isLoadingSubtitles = MutableStateFlow(true)
 
     private val _audioTracks = MutableStateFlow<List<VideoTrack>>(emptyList())
     val audioTracks = _audioTracks.asStateFlow()
@@ -313,6 +314,22 @@ class PlayerViewModel @JvmOverloads constructor(
             }
             _subtitleTracks.update { subTracks }
             _audioTracks.update { audioTracks }
+
+            if (!isLoadingSubtitles.value) {
+                val preferredSubtitle = activity.subtitleSelect.getPreferredSubtitleIndex(subtitleTracks.value)
+                preferredSubtitle?.let {
+                    activity.player.sid = it.id
+                    activity.player.secondarySid = -1
+                }
+
+                // We only need to select a subtitle once
+                isLoadingSubtitles.update { _ -> true }
+
+                // Once the preferred subtitle is set, all tracks are loaded
+                // and the video can start
+                updateIsLoadingEpisode(false)
+                unpause()
+            }
         }
     }
 

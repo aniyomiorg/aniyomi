@@ -134,7 +134,7 @@ class PlayerActivity : BaseActivity() {
     internal val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
 
-    private val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
+    internal val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
 
     private var audioFocusRequest: AudioFocusRequestCompat? = null
     private var restoreAudioFocus: () -> Unit = {}
@@ -1056,6 +1056,8 @@ class PlayerActivity : BaseActivity() {
                 "sub" -> MPVLib.command(arrayOf("sub-remove", "$mpvId"))
             }
         }
+
+        viewModel.isLoadingSubtitles.update { _ -> true }
     }
 
     // TODO: exception java.util.ConcurrentModificationException:
@@ -1068,10 +1070,8 @@ class PlayerActivity : BaseActivity() {
         setMpvMediaTitle()
         setupPlayerOrientation()
         clearTracks()
-        setupSubtitleTracks()
         setupAudioTracks()
-        viewModel.updateIsLoadingEpisode(false)
-        viewModel.unpause()
+        setupSubtitleTracks()
         // aniSkip stuff
         // TODO(aniskip)
         /*
@@ -1097,11 +1097,7 @@ class PlayerActivity : BaseActivity() {
             MPVLib.command(arrayOf("sub-add", sub.url, "auto", sub.lang))
         }
 
-        val preferredSubtitle = subtitleSelect.getPreferredSubtitleIndex(viewModel.subtitleTracks.value)
-        preferredSubtitle?.let {
-            player.sid = it.id
-            player.secondarySid = -1
-        }
+        viewModel.isLoadingSubtitles.update { _ -> false }
     }
 
     private fun setupAudioTracks() {
