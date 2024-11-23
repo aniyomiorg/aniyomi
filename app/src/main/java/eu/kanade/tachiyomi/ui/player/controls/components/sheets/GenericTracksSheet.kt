@@ -34,11 +34,12 @@ fun <T> GenericTracksSheet(
     tracks: ImmutableList<T>,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    dismissEvent: Boolean = false,
     header: @Composable () -> Unit = {},
     track: @Composable (T) -> Unit = {},
     footer: @Composable () -> Unit = {},
 ) {
-    PlayerSheet(onDismissRequest) {
+    PlayerSheet(onDismissRequest, dismissEvent = dismissEvent) {
         Column(modifier) {
             header()
             LazyColumn {

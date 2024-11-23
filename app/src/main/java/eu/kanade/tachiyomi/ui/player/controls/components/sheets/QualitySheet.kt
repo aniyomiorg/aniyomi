@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
@@ -23,16 +27,25 @@ fun QualitySheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var shouldDismissSheet by remember { mutableStateOf(false) }
+
     GenericTracksSheet(
         videoList,
         track = {
             VideoTrack(
                 it,
                 selected = currentVideo == it,
-                onClick = { onClick(it) },
+                onClick = {
+                    shouldDismissSheet = true
+                    onClick(it)
+                },
             )
         },
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = {
+            shouldDismissSheet = false
+            onDismissRequest()
+        },
+        dismissEvent = shouldDismissSheet,
         modifier = modifier
             .padding(vertical = MaterialTheme.MPVKtSpacing.medium),
     )

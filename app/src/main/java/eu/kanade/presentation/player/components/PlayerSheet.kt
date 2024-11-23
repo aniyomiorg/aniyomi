@@ -61,6 +61,7 @@ fun PlayerSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     tonalElevation: Dp = 1.dp,
+    dismissEvent: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -90,6 +91,15 @@ fun PlayerSheet(
             velocityThreshold = { with(density) { 125.dp.toPx() } },
         )
     }
+
+    LaunchedEffect(dismissEvent) {
+        if (dismissEvent) {
+            backgroundAlpha = 0f
+            anchoredDraggableState.animateTo(1)
+            onDismissRequest()
+        }
+    }
+
     val internalOnDismissRequest = {
         if (anchoredDraggableState.currentValue == 0) {
             scope.launch {

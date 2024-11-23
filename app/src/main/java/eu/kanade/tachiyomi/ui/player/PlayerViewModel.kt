@@ -358,14 +358,14 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     fun selectVideo(video: Video) {
+        updateIsLoadingEpisode(true)
+
         val idx = videoList.value.indexOf(video)
 
         activity.setVideoList(
             qualityIndex = idx,
             videos = videoList.value,
         )
-
-        sheetShown.update { _ -> Sheets.None }
     }
 
     fun addAudio(uri: Uri) {
