@@ -120,16 +120,10 @@ fun PlayerSheets(
             )
         }
 
-        Sheets.Decoders -> {
-            DecodersSheet(
-                selectedDecoder = decoder,
-                onSelect = onUpdateDecoder,
-                onDismissRequest,
-            )
-        }
-
         Sheets.More -> {
             MoreSheet(
+                selectedDecoder = decoder,
+                onSelectDecoder = onUpdateDecoder,
                 remainingTime = sleepTimerTimeRemaining,
                 onStartTimer = onStartSleepTimer,
                 onDismissRequest = onDismissRequest,

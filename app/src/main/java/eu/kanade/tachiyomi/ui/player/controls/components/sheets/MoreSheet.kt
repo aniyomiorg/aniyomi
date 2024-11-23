@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import eu.kanade.presentation.player.components.PlayerSheet
+import eu.kanade.tachiyomi.ui.player.Decoder
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AudioChannels
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
@@ -57,6 +58,8 @@ import uy.kohesive.injekt.api.get
 
 @Composable
 fun MoreSheet(
+    selectedDecoder: Decoder,
+    onSelectDecoder: (Decoder) -> Unit,
     remainingTime: Int,
     onStartTimer: (Int) -> Unit,
     onDismissRequest: () -> Unit,
@@ -117,6 +120,20 @@ fun MoreSheet(
                     }
                 }
             }
+
+            Text(stringResource(MR.strings.player_hwdec_mode))
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+            ) {
+                items(Decoder.entries.minus(Decoder.Auto)) { decoder ->
+                    FilterChip(
+                        selected = decoder == selectedDecoder,
+                        onClick = { onSelectDecoder(decoder) },
+                        label = { Text(text = decoder.title) },
+                    )
+                }
+            }
+
             Text(stringResource(MR.strings.player_sheets_stats_page_title))
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),

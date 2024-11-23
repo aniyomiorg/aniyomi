@@ -411,6 +411,7 @@
 
     <!-- Sheets - More Sheet -->
     <string name="player_sheets_more_title">More</string>
+    <string name="player_hwdec_mode">Hardware decoding mode</string>
     <string name="pref_audio_channels">Audio channels</string>
     <string name="player_sheets_stats_page_title">Default statistics page</string>
     <string name="player_sheets_tracks_off">Off</string>
@@ -1290,7 +1291,6 @@
     <string name="player_aniskip_dontskip">Don\'t skip</string>
     <string name="player_aniskip_dontskip_toast">Skip in %d seconds</string>
     <string name="player_aniskip_skip">%s skipped</string>
-    <string name="player_hwdec_mode">Hardware decoding mode</string>
     <string name="notification_episodes_single">Episode %1$s</string>
     <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
     <string name="notification_episodes_multiple">Episodes %1$s</string>

@@ -116,7 +116,9 @@ fun FiltersCard(
             item {
                 if (decoderPreferences.gpuNext().get()) return@item
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(MaterialTheme.MPVKtSpacing.medium)
+                        .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium),
                     horizontalAlignment = Alignment.Start,
                 ) {

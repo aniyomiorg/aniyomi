@@ -94,7 +94,6 @@ enum class Sheets {
     AudioTracks,
     QualityTracks,
     Chapters,
-    Decoders,
     More,
 }
 

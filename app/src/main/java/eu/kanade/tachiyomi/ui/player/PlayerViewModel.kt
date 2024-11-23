@@ -257,23 +257,6 @@ class PlayerViewModel @JvmOverloads constructor(
         _currentDecoder.update { getDecoderFromValue(activity.player.hwdecActive) }
     }
 
-    fun cycleDecoders() {
-        MPVLib.setPropertyString(
-            "hwdec",
-            when (currentDecoder.value) {
-                Decoder.HWPlus -> Decoder.HW.value
-                Decoder.HW -> Decoder.SW.value
-                Decoder.SW -> Decoder.HWPlus.value
-                Decoder.AutoCopy -> Decoder.SW.value
-                Decoder.Auto -> Decoder.SW.value
-            },
-        )
-        val newDecoder = activity.player.hwdecActive
-        if (newDecoder != currentDecoder.value.value) {
-            _currentDecoder.update { getDecoderFromValue(newDecoder) }
-        }
-    }
-
     fun updateDecoder(decoder: Decoder) {
         MPVLib.setPropertyString("hwdec", decoder.value)
     }
