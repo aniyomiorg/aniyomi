@@ -515,7 +515,7 @@ fun PlayerControls(
                         // customButton = customButton,
                         aniskipButton = aniskipButton,
                         onPressAniSkipButton = viewModel::aniskipPressed,
-                        isPipAvailable = activity.isPipSupported,
+                        isPipAvailable = activity.isPipSupportedAndEnabled,
                         onPipClick = {
                             activity.enterPictureInPictureMode(activity.createPipParams())
                         },
