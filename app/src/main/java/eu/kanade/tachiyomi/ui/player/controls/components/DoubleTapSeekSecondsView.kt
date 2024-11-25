@@ -33,6 +33,12 @@ class DoubleTapSeekSecondsView(context: Context, attrs: AttributeSet?) : LinearL
             field = value
         }
 
+    var text: String? = null
+        set(value) {
+            binding.doubleTapSeconds.text = value
+            field = value
+        }
+
     var seconds: Int = 0
         set(value) {
             binding.doubleTapSeconds.text = context.pluralStringResource(

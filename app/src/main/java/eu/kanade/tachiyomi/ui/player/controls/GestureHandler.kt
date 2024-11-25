@@ -74,6 +74,7 @@ fun GestureHandler(
     LaunchedEffect(seekAmount) {
         delay(800)
         viewModel.updateSeekAmount(0)
+        viewModel.updateSeekText(null)
         delay(100)
         viewModel.hideSeekBar()
     }
@@ -248,6 +249,7 @@ fun GestureHandler(
 @Composable
 fun DoubleTapToSeekOvals(
     amount: Int,
+    text: String?,
     interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
 ) {
@@ -259,7 +261,7 @@ fun DoubleTapToSeekOvals(
         CompositionLocalProvider(
             LocalRippleConfiguration provides playerRippleConfiguration,
         ) {
-            if (amount != 0) {
+            if (amount != 0 || text != null) {
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -276,7 +278,11 @@ fun DoubleTapToSeekOvals(
                     AndroidView(
                         factory = { DoubleTapSeekSecondsView(it, null) },
                         update = {
-                            if (amount != 0) {
+                            if (text != null) {
+                                it.text = text
+                                it.visibility = View.VISIBLE
+                                it.start()
+                            } else if (amount != 0) {
                                 it.isForward = amount > 0
                                 it.seconds = amount
                                 it.visibility = View.VISIBLE

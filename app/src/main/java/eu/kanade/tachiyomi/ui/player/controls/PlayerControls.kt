@@ -117,7 +117,9 @@ fun PlayerControls(
     val paused by viewModel.paused.collectAsState()
     val gestureSeekAmount by viewModel.gestureSeekAmount.collectAsState()
     val doubleTapSeekAmount by viewModel.doubleTapSeekAmount.collectAsState()
+    val seekText by viewModel.seekText.collectAsState()
     val currentChapter by viewModel.currentChapter.collectAsState()
+    val chapters by viewModel.chapters.collectAsState()
 
     val playerTimeToDisappear by playerPreferences.playerTimeToDisappear().collectAsState()
     var isSeeking by remember { mutableStateOf(false) }
@@ -184,7 +186,7 @@ fun PlayerControls(
         viewModel = viewModel,
         interactionSource = interactionSource,
     )
-    DoubleTapToSeekOvals(doubleTapSeekAmount, interactionSource)
+    DoubleTapToSeekOvals(doubleTapSeekAmount, seekText, interactionSource)
     CompositionLocalProvider(
         LocalRippleConfiguration provides playerRippleConfiguration,
         LocalPlayerButtonsClickEvent provides { resetControls = !resetControls },
@@ -419,7 +421,7 @@ fun PlayerControls(
                         timersInverted = Pair(false, invertDuration),
                         durationTimerOnCLick = { playerPreferences.invertDuration().set(!invertDuration) },
                         positionTimerOnClick = {},
-                        chapters = viewModel.chapters.toImmutableList(),
+                        chapters = chapters.map { it.toSegment() }.toImmutableList(),
                     )
                 }
                 val mediaTitle by viewModel.mediaTitle.collectAsState()
@@ -487,6 +489,7 @@ fun PlayerControls(
                     )
                 }
                 // Bottom right controls
+                val aniskipButton by viewModel.aniskipButton.collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
                     enter = if (!reduceMotion) {
@@ -510,6 +513,8 @@ fun PlayerControls(
                     BottomRightPlayerControls(
                         // TODO(customButton)
                         // customButton = customButton,
+                        aniskipButton = aniskipButton,
+                        onPressAniSkipButton = viewModel::aniskipPressed,
                         isPipAvailable = activity.isPipSupported,
                         onPipClick = {
                             // TODO(pip)
@@ -551,7 +556,7 @@ fun PlayerControls(
                 ) {
                     BottomLeftPlayerControls(
                         playbackSpeed,
-                        currentChapter = currentChapter,
+                        currentChapter = currentChapter?.toSegment(),
                         onLockControls = viewModel::lockControls,
                         onCycleRotation = viewModel::cycleScreenRotations,
                         onPlaybackSpeedChange = {
@@ -590,8 +595,8 @@ fun PlayerControls(
             currentVideo = videoList.getOrNull(selectedVideoIndex),
             onSelectVideo = { viewModel.selectVideo(it) },
 
-            chapter = currentChapter,
-            chapters = viewModel.chapters.toImmutableList(),
+            chapter = currentChapter?.toSegment(),
+            chapters = chapters.map { it.toSegment() }.toImmutableList(),
             onSeekToChapter = {
                 viewModel.selectChapter(it)
                 viewModel.unpause()

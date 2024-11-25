@@ -1,14 +1,8 @@
 package eu.kanade.tachiyomi.util
 
-import android.annotation.SuppressLint
-import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.updateLayoutParams
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.jsonMime
-import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import `is`.xyz.mpv.MPVLib
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -16,9 +10,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
-import tachiyomi.core.common.i18n.stringResource
-import tachiyomi.core.common.util.lang.withUIContext
-import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 
 class AniSkipApi {
@@ -59,90 +50,6 @@ class AniSkipApi {
         return response.body.string().substringAfter("idMal\":").substringBefore("}")
             .toLongOrNull() ?: 0
     }
-
-    // TODO(aniskip)
-    /*
-    class PlayerUtils(
-        private val binding: PlayerActivityBinding,
-        private val aniSkipResponse: List<Stamp>,
-    ) {
-        private val playerControls get() = binding.playerControls
-        private val activity: PlayerActivity get() = binding.root.context as PlayerActivity
-
-        internal suspend fun showSkipButton(skipType: SkipType) {
-            val skipButtonString = when (skipType) {
-                SkipType.ED -> MR.strings.player_aniskip_ed
-                SkipType.OP -> MR.strings.player_aniskip_op
-                SkipType.RECAP -> MR.strings.player_aniskip_recap
-                SkipType.MIXED_OP -> MR.strings.player_aniskip_mixedOp
-            }
-            withUIContext {
-                playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                playerControls.binding.controlsSkipIntroBtn.text = activity.stringResource(
-                    skipButtonString,
-                )
-            }
-        }
-
-        // this is used when netflixStyle is enabled
-        @SuppressLint("SetTextI18n")
-        suspend fun showSkipButton(skipType: SkipType, waitingTime: Int) {
-            val skipTime = when (skipType) {
-                SkipType.ED -> aniSkipResponse.first { it.skipType == SkipType.ED }.interval
-                SkipType.OP -> aniSkipResponse.first { it.skipType == SkipType.OP }.interval
-                SkipType.RECAP -> aniSkipResponse.first { it.skipType == SkipType.RECAP }.interval
-                SkipType.MIXED_OP -> aniSkipResponse.first { it.skipType == SkipType.MIXED_OP }.interval
-            }
-            if (waitingTime > -1) {
-                if (waitingTime > 0) {
-                    withUIContext {
-                        playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
-                        playerControls.binding.controlsSkipIntroBtn.text = activity.stringResource(
-                            MR.strings.player_aniskip_dontskip,
-                        )
-                    }
-                } else {
-                    seekTo(skipTime.endTime)
-                    skipAnimation(skipType)
-                }
-            } else {
-                // when waitingTime is -1, it means that the user cancelled the skip
-                showSkipButton(skipType)
-            }
-        }
-
-        fun skipAnimation(skipType: SkipType) {
-            binding.secondsView.binding.doubleTapSeconds.text = activity.stringResource(
-                MR.strings.player_aniskip_skip,
-                skipType.getString(),
-            )
-
-            binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
-                leftToLeft = ConstraintLayout.LayoutParams.UNSET
-            }
-            binding.secondsView.visibility = View.VISIBLE
-            binding.secondsView.isForward = true
-
-            binding.ffwdBg.visibility = View.VISIBLE
-            binding.ffwdBg.animate().alpha(0.15f).setDuration(100).withEndAction {
-                binding.secondsView.animate().alpha(1f).setDuration(500).withEndAction {
-                    binding.secondsView.animate().alpha(0f).setDuration(500).withEndAction {
-                        binding.ffwdBg.animate().alpha(0f).setDuration(100).withEndAction {
-                            binding.ffwdBg.visibility = View.GONE
-                            binding.secondsView.visibility = View.GONE
-                            binding.secondsView.alpha = 1f
-                        }
-                    }
-                }
-            }.start()
-        }
-
-        private fun seekTo(time: Double) {
-            MPVLib.command(arrayOf("seek", time.toString(), "absolute"))
-        }
-    }
-    */
 }
 
 @Serializable

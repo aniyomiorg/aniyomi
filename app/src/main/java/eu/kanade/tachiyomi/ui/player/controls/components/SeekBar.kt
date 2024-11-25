@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,21 @@ import `is`.xyz.mpv.Utils
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
+
+@Immutable
+data class IndexedSegment(
+    val name: String,
+    val start: Float,
+    val color: Color = Color.Unspecified,
+    val index: Int = 0,
+) {
+    companion object {
+        val Unspecified = IndexedSegment(name = "", start = 0f)
+    }
+
+    fun toSegment(): Segment = Segment(name, start, color)
+}
+
 
 @Composable
 fun SeekbarWithTimers(

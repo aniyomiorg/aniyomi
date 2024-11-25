@@ -11,7 +11,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.Rect
 import android.media.AudioFocusRequest
 import android.media.AudioManager
@@ -44,6 +43,7 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toAndroidRect
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -61,6 +61,7 @@ import androidx.media.AudioAttributesCompat
 import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
 import com.hippo.unifile.UniFile
+import dev.vivvvek.seeker.Segment
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
@@ -74,6 +75,7 @@ import eu.kanade.tachiyomi.databinding.PlayerLayoutBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.controls.PlayerControls
+import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
@@ -114,6 +116,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -531,7 +534,10 @@ class PlayerActivity : BaseActivity() {
     internal fun onObserverEvent(property: String, value: Long) {
         if (player.isExiting) return
         when (property) {
-            "time-pos" -> viewModel.updatePlayBackPos(value.toFloat())
+            "time-pos" -> {
+                viewModel.updatePlayBackPos(value.toFloat())
+                viewModel.aniSkipStuff(value)
+            }
             "demuxer-cache-time" -> viewModel.updateReadAhead(value = value)
             "volume" -> viewModel.setMPVVolume(value.toInt())
             "volume-max" -> viewModel.volumeBoostCap = value.toInt() - 100
@@ -851,8 +857,7 @@ class PlayerActivity : BaseActivity() {
         viewModel.pause()
         viewModel.isLoading.update { _ -> true }
 
-        // TODO(aniskip)
-        // aniskipStamps = emptyList()
+        aniskipStamps = emptyList()
 
         lifecycleScope.launch {
             viewModel.updateIsLoadingEpisode(true)
@@ -1010,39 +1015,6 @@ class PlayerActivity : BaseActivity() {
         )
     }
 
-    /*
-    @Suppress("UNUSED_PARAMETER")
-    fun cycleSpeed(view: View) {
-        player.cycleSpeed()
-        refreshUi()
-    }
-
-    // TODO(aniskip)
-    @Suppress("UNUSED_PARAMETER")
-    fun skipIntro(view: View) {
-        if (skipType != null) {
-            // this stops the counter
-            if (waitingAniSkip > 0 && netflixStyle) {
-                waitingAniSkip = -1
-                return
-            }
-            skipType.let {
-                MPVLib.command(
-                    arrayOf(
-                        "seek",
-                        "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}",
-                        "absolute",
-                    ),
-                )
-            }
-            AniSkipApi.PlayerUtils(binding, aniSkipInterval!!).skipAnimation(skipType!!)
-        } else if (playerControls.binding.controlsSkipIntroBtn.text != "") {
-            doubleTapSeek(viewModel.getAnimeSkipIntroLength(), isDoubleTap = false)
-            playerControls.resetControlsFade()
-        }
-    }
-    */
-
     private fun clearTracks() {
         val count = MPVLib.getPropertyInt("track-list/count")!!
         // Note that because events are async, properties might disappear at any moment
@@ -1066,27 +1038,24 @@ class PlayerActivity : BaseActivity() {
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
-    internal suspend fun fileLoaded() {
+    internal fun fileLoaded() {
         setMpvMediaTitle()
         setupPlayerOrientation()
         clearTracks()
         setupAudioTracks()
         setupSubtitleTracks()
+
         // aniSkip stuff
-        // TODO(aniskip)
-        /*
-        waitingAniSkip = gesturePreferences.waitingTimeAniSkip().get()
+        viewModel.waitingAniSkip = gesturePreferences.waitingTimeAniSkip().get()
         runBlocking {
-            if (aniSkipEnable) {
-                aniSkipInterval = viewModel.aniSkipResponse(player.duration)
-                aniSkipInterval?.let {
+            if (viewModel.aniSkipEnable) {
+                viewModel.aniSkipInterval = viewModel.aniSkipResponse(player.duration)
+                viewModel.aniSkipInterval?.let {
                     aniskipStamps = it
                     updateChapters(it, player.duration)
                 }
             }
         }
-
-         */
     }
 
     private fun setupSubtitleTracks() {
@@ -1130,7 +1099,12 @@ class PlayerActivity : BaseActivity() {
         MPVLib.setPropertyString("force-media-title", title)
     }
 
-    /*
+    private fun endFile(eofReached: Boolean) {
+        if (eofReached && playerPreferences.autoplayEnabled().get()) {
+            viewModel.changeEpisode(previous = false, autoPlay = true)
+        }
+    }
+
     private var aniskipStamps: List<Stamp> = emptyList()
     private fun updateChapters(stamps: List<Stamp>? = null, duration: Int? = null) {
         val aniskipStamps = stamps ?: aniskipStamps
@@ -1141,35 +1115,38 @@ class PlayerActivity : BaseActivity() {
             } else {
                 it.interval.startTime
             }
-            val startChapter = VideoChapter(
+            val startChapter = IndexedSegment(
                 index = -2, // Index -2 is used to indicate that this is an AniSkip chapter
-                title = it.skipType.getString(),
-                time = startTime,
+                name = it.skipType.getString(),
+                start = startTime.toFloat(),
+                color = Color(0xFFD8BBDF),
             )
             val nextStart = sortedAniskipStamps.getOrNull(i + 1)?.interval?.startTime
             val isNotLastChapter = abs(it.interval.endTime - (duration?.toDouble() ?: -2.0)) > 1.0
             val isNotAdjacent = nextStart == null || (abs(it.interval.endTime - nextStart) > 1.0)
             if (isNotLastChapter && isNotAdjacent) {
-                val endChapter = VideoChapter(
+                val endChapter = IndexedSegment(
                     index = -1,
-                    title = null,
-                    time = it.interval.endTime,
+                    name = "",
+                    start = it.interval.endTime.toFloat(),
                 )
                 return@mapIndexed listOf(startChapter, endChapter)
             } else {
                 listOf(startChapter)
             }
         }.flatten()
-        val playerChapters = player.loadChapters().filter { playerChapter ->
+        val playerChapters = viewModel.chapters.value.filter { playerChapter ->
             aniskipChapters.none { aniskipChapter ->
-                abs(aniskipChapter.time - playerChapter.time) < 1.0 && aniskipChapter.index == -2
+                abs(aniskipChapter.start - playerChapter.start) < 1.0 && aniskipChapter.index == -2
             }
-        }.sortedBy { it.time }.mapIndexed { i, it ->
-            if (i == 0 && it.time < 1.0) {
-                VideoChapter(
-                    it.index,
-                    it.title,
-                    0.0,
+        }.map {
+            IndexedSegment(it.name, it.start, it.color)
+        }.sortedBy { it.start }.mapIndexed { i, it ->
+            if (i == 0 && it.start < 1.0) {
+                IndexedSegment(
+                    it.name,
+                    0.0f,
+                    index = it.index,
                 )
             } else {
                 it
@@ -1177,81 +1154,27 @@ class PlayerActivity : BaseActivity() {
         }
         val filteredAniskipChapters = aniskipChapters.filter { aniskipChapter ->
             playerChapters.none { playerChapter ->
-                abs(aniskipChapter.time - playerChapter.time) < 1.0 && aniskipChapter.index != -2
+                abs(aniskipChapter.start - playerChapter.start) < 1.0 && aniskipChapter.index != -2
             }
         }
         val startChapter = if ((playerChapters + filteredAniskipChapters).isNotEmpty() &&
-            playerChapters.none { it.time == 0.0 } &&
-            filteredAniskipChapters.none { it.time == 0.0 }
+            playerChapters.none { it.start == 0.0f } &&
+            filteredAniskipChapters.none { it.start == 0.0f }
         ) {
             listOf(
-                VideoChapter(
+                IndexedSegment(
                     index = -1,
-                    title = null,
-                    time = 0.0,
+                    name = "",
+                    start = 0.0f,
                 ),
             )
         } else {
             emptyList()
         }
-        val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
-        videoChapters = combinedChapters
+        val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.start }
+        viewModel.updateChapters(combinedChapters)
     }
 
-    private val aniSkipEnable = gesturePreferences.aniSkipEnabled().get()
-    private val netflixStyle = gesturePreferences.enableNetflixStyleAniSkip().get()
 
-    private var aniSkipInterval: List<Stamp>? = null
-    private var waitingAniSkip = gesturePreferences.waitingTimeAniSkip().get()
-
-    private var skipType: SkipType? = null
-
-    private suspend fun aniSkipStuff(position: Long) {
-        if (!aniSkipEnable) return
-        // if it doesn't find any interval it will show the +85 button
-        if (aniSkipInterval == null) return
-
-        val autoSkipAniSkip = gesturePreferences.autoSkipAniSkip().get()
-
-        skipType =
-            aniSkipInterval
-                ?.firstOrNull {
-                    it.interval.startTime <= position &&
-                        it.interval.endTime > position
-                }?.skipType
-        skipType?.let { skipType ->
-            val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
-            if (netflixStyle) {
-                // show a toast with the seconds before the skip
-                if (waitingAniSkip == gesturePreferences.waitingTimeAniSkip().get()) {
-                    toast(
-                        "AniSkip: ${stringResource(MR.strings.player_aniskip_dontskip_toast,waitingAniSkip)}",
-                    )
-                }
-                aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
-                waitingAniSkip--
-            } else if (autoSkipAniSkip) {
-                skipType.let {
-                    MPVLib.command(
-                        arrayOf(
-                            "seek",
-                            "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}",
-                            "absolute",
-                        ),
-                    )
-                }
-            } else {
-                aniSkipPlayerUtils.showSkipButton(skipType)
-            }
-        } ?: run {
-            refreshUi()
-        }
-    }
-    */
-
-    private fun endFile(eofReached: Boolean) {
-        if (eofReached && playerPreferences.autoplayEnabled().get()) {
-            viewModel.changeEpisode(previous = false, autoPlay = true)
-        }
-    }
+    
 }
