@@ -241,6 +241,23 @@ class PlayerActivity : BaseActivity() {
             finish()
         }
 
+        viewModel.eventFlow
+            .onEach { event ->
+                when (event) {
+                    is PlayerViewModel.Event.SavedImage -> {
+                        onSaveImageResult(event.result)
+                    }
+                    is PlayerViewModel.Event.ShareImage -> {
+                        onShareImageResult(event.uri, event.seconds)
+                    }
+                    is PlayerViewModel.Event.SetCoverResult -> {
+                        onSetAsCoverResult(event.result)
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
+
+
         binding.controls.setContent {
             TachiyomiTheme {
                 PlayerControls(

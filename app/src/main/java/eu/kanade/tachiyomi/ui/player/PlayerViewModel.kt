@@ -1304,7 +1304,6 @@ class PlayerViewModel @JvmOverloads constructor(
             setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength)
             logcat(LogPriority.INFO) { "New Skip Intro Length is ${anime.skipIntroLength}" }
             _currentAnime.update { _ -> getAnime.await(anime.id) }
-            eventChannel.send(Event.SetAnimeSkipIntro(getAnimeSkipIntroLength()))
         }
     }
 
@@ -1470,7 +1469,6 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     sealed class Event {
-        data class SetAnimeSkipIntro(val duration: Int) : Event()
         data class SetCoverResult(val result: SetAsCover) : Event()
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
