@@ -517,8 +517,7 @@ fun PlayerControls(
                         onPressAniSkipButton = viewModel::aniskipPressed,
                         isPipAvailable = activity.isPipSupported,
                         onPipClick = {
-                            // TODO(pip)
-                            // activity.enterPictureInPictureMode(activity.createPipParams())
+                            activity.enterPictureInPictureMode(activity.createPipParams())
                         },
                         onAspectClick = {
                             viewModel.changeVideoAspect(

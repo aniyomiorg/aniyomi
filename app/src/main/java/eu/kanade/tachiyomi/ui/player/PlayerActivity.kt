@@ -262,7 +262,13 @@ class PlayerActivity : BaseActivity() {
             TachiyomiTheme {
                 PlayerControls(
                     viewModel = viewModel,
-                    onBackPress = ::finish,
+                    onBackPress = {
+                        if (isPipSupported && player.paused == false && playerPreferences.pipOnExit().get()) {
+                            enterPictureInPictureMode(createPipParams())
+                        } else {
+                            finish()
+                        }
+                    },
                     modifier = Modifier.onGloballyPositioned {
                         pipRect = run {
                             val boundsInWindow = it.boundsInWindow()
@@ -317,6 +323,10 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
+        if (isInPictureInPictureMode) {
+            finishAndRemoveTask()
+        }
+
         super.onStop()
     }
 
@@ -330,7 +340,7 @@ class PlayerActivity : BaseActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (isPipSupported && player.paused == false && playerPreferences.pipOnExit().get()) {
-            if (viewModel.sheetShown.value == Sheets.None && viewModel.panelShown.value == Panels.None) {
+            if (viewModel.sheetShown.value == Sheets.None && viewModel.panelShown.value == Panels.None && viewModel.dialogShown.value == Dialogs.None) {
                 enterPictureInPictureMode()
             }
         } else {
@@ -643,15 +653,27 @@ class PlayerActivity : BaseActivity() {
     fun createPipParams(): PictureInPictureParams {
         val builder = PictureInPictureParams.Builder()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            builder.setTitle(viewModel.mediaTitle.value)
+            val anime = viewModel.currentAnime.value
+            val episode = viewModel.currentEpisode.value
+
+            if (anime != null && episode != null) {
+                builder.setTitle(anime.title).setSubtitle(episode.name)
+            }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val autoEnter = playerPreferences.pipOnExit().get()
             builder.setAutoEnterEnabled(player.paused == false && autoEnter)
             builder.setSeamlessResizeEnabled(player.paused == false && autoEnter)
         }
-        // TODO(pip)
-        // builder.setActions(createPipActions(this, player.paused ?: true))
+        builder.setActions(
+            createPipActions(
+                context = this,
+                isPaused = player.paused ?: true,
+                replaceWithPrevious = playerPreferences.pipReplaceWithPrevious().get(),
+                playlistCount = viewModel.currentPlaylist.value.size,
+                playlistPosition = viewModel.getCurrentEpisodeIndex(),
+            )
+        )
         builder.setSourceRectHint(pipRect)
         player.videoH?.let {
             val height = it
@@ -683,8 +705,9 @@ class PlayerActivity : BaseActivity() {
                 when (intent.getIntExtra(PIP_INTENT_ACTION, 0)) {
                     PIP_PAUSE -> viewModel.pause()
                     PIP_PLAY -> viewModel.unpause()
-                    PIP_NEXT -> viewModel.handleRightDoubleTap()
-                    PIP_PREVIOUS -> viewModel.handleLeftDoubleTap()
+                    PIP_NEXT -> viewModel.changeEpisode(false)
+                    PIP_PREVIOUS -> viewModel.changeEpisode(true)
+                    PIP_SKIP -> viewModel.seekBy(10)
                 }
                 setPictureInPictureParams(createPipParams())
             }
@@ -903,7 +926,7 @@ class PlayerActivity : BaseActivity() {
                         logcat(LogPriority.ERROR) { "Error getting links" }
                     }
 
-                    if (PipState.mode == PipState.ON && pipEpisodeToasts) {
+                    if (isInPictureInPictureMode && pipEpisodeToasts) {
                         launchUI { toast(switchMethod.second) }
                     }
                 }

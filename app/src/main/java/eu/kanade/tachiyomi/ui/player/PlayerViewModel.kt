@@ -485,8 +485,7 @@ class PlayerViewModel @JvmOverloads constructor(
         activity.player.paused = true
         _paused.update { true }
         runCatching {
-            // TODO(pip)
-            // activity.setPictureInPictureParams(activity.createPipParams())
+            activity.setPictureInPictureParams(activity.createPipParams())
         }
     }
 

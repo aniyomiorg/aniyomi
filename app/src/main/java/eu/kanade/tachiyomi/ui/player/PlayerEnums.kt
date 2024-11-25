@@ -14,20 +14,6 @@ enum class SetAsCover {
     Error,
 }
 
-/**
- * Player's Picture-In-Picture state handler
- */
-enum class PipState {
-    OFF,
-    ON,
-    STARTED,
-    ;
-
-    companion object {
-        internal var mode: PipState = OFF
-    }
-}
-
 enum class PlayerOrientation(val titleRes: StringResource) {
     Free(MR.strings.rotation_free),
     Video(MR.strings.rotation_video),
