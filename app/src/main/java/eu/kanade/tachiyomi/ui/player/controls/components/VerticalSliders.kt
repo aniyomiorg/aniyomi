@@ -189,9 +189,10 @@ fun VolumeSlider(
 }
 
 val getVolumeSliderText: @Composable (Int, Int, Int, Int, Boolean) -> String =
-    { volume, mpvVolume, boostVolume, percentage, displayAsPercentage ->
+    { volume, mpvVolume, boostVolume, percentageInt, displayAsPercentage ->
         val percentFormat = remember { NumberFormat.getPercentInstance() }
         val integerFormat = remember { NumberFormat.getIntegerInstance() }
+        val percentage = percentageInt / 100f
 
         when (mpvVolume - 100) {
             0 -> if (displayAsPercentage) {
