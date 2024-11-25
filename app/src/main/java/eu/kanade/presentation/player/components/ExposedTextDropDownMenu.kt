@@ -44,7 +44,7 @@ fun ExposedTextDropDownMenu(
             colors = OutlinedTextFieldDefaults.colors(),
             modifier = Modifier
                 .menuAnchor(MenuAnchorType.PrimaryEditable)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
 
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
@@ -54,7 +54,7 @@ fun ExposedTextDropDownMenu(
                     onClick = {
                         expanded = false
                         onValueChangedEvent(option)
-                    }
+                    },
                 )
             }
         }

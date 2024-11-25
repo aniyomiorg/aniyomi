@@ -61,7 +61,7 @@ fun ControlsButton(
             )
             .padding(
                 vertical = MaterialTheme.MPVKtSpacing.medium,
-                horizontal = horizontalSpacing
+                horizontal = horizontalSpacing,
             ),
     ) {
         Icon(

@@ -64,7 +64,7 @@ fun SubtitleSettingsPanel(
                     top.linkTo(parent.top, 32.dp)
                     start.linkTo(parent.start)
                 },
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
             ) {
                 TopAppBar(
                     title = {

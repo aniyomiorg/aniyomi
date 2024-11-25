@@ -28,7 +28,6 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
 import tachiyomi.presentation.core.i18n.stringResource
 
-
 @Composable
 fun <T> GenericTracksSheet(
     tracks: ImmutableList<T>,

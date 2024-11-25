@@ -30,22 +30,22 @@ fun BottomRightPlayerControls(
 ) {
     Row(modifier) {
         if (aniskipButton != null) {
-             Box(
-                 modifier = Modifier.padding(end = MaterialTheme.MPVKtSpacing.smaller),
-             ) {
-                 Button(onClick = {}) {
-                     Text(text = aniskipButton)
-                 }
-                 Box(
-                     modifier = Modifier
-                         .matchParentSize()
-                         .combinedClickable(
-                             onClick = onPressAniSkipButton,
-                             interactionSource = remember { MutableInteractionSource() },
-                             indication = null,
-                         ),
-                 )
-             }
+            Box(
+                modifier = Modifier.padding(end = MaterialTheme.MPVKtSpacing.smaller),
+            ) {
+                Button(onClick = {}) {
+                    Text(text = aniskipButton)
+                }
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .combinedClickable(
+                            onClick = onPressAniSkipButton,
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                        ),
+                )
+            }
         }
         // TODO(customButton)
         // if (customButton != null) {

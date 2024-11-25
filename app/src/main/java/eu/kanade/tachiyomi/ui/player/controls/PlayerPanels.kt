@@ -39,10 +39,12 @@ fun PlayerPanels(
         transitionSpec = {
             fadeIn() + slideInHorizontally { it / 3 } togetherWith fadeOut() + slideOutHorizontally { it / 2 }
         },
-        modifier = modifier
+        modifier = modifier,
     ) { currentPanel ->
         when (currentPanel) {
-            Panels.None -> { Box(Modifier.fillMaxHeight()) }
+            Panels.None -> {
+                Box(Modifier.fillMaxHeight())
+            }
             Panels.SubtitleSettings -> {
                 SubtitleSettingsPanel(onDismissRequest)
             }
@@ -66,6 +68,8 @@ val panelCardsColors: @Composable () -> CardColors = {
     val colors = CardDefaults.cardColors()
     colors.copy(
         containerColor = MaterialTheme.colorScheme.surface.copy(playerPreferences.panelOpacity().get() / 100f),
-        disabledContainerColor = MaterialTheme.colorScheme.surfaceDim.copy(playerPreferences.panelOpacity().get() / 100f),
+        disabledContainerColor = MaterialTheme.colorScheme.surfaceDim.copy(
+            playerPreferences.panelOpacity().get() / 100f,
+        ),
     )
 }

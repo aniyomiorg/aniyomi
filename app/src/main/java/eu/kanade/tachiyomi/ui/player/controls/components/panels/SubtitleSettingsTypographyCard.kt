@@ -1,9 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.controls.components.panels
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import android.util.Log
-import androidx.annotation.StringRes
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +13,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BorderColor
-import androidx.compose.material.icons.filled.BorderStyle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FormatBold
 import androidx.compose.material.icons.filled.FormatClear
@@ -40,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.yubyf.truetypeparser.TTFFile
 import dev.icerock.moko.resources.StringResource
@@ -132,17 +127,17 @@ fun SubtitleSettingsTypographyCard(
             }
             var borderStyle by remember {
                 mutableStateOf(
-                    SubtitlesBorderStyle.entries.first { it.value == MPVLib.getPropertyString("sub-border-style") }
+                    SubtitlesBorderStyle.entries.first { it.value == MPVLib.getPropertyString("sub-border-style") },
                 )
             }
             var borderSize by remember {
                 mutableStateOf(
-                    MPVLib.getPropertyInt("sub-border-size")
+                    MPVLib.getPropertyInt("sub-border-size"),
                 )
             }
             var shadowOffset by remember {
                 mutableStateOf(
-                    MPVLib.getPropertyInt("sub-shadow-offset")
+                    MPVLib.getPropertyInt("sub-shadow-offset"),
                 )
             }
             Row(
@@ -203,16 +198,18 @@ fun SubtitleSettingsTypographyCard(
                     resetTypography(preferences)
                     isBold = MPVLib.getPropertyBoolean("sub-bold")
                     isItalic = MPVLib.getPropertyBoolean("sub-italic")
-                    justify = SubtitleJustification.entries.first { it.value == MPVLib.getPropertyString("sub-justify") }
+                    justify =
+                        SubtitleJustification.entries.first { it.value == MPVLib.getPropertyString("sub-justify") }
                     font = MPVLib.getPropertyString("sub-font")
                     fontSize = MPVLib.getPropertyInt("sub-font-size")
-                    borderStyle = SubtitlesBorderStyle.entries.first { it.value == MPVLib.getPropertyString("sub-border-style") }
+                    borderStyle =
+                        SubtitlesBorderStyle.entries.first { it.value == MPVLib.getPropertyString("sub-border-style") }
                     borderSize = MPVLib.getPropertyInt("sub-border-size")
                     shadowOffset = MPVLib.getPropertyInt("sub-shadow-offset")
                 }) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(Icons.Default.FormatClear, null)
                         Text(stringResource(MR.strings.action_reset))
@@ -325,5 +322,5 @@ enum class SubtitlesBorderStyle(
 ) {
     OutlineAndShadow("outline-and-shadow", MR.strings.player_sheets_subtitles_border_style_outline_and_shadow),
     OpaqueBox("opaque-box", MR.strings.player_sheets_subtitles_border_style_opaque_box),
-    BackgroundBox("background-box", MR.strings.player_sheets_subtitles_border_style_background_box)
+    BackgroundBox("background-box", MR.strings.player_sheets_subtitles_border_style_background_box),
 }

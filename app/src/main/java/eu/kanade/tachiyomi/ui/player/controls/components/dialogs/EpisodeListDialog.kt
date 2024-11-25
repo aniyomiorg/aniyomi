@@ -192,7 +192,7 @@ private fun EpisodeListItem(
                     )
                     if (episode.scanlator != null) {
                         DotSeparatorText(
-                            modifier = Modifier.alpha(textAlpha)
+                            modifier = Modifier.alpha(textAlpha),
                         )
                     }
                 }

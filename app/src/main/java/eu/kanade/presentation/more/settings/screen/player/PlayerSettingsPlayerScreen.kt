@@ -1,6 +1,5 @@
 package eu.kanade.presentation.more.settings.screen.player
 
-import android.content.pm.ActivityInfo
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -181,7 +180,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                         true
                     },
                 ),
-            )
+            ),
         )
     }
 

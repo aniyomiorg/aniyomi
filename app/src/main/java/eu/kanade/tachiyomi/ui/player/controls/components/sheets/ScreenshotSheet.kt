@@ -91,7 +91,7 @@ fun ScreenshotSheet(
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary,
                         )
-                    }
+                    },
                 )
             }
         }

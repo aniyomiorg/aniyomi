@@ -148,7 +148,7 @@ fun PlayerSheets(
             PlaybackSpeedSheet(
                 speed,
                 onSpeedChange = onSpeedChange,
-                onDismissRequest = onDismissRequest
+                onDismissRequest = onDismissRequest,
             )
         }
 

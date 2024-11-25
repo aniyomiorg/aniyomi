@@ -6,7 +6,6 @@ import android.media.AudioManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
@@ -15,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import dev.vivvvek.seeker.Segment
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
@@ -24,7 +22,6 @@ import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.toVideoList
-import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
@@ -39,7 +36,6 @@ import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
-import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
@@ -298,7 +294,6 @@ class PlayerViewModel @JvmOverloads constructor(
         MPVLib.getPropertyString("track-list/$it/type")
     }
 
-
     private var trackLoadingJob: Job? = null
     fun loadTracks() {
         trackLoadingJob?.cancel()
@@ -306,7 +301,7 @@ class PlayerViewModel @JvmOverloads constructor(
             val possibleTrackTypes = listOf("audio", "sub")
             val subTracks = mutableListOf<VideoTrack>()
             val audioTracks = mutableListOf(
-                VideoTrack(-1, activity.stringResource(MR.strings.off), null)
+                VideoTrack(-1, activity.stringResource(MR.strings.off), null),
             )
             try {
                 val tracksCount = MPVLib.getPropertyInt("track-list/count") ?: 0
@@ -490,7 +485,12 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private val showStatusBar = playerPreferences.showSystemStatusBar().get()
     fun showControls() {
-        if (sheetShown.value != Sheets.None || panelShown.value != Panels.None || dialogShown.value != Dialogs.None) return
+        if (sheetShown.value != Sheets.None ||
+            panelShown.value != Panels.None ||
+            dialogShown.value != Dialogs.None
+        ) {
+            return
+        }
         if (showStatusBar) {
             activity.windowInsetsController.show(WindowInsetsCompat.Type.statusBars())
         }
@@ -620,7 +620,7 @@ class PlayerViewModel @JvmOverloads constructor(
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,
             ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
-                -> {
+            -> {
                 playerPreferences.defaultPlayerOrientationType().set(PlayerOrientation.SensorPortrait)
                 ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
             }
@@ -816,11 +816,9 @@ class PlayerViewModel @JvmOverloads constructor(
         return episodesForPlayer
     }
 
-
     fun getCurrentEpisodeIndex(): Int {
         return currentPlaylist.value.indexOfFirst { currentEpisode.value?.id == it.id }
     }
-
 
     fun getAdjacentEpisodeId(previous: Boolean): Long {
         val newIndex = if (previous) getCurrentEpisodeIndex() - 1 else getCurrentEpisodeIndex() + 1
@@ -1366,8 +1364,8 @@ class PlayerViewModel @JvmOverloads constructor(
                 waitingAniSkip--
             } else if (autoSkipAniSkip) {
                 rightSeekToWithText(
-                    seekDuration = aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime.toInt(),
-                    text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString())
+                    seekDuration = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
+                    text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString()),
                 )
             } else {
                 showAniskipButton(skipType)
@@ -1402,7 +1400,7 @@ class PlayerViewModel @JvmOverloads constructor(
             } else {
                 rightSeekToWithText(
                     seekDuration = skipTime.endTime.toInt(),
-                    text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString())
+                    text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString()),
                 )
             }
         } else {
@@ -1419,8 +1417,8 @@ class PlayerViewModel @JvmOverloads constructor(
                 return
             }
             rightSeekToWithText(
-                seekDuration = aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime.toInt(),
-                text = activity.stringResource(MR.strings.player_aniskip_skip, skipType!!.getString())
+                seekDuration = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
+                text = activity.stringResource(MR.strings.player_aniskip_skip, skipType!!.getString()),
             )
         }
     }

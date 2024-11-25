@@ -68,7 +68,6 @@ fun MiddlePlayerControls(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.large),
     ) {
-
         AnimatedVisibility(
             visible = controlsShown && !areControlsLocked,
             enter = enter,

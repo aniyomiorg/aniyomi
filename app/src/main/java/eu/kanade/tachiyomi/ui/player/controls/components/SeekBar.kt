@@ -43,7 +43,6 @@ data class IndexedSegment(
     fun toSegment(): Segment = Segment(name, start, color)
 }
 
-
 @Composable
 fun SeekbarWithTimers(
     position: Float,
@@ -143,6 +142,6 @@ private fun PreviewSeekBar() {
         Pair(false, true),
         {},
         {},
-        persistentListOf<Segment>()
+        persistentListOf<Segment>(),
     )
 }

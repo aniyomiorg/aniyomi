@@ -45,7 +45,7 @@ fun BottomLeftPlayerControls(
         )
         ControlsButton(
             icon = Icons.Default.ScreenRotation,
-            onClick = onCycleRotation
+            onClick = onCycleRotation,
         )
         ControlsButton(
             text = stringResource(MR.strings.player_speed, playbackSpeed),
@@ -63,7 +63,7 @@ fun BottomLeftPlayerControls(
         ) {
             CurrentChapter(
                 chapter = currentChapter!!,
-                onClick = { onOpenSheet(Sheets.Chapters) }
+                onClick = { onOpenSheet(Sheets.Chapters) },
             )
         }
     }

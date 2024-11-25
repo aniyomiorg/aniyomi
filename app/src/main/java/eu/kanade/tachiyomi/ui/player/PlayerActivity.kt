@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player
 
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.PictureInPictureParams
 import android.content.BroadcastReceiver
@@ -12,7 +11,6 @@ import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.content.res.Configuration
 import android.graphics.Rect
-import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.session.MediaSession
 import android.media.session.PlaybackState
@@ -20,53 +18,29 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
-import android.os.ParcelFileDescriptor
-import android.os.PowerManager
-import android.provider.Settings
-import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
-import android.util.DisplayMetrics
-import android.util.Log
 import android.util.Rational
 import android.view.KeyEvent
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewAnimationUtils
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toAndroidRect
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.media.AudioAttributesCompat
 import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
 import com.hippo.unifile.UniFile
-import dev.vivvvek.seeker.Segment
-import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
-import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
@@ -78,23 +52,16 @@ import eu.kanade.tachiyomi.ui.player.controls.PlayerControls
 import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
-import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
-import eu.kanade.tachiyomi.util.AniSkipApi
-import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.SubtitleSelect
-import eu.kanade.tachiyomi.util.system.LocaleHelper
-import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
-import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -144,7 +111,8 @@ class PlayerActivity : BaseActivity() {
 
     private var pipRect: Rect? = null
     val isPipSupportedAndEnabled by lazy {
-        packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && playerPreferences.enablePip().get()
+        packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
+            playerPreferences.enablePip().get()
     }
 
     private var pipReceiver: BroadcastReceiver? = null
@@ -255,7 +223,6 @@ class PlayerActivity : BaseActivity() {
             }
             .launchIn(lifecycleScope)
 
-
         binding.controls.setContent {
             TachiyomiTheme {
                 PlayerControls(
@@ -274,7 +241,7 @@ class PlayerActivity : BaseActivity() {
                                 boundsInWindow.left.toInt(),
                                 boundsInWindow.top.toInt(),
                                 boundsInWindow.right.toInt(),
-                                boundsInWindow.bottom.toInt()
+                                boundsInWindow.bottom.toInt(),
                             )
                         }
                     },
@@ -338,7 +305,9 @@ class PlayerActivity : BaseActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (isPipSupportedAndEnabled && player.paused == false && playerPreferences.pipOnExit().get()) {
-            if (viewModel.sheetShown.value == Sheets.None && viewModel.panelShown.value == Panels.None && viewModel.dialogShown.value == Dialogs.None) {
+            if (viewModel.sheetShown.value == Sheets.None && viewModel.panelShown.value == Panels.None &&
+                viewModel.dialogShown.value == Dialogs.None
+            ) {
                 enterPictureInPictureMode()
             }
         } else {
@@ -346,18 +315,20 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-
     override fun onStart() {
         super.onStart()
         setPictureInPictureParams(createPipParams())
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+        )
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding.root.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_LOW_PROFILE
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LOW_PROFILE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -507,7 +478,7 @@ class PlayerActivity : BaseActivity() {
         when (it) {
             AudioManager.AUDIOFOCUS_LOSS,
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
-                -> {
+            -> {
                 val oldRestore = restoreAudioFocus
                 val wasPlayerPaused = player.paused ?: false
                 viewModel.pause()
@@ -623,7 +594,9 @@ class PlayerActivity : BaseActivity() {
         when (property.substringBeforeLast("/")) {
             "aid" -> trackId(value)?.let { viewModel.updateAudio(it) }
             "sid" -> trackId(value)?.let { viewModel.updateSubtitle(it, viewModel.selectedSubtitles.value.second) }
-            "secondary-sid" -> trackId(value)?.let { viewModel.updateSubtitle(viewModel.selectedSubtitles.value.first, it) }
+            "secondary-sid" -> trackId(value)?.let {
+                viewModel.updateSubtitle(viewModel.selectedSubtitles.value.first, it)
+            }
             "hwdec", "hwdec-current" -> viewModel.getDecoder()
             // TODO(custombutton)
             // "user-data/mpvkt" -> viewModel.handleLuaInvocation(property, value)
@@ -642,7 +615,9 @@ class PlayerActivity : BaseActivity() {
     internal fun event(eventId: Int) {
         if (player.isExiting) return
         when (eventId) {
-            MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> { viewModel.viewModelScope.launchIO { fileLoaded() } }
+            MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> {
+                viewModel.viewModelScope.launchIO { fileLoaded() }
+            }
             MPVLib.mpvEventId.MPV_EVENT_SEEK -> viewModel.isLoading.update { true }
             MPVLib.mpvEventId.MPV_EVENT_PLAYBACK_RESTART -> player.isExiting = false
         }
@@ -670,7 +645,7 @@ class PlayerActivity : BaseActivity() {
                 replaceWithPrevious = playerPreferences.pipReplaceWithPrevious().get(),
                 playlistCount = viewModel.currentPlaylist.value.size,
                 playlistPosition = viewModel.getCurrentEpisodeIndex(),
-            )
+            ),
         )
         builder.setSourceRectHint(pipRect)
         player.videoH?.let {
@@ -858,9 +833,9 @@ class PlayerActivity : BaseActivity() {
                             PlaybackState.ACTION_PAUSE or
                             PlaybackState.ACTION_STOP or
                             PlaybackState.ACTION_SKIP_TO_PREVIOUS or
-                            PlaybackState.ACTION_SKIP_TO_NEXT
+                            PlaybackState.ACTION_SKIP_TO_NEXT,
                     )
-                    .build()
+                    .build(),
             )
             isActive = true
         }
@@ -932,10 +907,10 @@ class PlayerActivity : BaseActivity() {
         }
 
         viewModel.updateHasPreviousEpisode(
-            viewModel.getCurrentEpisodeIndex() != 0
+            viewModel.getCurrentEpisodeIndex() != 0,
         )
         viewModel.updateHasNextEpisode(
-            viewModel.getCurrentEpisodeIndex() != viewModel.currentPlaylist.value.size - 1
+            viewModel.getCurrentEpisodeIndex() != viewModel.currentPlaylist.value.size - 1,
         )
     }
 

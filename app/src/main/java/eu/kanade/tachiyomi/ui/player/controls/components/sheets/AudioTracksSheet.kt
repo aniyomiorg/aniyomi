@@ -31,7 +31,7 @@ fun AudioTracksSheet(
     onAddAudioTrack: () -> Unit,
     onOpenDelayPanel: () -> Unit,
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     GenericTracksSheet(
         tracks,
@@ -44,7 +44,7 @@ fun AudioTracksSheet(
                     IconButton(onClick = onOpenDelayPanel) {
                         Icon(Icons.Default.MoreTime, null)
                     }
-                }
+                },
             )
         },
         track = {
@@ -54,7 +54,7 @@ fun AudioTracksSheet(
                 onClick = { onSelect(it.id) },
             )
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -63,7 +63,7 @@ fun AudioTrackRow(
     title: String,
     isSelected: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier

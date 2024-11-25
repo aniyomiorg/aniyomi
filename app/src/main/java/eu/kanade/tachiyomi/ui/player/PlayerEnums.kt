@@ -42,7 +42,6 @@ enum class SingleActionGesture(val stringRes: StringResource) {
     Custom(stringRes = MR.strings.single_action_custom),
 }
 
-
 /**
  * Key codes sent through the `Custom` option in gestures
  */

@@ -184,12 +184,16 @@ fun GestureHandler(
                 val volumeGestureSens = 0.03f
                 val mpvVolumeGestureSens = 0.02f
                 val isIncreasingVolumeBoost: (Float) -> Boolean = {
-                    volumeBoostingCap > 0 && currentVolume == viewModel.maxVolume &&
-                        currentMPVVolume - 100 < volumeBoostingCap && it < 0
+                    volumeBoostingCap > 0 &&
+                        currentVolume == viewModel.maxVolume &&
+                        currentMPVVolume - 100 < volumeBoostingCap &&
+                        it < 0
                 }
                 val isDecreasingVolumeBoost: (Float) -> Boolean = {
-                    volumeBoostingCap > 0 && currentVolume == viewModel.maxVolume &&
-                        currentMPVVolume - 100 in 1..volumeBoostingCap && it > 0
+                    volumeBoostingCap > 0 &&
+                        currentVolume == viewModel.maxVolume &&
+                        currentMPVVolume - 100 in 1..volumeBoostingCap &&
+                        it > 0
                 }
                 detectVerticalDragGestures(
                     onDragEnd = { startingY = 0f },
@@ -224,7 +228,12 @@ fun GestureHandler(
                                 startingY = change.position.y
                             }
                             viewModel.changeVolumeTo(
-                                calculateNewVerticalGestureValue(originalVolume, startingY, change.position.y, volumeGestureSens),
+                                calculateNewVerticalGestureValue(
+                                    originalVolume,
+                                    startingY,
+                                    change.position.y,
+                                    volumeGestureSens,
+                                ),
                             )
                         }
                         viewModel.displayVolumeSlider()
@@ -232,7 +241,12 @@ fun GestureHandler(
                     val changeBrightness: () -> Unit = {
                         if (startingY == 0f) startingY = change.position.y
                         viewModel.changeBrightnessTo(
-                            calculateNewVerticalGestureValue(originalBrightness, startingY, change.position.y, brightnessGestureSens),
+                            calculateNewVerticalGestureValue(
+                                originalBrightness,
+                                startingY,
+                                change.position.y,
+                                brightnessGestureSens,
+                            ),
                         )
                         viewModel.displayBrightnessSlider()
                     }

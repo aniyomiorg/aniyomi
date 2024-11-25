@@ -30,7 +30,7 @@ fun TopLeftPlayerControls(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.small)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.small),
     ) {
         ControlsButton(
             icon = Icons.AutoMirrored.Default.ArrowBack,
@@ -39,7 +39,7 @@ fun TopLeftPlayerControls(
         Column(
             verticalArrangement = Arrangement.spacedBy(-MaterialTheme.MPVKtSpacing.extraSmall),
             modifier = Modifier
-                .clickable(onClick = onTitleClick)
+                .clickable(onClick = onTitleClick),
         ) {
             Text(
                 animeTitle,
@@ -47,7 +47,7 @@ fun TopLeftPlayerControls(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = Color.White,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
             )
             Text(
                 mediaTitle,
@@ -69,6 +69,6 @@ fun TopLeftPlayerControlsPreview() {
         animeTitle = "Bleach",
         mediaTitle = "Episode 1 - A Shinigami is born",
         onTitleClick = {},
-        onBackClick = {}
+        onBackClick = {},
     )
 }

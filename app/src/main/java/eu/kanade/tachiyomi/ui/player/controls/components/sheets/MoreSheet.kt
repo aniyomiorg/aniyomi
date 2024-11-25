@@ -105,7 +105,7 @@ fun MoreSheet(
                             TimePickerDialog(
                                 remainingTime = remainingTime,
                                 onDismissRequest = { isSleepTimerDialogShown = false },
-                                onTimeSelect = onStartTimer
+                                onTimeSelect = onStartTimer,
                             )
                         }
                     }
@@ -143,7 +143,13 @@ fun MoreSheet(
                         label = {
                             Text(
                                 stringResource(
-                                    if (page == 0) MR.strings.player_sheets_tracks_off else MR.strings.player_sheets_stats_page_chip,
+                                    if (page ==
+                                        0
+                                    ) {
+                                        MR.strings.player_sheets_tracks_off
+                                    } else {
+                                        MR.strings.player_sheets_stats_page_chip
+                                    },
                                     page,
                                 ),
                             )
@@ -163,7 +169,7 @@ fun MoreSheet(
             }
 
             // TODO(customButtons)
-            //if (customButtons.isNotEmpty()) {
+            // if (customButtons.isNotEmpty()) {
             //    Text(text = stringResource(MR.strings.player_sheets_custom_buttons_title))
             //    FlowRow(
             //        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
@@ -194,7 +200,7 @@ fun MoreSheet(
             //            }
             //        }
             //    }
-            //}
+            // }
             Text(text = stringResource(MR.strings.pref_audio_channels))
             val audioChannels by audioPreferences.audioChannels().collectAsState()
             LazyRow(
@@ -275,7 +281,13 @@ fun TimePickerDialog(
                 ) {
                     IconButton(onClick = { currentLayoutType = if (currentLayoutType == 0) 1 else 0 }) {
                         Icon(
-                            imageVector = if (currentLayoutType == 0) Icons.Outlined.Schedule else Icons.Default.KeyboardAlt,
+                            imageVector = if (currentLayoutType ==
+                                0
+                            ) {
+                                Icons.Outlined.Schedule
+                            } else {
+                                Icons.Default.KeyboardAlt
+                            },
                             contentDescription = null,
                         )
                     }

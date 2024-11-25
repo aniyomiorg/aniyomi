@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.controls.components.panels
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -109,7 +108,7 @@ fun SubtitleSettingsColorsCard(
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(Icons.Default.FormatColorReset, null)
                         Text(stringResource(MR.strings.action_reset))
@@ -157,7 +156,7 @@ enum class SubColorType(
         MR.strings.player_sheets_subtitles_color_background,
         "sub-back-color",
         preference = SubtitlePreferences::backgroundColorSubtitles,
-    )
+    ),
 }
 
 fun resetColors(preferences: SubtitlePreferences, type: SubColorType) {
@@ -167,11 +166,17 @@ fun resetColors(preferences: SubtitlePreferences, type: SubColorType) {
         }
 
         SubColorType.Border -> {
-            MPVLib.setPropertyString("sub-border-color", preferences.borderColorSubtitles().deleteAndGet().toColorHexString())
+            MPVLib.setPropertyString(
+                "sub-border-color",
+                preferences.borderColorSubtitles().deleteAndGet().toColorHexString(),
+            )
         }
 
         SubColorType.Background -> {
-            MPVLib.setPropertyString("sub-back-color", preferences.backgroundColorSubtitles().deleteAndGet().toColorHexString())
+            MPVLib.setPropertyString(
+                "sub-back-color",
+                preferences.backgroundColorSubtitles().deleteAndGet().toColorHexString(),
+            )
         }
     }
 }

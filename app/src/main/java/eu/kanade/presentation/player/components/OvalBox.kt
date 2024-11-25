@@ -19,7 +19,7 @@ object RightSideOvalShape : Shape {
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
-        density: Density
+        density: Density,
     ): Outline {
         val path = Path().apply {
             moveTo(size.width, size.height)
@@ -31,7 +31,7 @@ object RightSideOvalShape : Shape {
                 -30f,
                 size.height / 2,
                 size.width / 10,
-                size.height
+                size.height,
             )
             close()
         }
@@ -43,7 +43,7 @@ object LeftSideOvalShape : Shape {
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
-        density: Density
+        density: Density,
     ): Outline {
         val path = Path().apply {
             moveTo(0f, 0f)
@@ -55,7 +55,7 @@ object LeftSideOvalShape : Shape {
                 size.width,
                 size.height / 2,
                 size.width - size.width / 10,
-                0f
+                0f,
             )
             close()
         }
@@ -70,7 +70,7 @@ private fun PreviewRightSideOvalBox() {
         modifier = Modifier
             .fillMaxSize()
             .clip(RightSideOvalShape)
-            .background(Color.Red)
+            .background(Color.Red),
     ) {}
 }
 
@@ -81,6 +81,6 @@ private fun PreviewLeftSideOvalBox() {
         modifier = Modifier
             .fillMaxSize()
             .clip(LeftSideOvalShape)
-            .background(Color.Red)
+            .background(Color.Red),
     ) {}
 }

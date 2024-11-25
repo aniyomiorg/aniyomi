@@ -39,7 +39,7 @@ fun ChaptersSheet(
         },
         onDismissRequest = onDismissRequest,
         modifier = modifier
-            .padding(vertical = MaterialTheme.MPVKtSpacing.medium)
+            .padding(vertical = MaterialTheme.MPVKtSpacing.medium),
     )
 }
 
@@ -49,7 +49,7 @@ fun ChapterTrack(
     index: Int,
     selected: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -64,7 +64,7 @@ fun ChapterTrack(
             fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Normal,
             maxLines = 1,
             modifier = Modifier.weight(1f),
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
         Text(
             Utils.prettyTime(chapter.start.toInt()),

@@ -22,7 +22,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import tachiyomi.presentation.core.components.material.MPVKtSpacing
 
-
 @Composable
 fun TopRightPlayerControls(
     // auto-play
@@ -57,7 +56,7 @@ fun TopRightPlayerControls(
             onToggleAutoPlay = onToggleAutoPlay,
             modifier = Modifier.padding(
                 horizontal = MaterialTheme.MPVKtSpacing.small,
-            )
+            ),
         )
         ControlsButton(
             Icons.Default.Subtitles,
@@ -111,7 +110,6 @@ fun AutoPlaySwitch(
             } else {
                 ContextCompat.getDrawable(switch.context, R.drawable.ic_pause_circle_filled_24)
             }
-
         },
         modifier = modifier,
     )

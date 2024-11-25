@@ -78,7 +78,7 @@ fun PlayerSheet(
     val alpha by animateFloatAsState(
         backgroundAlpha,
         animationSpec = sheetAnimationSpec,
-        label = "alpha"
+        label = "alpha",
     )
 
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()

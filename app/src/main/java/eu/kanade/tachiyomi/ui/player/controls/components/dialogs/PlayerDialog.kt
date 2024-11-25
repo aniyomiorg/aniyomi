@@ -39,7 +39,7 @@ fun PlayerDialog(
             dismissOnClickOutside = true,
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false,
-        )
+        ),
     ) {
         Surface(
             shape = MaterialTheme.shapes.large,

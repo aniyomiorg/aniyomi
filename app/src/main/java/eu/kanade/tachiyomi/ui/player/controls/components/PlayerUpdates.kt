@@ -33,7 +33,7 @@ fun PlayerUpdate(
 @Composable
 fun TextPlayerUpdate(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     PlayerUpdate(modifier) {
         Text(text)

@@ -18,9 +18,9 @@ fun DecodersSheet(
             AudioTrackRow(
                 title = stringResource(MR.strings.player_sheets_decoder_formatted, it.title, it.value),
                 isSelected = selectedDecoder == it,
-                onClick = { onSelect(it) }
+                onClick = { onSelect(it) },
             )
         },
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
     )
 }

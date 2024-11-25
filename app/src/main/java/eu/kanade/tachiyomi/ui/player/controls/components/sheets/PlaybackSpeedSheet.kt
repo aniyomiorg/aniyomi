@@ -27,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import eu.kanade.presentation.player.components.PlayerSheet
 import eu.kanade.presentation.player.components.SliderItem
 import eu.kanade.presentation.player.components.SwitchPreference
@@ -86,7 +85,7 @@ fun PlaybackSpeedSheet(
                 ) {
                     items(
                         playbackSpeedPresets.map { it.toFloat() }.sorted(),
-                        key = { it }
+                        key = { it },
                     ) {
                         InputChip(
                             selected = speed == it,
@@ -99,7 +98,11 @@ fun PlaybackSpeedSheet(
                                     Icons.Default.Close,
                                     null,
                                     modifier = Modifier
-                                        .clickable { preferences.speedPresets().set(playbackSpeedPresets.minus(it.toFixed(2).toString())) },
+                                        .clickable {
+                                            preferences.speedPresets().set(
+                                                playbackSpeedPresets.minus(it.toFixed(2).toString()),
+                                            )
+                                        },
                                 )
                             },
                         )

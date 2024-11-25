@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.controls.components.panels
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -92,7 +91,7 @@ fun SubtitleDelayPanel(
         LaunchedEffect(affectedSubtitle) {
             secondaryDelay = (
                 MPVLib.getPropertyDouble(
-                    if (affectedSubtitle == SubtitleDelayType.Both) "sub-delay" else "secondary-sub-delay"
+                    if (affectedSubtitle == SubtitleDelayType.Both) "sub-delay" else "secondary-sub-delay",
                 ) * 1000
                 ).toInt()
             delay = (MPVLib.getPropertyDouble("sub-delay") * 1000).toInt()
@@ -351,5 +350,6 @@ fun SubtitleDelayTitle(
 }
 
 enum class DelayType {
-    Audio, Subtitle
+    Audio,
+    Subtitle,
 }
