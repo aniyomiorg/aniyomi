@@ -175,8 +175,6 @@ class PlayerActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
-
-        private const val MAX_BRIGHTNESS = 255F
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -1214,7 +1212,4 @@ class PlayerActivity : BaseActivity() {
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.start }
         viewModel.updateChapters(combinedChapters)
     }
-
-
-    
 }

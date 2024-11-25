@@ -31,7 +31,6 @@ class PlayerObserver(val activity: PlayerActivity) :
     }
 
     override fun efEvent(err: String?) {
-
         var errorMessage = err ?: "Error: File ended"
         if (!httpError.isNullOrEmpty()) {
             errorMessage += ": $httpError"
@@ -39,7 +38,6 @@ class PlayerObserver(val activity: PlayerActivity) :
         }
         logcat(LogPriority.ERROR) { errorMessage }
         activity.runOnUiThread {
-            // activity.showLoadingIndicator(false)
             activity.toast(errorMessage, Toast.LENGTH_LONG)
         }
     }

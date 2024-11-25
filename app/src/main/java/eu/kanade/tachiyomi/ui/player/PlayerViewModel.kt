@@ -122,8 +122,6 @@ class PlayerViewModel @JvmOverloads constructor(
     private val basePreferences: BasePreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
-    private val _episodeList = MutableStateFlow<List<Episode>>(emptyList())
-    val episodeList = _episodeList.asStateFlow()
 
     private val _currentPlaylist = MutableStateFlow<List<Episode>>(emptyList())
     val currentPlaylist = _currentPlaylist.asStateFlow()
@@ -142,9 +140,6 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private val _currentSource = MutableStateFlow<AnimeSource?>(null)
     val currentSource = _currentSource.asStateFlow()
-
-    private val _videoStreams = MutableStateFlow(VideoStreams())
-    val videoStreams = _videoStreams.asStateFlow()
 
     private val _isLoadingEpisode = MutableStateFlow(false)
     val isLoadingEpisode = _isLoadingEpisode.asStateFlow()
@@ -267,7 +262,6 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     fun updateEpisodeList(episodeList: List<Episode>) {
-        _episodeList.update { _ -> episodeList }
         _currentPlaylist.update { _ -> filterEpisodeList(episodeList) }
     }
 
@@ -532,10 +526,6 @@ class PlayerViewModel @JvmOverloads constructor(
     fun seekTo(position: Int, precise: Boolean = true) {
         if (position !in 0..(activity.player.duration ?: 0)) return
         MPVLib.command(arrayOf("seek", position.toString(), if (precise) "absolute" else "absolute+keyframes"))
-    }
-
-    fun changeBrightnessBy(change: Float) {
-        changeBrightnessTo(currentBrightness.value + change)
     }
 
     fun changeBrightnessTo(
@@ -849,19 +839,6 @@ class PlayerViewModel @JvmOverloads constructor(
     fun updateHasPreviousEpisode(value: Boolean) {
         _hasPreviousEpisode.update { _ -> value }
     }
-
-
-    /*
-    override fun onCleared() {
-        if (currentEpisode != null) {
-            saveWatchingProgress(currentEpisode!!)
-            episodeToDownload?.let {
-                downloadManager.addDownloadsToStartOfQueue(listOf(it))
-            }
-        }
-    }
-
-     */
 
     /**
      * Called when the activity is saved and not changing configurations. It updates the database
@@ -1446,25 +1423,6 @@ class PlayerViewModel @JvmOverloads constructor(
                 text = activity.stringResource(MR.strings.player_aniskip_skip, skipType!!.getString())
             )
         }
-    }
-
-    class VideoStreams(val quality: Stream, val subtitle: Stream, val audio: Stream) {
-        constructor() : this(Stream(), Stream(), Stream())
-        class Stream(var index: Int = 0, var tracks: Array<Track> = emptyArray())
-    }
-
-    sealed class Dialog {
-        object EpisodeList : Dialog()
-        object SpeedPicker : Dialog()
-        object SkipIntroLength : Dialog()
-    }
-
-    sealed class Sheet {
-        object SubtitleSettings : Sheet()
-        object ScreenshotOptions : Sheet()
-        object PlayerSettings : Sheet()
-        object VideoChapters : Sheet()
-        object StreamsCatalog : Sheet()
     }
 
     sealed class Event {
