@@ -181,9 +181,9 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _paused = MutableStateFlow(false)
     val paused = _paused.asStateFlow()
 
-    private val _controlsShown = MutableStateFlow(true)
+    private val _controlsShown = MutableStateFlow(!playerPreferences.hideControls().get())
     val controlsShown = _controlsShown.asStateFlow()
-    private val _seekBarShown = MutableStateFlow(true)
+    private val _seekBarShown = MutableStateFlow(!playerPreferences.hideControls().get())
     val seekBarShown = _seekBarShown.asStateFlow()
     private val _areControlsLocked = MutableStateFlow(false)
     val areControlsLocked = _areControlsLocked.asStateFlow()
