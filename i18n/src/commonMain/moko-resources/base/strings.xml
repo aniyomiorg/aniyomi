@@ -248,8 +248,6 @@
     <string name="pref_skip_disable">Disable</string>
     <string name="pref_player_smooth_seek">Enable precise seeking</string>
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
-    <string name="pref_media_control_chapter_seeking">Seek chapters with media controls</string>
-    <string name="pref_media_control_chapter_seeking_summary">When enabled, using next will invoke the skip intro button if no chapters are found</string>
     <string name="pref_category_player_aniskip_info">AniSkip requires the anime to be tracked with MAL or Anilist to work</string>
     <string name="pref_enable_aniskip">Enable AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Enable auto skip</string>

@@ -56,7 +56,6 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
         val defaultSkipIntroLength by gesturePreferences.defaultIntroLength().stateIn(scope).collectAsState()
         val skipLengthPreference = gesturePreferences.skipLengthPreference()
         val playerSmoothSeek = gesturePreferences.playerSmoothSeek()
-        val mediaChapterSeek = gesturePreferences.mediaChapterSeek()
 
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
@@ -110,11 +109,6 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
                     pref = playerSmoothSeek,
                     title = stringResource(MR.strings.pref_player_smooth_seek),
                     subtitle = stringResource(MR.strings.pref_player_smooth_seek_summary),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = mediaChapterSeek,
-                    title = stringResource(MR.strings.pref_media_control_chapter_seeking),
-                    subtitle = stringResource(MR.strings.pref_media_control_chapter_seeking_summary),
                 ),
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(MR.strings.pref_category_player_aniskip_info),
