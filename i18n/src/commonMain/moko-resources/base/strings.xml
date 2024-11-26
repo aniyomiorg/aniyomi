@@ -246,8 +246,22 @@
     <string name="pref_skip_5" translatable="false">5s</string>
     <string name="pref_skip_3" translatable="false">3s</string>
     <string name="pref_skip_disable">Disable</string>
+    <string name="pref_player_smooth_seek">Enable precise seeking</string>
+    <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
     <string name="pref_media_control_chapter_seeking">Seek chapters with media controls</string>
     <string name="pref_media_control_chapter_seeking_summary">When enabled, using next will invoke the skip intro button if no chapters are found</string>
+    <string name="pref_category_player_aniskip_info">AniSkip requires the anime to be tracked with MAL or Anilist to work</string>
+    <string name="pref_enable_aniskip">Enable AniSkip</string>
+    <string name="pref_enable_auto_skip_ani_skip">Enable auto skip</string>
+    <string name="pref_enable_netflix_style_aniskip">Enable Netflix style</string>
+    <string name="pref_waiting_time_aniskip">Button timeout</string>
+    <string name="pref_waiting_time_aniskip_5">5 seconds</string>
+    <string name="pref_waiting_time_aniskip_6">6 seconds</string>
+    <string name="pref_waiting_time_aniskip_7">7 seconds</string>
+    <string name="pref_waiting_time_aniskip_8">8 seconds</string>
+    <string name="pref_waiting_time_aniskip_9">9 seconds</string>
+    <string name="pref_waiting_time_aniskip_10">10 seconds</string>
+
     <string name="pref_category_double_tap">Double tap</string>
     <string name="pref_left_double_tap">Double tap (left)</string>
     <string name="pref_center_double_tap">Double tap (center)</string>
@@ -317,6 +331,12 @@
 
     <!-- Player -->
 
+    <!-- Player - aniskip -->
+    <string name="player_aniskip_op">Skip Opening</string>
+    <string name="player_aniskip_ed">Skip Ending</string>
+    <string name="player_aniskip_mixedOp">Skip MixedOp</string>
+    <string name="player_aniskip_recap">Skip Recap</string>
+
     <!-- Player - Bottom left -->
     <string name="player_speed" translatable="false">%.2fx</string>
 
@@ -326,6 +346,7 @@
     <string name="video_stretch_screen">Stretched to screen</string>
 
     <!-- Other -->
+    <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
     <string name="toast_sleep_timer_ended">Sleep timer ended</string>
     <string name="player_generic_unit_ms">ms</string>
     <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
@@ -435,6 +456,9 @@
     <!-- Sheets - Subtitle tracks -->
     <string name="player_sheets_add_ext_sub">Add external subtitles</string>
     <string name="player_sheets_subtitles_footer_secondary_sid_no_styles">Secondary subtitles will have no ASS/SSA Styling.</string>
+
+    <!-- Sheets - screenshot -->
+    <string name="screenshot_show_subs">Include Subtitles</string>
 
     <!-- Subsections -->
     <string name="pref_category_general">General</string>
@@ -1134,7 +1158,6 @@
     <string name="action_play">Play</string>
     <string name="action_next_episode">Next episode</string>
     <string name="action_screen_fit">Screen fit mode</string>
-    <string name="action_player_pip">PiP mode</string>
     <string name="action_show_manga">Show manga</string>
     <string name="action_show_anime">Show anime</string>
     <string name="action_display_download_badge_anime">Downloaded episodes</string>
@@ -1148,7 +1171,6 @@
     <string name="action_order_by_episode_number">By episode number</string>
     <string name="action_start_download_externally">Use external downloader</string>
     <string name="action_start_download_internally">Use internal downloader</string>
-    <string name="pref_player_summary">Progress control, internal player, external player</string>
     <string name="pref_bottom_nav_style">Bottom navigation style</string>
     <string name="pref_default_home_tab_library">Set start screen to Manga Tab</string>
     <string name="pref_update_only_completely_read">Skip entries with unseen episode(s)/unread chapter(s)</string>
@@ -1159,17 +1181,6 @@
     <string name="pref_anime_library_update_categories_details">Anime in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="unofficial_extension_message_aniyomi">This extension is not from the official list.</string>
     <string name="unofficial_anime_extension_message">This extension is not from the official list.</string>
-    <string name="pref_category_player">Player</string>
-    <string name="pref_category_progress">Progress</string>
-    <string name="pref_category_internal_player">Internal player</string>
-    <string name="go_to_next_chapter">Next chapter</string>
-    <string name="go_to_previous_chapter">Previous chapter</string>
-    <string name="go_to_after_opening">Skipped opening</string>
-    <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
-    <string name="pref_player_smooth_seek">Enable precise seeking</string>
-    <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
-    <string name="pref_sub_select_conf">Edit advanced subtitle track select configuration</string>
-    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Delete chapters/episodes</string>
     <string name="pref_remove_after_marked_as_read">After manually marked as read/watched</string>
@@ -1237,14 +1248,6 @@
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Progress: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progress: %1$s</string>
-    <string name="screenshot_header">Take screenshot</string>
-    <string name="screenshot_show_subs">Include Subtitles</string>
-    <string name="toggle_player_statistics_page">Toggle statistics page</string>
-    <string name="player_statistics_page_1">Page 1</string>
-    <string name="player_statistics_page_2">Page 2</string>
-    <string name="player_statistics_page_3">Page 3</string>
-    <string name="pref_category_player_advanced">Advanced player settings</string>
-    <string name="pref_category_player_advanced_subtitle">Debanding, mpv.conf… etc</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
     <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
@@ -1257,40 +1260,12 @@
     <string name="download_notifier_download_paused_episodes">Episode download paused</string>
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
     <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
-    <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="label_storage">Storage</string>
     <string name="label_history">Manga</string>
     <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
     <string name="label_anime_updates">Anime</string>
-    <string name="player_overlay_back">Back</string>
-    <string name="video_custom_screen">Custom aspect ratio</string>
-    <string name="playback_speed_dialog_title">Change playback speed:</string>
-    <string name="playback_speed_dialog_reset">Reset</string>
-    <string name="settings_dialog_header">Player settings</string>
-    <string name="quality_dialog_header">Video quality</string>
-    <string name="chapter_dialog_header">Seek to chapter</string>
-    <string name="subtitle_dialog_header">Subtitle</string>
-    <string name="audio_dialog_header">Audio</string>
-    <string name="playback_options_speed">Playback speed</string>
-    <string name="playback_options_quality">Video quality</string>
-    <string name="playback_options_title">Playback options</string>
     <string name="action_change_intro_length">Change intro length</string>
-    <string name="player_aniskip_op">Skip Opening</string>
-    <string name="player_aniskip_ed">Skip Ending</string>
-    <string name="player_aniskip_mixedOp">Skip MixedOp</string>
-    <string name="player_aniskip_recap">Skip Recap</string>
-    <string name="pref_category_player_aniskip_info">AniSkip requires the anime to be tracked with MAL or Anilist to work</string>
-    <string name="pref_enable_aniskip">Enable AniSkip</string>
-    <string name="pref_enable_auto_skip_ani_skip">Enable auto skip</string>
-    <string name="pref_waiting_time_aniskip">Button timeout</string>
-    <string name="pref_waiting_time_aniskip_5">5 seconds</string>
-    <string name="pref_waiting_time_aniskip_6">6 seconds</string>
-    <string name="pref_waiting_time_aniskip_7">7 seconds</string>
-    <string name="pref_waiting_time_aniskip_8">8 seconds</string>
-    <string name="pref_waiting_time_aniskip_9">9 seconds</string>
-    <string name="pref_waiting_time_aniskip_10">10 seconds</string>
-    <string name="pref_enable_netflix_style_aniskip">Enable Netflix style</string>
     <string name="notification_episodes_single">Episode %1$s</string>
     <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
     <string name="notification_episodes_multiple">Episodes %1$s</string>
@@ -1306,33 +1281,11 @@
     <string name="extension_settings">Extension settings</string>
     <string name="theme_cottoncandy">Cotton Candy</string>
     <string name="theme_mocha">Mocha</string>
-    <string name="action_save_screenshot">Save screenshot</string>
     <string name="pref_episode_swipe">Episode swipe</string>
     <string name="pref_episode_swipe_end">Swipe to right action</string>
     <string name="pref_episode_swipe_start">Swipe to left action</string>
     <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
     <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
-    <string name="player_subtitle_settings_example">Lorem ipsum dolor sit amet.</string>
-    <string name="player_subtitle_settings_filters">Filters</string>
-    <string name="player_subtitle_settings_delay_tab">Delay</string>
-    <string name="player_subtitle_settings_font_tab">Font</string>
-    <string name="player_subtitle_settings_color_tab">Color</string>
-    <string name="player_subtitle_settings">Subtitle settings</string>
-    <string name="player_add_external_audio">Add external audio</string>
-    <string name="player_add_external_audio_intent">Select an audio file.</string>
-    <string name="player_add_external_subtitles">Add external subtitles</string>
-    <string name="player_add_external_subtitles_intent">Select a subtitle file.</string>
-    <string name="player_subtitle_empty_warning">Has no effect because there aren\'t any subtitle tracks in this video</string>
-    <string name="player_override_ass_subtitles">Override ASS subtitles</string>
-    <string name="player_reset_subtitles">Reset subtitles to default</string>
-    <string name="player_subtitle_delay">Subtitle delay</string>
-    <string name="player_audio_delay">Audio delay</string>
-    <string name="player_track_delay_text_field">Delay(s)</string>
-    <string name="player_font_size_text_field">Font size</string>
-    <string name="player_subtitle_text_color">Text</string>
-    <string name="player_subtitle_border_color">Border</string>
-    <string name="player_subtitle_background_color">Background</string>
-    <string name="player_subtitle_font_text_field">Font Name</string>
     <string name="data_saver_exclude">Exclude from data saver</string>
     <string name="data_saver_stop_exclude">Stop excluding from data saver</string>
     <string name="data_saver">Data Saver</string>
