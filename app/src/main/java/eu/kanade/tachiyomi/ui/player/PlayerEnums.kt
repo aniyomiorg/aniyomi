@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-
-
 package eu.kanade.tachiyomi.ui.player
 
 import dev.icerock.moko.resources.StringResource
