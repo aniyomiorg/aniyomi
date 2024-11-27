@@ -327,7 +327,8 @@ class PlayerActivity : BaseActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (isPipSupportedAndEnabled && player.paused == false && playerPreferences.pipOnExit().get()) {
-            if (viewModel.sheetShown.value == Sheets.None && viewModel.panelShown.value == Panels.None &&
+            if (viewModel.sheetShown.value == Sheets.None &&
+                viewModel.panelShown.value == Panels.None &&
                 viewModel.dialogShown.value == Dialogs.None
             ) {
                 enterPictureInPictureMode()
