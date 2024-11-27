@@ -50,7 +50,7 @@ import eu.kanade.tachiyomi.ui.player.settings.AudioChannels
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -79,8 +79,8 @@ fun MoreSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.MPVKtSpacing.medium),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                .padding(MaterialTheme.padding.medium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -93,7 +93,7 @@ fun MoreSheet(
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                 ) {
                     var isSleepTimerDialogShown by remember { mutableStateOf(false) }
                     IconToggleButton(
@@ -112,7 +112,7 @@ fun MoreSheet(
                     TextButton(onClick = onEnterFiltersPanel) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                         ) {
                             Icon(imageVector = Icons.Default.Tune, contentDescription = null)
                             Text(text = stringResource(MR.strings.player_sheets_filters_title))
@@ -123,7 +123,7 @@ fun MoreSheet(
 
             Text(stringResource(MR.strings.player_hwdec_mode))
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 items(Decoder.entries.minus(Decoder.Auto)) { decoder ->
                     FilterChip(
@@ -136,7 +136,7 @@ fun MoreSheet(
 
             Text(stringResource(MR.strings.player_sheets_stats_page_title))
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 items(6) { page ->
                     FilterChip(
@@ -204,7 +204,7 @@ fun MoreSheet(
             Text(text = stringResource(MR.strings.pref_audio_channels))
             val audioChannels by audioPreferences.audioChannels().collectAsState()
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 items(AudioChannels.entries) {
                     FilterChip(
@@ -241,14 +241,14 @@ fun TimePickerDialog(
         Surface(
             shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.surface,
-            modifier = modifier.padding(MaterialTheme.MPVKtSpacing.medium),
+            modifier = modifier.padding(MaterialTheme.padding.medium),
         ) {
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .width(IntrinsicSize.Max)
                     .animateContentSize()
-                    .padding(MaterialTheme.MPVKtSpacing.medium),
+                    .padding(MaterialTheme.padding.medium),
             ) {
                 var currentLayoutType by rememberSaveable { mutableIntStateOf(0) }
                 Text(

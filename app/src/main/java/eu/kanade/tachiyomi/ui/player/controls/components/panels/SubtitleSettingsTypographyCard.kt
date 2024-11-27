@@ -55,7 +55,7 @@ import kotlinx.coroutines.withContext
 import tachiyomi.core.common.preference.deleteAndGet
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -102,7 +102,7 @@ fun SubtitleSettingsTypographyCard(
         onExpand = { isExpanded = !isExpanded },
         title = {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
             ) {
                 Icon(Icons.Default.FormatColorText, null)
                 Text(stringResource(MR.strings.player_sheets_sub_typography_title))
@@ -144,7 +144,7 @@ fun SubtitleSettingsTypographyCard(
                 Modifier
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState())
-                    .padding(start = MaterialTheme.MPVKtSpacing.extraSmall, end = MaterialTheme.MPVKtSpacing.medium),
+                    .padding(start = MaterialTheme.padding.extraSmall, end = MaterialTheme.padding.medium),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconToggleButton(
@@ -208,7 +208,7 @@ fun SubtitleSettingsTypographyCard(
                     shadowOffset = MPVLib.getPropertyInt("sub-shadow-offset")
                 }) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(Icons.Default.FormatClear, null)
@@ -217,8 +217,8 @@ fun SubtitleSettingsTypographyCard(
                 }
             }
             Row(
-                modifier = Modifier.padding(horizontal = MaterialTheme.MPVKtSpacing.medium),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium),
+                modifier = Modifier.padding(horizontal = MaterialTheme.padding.medium),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(

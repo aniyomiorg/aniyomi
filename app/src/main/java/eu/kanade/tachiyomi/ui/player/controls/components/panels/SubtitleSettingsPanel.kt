@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import eu.kanade.tachiyomi.ui.player.controls.CARDS_MAX_WIDTH
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
@@ -64,7 +64,7 @@ fun SubtitleSettingsPanel(
                     top.linkTo(parent.top, 32.dp)
                     start.linkTo(parent.start)
                 },
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
             ) {
                 TopAppBar(
                     title = {
@@ -84,8 +84,8 @@ fun SubtitleSettingsPanel(
                     state = pagerState,
                     pageSize = PageSize.Fixed(LocalConfiguration.current.screenWidthDp.dp * 0.9f),
                     verticalAlignment = Alignment.Top,
-                    pageSpacing = MaterialTheme.MPVKtSpacing.smaller,
-                    contentPadding = PaddingValues(horizontal = MaterialTheme.MPVKtSpacing.smaller),
+                    pageSpacing = MaterialTheme.padding.small,
+                    contentPadding = PaddingValues(horizontal = MaterialTheme.padding.small),
                     beyondViewportPageCount = 1,
                 ) { page ->
                     cards(page, Modifier.fillMaxWidth())
@@ -94,7 +94,7 @@ fun SubtitleSettingsPanel(
         } else {
             Column(
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                 modifier = Modifier
                     .constrainAs(subSettingsCards) {
                         top.linkTo(parent.top)

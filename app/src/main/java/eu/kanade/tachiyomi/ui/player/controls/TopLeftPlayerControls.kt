@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun TopLeftPlayerControls(
@@ -30,14 +30,14 @@ fun TopLeftPlayerControls(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.small),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.mediumSmall),
     ) {
         ControlsButton(
             icon = Icons.AutoMirrored.Default.ArrowBack,
             onClick = onBackClick,
         )
         Column(
-            verticalArrangement = Arrangement.spacedBy(-MaterialTheme.MPVKtSpacing.extraSmall),
+            verticalArrangement = Arrangement.spacedBy(-MaterialTheme.padding.extraSmall),
             modifier = Modifier
                 .clickable(onClick = onTitleClick),
         ) {

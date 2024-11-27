@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun PlayerUpdate(
@@ -24,7 +24,7 @@ fun PlayerUpdate(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .background(Color.Black.copy(0.4f))
-            .padding(vertical = MaterialTheme.MPVKtSpacing.smaller, horizontal = MaterialTheme.MPVKtSpacing.medium)
+            .padding(vertical = MaterialTheme.padding.small, horizontal = MaterialTheme.padding.medium)
             .animateContentSize(),
         contentAlignment = Alignment.Center,
     ) { content() }

@@ -16,7 +16,7 @@ import dev.vivvvek.seeker.Segment
 import `is`.xyz.mpv.Utils
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
@@ -39,7 +39,7 @@ fun ChaptersSheet(
         },
         onDismissRequest = onDismissRequest,
         modifier = modifier
-            .padding(vertical = MaterialTheme.MPVKtSpacing.medium),
+            .padding(vertical = MaterialTheme.padding.medium),
     )
 }
 
@@ -55,7 +55,7 @@ fun ChapterTrack(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(vertical = MaterialTheme.MPVKtSpacing.smaller, horizontal = MaterialTheme.MPVKtSpacing.medium),
+            .padding(vertical = MaterialTheme.padding.small, horizontal = MaterialTheme.padding.medium),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(

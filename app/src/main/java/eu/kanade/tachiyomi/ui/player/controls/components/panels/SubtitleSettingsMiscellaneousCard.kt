@@ -31,7 +31,7 @@ import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.common.preference.deleteAndGet
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -43,7 +43,7 @@ fun SubtitlesMiscellaneousCard(modifier: Modifier = Modifier) {
     ExpandableCard(
         isExpanded,
         title = {
-            Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium)) {
                 Icon(Icons.Default.Tune, null)
                 Text(stringResource(MR.strings.player_sheets_sub_misc_title))
             }
@@ -108,7 +108,7 @@ fun SubtitlesMiscellaneousCard(modifier: Modifier = Modifier) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = MaterialTheme.MPVKtSpacing.medium, bottom = MaterialTheme.MPVKtSpacing.medium),
+                    .padding(end = MaterialTheme.padding.medium, bottom = MaterialTheme.padding.medium),
                 horizontalArrangement = Arrangement.End,
             ) {
                 TextButton(

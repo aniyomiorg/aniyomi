@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
@@ -65,9 +65,9 @@ fun SubtitlesSheet(
         footer = {
             Column(
                 modifier = modifier
-                    .padding(MaterialTheme.MPVKtSpacing.medium)
+                    .padding(MaterialTheme.padding.medium)
                     .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
                 horizontalAlignment = Alignment.Start,
             ) {
                 Icon(Icons.Outlined.Info, null)
@@ -89,7 +89,7 @@ fun SubtitleTrackRow(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(start = MaterialTheme.MPVKtSpacing.smaller, end = MaterialTheme.MPVKtSpacing.medium),
+            .padding(start = MaterialTheme.padding.small, end = MaterialTheme.padding.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(

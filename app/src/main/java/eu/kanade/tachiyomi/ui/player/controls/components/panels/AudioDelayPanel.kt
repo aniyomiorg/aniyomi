@@ -25,7 +25,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -40,7 +40,7 @@ fun AudioDelayPanel(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .padding(MaterialTheme.MPVKtSpacing.medium),
+            .padding(MaterialTheme.padding.medium),
     ) {
         val delayControlCard = createRef()
 

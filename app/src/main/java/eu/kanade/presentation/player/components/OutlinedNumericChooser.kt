@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
@@ -38,7 +38,7 @@ fun OutlinedNumericChooser(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         RepeatingIconButton(onClick = { onChange(value - step) }) {
             Icon(Icons.Filled.RemoveCircle, null)
@@ -92,7 +92,7 @@ fun OutlinedNumericChooser(
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         RepeatingIconButton(onClick = { onChange(value - step) }) {
             Icon(Icons.Filled.RemoveCircle, null)

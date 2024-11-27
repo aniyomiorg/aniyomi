@@ -25,7 +25,7 @@ import eu.kanade.presentation.player.components.PlayerSheet
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
@@ -66,15 +66,15 @@ fun AddTrackRow(
             .clickable(onClick = onClick)
             .height(48.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         Row(
             modifier = Modifier
                 .clickable(onClick = onClick)
                 .fillMaxHeight()
                 .weight(1f)
-                .padding(start = MaterialTheme.MPVKtSpacing.medium),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                .padding(start = MaterialTheme.padding.medium),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(

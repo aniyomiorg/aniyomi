@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -55,7 +55,7 @@ fun ExpandableCard(
         Row(
             modifier = Modifier
                 .clickable(onClick = { onExpand(!isExpanded) })
-                .padding(start = MaterialTheme.MPVKtSpacing.medium),
+                .padding(start = MaterialTheme.padding.medium),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             title(isExpanded)

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.ui.player.controls.LocalPlayerButtonsClickEvent
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun ControlsButton(
@@ -33,7 +33,7 @@ fun ControlsButton(
     onLongClick: () -> Unit = {},
     title: String? = null,
     color: Color = Color.White,
-    horizontalSpacing: Dp = MaterialTheme.MPVKtSpacing.medium,
+    horizontalSpacing: Dp = MaterialTheme.padding.medium,
     iconSize: Dp = 20.dp,
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
@@ -60,7 +60,7 @@ fun ControlsButton(
                 ripple(),
             )
             .padding(
-                vertical = MaterialTheme.MPVKtSpacing.medium,
+                vertical = MaterialTheme.padding.medium,
                 horizontal = horizontalSpacing,
             ),
     ) {
@@ -101,7 +101,7 @@ fun ControlsButton(
                 interactionSource,
                 ripple(),
             )
-            .padding(MaterialTheme.MPVKtSpacing.medium),
+            .padding(MaterialTheme.padding.medium),
     ) {
         Text(
             text,

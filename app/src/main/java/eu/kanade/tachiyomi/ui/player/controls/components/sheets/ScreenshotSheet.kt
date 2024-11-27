@@ -22,7 +22,7 @@ import eu.kanade.presentation.player.components.SwitchPreference
 import eu.kanade.tachiyomi.ui.player.controls.components.dialogs.PlayerDialog
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ActionButton
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import java.io.InputStream
 
@@ -49,8 +49,8 @@ fun ScreenshotSheet(
     ) {
         Column {
             Row(
-                modifier = Modifier.padding(vertical = MaterialTheme.MPVKtSpacing.medium),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                modifier = Modifier.padding(vertical = MaterialTheme.padding.medium),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 ActionButton(
                     modifier = Modifier.weight(1f),
@@ -83,7 +83,7 @@ fun ScreenshotSheet(
                     value = showSubtitles,
                     onValueChange = onToggleShowSubtitles,
                     modifier = Modifier.padding(
-                        MaterialTheme.MPVKtSpacing.medium,
+                        MaterialTheme.padding.medium,
                     ),
                     content = {
                         Text(
@@ -100,7 +100,7 @@ fun ScreenshotSheet(
     if (showSetCoverDialog) {
         PlayerDialog(
             titleRes = MR.strings.confirm_set_image_as_cover,
-            modifier = Modifier.fillMaxWidth(fraction = 0.6F).padding(MaterialTheme.MPVKtSpacing.medium),
+            modifier = Modifier.fillMaxWidth(fraction = 0.6F).padding(MaterialTheme.padding.medium),
             onConfirmRequest = {
                 onSetAsCover {
                     takeScreenshot(

@@ -32,7 +32,7 @@ import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.common.preference.deleteAndGet
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -46,7 +46,7 @@ fun VideoFiltersPanel(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .padding(MaterialTheme.MPVKtSpacing.medium),
+            .padding(MaterialTheme.padding.medium),
     ) {
         val filtersCard = createRef()
 
@@ -74,7 +74,7 @@ fun FiltersCard(
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(start = MaterialTheme.MPVKtSpacing.medium),
+                .padding(start = MaterialTheme.padding.medium),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -84,7 +84,7 @@ fun FiltersCard(
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
             ) {
                 TextButton(
                     onClick = {
@@ -117,9 +117,9 @@ fun FiltersCard(
                 if (decoderPreferences.gpuNext().get()) return@item
                 Column(
                     modifier = Modifier
-                        .padding(MaterialTheme.MPVKtSpacing.medium)
+                        .padding(MaterialTheme.padding.medium)
                         .fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
                     horizontalAlignment = Alignment.Start,
                 ) {
                     Icon(Icons.Outlined.Info, null)

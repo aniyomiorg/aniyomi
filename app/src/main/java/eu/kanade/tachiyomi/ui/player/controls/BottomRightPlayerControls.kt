@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import tachiyomi.presentation.core.components.material.Button
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun BottomRightPlayerControls(
@@ -31,7 +31,7 @@ fun BottomRightPlayerControls(
     Row(modifier) {
         if (aniskipButton != null) {
             Box(
-                modifier = Modifier.padding(end = MaterialTheme.MPVKtSpacing.smaller),
+                modifier = Modifier.padding(end = MaterialTheme.padding.small),
             ) {
                 Button(onClick = {}) {
                     Text(text = aniskipButton)

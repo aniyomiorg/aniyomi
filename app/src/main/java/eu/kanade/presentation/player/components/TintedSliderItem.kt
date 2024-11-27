@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import kotlin.math.max
 import kotlin.math.min
 
@@ -40,11 +40,11 @@ fun TintedSliderItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                horizontal = MaterialTheme.MPVKtSpacing.medium,
-                vertical = MaterialTheme.MPVKtSpacing.smaller,
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
             ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.large),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.large),
     ) {
         icon()
         Column(modifier = Modifier.weight(0.5f)) {

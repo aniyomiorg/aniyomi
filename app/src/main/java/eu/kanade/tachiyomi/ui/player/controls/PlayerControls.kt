@@ -60,7 +60,7 @@ import `is`.xyz.mpv.MPVLib
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -75,7 +75,7 @@ fun PlayerControls(
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val spacing = MaterialTheme.MPVKtSpacing
+    val spacing = MaterialTheme.padding
     val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
     val gesturePreferences = remember { Injekt.get<GesturePreferences>() }
     val audioPreferences = remember { Injekt.get<AudioPreferences>() }
@@ -182,7 +182,7 @@ fun PlayerControls(
                         ),
                         alpha = transparentOverlay,
                     )
-                    .padding(horizontal = MaterialTheme.MPVKtSpacing.medium),
+                    .padding(horizontal = MaterialTheme.padding.medium),
             ) {
                 val (topLeftControls, topRightControls) = createRefs()
                 val (volumeSlider, brightnessSlider) = createRefs()

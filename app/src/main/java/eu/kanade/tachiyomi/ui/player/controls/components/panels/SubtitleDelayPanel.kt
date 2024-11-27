@@ -47,7 +47,7 @@ import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.delay
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -64,7 +64,7 @@ fun SubtitleDelayPanel(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .padding(MaterialTheme.MPVKtSpacing.medium),
+            .padding(MaterialTheme.padding.medium),
     ) {
         val delayControlCard = createRef()
 
@@ -203,10 +203,10 @@ fun DelayCard(
             Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(
-                    horizontal = MaterialTheme.MPVKtSpacing.medium,
-                    vertical = MaterialTheme.MPVKtSpacing.smaller,
+                    horizontal = MaterialTheme.padding.medium,
+                    vertical = MaterialTheme.padding.small,
                 ),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
         ) {
             title()
             OutlinedNumericChooser(
@@ -224,7 +224,7 @@ fun DelayCard(
             // true (heard -> spotted), false (spotted -> heard)
             var isDirectionPositive by remember { mutableStateOf<Boolean?>(null) }
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 var timerStart by remember { mutableStateOf<Long?>(null) }
                 var finalDelay by remember { mutableIntStateOf(delay) }
@@ -279,7 +279,7 @@ fun DelayCard(
                 }
             }
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 Button(
                     onClick = onApply,
@@ -308,7 +308,7 @@ fun SubtitleDelayTitle(
 ) {
     Row(
         verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
         modifier = modifier.fillMaxWidth(),
     ) {
         Text(

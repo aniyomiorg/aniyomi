@@ -44,7 +44,7 @@ import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.deleteAndGet
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -60,7 +60,7 @@ fun SubtitleSettingsColorsCard(
         onExpand = { isExpanded = !isExpanded },
         title = {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
             ) {
                 Icon(Icons.Default.Palette, null)
                 Text(stringResource(MR.strings.player_sheets_sub_colors_title))
@@ -81,7 +81,7 @@ fun SubtitleSettingsColorsCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState())
-                    .padding(start = MaterialTheme.MPVKtSpacing.extraSmall, end = MaterialTheme.MPVKtSpacing.medium),
+                    .padding(start = MaterialTheme.padding.extraSmall, end = MaterialTheme.padding.medium),
             ) {
                 SubColorType.entries.forEach { type ->
                     IconToggleButton(
@@ -107,7 +107,7 @@ fun SubtitleSettingsColorsCard(
                     },
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(Icons.Default.FormatColorReset, null)

@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun SliderItem(
@@ -41,11 +41,11 @@ fun SliderItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                horizontal = MaterialTheme.MPVKtSpacing.medium,
-                vertical = MaterialTheme.MPVKtSpacing.smaller,
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
             ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.large),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.large),
     ) {
         icon()
         Column(modifier = Modifier.weight(0.5f)) {
@@ -90,11 +90,11 @@ fun SliderItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                horizontal = MaterialTheme.MPVKtSpacing.medium,
-                vertical = MaterialTheme.MPVKtSpacing.smaller,
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
             ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.large),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.large),
     ) {
         icon()
         Column(modifier = Modifier.weight(0.5f)) {
@@ -138,10 +138,10 @@ fun VerticalSliderItem(
         modifier = modifier
             .fillMaxHeight()
             .padding(
-                horizontal = MaterialTheme.MPVKtSpacing.medium,
-                vertical = MaterialTheme.MPVKtSpacing.smaller,
+                horizontal = MaterialTheme.padding.medium,
+                vertical = MaterialTheme.padding.small,
             ),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.larger),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         icon()

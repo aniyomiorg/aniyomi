@@ -20,7 +20,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun TopRightPlayerControls(
@@ -55,34 +55,34 @@ fun TopRightPlayerControls(
             isChecked = autoPlayEnabled,
             onToggleAutoPlay = onToggleAutoPlay,
             modifier = Modifier.padding(
-                horizontal = MaterialTheme.MPVKtSpacing.small,
+                horizontal = MaterialTheme.padding.mediumSmall,
             ),
         )
         ControlsButton(
             Icons.Default.Subtitles,
             onClick = onSubtitlesClick,
             onLongClick = onSubtitlesLongClick,
-            horizontalSpacing = MaterialTheme.MPVKtSpacing.small,
+            horizontalSpacing = MaterialTheme.padding.mediumSmall,
         )
         ControlsButton(
             Icons.Default.Audiotrack,
             onClick = onAudioClick,
             onLongClick = onAudioLongClick,
-            horizontalSpacing = MaterialTheme.MPVKtSpacing.small,
+            horizontalSpacing = MaterialTheme.padding.mediumSmall,
         )
         if (isEpisodeOnline == true) {
             ControlsButton(
                 Icons.Default.HighQuality,
                 onClick = onQualityClick,
                 onLongClick = onQualityClick,
-                horizontalSpacing = MaterialTheme.MPVKtSpacing.small,
+                horizontalSpacing = MaterialTheme.padding.mediumSmall,
             )
         }
         ControlsButton(
             Icons.Default.MoreVert,
             onClick = onMoreClick,
             onLongClick = onMoreLongClick,
-            horizontalSpacing = MaterialTheme.MPVKtSpacing.small,
+            horizontalSpacing = MaterialTheme.padding.mediumSmall,
         )
     }
 }

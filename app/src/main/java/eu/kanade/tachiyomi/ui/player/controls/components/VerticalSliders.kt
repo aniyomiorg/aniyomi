@@ -28,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import java.text.NumberFormat
 import kotlin.math.roundToInt
 
@@ -127,7 +127,7 @@ fun BrightnessSlider(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         Text(
             (brightness * 100).toInt().toString(),
@@ -162,7 +162,7 @@ fun VolumeSlider(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         val boostVolume = mpvVolume - 100
         Text(

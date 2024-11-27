@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import eu.kanade.tachiyomi.animesource.model.Video
 import kotlinx.collections.immutable.ImmutableList
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun QualitySheet(
@@ -47,7 +47,7 @@ fun QualitySheet(
         },
         dismissEvent = shouldDismissSheet,
         modifier = modifier
-            .padding(vertical = MaterialTheme.MPVKtSpacing.medium),
+            .padding(vertical = MaterialTheme.padding.medium),
     )
 }
 
@@ -70,8 +70,8 @@ fun VideoTrack(
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(
-                vertical = MaterialTheme.MPVKtSpacing.smaller,
-                horizontal = MaterialTheme.MPVKtSpacing.medium,
+                vertical = MaterialTheme.padding.small,
+                horizontal = MaterialTheme.padding.medium,
             ),
     )
 }

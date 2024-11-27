@@ -35,7 +35,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import `is`.xyz.mpv.Utils
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import kotlin.math.abs
 
@@ -66,7 +66,7 @@ fun MiddlePlayerControls(
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.large),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.large),
     ) {
         AnimatedVisibility(
             visible = controlsShown && !areControlsLocked,
@@ -119,7 +119,7 @@ fun MiddlePlayerControls(
                                 ripple(),
                                 onClick = onPlayPauseClick,
                             )
-                            .padding(MaterialTheme.MPVKtSpacing.medium),
+                            .padding(MaterialTheme.padding.medium),
                         contentDescription = null,
                     )
                 }

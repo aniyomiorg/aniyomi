@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.vivvvek.seeker.Segment
 import `is`.xyz.mpv.Utils
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun CurrentChapter(
@@ -43,7 +43,7 @@ fun CurrentChapter(
             .clip(RoundedCornerShape(25))
             .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6F))
             .clickable(onClick = onClick)
-            .padding(horizontal = MaterialTheme.MPVKtSpacing.small, vertical = MaterialTheme.MPVKtSpacing.smaller),
+            .padding(horizontal = MaterialTheme.padding.mediumSmall, vertical = MaterialTheme.padding.small),
     ) {
         AnimatedContent(
             targetState = chapter,
@@ -62,13 +62,13 @@ fun CurrentChapter(
         ) { currentChapter ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
             ) {
                 Icon(
                     imageVector = Icons.Default.Bookmarks,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(end = MaterialTheme.MPVKtSpacing.extraSmall)
+                        .padding(end = MaterialTheme.padding.extraSmall)
                         .size(16.dp),
                     tint = MaterialTheme.colorScheme.onBackground,
                 )

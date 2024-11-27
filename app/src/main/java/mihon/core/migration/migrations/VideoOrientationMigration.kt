@@ -11,7 +11,7 @@ import mihon.core.migration.MigrationContext
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
 
-class MigrateVideoOrientationMigration : Migration {
+class VideoOrientationMigration : Migration {
     override val version = 127f
 
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {

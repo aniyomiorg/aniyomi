@@ -34,7 +34,7 @@ import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.MPVKtSpacing
+import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -55,7 +55,7 @@ fun PlaybackSpeedSheet(
         Column(
             modifier
                 .verticalScroll(rememberScrollState())
-                .padding(vertical = MaterialTheme.MPVKtSpacing.medium),
+                .padding(vertical = MaterialTheme.padding.medium),
         ) {
             SliderItem(
                 label = stringResource(MR.strings.player_sheets_speed_slider_label),
@@ -69,9 +69,9 @@ fun PlaybackSpeedSheet(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.MPVKtSpacing.medium),
+                    .padding(horizontal = MaterialTheme.padding.medium),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.medium),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
             ) {
                 FilledTonalIconButton(onClick = {
                     preferences.speedPresets().delete()
@@ -81,7 +81,7 @@ fun PlaybackSpeedSheet(
                 LazyRow(
                     modifier = Modifier
                         .weight(1f),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.extraSmall),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                 ) {
                     items(
                         playbackSpeedPresets.map { it.toFloat() }.sorted(),
@@ -135,12 +135,12 @@ fun PlaybackSpeedSheet(
                     }
                 },
                 modifier = Modifier
-                    .padding(MaterialTheme.MPVKtSpacing.medium),
+                    .padding(MaterialTheme.padding.medium),
             )
             Row(
                 modifier = Modifier
-                    .padding(horizontal = MaterialTheme.MPVKtSpacing.medium),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.MPVKtSpacing.smaller),
+                    .padding(horizontal = MaterialTheme.padding.medium),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 Button(
                     modifier = Modifier.weight(1f),
