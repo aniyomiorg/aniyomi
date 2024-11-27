@@ -195,7 +195,7 @@
             android:name=".ui.player.PlayerActivity"
             android:autoRemoveFromRecents="true"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize|keyboardHidden|keyboard|uiMode"
-            android:exported="true"
+            android:exported="false"
             android:launchMode="singleTask"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
