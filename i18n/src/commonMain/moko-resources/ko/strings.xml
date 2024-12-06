@@ -972,7 +972,6 @@
     <string name="data_saver">데이터 절약</string>
     <string name="data_saver_image_format_summary_on">Jpeg 파일은 Webp보다 파일 사이즈가 작지만(더 많은 데이터가 절약), 이미지의 품질이 더 떨어집니다.
 \nJpeg로 압축을 진행합니다</string>
-    <string name="pref_debanding_disabled">비활성화</string>
     <string name="data_saver_summary">다운로드/로딩 시 이미지 압축</string>
     <string name="data_saver_image_quality_summary">값이 높으면 이미지 품질이 좋게 저장되지만 파일 크기가 커지게 됩니다. 80%는 좋은 파일 크기와 이미지 품질 사이의 중간값입니다</string>
     <string name="data_saver_image_format">Jpeg로 압축</string>
