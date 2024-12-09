@@ -17,6 +17,7 @@
 
 package eu.kanade.tachiyomi.ui.player.controls.components.sheets
 
+import android.text.format.DateUtils
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +41,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -113,17 +113,30 @@ fun MoreSheet(
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                 ) {
                     var isSleepTimerDialogShown by remember { mutableStateOf(false) }
-                    IconToggleButton(
-                        checked = remainingTime > 0,
-                        onCheckedChange = { isSleepTimerDialogShown = true },
-                    ) {
-                        Icon(Icons.Outlined.Timer, null)
-                        if (isSleepTimerDialogShown) {
-                            TimePickerDialog(
-                                remainingTime = remainingTime,
-                                onDismissRequest = { isSleepTimerDialogShown = false },
-                                onTimeSelect = onStartTimer,
+                    TextButton(onClick = { isSleepTimerDialogShown = true }) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
+                        ) {
+                            Icon(imageVector = Icons.Outlined.Timer, contentDescription = null)
+                            Text(
+                                text =
+                                if (remainingTime == 0) {
+                                    stringResource(MR.strings.timer_title)
+                                } else {
+                                    stringResource(
+                                        MR.strings.timer_remaining,
+                                        DateUtils.formatElapsedTime(remainingTime.toLong()),
+                                    )
+                                },
                             )
+                            if (isSleepTimerDialogShown) {
+                                TimePickerDialog(
+                                    remainingTime = remainingTime,
+                                    onDismissRequest = { isSleepTimerDialogShown = false },
+                                    onTimeSelect = onStartTimer,
+                                )
+                            }
                         }
                     }
                     TextButton(onClick = onEnterFiltersPanel) {
@@ -309,8 +322,13 @@ fun TimePickerDialog(
                         )
                     }
                     Row {
-                        TextButton(onClick = onDismissRequest) {
-                            Text(stringResource(MR.strings.action_cancel))
+                        if (remainingTime > 0) {
+                            TextButton(onClick = {
+                                onTimeSelect(0)
+                                onDismissRequest()
+                            }) {
+                                Text(stringResource(MR.strings.timer_cancel_timer))
+                            }
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         TextButton(

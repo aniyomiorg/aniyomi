@@ -250,6 +250,9 @@ class PlayerViewModel @JvmOverloads constructor(
         _aniskipButton.update { _ -> value }
     }
 
+    /**
+     * Starts a sleep timer/cancels the current timer if [seconds] is less than 1.
+     */
     fun startTimer(seconds: Int) {
         timerJob?.cancel()
         _remainingTime.value = seconds

@@ -442,8 +442,11 @@
     <string name="player_seek_n_seconds">%d seconds</string>
     <string name="player_speed" translatable="false">%.2fx</string>
     <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
-    <string name="timer_picker_enter_timer">Enter time</string>
-    <string name="timer_picker_pick_time">Pick time</string>
+    <string name="timer_title">Sleep Timer</string>
+    <string name="timer_remaining">%s remaining</string>
+    <string name="timer_picker_enter_timer">Enter duration</string>
+    <string name="timer_picker_pick_time">Pick duration</string>
+    <string name="timer_cancel_timer">Cancel current timer</string>
 
     <!-- Sheets - Playback Speed -->
     <string name="player_sheets_speed_slider_label">Speed</string>
