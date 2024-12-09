@@ -49,7 +49,7 @@ class SubtitlePreferences(
     )
 
     fun subtitleJustification() = preferenceStore.getEnum("pref_sub_justify", SubtitleJustification.Auto)
-    fun subtitlePos() = preferenceStore.getInt("pref_sub_pos", 0)
+    fun subtitlePos() = preferenceStore.getInt("pref_sub_pos", 100)
 
     fun overrideSubsASS() = preferenceStore.getBoolean("pref_override_subtitles_ass", false)
 
