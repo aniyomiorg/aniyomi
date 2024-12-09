@@ -62,22 +62,8 @@ class AniyomiMPVView(context: Context, attributes: AttributeSet) : BaseMPVView(c
     val hwdecActive: String
         get() = MPVLib.getPropertyString("hwdec-current") ?: "no"
 
-    var playbackSpeed: Double?
-        get() = MPVLib.getPropertyDouble("speed")
-        set(speed) = MPVLib.setPropertyDouble("speed", speed!!)
-
-    var subDelay: Double?
-        get() = MPVLib.getPropertyDouble("sub-delay")
-        set(delay) = MPVLib.setPropertyDouble("sub-delay", delay!!)
-
-    var secondarySubDelay: Double?
-        get() = MPVLib.getPropertyDouble("secondary-sub-delay")
-        set(delay) = MPVLib.setPropertyDouble("secondary-sub-delay", delay!!)
-
     val videoH: Int?
         get() = MPVLib.getPropertyInt("video-params/h")
-    val videoAspect: Double?
-        get() = MPVLib.getPropertyDouble("video-params/aspect")
 
     /**
      * Returns the video aspect ratio. Rotation is taken into account.
