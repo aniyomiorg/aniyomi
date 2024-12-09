@@ -30,6 +30,7 @@ import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
+import `is`.xyz.mpv.BaseMPVView
 import `is`.xyz.mpv.MPVLib
 import logcat.LogPriority
 import logcat.logcat
@@ -107,7 +108,7 @@ class AniyomiMPVView(context: Context, attributes: AttributeSet) : BaseMPVView(c
     var secondarySid: Int by TrackDelegate("secondary-sid")
     var aid: Int by TrackDelegate("aid")
 
-    override fun initOptions() {
+    override fun initOptions(vo: String) {
         setVo(if (decoderPreferences.gpuNext().get()) "gpu-next" else "gpu")
         MPVLib.setPropertyBoolean("pause", true)
         MPVLib.setOptionString("profile", "fast")

@@ -26,6 +26,10 @@ class PlayerObserver(val activity: PlayerActivity) :
         activity.runOnUiThread { activity.onObserverEvent(property, value) }
     }
 
+    override fun eventProperty(property: String, value: Double) {
+        activity.runOnUiThread { activity.onObserverEvent(property, value) }
+    }
+
     override fun event(eventId: Int) {
         activity.runOnUiThread { activity.event(eventId) }
     }

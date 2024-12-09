@@ -719,7 +719,7 @@ class PlayerActivity : BaseActivity() {
     private fun setupPlayerOrientation() {
         requestedOrientation = when (playerPreferences.defaultPlayerOrientationType().get()) {
             PlayerOrientation.Free -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
-            PlayerOrientation.Video -> if ((player.videoAspect ?: 0.0) > 1.0) {
+            PlayerOrientation.Video -> if ((player.getVideoOutAspect() ?: 0.0) > 1.0) {
                 ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             } else {
                 ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
