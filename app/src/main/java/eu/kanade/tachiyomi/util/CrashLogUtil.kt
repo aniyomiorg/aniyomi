@@ -53,7 +53,7 @@ class CrashLogUtil(
             Libplacebo version: v7.349.0
             FFmpeg version: n7.1
         """.trimIndent()
-        // TODO: Use this again (from aniyomi-mpv-lib 1.7.n onwards):
+        // TODO: Use this again (from aniyomi-mpv-lib 1.17.n onwards):
 
         //    MPV version: ${Utils.VERSIONS.mpv}
         //    Libplacebo version: ${Utils.VERSIONS.libPlacebo}
