@@ -46,7 +46,6 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.boundsInWindow
@@ -61,7 +60,6 @@ import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
 import com.hippo.unifile.UniFile
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -1065,7 +1063,7 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
-        viewModel.isLoadingSubtitles.update { _ -> true }
+        viewModel.isLoadingTracks.update { _ -> true }
     }
 
     // TODO: exception java.util.ConcurrentModificationException:
@@ -1078,8 +1076,7 @@ class PlayerActivity : BaseActivity() {
         setMpvMediaTitle()
         setupPlayerOrientation()
         clearTracks()
-        setupAudioTracks()
-        setupSubtitleTracks()
+        setupTracks()
 
         // aniSkip stuff
         viewModel.waitingAniSkip = gesturePreferences.waitingTimeAniSkip().get()
@@ -1094,24 +1091,27 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private fun setupSubtitleTracks() {
+    private fun setupTracks() {
+        val audioTracks = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
+            ?.audioTracks?.takeIf { it.isNotEmpty() }
         val subtitleTracks = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
             ?.subtitleTracks?.takeIf { it.isNotEmpty() }
 
-        subtitleTracks?.forEach { sub ->
-            MPVLib.command(arrayOf("sub-add", sub.url, "auto", sub.lang))
+        // If no external audio or subtitle tracks are present, loadTracks() won't be
+        // called and we need to call onFinishLoadingTracks() manually
+        if (audioTracks == null && subtitleTracks == null) {
+            viewModel.onFinishLoadingTracks()
+            return
         }
-
-        viewModel.isLoadingSubtitles.update { _ -> false }
-    }
-
-    private fun setupAudioTracks() {
-        val audioTracks = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
-            ?.audioTracks?.takeIf { it.isNotEmpty() }
 
         audioTracks?.forEach { audio ->
             MPVLib.command(arrayOf("audio-add", audio.url, "auto", audio.lang))
         }
+        subtitleTracks?.forEach { sub ->
+            MPVLib.command(arrayOf("sub-add", sub.url, "auto", sub.lang))
+        }
+
+        viewModel.isLoadingTracks.update { _ -> false }
     }
 
     private fun setMpvMediaTitle() {
