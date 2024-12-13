@@ -26,6 +26,7 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -90,9 +91,11 @@ fun GestureHandler(
     val areControlsLocked by viewModel.areControlsLocked.collectAsState()
     val seekAmount by viewModel.doubleTapSeekAmount.collectAsState()
     val isSeekingForwards by viewModel.isSeekingForwards.collectAsState()
+    var isDoubleTapSeeking by remember { mutableStateOf(false) }
 
     LaunchedEffect(seekAmount) {
         delay(800)
+        isDoubleTapSeeking = false
         viewModel.updateSeekAmount(0)
         viewModel.updateSeekText(null)
         delay(100)
@@ -122,6 +125,7 @@ fun GestureHandler(
                         if (controlsShown) viewModel.hideControls() else viewModel.showControls()
                     },
                     onDoubleTap = {
+                        if (isDoubleTapSeeking) return@detectTapGestures
                         if (it.x > size.width * 3 / 5) {
                             if (!isSeekingForwards) viewModel.updateSeekAmount(0)
                             viewModel.handleRightDoubleTap()
@@ -131,6 +135,7 @@ fun GestureHandler(
                         } else {
                             viewModel.handleCenterDoubleTap()
                         }
+                        isDoubleTapSeeking = true
                     },
                     onPress = {
                         if (panelShown != Panels.None && !allowGesturesInPanels) {
@@ -139,6 +144,17 @@ fun GestureHandler(
                         val press = PressInteraction.Press(
                             it.copy(x = if (it.x > size.width * 3 / 5) it.x - size.width * 0.6f else it.x),
                         )
+                        if (isDoubleTapSeeking) {
+                            if (it.x > size.width * 3 / 5) {
+                                if (!isSeekingForwards) viewModel.updateSeekAmount(0)
+                                viewModel.handleRightDoubleTap()
+                            } else if (it.x < size.width * 2 / 5) {
+                                if (isSeekingForwards) viewModel.updateSeekAmount(0)
+                                viewModel.handleLeftDoubleTap()
+                            } else {
+                                viewModel.handleCenterDoubleTap()
+                            }
+                        }
                         interactionSource.emit(press)
                         tryAwaitRelease()
                         if (isLongPressing) {
@@ -309,13 +325,15 @@ fun DoubleTapToSeekOvals(
                             .background(Color.White.copy(alpha))
                             .indication(interactionSource, ripple()),
                     )
-                    DoubleTapSeekTriangles(isForward = amount > 0)
-                    Text(
-                        text = pluralStringResource(MR.plurals.seconds, amount, amount),
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        DoubleTapSeekTriangles(isForward = amount > 0)
+                        Text(
+                            text = pluralStringResource(MR.plurals.seconds, amount, amount),
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                        )
+                    }
                 }
             }
         }
