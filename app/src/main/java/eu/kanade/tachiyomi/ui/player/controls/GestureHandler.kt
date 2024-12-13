@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeGestures
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -49,6 +50,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.player.components.LeftSideOvalShape
 import eu.kanade.presentation.player.components.RightSideOvalShape
 import eu.kanade.presentation.theme.playerRippleConfiguration
@@ -56,13 +59,15 @@ import eu.kanade.tachiyomi.ui.player.Panels
 import eu.kanade.tachiyomi.ui.player.PlayerUpdates
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.Sheets
-import eu.kanade.tachiyomi.ui.player.controls.components.DoubleTapSeekSecondsView
+import eu.kanade.tachiyomi.ui.player.controls.components.DoubleTapSeekTriangles
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -304,8 +309,12 @@ fun DoubleTapToSeekOvals(
                             .background(Color.White.copy(alpha))
                             .indication(interactionSource, ripple()),
                     )
-                    DoubleTapSeekSecondsView(
-                        seconds = amount,
+                    DoubleTapSeekTriangles(isForward = amount > 0)
+                    Text(
+                        text = pluralStringResource(MR.plurals.seconds, amount, amount),
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
                     )
                 }
             }

@@ -2,11 +2,9 @@ package eu.kanade.tachiyomi.ui.player.controls.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -16,18 +14,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import eu.kanade.tachiyomi.R
-import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.pluralStringResource
 
 @Composable
-fun DoubleTapSeekSecondsView(
-    modifier: Modifier = Modifier,
-    seconds: Int,
-) {
+fun DoubleTapSeekTriangles(isForward: Boolean) {
     val animationDuration = 750L
 
     val alpha1 = remember { Animatable(0f) }
@@ -45,26 +36,14 @@ fun DoubleTapSeekSecondsView(
         }
     }
 
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+    val rotation = if (isForward) 0f else 180f
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.rotate(rotation),
     ) {
-        val rotation = if (seconds > 0) 0f else 180f
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.rotate(rotation)
-        ) {
-            DoubleTapArrow(alpha1.value)
-            DoubleTapArrow(alpha2.value)
-            DoubleTapArrow(alpha3.value)
-        }
-
-        Text(
-            text = pluralStringResource(MR.plurals.seconds, seconds, seconds),
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center,
-            color = Color.White
-        )
+        DoubleTapArrow(alpha1.value)
+        DoubleTapArrow(alpha2.value)
+        DoubleTapArrow(alpha3.value)
     }
 }
 
@@ -78,6 +57,6 @@ private fun DoubleTapArrow(
         modifier = Modifier
             .size(width = 16.dp, height = 20.dp)
             .alpha(alpha = alpha),
-        tint = Color.White
+        tint = Color.White,
     )
 }

@@ -116,14 +116,13 @@ class PlayerActivity : BaseActivity() {
     val audioManager by lazy { getSystemService(Context.AUDIO_SERVICE) as AudioManager }
 
     private var mediaSession: MediaSession? = null
-    private val gesturePreferences: GesturePreferences get() = viewModel.gesturePreferences
-    private val playerPreferences: PlayerPreferences get() = viewModel.playerPreferences
+    private val gesturePreferences: GesturePreferences by lazy { viewModel.gesturePreferences }
+    private val playerPreferences: PlayerPreferences by lazy { viewModel.playerPreferences }
     private val subtitlePreferences: SubtitlePreferences = Injekt.get()
     private val audioPreferences: AudioPreferences = Injekt.get()
     private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
     private val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
-
 
     internal val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
 
@@ -679,6 +678,7 @@ class PlayerActivity : BaseActivity() {
         return builder.build()
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         if (!isInPictureInPictureMode) {
             pipReceiver?.let {
