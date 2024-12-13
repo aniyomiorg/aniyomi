@@ -673,7 +673,7 @@ class PlayerViewModel @JvmOverloads constructor(
             _doubleTapSeekAmount.value -= doubleTapToSeekDuration
         }
         _isSeekingForwards.value = false
-        seekBy(-doubleTapToSeekDuration)
+        seekBy(-doubleTapToSeekDuration, gesturePreferences.playerSmoothSeek().get())
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
     }
 
@@ -682,7 +682,7 @@ class PlayerViewModel @JvmOverloads constructor(
             _doubleTapSeekAmount.value += doubleTapToSeekDuration
         }
         _isSeekingForwards.value = true
-        seekBy(doubleTapToSeekDuration)
+        seekBy(doubleTapToSeekDuration, gesturePreferences.playerSmoothSeek().get())
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
     }
 
