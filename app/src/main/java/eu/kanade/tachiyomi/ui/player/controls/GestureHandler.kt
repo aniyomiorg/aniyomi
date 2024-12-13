@@ -17,7 +17,6 @@
 
 package eu.kanade.tachiyomi.ui.player.controls
 
-import android.view.View
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -50,7 +49,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.viewinterop.AndroidView
 import eu.kanade.presentation.player.components.LeftSideOvalShape
 import eu.kanade.presentation.player.components.RightSideOvalShape
 import eu.kanade.presentation.theme.playerRippleConfiguration
@@ -306,22 +304,8 @@ fun DoubleTapToSeekOvals(
                             .background(Color.White.copy(alpha))
                             .indication(interactionSource, ripple()),
                     )
-                    AndroidView(
-                        factory = { DoubleTapSeekSecondsView(it, null) },
-                        update = {
-                            if (text != null) {
-                                it.text = text
-                                it.visibility = View.VISIBLE
-                                it.start()
-                            } else if (amount != 0) {
-                                it.isForward = amount > 0
-                                it.seconds = amount
-                                it.visibility = View.VISIBLE
-                                it.start()
-                            } else {
-                                it.visibility = View.GONE
-                            }
-                        },
+                    DoubleTapSeekSecondsView(
+                        seconds = amount,
                     )
                 }
             }

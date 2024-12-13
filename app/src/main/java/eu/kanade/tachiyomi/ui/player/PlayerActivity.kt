@@ -116,8 +116,8 @@ class PlayerActivity : BaseActivity() {
     val audioManager by lazy { getSystemService(Context.AUDIO_SERVICE) as AudioManager }
 
     private var mediaSession: MediaSession? = null
-    private val gesturePreferences: GesturePreferences = viewModel.gesturePreferences
-    private val playerPreferences: PlayerPreferences = viewModel.playerPreferences
+    private val gesturePreferences: GesturePreferences get() = viewModel.gesturePreferences
+    private val playerPreferences: PlayerPreferences get() = viewModel.playerPreferences
     private val subtitlePreferences: SubtitlePreferences = Injekt.get()
     private val audioPreferences: AudioPreferences = Injekt.get()
     private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
