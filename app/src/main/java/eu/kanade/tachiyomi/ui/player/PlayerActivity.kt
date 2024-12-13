@@ -116,13 +116,14 @@ class PlayerActivity : BaseActivity() {
     val audioManager by lazy { getSystemService(Context.AUDIO_SERVICE) as AudioManager }
 
     private var mediaSession: MediaSession? = null
-    internal val playerPreferences: PlayerPreferences = Injekt.get()
-    internal val gesturePreferences: GesturePreferences = Injekt.get()
-    internal val subtitlePreferences: SubtitlePreferences = Injekt.get()
-    internal val audioPreferences: AudioPreferences = Injekt.get()
-    internal val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
-    internal val networkPreferences: NetworkPreferences = Injekt.get()
+    private val gesturePreferences: GesturePreferences = viewModel.gesturePreferences
+    private val playerPreferences: PlayerPreferences = viewModel.playerPreferences
+    private val subtitlePreferences: SubtitlePreferences = Injekt.get()
+    private val audioPreferences: AudioPreferences = Injekt.get()
+    private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
+    private val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
+
 
     internal val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
 
@@ -684,33 +685,33 @@ class PlayerActivity : BaseActivity() {
                 unregisterReceiver(pipReceiver)
                 pipReceiver = null
             }
-            super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-            return
-        }
-        setPictureInPictureParams(createPipParams())
-        viewModel.hideControls()
-        viewModel.hideSeekBar()
-        viewModel.isBrightnessSliderShown.update { false }
-        viewModel.isVolumeSliderShown.update { false }
-        viewModel.sheetShown.update { Sheets.None }
-        pipReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent == null || intent.action != PIP_INTENTS_FILTER) return
-                when (intent.getIntExtra(PIP_INTENT_ACTION, 0)) {
-                    PIP_PAUSE -> viewModel.pause()
-                    PIP_PLAY -> viewModel.unpause()
-                    PIP_NEXT -> viewModel.changeEpisode(false)
-                    PIP_PREVIOUS -> viewModel.changeEpisode(true)
-                    PIP_SKIP -> viewModel.seekBy(10)
+        } else {
+            setPictureInPictureParams(createPipParams())
+            viewModel.hideControls()
+            viewModel.hideSeekBar()
+            viewModel.isBrightnessSliderShown.update { false }
+            viewModel.isVolumeSliderShown.update { false }
+            viewModel.sheetShown.update { Sheets.None }
+            pipReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    if (intent == null || intent.action != PIP_INTENTS_FILTER) return
+                    when (intent.getIntExtra(PIP_INTENT_ACTION, 0)) {
+                        PIP_PAUSE -> viewModel.pause()
+                        PIP_PLAY -> viewModel.unpause()
+                        PIP_NEXT -> viewModel.changeEpisode(false)
+                        PIP_PREVIOUS -> viewModel.changeEpisode(true)
+                        PIP_SKIP -> viewModel.seekBy(10)
+                    }
+                    setPictureInPictureParams(createPipParams())
                 }
-                setPictureInPictureParams(createPipParams())
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(pipReceiver, IntentFilter(PIP_INTENTS_FILTER), RECEIVER_NOT_EXPORTED)
+            } else {
+                registerReceiver(pipReceiver, IntentFilter(PIP_INTENTS_FILTER))
             }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(pipReceiver, IntentFilter(PIP_INTENTS_FILTER), RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(pipReceiver, IntentFilter(PIP_INTENTS_FILTER))
-        }
+
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
     }
 
@@ -1072,7 +1073,7 @@ class PlayerActivity : BaseActivity() {
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
-    internal fun fileLoaded() {
+    private fun fileLoaded() {
         setMpvMediaTitle()
         setupPlayerOrientation()
         clearTracks()
