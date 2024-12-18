@@ -624,7 +624,7 @@
     <string name="fdroid_warning">Sas versiones de F-Droid non sunt prus suportadas in manera ufitziale.
 \nToca pro nde ischire de prus.</string>
     <string name="track_remove_date_conf_title">Bogare sa data\?</string>
-    <string name="pref_invalidate_download_cache">Invàlida s\'ìnditze de sos iscarrigamentos</string>
+    <string name="pref_invalidate_download_cache">Torra a inditzizare sos iscarrigamentos</string>
     <string name="track_remove_start_date_conf_text">Custu at a bogare sa data de incumintzu seletzionada in antis dae %s</string>
     <string name="track_remove_finish_date_conf_text">Custu at a bogare sa data de fine seletzionada in antis dae %s</string>
     <string name="label_downloaded">Iscarrigados</string>
