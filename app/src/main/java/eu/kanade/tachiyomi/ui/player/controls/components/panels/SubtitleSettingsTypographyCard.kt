@@ -51,7 +51,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.yubyf.truetypeparser.TTFFile
@@ -82,7 +81,6 @@ import uy.kohesive.injekt.api.get
 fun SubtitleSettingsTypographyCard(
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     val preferences = remember { Injekt.get<SubtitlePreferences>() }
     val storageManager = remember { Injekt.get<StorageManager>() }
     var isExpanded by remember { mutableStateOf(true) }

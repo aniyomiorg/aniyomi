@@ -74,7 +74,6 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -245,9 +244,9 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _aniskipButton = MutableStateFlow<String?>(null)
     val aniskipButton = _aniskipButton.asStateFlow()
 
-    val cachePath = activity.cacheDir.path
+    val cachePath: String = activity.cacheDir.path
 
-    fun updateAniskipButton(value: String?) {
+    private fun updateAniskipButton(value: String?) {
         _aniskipButton.update { _ -> value }
     }
 
@@ -283,7 +282,7 @@ class PlayerViewModel @JvmOverloads constructor(
         _isLoadingEpisode.update { _ -> value }
     }
 
-    fun updateEpisodeList(episodeList: List<Episode>) {
+    private fun updateEpisodeList(episodeList: List<Episode>) {
         _currentPlaylist.update { _ -> filterEpisodeList(episodeList) }
     }
 
@@ -615,6 +614,7 @@ class PlayerViewModel @JvmOverloads constructor(
         playerPreferences.autoplayEnabled().set(value)
     }
 
+    @Suppress("DEPRECATION")
     fun changeVideoAspect(aspect: VideoAspect) {
         var ratio = -1.0
         var pan = 1.0
@@ -686,7 +686,7 @@ class PlayerViewModel @JvmOverloads constructor(
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
     }
 
-    fun rightSeekToWithText(seekDuration: Int, text: String?) {
+    private fun rightSeekToWithText(seekDuration: Int, text: String?) {
         _isSeekingForwards.value = true
         _doubleTapSeekAmount.value = 1
         _seekText.update { _ -> text }
@@ -786,7 +786,7 @@ class PlayerViewModel @JvmOverloads constructor(
     /**
      * The current video's quality index. Used to restore from process kill.
      */
-    var qualityIndex = savedState.get<Int>("quality_index") ?: 0
+    private var qualityIndex = savedState.get<Int>("quality_index") ?: 0
         set(value) {
             savedState["quality_index"] = value
             field = value
@@ -846,7 +846,7 @@ class PlayerViewModel @JvmOverloads constructor(
         return currentPlaylist.value.indexOfFirst { currentEpisode.value?.id == it.id }
     }
 
-    fun getAdjacentEpisodeId(previous: Boolean): Long {
+    private fun getAdjacentEpisodeId(previous: Boolean): Long {
         val newIndex = if (previous) getCurrentEpisodeIndex() - 1 else getCurrentEpisodeIndex() + 1
 
         return when {
@@ -1005,7 +1005,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * Called every time a second is reached in the player. Used to mark the flag of episode being
      * seen, update tracking services, enqueue downloaded episode deletion and download next episode.
      */
-    fun onSecondReached(position: Int, duration: Int) {
+    private fun onSecondReached(position: Int, duration: Int) {
         if (isLoadingEpisode.value) return
         val currentEp = currentEpisode.value ?: return
         if (episodeId == -1L) return

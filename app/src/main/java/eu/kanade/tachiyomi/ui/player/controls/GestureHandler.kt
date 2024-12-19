@@ -17,7 +17,6 @@
 
 package eu.kanade.tachiyomi.ui.player.controls
 
-import android.view.View
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -27,6 +26,7 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeGestures
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -50,7 +51,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.player.components.LeftSideOvalShape
 import eu.kanade.presentation.player.components.RightSideOvalShape
 import eu.kanade.presentation.theme.playerRippleConfiguration
@@ -58,13 +60,15 @@ import eu.kanade.tachiyomi.ui.player.Panels
 import eu.kanade.tachiyomi.ui.player.PlayerUpdates
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.Sheets
-import eu.kanade.tachiyomi.ui.player.controls.components.DoubleTapSeekSecondsView
+import eu.kanade.tachiyomi.ui.player.controls.components.DoubleTapSeekTriangles
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
+import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -87,9 +91,11 @@ fun GestureHandler(
     val areControlsLocked by viewModel.areControlsLocked.collectAsState()
     val seekAmount by viewModel.doubleTapSeekAmount.collectAsState()
     val isSeekingForwards by viewModel.isSeekingForwards.collectAsState()
+    var isDoubleTapSeeking by remember { mutableStateOf(false) }
 
     LaunchedEffect(seekAmount) {
         delay(800)
+        isDoubleTapSeeking = false
         viewModel.updateSeekAmount(0)
         viewModel.updateSeekText(null)
         delay(100)
@@ -113,12 +119,13 @@ fun GestureHandler(
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeGestures)
             .pointerInput(Unit) {
-                var originalSpeed = viewModel.playbackSpeed.value
+                val originalSpeed = viewModel.playbackSpeed.value
                 detectTapGestures(
                     onTap = {
                         if (controlsShown) viewModel.hideControls() else viewModel.showControls()
                     },
                     onDoubleTap = {
+                        if (isDoubleTapSeeking) return@detectTapGestures
                         if (it.x > size.width * 3 / 5) {
                             if (!isSeekingForwards) viewModel.updateSeekAmount(0)
                             viewModel.handleRightDoubleTap()
@@ -128,6 +135,7 @@ fun GestureHandler(
                         } else {
                             viewModel.handleCenterDoubleTap()
                         }
+                        isDoubleTapSeeking = true
                     },
                     onPress = {
                         if (panelShown != Panels.None && !allowGesturesInPanels) {
@@ -136,6 +144,17 @@ fun GestureHandler(
                         val press = PressInteraction.Press(
                             it.copy(x = if (it.x > size.width * 3 / 5) it.x - size.width * 0.6f else it.x),
                         )
+                        if (isDoubleTapSeeking) {
+                            if (it.x > size.width * 3 / 5) {
+                                if (!isSeekingForwards) viewModel.updateSeekAmount(0)
+                                viewModel.handleRightDoubleTap()
+                            } else if (it.x < size.width * 2 / 5) {
+                                if (isSeekingForwards) viewModel.updateSeekAmount(0)
+                                viewModel.handleLeftDoubleTap()
+                            } else {
+                                viewModel.handleCenterDoubleTap()
+                            }
+                        }
                         interactionSource.emit(press)
                         tryAwaitRelease()
                         if (isLongPressing) {
@@ -306,23 +325,15 @@ fun DoubleTapToSeekOvals(
                             .background(Color.White.copy(alpha))
                             .indication(interactionSource, ripple()),
                     )
-                    AndroidView(
-                        factory = { DoubleTapSeekSecondsView(it, null) },
-                        update = {
-                            if (text != null) {
-                                it.text = text
-                                it.visibility = View.VISIBLE
-                                it.start()
-                            } else if (amount != 0) {
-                                it.isForward = amount > 0
-                                it.seconds = amount
-                                it.visibility = View.VISIBLE
-                                it.start()
-                            } else {
-                                it.visibility = View.GONE
-                            }
-                        },
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        DoubleTapSeekTriangles(isForward = amount > 0)
+                        Text(
+                            text = pluralStringResource(MR.plurals.seconds, amount, amount),
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center,
+                            color = Color.White,
+                        )
+                    }
                 }
             }
         }

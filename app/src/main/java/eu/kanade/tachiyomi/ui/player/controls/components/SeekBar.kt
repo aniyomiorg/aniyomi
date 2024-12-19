@@ -159,6 +159,6 @@ private fun PreviewSeekBar() {
         Pair(false, true),
         {},
         {},
-        persistentListOf<Segment>(),
+        persistentListOf(),
     )
 }
