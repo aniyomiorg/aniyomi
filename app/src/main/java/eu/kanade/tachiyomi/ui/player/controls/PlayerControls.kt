@@ -453,6 +453,7 @@ fun PlayerControls(
                 }
                 // Top right controls
                 val autoPlayEnabled by playerPreferences.autoplayEnabled().collectAsState()
+                val videoList by viewModel.videoList.collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
                     enter = if (!reduceMotion) {
@@ -479,7 +480,11 @@ fun PlayerControls(
                         onSubtitlesLongClick = { onOpenPanel(Panels.SubtitleSettings) },
                         onAudioClick = { onOpenSheet(Sheets.AudioTracks) },
                         onAudioLongClick = { onOpenPanel(Panels.AudioDelay) },
-                        onQualityClick = { onOpenSheet(Sheets.QualityTracks) },
+                        onQualityClick = {
+                            if (videoList.isNotEmpty()) {
+                                onOpenSheet(Sheets.QualityTracks)
+                            }
+                        },
                         isEpisodeOnline = viewModel.isEpisodeOnline(),
                         onMoreClick = { onOpenSheet(Sheets.More) },
                         onMoreLongClick = { onOpenPanel(Panels.VideoFilters) },
