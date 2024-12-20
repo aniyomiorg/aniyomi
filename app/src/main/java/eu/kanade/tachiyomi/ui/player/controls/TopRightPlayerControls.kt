@@ -17,11 +17,10 @@
 
 package eu.kanade.tachiyomi.ui.player.controls
 
-import android.content.res.Resources
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Audiotrack
 import androidx.compose.material.icons.filled.HighQuality
@@ -31,11 +30,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.controls.components.AutoPlaySwitch
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import tachiyomi.presentation.core.components.material.padding
 
@@ -71,67 +67,35 @@ fun TopRightPlayerControls(
         AutoPlaySwitch(
             isChecked = autoPlayEnabled,
             onToggleAutoPlay = onToggleAutoPlay,
-            modifier = Modifier.padding(
-                horizontal = MaterialTheme.padding.mediumSmall,
-            ),
+            modifier = Modifier
+                .padding(vertical = MaterialTheme.padding.medium, horizontal = MaterialTheme.padding.mediumSmall)
+                .size(width = 48.dp, height = 24.dp),
         )
         ControlsButton(
-            Icons.Default.Subtitles,
+            icon = Icons.Default.Subtitles,
             onClick = onSubtitlesClick,
             onLongClick = onSubtitlesLongClick,
             horizontalSpacing = MaterialTheme.padding.mediumSmall,
         )
         ControlsButton(
-            Icons.Default.Audiotrack,
+            icon = Icons.Default.Audiotrack,
             onClick = onAudioClick,
             onLongClick = onAudioLongClick,
             horizontalSpacing = MaterialTheme.padding.mediumSmall,
         )
         if (isEpisodeOnline == true) {
             ControlsButton(
-                Icons.Default.HighQuality,
+                icon = Icons.Default.HighQuality,
                 onClick = onQualityClick,
                 onLongClick = onQualityClick,
                 horizontalSpacing = MaterialTheme.padding.mediumSmall,
             )
         }
         ControlsButton(
-            Icons.Default.MoreVert,
+            icon = Icons.Default.MoreVert,
             onClick = onMoreClick,
             onLongClick = onMoreLongClick,
             horizontalSpacing = MaterialTheme.padding.mediumSmall,
         )
     }
-}
-
-@Composable
-fun AutoPlaySwitch(
-    isChecked: Boolean,
-    onToggleAutoPlay: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    AndroidView(
-        factory = { context ->
-            com.google.android.material.switchmaterial.SwitchMaterial(context).apply {
-                layoutParams = ViewGroup.LayoutParams(50.dp.toPx().toInt(), 50.dp.toPx().toInt())
-                this.isChecked = isChecked
-                setOnCheckedChangeListener { _, isChecked ->
-                    onToggleAutoPlay(isChecked)
-                }
-            }
-        },
-        update = { switch ->
-            switch.isChecked = isChecked
-            switch.thumbDrawable = if (isChecked) {
-                ContextCompat.getDrawable(switch.context, R.drawable.ic_play_circle_filled_24)
-            } else {
-                ContextCompat.getDrawable(switch.context, R.drawable.ic_pause_circle_filled_24)
-            }
-        },
-        modifier = modifier,
-    )
-}
-
-fun Dp.toPx(): Float {
-    return this.value * Resources.getSystem().displayMetrics.density
 }
