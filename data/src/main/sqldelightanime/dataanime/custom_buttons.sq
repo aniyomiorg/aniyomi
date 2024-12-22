@@ -1,0 +1,27 @@
+CREATE TABLE custom_buttons (
+    _id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    sortIndex INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    longPressContent TEXT NOT NULL
+);
+
+findAll:
+SELECT *
+FROM custom_buttons;
+
+insert:
+INSERT INTO custom_buttons(name, sortIndex, content, longPressContent)
+VALUES (:name, :sortIndex, :content, :longPressContent);
+
+delete:
+DELETE FROM custom_buttons
+WHERE _id = :customButtonId;
+
+update:
+UPDATE custom_buttons
+SET name = coalesce(:name, name),
+    sortIndex = coalesce(:sortIndex, sortIndex),
+    content = coalesce(:content, content),
+    longPressContent = coalesce(:longPressContent, longPressContent)
+WHERE _id = :customButtonId;

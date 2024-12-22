@@ -1,0 +1,8 @@
+-- Create CustomButtons table --
+CREATE TABLE custom_buttons (
+    _id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    sortIndex INTEGER NOT NULL,
+    content TEXT NOT NULL,
+    longPressContent TEXT NOT NULL
+);
