@@ -17,6 +17,8 @@ interface CustomButtonRepository {
         longPressContent: String,
     )
 
+    suspend fun updatePartialCustomButton(update: CustomButtonUpdate)
+
     suspend fun updatePartialCustomButtons(updates: List<CustomButtonUpdate>)
 
     suspend fun deleteCustomButton(customButtonId: Long)

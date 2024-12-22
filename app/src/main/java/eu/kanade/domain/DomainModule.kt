@@ -109,6 +109,8 @@ import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
 import tachiyomi.domain.custombuttons.interactor.CreateCustomButton
 import tachiyomi.domain.custombuttons.interactor.DeleteCustomButton
 import tachiyomi.domain.custombuttons.interactor.GetCustomButtons
+import tachiyomi.domain.custombuttons.interactor.ReorderCustomButton
+import tachiyomi.domain.custombuttons.interactor.UpdateCustomButton
 import tachiyomi.domain.custombuttons.repository.CustomButtonRepository
 import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.anime.interactor.GetAnime
@@ -379,5 +381,7 @@ class DomainModule : InjektModule {
         addFactory { CreateCustomButton(get()) }
         addFactory { DeleteCustomButton(get()) }
         addFactory { GetCustomButtons(get()) }
+        addFactory { UpdateCustomButton(get()) }
+        addFactory { ReorderCustomButton(get()) }
     }
 }

@@ -33,6 +33,12 @@ class CustomButtonRepositoryImpl(
         }
     }
 
+    override suspend fun updatePartialCustomButton(update: CustomButtonUpdate) {
+        handler.await {
+            updatePartialBlocking(update)
+        }
+    }
+
     override suspend fun updatePartialCustomButtons(updates: List<CustomButtonUpdate>) {
         handler.await(inTransaction = true) {
             for (update in updates) {
