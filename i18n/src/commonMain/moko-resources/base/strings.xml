@@ -318,6 +318,21 @@
     <string name="pref_player_audio_channels_reverse_stereo">Reverse stereo</string>
     <string name="pref_player_audio_boost_cap">Volume boost cap</string>
 
+    <!-- Player settings - Custom Buttons -->
+    <string name="pref_player_custom_button">Custom buttons</string>
+    <string name="pref_player_custom_button_summary">Execute lua code with custom buttons</string>
+    <string name="pref_player_custom_button_header">Edit custom buttons</string>
+    <string name="pref_player_custom_button_empty">You have no custom buttons. Tap the plus button to create a custom button.</string>
+    <string name="pref_player_custom_button_add">Add button</string>
+    <string name="pref_player_custom_button_edit">Edit button</string>
+    <string name="pref_player_custom_button_title">Title</string>
+    <string name="pref_player_custom_button_error_exists">Button already exists!</string>
+    <string name="pref_player_custom_button_content">Lua code</string>
+    <string name="pref_player_custom_button_content_long">Lua code (on long press)</string>
+    <string name="pref_player_custom_button_optional">(optional)</string>
+    <string name="pref_player_custom_button_delete">Delete button</string>
+    <string name="pref_player_custom_button_delete_confirm">Do you wish to delete the button "%s"?</string>
+
     <!-- Player settings - Advanced -->
     <string name="pref_player_advanced">Advanced</string>
     <string name="pref_player_advanced_summary">Scripts, mpv.conf, input.conf</string>

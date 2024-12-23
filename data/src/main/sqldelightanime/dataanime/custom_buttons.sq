@@ -8,7 +8,8 @@ CREATE TABLE custom_buttons (
 
 findAll:
 SELECT *
-FROM custom_buttons;
+FROM custom_buttons
+ORDER BY sortIndex;
 
 insert:
 INSERT INTO custom_buttons(name, sortIndex, content, longPressContent)
