@@ -93,8 +93,8 @@ voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", vers
 voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
-aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.16.n"
-ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.16"
+aniyomi-mpv = "com.github.aniyomiorg:aniyomi-mpv-lib:1.17.n"
+ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.17"
 arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.2.1"
 
 seeker = "io.github.2307vivek:seeker:1.2.2"
