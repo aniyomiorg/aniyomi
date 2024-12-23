@@ -31,6 +31,7 @@ import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import `is`.xyz.mpv.BaseMPVView
+import `is`.xyz.mpv.KeyMapping
 import `is`.xyz.mpv.MPVLib
 import logcat.LogPriority
 import logcat.logcat
