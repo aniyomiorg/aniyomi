@@ -42,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +56,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import eu.kanade.presentation.more.settings.screen.player.custombutton.getButtons
 import eu.kanade.presentation.theme.playerRippleConfiguration
 import eu.kanade.tachiyomi.ui.player.Dialogs
 import eu.kanade.tachiyomi.ui.player.Panels
@@ -148,14 +150,13 @@ fun PlayerControls(
         }
     }
 
-    // TODO(customButtons)
-    // val customButtons by viewModel.customButtons.collectAsState()
-    // val primaryCustomButtonId by playerPreferences.primaryCustomButtonId.collectAsState()
-    // val customButton by remember {
-    //     derivedStateOf {
-    //         customButtons.getButtons().firstOrNull { it.id == primaryCustomButtonId }
-    //     }
-    // }
+    val customButtons by viewModel.customButtons.collectAsState()
+    val primaryCustomButtonId by playerPreferences.primaryButtonId().collectAsState()
+    val customButton by remember {
+        derivedStateOf {
+            customButtons.getButtons().firstOrNull { it.id == primaryCustomButtonId }
+        }
+    }
 
     LaunchedEffect(
         controlsShown,
@@ -492,6 +493,7 @@ fun PlayerControls(
                 }
                 // Bottom right controls
                 val aniskipButton by viewModel.aniskipButton.collectAsState()
+                val customButtonTitle by viewModel.primaryButtonTitle.collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
                     enter = if (!reduceMotion) {
@@ -513,8 +515,8 @@ fun PlayerControls(
                 ) {
                     val activity = LocalContext.current as PlayerActivity
                     BottomRightPlayerControls(
-                        // TODO(customButton)
-                        // customButton = customButton,
+                        customButton = customButton,
+                        customButtonTitle = customButtonTitle,
                         aniskipButton = aniskipButton,
                         onPressAniSkipButton = viewModel::aniskipPressed,
                         isPipAvailable = activity.isPipSupportedAndEnabled,
@@ -610,8 +612,7 @@ fun PlayerControls(
             onSpeedChange = { MPVLib.setPropertyDouble("speed", it.toFixed(2).toDouble()) },
             sleepTimerTimeRemaining = sleepTimerTimeRemaining,
             onStartSleepTimer = viewModel::startTimer,
-            // TODO(customButtons)
-            // buttons = customButtons.getButtons().toImmutableList(),
+            buttons = customButtons.getButtons().toImmutableList(),
 
             showSubtitles = showSubtitles,
             onToggleShowSubtitles = { subtitlePreferences.screenshotSubtitles().set(it) },

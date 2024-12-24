@@ -215,7 +215,8 @@ class AniyomiMPVView(context: Context, attributes: AttributeSet) : BaseMPVView(c
         "paused-for-cache" to MPVLib.mpvFormat.MPV_FORMAT_FLAG,
         "seeking" to MPVLib.mpvFormat.MPV_FORMAT_FLAG,
         "eof-reached" to MPVLib.mpvFormat.MPV_FORMAT_FLAG,
-        "user-data/mpvkt" to MPVLib.mpvFormat.MPV_FORMAT_STRING,
+
+        "user-data/aniyomi/show_text" to MPVLib.mpvFormat.MPV_FORMAT_STRING,
     )
 
     private fun setupAudioOptions() {

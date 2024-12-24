@@ -162,3 +162,21 @@ sealed interface CustomButtonScreenState {
             get() = customButtons.isEmpty()
     }
 }
+
+sealed interface CustomButtonFetchState {
+    @Immutable
+    data object Loading : CustomButtonFetchState
+
+    @Immutable
+    data class Success(val customButtons: ImmutableList<CustomButton>) : CustomButtonFetchState
+
+    @Immutable
+    data class Error(val errorMessage: String) : CustomButtonFetchState
+}
+
+fun CustomButtonFetchState.getButtons(): ImmutableList<CustomButton> {
+    return when (this) {
+        is CustomButtonFetchState.Success -> this.customButtons
+        else -> emptyList<CustomButton>().toImmutableList()
+    }
+}

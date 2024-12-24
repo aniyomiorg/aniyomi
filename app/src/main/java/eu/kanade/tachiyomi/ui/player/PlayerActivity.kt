@@ -94,6 +94,7 @@ import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
+import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
@@ -114,6 +115,7 @@ class PlayerActivity : BaseActivity() {
     val player by lazy { binding.player }
     val windowInsetsController by lazy { WindowCompat.getInsetsController(window, window.decorView) }
     val audioManager by lazy { getSystemService(Context.AUDIO_SERVICE) as AudioManager }
+    private var hasCopiedScripts = false
 
     private var mediaSession: MediaSession? = null
     private val gesturePreferences: GesturePreferences by lazy { viewModel.gesturePreferences }
@@ -401,6 +403,16 @@ class PlayerActivity : BaseActivity() {
         MPVLib.addObserver(playerObserver)
     }
 
+    private fun initLuaBridge() {
+        val scriptsDir = UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
+
+        val luaFile = scriptsDir?.createFile("aniyomi.lua")
+        val luaBridge = assets.open("aniyomi.lua")
+        luaFile?.openOutputStream()?.bufferedWriter()?.use { scriptLua ->
+            luaBridge.bufferedReader().use { scriptLua.write(it.readText()) }
+        }
+    }
+
     private fun copyScripts() {
         CoroutineScope(Dispatchers.IO).launchIO {
             // First, delete all present scripts
@@ -410,7 +422,11 @@ class PlayerActivity : BaseActivity() {
             val scriptOptsDir = {
                 UniFile.fromFile(applicationContext.filesDir)?.createDirectory("script-opts")
             }
-            scriptsDir()?.delete()
+            if (!hasCopiedScripts) {
+                scriptsDir()?.delete()
+                initLuaBridge()
+                hasCopiedScripts = true
+            }
             scriptOptsDir()?.delete()
 
             // Then, copy the scripts from the Aniyomi directory
@@ -474,6 +490,49 @@ class PlayerActivity : BaseActivity() {
                 "osd-fonts-dir",
                 applicationContext.filesDir.path,
             )
+        }
+    }
+
+    fun setupCustomButtons(buttons: List<CustomButton>) {
+        CoroutineScope(Dispatchers.IO).launchIO {
+            val scriptsDir = {
+                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
+            }
+
+            if (!hasCopiedScripts) {
+                scriptsDir()?.delete()
+                initLuaBridge()
+                hasCopiedScripts = true
+            }
+
+            val customButtonsContent = buildString {
+                appendLine("local lua_modules = mp.find_config_file('scripts')")
+                appendLine("if lua_modules then")
+                append("package.path = package.path .. ';' .. lua_modules .. '/?.lua;' .. lua_modules .. '/?/init.lua;' .. '")
+                append(scriptsDir()!!.filePath)
+                appendLine("' .. '/?.lua'")
+                appendLine("end")
+                appendLine("local aniyomi = require 'aniyomi'")
+                buttons.forEach { button ->
+                    appendLine("function button${button.id}()")
+                    appendLine(button.content)
+                    appendLine("end")
+                    appendLine("mp.register_script_message('call_button_${button.id}', button${button.id})")
+                    appendLine("function button${button.id}long()")
+                    appendLine(button.longPressContent)
+                    appendLine("end")
+                    appendLine("mp.register_script_message('call_button_${button.id}_long', button${button.id}long)")
+                }
+            }
+
+            val file = scriptsDir()?.createFile("custombuttons.lua")
+            file?.openOutputStream()?.bufferedWriter()?.use {
+                it.write(customButtonsContent)
+            }
+
+            file?.let {
+                MPVLib.command(arrayOf("load-script", it.filePath))
+            }
         }
     }
 
@@ -570,7 +629,6 @@ class PlayerActivity : BaseActivity() {
                 viewModel.loadChapters()
                 viewModel.updateChapter(0)
             }
-            // TODO(tracklist)
             "track-list" -> viewModel.loadTracks()
         }
     }
@@ -619,8 +677,7 @@ class PlayerActivity : BaseActivity() {
                 viewModel.updateSubtitle(viewModel.selectedSubtitles.value.first, it)
             }
             "hwdec", "hwdec-current" -> viewModel.getDecoder()
-            // TODO(custombutton)
-            // "user-data/mpvkt" -> viewModel.handleLuaInvocation(property, value)
+            "user-data/aniyomi" -> viewModel.handleLuaInvocation(property, value)
         }
     }
 
