@@ -587,7 +587,7 @@
     <string name="pref_app_language">App-Sprache</string>
     <string name="theme_lavender">Lavendel</string>
     <string name="description_placeholder">Keine Beschreibung</string>
-    <string name="delete_category_confirmation">Möchtest du die Kategorie „%s“ löschen\?</string>
+    <string name="delete_category_confirmation">Möchtest du die Kategorie „%s“ löschen?</string>
     <string name="delete_category">Kategorie löschen</string>
     <string name="internal_error">InternalError: Überprüfe die Absturzprotokolle für mehr Infos</string>
     <string name="pref_user_agent_string">Standard-User-Agent-Text</string>
