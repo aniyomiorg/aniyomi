@@ -589,7 +589,7 @@
     <string name="theme_lavender">Lavanda</string>
     <string name="description_placeholder">Sin descripción</string>
     <string name="delete_category">Borrar categoría</string>
-    <string name="delete_category_confirmation">¿Quieres borrar la categoría «%s»\?</string>
+    <string name="delete_category_confirmation">¿Quieres borrar la categoría «%s»?</string>
     <string name="internal_error">ErrorInterno: Mira el registro de depuración para más información</string>
     <string name="pref_user_agent_string">Identificarse como otro navegador web («user agent»)</string>
     <string name="pref_reset_user_agent_string">Volver a la identificación de navegador («user agent») original</string>
