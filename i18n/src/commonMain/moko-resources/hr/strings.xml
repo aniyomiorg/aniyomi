@@ -561,7 +561,7 @@
     <string name="network_not_metered">Samo na mrežom bez ograničenja</string>
     <string name="action_sort_unread_count">Broj nepročitanih</string>
     <string name="delete_category">Izbriši kategoriju</string>
-    <string name="delete_category_confirmation">Želiš li izbrisati kategoriju „%s”\?</string>
+    <string name="delete_category_confirmation">Želiš li izbrisati kategoriju „%s”?</string>
     <string name="auto_download_while_reading">Automatski preuzmi tijekom čitanja</string>
     <string name="internal_error">Interna greška: Provjeri zapise o iznenadnom prekidu rada aplikacije za daljnje informacije</string>
     <string name="pref_app_language">Jezik aplikacije</string>
