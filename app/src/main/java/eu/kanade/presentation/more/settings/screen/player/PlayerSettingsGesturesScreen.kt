@@ -18,8 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.player.viewer.SingleActionGesture
+import eu.kanade.tachiyomi.ui.player.SingleActionGesture
+import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
@@ -39,23 +39,23 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
+        val gesturePreferences = remember { Injekt.get<GesturePreferences>() }
 
         return listOf(
-            getSeekingGroup(playerPreferences = playerPreferences),
-            getDoubleTapGroup(playerPreferences = playerPreferences),
-            getMediaControlsGroup(playerPreferences = playerPreferences),
+            getSeekingGroup(gesturePreferences = gesturePreferences),
+            getDoubleTapGroup(gesturePreferences = gesturePreferences),
+            getMediaControlsGroup(gesturePreferences = gesturePreferences),
         )
     }
 
     @Composable
-    private fun getSeekingGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+    private fun getSeekingGroup(gesturePreferences: GesturePreferences): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
-        val enableHorizontalSeekGesture = playerPreferences.gestureHorizontalSeek()
-        val defaultSkipIntroLength by playerPreferences.defaultIntroLength().stateIn(scope).collectAsState()
-        val skipLengthPreference = playerPreferences.skipLengthPreference()
-        val playerSmoothSeek = playerPreferences.playerSmoothSeek()
-        val mediaChapterSeek = playerPreferences.mediaChapterSeek()
+        val enableHorizontalSeekGesture = gesturePreferences.gestureHorizontalSeek()
+        val showSeekbar = gesturePreferences.showSeekBar()
+        val defaultSkipIntroLength by gesturePreferences.defaultIntroLength().stateIn(scope).collectAsState()
+        val skipLengthPreference = gesturePreferences.skipLengthPreference()
+        val playerSmoothSeek = gesturePreferences.playerSmoothSeek()
 
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
@@ -63,17 +63,17 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
                 initialSkipIntroLength = defaultSkipIntroLength,
                 onDismissRequest = { showDialog = false },
                 onValueChanged = { skipIntroLength ->
-                    playerPreferences.defaultIntroLength().set(skipIntroLength)
+                    gesturePreferences.defaultIntroLength().set(skipIntroLength)
                     showDialog = false
                 },
             )
         }
 
         // Aniskip
-        val enableAniSkip = playerPreferences.aniSkipEnabled()
-        val enableAutoAniSkip = playerPreferences.autoSkipAniSkip()
-        val enableNetflixAniSkip = playerPreferences.enableNetflixStyleAniSkip()
-        val waitingTimeAniSkip = playerPreferences.waitingTimeAniSkip()
+        val enableAniSkip = gesturePreferences.aniSkipEnabled()
+        val enableAutoAniSkip = gesturePreferences.autoSkipAniSkip()
+        val enableNetflixAniSkip = gesturePreferences.enableNetflixStyleAniSkip()
+        val waitingTimeAniSkip = gesturePreferences.waitingTimeAniSkip()
 
         val isAniSkipEnabled by enableAniSkip.collectAsState()
 
@@ -83,6 +83,10 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableHorizontalSeekGesture,
                     title = stringResource(MR.strings.enable_horizontal_seek_gesture),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = showSeekbar,
+                    title = stringResource(MR.strings.pref_show_seekbar),
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_default_intro_length),
@@ -105,11 +109,6 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
                     pref = playerSmoothSeek,
                     title = stringResource(MR.strings.pref_player_smooth_seek),
                     subtitle = stringResource(MR.strings.pref_player_smooth_seek_summary),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = mediaChapterSeek,
-                    title = stringResource(MR.strings.pref_media_control_chapter_seeking),
-                    subtitle = stringResource(MR.strings.pref_media_control_chapter_seeking_summary),
                 ),
                 Preference.PreferenceItem.InfoPreference(
                     title = stringResource(MR.strings.pref_category_player_aniskip_info),
@@ -146,10 +145,10 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getDoubleTapGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
-        val leftDoubleTap = playerPreferences.leftDoubleTapGesture()
-        val centerDoubleTap = playerPreferences.centerDoubleTapGesture()
-        val rightDoubleTap = playerPreferences.rightDoubleTapGesture()
+    private fun getDoubleTapGroup(gesturePreferences: GesturePreferences): Preference.PreferenceGroup {
+        val leftDoubleTap = gesturePreferences.leftDoubleTapGesture()
+        val centerDoubleTap = gesturePreferences.centerDoubleTapGesture()
+        val rightDoubleTap = gesturePreferences.rightDoubleTapGesture()
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_double_tap),
@@ -193,10 +192,10 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getMediaControlsGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
-        val mediaPrevious = playerPreferences.mediaPreviousGesture()
-        val mediaPlayPause = playerPreferences.mediaPlayPauseGesture()
-        val mediaNext = playerPreferences.mediaNextGesture()
+    private fun getMediaControlsGroup(gesturePreferences: GesturePreferences): Preference.PreferenceGroup {
+        val mediaPrevious = gesturePreferences.mediaPreviousGesture()
+        val mediaPlayPause = gesturePreferences.mediaPlayPauseGesture()
+        val mediaNext = gesturePreferences.mediaNextGesture()
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_media_controls),
