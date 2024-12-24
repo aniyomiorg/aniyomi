@@ -102,7 +102,8 @@ fun MoreSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.padding.medium),
+                .padding(MaterialTheme.padding.medium)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
         ) {
             Row(

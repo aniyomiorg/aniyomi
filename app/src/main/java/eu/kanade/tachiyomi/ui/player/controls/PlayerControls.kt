@@ -118,38 +118,7 @@ fun PlayerControls(
     val playerTimeToDisappear by playerPreferences.playerTimeToDisappear().collectAsState()
     var isSeeking by remember { mutableStateOf(false) }
     var resetControls by remember { mutableStateOf(true) }
-
-    val onOpenSheet: (Sheets) -> Unit = {
-        viewModel.sheetShown.update { _ -> it }
-        if (it == Sheets.None) {
-            viewModel.showControls()
-        } else {
-            viewModel.hideControls()
-            viewModel.panelShown.update { Panels.None }
-            viewModel.dialogShown.update { Dialogs.None }
-        }
-    }
-    val onOpenPanel: (Panels) -> Unit = {
-        viewModel.panelShown.update { _ -> it }
-        if (it == Panels.None) {
-            viewModel.showControls()
-        } else {
-            viewModel.hideControls()
-            viewModel.sheetShown.update { Sheets.None }
-            viewModel.dialogShown.update { Dialogs.None }
-        }
-    }
-    val onOpenDialog: (Dialogs) -> Unit = {
-        viewModel.dialogShown.update { _ -> it }
-        if (it == Dialogs.None) {
-            viewModel.showControls()
-        } else {
-            viewModel.hideControls()
-            viewModel.sheetShown.update { Sheets.None }
-            viewModel.panelShown.update { Panels.None }
-        }
-    }
-
+    
     val customButtons by viewModel.customButtons.collectAsState()
     val primaryCustomButtonId by playerPreferences.primaryButtonId().collectAsState()
     val customButton by remember {
@@ -448,7 +417,7 @@ fun PlayerControls(
                     TopLeftPlayerControls(
                         animeTitle = animeTitle,
                         mediaTitle = mediaTitle,
-                        onTitleClick = { onOpenDialog(Dialogs.EpisodeList) },
+                        onTitleClick = { viewModel.showDialog(Dialogs.EpisodeList) },
                         onBackClick = onBackPress,
                     )
                 }
@@ -477,18 +446,18 @@ fun PlayerControls(
                     TopRightPlayerControls(
                         autoPlayEnabled = autoPlayEnabled,
                         onToggleAutoPlay = { viewModel.setAutoPlay(it) },
-                        onSubtitlesClick = { onOpenSheet(Sheets.SubtitleTracks) },
-                        onSubtitlesLongClick = { onOpenPanel(Panels.SubtitleSettings) },
-                        onAudioClick = { onOpenSheet(Sheets.AudioTracks) },
-                        onAudioLongClick = { onOpenPanel(Panels.AudioDelay) },
+                        onSubtitlesClick = { viewModel.showSheet(Sheets.SubtitleTracks) },
+                        onSubtitlesLongClick = { viewModel.showPanel(Panels.SubtitleSettings) },
+                        onAudioClick = { viewModel.showSheet(Sheets.AudioTracks) },
+                        onAudioLongClick = { viewModel.showPanel(Panels.AudioDelay) },
                         onQualityClick = {
                             if (videoList.isNotEmpty()) {
-                                onOpenSheet(Sheets.QualityTracks)
+                                viewModel.showSheet(Sheets.QualityTracks)
                             }
                         },
                         isEpisodeOnline = viewModel.isEpisodeOnline(),
-                        onMoreClick = { onOpenSheet(Sheets.More) },
-                        onMoreLongClick = { onOpenPanel(Panels.VideoFilters) },
+                        onMoreClick = { viewModel.showSheet(Sheets.More) },
+                        onMoreLongClick = { viewModel.showPanel(Panels.VideoFilters) },
                     )
                 }
                 // Bottom right controls
@@ -567,7 +536,7 @@ fun PlayerControls(
                         onPlaybackSpeedChange = {
                             MPVLib.setPropertyDouble("speed", it.toDouble())
                         },
-                        onOpenSheet = onOpenSheet,
+                        onOpenSheet = viewModel::showSheet,
                     )
                 }
             }
@@ -622,17 +591,16 @@ fun PlayerControls(
             onSave = { viewModel.saveImage(it, viewModel.pos.value.toInt()) },
             takeScreenshot = viewModel::takeScreenshot,
             onDismissScreenshot = {
-                onOpenSheet(Sheets.None)
+                viewModel.showSheet(Sheets.None)
                 viewModel.unpause()
             },
-
-            onOpenPanel = onOpenPanel,
-            onDismissRequest = { onOpenSheet(Sheets.None) },
+            onOpenPanel = viewModel::showPanel,
+            onDismissRequest = { viewModel.showSheet(Sheets.None) },
         )
         val panel by viewModel.panelShown.collectAsState()
         PlayerPanels(
             panelShown = panel,
-            onDismissRequest = { onOpenPanel(Panels.None) },
+            onDismissRequest = { viewModel.showPanel(Panels.None) },
         )
 
         val activity = LocalContext.current as PlayerActivity
@@ -650,11 +618,11 @@ fun PlayerControls(
             dateFormat = viewModel.dateFormat,
             onBookmarkClicked = viewModel::bookmarkEpisode,
             onEpisodeClicked = {
-                onOpenDialog(Dialogs.None)
+                viewModel.showDialog(Dialogs.None)
                 activity.changeEpisode(it)
             },
 
-            onDismissRequest = { onOpenDialog(Dialogs.None) },
+            onDismissRequest = { viewModel.showDialog(Dialogs.None) },
         )
     }
 }

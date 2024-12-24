@@ -43,6 +43,7 @@ import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.settings.screen.player.custombutton.CustomButtonFetchState
+import eu.kanade.presentation.more.settings.screen.player.custombutton.getButtons
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.toVideoList
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -576,6 +577,39 @@ class PlayerViewModel @JvmOverloads constructor(
         _areControlsLocked.update { false }
     }
 
+    fun showSheet(sheet: Sheets) {
+        sheetShown.update { sheet }
+        if (sheet == Sheets.None) {
+            showControls()
+        } else {
+            hideControls()
+            panelShown.update { Panels.None }
+            dialogShown.update { Dialogs.None }
+        }
+    }
+
+    fun showPanel(panel: Panels) {
+        panelShown.update { panel }
+        if (panel == Panels.None) {
+            showControls()
+        } else {
+            hideControls()
+            sheetShown.update { Sheets.None }
+            dialogShown.update { Dialogs.None }
+        }
+    }
+
+    fun showDialog(dialog: Dialogs) {
+        dialogShown.update { dialog }
+        if (dialog == Dialogs.None) {
+            showControls()
+        } else {
+            hideControls()
+            sheetShown.update { Sheets.None }
+            panelShown.update { Panels.None }
+        }
+    }
+
     fun seekBy(offset: Int, precise: Boolean = false) {
         MPVLib.command(arrayOf("seek", offset.toString(), if (precise) "relative+exact" else "relative"))
     }
@@ -698,6 +732,40 @@ class PlayerViewModel @JvmOverloads constructor(
 
         when (property.substringAfterLast("/")) {
             "show_text" -> playerUpdate.update { PlayerUpdates.ShowText(data) }
+            "toggle_ui" -> {
+                when (data) {
+                    "show" -> showControls()
+                    "toggle" -> { if (controlsShown.value) hideControls() else showControls() }
+                    "hide" -> {
+                        sheetShown.update { Sheets.None }
+                        panelShown.update { Panels.None }
+                        dialogShown.update { Dialogs.None }
+                        hideControls()
+                    }
+                }
+            }
+            "show_panel" -> {
+                when (data) {
+                    "subtitle_settings" -> showPanel(Panels.SubtitleSettings)
+                    "subtitle_delay" -> showPanel(Panels.SubtitleDelay)
+                    "audio_delay" -> showPanel(Panels.AudioDelay)
+                    "video_filters" -> showPanel(Panels.VideoFilters)
+                }
+            }
+            "set_button_title" -> {
+                _primaryButtonTitle.update { _ -> data }
+            }
+            "reset_button_title" -> {
+                _customButtons.value.getButtons().firstOrNull { it.id == playerPreferences.primaryButtonId().get() }?.let {
+                    setPrimaryCustomButtonTitle(it)
+                }
+            }
+            "switch_episode" -> {
+                when (data) {
+                    "n" -> changeEpisode(false)
+                    "p" -> changeEpisode(true)
+                }
+            }
         }
 
         MPVLib.setPropertyString(property, "")
