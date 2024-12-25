@@ -377,9 +377,6 @@ class PlayerActivity : BaseActivity() {
         val configDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
             storageManager.getMPVConfigDirectory()!!.filePath!!
         } else {
-            if (advancedPlayerPreferences.mpvScripts().get()) {
-                copyScripts()
-            }
             applicationContext.filesDir.path
         }
 
@@ -388,6 +385,7 @@ class PlayerActivity : BaseActivity() {
         val mpvInputFile = File("$configDir/input.conf")
         advancedPlayerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
+        copyScripts()
         copyAssets(configDir)
         copyFontsDirectory()
 
@@ -403,33 +401,19 @@ class PlayerActivity : BaseActivity() {
         MPVLib.addObserver(playerObserver)
     }
 
-    private fun initLuaBridge() {
-        val scriptsDir = UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
-
-        val luaFile = scriptsDir?.createFile("aniyomi.lua")
-        val luaBridge = assets.open("aniyomi.lua")
-        luaFile?.openOutputStream()?.bufferedWriter()?.use { scriptLua ->
-            luaBridge.bufferedReader().use { scriptLua.write(it.readText()) }
-        }
-    }
-
     private fun copyScripts() {
-        CoroutineScope(Dispatchers.IO).launchIO {
-            // First, delete all present scripts
-            val scriptsDir = {
-                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
-            }
-            val scriptOptsDir = {
-                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("script-opts")
-            }
-            if (!hasCopiedScripts) {
-                scriptsDir()?.delete()
-                initLuaBridge()
-                hasCopiedScripts = true
-            }
-            scriptOptsDir()?.delete()
+        // First, delete all present scripts
+        val scriptsDir = {
+            UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
+        }
+        val scriptOptsDir = {
+            UniFile.fromFile(applicationContext.filesDir)?.createDirectory("script-opts")
+        }
+        scriptsDir()?.delete()
+        scriptOptsDir()?.delete()
 
-            // Then, copy the scripts from the Aniyomi directory
+        // Then, copy the scripts from the Aniyomi directory
+        if (advancedPlayerPreferences.mpvScripts().get()) {
             storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
                 val outFile = scriptsDir()?.createFile(file.name)
                 outFile?.let {
@@ -442,6 +426,13 @@ class PlayerActivity : BaseActivity() {
                     file.openInputStream().copyTo(it.openOutputStream())
                 }
             }
+        }
+
+        // Copy over the bridge file
+        val luaFile = scriptsDir()?.createFile("aniyomi.lua")
+        val luaBridge = assets.open("aniyomi.lua")
+        luaFile?.openOutputStream()?.bufferedWriter()?.use { scriptLua ->
+            luaBridge.bufferedReader().use { scriptLua.write(it.readText()) }
         }
     }
 
@@ -497,12 +488,6 @@ class PlayerActivity : BaseActivity() {
         CoroutineScope(Dispatchers.IO).launchIO {
             val scriptsDir = {
                 UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
-            }
-
-            if (!hasCopiedScripts) {
-                scriptsDir()?.delete()
-                initLuaBridge()
-                hasCopiedScripts = true
             }
 
             val customButtonsContent = buildString {
