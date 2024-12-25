@@ -789,6 +789,7 @@
     <string name="app_settings">App settings</string>
     <string name="source_settings">Source settings</string>
     <string name="extensionRepo_settings">Extension repos</string>
+    <string name="custom_button_settings">Custom buttons</string>
     <string name="private_settings">Include sensitive settings (e.g., tracker login tokens)</string>
     <string name="non_library_settings">All read/watched entries</string>
     <string name="creating_backup">Creating backup</string>
