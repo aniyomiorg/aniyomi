@@ -20,7 +20,7 @@ fun IntegerPickerDialog(
     onDismissRequest: () -> Unit,
 ) {
     var newValue = defaultValue
-    val values = (minValue .. maxValue step step).toList()
+    val values = (minValue..maxValue step step).toList()
     val items = values.map { String.format(nameFormat, it) }.toImmutableList()
 
     PlayerDialog(

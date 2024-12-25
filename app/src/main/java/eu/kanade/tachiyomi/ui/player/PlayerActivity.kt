@@ -496,7 +496,9 @@ class PlayerActivity : BaseActivity() {
             val customButtonsContent = buildString {
                 appendLine("local lua_modules = mp.find_config_file('scripts')")
                 appendLine("if lua_modules then")
-                append("package.path = package.path .. ';' .. lua_modules .. '/?.lua;' .. lua_modules .. '/?/init.lua;' .. '")
+                append(
+                    "package.path = package.path .. ';' .. lua_modules .. '/?.lua;' .. lua_modules .. '/?/init.lua;' .. '",
+                )
                 append(scriptsDir()!!.filePath)
                 appendLine("' .. '/?.lua'")
                 appendLine("end")
@@ -1174,7 +1176,12 @@ class PlayerActivity : BaseActivity() {
         MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
         MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
         CoroutineScope(Dispatchers.IO).launchIO {
-            MPVLib.setPropertyString("user-data/current-anime/category", getAnimeCategories.await(anime.id).joinToString { it.name })
+            MPVLib.setPropertyString(
+                "user-data/current-anime/category",
+                getAnimeCategories.await(anime.id).joinToString {
+                    it.name
+                },
+            )
         }
 
         val epNumber = episode.episode_number.let { number ->

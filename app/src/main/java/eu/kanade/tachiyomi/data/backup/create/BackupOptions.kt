@@ -34,7 +34,8 @@ data class BackupOptions(
         extensions,
     )
 
-    fun canCreate() = libraryEntries || categories || appSettings || extensionRepoSettings || customButton || sourceSettings
+    fun canCreate() =
+        libraryEntries || categories || appSettings || extensionRepoSettings || customButton || sourceSettings
 
     companion object {
         val libraryOptions = persistentListOf(

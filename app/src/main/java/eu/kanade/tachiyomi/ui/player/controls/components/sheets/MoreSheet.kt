@@ -206,36 +206,36 @@ fun MoreSheet(
             }
 
             if (customButtons.isNotEmpty()) {
-               Text(text = stringResource(MR.strings.player_sheets_custom_buttons_title))
-               FlowRow(
-                   verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.mediumSmall),
-                   horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
-                   maxItemsInEachRow = Int.MAX_VALUE,
-               ) {
-                   customButtons.forEach { button ->
+                Text(text = stringResource(MR.strings.player_sheets_custom_buttons_title))
+                FlowRow(
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.mediumSmall),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
+                    maxItemsInEachRow = Int.MAX_VALUE,
+                ) {
+                    customButtons.forEach { button ->
 
-                       val inputChipInteractionSource = remember { MutableInteractionSource() }
+                        val inputChipInteractionSource = remember { MutableInteractionSource() }
 
-                       Box {
-                           FilterChip(
-                               onClick = {},
-                               label = { Text(text = button.name) },
-                               selected = false,
-                               interactionSource = inputChipInteractionSource,
-                           )
-                           Box(
-                               modifier = Modifier
-                                   .matchParentSize()
-                                   .combinedClickable(
-                                       onClick = { button.execute() },
-                                       onLongClick = { button.executeLongPress() },
-                                       interactionSource = inputChipInteractionSource,
-                                       indication = null,
-                                   ),
-                           )
-                       }
-                   }
-               }
+                        Box {
+                            FilterChip(
+                                onClick = {},
+                                label = { Text(text = button.name) },
+                                selected = false,
+                                interactionSource = inputChipInteractionSource,
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .combinedClickable(
+                                        onClick = { button.execute() },
+                                        onLongClick = { button.executeLongPress() },
+                                        interactionSource = inputChipInteractionSource,
+                                        indication = null,
+                                    ),
+                            )
+                        }
+                    }
+                }
             }
             Text(text = stringResource(MR.strings.pref_audio_channels))
             val audioChannels by audioPreferences.audioChannels().collectAsState()

@@ -317,7 +317,7 @@ class AnimeScreen(
                     onValueChanged = {
                         updateSkipIntroLength(it.toLong())
                         onDismissRequest()
-                    }
+                    },
                 )
             }
             is AnimeScreenModel.Dialog.ShowQualities -> {

@@ -28,7 +28,6 @@ import android.media.AudioManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
@@ -740,7 +739,9 @@ class PlayerViewModel @JvmOverloads constructor(
             "toggle_ui" -> {
                 when (data) {
                     "show" -> showControls()
-                    "toggle" -> { if (controlsShown.value) hideControls() else showControls() }
+                    "toggle" -> {
+                        if (controlsShown.value) hideControls() else showControls()
+                    }
                     "hide" -> {
                         sheetShown.update { Sheets.None }
                         panelShown.update { Panels.None }
@@ -782,8 +783,8 @@ class PlayerViewModel @JvmOverloads constructor(
                         nameFormat = nameFormat,
                         title = title,
                         onChange = { MPVLib.command(arrayOf("script-message", "int-picker-callback", it.toString())) },
-                        onDismissRequest = { showDialog(Dialogs.None) }
-                    )
+                        onDismissRequest = { showDialog(Dialogs.None) },
+                    ),
                 )
             }
             "pause" -> {

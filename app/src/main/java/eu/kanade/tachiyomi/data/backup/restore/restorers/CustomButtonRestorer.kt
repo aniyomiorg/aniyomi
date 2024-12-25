@@ -27,7 +27,14 @@ class CustomButtonRestorer(
                     val sortIndex = nextSortIndex++
                     handler.awaitOneExecutable {
                         val isFavorite = it.isFavorite && !dbHasFavorite
-                        custom_buttonsQueries.insert(it.name, isFavorite, sortIndex, it.content, it.longPressContent, it.onStartup)
+                        custom_buttonsQueries.insert(
+                            it.name,
+                            isFavorite,
+                            sortIndex,
+                            it.content,
+                            it.longPressContent,
+                            it.onStartup,
+                        )
                         custom_buttonsQueries.selectLastInsertedRowId()
                     }
                 }
