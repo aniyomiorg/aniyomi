@@ -606,9 +606,11 @@ class PlayerViewModel @JvmOverloads constructor(
     fun showDialog(dialog: Dialogs) {
         dialogShown.update { dialog }
         if (dialog == Dialogs.None) {
-            showControls()
+            hideControls()
+            unpause()
         } else {
             hideControls()
+            pause()
             sheetShown.update { Sheets.None }
             panelShown.update { Panels.None }
         }
@@ -773,16 +775,17 @@ class PlayerViewModel @JvmOverloads constructor(
                 }
             }
             "launch_int_picker" -> {
-                val (title, nameFormat, start, stop, step, default) = data.split("|")
+                val (title, nameFormat, start, stop, step, pickerProperty) = data.split("|")
+                val defaultValue = MPVLib.getPropertyInt(pickerProperty)
                 showDialog(
                     Dialogs.IntegerPicker(
-                        defaultValue = default.toInt(),
+                        defaultValue = defaultValue,
                         minValue = start.toInt(),
                         maxValue = stop.toInt(),
                         step = step.toInt(),
                         nameFormat = nameFormat,
                         title = title,
-                        onChange = { MPVLib.command(arrayOf("script-message", "int-picker-callback", it.toString())) },
+                        onChange = { MPVLib.setPropertyInt(pickerProperty, it) },
                         onDismissRequest = { showDialog(Dialogs.None) },
                     ),
                 )

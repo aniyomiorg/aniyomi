@@ -615,7 +615,6 @@ fun PlayerControls(
                 viewModel.showDialog(Dialogs.None)
                 activity.changeEpisode(it)
             },
-
             onDismissRequest = { viewModel.showDialog(Dialogs.None) },
         )
     }

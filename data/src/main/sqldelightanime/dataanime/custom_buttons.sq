@@ -15,13 +15,7 @@ INSERT OR IGNORE INTO custom_buttons (_id, name, isFavorite, sortIndex, content,
 VALUES (1, '+85 s', 1, 0, 'local intro_length = mp.get_property_number("user-data/current-anime/intro-length")
 aniyomi.right_seek_by(intro_length)', 'aniyomi.pause()
 local intro_length = mp.get_property_number("user-data/current-anime/intro-length")
-aniyomi.int_picker("Change intro length", "%ds", 0, 255, 1, intro_length)', 'function on_intro_length_selected(length)
-  mp.set_property_number("user-data/current-anime/intro-length", length)
-  aniyomi.unpause()
-  aniyomi.hide_ui()
-end
-
-function update_button(_, length)
+aniyomi.int_picker("Change intro length", "%ds", 0, 255, 1, "user-data/current-anime/intro-length")', 'function update_button(_, length)
   if length ~= nil then
     if length == 0 then
 	  aniyomi.hide_button()
@@ -32,7 +26,6 @@ function update_button(_, length)
 end
 
 if $isP then
-  mp.register_script_message("int-picker-callback", on_intro_length_selected)
   mp.observe_property("user-data/current-anime/intro-length", "number", update_button)
 end');
 
