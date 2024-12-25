@@ -94,6 +94,7 @@ import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
+import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.custombuttons.interactor.GetCustomButtons
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.download.service.DownloadPreferences
@@ -136,6 +137,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val getAnime: GetAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
     private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
+    private val getAnimeCategories: GetAnimeCategories = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
@@ -782,6 +784,21 @@ class PlayerViewModel @JvmOverloads constructor(
                     )
                 )
             }
+            "pause" -> {
+                when (data) {
+                    "pause" -> pause()
+                    "unpause" -> unpause()
+                    "pauseunpause" -> pauseUnpause()
+                }
+            }
+            "seek_with_text" -> {
+                val (seekValue, text) = data.split("|", limit = 2)
+                if (seekValue.toFloat() < pos.value) {
+                    leftSeekToWithText(seekValue.toInt(), text)
+                } else {
+                    rightSeekToWithText(seekValue.toInt(), text)
+                }
+            }
         }
 
         MPVLib.setPropertyString(property, "")
@@ -814,6 +831,14 @@ class PlayerViewModel @JvmOverloads constructor(
         }
         _isSeekingForwards.value = true
         seekBy(doubleTapToSeekDuration, gesturePreferences.playerSmoothSeek().get())
+        if (gesturePreferences.showSeekBar().get()) showSeekBar()
+    }
+
+    private fun leftSeekToWithText(seekValue: Int, text: String?) {
+        _isSeekingForwards.value = false
+        _doubleTapSeekAmount.value = -1
+        _seekText.update { _ -> text }
+        seekTo(seekValue)
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
     }
 
@@ -1064,6 +1089,12 @@ class PlayerViewModel @JvmOverloads constructor(
                             throw Exception("Video list is empty.")
                         }
                 }
+
+                // Write to mpv table
+                MPVLib.setPropertyString("user-data/current-anime/episode-title", episode.name)
+                MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
+                MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
+                MPVLib.setPropertyString("user-data/current-anime/category", getAnimeCategories.await(animeId).joinToString { it.name })
 
                 val result = InitResult(
                     videoList = currentVideoList,
