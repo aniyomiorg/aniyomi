@@ -261,6 +261,9 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _primaryButtonTitle = MutableStateFlow("")
     val primaryButtonTitle = _primaryButtonTitle.asStateFlow()
 
+    private val _primaryButton = MutableStateFlow<CustomButton?>(null)
+    val primaryButton = _primaryButton.asStateFlow()
+
     private fun updateAniskipButton(value: String?) {
         _aniskipButton.update { _ -> value }
     }
@@ -270,6 +273,7 @@ class PlayerViewModel @JvmOverloads constructor(
             try {
                 val buttons = getCustomButtons.getAll()
                 buttons.firstOrNull { it.isFavorite }?.let {
+                    _primaryButton.update { _ -> it }
                     // If the button text is not empty, it has been set buy a lua script in which
                     // case we don't want to override it
                     if (_primaryButtonTitle.value.isEmpty()) {
@@ -799,6 +803,19 @@ class PlayerViewModel @JvmOverloads constructor(
                     rightSeekToWithText(seekValue.toInt(), text)
                 }
             }
+            "toggle_button" -> {
+                when (data) {
+                    "h" -> _primaryButton.update { null }
+                    "s" -> _primaryButton.update { _customButtons.value.getButtons().firstOrNull { it.isFavorite } }
+                }
+            }
+            "seek_by" -> {
+                val (dir, seekValue) = data.split("|")
+                when (dir) {
+                    "l" -> leftSeekBy(seekValue.toInt())
+                    "r" -> rightSeekBy(seekValue.toInt())
+                }
+            }
         }
 
         MPVLib.setPropertyString(property, "")
@@ -816,22 +833,30 @@ class PlayerViewModel @JvmOverloads constructor(
         _seekText.update { _ -> value }
     }
 
-    fun leftSeek() {
+    fun leftSeekBy(value: Int) {
         if (pos.value > 0) {
-            _doubleTapSeekAmount.value -= doubleTapToSeekDuration
+            _doubleTapSeekAmount.value -= value
         }
         _isSeekingForwards.value = false
-        seekBy(-doubleTapToSeekDuration, gesturePreferences.playerSmoothSeek().get())
+        seekBy(-value, gesturePreferences.playerSmoothSeek().get())
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
     }
 
-    fun rightSeek() {
+    fun rightSeekBy(value: Int) {
         if (pos.value < duration.value) {
-            _doubleTapSeekAmount.value += doubleTapToSeekDuration
+            _doubleTapSeekAmount.value += value
         }
         _isSeekingForwards.value = true
-        seekBy(doubleTapToSeekDuration, gesturePreferences.playerSmoothSeek().get())
+        seekBy(value, gesturePreferences.playerSmoothSeek().get())
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
+    }
+
+    fun leftSeek() {
+        leftSeekBy(doubleTapToSeekDuration)
+    }
+
+    fun rightSeek() {
+        rightSeekBy(doubleTapToSeekDuration)
     }
 
     private fun leftSeekToWithText(seekValue: Int, text: String?) {

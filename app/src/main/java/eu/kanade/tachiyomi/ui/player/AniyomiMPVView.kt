@@ -225,6 +225,8 @@ class AniyomiMPVView(context: Context, attributes: AttributeSet) : BaseMPVView(c
         "user-data/aniyomi/launch_int_picker" to MPVLib.mpvFormat.MPV_FORMAT_STRING,
         "user-data/aniyomi/pause" to MPVLib.mpvFormat.MPV_FORMAT_STRING,
         "user-data/aniyomi/seek_with_text" to MPVLib.mpvFormat.MPV_FORMAT_STRING,
+        "user-data/aniyomi/toggle_button" to MPVLib.mpvFormat.MPV_FORMAT_STRING,
+        "user-data/aniyomi/seek_by" to MPVLib.mpvFormat.MPV_FORMAT_STRING,
     )
 
     private fun setupAudioOptions() {

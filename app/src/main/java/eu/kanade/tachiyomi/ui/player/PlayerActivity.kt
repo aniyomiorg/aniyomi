@@ -499,13 +499,13 @@ class PlayerActivity : BaseActivity() {
                 appendLine("end")
                 appendLine("local aniyomi = require 'aniyomi'")
                 buttons.forEach { button ->
-                    appendLine(button.onStartup)
+                    appendLine(button.getButtonOnStartup())
                     appendLine("function button${button.id}()")
-                    appendLine(button.content)
+                    appendLine(button.getButtonContent())
                     appendLine("end")
                     appendLine("mp.register_script_message('call_button_${button.id}', button${button.id})")
                     appendLine("function button${button.id}long()")
-                    appendLine(button.longPressContent)
+                    appendLine(button.getButtonLongPressContent())
                     appendLine("end")
                     appendLine("mp.register_script_message('call_button_${button.id}_long', button${button.id}long)")
                 }

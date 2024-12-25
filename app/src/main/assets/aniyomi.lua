@@ -50,4 +50,16 @@ end
 function aniyomi.seek_to_with_text(value, text)
     mp.set_property("user-data/aniyomi/seek_with_text", value .. "|" .. text)
 end
+function aniyomi.hide_button()
+    mp.set_property("user-data/aniyomi/toggle_button", "h")
+end
+function aniyomi.show_button()
+    mp.set_property("user-data/aniyomi/toggle_button", "s")
+end
+function aniyomi.left_seek_by(value)
+    mp.set_property("user-data/aniyomi/seek_by", "l|" .. value)
+end
+function aniyomi.right_seek_by(value)
+    mp.set_property("user-data/aniyomi/seek_by", "r|" .. value)
+end
 return aniyomi
