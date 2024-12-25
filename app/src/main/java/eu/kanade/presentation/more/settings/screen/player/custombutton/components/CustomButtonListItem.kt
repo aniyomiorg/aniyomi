@@ -33,7 +33,7 @@ fun CustomButtonListItem(
     customButton: CustomButton,
     canMoveUp: Boolean,
     canMoveDown: Boolean,
-    isPrimary: Boolean,
+    isFavorite: Boolean,
     onMoveUp: (CustomButton) -> Unit,
     onMoveDown: (CustomButton) -> Unit,
     onTogglePrimary: () -> Unit,
@@ -90,7 +90,7 @@ fun CustomButtonListItem(
             Spacer(modifier = Modifier.weight(1f))
 
             val starColor = Color(0xFFFDD835)
-            val starImage = if (isPrimary) Icons.Outlined.Star else Icons.Outlined.StarOutline
+            val starImage = if (isFavorite) Icons.Outlined.Star else Icons.Outlined.StarOutline
             IconButton(onClick = onTogglePrimary) {
                 Icon(
                     imageVector = starImage,

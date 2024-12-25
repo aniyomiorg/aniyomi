@@ -60,7 +60,6 @@ class PlayerPreferences(
 
     // Non-preferences
 
-    fun primaryButtonId() = preferenceStore.getLong("pref_custom_button_id", 0L)
     fun playerSpeed() = preferenceStore.getFloat("pref_player_speed", 1f)
     fun speedPresets() = preferenceStore.getStringSet(
         "default_speed_presets",

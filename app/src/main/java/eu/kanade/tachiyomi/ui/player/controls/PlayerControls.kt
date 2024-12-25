@@ -120,10 +120,9 @@ fun PlayerControls(
     var resetControls by remember { mutableStateOf(true) }
     
     val customButtons by viewModel.customButtons.collectAsState()
-    val primaryCustomButtonId by playerPreferences.primaryButtonId().collectAsState()
     val customButton by remember {
         derivedStateOf {
-            customButtons.getButtons().firstOrNull { it.id == primaryCustomButtonId }
+            customButtons.getButtons().firstOrNull { it.isFavorite }
         }
     }
 

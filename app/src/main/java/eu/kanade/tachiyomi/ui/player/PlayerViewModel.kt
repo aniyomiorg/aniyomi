@@ -267,7 +267,7 @@ class PlayerViewModel @JvmOverloads constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val buttons = getCustomButtons.getAll()
-                buttons.firstOrNull { it.id == playerPreferences.primaryButtonId().get() }?.let {
+                buttons.firstOrNull { it.isFavorite }?.let {
                     // If the button text is not empty, it has been set buy a lua script in which
                     // case we don't want to override it
                     if (_primaryButtonTitle.value.isEmpty()) {
@@ -756,7 +756,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 _primaryButtonTitle.update { _ -> data }
             }
             "reset_button_title" -> {
-                _customButtons.value.getButtons().firstOrNull { it.id == playerPreferences.primaryButtonId().get() }?.let {
+                _customButtons.value.getButtons().firstOrNull { it.isFavorite }?.let {
                     setPrimaryCustomButtonTitle(it)
                 }
             }

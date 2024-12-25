@@ -25,9 +25,10 @@ class CustomButtonRepositoryImpl(
         sortIndex: Long,
         content: String,
         longPressContent: String,
+        onStartup: String,
     ) {
         try {
-            handler.await { custom_buttonsQueries.insert(name, sortIndex, content, longPressContent) }
+            handler.await { custom_buttonsQueries.insert(name, sortIndex, content, longPressContent, onStartup) }
         } catch (ex: SQLiteException) {
             throw SaveCustomButtonException(ex)
         }
@@ -54,24 +55,30 @@ class CustomButtonRepositoryImpl(
     private fun AnimeDatabase.updatePartialBlocking(update: CustomButtonUpdate) {
         custom_buttonsQueries.update(
             name = update.name,
+            isFavorite = update.isFavorite,
             sortIndex = update.sortIndex,
             content = update.content,
             longPressContent = update.longPressContent,
             customButtonId = update.id,
+            onStartup = update.onStartup,
         )
     }
 
     private fun mapCustomButton(
         id: Long,
         name: String,
+        isFavorite: Boolean,
         sortIndex: Long,
         content: String,
         longPressContent: String,
+        onStartup: String,
     ): CustomButton = CustomButton(
         id = id,
         name = name,
+        isFavorite = isFavorite,
         sortIndex = sortIndex,
         content = content,
         longPressContent = longPressContent,
+        onStartup = onStartup,
     )
 }

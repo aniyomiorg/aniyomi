@@ -15,6 +15,7 @@ interface CustomButtonRepository {
         sortIndex: Long,
         content: String,
         longPressContent: String,
+        onStartup: String,
     )
 
     suspend fun updatePartialCustomButton(update: CustomButtonUpdate)

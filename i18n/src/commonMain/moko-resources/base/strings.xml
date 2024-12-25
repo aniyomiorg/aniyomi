@@ -332,6 +332,8 @@
     <string name="pref_player_custom_button_optional">(optional)</string>
     <string name="pref_player_custom_button_delete">Delete button</string>
     <string name="pref_player_custom_button_delete_confirm">Do you wish to delete the button "%s"?</string>
+    <string name="pref_player_custom_button_startup">On startup</string>
+    <string name="pref_player_custom_button_id">(ID: %d)</string>
 
     <!-- Player settings - Advanced -->
     <string name="pref_player_advanced">Advanced</string>

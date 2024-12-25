@@ -514,6 +514,7 @@ class PlayerActivity : BaseActivity() {
                 appendLine("end")
                 appendLine("local aniyomi = require 'aniyomi'")
                 buttons.forEach { button ->
+                    appendLine(button.onStartup)
                     appendLine("function button${button.id}()")
                     appendLine(button.content)
                     appendLine("end")

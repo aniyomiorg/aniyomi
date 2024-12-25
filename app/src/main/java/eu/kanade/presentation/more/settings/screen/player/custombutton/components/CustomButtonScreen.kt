@@ -24,7 +24,6 @@ import tachiyomi.presentation.core.util.plus
 @Composable
 fun CustomButtonScreen(
     state: CustomButtonScreenState.Success,
-    primaryCustomButtonId: Long,
     onClickCreate: () -> Unit,
     onClickPrimary: (CustomButton) -> Unit,
     onClickEdit: (CustomButton) -> Unit,
@@ -62,7 +61,6 @@ fun CustomButtonScreen(
 
         CustomButtonContent(
             customButtons = state.customButtons,
-            primaryCustomButtonId = primaryCustomButtonId,
             lazyListState = lazyListState,
             paddingValues = paddingValues +
                 topSmallPaddingValues +
@@ -79,7 +77,6 @@ fun CustomButtonScreen(
 @Composable
 private fun CustomButtonContent(
     customButtons: List<CustomButton>,
-    primaryCustomButtonId: Long,
     lazyListState: LazyListState,
     paddingValues: PaddingValues,
     onClickPrimary: (CustomButton) -> Unit,
@@ -102,7 +99,7 @@ private fun CustomButtonContent(
                 customButton = customButton,
                 canMoveUp = index != 0,
                 canMoveDown = index != customButtons.lastIndex,
-                isPrimary = customButton.id == primaryCustomButtonId,
+                isFavorite = customButton.isFavorite,
                 onMoveUp = onMoveUp,
                 onMoveDown = onMoveDown,
                 onTogglePrimary = { onClickPrimary(customButton) },

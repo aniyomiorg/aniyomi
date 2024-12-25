@@ -2,6 +2,10 @@ package eu.kanade.presentation.more.settings.screen.player.custombutton.componen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -14,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import dev.icerock.moko.resources.StringResource
@@ -21,6 +26,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import kotlin.time.Duration.Companion.seconds
@@ -28,7 +34,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun CustomButtonButtonDialog(
     onDismissRequest: () -> Unit,
-    onAction: (String, String, String) -> Unit,
+    onAction: (String, String, String, String) -> Unit,
     titleRes: StringResource,
     actionRes: StringResource,
     buttonNames: ImmutableList<String>,
@@ -37,6 +43,7 @@ fun CustomButtonButtonDialog(
     var title by remember { mutableStateOf(initialState?.name ?: "") }
     var content by remember { mutableStateOf(initialState?.content ?: "") }
     var longPressContent by remember { mutableStateOf(initialState?.longPressContent ?: "") }
+    var startUp by remember { mutableStateOf(initialState?.onStartup ?: "") }
 
     val focusRequester = remember { FocusRequester() }
     val titleAlreadyExists = remember(title) { buttonNames.contains(title) }
@@ -47,7 +54,7 @@ fun CustomButtonButtonDialog(
             TextButton(
                 enabled = title.isNotEmpty() && content.isNotEmpty() && !titleAlreadyExists,
                 onClick = {
-                    onAction(title, content, longPressContent)
+                    onAction(title, content, longPressContent, startUp)
                     onDismissRequest()
                 },
             ) {
@@ -60,11 +67,22 @@ fun CustomButtonButtonDialog(
             }
         },
         title = {
-            Text(text = stringResource(titleRes))
+            Row {
+                Text(text = stringResource(titleRes))
+                initialState?.id?.let { buttonId ->
+                    Spacer(Modifier.weight(1f))
+                    Text(
+                        text = stringResource(MR.strings.pref_player_custom_button_id, buttonId),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.alpha(alpha = DISABLED_ALPHA),
+                    )
+                }
+            }
         },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
+                modifier = Modifier.verticalScroll(rememberScrollState()),
             ) {
                 OutlinedTextField(
                     modifier = Modifier
@@ -96,6 +114,7 @@ fun CustomButtonButtonDialog(
                         Text(text = stringResource(MR.strings.information_required_plain))
                     },
                     minLines = 3,
+                    maxLines = 5,
                 )
 
                 OutlinedTextField(
@@ -108,6 +127,20 @@ fun CustomButtonButtonDialog(
                         Text(text = stringResource(MR.strings.pref_player_custom_button_optional))
                     },
                     minLines = 3,
+                    maxLines = 5,
+                )
+
+                OutlinedTextField(
+                    value = startUp,
+                    onValueChange = { startUp = it },
+                    label = {
+                        Text(text = stringResource(MR.strings.pref_player_custom_button_startup))
+                    },
+                    supportingText = {
+                        Text(text = stringResource(MR.strings.pref_player_custom_button_optional))
+                    },
+                    minLines = 2,
+                    maxLines = 4,
                 )
             }
         },
@@ -123,7 +156,7 @@ fun CustomButtonButtonDialog(
 @Composable
 fun CustomButtonCreateDialog(
     onDismissRequest: () -> Unit,
-    onCreate: (String, String, String) -> Unit,
+    onCreate: (String, String, String, String) -> Unit,
     buttonNames: ImmutableList<String>,
 ) {
     CustomButtonButtonDialog(
@@ -139,7 +172,7 @@ fun CustomButtonCreateDialog(
 @Composable
 fun CustomButtonEditDialog(
     onDismissRequest: () -> Unit,
-    onEdit: (String, String, String) -> Unit,
+    onEdit: (String, String, String, String) -> Unit,
     buttonNames: ImmutableList<String>,
     initialState: CustomButton,
 ) {

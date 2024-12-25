@@ -39,7 +39,6 @@ object PlayerSettingsCustomButtonScreen : Screen() {
 
         CustomButtonScreen(
             state = successState,
-            primaryCustomButtonId = screenModel.primaryButtonId,
             onClickCreate = { screenModel.showDialog(CustomButtonDialog.Create) },
             onClickPrimary = { screenModel.togglePrimaryButton(it) },
             onClickEdit = { screenModel.showDialog(CustomButtonDialog.Edit(it)) },
@@ -68,7 +67,7 @@ object PlayerSettingsCustomButtonScreen : Screen() {
             is CustomButtonDialog.Edit -> {
                 CustomButtonEditDialog(
                     onDismissRequest = screenModel::dismissDialog,
-                    onEdit = { title, content, longPressContent ->
+                    onEdit = { title, content, longPressContent, onStartup ->
                         screenModel.editCustomButton(
                             CustomButtonUpdate(
                                 id = dialog.customButton.id,
@@ -76,6 +75,7 @@ object PlayerSettingsCustomButtonScreen : Screen() {
                                 sortIndex = dialog.customButton.sortIndex,
                                 content = content,
                                 longPressContent = longPressContent,
+                                onStartup = onStartup,
                             ),
                         )
                     },
