@@ -235,7 +235,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
     val sheetShown = MutableStateFlow(Sheets.None)
     val panelShown = MutableStateFlow(Panels.None)
-    val dialogShown = MutableStateFlow(Dialogs.None)
+    val dialogShown = MutableStateFlow<Dialogs>(Dialogs.None)
 
     private val _seekText = MutableStateFlow<String?>(null)
     val seekText = _seekText.asStateFlow()
@@ -766,10 +766,28 @@ class PlayerViewModel @JvmOverloads constructor(
                     "p" -> changeEpisode(true)
                 }
             }
+            "launch_int_picker" -> {
+                val (title, nameFormat, start, stop, step, pickerProperty) = data.split("|")
+                val defaultValue = MPVLib.getPropertyInt(pickerProperty)
+                showDialog(
+                    Dialogs.IntegerPicker(
+                        defaultValue = defaultValue,
+                        minValue = start.toInt(),
+                        maxValue = stop.toInt(),
+                        step = step.toInt(),
+                        nameFormat = nameFormat,
+                        title = title,
+                        onChange = { MPVLib.setPropertyInt(pickerProperty, it) },
+                        onDismissRequest = { showDialog(Dialogs.None) }
+                    )
+                )
+            }
         }
 
         MPVLib.setPropertyString(property, "")
     }
+
+    private operator fun <T> List<T>.component6(): T = get(5)
 
     private val doubleTapToSeekDuration = gesturePreferences.skipLengthPreference().get()
 
