@@ -35,8 +35,8 @@ end
 function aniyomi.next_episode()
     mp.set_property("user-data/aniyomi/switch_episode", "n")
 end
-function aniyomi.int_picker(title, name_format, start, stop, step, property)
-    mp.set_property("user-data/aniyomi/launch_int_picker", title .. "|" .. name_format ..  "|" .. start .. "|" .. stop .. "|" .. step .. "|" .. property)
+function aniyomi.int_picker(title, name_format, start, stop, step, default)
+    mp.set_property("user-data/aniyomi/launch_int_picker", title .. "|" .. name_format ..  "|" .. start .. "|" .. stop .. "|" .. step .. "|" .. default)
 end
 function aniyomi.pause()
     mp.set_property("user-data/aniyomi/pause", "pause")

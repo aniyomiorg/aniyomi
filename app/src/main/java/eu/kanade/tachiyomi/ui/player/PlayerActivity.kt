@@ -605,6 +605,7 @@ class PlayerActivity : BaseActivity() {
             "volume-max" -> viewModel.volumeBoostCap = value.toInt() - 100
             "chapter" -> viewModel.updateChapter(value)
             "duration" -> viewModel.duration.update { value.toFloat() }
+            "user-data/current-anime/intro-length" -> viewModel.setAnimeSkipIntroLength(value)
         }
     }
 

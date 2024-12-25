@@ -773,17 +773,16 @@ class PlayerViewModel @JvmOverloads constructor(
                 }
             }
             "launch_int_picker" -> {
-                val (title, nameFormat, start, stop, step, pickerProperty) = data.split("|")
-                val defaultValue = MPVLib.getPropertyInt(pickerProperty)
+                val (title, nameFormat, start, stop, step, default) = data.split("|")
                 showDialog(
                     Dialogs.IntegerPicker(
-                        defaultValue = defaultValue,
+                        defaultValue = default.toInt(),
                         minValue = start.toInt(),
                         maxValue = stop.toInt(),
                         step = step.toInt(),
                         nameFormat = nameFormat,
                         title = title,
-                        onChange = { MPVLib.setPropertyInt(pickerProperty, it) },
+                        onChange = { MPVLib.command(arrayOf("script-message", "int-picker-callback", it.toString())) },
                         onDismissRequest = { showDialog(Dialogs.None) }
                     )
                 )
@@ -1466,19 +1465,6 @@ class PlayerViewModel @JvmOverloads constructor(
     fun deletePendingEpisodes() {
         viewModelScope.launchNonCancellable {
             downloadManager.deletePendingEpisodes()
-        }
-    }
-
-    /**
-     * Returns the skipIntroLength used by this anime or the default one.
-     */
-    fun getAnimeSkipIntroLength(resolveDefault: Boolean = true): Int {
-        val default = gesturePreferences.defaultIntroLength().get()
-        val anime = currentAnime.value ?: return default
-        val skipIntroLength = anime.skipIntroLength
-        return when {
-            resolveDefault && skipIntroLength <= 0 -> default
-            else -> anime.skipIntroLength
         }
     }
 
