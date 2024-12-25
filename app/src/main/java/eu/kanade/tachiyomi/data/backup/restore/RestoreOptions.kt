@@ -24,9 +24,13 @@ data class RestoreOptions(
         extensions,
     )
 
-    fun canRestore() =
-        libraryEntries || categories || appSettings || extensionRepoSettings || customButtons || sourceSettings ||
-            extensions
+    fun canRestore() = libraryEntries ||
+        categories ||
+        appSettings ||
+        extensionRepoSettings ||
+        customButtons ||
+        sourceSettings ||
+        extensions
 
     companion object {
         val options = persistentListOf(
