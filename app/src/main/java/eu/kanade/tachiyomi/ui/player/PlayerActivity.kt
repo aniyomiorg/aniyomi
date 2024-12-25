@@ -94,7 +94,6 @@ import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
-import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
@@ -125,7 +124,6 @@ class PlayerActivity : BaseActivity() {
     private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
     private val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
-    private val getAnimeCategories: GetAnimeCategories = Injekt.get()
 
     internal val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
 
@@ -1173,16 +1171,6 @@ class PlayerActivity : BaseActivity() {
 
         // Write to mpv table
         MPVLib.setPropertyString("user-data/current-anime/episode-title", episode.name)
-        MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
-        MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
-        CoroutineScope(Dispatchers.IO).launchIO {
-            MPVLib.setPropertyString(
-                "user-data/current-anime/category",
-                getAnimeCategories.await(anime.id).joinToString {
-                    it.name
-                },
-            )
-        }
 
         val epNumber = episode.episode_number.let { number ->
             if (ceil(number) == floor(number)) number.toInt() else number
