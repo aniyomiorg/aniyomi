@@ -239,7 +239,7 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
     }
 
     @Composable
-    private fun SkipIntroLengthDialog(
+    fun SkipIntroLengthDialog(
         initialSkipIntroLength: Int,
         onDismissRequest: () -> Unit,
         onValueChanged: (skipIntroLength: Int) -> Unit,
