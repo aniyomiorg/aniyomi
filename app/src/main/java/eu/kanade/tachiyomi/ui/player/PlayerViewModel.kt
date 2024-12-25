@@ -28,6 +28,7 @@ import android.media.AudioManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
@@ -94,7 +95,6 @@ import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
-import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.custombuttons.interactor.GetCustomButtons
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.download.service.DownloadPreferences
@@ -137,7 +137,6 @@ class PlayerViewModel @JvmOverloads constructor(
     private val getAnime: GetAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
     private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
-    private val getAnimeCategories: GetAnimeCategories = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
@@ -1113,12 +1112,6 @@ class PlayerViewModel @JvmOverloads constructor(
                             throw Exception("Video list is empty.")
                         }
                 }
-
-                // Write to mpv table
-                MPVLib.setPropertyString("user-data/current-anime/episode-title", episode.name)
-                MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
-                MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
-                MPVLib.setPropertyString("user-data/current-anime/category", getAnimeCategories.await(animeId).joinToString { it.name })
 
                 val result = InitResult(
                     videoList = currentVideoList,

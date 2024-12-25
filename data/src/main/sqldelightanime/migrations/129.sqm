@@ -19,7 +19,6 @@ aniyomi.int_picker("Change intro length", "%ds", 0, 255, 1, intro_length)', 'fun
   aniyomi.unpause()
   aniyomi.hide_ui()
 end
-mp.register_script_message("int-picker-callback", on_intro_length_selected)
 
 function update_button(_, length)
   if length ~= nil then
@@ -30,4 +29,8 @@ function update_button(_, length)
     aniyomi.set_button_title("+" .. length .. " s")
   end
 end
-mp.observe_property("user-data/current-anime/intro-length", "number", update_button)');
+
+if $isP then
+  mp.register_script_message("int-picker-callback", on_intro_length_selected)
+  mp.observe_property("user-data/current-anime/intro-length", "number", update_button)
+end');

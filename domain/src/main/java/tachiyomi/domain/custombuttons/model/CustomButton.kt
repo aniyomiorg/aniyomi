@@ -9,15 +9,18 @@ data class CustomButton(
     val longPressContent: String,
     val onStartup: String,
 ) {
-    fun getButtonContent(): String {
-        return content.replace("${'$'}id", id.toString())
+    fun getButtonContent(primaryId: Long): String {
+        val isPrimary = if (primaryId == id) "true" else "false"
+        return content.replace("${'$'}id", id.toString()).replace("${'$'}isP", isPrimary)
     }
 
-    fun getButtonLongPressContent(): String {
-        return longPressContent.replace("${'$'}id", id.toString())
+    fun getButtonLongPressContent(primaryId: Long): String {
+        val isPrimary = if (primaryId == id) "true" else "false"
+        return longPressContent.replace("${'$'}id", id.toString()).replace("${'$'}isP", isPrimary)
     }
 
-    fun getButtonOnStartup(): String {
-        return onStartup.replace("${'$'}id", id.toString())
+    fun getButtonOnStartup(primaryId: Long): String {
+        val isPrimary = if (primaryId == id) "true" else "false"
+        return onStartup.replace("${'$'}id", id.toString()).replace("${'$'}isP", isPrimary)
     }
 }

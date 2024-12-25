@@ -94,6 +94,7 @@ import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
+import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
@@ -115,7 +116,6 @@ class PlayerActivity : BaseActivity() {
     val player by lazy { binding.player }
     val windowInsetsController by lazy { WindowCompat.getInsetsController(window, window.decorView) }
     val audioManager by lazy { getSystemService(Context.AUDIO_SERVICE) as AudioManager }
-    private var hasCopiedScripts = false
 
     private var mediaSession: MediaSession? = null
     private val gesturePreferences: GesturePreferences by lazy { viewModel.gesturePreferences }
@@ -125,6 +125,7 @@ class PlayerActivity : BaseActivity() {
     private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
     private val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
+    private val getAnimeCategories: GetAnimeCategories = Injekt.get()
 
     internal val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
 
@@ -490,6 +491,8 @@ class PlayerActivity : BaseActivity() {
                 UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
             }
 
+            val primaryButtonId = viewModel.primaryButton.value?.id ?: 0L
+
             val customButtonsContent = buildString {
                 appendLine("local lua_modules = mp.find_config_file('scripts')")
                 appendLine("if lua_modules then")
@@ -499,13 +502,13 @@ class PlayerActivity : BaseActivity() {
                 appendLine("end")
                 appendLine("local aniyomi = require 'aniyomi'")
                 buttons.forEach { button ->
-                    appendLine(button.getButtonOnStartup())
+                    appendLine(button.getButtonOnStartup(primaryButtonId))
                     appendLine("function button${button.id}()")
-                    appendLine(button.getButtonContent())
+                    appendLine(button.getButtonContent(primaryButtonId))
                     appendLine("end")
                     appendLine("mp.register_script_message('call_button_${button.id}', button${button.id})")
                     appendLine("function button${button.id}long()")
-                    appendLine(button.getButtonLongPressContent())
+                    appendLine(button.getButtonLongPressContent(primaryButtonId))
                     appendLine("end")
                     appendLine("mp.register_script_message('call_button_${button.id}_long', button${button.id}long)")
                 }
@@ -1165,6 +1168,14 @@ class PlayerActivity : BaseActivity() {
 
         viewModel.animeTitle.update { _ -> anime.title }
         viewModel.mediaTitle.update { _ -> episode.name }
+
+        // Write to mpv table
+        MPVLib.setPropertyString("user-data/current-anime/episode-title", episode.name)
+        MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
+        MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
+        CoroutineScope(Dispatchers.IO).launchIO {
+            MPVLib.setPropertyString("user-data/current-anime/category", getAnimeCategories.await(anime.id).joinToString { it.name })
+        }
 
         val epNumber = episode.episode_number.let { number ->
             if (ceil(number) == floor(number)) number.toInt() else number
