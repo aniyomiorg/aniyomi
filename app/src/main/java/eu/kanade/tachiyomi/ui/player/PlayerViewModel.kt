@@ -608,11 +608,9 @@ class PlayerViewModel @JvmOverloads constructor(
     fun showDialog(dialog: Dialogs) {
         dialogShown.update { dialog }
         if (dialog == Dialogs.None) {
-            hideControls()
-            unpause()
+            showControls()
         } else {
             hideControls()
-            pause()
             sheetShown.update { Sheets.None }
             panelShown.update { Panels.None }
         }
@@ -810,7 +808,13 @@ class PlayerViewModel @JvmOverloads constructor(
             "toggle_button" -> {
                 when (data) {
                     "h" -> _primaryButton.update { null }
-                    "s" -> _primaryButton.update { _customButtons.value.getButtons().firstOrNull { it.isFavorite } }
+                    "s" -> {
+                        if (_primaryButton.value == null) {
+                            _primaryButton.update {
+                                _customButtons.value.getButtons().firstOrNull { it.isFavorite }
+                            }
+                        }
+                    }
                 }
             }
             "seek_by" -> {
