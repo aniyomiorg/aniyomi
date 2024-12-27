@@ -869,4 +869,9 @@
     <string name="label_category">カテゴリー</string>
     <string name="label_recent_anime_updates">アニメの更新(直近)</string>
     <string name="action_sort_random">ランダム</string>
+    <string name="label_player_settings">プレイヤー設定</string>
+    <string name="action_search_player_settings">検索、サーチ設定</string>
+    <string name="pref_player_internal">内蔵プレイヤー</string>
+    <string name="action_copy_link">リンクをコピーする</string>
+    <string name="action_add_anyway">どうしても追加する</string>
 </resources>
