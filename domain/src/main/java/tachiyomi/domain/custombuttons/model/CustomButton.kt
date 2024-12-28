@@ -11,16 +11,16 @@ data class CustomButton(
 ) {
     fun getButtonContent(primaryId: Long): String {
         val isPrimary = if (primaryId == id) "true" else "false"
-        return content.replace("${'$'}id", id.toString()).replace("${'$'}isP", isPrimary)
+        return content.replace("${'$'}id", id.toString()).replace("${'$'}isPrimary", isPrimary)
     }
 
     fun getButtonLongPressContent(primaryId: Long): String {
         val isPrimary = if (primaryId == id) "true" else "false"
-        return longPressContent.replace("${'$'}id", id.toString()).replace("${'$'}isP", isPrimary)
+        return longPressContent.replace("${'$'}id", id.toString()).replace("${'$'}isPrimary", isPrimary)
     }
 
     fun getButtonOnStartup(primaryId: Long): String {
         val isPrimary = if (primaryId == id) "true" else "false"
-        return onStartup.replace("${'$'}id", id.toString()).replace("${'$'}isP", isPrimary)
+        return onStartup.replace("${'$'}id", id.toString()).replace("${'$'}isPrimary", isPrimary)
     }
 }

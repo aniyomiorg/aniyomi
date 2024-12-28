@@ -26,7 +26,7 @@ aniyomi.int_picker("Change intro length", "%ds", 0, 255, 1, "user-data/current-a
   end
 end
 
-if $isP then
+if $isPrimary then
   mp.observe_property("user-data/current-anime/intro-length", "number", update_button)
 end');
 
