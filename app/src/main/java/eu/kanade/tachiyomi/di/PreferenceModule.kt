@@ -10,7 +10,12 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerPreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
+import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
+import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
+import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import tachiyomi.core.common.preference.AndroidPreferenceStore
@@ -50,6 +55,21 @@ class PreferenceModule(val app: Application) : InjektModule {
         }
         addSingletonFactory {
             PlayerPreferences(get())
+        }
+        addSingletonFactory {
+            GesturePreferences(get())
+        }
+        addSingletonFactory {
+            DecoderPreferences(get())
+        }
+        addSingletonFactory {
+            SubtitlePreferences(get())
+        }
+        addSingletonFactory {
+            AudioPreferences(get())
+        }
+        addSingletonFactory {
+            AdvancedPlayerPreferences(get())
         }
         addSingletonFactory {
             TorrentServerPreferences(get())

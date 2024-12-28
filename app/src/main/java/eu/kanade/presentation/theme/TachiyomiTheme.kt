@@ -1,8 +1,10 @@
 package eu.kanade.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalContext
@@ -83,6 +85,22 @@ private fun getThemeColorScheme(
         isAmoled,
     )
 }
+
+private const val RIPPLE_DRAGGED_ALPHA = .5f
+private const val RIPPLE_FOCUSED_ALPHA = .6f
+private const val RIPPLE_HOVERED_ALPHA = .4f
+private const val RIPPLE_PRESSED_ALPHA = .6f
+
+val playerRippleConfiguration
+    @Composable get() = RippleConfiguration(
+        color = MaterialTheme.colorScheme.primaryContainer,
+        rippleAlpha = RippleAlpha(
+            draggedAlpha = RIPPLE_DRAGGED_ALPHA,
+            focusedAlpha = RIPPLE_FOCUSED_ALPHA,
+            hoveredAlpha = RIPPLE_HOVERED_ALPHA,
+            pressedAlpha = RIPPLE_PRESSED_ALPHA,
+        ),
+    )
 
 private val colorSchemes: Map<AppTheme, BaseColorScheme> = mapOf(
     AppTheme.DEFAULT to TachiyomiColorScheme,

@@ -31,7 +31,7 @@ android {
 
         applicationId = "com.dark.animetailv2"
 
-        versionCode = 126
+        versionCode = 127
         versionName = "0.16.5.8"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -187,6 +187,7 @@ dependencies {
     implementation(androidx.appcompat)
     implementation(androidx.biometricktx)
     implementation(androidx.constraintlayout)
+    implementation(androidx.compose.constraintlayout)
     implementation(androidx.corektx)
     implementation(androidx.splashscreen)
     implementation(androidx.recyclerview)

@@ -1,62 +1,48 @@
 package eu.kanade.tachiyomi.util
 
 import androidx.core.os.LocaleListCompat
-import eu.kanade.tachiyomi.animesource.model.Track
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
-import logcat.LogPriority
-import tachiyomi.core.common.util.system.logcat
-import uy.kohesive.injekt.injectLazy
+import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
+import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import java.util.Locale
 
-class SubtitleSelect(private val playerPreferences: PlayerPreferences) {
+class SubtitleSelect(private val subtitlePreferences: SubtitlePreferences) {
 
-    private val json: Json by injectLazy()
+    fun getPreferredSubtitleIndex(tracks: List<VideoTrack>): VideoTrack? {
+        val prefLangs = subtitlePreferences.preferredSubLanguages().get().split(",")
+            .filter { it.isNotEmpty() }
+        val whitelist = subtitlePreferences.subtitleWhitelist().get().split(",")
+            .filter { it.isNotEmpty() }
+        val blacklist = subtitlePreferences.subtitleBlacklist().get().split(",")
+            .filter { it.isNotEmpty() }
 
-    fun getPreferredSubtitleIndex(tracks: List<Track>): Int? {
-        val config = try {
-            json.decodeFromString<SubConfig>(playerPreferences.subSelectConf().get())
-        } catch (e: SerializationException) {
-            logcat(LogPriority.WARN, e) { "Invalid subtitle select configuration" }
-            SubConfig()
-        }
-
-        val locales = config.lang.map(::Locale).ifEmpty {
+        val locales = prefLangs.map(::Locale).ifEmpty {
             listOf(LocaleListCompat.getDefault()[0]!!)
         }
+
         val chosenLocale = locales.firstOrNull { locale ->
-            tracks.any { t -> containsLang(t.lang, locale) }
+            tracks.any { t -> containsLang(t, locale) }
         } ?: return null
 
         val filtered = tracks.withIndex()
             .filterNot { (_, track) ->
-                config.blacklist.any { track.lang.contains(it, true) }
+                blacklist.any { track.name.contains(it, true) }
             }
             .filter { (_, track) ->
-                containsLang(track.lang, chosenLocale)
+                containsLang(track, chosenLocale)
             }
 
         return filtered.firstOrNull { (_, track) ->
-            config.whitelist.any { track.lang.contains(it, true) }
-        }?.index ?: filtered.getOrNull(0)?.index
+            whitelist.any { track.name.contains(it, true) }
+        }?.value ?: filtered.getOrNull(0)?.value
     }
 
-    private fun containsLang(title: String, locale: Locale): Boolean {
+    private fun containsLang(track: VideoTrack, locale: Locale): Boolean {
         val localName = locale.getDisplayName(locale)
         val englishName = locale.getDisplayName(Locale.ENGLISH).substringBefore(" (")
         val langRegex = Regex("""\b${locale.isO3Language}|${locale.language}\b""", RegexOption.IGNORE_CASE)
 
-        return title.contains(localName, true) ||
-            title.contains(englishName, true) ||
-            langRegex.find(title) != null
+        return track.name.contains(localName, true) ||
+            track.name.contains(englishName, true) ||
+            track.language?.let { langRegex.find(it) != null } == true
     }
-
-    @Serializable
-    data class SubConfig(
-        val lang: List<String> = emptyList(),
-        val blacklist: List<String> = emptyList(),
-        val whitelist: List<String> = emptyList(),
-    )
 }

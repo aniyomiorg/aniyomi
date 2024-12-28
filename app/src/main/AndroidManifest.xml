@@ -203,13 +203,13 @@
         </activity>
         <activity
             android:name=".ui.player.PlayerActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="fullSensor"
-            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize|keyboardHidden|keyboard"
-            android:supportsPictureInPicture="true"
-            android:resizeableActivity="true"
+            android:autoRemoveFromRecents="true"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize|keyboardHidden|keyboard|uiMode"
             android:exported="false"
-            tools:targetApi="n">
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/Theme.Tachiyomi">
             <intent-filter>
                 <action android:name="com.samsung.android.support.REMOTE_ACTION" />
             </intent-filter>
