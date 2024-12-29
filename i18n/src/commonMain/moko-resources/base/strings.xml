@@ -206,9 +206,7 @@
     <string name="pref_controls_show_loading">Show loading circle</string>
     <string name="pref_controls_show_chapter_indicator">Show current chapter indicator</string>
     <string name="pref_controls_show_chapter_indicator_info">Only appears if the video has chapters</string>
-    <string name="enable_volume_brightness_gestures">Enable Volume and Brightness Gestures</string>
     <string name="pref_controls_display_volume_percentage">Display volume as percentage</string>
-    <string name="pref_controls_swap_vol_brightness">Swap volume and brightness slider</string>
     <string name="pref_remember_brightness">Remember and switch to the last used brightness</string>
     <string name="pref_remember_volume">Remember and switch to the last used volume</string>
 
@@ -233,6 +231,10 @@
     <!-- Player Settings - Gestures -->
     <string name="pref_player_gestures">Gestures</string>
     <string name="pref_player_gestures_summary">Seeking, double tap, media controls</string>
+
+    <string name="pref_category_player_sliders">Sliders</string>
+    <string name="enable_volume_brightness_gestures">Enable Volume and Brightness Gestures</string>
+    <string name="pref_controls_swap_vol_brightness">Swap volume and brightness slider</string>
 
     <string name="pref_category_player_seeking">Seeking</string>
     <string name="enable_horizontal_seek_gesture">Enable Horizontal Seek Gesture</string>

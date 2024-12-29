@@ -42,9 +42,30 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
         val gesturePreferences = remember { Injekt.get<GesturePreferences>() }
 
         return listOf(
+            getSlidersGroup(gesturePreferences = gesturePreferences),
             getSeekingGroup(gesturePreferences = gesturePreferences),
             getDoubleTapGroup(gesturePreferences = gesturePreferences),
             getMediaControlsGroup(gesturePreferences = gesturePreferences),
+        )
+    }
+
+    @Composable
+    private fun getSlidersGroup(gesturePreferences: GesturePreferences): Preference.PreferenceGroup {
+        val enableVolumeBrightnessGestures = gesturePreferences.gestureVolumeBrightness()
+        val swapVol = gesturePreferences.swapVolumeBrightness()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(MR.strings.pref_category_player_sliders),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableVolumeBrightnessGestures,
+                    title = stringResource(MR.strings.enable_volume_brightness_gestures),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = swapVol,
+                    title = stringResource(MR.strings.pref_controls_swap_vol_brightness),
+                ),
+            ),
         )
     }
 

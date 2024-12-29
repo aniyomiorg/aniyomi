@@ -102,8 +102,8 @@ fun GestureHandler(
         viewModel.hideSeekBar()
     }
 
-    val gestureVolumeBrightness = playerPreferences.gestureVolumeBrightness().get()
-    val swapVolumeBrightness by playerPreferences.swapVolumeBrightness().collectAsState()
+    val gestureVolumeBrightness = gesturePreferences.gestureVolumeBrightness().get()
+    val swapVolumeBrightness by gesturePreferences.swapVolumeBrightness().collectAsState()
     val seekGesture by gesturePreferences.gestureHorizontalSeek().collectAsState()
     val preciseSeeking by gesturePreferences.playerSmoothSeek().collectAsState()
     val showSeekbar by gesturePreferences.showSeekBar().collectAsState()
