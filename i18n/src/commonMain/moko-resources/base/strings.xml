@@ -399,6 +399,7 @@
     <string name="player_sheets_sub_typography_title">Typography</string>
     <string name="player_sheets_sub_typography_font">Font</string>
     <string name="player_sheets_sub_typography_font_size">Font size</string>
+    <string name="player_sheets_sub_typography_border_style">Border style</string>
     <string name="player_sheets_sub_typography_border_size">Border size</string>
     <string name="player_sheets_subtitles_shadow_offset">Shadow offset</string>
     <string name="player_sheets_subtitles_border_style_outline_and_shadow">Outline and shadow</string>
