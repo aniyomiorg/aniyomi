@@ -18,18 +18,23 @@
 package eu.kanade.tachiyomi.ui.player.controls.components.panels
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BorderColor
+import androidx.compose.material.icons.filled.BorderStyle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FormatBold
 import androidx.compose.material.icons.filled.FormatClear
@@ -52,6 +57,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yubyf.truetypeparser.TTFFile
 import dev.icerock.moko.resources.StringResource
@@ -269,24 +275,54 @@ fun SubtitleSettingsTypographyCard(
             }
 
             var selectingBorderStyle by remember { mutableStateOf(false) }
-            DropdownMenu(expanded = selectingBorderStyle, onDismissRequest = { selectingBorderStyle = false }) {
-                SubtitlesBorderStyle.entries.map {
-                    DropdownMenuItem(
-                        text = { Text(stringResource(it.titleRes)) },
-                        onClick = {
-                            borderStyle = it
-                            preferences.borderStyleSubtitles().set(it)
-                            MPVLib.setPropertyString("sub-border-style", it.value)
-                        },
-                        trailingIcon = {
-                            if (borderStyle == it) {
-                                Icon(
-                                    imageVector = Icons.Default.Check,
-                                    contentDescription = null,
-                                )
-                            }
-                        },
-                    )
+            Box {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            onClick = {
+                                selectingBorderStyle = !selectingBorderStyle
+                            },
+                        )
+                        .padding(
+                            horizontal = MaterialTheme.padding.medium,
+                            vertical = MaterialTheme.padding.small,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.large),
+                ) {
+                    Icon(Icons.Default.BorderStyle, null)
+                    Column {
+                        Text(
+                            text = stringResource(MR.strings.player_sheets_sub_typography_border_style),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                        Text(
+                            text = stringResource(borderStyle.titleRes),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                }
+                DropdownMenu(expanded = selectingBorderStyle, onDismissRequest = { selectingBorderStyle = false }) {
+                    SubtitlesBorderStyle.entries.map {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(it.titleRes)) },
+                            onClick = {
+                                borderStyle = it
+                                preferences.borderStyleSubtitles().set(it)
+                                MPVLib.setPropertyString("sub-border-style", it.value)
+                                selectingBorderStyle = false
+                            },
+                            trailingIcon = {
+                                if (borderStyle == it) {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = null,
+                                    )
+                                }
+                            },
+                        )
+                    }
                 }
             }
             SliderItem(
