@@ -7,6 +7,13 @@ import tachiyomi.core.common.preference.getEnum
 class GesturePreferences(
     private val preferenceStore: PreferenceStore,
 ) {
+    // Sliders
+    fun gestureVolumeBrightness() = preferenceStore.getBoolean(
+        "pref_gesture_volume_brightness",
+        true,
+    )
+    fun swapVolumeBrightness() = preferenceStore.getBoolean("pref_swap_volume_and_brightness", false)
+
     // Seeking
 
     fun gestureHorizontalSeek() = preferenceStore.getBoolean("pref_gesture_horizontal_seek", true)

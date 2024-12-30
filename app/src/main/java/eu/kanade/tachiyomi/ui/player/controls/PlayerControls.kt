@@ -216,7 +216,7 @@ fun PlayerControls(
                 val brightness by viewModel.currentBrightness.collectAsState()
                 val volume by viewModel.currentVolume.collectAsState()
                 val mpvVolume by viewModel.currentMPVVolume.collectAsState()
-                val swapVolumeAndBrightness by playerPreferences.swapVolumeBrightness().collectAsState()
+                val swapVolumeAndBrightness by gesturePreferences.swapVolumeBrightness().collectAsState()
                 val reduceMotion by playerPreferences.reduceMotion().collectAsState()
 
                 LaunchedEffect(volume, mpvVolume, isVolumeSliderShown) {

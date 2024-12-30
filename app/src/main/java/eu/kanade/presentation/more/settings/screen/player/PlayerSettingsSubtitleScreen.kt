@@ -21,16 +21,11 @@ object PlayerSettingsSubtitleScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val subtitlePreferences = remember { Injekt.get<SubtitlePreferences>() }
 
-        val rememberDelay = subtitlePreferences.rememberSubtitlesDelay()
         val langPref = subtitlePreferences.preferredSubLanguages()
         val whitelist = subtitlePreferences.subtitleWhitelist()
         val blacklist = subtitlePreferences.subtitleBlacklist()
 
         return listOf(
-            Preference.PreferenceItem.SwitchPreference(
-                pref = rememberDelay,
-                title = stringResource(MR.strings.player_subtitle_remember_delay),
-            ),
             Preference.PreferenceItem.EditTextInfoPreference(
                 pref = langPref,
                 title = stringResource(MR.strings.pref_player_subtitle_lang),

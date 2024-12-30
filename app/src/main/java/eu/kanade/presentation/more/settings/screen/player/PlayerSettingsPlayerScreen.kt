@@ -82,11 +82,8 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
     @Composable
     private fun getControlsGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
         val allowGestures = playerPreferences.allowGestures()
-        val displayVol = playerPreferences.displayVolPer()
-        val swapVol = playerPreferences.swapVolumeBrightness()
         val showLoading = playerPreferences.showLoadingCircle()
         val showChapter = playerPreferences.showCurrentChapter()
-        val enableVolumeBrightnessGestures = playerPreferences.gestureVolumeBrightness()
         val rememberPlayerBrightness = playerPreferences.rememberPlayerBrightness()
         val rememberPlayerVolume = playerPreferences.rememberPlayerVolume()
 
@@ -107,18 +104,6 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                     subtitle = stringResource(MR.strings.pref_controls_show_chapter_indicator_info),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableVolumeBrightnessGestures,
-                    title = stringResource(MR.strings.enable_volume_brightness_gestures),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = displayVol,
-                    title = stringResource(MR.strings.pref_controls_display_volume_percentage),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = swapVol,
-                    title = stringResource(MR.strings.pref_controls_swap_vol_brightness),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
                     pref = rememberPlayerBrightness,
                     title = stringResource(MR.strings.pref_remember_brightness),
                 ),
@@ -134,6 +119,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
     private fun getDisplayGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
         val fullScreen = playerPreferences.playerFullscreen()
         val hideControls = playerPreferences.hideControls()
+        val displayVol = playerPreferences.displayVolPer()
         val showSystemBar = playerPreferences.showSystemStatusBar()
         val reduceMotion = playerPreferences.reduceMotion()
         val hideTime = playerPreferences.playerTimeToDisappear()
@@ -153,6 +139,10 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = hideControls,
                     title = stringResource(MR.strings.pref_player_hide_controls),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = displayVol,
+                    title = stringResource(MR.strings.pref_controls_display_volume_percentage),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = showSystemBar,
