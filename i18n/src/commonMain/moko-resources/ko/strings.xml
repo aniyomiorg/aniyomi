@@ -950,7 +950,6 @@
     <string name="pref_reset_mpv_conf">MPV 구성 파일 초기화</string>
     <string name="delete_confirmation">정말로 \"%s\"을/를 삭제하시겠습니까?</string>
     <string name="label_storage">저장공간</string>
-    <string name="player_audio_remember_delay">오디오 딜레이 기억하기</string>
     <string name="download_slots_info">자체 호스팅 또는 무제한 소스에서만 동시에 다운로드됩니다</string>
     <string name="theme_mocha">모카</string>
     <string name="unlock_app_title">Aniyomi 잠금해재</string>
@@ -961,7 +960,6 @@
     <string name="unseen">보지 않음</string>
     <string name="pref_mpv_input">키보드 매핑 구성을 위한 MPV 입력 파일 편집</string>
     <string name="theme_cottoncandy">솜사탕</string>
-    <string name="player_subtitle_remember_delay">자막 딜레이 기억하기</string>
     <string name="label_manga_extension_repos">만화 확장앱 저장소</string>
     <string name="label_anime_extension_repos">애니메이션 확장앱 저장소</string>
     <string name="label_recent_anime_updates">애니메이션 업데이트</string>

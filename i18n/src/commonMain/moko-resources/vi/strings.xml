@@ -1031,8 +1031,6 @@
     <string name="pref_enable_netflix_style_aniskip">Bật style Netflix</string>
     <string name="player_aniskip_dontskip">Không skip</string>
     <string name="player_aniskip_skip">bỏ qua %s giây</string>
-    <string name="player_subtitle_remember_delay">Ghi nhớ độ trễ phụ đề</string>
-    <string name="player_audio_remember_delay">Ghi nhớ độ trễ âm thanh</string>
     <string name="data_saver_color_bw">Chuyển đổi sang Đen Trắng</string>
     <string name="label_manga_extension_repos">Repo Manga Extension</string>
     <string name="pref_mpv_scripts">Kích hoạt script MPV</string>

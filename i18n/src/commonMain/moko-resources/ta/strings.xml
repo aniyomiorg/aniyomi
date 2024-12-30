@@ -71,8 +71,6 @@
     <string name="pref_episode_swipe_start">இடது செயலுக்கு ச்வைப் செய்யவும்</string>
     <string name="pref_category_hide_hidden">வகைகள் மற்றும் சேமிப்பக திரையில் இருந்து மறைக்கப்பட்ட வகைகளை மறைக்கவும்</string>
     <string name="pref_update_anime_release_grace_period">அனிம் வெளியீட்டு சலுகை காலம் என்று எதிர்பார்க்கப்படுகிறது</string>
-    <string name="player_subtitle_remember_delay">வசன தாமதத்தை நினைவில் கொள்ளுங்கள்</string>
-    <string name="player_audio_remember_delay">ஆடியோ தாமதத்தை நினைவில் கொள்ளுங்கள்</string>
     <string name="data_saver_exclude">தரவு சேமிப்பாளரிடமிருந்து விலக்கு</string>
     <string name="data_saver_stop_exclude">தரவு சேமிப்பாளரிடமிருந்து விலக்குவதை நிறுத்துங்கள்</string>
     <string name="data_saver">தரவு சேமிப்பாளர்</string>

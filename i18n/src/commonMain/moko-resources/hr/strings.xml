@@ -993,14 +993,12 @@
     <string name="download_slots_info">Istodobno će se preuzimati samo iz izvora koji se sami hostiraju ili bez mjerenja</string>
     <string name="theme_cottoncandy">Cotton Candy</string>
     <string name="label_storage">Memorija</string>
-    <string name="player_audio_remember_delay">Zapamti kašnjenje zvuka</string>
     <string name="unlock_app_title">Otključaj Aniyomi</string>
     <string name="label_all">Sve</string>
     <string name="label_category">Kategorija</string>
     <string name="pref_pip_replace_with_previous">Zamjenjuje opciju Preskoči 10 sekundi s prethodnom epizodom</string>
     <string name="pref_anime_storage_usage">Korištenje Anime spremišta</string>
     <string name="pref_manga_storage_usage">Korištenje Manga spremišta</string>
-    <string name="player_subtitle_remember_delay">Zapamti kašnjenje titlova</string>
     <string name="pref_update_anime_release_grace_period">Očekivano razdoblje odgode izdavanje animea</string>
     <string name="unseen">Nepogledano</string>
     <string name="label_manga_extension_repos">Repozitoriji Manga proširenja</string>

@@ -1004,11 +1004,9 @@
     <string name="pref_anime_storage_usage">Utilizzo memoria Anime</string>
     <string name="pref_manga_storage_usage">Utilizzo memoria Manga</string>
     <string name="pref_update_anime_release_grace_period">Finestra di rilascio stimata per l\'anime</string>
-    <string name="player_audio_remember_delay">Memorizza ritardo audio</string>
     <string name="unseen">Non visto</string>
     <string name="label_category">Categoria</string>
     <string name="delete_confirmation">Sei sicuro di voler eliminare \"%s\"?</string>
-    <string name="player_subtitle_remember_delay">Memorizza ritardo dei sottotitoli</string>
     <string name="label_manga_extension_repos">Repo delle estensioni manga</string>
     <string name="label_anime_extension_repos">Repo delle estensioni anime</string>
     <string name="pref_reset_mpv_conf">Reimposta configurazione MPV</string>

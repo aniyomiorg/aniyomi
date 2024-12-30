@@ -980,8 +980,6 @@
     <string name="action_sort_airing_time">播放时间</string>
     <string name="pref_general_summary">应用语言 • 通知</string>
     <string name="action_open_repo">打开资源仓库</string>
-    <string name="player_subtitle_remember_delay">记住所设置的字幕延迟</string>
-    <string name="player_audio_remember_delay">记住所设置的音轨延迟</string>
     <string name="anime_interval_expected_update">新剧集预计在%1$s后发布，每隔%2$s检查一次。</string>
     <string name="download_notifier_download_finish">下载已完成</string>
     <string name="notification_episodes_multiple">第 %1$s 集</string>

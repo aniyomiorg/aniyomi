@@ -1036,7 +1036,6 @@
     <string name="unseen">Desver</string>
     <string name="label_recent_anime_updates">Atualização de animes</string>
     <string name="pref_debanding_title">Debandar</string>
-    <string name="player_subtitle_remember_delay">Lembrar atraso da legenda</string>
     <string name="label_storage">Armazenamento</string>
     <string name="pref_mpv_input">Edite o arquivo de entrada MPV para configuração de mapeamento de teclado</string>
     <string name="download_slots_info">Só fará download simultaneamente de fontes auto-hospedadas ou ilimitadas</string>
@@ -1049,7 +1048,6 @@
     <string name="pref_gpu_next_title">Ativar renderização prévia</string>
     <string name="pref_gpu_next_subtitle">Novo vídeo renderizando de fundo</string>
     <string name="pref_episode_swipe_end">Deslize para a direita para ação</string>
-    <string name="player_audio_remember_delay">Lembrar atraso de aúdio</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="resmush">resmush.it</string>
     <string name="label_manga_extension_repos">Repositório de extensões de mangás</string>

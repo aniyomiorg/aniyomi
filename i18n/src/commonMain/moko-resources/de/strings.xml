@@ -1004,14 +1004,12 @@
     <string name="data_saver_downloader">Datensparer im Downloader verwenden</string>
     <string name="data_saver_image_quality">Bildqualität</string>
     <string name="pref_episode_swipe">Folgenaktionen</string>
-    <string name="player_subtitle_remember_delay">Untertitelverzögerung merken</string>
     <string name="pref_anime_storage_usage">Anime-Speicherverbrauch</string>
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_hero">Bandwidth Hero (erfordert einen Bandwidth Hero Proxy-Server)</string>
     <string name="pref_pip_replace_with_previous">Ersetzt den 10-Sekunden-überspringen-Knopf mit \"Vorherige Folge\"</string>
     <string name="data_saver_stop_exclude">Nicht vom Datensparer ausschließen</string>
     <string name="theme_mocha">Mokka</string>
-    <string name="player_audio_remember_delay">Tonverzögerung merken</string>
     <string name="delete_confirmation">Sind Sie sicher, dass Sie \"%s\" löschen möchten?</string>
     <string name="data_saver">Datensparer</string>
     <string name="data_saver_image_format_summary_on">Die Jpeg-Datei ist wesentlich kleiner als die Webp-Datei (das heißt es werden mehr Daten gespeichert), aber die Qualität der Bilder nimmt dadurch auch zu.

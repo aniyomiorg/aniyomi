@@ -1022,7 +1022,6 @@
     <string name="label_storage">Depolama</string>
     <string name="pref_reset_mpv_conf">MPV yapılandırma dosyasını sıfırla</string>
     <string name="delete_confirmation">\"%s\" dosyasını silmek istediğinize emin misiniz?</string>
-    <string name="player_audio_remember_delay">Ses gecikmesini hatırla</string>
     <string name="unlock_app_title">Aniyomi\'nin kilidini aç</string>
     <string name="pref_pip_replace_with_previous">10 saniye atlama seçeneğini önceki bölüme geç seçeneği ile değiştirir</string>
     <string name="pref_anime_storage_usage">Anime Depolama kullanımı</string>
@@ -1031,7 +1030,6 @@
     <string name="pref_mpv_input">Tuş atamaları için MPV giriş dosyasını düzenle</string>
     <string name="label_manga_extension_repos">Manga eklenti depoları</string>
     <string name="label_anime_extension_repos">Anime eklenti depoları</string>
-    <string name="player_subtitle_remember_delay">Alt yazı gecikmesini hatırla</string>
     <string name="pref_debanding_title">Debanding</string>
     <string name="confirm_exit">Çıkmak için tekrar geriye basın</string>
     <string name="action_filter_started">Başlandı</string>

@@ -1021,7 +1021,6 @@
     <string name="theme_cottoncandy">Algodón de azúcar</string>
     <string name="download_slots_info">Solo se descargará simultáneamente desde las fuentes autoalojadas o sin contador</string>
     <string name="dialog_with_checkbox_reset">Restablecer todos los capítulos de este manga</string>
-    <string name="player_audio_remember_delay">Recordar el retardo del audio</string>
     <string name="label_all">Todo</string>
     <string name="label_category">Categoría</string>
     <string name="label_storage">Almacenamiento</string>
@@ -1031,7 +1030,6 @@
     <string name="pref_anime_storage_usage">Uso del espacio de almacenamiento del anime</string>
     <string name="pref_manga_storage_usage">Uso del espacio de almacenamiento del manga</string>
     <string name="delete_confirmation">¿Seguro que desea borrar \"%s\"?</string>
-    <string name="player_subtitle_remember_delay">Recordar el retraso de los subtítulos</string>
     <string name="dialog_with_checkbox_reset_anime">Restablecer todos los episodios de este anime</string>
     <string name="pref_mpv_input">Editar el archivo de entrada MPV para la configuración de la asignación del teclado</string>
     <string name="unseen">Sin ver</string>

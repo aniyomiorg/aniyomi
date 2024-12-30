@@ -1021,8 +1021,6 @@
     <string name="theme_mocha">Mocha</string>
     <string name="pref_hide_in_anime_library_items">Cacher les entrées d\'animes déjà dans la bibliothèque</string>
     <string name="data_saver_downloader">Utiliser l\'économiseur de données dans le téléchargeur</string>
-    <string name="player_audio_remember_delay">Se rappeler du délai de l\'audio</string>
-    <string name="player_subtitle_remember_delay">Se rappeler du délai des sous-titres</string>
     <string name="data_saver_image_format_summary_on">La taille des fichiers Jpeg est considérablement plus basse qu\'en Webp (il y a donc moins de données utilisées) mais les images sont de moins bonne qualité.
 \nCompresse actuellement en Jpeg</string>
     <string name="data_saver_color_bw">Convertir en noir et blanc</string>

@@ -1012,8 +1012,6 @@
     <string name="label_storage">Emmagatzematge</string>
     <string name="copied_video_link_to_clipboard">Nexe de qualitat de vídeo copiat a portapapers</string>
     <string name="theme_cottoncandy">Caramel de cotó</string>
-    <string name="player_subtitle_remember_delay">Recorda retard dels subtítols</string>
-    <string name="player_audio_remember_delay">Recorda retard de l\'àudio</string>
     <string name="data_saver_image_quality">Qualitat d\'imatge</string>
     <string name="resmush">resmush.it</string>
     <string name="pref_category_hide_hidden">Amaga les categories ocultes de categories i pantalla d\'emmagatzematge</string>

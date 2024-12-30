@@ -823,8 +823,6 @@
     <string name="pref_waiting_time_aniskip">Време истека дугмета</string>
     <string name="data_saver_stop_exclude">Престани са искључивањем из уштеде података</string>
     <string name="bandwidth_hero">Bandwidth Hero (захтева Bandwidth Hero Proxy сервер)</string>
-    <string name="player_subtitle_remember_delay">Запамти кашњење титлова</string>
-    <string name="player_audio_remember_delay">Запамти кашњење звука</string>
     <string name="download_slots_info">Преузимаће истовремено само са самостално хостованих или неограничених извора</string>
     <string name="download_speed_limit">Ограничење брзине преузимања</string>
     <string name="pref_category_pip">Слика у слици (PiP)</string>

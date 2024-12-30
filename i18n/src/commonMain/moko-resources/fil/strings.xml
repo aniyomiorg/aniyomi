@@ -1024,7 +1024,6 @@
     <string name="label_all">Lahat</string>
     <string name="label_category">Kategorya</string>
     <string name="delete_confirmation">Sigurado ka ba na alisin ang \"%s\"?</string>
-    <string name="player_audio_remember_delay">Tandaan ang kahulihan ng tunog</string>
     <string name="label_storage">Espasyo</string>
     <string name="pref_pip_replace_with_previous">Pinapalitan ang \"Skip 10 seconds option\" ng huling episode</string>
     <string name="pref_anime_storage_usage">Espasyo na nagagamit ng Anime</string>
@@ -1038,7 +1037,6 @@
     <string name="anime_interval_expected_update">Mga bago na episode ay lalabas sa %1$s, i-check kada %2$s.</string>
     <string name="pref_start_screen">Simulang Pahina</string>
     <string name="download_notifier_download_finish">Nakumpleto ang download</string>
-    <string name="player_subtitle_remember_delay">Tandaan ang kahulihan ng subtitle</string>
     <string name="download_speed_limit">Limito ng bilis ng pag-download</string>
     <string name="download_speed_limit_hint">Ilagay ay 0 para tanggalin ang limitadong bilis.</string>
     <string name="confirm_exit">Pindutin ulit ang back para umalis</string>

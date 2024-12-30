@@ -854,7 +854,6 @@
     <string name="pref_hide_in_anime_library_items">Скрыть аниме, которое уже есть в библиотеке</string>
     <string name="pref_reset_mpv_conf">Сброс файла конфигурации MPV</string>
     <string name="pref_mpv_input">Редактировать входной файл MPV для настройки отображения клавиатуры</string>
-    <string name="player_subtitle_remember_delay">Запомнить задержку субтитров</string>
     <string name="pref_manga_storage_usage">Использование хранилища Манга</string>
     <string name="delete_confirmation">Вы уверены, что хотите удалить «%s»?</string>
     <string name="label_storage">Хранилище</string>
@@ -994,7 +993,6 @@
     <string name="label_anime_history">Аниме</string>
     <string name="player_aniskip_ed">Пропустить Эндинг</string>
     <string name="pref_waiting_time_aniskip_9">9 секунд</string>
-    <string name="player_audio_remember_delay">Запомните задержку звука</string>
     <string name="data_saver_summary">Сжимайте изображения перед скачиванием или загрузкой в программу чтения</string>
     <string name="data_saver_downloader">Используйте сохранение данных в загрузчике</string>
     <string name="data_saver_ignore_jpeg">Игнорировать Jpeg-изображения</string>

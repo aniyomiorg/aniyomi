@@ -957,8 +957,6 @@
     <string name="pref_episode_swipe_start">Deslize para a esquerda</string>
     <string name="pref_update_anime_release_grace_period">Período de tempo previsto para lançamento</string>
     <string name="pref_category_hide_hidden">Ocultar Categorias Ocultas das categorias e da tela de armazenamento</string>
-    <string name="player_audio_remember_delay">Lembrar atraso de aúdio</string>
-    <string name="player_subtitle_remember_delay">Lembrar atraso de legenda</string>
     <string name="data_saver_exclude">Retirar da economia de dados</string>
     <string name="data_saver_stop_exclude">Parar exclusão da economia de dados</string>
     <string name="data_saver_ignore_jpeg">Ignorar imagens Jpeg</string>

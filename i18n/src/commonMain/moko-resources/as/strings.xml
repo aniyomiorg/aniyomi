@@ -26,8 +26,6 @@
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="label_migration_anime">এনিমে স্থানান্তৰ</string>
-    <string name="player_subtitle_remember_delay">সাবটাইটেল বিলম্ব মনত ৰাখক</string>
-    <string name="player_audio_remember_delay">অডিঅ’ বিলম্ব মনত ৰাখক</string>
     <string name="data_saver_downloader">ডাটা ছেভাৰ ডাউনলোডাৰত ব্যৱহাৰ কৰক</string>
     <string name="data_saver_ignore_jpeg">জপেগ চিত্ৰসমূহ উপেক্ষা কৰক</string>
     <string name="data_saver_ignore_gif">জিফ এনিমেশ্বনসমূহ উপেক্ষা কৰক</string>

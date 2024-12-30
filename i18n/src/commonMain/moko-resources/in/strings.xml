@@ -1046,8 +1046,6 @@
     <string name="pref_download_slots">Unduhan maksimal</string>
     <string name="pref_debanding_title">Debanding</string>
     <string name="theme_cottoncandy">Permen Kapas</string>
-    <string name="player_subtitle_remember_delay">Ingat penundaan subtitle</string>
-    <string name="player_audio_remember_delay">Ingat penundaan audio</string>
     <string name="download_slots_info">Hanya akan mengunduh secara bersamaan dari sumber yang dihosting sendiri atau tidak diukur</string>
     <string name="unseen">Tak terlihat</string>
     <string name="label_manga_extension_repos">Repo ekstensi manga</string>

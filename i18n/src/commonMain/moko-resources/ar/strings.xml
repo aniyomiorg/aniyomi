@@ -1083,8 +1083,6 @@
     <string name="anime_interval_expected_update">من المتوقع إصدار حلقات جديدة بعد %1$s، سيتم التحقق كل %2$s.</string>
     <string name="onboarding_storage_action_create_folder">إنشاء مجلد Aniyomi افتراضي</string>
     <string name="safe_download">وضع التنزيل الآمن للأنمي</string>
-    <string name="player_subtitle_remember_delay">تذكر تأخير الترجمة</string>
-    <string name="player_audio_remember_delay">تذكر تأخير الصوت</string>
     <string name="safe_download_summary">تمكين وضع التنزيل بخط واحد وبدون نطاق</string>
     <string name="download_threads_number">عدد الخطوط</string>
     <string name="download_threads_number_summary">عدد الخطوط المستخدمة للتنزيل، قد يؤدي إلى حظر عنوان IP الخاص بك إذا كان مرتفعًا للغاية، وعادةً ما يكون 4 عددًا جيدًا لتجنب التحميل الثقيل على خوادم المصدر.</string>
