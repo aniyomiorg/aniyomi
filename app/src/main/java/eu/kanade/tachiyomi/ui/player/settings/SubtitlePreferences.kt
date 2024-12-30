@@ -15,11 +15,6 @@ import tachiyomi.core.common.preference.getEnum
 class SubtitlePreferences(
     private val preferenceStore: PreferenceStore,
 ) {
-    fun rememberSubtitlesDelay() = preferenceStore.getBoolean(
-        "pref_remember_subtitles_delay",
-        false,
-    )
-
     fun preferredSubLanguages() = preferenceStore.getString("pref_subtitle_lang", "")
     fun subtitleWhitelist() = preferenceStore.getString("pref_subtitle_whitelist", "")
     fun subtitleBlacklist() = preferenceStore.getString("pref_subtitle_blacklist", "")

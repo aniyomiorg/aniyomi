@@ -296,7 +296,6 @@
     <!-- Player settings - Subtitles -->
     <string name="pref_player_subtitle">Subtitles</string>
     <string name="pref_player_subtitle_summary">Preferred languages, whitelist, blacklist</string>
-    <string name="player_subtitle_remember_delay">Remember subtitle delay</string>
     <string name="pref_player_subtitle_lang">Preferred languages</string>
     <string name="pref_player_subtitle_lang_info">Subtitle language(s) to be selected by default on a video with multiple subtitles, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
     <string name="pref_player_subtitle_whitelist">Whitelist</string>
@@ -307,7 +306,6 @@
     <!-- Player settings - Audio -->
     <string name="pref_player_audio">Audio</string>
     <string name="pref_player_audio_summary">Preferred languages, pitch correction, audio channels</string>
-    <string name="player_audio_remember_delay">Remember audio delay</string>
     <string name="pref_player_audio_lang">Preferred languages</string>
     <string name="pref_player_audio_lang_info">Audio language(s) to be selected by default on a video with multiple audio streams, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
     <string name="pref_player_audio_pitch_correction">Enable audio pitch correction</string>
