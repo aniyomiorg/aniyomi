@@ -26,7 +26,7 @@ end
 function aniyomi.set_button_title(text)
     mp.set_property("user-data/aniyomi/set_button_title", text)
 end
-function aniyomi.reset_button_title(text)
+function aniyomi.reset_button_title()
     mp.set_property("user-data/aniyomi/reset_button_title", "unused")
 end
 function aniyomi.previous_episode()
