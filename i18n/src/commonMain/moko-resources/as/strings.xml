@@ -1149,4 +1149,7 @@
     <string name="pref_player_advanced_summary">স্ক্ৰিপ্ট, mpv.conf, input.conf</string>
     <string name="pref_player_subtitle_blacklist_info">সাবটাইটেলৰ বাবে ব্লেকলিষ্ট। যদিহে ব্লেকলিষ্ট সংজ্ঞায়িত থাকে, তেন্তে ব্লেকলিষ্ট শব্দ থকা সকলো সাবটাইটেল পৰিস্কাৰ কৰা হব। একাধিক মানে কমা দ্বাৰা পৃথক কৰিব পাৰি।</string>
     <string name="pref_player_subtitle_lang_info">একাধিক সাবটাইটেল থকা ভিডিঅ\'ত ডিফল্টৰূপে বাচনি কৰা ভাষা(সমূহ), দুই-অথবা তিনিচৰাৰ ভাষা কোড সমৰ্থিত। একাধিক মানে কমা দ্বাৰা পৃথক কৰিব পাৰি।</string>
+    <string name="rotation_video">ভিডিঅ</string>
+    <string name="pref_controls_allow_gestures_in_panels">পেনেলত ইঙ্গিত অনুমতি দিয়ক</string>
+    <string name="pref_category_controls">নিয়ন্ত্ৰণসমূহ</string>
 </resources>
