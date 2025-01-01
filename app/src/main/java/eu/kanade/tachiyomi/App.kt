@@ -107,6 +107,8 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
+        val scope = ProcessLifecycleOwner.get().lifecycleScope
+
         // Show notification to disable Incognito Mode when it's enabled
         basePreferences.incognitoMode().changes()
             .onEach { enabled ->
