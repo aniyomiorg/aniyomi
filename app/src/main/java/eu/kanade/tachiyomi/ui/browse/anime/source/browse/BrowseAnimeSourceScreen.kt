@@ -208,11 +208,9 @@ data class BrowseAnimeSourceScreen(
             },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         ) { paddingValues ->
-            val pagingFlow by screenModel.animePagerFlowFlow.collectAsState()
-
             BrowseAnimeSourceContent(
                 source = screenModel.source,
-                animeList = pagingFlow.collectAsLazyPagingItems(),
+                animeList = screenModel.animePagerFlow.collectAsLazyPagingItems(),
                 columns = screenModel.getColumnsPreference(LocalConfiguration.current.orientation),
                 displayMode = screenModel.displayMode,
                 snackbarHostState = snackbarHostState,
