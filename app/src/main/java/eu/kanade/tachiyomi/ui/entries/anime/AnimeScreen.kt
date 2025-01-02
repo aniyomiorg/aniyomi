@@ -55,7 +55,6 @@ import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -335,13 +334,17 @@ class AnimeScreen(
                         screenModel.setAnimeViewerFlags.awaitSetSkipIntroLength(animeId, newLength)
                     }
                 }
+                // TODO(custombuttons)
+                /*
                 SkipIntroLengthDialog(
                     currentSkipIntroLength = successState.anime.skipIntroLength,
-                    defaultSkipIntroLength = screenModel.playerPreferences.defaultIntroLength().get(),
+                    defaultSkipIntroLength = screenModel.gesturePreferences.defaultIntroLength().get(),
                     fromPlayer = false,
                     updateSkipIntroLength = ::updateSkipIntroLength,
                     onDismissRequest = onDismissRequest,
                 )
+
+                 */
             }
             is AnimeScreenModel.Dialog.ShowQualities -> {
                 EpisodeOptionsDialogScreen.onDismissDialog = onDismissRequest

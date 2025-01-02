@@ -7,6 +7,7 @@ package eu.kanade.tachiyomi.data.connections.discord
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.IBinder
@@ -18,7 +19,7 @@ import eu.kanade.tachiyomi.data.connections.ConnectionsManager
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.ui.player.viewer.PipState
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.serialization.json.Json
@@ -31,6 +32,7 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.ceil
 import kotlin.math.floor
+
 
 class DiscordRPCService : Service() {
 
@@ -91,6 +93,9 @@ class DiscordRPCService : Service() {
         internal var rpc: DiscordRPC? = null
 
         private val handler = Handler(Looper.getMainLooper())
+        private val playerPreferences: PlayerPreferences by injectLazy()
+
+
 
         fun start(context: Context) {
             handler.removeCallbacksAndMessages(null)
@@ -128,7 +133,7 @@ class DiscordRPCService : Service() {
             discordScreen: DiscordScreen,
             playerData: PlayerData = PlayerData(),
         ) {
-            if (PipState.mode == PipState.ON && discordScreen != DiscordScreen.VIDEO) return
+            if ( discordScreen != DiscordScreen.VIDEO) return
             lastUsedScreen = discordScreen
 
             if (rpc == null) return

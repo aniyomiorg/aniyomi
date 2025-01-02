@@ -6,8 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.player.viewer.AudioChannels
+import eu.kanade.tachiyomi.ui.player.settings.AudioChannels
+import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import kotlinx.collections.immutable.toImmutableMap
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
@@ -23,12 +23,12 @@ object PlayerSettingsAudioScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
+        val audioPreferences = remember { Injekt.get<AudioPreferences>() }
 
-        val prefLangs = playerPreferences.preferredAudioLanguages()
-        val pitchCorrection = playerPreferences.enablePitchCorrection()
-        val audioChannels = playerPreferences.audioChannels()
-        val boostCapPref = playerPreferences.volumeBoostCap()
+        val prefLangs = audioPreferences.preferredAudioLanguages()
+        val pitchCorrection = audioPreferences.enablePitchCorrection()
+        val audioChannels = audioPreferences.audioChannels()
+        val boostCapPref = audioPreferences.volumeBoostCap()
         val boostCap by boostCapPref.collectAsState()
 
         return listOf(
@@ -46,7 +46,7 @@ object PlayerSettingsAudioScreen : SearchableSettings {
                 pref = audioChannels,
                 title = stringResource(MR.strings.pref_player_audio_channels),
                 entries = AudioChannels.entries.associateWith {
-                    stringResource(it.textRes)
+                    stringResource(it.titleRes)
                 }.toImmutableMap(),
             ),
             Preference.PreferenceItem.SliderPreference(

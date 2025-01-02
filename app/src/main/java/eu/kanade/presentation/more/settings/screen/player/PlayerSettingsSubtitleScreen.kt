@@ -5,7 +5,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
@@ -19,11 +19,11 @@ object PlayerSettingsSubtitleScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
+        val subtitlePreferences = remember { Injekt.get<SubtitlePreferences>() }
 
-        val langPref = playerPreferences.preferredSubLanguages()
-        val whitelist = playerPreferences.subtitleWhitelist()
-        val blacklist = playerPreferences.subtitleBlacklist()
+        val langPref = subtitlePreferences.preferredSubLanguages()
+        val whitelist = subtitlePreferences.subtitleWhitelist()
+        val blacklist = subtitlePreferences.subtitleBlacklist()
 
         return listOf(
             Preference.PreferenceItem.EditTextInfoPreference(

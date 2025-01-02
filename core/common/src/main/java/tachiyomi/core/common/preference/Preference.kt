@@ -53,6 +53,11 @@ inline fun <reified T, R : T> Preference<T>.getAndSet(crossinline block: (T) -> 
     block(get()),
 )
 
+inline fun <reified T> Preference<T>.deleteAndGet(): T {
+    delete()
+    return get()
+}
+
 operator fun <T> Preference<Set<T>>.plusAssign(item: T) {
     set(get() + item)
 }
