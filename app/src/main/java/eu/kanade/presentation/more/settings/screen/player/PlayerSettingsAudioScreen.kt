@@ -25,7 +25,6 @@ object PlayerSettingsAudioScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val audioPreferences = remember { Injekt.get<AudioPreferences>() }
 
-        val rememberDelay = audioPreferences.rememberAudioDelay()
         val prefLangs = audioPreferences.preferredAudioLanguages()
         val pitchCorrection = audioPreferences.enablePitchCorrection()
         val audioChannels = audioPreferences.audioChannels()
@@ -33,10 +32,6 @@ object PlayerSettingsAudioScreen : SearchableSettings {
         val boostCap by boostCapPref.collectAsState()
 
         return listOf(
-            Preference.PreferenceItem.SwitchPreference(
-                pref = rememberDelay,
-                title = stringResource(MR.strings.player_audio_remember_delay),
-            ),
             Preference.PreferenceItem.EditTextInfoPreference(
                 pref = prefLangs,
                 title = stringResource(MR.strings.pref_player_audio_lang),

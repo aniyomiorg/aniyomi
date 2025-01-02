@@ -21,14 +21,8 @@ class PlayerPreferences(
     // Controls
 
     fun allowGestures() = preferenceStore.getBoolean("pref_allow_gestures_in_panels", false)
-    fun displayVolPer() = preferenceStore.getBoolean("pref_display_vol_as_per", true)
-    fun swapVolumeBrightness() = preferenceStore.getBoolean("pref_swap_volume_and_brightness", false)
     fun showLoadingCircle() = preferenceStore.getBoolean("pref_show_loading", true)
     fun showCurrentChapter() = preferenceStore.getBoolean("pref_show_current_chapter", true)
-    fun gestureVolumeBrightness() = preferenceStore.getBoolean(
-        "pref_gesture_volume_brightness",
-        true,
-    )
     fun rememberPlayerBrightness() = preferenceStore.getBoolean("pref_remember_brightness", false)
     fun playerBrightnessValue() = preferenceStore.getFloat("player_brightness_value", -1.0F)
     fun rememberPlayerVolume() = preferenceStore.getBoolean("pref_remember_volume", false)
@@ -38,6 +32,7 @@ class PlayerPreferences(
 
     fun playerFullscreen() = preferenceStore.getBoolean("player_fullscreen", true)
     fun hideControls() = preferenceStore.getBoolean("player_hide_controls", false)
+    fun displayVolPer() = preferenceStore.getBoolean("pref_display_vol_as_per", true)
     fun showSystemStatusBar() = preferenceStore.getBoolean("pref_show_system_status_bar", false)
     fun reduceMotion() = preferenceStore.getBoolean("pref_reduce_motion", false)
     fun playerTimeToDisappear() = preferenceStore.getInt("pref_player_time_to_disappear", 4000)

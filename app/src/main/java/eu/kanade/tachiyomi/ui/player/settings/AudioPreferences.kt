@@ -8,7 +8,6 @@ import tachiyomi.i18n.MR
 class AudioPreferences(
     private val preferenceStore: PreferenceStore,
 ) {
-    fun rememberAudioDelay() = preferenceStore.getBoolean("pref_remember_audio_delay", false)
     fun preferredAudioLanguages() = preferenceStore.getString("pref_audio_lang", "")
     fun enablePitchCorrection() = preferenceStore.getBoolean("pref_audio_pitch_correction", true)
     fun audioChannels() = preferenceStore.getEnum("pref_audio_config", AudioChannels.AutoSafe)
