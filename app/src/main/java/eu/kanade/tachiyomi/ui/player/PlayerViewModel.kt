@@ -39,7 +39,6 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
-import eu.kanade.domain.sync.SyncPreferences
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
@@ -54,7 +53,6 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
-import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
@@ -136,7 +134,6 @@ class PlayerViewModel @JvmOverloads constructor(
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
-    private val syncPreferences: SyncPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
     private val basePreferences: BasePreferences = Injekt.get(),
@@ -161,10 +158,617 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _currentSource = MutableStateFlow<AnimeSource?>(null)
     val currentSource = _currentSource.asStateFlow()
 
+    private val _isLoadingEpisode = MutableStateFlow(false)
+    val isLoadingEpisode = _isLoadingEpisode.asStateFlow()
+
+    private val _currentDecoder = MutableStateFlow(getDecoderFromValue(MPVLib.getPropertyString("hwdec")))
+    val currentDecoder = _currentDecoder.asStateFlow()
+
+    val mediaTitle = MutableStateFlow("")
+    val animeTitle = MutableStateFlow("")
+
+    val isLoading = MutableStateFlow(true)
+    val playbackSpeed = MutableStateFlow(playerPreferences.playerSpeed().get())
+
+    private val _subtitleTracks = MutableStateFlow<List<VideoTrack>>(emptyList())
+    val subtitleTracks = _subtitleTracks.asStateFlow()
+    private val _selectedSubtitles = MutableStateFlow(Pair(-1, -1))
+    val selectedSubtitles = _selectedSubtitles.asStateFlow()
+
+    private val _audioTracks = MutableStateFlow<List<VideoTrack>>(emptyList())
+    val audioTracks = _audioTracks.asStateFlow()
+    private val _selectedAudio = MutableStateFlow(-1)
+    val selectedAudio = _selectedAudio.asStateFlow()
+
+    val isLoadingTracks = MutableStateFlow(true)
+
+    private val _videoList = MutableStateFlow<List<Video>>(emptyList())
+    val videoList = _videoList.asStateFlow()
+    private val _selectedVideoIndex = MutableStateFlow(-1)
+    val selectedVideoIndex = _selectedVideoIndex.asStateFlow()
+
+    private val _chapters = MutableStateFlow<List<IndexedSegment>>(emptyList())
+    val chapters = _chapters.asStateFlow()
+    private val _currentChapter = MutableStateFlow<IndexedSegment?>(null)
+    val currentChapter = _currentChapter.asStateFlow()
+
+    private val _pos = MutableStateFlow(0f)
+    val pos = _pos.asStateFlow()
+
+    val duration = MutableStateFlow(0f)
+
+    private val _readAhead = MutableStateFlow(0f)
+    val readAhead = _readAhead.asStateFlow()
+
+    private val _paused = MutableStateFlow(false)
+    val paused = _paused.asStateFlow()
+
+    private val _controlsShown = MutableStateFlow(!playerPreferences.hideControls().get())
+    val controlsShown = _controlsShown.asStateFlow()
+    private val _seekBarShown = MutableStateFlow(!playerPreferences.hideControls().get())
+    val seekBarShown = _seekBarShown.asStateFlow()
+    private val _areControlsLocked = MutableStateFlow(false)
+    val areControlsLocked = _areControlsLocked.asStateFlow()
+
+    val playerUpdate = MutableStateFlow<PlayerUpdates>(PlayerUpdates.None)
+    val isBrightnessSliderShown = MutableStateFlow(false)
+    val isVolumeSliderShown = MutableStateFlow(false)
+    val currentBrightness = MutableStateFlow(
+        runCatching {
+            Settings.System.getFloat(activity.contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+                .normalize(0f, 255f, 0f, 1f)
+        }.getOrElse { 0f },
+    )
+    val currentVolume = MutableStateFlow(activity.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC))
+    val currentMPVVolume = MutableStateFlow(MPVLib.getPropertyInt("volume"))
+    var volumeBoostCap: Int = MPVLib.getPropertyInt("volume-max")
+
+    // Pair(startingPosition, seekAmount)
+    val gestureSeekAmount = MutableStateFlow<Pair<Int, Int>?>(null)
+
+    val sheetShown = MutableStateFlow(Sheets.None)
+    val panelShown = MutableStateFlow(Panels.None)
+    val dialogShown = MutableStateFlow(Dialogs.None)
+
+    private val _seekText = MutableStateFlow<String?>(null)
+    val seekText = _seekText.asStateFlow()
+    private val _doubleTapSeekAmount = MutableStateFlow(0)
+    val doubleTapSeekAmount = _doubleTapSeekAmount.asStateFlow()
+    private val _isSeekingForwards = MutableStateFlow(false)
+    val isSeekingForwards = _isSeekingForwards.asStateFlow()
+
+    private var timerJob: Job? = null
+    private val _remainingTime = MutableStateFlow(0)
+    val remainingTime = _remainingTime.asStateFlow()
+
+    private val _aniskipButton = MutableStateFlow<String?>(null)
+    val aniskipButton = _aniskipButton.asStateFlow()
+
+    val cachePath: String = activity.cacheDir.path
+
+    private fun updateAniskipButton(value: String?) {
+        _aniskipButton.update { _ -> value }
+    }
+
+    /**
+     * Starts a sleep timer/cancels the current timer if [seconds] is less than 1.
+     */
+    fun startTimer(seconds: Int) {
+        timerJob?.cancel()
+        _remainingTime.value = seconds
+        if (seconds < 1) return
+        timerJob = viewModelScope.launch {
+            for (time in seconds downTo 0) {
+                _remainingTime.value = time
+                delay(1000)
+            }
+            pause()
+            withUIContext { Injekt.get<Application>().toast(MR.strings.toast_sleep_timer_ended) }
+        }
+    }
+
+    fun isEpisodeOnline(): Boolean? {
+        val anime = currentAnime.value ?: return null
+        val episode = currentEpisode.value ?: return null
+        val source = currentSource.value ?: return null
+        return source is AnimeHttpSource &&
+            !EpisodeLoader.isDownload(
+                episode.toDomainEpisode()!!,
+                anime,
+            )
+    }
+
+    fun updateIsLoadingEpisode(value: Boolean) {
+        _isLoadingEpisode.update { _ -> value }
+    }
+
+    private fun updateEpisodeList(episodeList: List<Episode>) {
+        _currentPlaylist.update { _ -> filterEpisodeList(episodeList) }
+    }
+
+    fun getDecoder() {
+        _currentDecoder.update { getDecoderFromValue(activity.player.hwdecActive) }
+    }
+
+    fun updateDecoder(decoder: Decoder) {
+        MPVLib.setPropertyString("hwdec", decoder.value)
+    }
+
+    val getTrackLanguage: (Int) -> String = {
+        if (it != -1) {
+            MPVLib.getPropertyString("track-list/$it/lang") ?: ""
+        } else {
+            activity.stringResource(MR.strings.off)
+        }
+    }
+    val getTrackTitle: (Int) -> String = {
+        if (it != -1) {
+            MPVLib.getPropertyString("track-list/$it/title") ?: ""
+        } else {
+            activity.stringResource(MR.strings.off)
+        }
+    }
+    val getTrackMPVId: (Int) -> Int = {
+        if (it != -1) {
+            MPVLib.getPropertyInt("track-list/$it/id")
+        } else {
+            -1
+        }
+    }
+    val getTrackType: (Int) -> String? = {
+        MPVLib.getPropertyString("track-list/$it/type")
+    }
+
+    private var trackLoadingJob: Job? = null
+    fun loadTracks() {
+        trackLoadingJob?.cancel()
+        trackLoadingJob = viewModelScope.launch {
+            val possibleTrackTypes = listOf("audio", "sub")
+            val subTracks = mutableListOf<VideoTrack>()
+            val audioTracks = mutableListOf(
+                VideoTrack(-1, activity.stringResource(MR.strings.off), null),
+            )
+            try {
+                val tracksCount = MPVLib.getPropertyInt("track-list/count") ?: 0
+                for (i in 0..<tracksCount) {
+                    val type = getTrackType(i)
+                    if (!possibleTrackTypes.contains(type) || type == null) continue
+                    when (type) {
+                        "sub" -> subTracks.add(VideoTrack(getTrackMPVId(i), getTrackTitle(i), getTrackLanguage(i)))
+                        "audio" -> audioTracks.add(VideoTrack(getTrackMPVId(i), getTrackTitle(i), getTrackLanguage(i)))
+                        else -> error("Unrecognized track type")
+                    }
+                }
+            } catch (e: NullPointerException) {
+                logcat(LogPriority.ERROR) { "Couldn't load tracks, probably cause mpv was destroyed" }
+                return@launch
+            }
+            _subtitleTracks.update { subTracks }
+            _audioTracks.update { audioTracks }
+
+            if (!isLoadingTracks.value) {
+                onFinishLoadingTracks()
+            }
+        }
+    }
+
+    fun onFinishLoadingTracks() {
+        val preferredSubtitle = activity.subtitleSelect.getPreferredSubtitleIndex(subtitleTracks.value)
+        preferredSubtitle?.let {
+            activity.player.sid = it.id
+            activity.player.secondarySid = -1
+        }
+
+        isLoadingTracks.update { _ -> true }
+        updateIsLoadingEpisode(false)
+        unpause()
+    }
+
+    @Immutable
+    data class VideoTrack(
+        val id: Int,
+        val name: String,
+        val language: String?,
+    )
+
+    fun loadChapters() {
+        val chapters = mutableListOf<IndexedSegment>()
+        val count = MPVLib.getPropertyInt("chapter-list/count")!!
+        for (i in 0 until count) {
+            val title = MPVLib.getPropertyString("chapter-list/$i/title")
+            val time = MPVLib.getPropertyInt("chapter-list/$i/time")!!
+            chapters.add(
+                IndexedSegment(
+                    name = title,
+                    start = time.toFloat(),
+                    index = 0,
+                ),
+            )
+        }
+        updateChapters(chapters.sortedBy { it.start })
+    }
+
+    fun updateChapters(chapters: List<IndexedSegment>) {
+        _chapters.update { _ -> chapters }
+    }
+
+    fun selectChapter(index: Int) {
+        val time = chapters.value[index].start
+        seekTo(time.toInt())
+    }
+
+    fun updateChapter(index: Long) {
+        if (chapters.value.isEmpty() || index == -1L) return
+        _currentChapter.update { chapters.value.getOrNull(index.toInt()) ?: return }
+    }
+
+    fun updateVideoList(videoList: List<Video>) {
+        _videoList.update { _ -> videoList }
+    }
+
+    fun setVideoIndex(idx: Int) {
+        _selectedVideoIndex.update { _ -> idx }
+    }
+
+    fun selectVideo(video: Video) {
+        updateIsLoadingEpisode(true)
+
+        val idx = videoList.value.indexOf(video)
+
+        activity.setVideoList(
+            qualityIndex = idx,
+            videos = videoList.value,
+        )
+    }
+
+    fun addAudio(uri: Uri) {
+        val url = uri.toString()
+        val isContentUri = url.startsWith("content://")
+        val path = (if (isContentUri) uri.openContentFd(activity) else url)
+            ?: return
+        val name = if (isContentUri) uri.getFileName(activity) else null
+        if (name == null) {
+            MPVLib.command(arrayOf("audio-add", path, "cached"))
+        } else {
+            MPVLib.command(arrayOf("audio-add", path, "cached", name))
+        }
+    }
+
+    fun selectAudio(id: Int) {
+        activity.player.aid = id
+    }
+
+    fun updateAudio(id: Int) {
+        _selectedAudio.update { id }
+    }
+
+    fun addSubtitle(uri: Uri) {
+        val url = uri.toString()
+        val isContentUri = url.startsWith("content://")
+        val path = (if (isContentUri) uri.openContentFd(activity) else url)
+            ?: return
+        val name = if (isContentUri) uri.getFileName(activity) else null
+        if (name == null) {
+            MPVLib.command(arrayOf("sub-add", path, "cached"))
+        } else {
+            MPVLib.command(arrayOf("sub-add", path, "cached", name))
+        }
+    }
+
+    fun selectSub(id: Int) {
+        val selectedSubs = selectedSubtitles.value
+        _selectedSubtitles.update {
+            when (id) {
+                selectedSubs.first -> Pair(selectedSubs.second, -1)
+                selectedSubs.second -> Pair(selectedSubs.first, -1)
+                else -> {
+                    if (selectedSubs.first != -1) {
+                        Pair(selectedSubs.first, id)
+                    } else {
+                        Pair(id, -1)
+                    }
+                }
+            }
+        }
+        activity.player.secondarySid = _selectedSubtitles.value.second
+        activity.player.sid = _selectedSubtitles.value.first
+    }
+
+    fun updateSubtitle(sid: Int, secondarySid: Int) {
+        _selectedSubtitles.update { Pair(sid, secondarySid) }
+    }
+
+    fun updatePlayBackPos(pos: Float) {
+        onSecondReached(pos.toInt(), duration.value.toInt())
+        _pos.update { pos }
+    }
+
+    fun updateReadAhead(value: Long) {
+        _readAhead.update { value.toFloat() }
+    }
+
+    fun pauseUnpause() {
+        if (paused.value) {
+            unpause()
+        } else {
+            pause()
+        }
+    }
+
+    fun pause() {
+        activity.player.paused = true
+        _paused.update { true }
+        runCatching {
+            activity.setPictureInPictureParams(activity.createPipParams())
+        }
+    }
+
+    fun unpause() {
+        activity.player.paused = false
+        _paused.update { false }
+    }
+
+    private val showStatusBar = playerPreferences.showSystemStatusBar().get()
+    fun showControls() {
+        if (sheetShown.value != Sheets.None ||
+            panelShown.value != Panels.None ||
+            dialogShown.value != Dialogs.None
+        ) {
+            return
+        }
+        if (showStatusBar) {
+            activity.windowInsetsController.show(WindowInsetsCompat.Type.statusBars())
+        }
+        _controlsShown.update { true }
+    }
+
+    fun hideControls() {
+        activity.windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+        _controlsShown.update { false }
+    }
+
+    fun hideSeekBar() {
+        _seekBarShown.update { false }
+    }
+
+    fun showSeekBar() {
+        if (sheetShown.value != Sheets.None) return
+        _seekBarShown.update { true }
+    }
+
+    fun lockControls() {
+        _areControlsLocked.update { true }
+    }
+
+    fun unlockControls() {
+        _areControlsLocked.update { false }
+    }
+
+    fun seekBy(offset: Int, precise: Boolean = false) {
+        MPVLib.command(arrayOf("seek", offset.toString(), if (precise) "relative+exact" else "relative"))
+    }
+
+    fun seekTo(position: Int, precise: Boolean = true) {
+        if (position !in 0..(activity.player.duration ?: 0)) return
+        MPVLib.command(arrayOf("seek", position.toString(), if (precise) "absolute" else "absolute+keyframes"))
+    }
+
+    fun changeBrightnessTo(
+        brightness: Float,
+    ) {
+        activity.window.attributes = activity.window.attributes.apply {
+            screenBrightness = brightness.coerceIn(0f, 1f).also {
+                currentBrightness.update { _ -> it }
+            }
+        }
+    }
+
+    fun displayBrightnessSlider() {
+        isBrightnessSliderShown.update { true }
+    }
+
+    val maxVolume = activity.audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+    fun changeVolumeBy(change: Int) {
+        val mpvVolume = MPVLib.getPropertyInt("volume")
+        if (volumeBoostCap > 0 && currentVolume.value == maxVolume) {
+            if (mpvVolume == 100 && change < 0) changeVolumeTo(currentVolume.value + change)
+            val finalMPVVolume = (mpvVolume + change).coerceAtLeast(100)
+            if (finalMPVVolume in 100..volumeBoostCap + 100) {
+                changeMPVVolumeTo(finalMPVVolume)
+                return
+            }
+        }
+        changeVolumeTo(currentVolume.value + change)
+    }
+
+    fun changeVolumeTo(volume: Int) {
+        val newVolume = volume.coerceIn(0..maxVolume)
+        activity.audioManager.setStreamVolume(
+            AudioManager.STREAM_MUSIC,
+            newVolume,
+            0,
+        )
+        currentVolume.update { newVolume }
+    }
+
+    fun changeMPVVolumeTo(volume: Int) {
+        MPVLib.setPropertyInt("volume", volume)
+    }
+
+    fun setMPVVolume(volume: Int) {
+        if (volume != currentMPVVolume.value) displayVolumeSlider()
+        currentMPVVolume.update { volume }
+    }
+
+    fun displayVolumeSlider() {
+        isVolumeSliderShown.update { true }
+    }
+
+    fun setAutoPlay(value: Boolean) {
+        val textRes = if (value) {
+            MR.strings.enable_auto_play
+        } else {
+            MR.strings.disable_auto_play
+        }
+        playerUpdate.update { PlayerUpdates.ShowTextResource(textRes) }
+        playerPreferences.autoplayEnabled().set(value)
+    }
+
+    @Suppress("DEPRECATION")
+    fun changeVideoAspect(aspect: VideoAspect) {
+        var ratio = -1.0
+        var pan = 1.0
+        when (aspect) {
+            VideoAspect.Crop -> {
+                pan = 1.0
+            }
+
+            VideoAspect.Fit -> {
+                pan = 0.0
+                MPVLib.setPropertyDouble("panscan", 0.0)
+            }
+
+            VideoAspect.Stretch -> {
+                val dm = DisplayMetrics()
+                activity.windowManager.defaultDisplay.getRealMetrics(dm)
+                ratio = dm.widthPixels / dm.heightPixels.toDouble()
+                pan = 0.0
+            }
+        }
+        MPVLib.setPropertyDouble("panscan", pan)
+        MPVLib.setPropertyDouble("video-aspect-override", ratio)
+        playerPreferences.aspectState().set(aspect)
+        playerUpdate.update { PlayerUpdates.AspectRatio }
+    }
+
+    fun cycleScreenRotations() {
+        activity.requestedOrientation = when (activity.requestedOrientation) {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,
+            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE,
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE,
+                -> {
+                playerPreferences.defaultPlayerOrientationType().set(PlayerOrientation.SensorPortrait)
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            }
+
+            else -> {
+                playerPreferences.defaultPlayerOrientationType().set(PlayerOrientation.SensorLandscape)
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            }
+        }
+    }
+
+    private val doubleTapToSeekDuration = gesturePreferences.skipLengthPreference().get()
+
+    fun updateSeekAmount(amount: Int) {
+        _doubleTapSeekAmount.update { _ -> amount }
+    }
+
+    fun updateSeekText(value: String?) {
+        _seekText.update { _ -> value }
+    }
+
+    fun leftSeek() {
+        if (pos.value > 0) {
+            _doubleTapSeekAmount.value -= doubleTapToSeekDuration
+        }
+        _isSeekingForwards.value = false
+        seekBy(-doubleTapToSeekDuration, gesturePreferences.playerSmoothSeek().get())
+        if (gesturePreferences.showSeekBar().get()) showSeekBar()
+    }
+
+    fun rightSeek() {
+        if (pos.value < duration.value) {
+            _doubleTapSeekAmount.value += doubleTapToSeekDuration
+        }
+        _isSeekingForwards.value = true
+        seekBy(doubleTapToSeekDuration, gesturePreferences.playerSmoothSeek().get())
+        if (gesturePreferences.showSeekBar().get()) showSeekBar()
+    }
+
+    private fun rightSeekToWithText(seekDuration: Int, text: String?) {
+        _isSeekingForwards.value = true
+        _doubleTapSeekAmount.value = 1
+        _seekText.update { _ -> text }
+        seekTo(seekDuration)
+        if (gesturePreferences.showSeekBar().get()) showSeekBar()
+    }
+
+    fun changeEpisode(previous: Boolean, autoPlay: Boolean = false) {
+        if (previous && !hasPreviousEpisode.value) {
+            activity.toast(activity.stringResource(MR.strings.no_prev_episode))
+            return
+        }
+
+        if (!previous && !hasNextEpisode.value) {
+            activity.toast(activity.stringResource(MR.strings.no_next_episode))
+            return
+        }
+
+        activity.changeEpisode(getAdjacentEpisodeId(previous = previous), autoPlay = autoPlay)
+    }
+
+    fun handleLeftDoubleTap() {
+        when (gesturePreferences.leftDoubleTapGesture().get()) {
+            SingleActionGesture.Seek -> {
+                leftSeek()
+            }
+            SingleActionGesture.PlayPause -> {
+                pauseUnpause()
+            }
+            SingleActionGesture.Custom -> {
+                MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapLeft.keyCode))
+            }
+            SingleActionGesture.None -> {}
+            SingleActionGesture.Switch -> changeEpisode(true)
+        }
+    }
+
+    fun handleCenterDoubleTap() {
+        when (gesturePreferences.centerDoubleTapGesture().get()) {
+            SingleActionGesture.PlayPause -> {
+                pauseUnpause()
+            }
+            SingleActionGesture.Custom -> {
+                MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapCenter.keyCode))
+            }
+            SingleActionGesture.Seek -> {}
+            SingleActionGesture.None -> {}
+            SingleActionGesture.Switch -> {}
+        }
+    }
+
+    fun handleRightDoubleTap() {
+        when (gesturePreferences.rightDoubleTapGesture().get()) {
+            SingleActionGesture.Seek -> {
+                rightSeek()
+            }
+            SingleActionGesture.PlayPause -> {
+                pauseUnpause()
+            }
+            SingleActionGesture.Custom -> {
+                MPVLib.command(arrayOf("keypress", CustomKeyCodes.DoubleTapRight.keyCode))
+            }
+            SingleActionGesture.None -> {}
+            SingleActionGesture.Switch -> changeEpisode(false)
+        }
+    }
+
+    override fun onCleared() {
+        if (currentEpisode.value != null) {
+            saveWatchingProgress(currentEpisode.value!!)
+            episodeToDownload?.let {
+                downloadManager.addDownloadsToStartOfQueue(listOf(it))
+            }
+        }
+    }
+
+    // ====== OLD ======
+
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    internal val incognitoMode = basePreferences.incognitoMode().get()
+    val incognitoMode = basePreferences.incognitoMode().get()
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileWatching().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
@@ -199,7 +803,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private var episodeToDownload: AnimeDownload? = null
 
-    private var currentVideoList: List<Video>? = null
+    var currentVideoList: List<Video>? = null
 
     private fun filterEpisodeList(episodes: List<Episode>): List<Episode> {
         val anime = currentAnime.value ?: return episodes
@@ -406,9 +1010,6 @@ class PlayerViewModel @JvmOverloads constructor(
         val currentEp = currentEpisode.value ?: return
         if (episodeId == -1L) return
 
-        val syncTriggerOpt = syncPreferences.getSyncTriggerOptions()
-        val isSyncEnabled = syncPreferences.isSyncEnabled()
-
         val seconds = position * 1000L
         val totalSeconds = duration * 1000L
         // Save last second seen and mark as seen if needed
@@ -423,11 +1024,6 @@ class PlayerViewModel @JvmOverloads constructor(
             currentEp.seen = true
             updateTrackEpisodeSeen(currentEp)
             deleteEpisodeIfNeeded(currentEp)
-
-            // Check if syncing is enabled for chapter read:
-            if (isSyncEnabled && syncTriggerOpt.syncOnEpisodeSeen) {
-                SyncDataJob.startNow(Injekt.get<Application>())
-            }
         }
 
         saveWatchingProgress(currentEp)
@@ -501,9 +1097,6 @@ class PlayerViewModel @JvmOverloads constructor(
      * If incognito mode isn't on or has at least 1 tracker
      */
     private suspend fun saveEpisodeProgress(episode: Episode) {
-        val syncTriggerOpt = syncPreferences.getSyncTriggerOptions()
-        val isSyncEnabled = syncPreferences.isSyncEnabled()
-
         if (!incognitoMode || hasTrackers) {
             updateEpisode.await(
                 EpisodeUpdate(
@@ -514,11 +1107,6 @@ class PlayerViewModel @JvmOverloads constructor(
                     totalSeconds = episode.total_seconds,
                 ),
             )
-
-            // Check if syncing is enabled for chapter open:
-            if (isSyncEnabled && syncTriggerOpt.syncOnChapterOpen && episode.last_second_seen == 0L) {
-                SyncDataJob.startNow(Injekt.get<Application>())
-            }
         }
     }
 
@@ -812,6 +1400,7 @@ class PlayerViewModel @JvmOverloads constructor(
             updateAniskipButton(null)
             waitingAniSkip = defaultWaitingTime
         }
+
     }
 
     private fun showAniskipButton(skipType: SkipType) {

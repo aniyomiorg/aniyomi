@@ -41,13 +41,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Rational
-import android.util.Log
-import android.view.GestureDetector
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,10 +58,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.media.AudioAttributesCompat
 import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
-import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaLoadRequestData
 import com.google.android.gms.cast.MediaMetadata
-import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManagerListener
 import com.google.android.gms.common.ConnectionResult
@@ -72,14 +67,10 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.images.WebImage
 import com.hippo.unifile.UniFile
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.connections.service.ConnectionsPreferences
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
-import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
@@ -87,7 +78,6 @@ import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerLayoutBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
-import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.controls.PlayerControls
 import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
@@ -116,6 +106,9 @@ import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.storage.service.StorageManager
+import eu.kanade.domain.connections.service.ConnectionsPreferences
+import eu.kanade.tachiyomi.data.connections.discord.PlayerData
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -124,10 +117,13 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.Calendar
 import kotlin.math.abs
+import java.util.Calendar
 import kotlin.math.ceil
 import kotlin.math.floor
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.cast.MediaInfo
+
 
 class PlayerActivity : BaseActivity() {
     private val viewModel by viewModels<PlayerViewModel>(factoryProducer = { PlayerViewModelProviderFactory(this) })
@@ -145,6 +141,11 @@ class PlayerActivity : BaseActivity() {
     private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
     private val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
+    private var mCastContext: CastContext? = null
+    private var mSessionManagerListener: SessionManagerListener<CastSession>? = null
+    internal var mCastSession: CastSession? = null
+    private var isInCastMode: Boolean = false
+    private var isCastApiAvailable = false
 
     internal val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
 
@@ -156,6 +157,8 @@ class PlayerActivity : BaseActivity() {
         packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
             playerPreferences.enablePip().get()
     }
+
+
 
     private var pipReceiver: BroadcastReceiver? = null
 
@@ -191,7 +194,6 @@ class PlayerActivity : BaseActivity() {
     private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
     // <-- AM (CONNECTIONS)
 
-    @SuppressLint("MissingSuperCall")
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
@@ -235,12 +237,6 @@ class PlayerActivity : BaseActivity() {
 
         setIntent(intent)
     }
-    
-    private var mCastContext: CastContext? = null
-    private var mSessionManagerListener: SessionManagerListener<CastSession>? = null
-    internal var mCastSession: CastSession? = null
-    private var isInCastMode: Boolean = false
-    private var isCastApiAvailable = false
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -275,6 +271,12 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             .launchIn(lifecycleScope)
+            viewModel.viewModelScope.launchUI {
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingPlayer = false)
+
+            // <-- AM (DISCORD)
+        }
 
         binding.controls.setContent {
             TachiyomiTheme {
@@ -302,6 +304,18 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
+        isCastApiAvailable =
+            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        try {
+            if (isCastApiAvailable) {
+                mCastContext = CastContext.getSharedInstance(this)
+                mCastSession = mCastContext!!.sessionManager.currentCastSession
+                setupCastListener()
+            }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Service the google play services not available" }
+        }
+
         onNewIntent(this.intent)
     }
 
@@ -321,6 +335,10 @@ class PlayerActivity : BaseActivity() {
         MPVLib.removeObserver(playerObserver)
         player.destroy()
 
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingPlayer = true)
+        // <-- AM (DISCORD)
+
         super.onDestroy()
     }
 
@@ -329,6 +347,7 @@ class PlayerActivity : BaseActivity() {
             viewModel.pause()
         }
         viewModel.saveCurrentEpisodeWatchingProgress()
+        updateDiscordRPC(exitingPlayer = false)
         super.onPause()
     }
 
@@ -364,17 +383,6 @@ class PlayerActivity : BaseActivity() {
             ) {
                 enterPictureInPictureMode()
             }
-            isCastApiAvailable =
-            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
-        try {
-            if (isCastApiAvailable) {
-                mCastContext = CastContext.getSharedInstance(this)
-                mCastSession = mCastContext!!.sessionManager.currentCastSession
-                setupCastListener()
-            }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e) { "Service the google play services not available" }
-        }
         } else {
             super.onBackPressed()
         }
@@ -391,9 +399,9 @@ class PlayerActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding.root.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_LOW_PROFILE
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_LOW_PROFILE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -411,6 +419,7 @@ class PlayerActivity : BaseActivity() {
                 if (it != -1f) viewModel.changeBrightnessTo(it)
             }
         }
+        updateDiscordRPC(exitingPlayer = false)
     }
 
     private fun setupPlayerMPV() {
@@ -543,7 +552,7 @@ class PlayerActivity : BaseActivity() {
         when (it) {
             AudioManager.AUDIOFOCUS_LOSS,
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
-            -> {
+                -> {
                 val oldRestore = restoreAudioFocus
                 val wasPlayerPaused = player.paused ?: false
                 viewModel.pause()
@@ -572,6 +581,18 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        isCastApiAvailable =
+            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        try {
+            if (isCastApiAvailable) {
+                mCastContext!!.sessionManager.addSessionManagerListener(
+                    mSessionManagerListener!!,
+                    CastSession::class.java,
+                )
+                isInCastMode = mCastSession != null && mCastSession!!.isConnected
+            }
+        } catch (_: Exception) {
+        }
         super.onResume()
 
         viewModel.currentVolume.update {
@@ -579,6 +600,7 @@ class PlayerActivity : BaseActivity() {
                 if (it < viewModel.maxVolume) viewModel.changeMPVVolumeTo(100)
             }
         }
+        updateDiscordRPC(exitingPlayer = false)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -630,6 +652,7 @@ class PlayerActivity : BaseActivity() {
                     viewModel.unpause()
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
+                updateDiscordRPC(exitingPlayer = false)
             }
 
             "paused-for-cache" -> {
@@ -835,6 +858,17 @@ class PlayerActivity : BaseActivity() {
                     }
 
                     override fun onPause() {
+                        isCastApiAvailable =
+                            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this@PlayerActivity) == ConnectionResult.SUCCESS
+                        try {
+                            if (isCastApiAvailable) {
+                                mCastContext!!.sessionManager.removeSessionManagerListener(
+                                    mSessionManagerListener!!,
+                                    CastSession::class.java,
+                                )
+                            }
+                        } catch (_: Exception) {
+                        }
                         when (playAction) {
                             SingleActionGesture.None -> {}
                             SingleActionGesture.Seek -> {}
@@ -1009,9 +1043,48 @@ class PlayerActivity : BaseActivity() {
                     MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
                 }
             }
-
-            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
+            if (it.videoUrl?.startsWith(TorrentServerUtils.hostUrl) == true ||
+                it.videoUrl?.startsWith("magnet") == true ||
+                it.videoUrl?.endsWith(".torrent") == true
+            ) {
+                launchIO {
+                    TorrentServerService.start()
+                    TorrentServerService.wait(10)
+                    torrentLinkHandler(it.videoUrl!!, it.quality)
+                }
+            } else {
+                MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
+            }
         }
+        updateDiscordRPC(exitingPlayer = false)
+    }
+
+    private fun torrentLinkHandler(videoUrl: String, quality: String) {
+        var index = 0
+
+        // check if link is from localSource
+        if (videoUrl.startsWith("content://")) {
+            val videoInputStream = applicationContext.contentResolver.openInputStream(Uri.parse(videoUrl))
+            val torrent = TorrentServerApi.uploadTorrent(videoInputStream!!, quality, "", "", false)
+            val torrentUrl = TorrentServerUtils.getTorrentPlayLink(torrent, 0)
+            MPVLib.command(arrayOf("loadfile", torrentUrl))
+            return
+        }
+
+        // check if link is from magnet, in that check if index is present
+        if (videoUrl.startsWith("magnet")) {
+            if (videoUrl.contains("index=")) {
+                index = try {
+                    videoUrl.substringAfter("index=").toInt()
+                } catch (e: NumberFormatException) {
+                    0
+                }
+            }
+        }
+
+        val currentTorrent = TorrentServerApi.addTorrent(videoUrl, quality, "", "", false)
+        val videoTorrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+        MPVLib.command(arrayOf("loadfile", videoTorrentUrl))
     }
 
     /**
@@ -1256,6 +1329,7 @@ class PlayerActivity : BaseActivity() {
         viewModel.updateChapters(combinedChapters)
     }
 
+
     // AM (DISCORD) -->
     private fun updateDiscordRPC(exitingPlayer: Boolean) {
         if (connectionsPreferences.enableDiscordRPC().get()) {
@@ -1270,22 +1344,18 @@ class PlayerActivity : BaseActivity() {
                         timeInMillis = startTimestamp.timeInMillis
                         add(Calendar.SECOND, durationInSeconds)
                     }
-                    Log.d("PlayerActivity", "player.timePos: ${player.timePos}")
-                    Log.d("PlayerActivity", "startTimestamp: $startTimestamp")
-                    Log.d("PlayerActivity", "endTimestamp: $endTimestamp")
-                    Log.d("PlayerActivity", "durationInSeconds: $durationInSeconds")
 
                     DiscordRPCService.setPlayerActivity(
                         context = this@PlayerActivity,
                         PlayerData(
-                            incognitoMode = viewModel.currentSource.isNsfw() || viewModel.incognitoMode,
-                            animeId = viewModel.currentAnime?.id,
-                            animeTitle = viewModel.currentAnime?.ogTitle,
-                            thumbnailUrl = viewModel.currentAnime?.thumbnailUrl,
+                            incognitoMode = viewModel.currentSource.value?.isNsfw() == true || viewModel.incognitoMode,
+                            animeId = viewModel.currentAnime.value?.id ?: -1,
+                            animeTitle = viewModel.currentAnime.value?.ogTitle ?: "",
+                            thumbnailUrl = viewModel.currentAnime.value?.thumbnailUrl ?: "",
                             episodeNumber = if (connectionsPreferences.useChapterTitles().get()) {
-                                viewModel.currentEpisode?.name.toString()
+                                viewModel.currentEpisode.value?.name.toString()
                             } else {
-                                viewModel.state.value.episode?.episode_number.toString()
+                                viewModel.currentEpisode.value?.episode_number.toString()
                             },
                             startTimestamp = startTimestamp.timeInMillis,
                             endTimestamp = endTimestamp.timeInMillis,
@@ -1355,26 +1425,30 @@ class PlayerActivity : BaseActivity() {
         remoteMediaClient.load(
             MediaLoadRequestData.Builder()
                 .setMediaInfo(buildMediaInfo())
-                .setAutoplay(playerControls.binding.toggleAutoplay.isChecked)
+                .setAutoplay(true)
                 .setCurrentTime(player.timePos!!.toLong() * 1000).build(),
         )
     }
 
+    val title = viewModel.currentAnime.value?.title ?: ""
+    val name = viewModel.currentEpisode.value?.name ?: ""
+    val thumbnailUrl = viewModel.currentAnime.value?.thumbnailUrl ?: ""
+
     private fun buildMediaInfo(): MediaInfo {
         val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
-        viewModel.currentAnime?.title?.let { movieMetadata.putString(MediaMetadata.KEY_TITLE, it) }
-        viewModel.currentEpisode?.name?.let { movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, it) }
-        movieMetadata.addImage(WebImage(Uri.parse(viewModel.currentAnime!!.thumbnailUrl!!)))
+        title.let { movieMetadata.putString(MediaMetadata.KEY_TITLE, it) }
+        name.let { movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, it) }
+        movieMetadata.addImage(WebImage(Uri.parse(thumbnailUrl)))
 
-        return currentVideoList?.getOrNull(0)?.videoUrl!!.let {
-            MediaInfo.Builder(it)
+        return viewModel.currentEpisode.value?.url?.let { url ->
+            MediaInfo.Builder(url)
                 .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
                 // agrega varios tipos de videos
                 .setContentType("video/mp4")
-                .setContentUrl(it)
+                .setContentUrl(url)
                 .setMetadata(movieMetadata)
                 .setStreamDuration((player.duration!!).toLong())
                 .build()
-        }
+        }!!
     }
 }
