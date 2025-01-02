@@ -58,19 +58,23 @@ import androidx.lifecycle.viewModelScope
 import androidx.media.AudioAttributesCompat
 import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
+import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaLoadRequestData
 import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManagerListener
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.images.WebImage
 import com.hippo.unifile.UniFile
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.PlayerData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
@@ -78,6 +82,7 @@ import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
 import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerLayoutBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
+import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.controls.PlayerControls
 import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
@@ -106,9 +111,6 @@ import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.storage.service.StorageManager
-import eu.kanade.domain.connections.service.ConnectionsPreferences
-import eu.kanade.tachiyomi.data.connections.discord.PlayerData
-import eu.kanade.tachiyomi.source.anime.isNsfw
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -117,13 +119,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import kotlin.math.abs
 import java.util.Calendar
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
-import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.cast.MediaInfo
-
 
 class PlayerActivity : BaseActivity() {
     private val viewModel by viewModels<PlayerViewModel>(factoryProducer = { PlayerViewModelProviderFactory(this) })
@@ -157,8 +156,6 @@ class PlayerActivity : BaseActivity() {
         packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
             playerPreferences.enablePip().get()
     }
-
-
 
     private var pipReceiver: BroadcastReceiver? = null
 
@@ -271,7 +268,7 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             .launchIn(lifecycleScope)
-            viewModel.viewModelScope.launchUI {
+        viewModel.viewModelScope.launchUI {
             // AM (DISCORD) -->
             updateDiscordRPC(exitingPlayer = false)
 
@@ -399,9 +396,9 @@ class PlayerActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding.root.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_LOW_PROFILE
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LOW_PROFILE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -552,7 +549,7 @@ class PlayerActivity : BaseActivity() {
         when (it) {
             AudioManager.AUDIOFOCUS_LOSS,
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
-                -> {
+            -> {
                 val oldRestore = restoreAudioFocus
                 val wasPlayerPaused = player.paused ?: false
                 viewModel.pause()
@@ -859,7 +856,8 @@ class PlayerActivity : BaseActivity() {
 
                     override fun onPause() {
                         isCastApiAvailable =
-                            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this@PlayerActivity) == ConnectionResult.SUCCESS
+                            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this@PlayerActivity) ==
+                            ConnectionResult.SUCCESS
                         try {
                             if (isCastApiAvailable) {
                                 mCastContext!!.sessionManager.removeSessionManagerListener(
@@ -1328,7 +1326,6 @@ class PlayerActivity : BaseActivity() {
         val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.start }
         viewModel.updateChapters(combinedChapters)
     }
-
 
     // AM (DISCORD) -->
     private fun updateDiscordRPC(exitingPlayer: Boolean) {

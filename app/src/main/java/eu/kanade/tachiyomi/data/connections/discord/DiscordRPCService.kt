@@ -7,7 +7,6 @@ package eu.kanade.tachiyomi.data.connections.discord
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.IBinder
@@ -32,7 +31,6 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.ceil
 import kotlin.math.floor
-
 
 class DiscordRPCService : Service() {
 
@@ -95,8 +93,6 @@ class DiscordRPCService : Service() {
         private val handler = Handler(Looper.getMainLooper())
         private val playerPreferences: PlayerPreferences by injectLazy()
 
-
-
         fun start(context: Context) {
             handler.removeCallbacksAndMessages(null)
             if (rpc == null && connectionsPreferences.enableDiscordRPC().get()) {
@@ -133,7 +129,7 @@ class DiscordRPCService : Service() {
             discordScreen: DiscordScreen,
             playerData: PlayerData = PlayerData(),
         ) {
-            if ( discordScreen != DiscordScreen.VIDEO) return
+            if (discordScreen != DiscordScreen.VIDEO) return
             lastUsedScreen = discordScreen
 
             if (rpc == null) return
