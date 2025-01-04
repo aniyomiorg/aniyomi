@@ -420,7 +420,7 @@
     <string name="whats_new">Шта је ново</string>
     <string name="notification_incognito_text">Деактивирај инкогнито мод</string>
     <string name="downloaded_chapters">Преузета поглавља</string>
-    <string name="action_global_search_query">Претражи 1$s глобално</string>
+    <string name="action_global_search_query">Претражи \"%1$s\" глобално</string>
     <string name="no_pinned_sources">Немате закачених извора</string>
     <string name="chapter_not_found">Поглавље није пронађено</string>
     <string name="local_invalid_format">Неважећи формат поглавља</string>
@@ -743,9 +743,9 @@
     <string name="action_add_repo">Додај репозиторијум</string>
     <string name="action_delete_repo">Избриши репозиторијум</string>
     <string name="label_add_repo_input">URL репозиторијума</string>
-    <string name="action_add_repo_message">Додајте додатне репозиторије у Aniyomi. Ово би требало да буде URL који завршава са ndex.min.json</string>
+    <string name="action_add_repo_message">Додај додатне репозиторијуме у Анијоми. Ово би требало да буде URL који завршава са \"index.min.json\".</string>
     <string name="invalid_repo_name">Неисправан URL репозиторијума</string>
-    <string name="delete_repo_confirmation">Да ли желите да обришете репо s?</string>
+    <string name="delete_repo_confirmation">Да ли желиш да обришеш репозиторијум \"%s\"?</string>
     <string name="private_settings">Укључи и осетљива подешавања (нпр. токени за пријаву у пратиоце)</string>
     <string name="onboarding_storage_action_select">Изабери путању</string>
     <string name="onboarding_action_finish">Започни</string>
@@ -1231,4 +1231,6 @@
     <string name="player_sheets_custom_buttons_title">Прилагођена дугмад</string>
     <string name="timer_picker_enter_timer">Унесите трајање</string>
     <string name="pref_audio_pitch_correction_summary">Спречава да звук добије високи тон на већим брзинама и дубок тон на мањим брзинама</string>
+    <string name="pref_category_player_sliders">Клизачи</string>
+    <string name="player_sheets_sub_typography_border_style">Стил ивице</string>
 </resources>
