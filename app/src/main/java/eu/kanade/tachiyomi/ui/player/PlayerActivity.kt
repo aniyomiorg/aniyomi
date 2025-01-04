@@ -1075,6 +1075,8 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupTracks() {
+        viewModel.isLoadingTracks.update { _ -> true }
+
         val audioTracks = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
             ?.audioTracks?.takeIf { it.isNotEmpty() }
         val subtitleTracks = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
