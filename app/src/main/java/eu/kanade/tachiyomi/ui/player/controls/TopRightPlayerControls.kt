@@ -31,6 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.mediarouter.app.MediaRouteButton
+import com.google.android.gms.cast.framework.CastButtonFactory
 import eu.kanade.tachiyomi.ui.player.controls.components.AutoPlaySwitch
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import tachiyomi.presentation.core.components.material.padding
@@ -57,6 +60,9 @@ fun TopRightPlayerControls(
     onMoreClick: () -> Unit,
     onMoreLongClick: () -> Unit,
 
+    // cast
+    isCastEnabled: () -> Boolean,
+
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -71,6 +77,17 @@ fun TopRightPlayerControls(
                 .padding(vertical = MaterialTheme.padding.medium, horizontal = MaterialTheme.padding.mediumSmall)
                 .size(width = 48.dp, height = 24.dp),
         )
+        if (isCastEnabled()) {
+            AndroidView(
+                factory = { context ->
+                    MediaRouteButton(context).apply {
+                        CastButtonFactory.setUpMediaRouteButton(context, this)
+                    }
+                },
+                modifier = Modifier
+                    .padding(vertical = MaterialTheme.padding.medium, horizontal = MaterialTheme.padding.mediumSmall),
+            )
+        }
         ControlsButton(
             icon = Icons.Default.Subtitles,
             onClick = onSubtitlesClick,

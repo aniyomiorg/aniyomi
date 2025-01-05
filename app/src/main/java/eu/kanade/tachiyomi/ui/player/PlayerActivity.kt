@@ -300,7 +300,6 @@ class PlayerActivity : BaseActivity() {
                 )
             }
         }
-
         isCastApiAvailable =
             GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
         try {
@@ -1367,7 +1366,7 @@ class PlayerActivity : BaseActivity() {
     }
     // <-- AM (DISCORD)
 
-    // -- CAST --
+// -- CAST --
 
     private fun setupCastListener() {
         mSessionManagerListener = object : SessionManagerListener<CastSession> {
@@ -1415,37 +1414,43 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun loadRemoteMedia() {
-        if (mCastSession == null) {
+        // Validar que las dependencias necesarias estén inicializadas
+        if (mCastSession == null || viewModel.currentAnime.value == null || viewModel.currentEpisode.value == null) {
+            logcat(LogPriority.ERROR) { "Cannot load remote media: Missing session or data" }
             return
         }
         val remoteMediaClient = mCastSession!!.remoteMediaClient ?: return
-        remoteMediaClient.load(
-            MediaLoadRequestData.Builder()
-                .setMediaInfo(buildMediaInfo())
-                .setAutoplay(true)
-                .setCurrentTime(player.timePos!!.toLong() * 1000).build(),
-        )
+        try {
+            remoteMediaClient.load(
+                MediaLoadRequestData.Builder()
+                    .setMediaInfo(buildMediaInfo())
+                    .setAutoplay(true)
+                    .setCurrentTime((player.timePos ?: 0).toLong() * 1000)
+                    .build(),
+            )
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Error loading remote media" }
+        }
     }
 
-    val title = viewModel.currentAnime.value?.title ?: ""
-    val name = viewModel.currentEpisode.value?.name ?: ""
-    val thumbnailUrl = viewModel.currentAnime.value?.thumbnailUrl ?: ""
-
     private fun buildMediaInfo(): MediaInfo {
-        val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
-        title.let { movieMetadata.putString(MediaMetadata.KEY_TITLE, it) }
-        name.let { movieMetadata.putString(MediaMetadata.KEY_SUBTITLE, it) }
-        movieMetadata.addImage(WebImage(Uri.parse(thumbnailUrl)))
+        val currentAnime = viewModel.currentAnime.value ?: throw IllegalStateException("Anime data not available")
+        val currentvideo = viewModel.videoList.value[viewModel.selectedVideoIndex.value]
+        val cuarenteEpisode =
+            viewModel.currentEpisode.value ?: throw IllegalStateException("Episode data not available")
 
-        return viewModel.currentEpisode.value?.url?.let { url ->
-            MediaInfo.Builder(url)
-                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                // agrega varios tipos de videos
-                .setContentType("video/mp4")
-                .setContentUrl(url)
-                .setMetadata(movieMetadata)
-                .setStreamDuration((player.duration!!).toLong())
-                .build()
-        }!!
+        val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE).apply {
+            putString(MediaMetadata.KEY_TITLE, currentAnime.title)
+            putString(MediaMetadata.KEY_SUBTITLE, cuarenteEpisode.name)
+            addImage(WebImage(Uri.parse(currentAnime.thumbnailUrl)))
+        }
+        val videoUrl = currentvideo.videoUrl ?: throw IllegalStateException("Video URL not available")
+
+        return MediaInfo.Builder(videoUrl)
+            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+            .setContentType("video/mp4")
+            .setMetadata(movieMetadata)
+            .setStreamDuration((player.duration ?: 0).toLong())
+            .build()
     }
 }

@@ -488,6 +488,7 @@ fun PlayerControls(
                         isEpisodeOnline = viewModel.isEpisodeOnline(),
                         onMoreClick = { onOpenSheet(Sheets.More) },
                         onMoreLongClick = { onOpenPanel(Panels.VideoFilters) },
+                        isCastEnabled = { playerPreferences.enableCast().get() },
                     )
                 }
                 // Bottom right controls
