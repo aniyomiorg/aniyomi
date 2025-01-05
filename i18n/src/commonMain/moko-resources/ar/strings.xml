@@ -25,13 +25,13 @@
     <string name="action_mark_as_read">تحديد كمقروء</string>
     <string name="action_mark_as_unread">تحديد كغير مقروء</string>
     <string name="action_mark_previous_as_read">تحديد السابق كمقروء</string>
-    <string name="action_download">تنزيل</string>
+    <string name="action_download">تحميل</string>
     <string name="action_bookmark">احفظ الفصل كإشارة مرجعية</string>
     <string name="action_remove_bookmark">إزالة الإشارة المرجعية</string>
     <string name="action_delete">حذف</string>
     <string name="action_update_library">تحديث المكتبة</string>
     <string name="action_edit">تعديل</string>
-    <string name="action_add">أضف</string>
+    <string name="action_add">إضافة</string>
     <string name="action_add_category">إضافة فئة</string>
     <string name="action_edit_categories">تعديل الفئات</string>
     <string name="action_rename_category">إعادة تسمية الفئة</string>
