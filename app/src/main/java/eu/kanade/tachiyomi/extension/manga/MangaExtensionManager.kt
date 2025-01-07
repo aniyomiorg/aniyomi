@@ -177,10 +177,9 @@ class MangaExtensionManager(
     private fun updatedInstalledExtensionsStatuses(
         availableExtensions: List<MangaExtension.Available>,
     ) {
-        if (availableExtensions.isEmpty()) {
-            preferences.mangaExtensionUpdatesCount().set(0)
-            return
-        }
+        // KMK -->
+        val noExtAvailable = availableExtensions.isEmpty()
+        // KMK <--
 
         val installedExtensionsMap = installedExtensionsMapFlow.value.toMutableMap()
         var changed = false
@@ -188,10 +187,19 @@ class MangaExtensionManager(
         for ((pkgName, extension) in installedExtensionsMap) {
             val availableExt = availableExtensions.find { it.pkgName == pkgName }
 
-            if (availableExt == null && !extension.isObsolete) {
-                installedExtensionsMap[pkgName] = extension.copy(isObsolete = true)
-                changed = true
-            } else if (availableExt != null) {
+            // KMK -->
+            if (availableExt == null/* KMK --> && !extension.isObsolete // KMK <-- */) {
+                // Clear hasUpdate & set isObsolete
+                val isObsolete = !noExtAvailable && !extension.isObsolete
+                // KMK: installedExtensionsMap[pkgName] = extension.copy(isObsolete = true)
+                installedExtensionsMap[pkgName] = extension.copy(
+                    isObsolete = isObsolete,
+                    hasUpdate = false,
+                )
+                // KMK: changed = true
+                changed = changed || isObsolete || noExtAvailable && (extension.isObsolete || extension.hasUpdate)
+                // KMK <--
+            } else /* KMK --> if (availableExt != null) // KMK <-- */ {
                 val hasUpdate = extension.updateExists(availableExt)
                 if (extension.hasUpdate != hasUpdate) {
                     installedExtensionsMap[pkgName] = extension.copy(

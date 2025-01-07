@@ -4,10 +4,13 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import mihon.domain.extensionrepo.manga.interactor.CreateMangaExtensionRepo
@@ -27,6 +30,9 @@ class MangaExtensionReposScreenModel(
     private val deleteExtensionRepo: DeleteMangaExtensionRepo = Injekt.get(),
     private val replaceExtensionRepo: ReplaceMangaExtensionRepo = Injekt.get(),
     private val updateExtensionRepo: UpdateMangaExtensionRepo = Injekt.get(),
+    // KMK -->
+    private val sourcePreferences: SourcePreferences = Injekt.get(),
+    // KMK <--
 ) : StateScreenModel<RepoScreenState>(RepoScreenState.Loading) {
 
     private val _events: Channel<RepoEvent> = Channel(Int.MAX_VALUE)
@@ -39,10 +45,25 @@ class MangaExtensionReposScreenModel(
                     mutableState.update {
                         RepoScreenState.Success(
                             repos = repos.toImmutableSet(),
+                            // KMK -->
+                            disabledRepos = sourcePreferences.disabledRepos().get(),
+                            // KMK <--
                         )
                     }
                 }
         }
+        // KMK -->
+        sourcePreferences.disabledRepos().changes()
+            .onEach { disabledRepos ->
+                mutableState.update {
+                    when (it) {
+                        is RepoScreenState.Success -> it.copy(disabledRepos = disabledRepos)
+                        else -> it
+                    }
+                }
+            }
+            .launchIn(screenModelScope)
+        // KMK <--
     }
 
     /**
@@ -91,10 +112,35 @@ class MangaExtensionReposScreenModel(
      * Deletes the given repo from the database
      */
     fun deleteRepo(baseUrl: String) {
+
+        // KMK -->
+        // Remove repo from disabled list
+        enableRepo(baseUrl)
+        // KMK <--
+
         screenModelScope.launchIO {
             deleteExtensionRepo.await(baseUrl)
         }
     }
+
+    // KMK -->
+    fun enableRepo(baseUrl: String) {
+        val disabledRepos = sourcePreferences.disabledRepos().get()
+        if (baseUrl in disabledRepos) {
+            sourcePreferences.disabledRepos().set(
+                disabledRepos.filterNot { it == baseUrl }.toSet(),
+            )
+        }
+    }
+    fun disableRepo(baseUrl: String) {
+        val disabledRepos = sourcePreferences.disabledRepos().get()
+        if (baseUrl !in disabledRepos) {
+            sourcePreferences.disabledRepos().set(
+                disabledRepos + baseUrl,
+            )
+        }
+    }
+    // KMK <--
 
     fun showDialog(dialog: RepoDialog) {
         mutableState.update {
@@ -138,6 +184,9 @@ sealed class RepoScreenState {
         val repos: ImmutableSet<ExtensionRepo>,
         val oldRepos: ImmutableSet<String>? = null,
         val dialog: RepoDialog? = null,
+        // KMK -->
+        val disabledRepos: Set<String> = emptySet(),
+        // KMK <--
     ) : RepoScreenState() {
 
         val isEmpty: Boolean

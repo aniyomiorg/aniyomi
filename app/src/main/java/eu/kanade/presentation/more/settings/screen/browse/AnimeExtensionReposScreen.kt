@@ -14,6 +14,7 @@ import eu.kanade.presentation.more.settings.screen.browse.components.ExtensionRe
 import eu.kanade.presentation.more.settings.screen.browse.components.ExtensionRepoDeleteDialog
 import eu.kanade.presentation.more.settings.screen.browse.components.ExtensionReposScreen
 import eu.kanade.presentation.util.Screen
+import tachiyomi.i18n.MR
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.toImmutableSet
@@ -48,6 +49,16 @@ class AnimeExtensionReposScreen(
             onClickCreate = { screenModel.showDialog(RepoDialog.Create) },
             onOpenWebsite = { context.openInBrowser(it.website) },
             onClickDelete = { screenModel.showDialog(RepoDialog.Delete(it)) },
+            // KMK -->
+            onClickEnable = {
+                screenModel.enableRepo(it)
+                context.toast(MR.strings.extensions_page_need_refresh)
+            },
+            onClickDisable = {
+                screenModel.disableRepo(it)
+                context.toast(MR.strings.extensions_page_need_refresh)
+            },
+            // KMK <--
             onClickRefresh = { screenModel.refreshRepos() },
             navigateUp = navigator::pop,
         )

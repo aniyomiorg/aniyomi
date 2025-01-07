@@ -80,6 +80,9 @@ class SourcePreferences(
         "browse_hide_in_library_items",
         false,
     )
+    // KMK -->
+    fun disabledRepos() = preferenceStore.getStringSet("disabled_repos", emptySet())
+    // KMK <--
 
     // SY -->
 
