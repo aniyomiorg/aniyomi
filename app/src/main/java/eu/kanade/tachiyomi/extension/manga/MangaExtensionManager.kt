@@ -188,7 +188,7 @@ class MangaExtensionManager(
             val availableExt = availableExtensions.find { it.pkgName == pkgName }
 
             // KMK -->
-            if (availableExt == null/* KMK --> && !extension.isObsolete // KMK <-- */) {
+            if (availableExt == null) {
                 // Clear hasUpdate & set isObsolete
                 val isObsolete = !noExtAvailable && !extension.isObsolete
                 // KMK: installedExtensionsMap[pkgName] = extension.copy(isObsolete = true)
@@ -199,7 +199,7 @@ class MangaExtensionManager(
                 // KMK: changed = true
                 changed = changed || isObsolete || noExtAvailable && (extension.isObsolete || extension.hasUpdate)
                 // KMK <--
-            } else /* KMK --> if (availableExt != null) // KMK <-- */ {
+            } else {
                 val hasUpdate = extension.updateExists(availableExt)
                 if (extension.hasUpdate != hasUpdate) {
                     installedExtensionsMap[pkgName] = extension.copy(

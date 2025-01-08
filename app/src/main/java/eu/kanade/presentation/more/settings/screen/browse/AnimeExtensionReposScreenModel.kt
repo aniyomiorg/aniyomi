@@ -2,14 +2,14 @@ package eu.kanade.presentation.more.settings.screen.browse
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
-import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo
 import mihon.domain.extensionrepo.anime.interactor.DeleteAnimeExtensionRepo
 import mihon.domain.extensionrepo.anime.interactor.GetAnimeExtensionRepo
@@ -61,7 +61,6 @@ class AnimeExtensionReposScreenModel(
             }
             .launchIn(screenModelScope)
         // KMK <--
-
     }
 
     /**
@@ -110,7 +109,6 @@ class AnimeExtensionReposScreenModel(
      * Deletes the given repo from the database
      */
     fun deleteRepo(baseUrl: String) {
-
         // KMK -->
         // Remove repo from disabled list
         enableRepo(baseUrl)

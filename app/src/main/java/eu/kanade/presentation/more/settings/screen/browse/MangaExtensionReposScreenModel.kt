@@ -112,7 +112,6 @@ class MangaExtensionReposScreenModel(
      * Deletes the given repo from the database
      */
     fun deleteRepo(baseUrl: String) {
-
         // KMK -->
         // Remove repo from disabled list
         enableRepo(baseUrl)
