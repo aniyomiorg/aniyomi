@@ -82,8 +82,8 @@ Before reporting a new issue, take a look at the [FAQ](https://aniyomi.org/docs/
 
 Thank you to all the people who have contributed!
 
-<a href="https://github.com/aniyomiorg/aniyomi/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=aniyomiorg/aniyomi" alt="Aniyomi app contributors" title="Aniyomi app contributors" width="800"/>
+<a href="https://github.com/Dark25/Animetail2/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=Dark25/Animetail2" alt="Aniyomi app contributors" title="Aniyomi app contributors" width="800"/>
 </a>
 
 ### Disclaimer
