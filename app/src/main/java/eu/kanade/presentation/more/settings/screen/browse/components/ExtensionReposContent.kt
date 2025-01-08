@@ -1,14 +1,16 @@
 package eu.kanade.presentation.more.settings.screen.browse.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Label
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Delete
@@ -23,9 +25,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -77,94 +84,113 @@ private fun ExtensionRepoListItem(
     repo: ExtensionRepo,
     onOpenWebsite: () -> Unit,
     onDelete: () -> Unit,
+    modifier: Modifier = Modifier,
     // KMK -->
     isDisabled: Boolean,
     onEnable: () -> Unit,
     onDisable: () -> Unit,
     // KMK <--
-    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 
     ElevatedCard(
         modifier = modifier,
     ) {
+        // KMK -->
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = MaterialTheme.padding.medium,
-                    top = MaterialTheme.padding.medium,
-                    end = MaterialTheme.padding.medium,
-                ),
-            verticalAlignment = Alignment.CenterVertically,
+                .padding(start = MaterialTheme.padding.medium),
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Outlined.Label,
+            val resId = repoResId(repo.baseUrl)
+            Image(
+                bitmap = ImageBitmap.imageResource(id = resId),
                 contentDescription = null,
-                // KMK -->
-                tint = LocalContentColor.current.let { if (isDisabled) it.copy(alpha = 0.6f) else it },
-                // KMK <--
+                alpha = if (isDisabled) 0.4f else 1f,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(MaterialTheme.shapes.extraSmall)
+                    .align(Alignment.CenterVertically),
             )
-            Text(
-                text = repo.name,
-                modifier = Modifier.padding(start = MaterialTheme.padding.medium),
-                style = MaterialTheme.typography.titleMedium,
-                // KMK -->
-                color = LocalContentColor.current.let { if (isDisabled) it.copy(alpha = 0.6f) else it },
-                textDecoration = TextDecoration.LineThrough.takeIf { isDisabled },
+            Column {
                 // KMK <--
-            )
-        }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = MaterialTheme.padding.medium,
+                            top = MaterialTheme.padding.medium,
+                            end = MaterialTheme.padding.medium,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = repo.name,
+                        // KMK: modifier = Modifier.padding(start = MaterialTheme.padding.medium),
+                        style = MaterialTheme.typography.titleMedium,
+                        // KMK -->
+                        color = LocalContentColor.current.let { if (isDisabled) it.copy(alpha = 0.6f) else it },
+                        textDecoration = TextDecoration.LineThrough.takeIf { isDisabled },
+                        // KMK <--
+                    )
+                }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            IconButton(onClick = onOpenWebsite) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
-                    contentDescription = stringResource(MR.strings.action_open_in_browser),
-                )
-            }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    IconButton(onClick = onOpenWebsite) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
+                            contentDescription = stringResource(MR.strings.action_open_in_browser),
+                        )
+                    }
 
-            IconButton(
-                onClick = {
-                    val url = "${repo.baseUrl}/index.min.json"
-                    context.copyToClipboard(url, url)
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.ContentCopy,
-                    contentDescription = stringResource(MR.strings.action_copy_to_clipboard),
-                )
-            }
+                    IconButton(
+                        onClick = {
+                            val url = "${repo.baseUrl}/index.min.json"
+                            context.copyToClipboard(url, url)
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.ContentCopy,
+                            contentDescription = stringResource(MR.strings.action_copy_to_clipboard),
+                        )
+                    }
 
-            // KMK -->
-            IconButton(onClick = if (isDisabled) onEnable else onDisable) {
-                Icon(
-                    imageVector = if (isDisabled) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                    contentDescription = stringResource(MR.strings.action_disable),
-                )
-            }
-            // KMK <--
+                    // KMK -->
+                    IconButton(onClick = if (isDisabled) onEnable else onDisable) {
+                        Icon(
+                            imageVector = if (isDisabled) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                            contentDescription = stringResource(MR.strings.action_disable),
+                        )
+                    }
+                    // KMK <--
 
-            IconButton(onClick = onDelete) {
-                Icon(
-                    imageVector = Icons.Outlined.Delete,
-                    contentDescription = stringResource(MR.strings.action_delete),
-                )
+                    IconButton(onClick = onDelete) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = stringResource(MR.strings.action_delete),
+                        )
+                    }
+                }
             }
         }
     }
 }
+
 // KMK -->
+fun repoResId(baseUrl: String) = when (baseUrl) {
+    "https://raw.githubusercontent.com/Dark25/aniyomi-extensions/repo" -> R.mipmap.animetail
+    "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo" -> R.mipmap.aniyomi
+    "https://raw.githubusercontent.com/keiyoushi/extensions/repo" -> R.mipmap.keiyoushi
+    else -> R.mipmap.extension
+}
+
 @Preview
 @Composable
 fun ExtensionReposContentPreview() {
     val repos = persistentSetOf(
-        ExtensionRepo("url1", "Repo 1", "", "", "key1"),
-        ExtensionRepo("url2", "Repo 2", "", "", "key2"),
+        ExtensionRepo("https://repo", "Other", "", "", "key2"),
     )
     ExtensionReposContent(
         repos = repos,
@@ -174,7 +200,7 @@ fun ExtensionReposContentPreview() {
         onClickDelete = {},
         onClickEnable = {},
         onClickDisable = {},
-        disabledRepos = setOf("url2"),
+        disabledRepos = setOf("https://repo"),
     )
 }
 // KMK <--
