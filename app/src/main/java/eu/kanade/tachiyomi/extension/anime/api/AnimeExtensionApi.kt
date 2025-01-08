@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.extension.anime.api
 
 import android.content.Context
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -34,14 +35,21 @@ internal class AnimeExtensionApi {
     private val updateExtensionRepo: UpdateAnimeExtensionRepo by injectLazy()
     private val animeExtensionManager: AnimeExtensionManager by injectLazy()
     private val json: Json by injectLazy()
+    private val sourcePreferences: SourcePreferences by injectLazy()
 
     private val lastExtCheck: Preference<Long> by lazy {
         preferenceStore.getLong("last_ext_check", 0)
     }
 
     suspend fun findExtensions(): List<AnimeExtension.Available> {
+        // KMK -->
+        val disabledRepos = sourcePreferences.disabledRepos().get()
+        // KMK <--
         return withIOContext {
             getExtensionRepo.getAll()
+                // KMK -->
+                .filterNot { it.baseUrl in disabledRepos }
+                // KMK <--
                 .map { async { getExtensions(it) } }
                 .awaitAll()
                 .flatten()
@@ -58,7 +66,13 @@ internal class AnimeExtensionApi {
             with(json) {
                 response
                     .parseAs<List<AnimeExtensionJsonObject>>()
-                    .toExtensions(repoBaseUrl)
+                    .toExtensions(
+                        repoBaseUrl,
+                        // KMK -->
+                        signature = extRepo.signingKeyFingerprint,
+                        repoName = extRepo.shortName ?: extRepo.name,
+                        // KMK <--
+                    )
             }
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Failed to get extensions from $repoBaseUrl" }
@@ -110,7 +124,13 @@ internal class AnimeExtensionApi {
         return extensionsWithUpdate
     }
 
-    private fun List<AnimeExtensionJsonObject>.toExtensions(repoUrl: String): List<AnimeExtension.Available> {
+    private fun List<AnimeExtensionJsonObject>.toExtensions(
+        repoUrl: String,
+        // KMK -->
+        signature: String,
+        repoName: String,
+        // KMK <--
+    ): List<AnimeExtension.Available> {
         return this
             .filter {
                 val libVersion = it.extractLibVersion()
@@ -130,6 +150,10 @@ internal class AnimeExtensionApi {
                     apkName = it.apk,
                     iconUrl = "$repoUrl/icon/${it.pkg}.png",
                     repoUrl = repoUrl,
+                    // KMK -->
+                    signatureHash = signature,
+                    repoName = repoName,
+                    // KMK <--
                 )
             }
     }
