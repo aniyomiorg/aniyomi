@@ -60,6 +60,8 @@ Features include:
         * Discord Rich Presence
     * TachiyomiJ2K:
         * Page Preload
+    * Komikku:
+        * Repository visibility toggle, icon support, and name display
 
 </div>
 
