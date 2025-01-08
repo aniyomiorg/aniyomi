@@ -66,7 +66,13 @@ internal class MangaExtensionApi {
             with(json) {
                 response
                     .parseAs<List<ExtensionJsonObject>>()
-                    .toExtensions(repoBaseUrl)
+                    .toExtensions(
+                        repoBaseUrl,
+                        // KMK -->
+                        signature = extRepo.signingKeyFingerprint,
+                        repoName = extRepo.shortName ?: extRepo.name,
+                        // KMK <--
+                    )
             }
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Failed to get extensions from $repoBaseUrl" }
@@ -117,7 +123,13 @@ internal class MangaExtensionApi {
         return extensionsWithUpdate
     }
 
-    private fun List<ExtensionJsonObject>.toExtensions(repoUrl: String): List<MangaExtension.Available> {
+    private fun List<ExtensionJsonObject>.toExtensions(
+        repoUrl: String,
+        // KMK -->
+        signature: String,
+        repoName: String,
+        // KMK <--
+    ): List<MangaExtension.Available> {
         return this
             .filter {
                 val libVersion = it.extractLibVersion()
@@ -136,6 +148,10 @@ internal class MangaExtensionApi {
                     apkName = it.apk,
                     iconUrl = "$repoUrl/icon/${it.pkg}.png",
                     repoUrl = repoUrl,
+                    // KMK -->
+                    signatureHash = signature,
+                    repoName = repoName,
+                    // KMK <--
                 )
             }
     }

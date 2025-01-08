@@ -66,7 +66,13 @@ internal class AnimeExtensionApi {
             with(json) {
                 response
                     .parseAs<List<AnimeExtensionJsonObject>>()
-                    .toExtensions(repoBaseUrl)
+                    .toExtensions(
+                        repoBaseUrl,
+                        // KMK -->
+                        signature = extRepo.signingKeyFingerprint,
+                        repoName = extRepo.shortName ?: extRepo.name,
+                        // KMK <--
+                    )
             }
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Failed to get extensions from $repoBaseUrl" }
@@ -118,7 +124,13 @@ internal class AnimeExtensionApi {
         return extensionsWithUpdate
     }
 
-    private fun List<AnimeExtensionJsonObject>.toExtensions(repoUrl: String): List<AnimeExtension.Available> {
+    private fun List<AnimeExtensionJsonObject>.toExtensions(
+        repoUrl: String,
+        // KMK -->
+        signature: String,
+        repoName: String,
+        // KMK <--
+    ): List<AnimeExtension.Available> {
         return this
             .filter {
                 val libVersion = it.extractLibVersion()
@@ -138,6 +150,10 @@ internal class AnimeExtensionApi {
                     apkName = it.apk,
                     iconUrl = "$repoUrl/icon/${it.pkg}.png",
                     repoUrl = repoUrl,
+                    // KMK -->
+                    signatureHash = signature,
+                    repoName = repoName,
+                    // KMK <--
                 )
             }
     }
