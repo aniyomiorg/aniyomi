@@ -1157,4 +1157,13 @@
     <string name="pref_player_audio_pitch_correction_summary">Evita que el audio se vuelva agudo a velocidades más rápidas y grave a velocidades más lentas</string>
     <string name="pref_player_advanced_summary">Scripts, mpv.conf, input.conf</string>
     <string name="pref_player_decoder_summary">Descodificación por hardware, formato de píxel, debanding</string>
+    <string name="pref_controls_display_volume_percentage">Mostrar el volumen como porcentaje</string>
+    <string name="rotation_video">Video</string>
+    <string name="pref_category_controls">Controles</string>
+    <string name="pref_controls_allow_gestures_in_panels">Permitir gestos en paneles</string>
+    <string name="pref_controls_show_loading">Mostrar círculo de carga</string>
+    <string name="pref_controls_show_chapter_indicator">Mostrar indicador de capítulo actual</string>
+    <string name="pref_controls_show_chapter_indicator_info">Solo aparece si el vídeo tiene capítulos</string>
+    <string name="pref_show_system_bar">Mostrar la barra de estado del sistema con controles</string>
+    <string name="pref_reduce_motion">Reducir la animación del reproductor</string>
 </resources>
