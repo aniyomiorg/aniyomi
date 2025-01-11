@@ -12,9 +12,13 @@ import eu.kanade.tachiyomi.data.track.mangaupdates.dto.MURating
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.copyTo
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.toTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
+import eu.kanade.tachiyomi.util.lang.htmlDecode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.i18n.MR
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, DeletableMangaTracker {
@@ -100,6 +104,24 @@ class MangaUpdates(id: Long) : BaseTracker(id, "MangaUpdates"), MangaTracker, De
             .map {
                 it.toTrackSearch(id)
             }
+    }
+
+    override suspend fun getMangaMetadata(track: DomainTrack): TrackMangaMetadata? {
+        val series = api.getSeries(track)
+        return series?.let {
+            TrackMangaMetadata(
+                it.seriesId,
+                it.title?.htmlDecode(),
+                it.image?.url?.original,
+                it.description?.htmlDecode(),
+                it.authors?.filter { it.type == "Author" }?.joinToString(separator = ", ") { it.name ?: "" },
+                it.authors?.filter { it.type == "Artist" }?.joinToString(separator = ", ") { it.name ?: "" },
+            )
+        }
+    }
+
+    override suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
+        throw NotImplementedError("Not implemented.")
     }
 
     override suspend fun refresh(track: MangaTrack): MangaTrack {

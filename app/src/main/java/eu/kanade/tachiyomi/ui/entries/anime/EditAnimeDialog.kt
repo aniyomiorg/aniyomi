@@ -3,14 +3,18 @@ package eu.kanade.tachiyomi.ui.entries.anime
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
@@ -30,15 +35,29 @@ import coil3.transform.RoundedCornersTransformation
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import eu.kanade.presentation.track.components.TrackLogoIcon
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
+import eu.kanade.tachiyomi.data.track.Tracker
+import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.databinding.EditAnimeDialogBinding
 import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.system.dpToPx
+import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.materialdialogs.setTextInput
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import logcat.LogPriority
+import tachiyomi.core.common.i18n.stringResource
+import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
+import tachiyomi.domain.track.anime.model.AnimeTrack
+import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.anime.isLocal
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @Composable
 @Suppress("MagicNumber", "LongMethod")
@@ -58,6 +77,10 @@ fun EditAnimeDialog(
     var binding by remember {
         mutableStateOf<EditAnimeDialogBinding?>(null)
     }
+    val showTrackerSelectionDialogue = remember { mutableStateOf(false) }
+    val getTracks = remember { Injekt.get<GetAnimeTracks>() }
+    val trackerManager = remember { Injekt.get<TrackerManager>() }
+    val tracks = remember { mutableStateOf(emptyList<Pair<AnimeTrack, Tracker>>()) }
     AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
@@ -104,7 +127,16 @@ fun EditAnimeDialog(
                         EditAnimeDialogBinding.inflate(LayoutInflater.from(factoryContext))
                             .also { binding = it }
                             .apply {
-                                onViewCreated(anime, factoryContext, this, scope)
+                                onViewCreated(
+                                    anime,
+                                    factoryContext,
+                                    this,
+                                    scope,
+                                    getTracks,
+                                    trackerManager,
+                                    tracks,
+                                    showTrackerSelectionDialogue,
+                                )
                             }
                             .root
                     },
@@ -113,14 +145,69 @@ fun EditAnimeDialog(
             }
         },
     )
+    if (showTrackerSelectionDialogue.value) {
+        TrackerSelectDialog(
+            tracks = tracks.value,
+            onDismissRequest = { showTrackerSelectionDialogue.value = false },
+            onTrackerSelect = { tracker, track ->
+                scope.launch {
+                    autofillFromTracker(binding!!, track, tracker)
+                }
+            },
+        )
+    }
 }
 
 @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
+@Composable
+fun TrackerSelectDialog(
+    tracks: List<Pair<AnimeTrack, Tracker>>,
+    onDismissRequest: () -> Unit,
+    onTrackerSelect: (
+        tracker: Tracker,
+        track: AnimeTrack,
+    ) -> Unit,
+) {
+    AlertDialog(
+        modifier = Modifier.fillMaxWidth(),
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(R.string.action_cancel))
+            }
+        },
+        title = {
+            Text(stringResource(R.string.select_tracker))
+        },
+        text = {
+            FlowRow(
+                modifier = Modifier
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                tracks.forEach { (AnimeTrack, tracker) ->
+                    TrackLogoIcon(
+                        tracker,
+                        onClick = {
+                            onTrackerSelect(tracker, AnimeTrack)
+                            onDismissRequest()
+                        },
+                    )
+                }
+            }
+        },
+    )
+}
+
 private fun onViewCreated(
     anime: Anime,
     context: Context,
     binding: EditAnimeDialogBinding,
     scope: CoroutineScope,
+    getTracks: GetAnimeTracks,
+    trackerManager: TrackerManager,
+    tracks: MutableState<List<Pair<AnimeTrack, Tracker>>>,
+    showTrackerSelectionDialogue: MutableState<Boolean>,
 ) {
     loadCover(anime, binding)
 
@@ -193,7 +280,71 @@ private fun onViewCreated(
     binding.resetTags.setOnClickListener { resetTags(anime, binding, scope) }
     // SY -->
     binding.resetInfo.setOnClickListener { resetInfo(anime, binding, scope) }
-    // SY <--
+    binding.autofillFromTracker.setOnClickListener {
+        scope.launch {
+            getTrackers(
+                anime,
+                binding,
+                context,
+                getTracks,
+                trackerManager,
+                tracks,
+                showTrackerSelectionDialogue,
+            )
+        }
+    }
+}
+
+private suspend fun getTrackers(
+    anime: Anime,
+    binding: EditAnimeDialogBinding,
+    context: Context,
+    getTracks: GetAnimeTracks,
+    trackerManager: TrackerManager,
+    tracks: MutableState<List<Pair<AnimeTrack, Tracker>>>,
+    showTrackerSelectionDialogue: MutableState<Boolean>,
+) {
+    tracks.value = getTracks.await(anime.id).map { track ->
+        track to trackerManager.get(track.trackerId)!!
+    }
+        .filterNot { (_, tracker) -> tracker is EnhancedAnimeTracker }
+
+    if (tracks.value.isEmpty()) {
+        context.toast(context.stringResource(MR.strings.entry_not_tracked))
+        return
+    }
+
+    if (tracks.value.size > 1) {
+        showTrackerSelectionDialogue.value = true
+        return
+    }
+
+    autofillFromTracker(binding, tracks.value.first().first, tracks.value.first().second)
+}
+
+private fun setTextIfNotBlank(field: (String) -> Unit, value: String?) {
+    value?.takeIf { it.isNotBlank() }?.let { field(it) }
+}
+
+private suspend fun autofillFromTracker(binding: EditAnimeDialogBinding, track: AnimeTrack, tracker: Tracker) {
+    try {
+        val trackerAnimeMetadata = tracker.getAnimeMetadata(track)
+
+        setTextIfNotBlank(binding.title::setText, trackerAnimeMetadata?.title)
+        setTextIfNotBlank(binding.animeAuthor::setText, trackerAnimeMetadata?.authors)
+        setTextIfNotBlank(binding.animeArtist::setText, trackerAnimeMetadata?.artists)
+        setTextIfNotBlank(binding.animeDescription::setText, trackerAnimeMetadata?.description)
+    } catch (e: Throwable) {
+        tracker.logcat(LogPriority.ERROR, e)
+        binding.root.context.toast(
+            binding.root.context.stringResource(
+                MR.strings.track_error,
+                tracker.name,
+                e.message ?: "",
+            ),
+        )
+    }
+    // SY<--
 }
 
 private fun resetTags(anime: Anime, binding: EditAnimeDialogBinding, scope: CoroutineScope) {

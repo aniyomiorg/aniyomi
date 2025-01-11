@@ -114,23 +114,41 @@
         android:layout_marginBottom="12dp" />
 
     <Button
-        android:id="@+id/reset_tags"
+        android:id="@+id/autofill_from_tracker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/reset_tags"
+        android:text="@string/fill_from_tracker"
         android:textAllCaps="false" />
-    <Button
-        android:id="@+id/reset_info"
-        android:layout_width="wrap_content"
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/reset_info"
-        android:textAllCaps="false" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/reset_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/reset_tags"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/reset_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/reset_info"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

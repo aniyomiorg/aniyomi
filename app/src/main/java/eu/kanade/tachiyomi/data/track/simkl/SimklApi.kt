@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.simkl.dto.SimklAnimeResponse
 import eu.kanade.tachiyomi.data.track.simkl.dto.SimklOAuth
 import eu.kanade.tachiyomi.data.track.simkl.dto.SimklSearchResult
 import eu.kanade.tachiyomi.data.track.simkl.dto.SimklSyncResult
@@ -27,6 +29,7 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.common.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
 class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) {
 
@@ -203,7 +206,6 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             listAnime.toAnimeTrack(typeName, type, status)
         }
     }
-
     fun getCurrentUser(): Int {
         return runBlocking {
             with(json) {
@@ -211,6 +213,31 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                     .awaitSuccess()
                     .parseAs<SimklUser>()
                     .account.id
+            }
+        }
+    }
+    suspend fun getSimklAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata {
+        return withIOContext {
+            val type = track.remoteUrl
+                .substringAfter("/")
+                .substringBefore("/")
+            Log.d("SimklApi", "Fetching metadata for track: $type")
+            val url = "$API_URL/$type/${track.remoteId}?extended=full&client_id=$CLIENT_ID"
+            Log.d("SimklApi", "Requesting URL: $url")
+            with(json) {
+                authClient.newCall(GET(url))
+                    .awaitSuccess()
+                    .parseAs<SimklAnimeResponse>()
+                    .let {
+                        TrackAnimeMetadata(
+                            remoteId = it.id,
+                            title = it.title,
+                            thumbnailUrl = it.poster,
+                            description = it.overview,
+                            authors = if (type == "movies") it.director else it.network,
+                            artists = it.network,
+                        )
+                    }
             }
         }
     }
