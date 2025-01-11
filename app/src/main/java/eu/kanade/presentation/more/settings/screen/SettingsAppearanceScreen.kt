@@ -46,6 +46,9 @@ object SettingsAppearanceScreen : SearchableSettings {
         return listOf(
             getThemeGroup(uiPreferences = uiPreferences),
             getDisplayGroup(uiPreferences = uiPreferences),
+            // SY -->
+            getNavbarGroup(uiPreferences = uiPreferences),
+            // SY <--
         )
     }
 
@@ -187,6 +190,28 @@ object SettingsAppearanceScreen : SearchableSettings {
             ),
         )
     }
+
+    @Composable
+    fun getNavbarGroup(uiPreferences: UiPreferences): Preference.PreferenceGroup {
+        return Preference.PreferenceGroup(
+            stringResource(MR.strings.pref_category_navbar),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = uiPreferences.showNavUpdates(),
+                    title = stringResource(MR.strings.pref_hide_updates_button),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = uiPreferences.showNavHistory(),
+                    title = stringResource(MR.strings.pref_hide_history_button),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = uiPreferences.bottomBarLabels(),
+                    title = stringResource(MR.strings.pref_show_bottom_bar_labels),
+                ),
+            ),
+        )
+    }
+// SY <--
 }
 
 private val DateFormats = listOf(
