@@ -976,7 +976,7 @@ class PlayerActivity : BaseActivity() {
             videoLoadingJob = CoroutineScope(Dispatchers.IO).launch {
                 if (this.coroutineContext.job.isCancelled)
                     return@launch
-                
+
                 var vidUrl = it.videoUrl
                 if (viewModel.isEpisodeOnline() == true)
                 {
@@ -986,6 +986,12 @@ class PlayerActivity : BaseActivity() {
 
                 if (this.coroutineContext.job.isCancelled)
                     return@launch
+
+                if (vidUrl == null)
+                {
+                    toast("An error occurred while loading the video.")
+                    return@launch
+                }
 
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(vidUrl)))
                 viewModel.unpause()
