@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -26,6 +27,7 @@ object PlayerSettingsCustomButtonScreen : Screen() {
     override fun Content() {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
+        val uriHandler = LocalUriHandler.current
         val screenModel = rememberScreenModel { PlayerSettingsCustomButtonScreenModel() }
 
         val state by screenModel.state.collectAsState()
@@ -39,6 +41,7 @@ object PlayerSettingsCustomButtonScreen : Screen() {
 
         CustomButtonScreen(
             state = successState,
+            onClickFAQ = { uriHandler.openUri("https://aniyomi.org/docs/guides/player-settings/custom-buttons") },
             onClickCreate = { screenModel.showDialog(CustomButtonDialog.Create) },
             onClickPrimary = { screenModel.togglePrimaryButton(it) },
             onClickEdit = { screenModel.showDialog(CustomButtonDialog.Edit(it)) },

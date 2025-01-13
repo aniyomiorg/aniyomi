@@ -7,6 +7,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,6 +28,7 @@ import tachiyomi.presentation.core.util.plus
 @Composable
 fun CustomButtonScreen(
     state: CustomButtonScreenState.Success,
+    onClickFAQ: () -> Unit,
     onClickCreate: () -> Unit,
     onClickPrimary: (CustomButton) -> Unit,
     onClickEdit: (CustomButton) -> Unit,
@@ -38,9 +43,14 @@ fun CustomButtonScreen(
             AppBar(
                 title = stringResource(MR.strings.pref_player_custom_button_header),
                 navigateUp = navigateUp,
-                // actions = {
-                //     TODO: link to website
-                // },
+                actions = {
+                    IconButton(onClick = onClickFAQ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
+                            contentDescription = stringResource(MR.strings.pref_player_custom_button_guide),
+                        )
+                    }
+                },
                 scrollBehavior = scrollBehavior,
             )
         },

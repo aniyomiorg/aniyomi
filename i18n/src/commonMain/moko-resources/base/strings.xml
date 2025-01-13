@@ -322,6 +322,7 @@
     <string name="pref_player_custom_button">Custom buttons</string>
     <string name="pref_player_custom_button_summary">Execute lua code with custom buttons</string>
     <string name="pref_player_custom_button_header">Edit custom buttons</string>
+    <string name="pref_player_custom_button_guide">Custom buttons guide</string>
     <string name="pref_player_custom_button_empty">You have no custom buttons. Tap the plus button to create a custom button.</string>
     <string name="pref_player_custom_button_add">Add button</string>
     <string name="pref_player_custom_button_edit">Edit button</string>
