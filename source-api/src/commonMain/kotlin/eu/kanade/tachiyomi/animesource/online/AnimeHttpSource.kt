@@ -333,6 +333,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * Returns the resolved url of the episode link. Override only if it's needed to resolve
      * the url.
      *
+     * @since extensions-lib 1.5
      * @param video the video information.
      */
     open fun resolveVideoUrl(video: Video): String? {
