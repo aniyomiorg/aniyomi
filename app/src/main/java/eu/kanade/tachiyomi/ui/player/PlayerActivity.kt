@@ -979,12 +979,13 @@ class PlayerActivity : BaseActivity() {
                     return@launch
 
                 var vidUrl = it.videoUrl
-                if (viewModel.isEpisodeOnline() == true)
+                if (viewModel.isEpisodeOnline() == true && it.status != Video.State.READY)
                 {
                     val source = viewModel.currentSource.value as? AnimeHttpSource ?: return@launch
                     try
                     {
                         vidUrl = source.resolveVideoUrl(it)
+                        it.status = Video.State.READY
                     }
                     catch (e: Exception)
                     {
@@ -992,6 +993,7 @@ class PlayerActivity : BaseActivity() {
                             throw e
                         }
 
+                        it.status = Video.State.ERROR
                         toast("An error occurred while loading the video.")
                         logcat(LogPriority.ERROR, e)
                         return@launch
@@ -1006,6 +1008,7 @@ class PlayerActivity : BaseActivity() {
                     toast("An error occurred while loading the video.")
                     return@launch
                 }
+                viewModel.updateVideoList(videos)
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(vidUrl)))
                 viewModel.unpause()
             }
