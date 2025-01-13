@@ -983,6 +983,7 @@ class PlayerActivity : BaseActivity() {
                     try {
                         vidUrl = source.resolveVideoUrl(it)
                         it.status = Video.State.READY
+                        it.videoUrl = vidUrl
                     } catch (e: Exception) {
                         if (e is CancellationException) {
                             throw e
