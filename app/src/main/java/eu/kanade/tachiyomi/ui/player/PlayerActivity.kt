@@ -942,31 +942,40 @@ class PlayerActivity : BaseActivity() {
         fromStart: Boolean = false,
         position: Long? = null,
     ) {
-        if (player.isExiting) return
-        viewModel.updateVideoList(videos ?: emptyList())
-        if (videos == null) return
+        CoroutineScope(Dispatchers.IO).launchIO {
+            if (player.isExiting) return@launchIO
+            viewModel.updateVideoList(videos ?: emptyList())
+            if (videos == null) return@launchIO
 
-        videos.getOrNull(qualityIndex)?.let {
-            viewModel.setVideoIndex(qualityIndex)
-            setHttpOptions(it)
-            if (viewModel.isLoadingEpisode.value) {
-                viewModel.currentEpisode.value?.let { episode ->
-                    val preservePos = playerPreferences.preserveWatchingPosition().get()
-                    val resumePosition = position
-                        ?: if ((episode.seen && !preservePos) || fromStart) {
-                            0L
-                        } else {
-                            episode.last_second_seen
-                        }
-                    MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
+            videos.getOrNull(qualityIndex)?.let {
+                viewModel.setVideoIndex(qualityIndex)
+                var vidUrl = it.videoUrl
+                if (viewModel.isEpisodeOnline() == true)
+                {
+                    val source =viewModel.currentSource.value as? AnimeHttpSource ?: return@launchIO
+                    vidUrl = source.resolveVideoUrl(it)
                 }
-            } else {
-                player.timePos?.let {
-                    MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
+
+                setHttpOptions(it)
+                if (viewModel.isLoadingEpisode.value) {
+                    viewModel.currentEpisode.value?.let { episode ->
+                        val preservePos = playerPreferences.preserveWatchingPosition().get()
+                        val resumePosition = position
+                            ?: if ((episode.seen && !preservePos) || fromStart) {
+                                0L
+                            } else {
+                                episode.last_second_seen
+                            }
+                        MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
+                    }
+                } else {
+                    player.timePos?.let {
+                        MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
+                    }
                 }
+
+                MPVLib.command(arrayOf("loadfile", parseVideoUrl(vidUrl)))
             }
-
-            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
         }
     }
 

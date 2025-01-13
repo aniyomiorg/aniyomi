@@ -330,6 +330,16 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     protected abstract fun videoListParse(response: Response): List<Video>
 
     /**
+     * Returns the resolved url of the episode link. Override only if it's needed to resolve
+     * the url.
+     *
+     * @param video the video information.
+     */
+    open fun resolveVideoUrl(video: Video): String? {
+        return video.videoUrl
+    }
+
+    /**
      * Sorts the video list. Override this according to the user's preference.
      */
     protected open fun List<Video>.sort(): List<Video> {
@@ -446,7 +456,8 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     fun safeVideoRequest(
         video: Video,
     ): Request {
-        return GET(video.videoUrl!!, video.headers ?: headers)
+        val resolvedUrl = resolveVideoUrl(video)
+        return GET(resolvedUrl!!, video.headers ?: headers)
     }
 
     /**
