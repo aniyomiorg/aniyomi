@@ -336,7 +336,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @since extensions-lib 1.5
      * @param video the video information.
      */
-    open fun resolveVideoUrl(video: Video): String? {
+    open suspend fun resolveVideoUrl(video: Video): String? {
         return video.videoUrl
     }
 
@@ -454,7 +454,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param video the video whose link has to be fetched
      */
 
-    fun safeVideoRequest(
+    suspend fun safeVideoRequest(
         video: Video,
     ): Request {
         val resolvedUrl = resolveVideoUrl(video)
