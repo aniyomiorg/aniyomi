@@ -82,9 +82,13 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
@@ -936,45 +940,55 @@ class PlayerActivity : BaseActivity() {
         )
     }
 
+    private var videoLoadingJob: Job? = null
     fun setVideoList(
         qualityIndex: Int,
         videos: List<Video>?,
         fromStart: Boolean = false,
         position: Long? = null,
     ) {
-        CoroutineScope(Dispatchers.IO).launchIO {
-            if (player.isExiting) return@launchIO
-            viewModel.updateVideoList(videos ?: emptyList())
-            if (videos == null) return@launchIO
+        videoLoadingJob?.cancel()
+        if (player.isExiting) return
+        viewModel.updateVideoList(videos ?: emptyList())
+        if (videos == null) return
 
-            videos.getOrNull(qualityIndex)?.let {
-                viewModel.setVideoIndex(qualityIndex)
+        viewModel.pause()
+        videos.getOrNull(qualityIndex)?.let {
+            viewModel.setVideoIndex(qualityIndex)
+            setHttpOptions(it)
+            if (viewModel.isLoadingEpisode.value) {
+                viewModel.currentEpisode.value?.let { episode ->
+                    val preservePos = playerPreferences.preserveWatchingPosition().get()
+                    val resumePosition = position
+                        ?: if ((episode.seen && !preservePos) || fromStart) {
+                            0L
+                        } else {
+                            episode.last_second_seen
+                        }
+                    MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
+                }
+            } else {
+                player.timePos?.let {
+                    MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
+                }
+            }
+
+            videoLoadingJob = CoroutineScope(Dispatchers.IO).launch {
+                if (this.coroutineContext.job.isCancelled)
+                    return@launch
+                
                 var vidUrl = it.videoUrl
                 if (viewModel.isEpisodeOnline() == true)
                 {
-                    val source =viewModel.currentSource.value as? AnimeHttpSource ?: return@launchIO
+                    val source = viewModel.currentSource.value as? AnimeHttpSource ?: return@launch
                     vidUrl = source.resolveVideoUrl(it)
                 }
 
-                setHttpOptions(it)
-                if (viewModel.isLoadingEpisode.value) {
-                    viewModel.currentEpisode.value?.let { episode ->
-                        val preservePos = playerPreferences.preserveWatchingPosition().get()
-                        val resumePosition = position
-                            ?: if ((episode.seen && !preservePos) || fromStart) {
-                                0L
-                            } else {
-                                episode.last_second_seen
-                            }
-                        MPVLib.command(arrayOf("set", "start", "${resumePosition / 1000F}"))
-                    }
-                } else {
-                    player.timePos?.let {
-                        MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
-                    }
-                }
+                if (this.coroutineContext.job.isCancelled)
+                    return@launch
 
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(vidUrl)))
+                viewModel.unpause()
             }
         }
     }
