@@ -84,8 +84,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -975,20 +973,17 @@ class PlayerActivity : BaseActivity() {
             }
 
             videoLoadingJob = CoroutineScope(Dispatchers.IO).launch {
-                if (this.coroutineContext.job.isCancelled)
+                if (this.coroutineContext.job.isCancelled) {
                     return@launch
+                }
 
                 var vidUrl = it.videoUrl
-                if (viewModel.isEpisodeOnline() == true && it.status != Video.State.READY)
-                {
+                if (viewModel.isEpisodeOnline() == true && it.status != Video.State.READY) {
                     val source = viewModel.currentSource.value as? AnimeHttpSource ?: return@launch
-                    try
-                    {
+                    try {
                         vidUrl = source.resolveVideoUrl(it)
                         it.status = Video.State.READY
-                    }
-                    catch (e: Exception)
-                    {
+                    } catch (e: Exception) {
                         if (e is CancellationException) {
                             throw e
                         }
@@ -1000,11 +995,11 @@ class PlayerActivity : BaseActivity() {
                     }
                 }
 
-                if (this.coroutineContext.job.isCancelled)
+                if (this.coroutineContext.job.isCancelled) {
                     return@launch
+                }
 
-                if (vidUrl == null)
-                {
+                if (vidUrl == null) {
                     toast("An error occurred while loading the video.")
                     return@launch
                 }
