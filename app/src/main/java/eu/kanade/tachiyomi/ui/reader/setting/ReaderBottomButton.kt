@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.reader.setting
 
 import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 
 enum class ReaderBottomButton(val value: String, val stringRes: StringResource) {
     ViewChapters("vc", MR.strings.action_view_chapters),
@@ -10,7 +11,7 @@ enum class ReaderBottomButton(val value: String, val stringRes: StringResource) 
     ReadingMode("rm", MR.strings.viewer),
     Rotation("rot", MR.strings.rotation_type),
     Crop("cro", MR.strings.pref_crop_borders),
-    PageLayout("pl", MR.strings.page_layout),
+    PageLayout("pl", TLMR.strings.page_layout),
     ;
 
     fun isIn(buttons: Collection<String>) = value in buttons

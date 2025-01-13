@@ -45,6 +45,9 @@ include(":core:common")
 include(":data")
 include(":domain")
 include(":i18n")
+// TAIL -->
+include(":i18n-tail")
+// TAIL <--
 include(":macrobenchmark")
 include(":presentation-core")
 include(":presentation-widget")

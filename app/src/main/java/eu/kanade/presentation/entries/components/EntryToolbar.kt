@@ -29,6 +29,7 @@ import eu.kanade.presentation.components.UpIcon
 import eu.kanade.presentation.entries.DownloadAction
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.theme.active
 
@@ -130,7 +131,7 @@ fun EntryToolbar(
                                 if (onClickEditInfo != null) {
                                     add(
                                         AppBar.OverflowAction(
-                                            title = stringResource(MR.strings.action_edit_info),
+                                            title = stringResource(TLMR.strings.action_edit_info),
                                             onClick = onClickEditInfo,
                                         ),
                                     )

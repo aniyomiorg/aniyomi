@@ -49,7 +49,7 @@ import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -278,7 +278,7 @@ class ExternalIntents {
                 }
             } else {
                 withUIContext {
-                    context.toast(MR.strings.install_amnis, 8)
+                    context.toast(TLMR.strings.install_amnis, 8)
                 }
             }
             data = uri

@@ -8,7 +8,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -21,7 +20,7 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.more.settings.widget.ThemeColorPickerWidget
 import eu.kanade.presentation.util.Screen
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -54,7 +53,7 @@ class AppCustomThemeColorPickerScreen : Screen() {
         Scaffold(
             topBar = { scrollBehavior ->
                 AppBar(
-                    title = stringResource(MR.strings.pref_custom_color),
+                    title = stringResource(TLMR.strings.pref_custom_color),
                     navigateUp = navigator::pop,
                     scrollBehavior = scrollBehavior,
                 )

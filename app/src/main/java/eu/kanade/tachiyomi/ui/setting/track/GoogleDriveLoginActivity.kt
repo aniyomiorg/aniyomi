@@ -6,7 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import eu.kanade.tachiyomi.data.sync.service.GoogleDriveService
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -23,7 +23,7 @@ class GoogleDriveLoginActivity : BaseOAuthLoginActivity() {
                     onSuccess = {
                         Toast.makeText(
                             this@GoogleDriveLoginActivity,
-                            stringResource(MR.strings.google_drive_login_success),
+                            stringResource(TLMR.strings.google_drive_login_success),
                             Toast.LENGTH_LONG,
                         ).show()
 
@@ -32,7 +32,7 @@ class GoogleDriveLoginActivity : BaseOAuthLoginActivity() {
                     onFailure = { error ->
                         Toast.makeText(
                             this@GoogleDriveLoginActivity,
-                            stringResource(MR.strings.google_drive_login_failed, error),
+                            stringResource(TLMR.strings.google_drive_login_failed, error),
                             Toast.LENGTH_LONG,
                         ).show()
                         returnToSettings()
@@ -42,7 +42,7 @@ class GoogleDriveLoginActivity : BaseOAuthLoginActivity() {
         } else if (error != null) {
             Toast.makeText(
                 this@GoogleDriveLoginActivity,
-                stringResource(MR.strings.google_drive_login_failed, error),
+                stringResource(TLMR.strings.google_drive_login_failed, error),
                 Toast.LENGTH_LONG,
             ).show()
 

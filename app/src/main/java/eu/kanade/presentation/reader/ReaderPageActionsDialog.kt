@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.ActionButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
@@ -53,7 +54,7 @@ fun ReaderPageActionsDialog(
                 title = stringResource(
                     // SY -->
                     if (hasExtraPage) {
-                        MR.strings.action_set_first_page_cover
+                        TLMR.strings.action_set_first_page_cover
                     } else {
                         MR.strings.set_as_cover
                     },
@@ -76,7 +77,7 @@ fun ReaderPageActionsDialog(
                 title = stringResource(
                     // SY -->
                     if (hasExtraPage) {
-                        MR.strings.action_save_first_page
+                        TLMR.strings.action_save_first_page
                     } else {
                         MR.strings.action_save
                     },
@@ -97,7 +98,7 @@ fun ReaderPageActionsDialog(
             ) {
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(MR.strings.action_set_second_page_cover),
+                    title = stringResource(TLMR.strings.action_set_second_page_cover),
                     icon = Icons.Outlined.Photo,
                     onClick = {
                         showSetCoverDialog = true
@@ -105,7 +106,7 @@ fun ReaderPageActionsDialog(
                 )
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(MR.strings.action_share_second_page),
+                    title = stringResource(TLMR.strings.action_share_second_page),
                     icon = Icons.Outlined.Share,
                     onClick = {
                         onShare(false, true)
@@ -114,7 +115,7 @@ fun ReaderPageActionsDialog(
                 )
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(MR.strings.action_save_second_page),
+                    title = stringResource(TLMR.strings.action_save_second_page),
                     icon = Icons.Outlined.Save,
                     onClick = {
                         onSave(true)
@@ -127,7 +128,7 @@ fun ReaderPageActionsDialog(
             ) {
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(MR.strings.action_share_combined_page),
+                    title = stringResource(TLMR.strings.action_share_combined_page),
                     icon = Icons.Outlined.Share,
                     onClick = {
                         onShareCombined(true)
@@ -136,7 +137,7 @@ fun ReaderPageActionsDialog(
                 )
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(MR.strings.action_save_combined_page),
+                    title = stringResource(TLMR.strings.action_save_combined_page),
                     icon = Icons.Outlined.Save,
                     onClick = {
                         onSaveCombined()

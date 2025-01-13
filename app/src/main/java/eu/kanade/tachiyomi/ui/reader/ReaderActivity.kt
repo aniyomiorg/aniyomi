@@ -108,6 +108,7 @@ import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -893,7 +894,7 @@ class ReaderActivity : BaseActivity() {
         // SY -->
         val text = if (secondPage != null) {
             stringResource(
-                MR.strings.share_pages_info,
+                TLMR.strings.share_pages_info,
                 manga.title,
                 chapter.name,
                 if (resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) {

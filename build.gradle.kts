@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath(libs.android.shortcut.gradle)
         classpath(libs.google.services.gradle)
+        classpath(libs.gradleversionsx)
     }
 }
 

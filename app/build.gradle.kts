@@ -9,6 +9,7 @@ plugins {
     id("com.github.zellius.shortcut-helper")
     kotlin("plugin.serialization")
     alias(libs.plugins.aboutLibraries)
+    id("com.github.ben-manes.versions")
 }
 
 if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
@@ -147,6 +148,9 @@ android {
 
 dependencies {
     implementation(projects.i18n)
+    // TAIL
+    implementation(projects.i18nTail)
+    // TAIL
     implementation(projects.core.archive)
     implementation(projects.core.common)
     implementation(projects.coreMetadata)
