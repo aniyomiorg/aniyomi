@@ -2,7 +2,7 @@
 <resources>
   <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Tracking-Status</string>
   <string name="tag">Tags</string>
-  <string name="ungrouped">Ungrouped</string>
+  <string name="ungrouped">Nicht gruppiert</string>
   <string name="not_tracked">Nicht verfolgt</string>
   <string name="group" comment="group More Info Menu">Gruppe</string>
   <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Dynamische Kategorie-Aktualisierungen der Anime Library</string>
@@ -38,7 +38,7 @@
   <string name="pref_discord_dnd">⛔ Nicht stören</string>
   <string name="pref_discord_idle">🌙 Leerlauf</string>
   <string name="pref_discord_online">🟢 Online</string>
-  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_category_discord_incognito">RPC Inkognito</string>
   <string name="pref_discord_incognito">Discord Inkognito Modus</string>
   <string name="pref_discord_incognito_summary">Überschrieben wenn Inkognito-Modus aktiviert ist</string>
   <string name="pref_discord_incognito_categories_details">Einträge in eingeschlossenen Kategorien werden nicht in Discord angezeigt</string>
