@@ -80,6 +80,7 @@ import eu.kanade.tachiyomi.util.SubtitleSelect
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -981,7 +982,20 @@ class PlayerActivity : BaseActivity() {
                 if (viewModel.isEpisodeOnline() == true)
                 {
                     val source = viewModel.currentSource.value as? AnimeHttpSource ?: return@launch
-                    vidUrl = source.resolveVideoUrl(it)
+                    try
+                    {
+                        vidUrl = source.resolveVideoUrl(it)
+                    }
+                    catch (e: Exception)
+                    {
+                        if (e is CancellationException) {
+                            throw e
+                        }
+
+                        toast("An error occurred while loading the video.")
+                        logcat(LogPriority.ERROR, e)
+                        return@launch
+                    }
                 }
 
                 if (this.coroutineContext.job.isCancelled)
@@ -992,7 +1006,6 @@ class PlayerActivity : BaseActivity() {
                     toast("An error occurred while loading the video.")
                     return@launch
                 }
-
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(vidUrl)))
                 viewModel.unpause()
             }
