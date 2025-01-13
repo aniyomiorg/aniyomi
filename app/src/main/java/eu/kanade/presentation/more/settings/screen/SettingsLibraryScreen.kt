@@ -40,6 +40,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_C
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -274,31 +275,31 @@ object SettingsLibraryScreen : SearchableSettings {
                 // SY -->
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.groupAnimeLibraryUpdateType(),
-                    title = stringResource(MR.strings.anime_library_group_updates),
+                    title = stringResource(TLMR.strings.anime_library_group_updates),
                     entries = persistentMapOf(
                         AnimeGroupLibraryMode.GLOBAL to stringResource(
-                            MR.strings.library_group_updates_global,
+                            TLMR.strings.library_group_updates_global,
                         ),
                         AnimeGroupLibraryMode.ALL_BUT_UNGROUPED to stringResource(
-                            MR.strings.library_group_updates_all_but_ungrouped,
+                            TLMR.strings.library_group_updates_all_but_ungrouped,
                         ),
                         AnimeGroupLibraryMode.ALL to stringResource(
-                            MR.strings.library_group_updates_all,
+                            TLMR.strings.library_group_updates_all,
                         ),
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.groupMangaLibraryUpdateType(),
-                    title = stringResource(MR.strings.manga_library_group_updates),
+                    title = stringResource(TLMR.strings.manga_library_group_updates),
                     entries = persistentMapOf(
                         MangaGroupLibraryMode.GLOBAL to stringResource(
-                            MR.strings.library_group_updates_global,
+                            TLMR.strings.library_group_updates_global,
                         ),
                         MangaGroupLibraryMode.ALL_BUT_UNGROUPED to stringResource(
-                            MR.strings.library_group_updates_all_but_ungrouped,
+                            TLMR.strings.library_group_updates_all_but_ungrouped,
                         ),
                         MangaGroupLibraryMode.ALL to stringResource(
-                            MR.strings.library_group_updates_all,
+                            TLMR.strings.library_group_updates_all,
                         ),
                     ),
                 ),

@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsScreenModel
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import eu.kanade.tachiyomi.ui.reader.viewer.webtoon.WebtoonViewer
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.SettingsChipRow
@@ -103,7 +104,7 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
 
     // SY -->
     val pageLayout by screenModel.preferences.pageLayout().collectAsState()
-    SettingsChipRow(MR.strings.page_layout) {
+    SettingsChipRow(TLMR.strings.page_layout) {
         ReaderPreferences.PageLayouts.mapIndexed { index, text ->
             FilterChip(
                 selected = pageLayout == index,
@@ -162,12 +163,12 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
     )
 
     CheckboxItem(
-        label = stringResource(MR.strings.invert_double_pages),
+        label = stringResource(TLMR.strings.invert_double_pages),
         pref = screenModel.preferences.invertDoublePages(),
     )
 
     val centerMarginType by screenModel.preferences.centerMarginType().collectAsState()
-    SettingsChipRow(MR.strings.pref_center_margin) {
+    SettingsChipRow(TLMR.strings.pref_center_margin) {
         ReaderPreferences.CenterMarginTypes.mapIndexed { index, text ->
             FilterChip(
                 selected = centerMarginType == index,

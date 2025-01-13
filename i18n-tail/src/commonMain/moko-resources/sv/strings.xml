@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Spårnings status</string>
+  <string name="tag">Taggar</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Inte spårad</string>
+  <string name="group" comment="group More Info Menu">Grupp</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Library dynamiska kategoriuppdateringar</string>
+  <string name="manga_library_group_updates">Manga Library dynamiska kategoriuppdateringar</string>
+  <string name="library_group_updates_global">Starta alltid globala uppdateringar</string>
+  <string name="library_group_updates_all_but_ungrouped">Starta globala uppdateringar endast för ogrupperade, kategoriuppdateringar för andra</string>
+  <string name="library_group_updates_all">Starta kategoriuppdateringar hela tiden</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Återställ taggar</string>
+  <string name="add_tag">Lägg till tagg</string>
+  <string name="title_hint">Titel: %1$s</string>
+  <string name="description_hint">Beskrivning: %1$s</string>
+  <string name="author_hint">Författare: %1$s</string>
+  <string name="artist_hint">Konstnär: %1$s</string>
+  <string name="custom_entry_info">Anpassad post info</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Preferences">Casta inställningar</string>
+  <string name="pref_enable_cast">Aktivera eller inaktivera Cast</string>
+  <string name="action_cast">Skicka till Cast</string>
+  <string name="pref_show_downloaded_episode_file_size">Visa hämtade avsnittets filstorlek</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Inställningar</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Redigera information</string>
+  <string name="special_services" comment="special_services Connections section">Särskilda tjänster</string>
+  <string name="pref_category_connections">Anslutningar</string>
+  <string name="pref_connections_summary">Discord, mer att komma..</string>
+  <string name="connections_info">Specialtjänster som är unika för Animetail och förbättra hur du använder appen</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Denna Discord-tjänst fungerar genom tokenloggning. Använd på egen risk. Din token lagras lokalt och Animetail delar den inte någon annanstans</string>
+  <string name="pref_discord_rpc">Discord Rich Presence</string>
+  <string name="show_chapters_titles_title">Visa avsnitt/kapitel titlar</string>
+  <string name="show_chapters_titles_subtitle">Visa titeln på avsnittet du läser</string>
+  <string name="pref_enable_discord_rpc">Aktivera Discord Rich Presence</string>
+  <string name="pref_discord_status">Discords status</string>
+  <string name="pref_discord_dnd">⛔ Stör ej</string>
+  <string name="pref_discord_idle">🌙 Idle</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Discord inkognitoläge</string>
+  <string name="pref_discord_incognito_summary">Åsidosätt när inkognitoläge är aktiverat</string>
+  <string name="pref_discord_incognito_categories_details">Poster i inkluderade kategorier kommer inte att visas i Discord</string>
+  <string name="browsing" comment="browsing Discord section">Surfning</string>
+  <string name="scrolling">Rullar igenom</string>
+  <string name="messing">Ringer runt med</string>
+  <string name="video">Video</string>
+  <string name="comic">Serie</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player måste installeras</string>
+  <string name="pref_category_torrentserver">Inställningar för TorrentServer</string>
+  <string name="pref_torrentserver_port">TorrentServer Port</string>
+  <string name="torrentserver_is_running">Torrent Server körs</string>
+  <string name="pref_torrent_trackers">Torrent Trackers</string>
+  <string name="pref_reset_torrent_trackers_string">Återställ standard torrent trackers sträng</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Summa för sidförladdning</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Bevara läsposition vid läsposter</string>
+  <string name="reader_bottom_buttons">Nedre knappar för läsare</string>
+  <string name="reader_bottom_buttons_summary">Anpassa vilka knappar som visas längst ner på läsaren</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Ange första sidan som omslag</string>
+  <string name="action_set_second_page_cover">Ange andra sidan som omslag</string>
+  <string name="action_save_first_page">Spara första sidan</string>
+  <string name="action_save_second_page">Spara andra sidan</string>
+  <string name="action_share_first_page">Dela första sidan</string>
+  <string name="action_share_second_page">Dela andra sidan</string>
+  <string name="action_save_combined_page">Spara kombinerad sida</string>
+  <string name="action_share_combined_page">Dela kombinerad sida</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, sidor %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Sidans layout</string>
+  <string name="shift_double_pages">Skifta en sida över</string>
+  <string name="double_pages">Dubbla sidor</string>
+  <string name="single_page">Enda sidan</string>
+  <string name="automatic_orientation">Automatisk (baserat på orientering)</string>
+  <string name="automatic_can_still_switch">När du använder automatisk sidlayout, kan du fortfarande växla mellan layouter när du läser utan att åsidosätta denna inställning</string>
+  <string name="invert_double_pages">Invertera dubbla sidor </string>
+  <string name="center_margin" comment="center_margin Center margin">Centrera marginal</string>
+  <string name="center_margin_none">Ingen</string>
+  <string name="center_margin_double_page">Lägg till dubbel sida</string>
+  <string name="center_margin_wide_page">Lägg till i bred sida</string>
+  <string name="center_margin_double_and_wide_page">Lägg till i båda</string>
+  <string name="pref_center_margin">Mitten marginaltyp</string>
+  <string name="pref_center_margin_summary">Infoga distans för att rymma deadspace på vikbara enheter.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Anpassad färgväljare</string>
+  <string name="custom_color_description">Välj en färg för det anpassade temat</string>
+  <string name="theme_custom">Anpassat tema</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Säkerhetskopiera</string>
+  <string name="label_sync">Synk</string>
+  <string name="label_triggers">Utlösare</string>
+  <string name="pref_backup_and_sync_summary">Manuell &amp; automatiska säkerhetskopieringar och synkronisering</string>
+  <string name="update_30min">Var 30:e minut</string>
+  <string name="update_1hour">Varje timme</string>
+  <string name="update_3hour">Var 3:e timme</string>
+  <string name="sync_error">Synkronisering av bibliotek misslyckades</string>
+  <string name="sync_complete">Synkronisering av bibliotek slutförd</string>
+  <string name="sync_in_progress">Synkronisering pågår redan</string>
+  <string name="pref_sync_host">Värd</string>
+  <string name="pref_sync_host_summ">Ange värdadressen för att synkronisera ditt bibliotek</string>
+  <string name="pref_sync_api_key">API nyckel</string>
+  <string name="pref_sync_api_key_summ">Ange API-nyckel för att synkronisera ditt bibliotek</string>
+  <string name="pref_sync_now_group_title">Synkronisera åtgärder</string>
+  <string name="pref_sync_now">Synkronisera nu</string>
+  <string name="pref_sync_confirmation_title">Synkronisera bekräftelse</string>
+  <string name="pref_sync_now_subtitle">Initiera omedelbar synkronisering av dina data</string>
+  <string name="pref_sync_confirmation_message">Synkronisering kommer att skriva över ditt lokala bibliotek med fjärrbiblioteket. Är du säker på att du vill fortsätta?</string>
+  <string name="pref_sync_service">Tjänst</string>
+  <string name="pref_sync_service_summ">Välj tjänsten för att synkronisera ditt bibliotek med</string>
+  <string name="pref_sync_service_category">Synk</string>
+  <string name="pref_sync_automatic_category">Automatisk synkronisering</string>
+  <string name="pref_sync_interval">Synkronisering frekvens</string>
+  <string name="pref_choose_what_to_sync">Välj vad du ska synkronisera</string>
+  <string name="success_reset_sync_timestamp">Senast synkroniserade tidsstämpel återställd</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Klar i %1$s</string>
+  <string name="last_synchronization">Senaste synkronisering: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Logga in</string>
+  <string name="google_drive_sign_in_success">Inloggad framgångsrikt</string>
+  <string name="google_drive_sign_in_failed">Inloggning misslyckades</string>
+  <string name="authentication">Autentisering</string>
+  <string name="pref_google_drive_purge_sync_data">Rensa synkroniseringsdata från Google Drive</string>
+  <string name="google_drive_sync_data_purged">Synkroniseringsdata rensas från Google Drive</string>
+  <string name="google_drive_sync_data_not_found">Inga synkroniseringsdata hittades i Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">Fel vid rensning av synkroniseringsdata från Google Drive, försök att logga in igen.</string>
+  <string name="google_drive_login_success">Inloggad på Google Drive</string>
+  <string name="google_drive_login_failed">Det gick inte att logga in på Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">Inte inloggad på Google Drive</string>
+  <string name="error_uploading_sync_data">Fel vid uppladdning av synkroniseringsdata till Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Fel vid borttagning av Google Drive Lock fil</string>
+  <string name="error_before_sync_gdrive">Fel före synkronisering: %s</string>
+  <string name="pref_purge_confirmation_title">Rensa bekräftelse</string>
+  <string name="pref_purge_confirmation_message">Rensning av synkroniseringsdata raderar alla dina synkroniseringsdata från Google Drive. Är du säker på att du vill fortsätta?</string>
+  <string name="pref_sync_options">Skapa synkroniseringsutlösare</string>
+  <string name="pref_sync_options_summ">Kan användas för att ställa in synkroniseringsutlösare</string>
+  <string name="sync_on_chapter_read">Synkronisera på kapitel Läs</string>
+  <string name="sync_on_chapter_open">Synkronisera på kapitel Öppet</string>
+  <string name="sync_on_episode_seen">Synkronisera vid episod Sett</string>
+  <string name="sync_on_episode_open">Synkronisering vid episod öppen</string>
+  <string name="sync_on_app_start">Synkronisering vid appstart</string>
+  <string name="sync_on_app_resume">Synkronisering vid Appens Återupptagande</string>
+  <string name="sync_library">Synkronisera bibliotek</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Uppdatera tilläggssidan för att uppdatera listan.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Navbar</string>
+  <string name="pref_hide_updates_button">Visa uppdateringar i navigatorn</string>
+  <string name="pref_hide_history_button">Visa historik i navigatorn</string>
+  <string name="pref_show_bottom_bar_labels">Visa alltid navigeringsetiketter</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Välj en spårare</string>
+  <string name="entry_not_tracked">Inlägget spåras inte.</string>
+  <string name="fill_from_tracker">Fyll från tracker</string>
+</resources>

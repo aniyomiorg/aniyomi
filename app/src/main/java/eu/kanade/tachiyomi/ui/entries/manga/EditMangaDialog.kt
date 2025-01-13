@@ -55,6 +55,7 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.model.MangaTrack
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -311,7 +312,7 @@ private suspend fun getTrackers(
         .filterNot { (_, tracker) -> tracker is EnhancedMangaTracker }
 
     if (tracks.value.isEmpty()) {
-        context.toast(context.stringResource(MR.strings.entry_not_tracked))
+        context.toast(context.stringResource(TLMR.strings.entry_not_tracked))
         return
     }
 

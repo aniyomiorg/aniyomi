@@ -28,6 +28,7 @@ import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.IOException
@@ -110,7 +111,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
     @Suppress("TooGenericExceptionThrown", "TooGenericExceptionCaught")
     private fun pullSyncData(): SyncData? {
         val drive = googleDriveService.driveService
-            ?: throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
+            ?: throw Exception(context.stringResource(TLMR.strings.google_drive_not_signed_in))
 
         val fileList = getAppDataFileList(drive)
         if (fileList.isEmpty()) {
@@ -139,7 +140,7 @@ class GoogleDriveSyncService(context: Context, json: Json, syncPreferences: Sync
     @Suppress("TooGenericExceptionThrown")
     private suspend fun pushSyncData(syncData: SyncData) {
         val drive = googleDriveService.driveService
-            ?: throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
+            ?: throw Exception(context.stringResource(TLMR.strings.google_drive_not_signed_in))
 
         val fileList = getAppDataFileList(drive)
         val backup = syncData.backup ?: return
@@ -335,7 +336,7 @@ class GoogleDriveService(private val context: Context) {
             .build()
 
         if (refreshToken == "") {
-            throw Exception(context.stringResource(MR.strings.google_drive_not_signed_in))
+            throw Exception(context.stringResource(TLMR.strings.google_drive_not_signed_in))
         }
 
         credential.refreshToken = refreshToken

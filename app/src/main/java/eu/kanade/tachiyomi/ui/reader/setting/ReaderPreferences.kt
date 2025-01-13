@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 
 class ReaderPreferences(
     private val preferenceStore: PreferenceStore,
@@ -241,16 +242,16 @@ class ReaderPreferences(
 
         // SY -->
         val PageLayouts = listOf(
-            MR.strings.single_page,
-            MR.strings.double_pages,
-            MR.strings.automatic_orientation,
+            TLMR.strings.single_page,
+            TLMR.strings.double_pages,
+            TLMR.strings.automatic_orientation,
         )
 
         val CenterMarginTypes = listOf(
-            MR.strings.center_margin_none,
-            MR.strings.center_margin_double_page,
-            MR.strings.center_margin_wide_page,
-            MR.strings.center_margin_double_and_wide_page,
+            TLMR.strings.center_margin_none,
+            TLMR.strings.center_margin_double_page,
+            TLMR.strings.center_margin_wide_page,
+            TLMR.strings.center_margin_double_and_wide_page,
         )
         // SY <--
     }

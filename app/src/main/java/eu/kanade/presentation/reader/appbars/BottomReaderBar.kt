@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -22,6 +21,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderBottomButton
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
@@ -111,7 +111,7 @@ fun BottomReaderBar(
             IconButton(onClick = onClickPageLayout) {
                 Icon(
                     painter = painterResource(R.drawable.ic_book_open_variant_24dp),
-                    contentDescription = stringResource(MR.strings.page_layout),
+                    contentDescription = stringResource(TLMR.strings.page_layout),
                 )
             }
         }
@@ -120,7 +120,7 @@ fun BottomReaderBar(
             IconButton(onClick = onClickShiftPage) {
                 Icon(
                     painter = painterResource(R.drawable.ic_page_next_outline_24dp),
-                    contentDescription = stringResource(MR.strings.shift_double_pages),
+                    contentDescription = stringResource(TLMR.strings.shift_double_pages),
                 )
             }
         }

@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.coroutines.EmptyCoroutineContext
@@ -92,7 +93,7 @@ class TorrentServerService : Service() {
             )
         val builder = context.notificationBuilder(Notifications.CHANNEL_TORRENT_SERVER) {
             setSmallIcon(R.drawable.ic_ani)
-            setContentText(stringResource(MR.strings.torrentserver_is_running))
+            setContentText(stringResource(TLMR.strings.torrentserver_is_running))
             setContentTitle(stringResource(MR.strings.app_name))
             setAutoCancel(false)
             setOngoing(true)

@@ -61,6 +61,7 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
 import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -185,7 +186,7 @@ data object MangaLibraryTab : Tab {
                         if (!SyncDataJob.isRunning(context)) {
                             SyncDataJob.startNow(context)
                         } else {
-                            context.toast(MR.strings.sync_in_progress)
+                            context.toast(TLMR.strings.sync_in_progress)
                         }
                     },
                     searchQuery = state.searchQuery,

@@ -34,6 +34,7 @@ import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.BaseSortItem
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
@@ -62,7 +63,7 @@ fun AnimeLibrarySettingsDialog(
             stringResource(MR.strings.action_sort),
             stringResource(MR.strings.action_display),
             // SY -->
-            stringResource(MR.strings.group),
+            stringResource(TLMR.strings.group),
             // SY <--
         ),
     ) { page ->

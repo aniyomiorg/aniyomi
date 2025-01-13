@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Estado del seguimiento</string>
+  <string name="tag">Etiquetas</string>
+  <string name="ungrouped">No agrupado</string>
+  <string name="not_tracked">No rastreado</string>
+  <string name="group" comment="group More Info Menu">Grupo</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Actualizaciones dinámicas de categorías de Anime Library</string>
+  <string name="manga_library_group_updates">Actualizaciones de categorías dinámicas de Manga Library</string>
+  <string name="library_group_updates_global">Siempre lanzar actualizaciones globales</string>
+  <string name="library_group_updates_all_but_ungrouped">Lanzar actualizaciones globales para los no agrupados y por categoría para los demás</string>
+  <string name="library_group_updates_all">Lanzar actualizaciones por categoría todo el tiempo</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Restablecer las etiquetas</string>
+  <string name="add_tag">Añadir etiqueta</string>
+  <string name="title_hint">Título: %1$s</string>
+  <string name="description_hint">Descripción: %1$s</string>
+  <string name="author_hint">Autor: %1$s</string>
+  <string name="artist_hint">Artista: %1$s</string>
+  <string name="custom_entry_info">Información de entrada personalizada</string>
+  <string name="reset_info">Restablecer información</string>
+  <string name="pref_category_cast" comment="pref_category_cast Preferences">Configuración de transmisión</string>
+  <string name="pref_enable_cast">Habilitar o deshabilitar la transmisión</string>
+  <string name="action_cast">Enviar a la transmisión</string>
+  <string name="pref_show_downloaded_episode_file_size">Mostrar el tamaño del archivo del episodio descargado</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Ajustes de bifurcación</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Editar info</string>
+  <string name="special_services" comment="special_services Connections section">Servicios Especiales</string>
+  <string name="pref_category_connections">Conexiones</string>
+  <string name="pref_connections_summary">Discord, más por venir…</string>
+  <string name="connections_info">Servicios especiales exclusivos de Animetail que mejoran la forma en que usas la app</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Este servicio de Discord funciona a través de inicio de sesión con token. Úsalo bajo tu propio riesgo. Tu token se guarda localmente y Animetail no lo comparte en ningún otro lugar</string>
+  <string name="pref_discord_rpc">Discord Rica Presence</string>
+  <string name="show_chapters_titles_title">Mostrar títulos de episodios/capítulos</string>
+  <string name="show_chapters_titles_subtitle">Mostrar el título del episodio/capítulo que estás leyendo</string>
+  <string name="pref_enable_discord_rpc">Habilitar Discord Rich Presence</string>
+  <string name="pref_discord_status">Estado de Discord</string>
+  <string name="pref_discord_dnd">⛔ No molestar</string>
+  <string name="pref_discord_idle">🌙 Inactivo</string>
+  <string name="pref_discord_online">🟢 En línea</string>
+  <string name="pref_category_discord_incognito">RPC Incógnito</string>
+  <string name="pref_discord_incognito">Modo Discord Incógnito</string>
+  <string name="pref_discord_incognito_summary">Anulado cuando se habilita el modo incógnito</string>
+  <string name="pref_discord_incognito_categories_details">Las entradas en las categorías incluidas no se mostrarán en Discord</string>
+  <string name="browsing" comment="browsing Discord section">Navegando</string>
+  <string name="scrolling">Desplazándose</string>
+  <string name="messing">Experimentando con</string>
+  <string name="video">Vídeo</string>
+  <string name="comic">Cómic</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Es necesario instalar Amnis Player</string>
+  <string name="pref_category_torrentserver">Preferencias de TorrentServer</string>
+  <string name="pref_torrentserver_port">Puerto para TorrentServer</string>
+  <string name="torrentserver_is_running">Torrent Server se está ejecutando</string>
+  <string name="pref_torrent_trackers">Rastreadores Torrent</string>
+  <string name="pref_reset_torrent_trackers_string">Restablecer cadena de rastreadores de torrent por defecto</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Cantidad de precarga de página</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Conservar la posición de lectura en las entradas leídas</string>
+  <string name="reader_bottom_buttons">Botones inferiores del lector</string>
+  <string name="reader_bottom_buttons_summary">Personalizar los botones que aparecen en la parte inferior del lector</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Establecer la primera página como portada</string>
+  <string name="action_set_second_page_cover">Establecer la segunda página como portada</string>
+  <string name="action_save_first_page">Guardar la primera página</string>
+  <string name="action_save_second_page">Guardar la segunda página</string>
+  <string name="action_share_first_page">Compartir la primera página</string>
+  <string name="action_share_second_page">Compartir la segunda página</string>
+  <string name="action_save_combined_page">Guardar la página combinada</string>
+  <string name="action_share_combined_page">Compartir la página combinada</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, páginas %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Diseño de página</string>
+  <string name="shift_double_pages">Desplazar una página</string>
+  <string name="double_pages">Dobles páginas</string>
+  <string name="single_page">Una sola página</string>
+  <string name="automatic_orientation">Automático (basado en la orientación)</string>
+  <string name="automatic_can_still_switch">Al usar el diseño de página automático, aún puedes cambiar entre diseños mientras lees sin anular esta configuración</string>
+  <string name="invert_double_pages">Invertir doble página </string>
+  <string name="center_margin" comment="center_margin Center margin">Centrar margen</string>
+  <string name="center_margin_none">Nada</string>
+  <string name="center_margin_double_page">Añadir a doble página</string>
+  <string name="center_margin_wide_page">Añadir a la página ancha</string>
+  <string name="center_margin_double_and_wide_page">Agregar a ambos</string>
+  <string name="pref_center_margin">Tipo del margen central</string>
+  <string name="pref_center_margin_summary">Insertar espaciador para ajustar el espacio muerto en dispositivos plegables.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Selector de color personalizado</string>
+  <string name="custom_color_description">Elige un color para el tema personalizado</string>
+  <string name="theme_custom">Tema personalizado</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Respaldar</string>
+  <string name="label_sync">Sincronizar</string>
+  <string name="label_triggers">Disparadores</string>
+  <string name="pref_backup_and_sync_summary">Copias de seguridad automáticas &amp; y sincronización manual</string>
+  <string name="update_30min">Cada 30 minutos</string>
+  <string name="update_1hour">Cada hora</string>
+  <string name="update_3hour">Cada 3 horas</string>
+  <string name="sync_error">Error al sincronizar la biblioteca</string>
+  <string name="sync_complete">Sincronización completa</string>
+  <string name="sync_in_progress">La sincronización ya está en progreso</string>
+  <string name="pref_sync_host">Host</string>
+  <string name="pref_sync_host_summ">Introduzca la dirección del host para sincronizar su biblioteca</string>
+  <string name="pref_sync_api_key">Clave API</string>
+  <string name="pref_sync_api_key_summ">Introduzca la clave API para sincronizar su biblioteca</string>
+  <string name="pref_sync_now_group_title">Acciones de sincronización</string>
+  <string name="pref_sync_now">Sincronizar ahora</string>
+  <string name="pref_sync_confirmation_title">Confirmación de sincronización</string>
+  <string name="pref_sync_now_subtitle">Iniciar la sincronización inmediata de sus datos</string>
+  <string name="pref_sync_confirmation_message">La sincronización sobrescribirá tu biblioteca local con la biblioteca remota. ¿Estás seguro de que deseas continuar?</string>
+  <string name="pref_sync_service">Servicio</string>
+  <string name="pref_sync_service_summ">Seleccione el servicio con el que sincronizar su biblioteca</string>
+  <string name="pref_sync_service_category">Sincronizar</string>
+  <string name="pref_sync_automatic_category">Sincronización automática</string>
+  <string name="pref_sync_interval">Frecuencia de sincronización</string>
+  <string name="pref_choose_what_to_sync">Elige qué sincronizar</string>
+  <string name="success_reset_sync_timestamp">Última marca de tiempo de sincronización restablecida</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Listo en %1$s</string>
+  <string name="last_synchronization">Última sincronización: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Iniciar sesión</string>
+  <string name="google_drive_sign_in_success">Sesión iniciada correctamente</string>
+  <string name="google_drive_sign_in_failed">Error al iniciar sesión</string>
+  <string name="authentication">Autenticación</string>
+  <string name="pref_google_drive_purge_sync_data">Borrar datos de sincronización de Google Drive</string>
+  <string name="google_drive_sync_data_purged">Sincronizar datos borrados de Google Drive</string>
+  <string name="google_drive_sync_data_not_found">No se han encontrado datos de sincronización en Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">Error al purgar los datos de sincronización de Google Drive. Intenta iniciar sesión nuevamente.</string>
+  <string name="google_drive_login_success">Conectado a Google Drive</string>
+  <string name="google_drive_login_failed">No se pudo iniciar sesión en Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">No has iniciado sesión en Google Drive</string>
+  <string name="error_uploading_sync_data">Error al subir los datos de sincronización a Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Error al eliminar el archivo de bloqueo de Google Drive</string>
+  <string name="error_before_sync_gdrive">Error antes de la sincronización: %s</string>
+  <string name="pref_purge_confirmation_title">Confirmación de eliminación</string>
+  <string name="pref_purge_confirmation_message">Purgar los datos de sincronización eliminará todos tus datos de sincronización de Google Drive. ¿Estás seguro de que deseas continuar?</string>
+  <string name="pref_sync_options">Crear disparadores de sincronización</string>
+  <string name="pref_sync_options_summ">Puede usarse para configurar disparadores de sincronización</string>
+  <string name="sync_on_chapter_read">Sincronizar al leer el capítulo</string>
+  <string name="sync_on_chapter_open">Sincronizar al abrir capítulo</string>
+  <string name="sync_on_episode_seen">Sincronizar al ver el episodio</string>
+  <string name="sync_on_episode_open">Sincronizar al abrir el episodio</string>
+  <string name="sync_on_app_start">Sincronizar al iniciar la app</string>
+  <string name="sync_on_app_resume">Sincronizar al reanudar la app</string>
+  <string name="sync_library">Sincronizar biblioteca</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Actualiza la página de la extensión para actualizar la lista.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Barra de navegación</string>
+  <string name="pref_hide_updates_button">Mostrar actualizaciones en la barra de navegación</string>
+  <string name="pref_hide_history_button">Mostrar historial en la barra de navegación</string>
+  <string name="pref_show_bottom_bar_labels">Mostrar siempre las etiquetas de la barra de navegación</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Seleccionar un rastreador</string>
+  <string name="entry_not_tracked">No se ha realizado seguimiento de la entrada.</string>
+  <string name="fill_from_tracker">Rellenar desde el rastreador</string>
+</resources>

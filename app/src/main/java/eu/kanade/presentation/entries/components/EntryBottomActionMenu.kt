@@ -30,8 +30,6 @@ import androidx.compose.material.icons.outlined.BookmarkRemove
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.DoneAll
 import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.Input
-import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.RemoveDone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -62,6 +60,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -363,7 +362,7 @@ fun LibraryBottomActionMenu(
                 // SY -->
                 if (showOverflow) {
                     Button(
-                        title = stringResource(MR.strings.reset_info),
+                        title = stringResource(TLMR.strings.reset_info),
                         icon = Icons.Outlined.Delete,
                         toConfirm = confirm[5],
                         onLongClick = { onLongClickItem(5) },

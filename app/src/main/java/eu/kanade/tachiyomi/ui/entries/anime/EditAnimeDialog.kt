@@ -55,6 +55,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.model.AnimeTrack
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -310,7 +311,7 @@ private suspend fun getTrackers(
         .filterNot { (_, tracker) -> tracker is EnhancedAnimeTracker }
 
     if (tracks.value.isEmpty()) {
-        context.toast(context.stringResource(MR.strings.entry_not_tracked))
+        context.toast(context.stringResource(TLMR.strings.entry_not_tracked))
         return
     }
 

@@ -25,8 +25,8 @@ import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableMap
-import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -72,8 +72,8 @@ object SettingsAppearanceScreen : SearchableSettings {
         val customPreferenceItem = if (appTheme == AppTheme.CUSTOM) {
             listOf(
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.pref_custom_color),
-                    subtitle = stringResource(MR.strings.custom_color_description),
+                    title = stringResource(TLMR.strings.pref_custom_color),
+                    subtitle = stringResource(TLMR.strings.custom_color_description),
                     onClick = { navigator.push(AppCustomThemeColorPickerScreen()) },
                 ),
             )
@@ -194,19 +194,19 @@ object SettingsAppearanceScreen : SearchableSettings {
     @Composable
     fun getNavbarGroup(uiPreferences: UiPreferences): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            stringResource(MR.strings.pref_category_navbar),
+            stringResource(TLMR.strings.pref_category_navbar),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = uiPreferences.showNavUpdates(),
-                    title = stringResource(MR.strings.pref_hide_updates_button),
+                    title = stringResource(TLMR.strings.pref_hide_updates_button),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = uiPreferences.showNavHistory(),
-                    title = stringResource(MR.strings.pref_hide_history_button),
+                    title = stringResource(TLMR.strings.pref_hide_history_button),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = uiPreferences.bottomBarLabels(),
-                    title = stringResource(MR.strings.pref_show_bottom_bar_labels),
+                    title = stringResource(TLMR.strings.pref_show_bottom_bar_labels),
                 ),
             ),
         )

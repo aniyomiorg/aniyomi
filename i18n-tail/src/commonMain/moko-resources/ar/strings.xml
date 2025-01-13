@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">حالة التتبع</string>
+  <string name="tag">الوسوم</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">لم يتتبع</string>
+  <string name="group" comment="group More Info Menu">مجموعة</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">تحديثات فئة أنيمي الديناميكية</string>
+  <string name="manga_library_group_updates">تحديثات الفئة الديناميكية لمكتبة مانغا</string>
+  <string name="library_group_updates_global">تشغيل التحديثات العالمية دائمًا</string>
+  <string name="library_group_updates_all_but_ungrouped">تشغيل التحديثات العالمية فقط لتحديثات الفئات الغير مجمعة للآخرين</string>
+  <string name="library_group_updates_all">تشغيل فئة التحديثات طوال الوقت</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">إعادة تعيين العلامات</string>
+  <string name="add_tag">إضافة علامة</string>
+  <string name="title_hint">العنوان: %1$s</string>
+  <string name="description_hint">الوصف: %1$s</string>
+  <string name="author_hint">المؤلف: %1$s</string>
+  <string name="artist_hint">الفنان: %1$s</string>
+  <string name="custom_entry_info">معلومات الإدخال المخصصة</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Preferences">إعدادات القصة</string>
+  <string name="pref_enable_cast">تمكين أو تعطيل المشاهدة</string>
+  <string name="action_cast">إرسال إلى الكشوف</string>
+  <string name="pref_show_downloaded_episode_file_size">إظهار حجم ملف الحلقة التي تم تنزيلها</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">إعدادات الفتح</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">تعديل المعلومات</string>
+  <string name="special_services" comment="special_services Connections section">الخدمات الخاصة</string>
+  <string name="pref_category_connections">اتصالات</string>
+  <string name="pref_connections_summary">ديسكورد، أكثر من ذلك..</string>
+  <string name="connections_info">الخدمات الخاصة الفريدة من نوعها في Animetail وتعزيز طريقة استخدام التطبيق</string>
+  <string name="connections_discord">ديسكورد</string>
+  <string name="connections_discord_info">خدمة ديسكورد هذه تعمل من خلال تسجيل الرمز المميز. استخدمها على مسؤوليتك الخاصة. يتم تخزين الرمز المميز الخاص بك محليا ولا يشاركه الذيل في أي مكان آخر</string>
+  <string name="pref_discord_rpc">وجود ديسكورد الغني</string>
+  <string name="show_chapters_titles_title">إظهار عناوين الحلقات / الفصول</string>
+  <string name="show_chapters_titles_subtitle">إظهار عنوان الحلقة/الفصل الذي تقرأه</string>
+  <string name="pref_enable_discord_rpc">تمكين وجود ديسكورد الغني</string>
+  <string name="pref_discord_status">حالة ديسكورد</string>
+  <string name="pref_discord_dnd">⛔ الرجاء عدم الإزعاج</string>
+  <string name="pref_discord_idle">:crescent_القمر: الخمول</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">وضع التخفي ديسكورد</string>
+  <string name="pref_discord_incognito_summary">تم تجاوزها عند تمكين وضع التخفي</string>
+  <string name="pref_discord_incognito_categories_details">المدخلات في الفئات المدرجة لن يتم عرضها في ديسكورد</string>
+  <string name="browsing" comment="browsing Discord section">تصفح</string>
+  <string name="scrolling">التمرير عبر</string>
+  <string name="messing">المراسلة مع</string>
+  <string name="video">فيديو</string>
+  <string name="comic">فكاهي</string>
+  <string name="install_amnis" comment="install_amnis Torrent">يجب تثبيت لاعب Amnis</string>
+  <string name="pref_category_torrentserver">تفضيلات تورنتسيرفر</string>
+  <string name="pref_torrentserver_port">منفذ تورنتسيرفر</string>
+  <string name="torrentserver_is_running">خادم تورنت قيد التشغيل</string>
+  <string name="pref_torrent_trackers">تعقب تورينت</string>
+  <string name="pref_reset_torrent_trackers_string">إعادة تعيين سلسلة تعقب التورنت الافتراضية</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">كمية التحميل المسبق للصفحة</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">الحفاظ على موضع القراءة عند قراءة المواد</string>
+  <string name="reader_bottom_buttons">أزرار القارئ السفلي</string>
+  <string name="reader_bottom_buttons_summary">تخصيص الأزرار التي تظهر في أسفل القارئ</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">تعيين الصفحة الأولى كغطاء</string>
+  <string name="action_set_second_page_cover">تعيين الصفحة الثانية كغطاء</string>
+  <string name="action_save_first_page">حفظ الصفحة الأولى</string>
+  <string name="action_save_second_page">حفظ الصفحة الثانية</string>
+  <string name="action_share_first_page">مشاركة الصفحة الأولى</string>
+  <string name="action_share_second_page">مشاركة الصفحة الثانية</string>
+  <string name="action_save_combined_page">حفظ الصفحة مجتمعة</string>
+  <string name="action_share_combined_page">مشاركة الصفحة المدمجة</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s، الصفحات %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">تخطيط الصفحة</string>
+  <string name="shift_double_pages">تحويل صفحة واحدة فوق</string>
+  <string name="double_pages">صفحات مزدوجة</string>
+  <string name="single_page">صفحة واحدة</string>
+  <string name="automatic_orientation">تلقائي (مبني على التوجيه)</string>
+  <string name="automatic_can_still_switch">عند استخدام تخطيط الصفحات التلقائية، لا يزال بإمكانك التبديل بين المخططات أثناء القراءة دون تجاوز هذا الإعداد</string>
+  <string name="invert_double_pages">عكس الصفحات المزدوجة </string>
+  <string name="center_margin" comment="center_margin Center margin">هامش الوسط</string>
+  <string name="center_margin_none">لا</string>
+  <string name="center_margin_double_page">إضافة إلى صفحة مزدوجة</string>
+  <string name="center_margin_wide_page">إضافة إلى صفحة واسعة</string>
+  <string name="center_margin_double_and_wide_page">إضافة إلى كليهما</string>
+  <string name="pref_center_margin">نوع هامش الوسط</string>
+  <string name="pref_center_margin_summary">إدراج مسافة لاستيعاب المساحة النهائية على الأجهزة القابلة للتكوين.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">اختيار لون مخصص</string>
+  <string name="custom_color_description">اختيار لون للسمة المخصصة</string>
+  <string name="theme_custom">سمة مخصصة</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">النسخ الاحتياطي</string>
+  <string name="label_sync">مزامنة</string>
+  <string name="label_triggers">المحفزات</string>
+  <string name="pref_backup_and_sync_summary">يدوياً &amp; النسخ الاحتياطي التلقائي والمزامنة</string>
+  <string name="update_30min">كل 30 دقيقة</string>
+  <string name="update_1hour">كل ساعة</string>
+  <string name="update_3hour">كل 3 ساعات</string>
+  <string name="sync_error">فشل مزامنة المكتبة</string>
+  <string name="sync_complete">تم مزامنة المكتبة</string>
+  <string name="sync_in_progress">المزامنة قيد التقدم بالفعل</string>
+  <string name="pref_sync_host">المضيف</string>
+  <string name="pref_sync_host_summ">أدخل عنوان المضيف لمزامنة مكتبتك</string>
+  <string name="pref_sync_api_key">مفتاح API</string>
+  <string name="pref_sync_api_key_summ">أدخل مفتاح API لمزامنة المكتبة الخاصة بك</string>
+  <string name="pref_sync_now_group_title">إجراءات المزامنة</string>
+  <string name="pref_sync_now">المزامنة الآن</string>
+  <string name="pref_sync_confirmation_title">تأكيد المزامنة</string>
+  <string name="pref_sync_now_subtitle">بدء المزامنة الفورية للبيانات الخاصة بك</string>
+  <string name="pref_sync_confirmation_message">سيتم مزامنة الكتابة فوق المكتبة المحلية الخاصة بك مع المكتبة البعيدة. هل أنت متأكد من أنك تريد المتابعة؟</string>
+  <string name="pref_sync_service">الخدمة</string>
+  <string name="pref_sync_service_summ">حدد الخدمة لمزامنة مكتبتك مع</string>
+  <string name="pref_sync_service_category">مزامنة</string>
+  <string name="pref_sync_automatic_category">المزامنة التلقائية</string>
+  <string name="pref_sync_interval">تردد المزامنة</string>
+  <string name="pref_choose_what_to_sync">اختر ما المزامنة</string>
+  <string name="success_reset_sync_timestamp">آخر مزامنة زمنية إعادة تعيين</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">تم في %1$s</string>
+  <string name="last_synchronization">آخر مزامنة: %1$s</string>
+  <string name="google_drive">محرك جوجل</string>
+  <string name="pref_google_drive_sign_in">تسجيل الدخول</string>
+  <string name="google_drive_sign_in_success">تم تسجيل الدخول بنجاح</string>
+  <string name="google_drive_sign_in_failed">فشل تسجيل الدخول</string>
+  <string name="authentication">المصادقة</string>
+  <string name="pref_google_drive_purge_sync_data">مسح مزامنة البيانات من Google Drive</string>
+  <string name="google_drive_sync_data_purged">مزامنة البيانات تمت إزالتها من Google Drive</string>
+  <string name="google_drive_sync_data_not_found">لم يتم العثور على بيانات مزامنة في Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">خطأ في إزالة بيانات المزامنة من Google Drive, حاول تسجيل الدخول مرة أخرى.</string>
+  <string name="google_drive_login_success">تسجيل الدخول إلى Google Drive</string>
+  <string name="google_drive_login_failed">فشل تسجيل الدخول إلى محرك جوجل: %s</string>
+  <string name="google_drive_not_signed_in">لم يتم تسجيل الدخول إلى Google Drive</string>
+  <string name="error_uploading_sync_data">خطأ في تحميل بيانات المزامنة إلى Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">خطأ في حذف ملف قفل Google Drive</string>
+  <string name="error_before_sync_gdrive">خطأ قبل المزامنة: %s</string>
+  <string name="pref_purge_confirmation_title">تأكيد التطهير</string>
+  <string name="pref_purge_confirmation_message">سيتم حذف بيانات مزامنة البيانات الخاصة بك من Google Drive. هل أنت متأكد من أنك تريد المتابعة؟</string>
+  <string name="pref_sync_options">إنشاء مشغلات المزامنة</string>
+  <string name="pref_sync_options_summ">يمكن استخدامه لتعيين مشغلات المزامنة</string>
+  <string name="sync_on_chapter_read">المزامنة عند قراءة الفصل</string>
+  <string name="sync_on_chapter_open">المزامنة عند فتح الفصل</string>
+  <string name="sync_on_episode_seen">المزامنة في الحلقة المشاهدة</string>
+  <string name="sync_on_episode_open">المزامنة عند فتح الحلقة</string>
+  <string name="sync_on_app_start">المزامنة عند بدء التطبيق</string>
+  <string name="sync_on_app_resume">المزامنة عند استئناف التطبيق</string>
+  <string name="sync_library">مكتبة المزامنة</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">تحديث صفحة الملحق لتحديث القائمة.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">شريط التنقل</string>
+  <string name="pref_hide_updates_button">إظهار التحديثات في Nv</string>
+  <string name="pref_hide_history_button">إظهار المحفوظات في Nv</string>
+  <string name="pref_show_bottom_bar_labels">إظهار دائما تسميات Nv</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">حدد متتبع</string>
+  <string name="entry_not_tracked">لم يتم تتبع الدخول.</string>
+  <string name="fill_from_tracker">ملء من المتتبع</string>
+</resources>
