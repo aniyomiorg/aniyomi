@@ -14,7 +14,7 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 
 [![CI](https://img.shields.io/github/actions/workflow/status/Dark25/aniyomi/build_push.yml?labelColor=27303D)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml)
 [![License: Apache-2.0](https://img.shields.io/github/license/Dark25/aniyomi?labelColor=27303D&color=818cf8)](/LICENSE)
-[![Translation status](https://img.shields.io/weblate/progress/aniyomi?labelColor=27303D&color=946300)](https://hosted.weblate.org/engage/aniyomi/)
+[![Crowdin](https://badges.crowdin.net/animetail/localized.svg)](https://crowdin.com/project/animetail)
 
 ## Download
 
