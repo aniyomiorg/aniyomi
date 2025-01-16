@@ -357,7 +357,7 @@
     <string name="label_data">Tiedot</string>
     <string name="backup_restore_missing_sources">Puuttuvat lähteet:</string>
     <string name="invalid_backup_file_missing_manga">Varmuuskopio ei sisällä mangaa.</string>
-    <string name="invalid_backup_file">Virheellinen varmuuskopio</string>
+    <string name="invalid_backup_file">Virheellinen varmuuskopiotiedosto:</string>
     <string name="pref_library_update_refresh_metadata_summary">Tarkista uusi kansi ja tiedot päivitettäessä kirjastoa</string>
     <string name="pref_library_update_refresh_metadata">Päivitä metatiedot automaattisesti</string>
     <string name="action_migrate">Siirrä</string>
