@@ -1184,7 +1184,7 @@
     <string name="player_sheets_sub_color_alpha">Alfa</string>
     <string name="player_sheets_sub_typography_font">Yazı tipi</string>
     <string name="player_sheets_sub_typography_font_size">Yazı tipi boyutu</string>
-    <string name="player_sheets_sub_typography_border_size">Sınır boyutu</string>
+    <string name="player_sheets_sub_typography_border_size">Kenar boyutu</string>
     <string name="player_sheets_subtitles_shadow_offset">Gölge uzaklığı</string>
     <string name="player_sheets_subtitles_border_style_outline_and_shadow">Dış hat ve gölge</string>
     <string name="player_sheets_subtitles_border_style_opaque_box">Opak kutu</string>
@@ -1232,4 +1232,6 @@
     <string name="player_sheets_add_ext_sub">Harici alt yazılar ekle</string>
     <string name="player_sheets_add_ext_audio">Harici ses kaynakları ekle</string>
     <string name="player_sheets_tracks_off">Kapalı</string>
+    <string name="pref_category_player_sliders">Kaydırıcılar</string>
+    <string name="player_sheets_sub_typography_border_style">Kenar stili</string>
 </resources>
