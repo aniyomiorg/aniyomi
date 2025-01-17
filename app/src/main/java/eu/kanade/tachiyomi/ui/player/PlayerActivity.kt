@@ -418,6 +418,12 @@ class PlayerActivity : BaseActivity() {
         updateDiscordRPC(exitingPlayer = false)
     }
 
+    private fun executeMPVCommand(commands: Array<String>) {
+        if (!player.isExiting) {
+            MPVLib.command(commands)
+        }
+    }
+
     private fun setupPlayerMPV() {
         val logLevel = if (networkPreferences.verboseLogging().get()) "info" else "warn"
 
@@ -779,6 +785,7 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerOrientation() {
+        if (player.isExiting) return
         requestedOrientation = when (playerPreferences.defaultPlayerOrientationType().get()) {
             PlayerOrientation.Free -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
             PlayerOrientation.Video -> if ((player.getVideoOutAspect() ?: 0.0) > 1.0) {
@@ -1171,6 +1178,7 @@ class PlayerActivity : BaseActivity() {
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     private fun fileLoaded() {
+        if (player.isExiting) return
         setMpvMediaTitle()
         setupPlayerOrientation()
         setupTracks()
@@ -1189,6 +1197,7 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupTracks() {
+        if (player.isExiting) return
         viewModel.isLoadingTracks.update { _ -> true }
 
         val audioTracks = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
@@ -1204,16 +1213,17 @@ class PlayerActivity : BaseActivity() {
         }
 
         audioTracks?.forEach { audio ->
-            MPVLib.command(arrayOf("audio-add", audio.url, "auto", audio.lang))
+            executeMPVCommand(arrayOf("audio-add", audio.url, "auto", audio.lang))
         }
         subtitleTracks?.forEach { sub ->
-            MPVLib.command(arrayOf("sub-add", sub.url, "auto", sub.lang))
+            executeMPVCommand(arrayOf("sub-add", sub.url, "auto", sub.lang))
         }
 
         viewModel.isLoadingTracks.update { _ -> false }
     }
 
     private fun setMpvMediaTitle() {
+        if (player.isExiting) return
         val anime = viewModel.currentAnime.value ?: return
         val episode = viewModel.currentEpisode.value ?: return
 
