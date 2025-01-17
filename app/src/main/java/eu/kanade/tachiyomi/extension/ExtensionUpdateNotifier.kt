@@ -16,7 +16,7 @@ class ExtensionUpdateNotifier(
     private val securityPreferences: SecurityPreferences = Injekt.get(),
 ) {
 
-    fun promptUpdates(names: List<String>) {
+    fun promptUpdates(names: List<String>, anime: Boolean = false) {
         context.notify(
             Notifications.ID_UPDATES_TO_EXTS,
             Notifications.CHANNEL_EXTENSIONS_UPDATE,
@@ -34,7 +34,11 @@ class ExtensionUpdateNotifier(
                 setStyle(NotificationCompat.BigTextStyle().bigText(extNames))
             }
             setSmallIcon(R.drawable.ic_extension_24dp)
-            setContentIntent(NotificationReceiver.openExtensionsPendingActivity(context))
+            if (!anime) {
+                setContentIntent(NotificationReceiver.openExtensionsPendingActivity(context))
+            } else {
+                setContentIntent(NotificationReceiver.openAnimeExtensionsPendingActivity(context))
+            }
             setAutoCancel(true)
         }
     }
