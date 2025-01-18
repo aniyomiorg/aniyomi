@@ -342,12 +342,6 @@ class AnimeScreenModel(
                     }
                 }
 
-                // Set default intro length
-                setAnimeViewerFlags.awaitSetSkipIntroLength(
-                    anime.id,
-                    gesturePreferences.defaultIntroLength().get().toLong(),
-                )
-
                 // Finally match with enhanced tracking when available
                 addTracks.bindEnhancedTrackers(anime, state.source)
                 if (autoOpenTrack) {
