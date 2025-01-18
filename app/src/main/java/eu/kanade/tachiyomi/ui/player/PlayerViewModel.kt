@@ -214,7 +214,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
     // False because the video shouldn't start paused
     private val _pausedState = MutableStateFlow<Boolean?>(false)
-    private val pausedState = _pausedState.asStateFlow()
+    val pausedState = _pausedState.asStateFlow()
 
     private val _controlsShown = MutableStateFlow(!playerPreferences.hideControls().get())
     val controlsShown = _controlsShown.asStateFlow()
