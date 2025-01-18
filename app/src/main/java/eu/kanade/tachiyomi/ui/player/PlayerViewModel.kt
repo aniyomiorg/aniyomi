@@ -212,6 +212,10 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _paused = MutableStateFlow(false)
     val paused = _paused.asStateFlow()
 
+    // False because the video shouldn't start paused
+    private val _pausedState = MutableStateFlow<Boolean?>(false)
+    val pausedState = _pausedState.asStateFlow()
+
     private val _controlsShown = MutableStateFlow(!playerPreferences.hideControls().get())
     val controlsShown = _controlsShown.asStateFlow()
     private val _seekBarShown = MutableStateFlow(!playerPreferences.hideControls().get())
@@ -400,7 +404,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
         isLoadingTracks.update { _ -> true }
         updateIsLoadingEpisode(false)
-        unpause()
+        setPausedState()
     }
 
     @Immutable
@@ -453,6 +457,10 @@ class PlayerViewModel @JvmOverloads constructor(
         updateIsLoadingEpisode(true)
 
         val idx = videoList.value.indexOf(video)
+
+        updatePausedState()
+        // Pause until everything has loaded
+        pause()
 
         activity.setVideoList(
             qualityIndex = idx,
@@ -524,6 +532,22 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun updateReadAhead(value: Long) {
         _readAhead.update { value.toFloat() }
+    }
+
+    private fun updatePausedState() {
+        _pausedState.update { _ -> paused.value }
+    }
+
+    private fun setPausedState() {
+        pausedState.value?.let {
+            if (it) {
+                pause()
+            } else {
+                unpause()
+            }
+
+            _pausedState.update { _ -> null }
+        }
     }
 
     fun pauseUnpause() {
