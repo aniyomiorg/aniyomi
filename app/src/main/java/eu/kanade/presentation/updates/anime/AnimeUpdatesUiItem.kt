@@ -58,7 +58,6 @@ import tachiyomi.presentation.core.util.selectedBackground
 import uy.kohesive.injekt.injectLazy
 import java.util.concurrent.TimeUnit
 
-
 private val preferences: DownloadPreferences by injectLazy()
 private val animeDownloadProvider: AnimeDownloadProvider by injectLazy()
 private val animeSourceManager: AnimeSourceManager by injectLazy()

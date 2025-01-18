@@ -899,7 +899,6 @@ private fun LazyListScope.sharedEpisodeItems(
                 MissingItemCountListItem(count = episodeItem.count)
             }
             is EpisodeList.Item -> {
-
                 var fileSizeAsync: Long? by remember { mutableStateOf(episodeItem.fileSize) }
                 if (episodeItem.downloadState == AnimeDownload.State.DOWNLOADED &&
                     preferences.showEpisodeFileSize().get() && fileSizeAsync == null
@@ -917,7 +916,6 @@ private fun LazyListScope.sharedEpisodeItems(
                         episodeItem.fileSize = fileSizeAsync
                     }
                 }
-
 
                 AnimeEpisodeListItem(
                     title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
