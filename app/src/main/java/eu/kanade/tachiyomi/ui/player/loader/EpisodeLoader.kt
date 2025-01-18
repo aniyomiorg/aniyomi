@@ -64,7 +64,7 @@ class EpisodeLoader {
         private suspend fun isHttp(episode: Episode, source: AnimeHttpSource): List<Video> {
             val videos = source.getVideoList(episode.toSEpisode())
 
-            videos.filter { it.videoUrl.isNullOrEmpty() }.forEach { video ->
+            videos.filter { it.videoUrl.isEmpty() }.forEach { video ->
                 video.status = Video.State.LOAD_VIDEO
 
                 try {

@@ -223,7 +223,7 @@ private fun VideoList(
         Column {
             if (selectedVideo.videoUrl != null && !showAllQualities) {
                 ClickableRow(
-                    text = selectedVideo.quality,
+                    text = selectedVideo.videoTitle,
                     icon = null,
                     onClick = { showAllQualities = true },
                     showDropdownArrow = true,
@@ -283,7 +283,7 @@ private fun VideoList(
             Column {
                 videoList.forEach { video ->
                     ClickableRow(
-                        text = video.quality,
+                        text = video.videoTitle,
                         icon = null,
                         onClick = {
                             selectedVideo = video

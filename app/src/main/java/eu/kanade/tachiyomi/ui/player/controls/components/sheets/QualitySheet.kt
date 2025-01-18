@@ -59,7 +59,7 @@ fun VideoTrack(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = video.quality,
+        text = video.videoTitle,
         fontStyle = if (selected) FontStyle.Italic else FontStyle.Normal,
         fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Normal,
         style = MaterialTheme.typography.bodyMedium,
