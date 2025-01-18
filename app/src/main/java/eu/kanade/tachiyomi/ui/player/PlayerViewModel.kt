@@ -212,6 +212,10 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _paused = MutableStateFlow(false)
     val paused = _paused.asStateFlow()
 
+    // False because the video shouldn't start paused
+    private val _pausedState = MutableStateFlow<Boolean?>(false)
+    val pausedState = _pausedState.asStateFlow()
+
     private val _controlsShown = MutableStateFlow(!playerPreferences.hideControls().get())
     val controlsShown = _controlsShown.asStateFlow()
     private val _seekBarShown = MutableStateFlow(!playerPreferences.hideControls().get())
@@ -400,7 +404,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
         isLoadingTracks.update { _ -> true }
         updateIsLoadingEpisode(false)
-        unpause()
+        setPausedState()
     }
 
     @Immutable
@@ -453,6 +457,10 @@ class PlayerViewModel @JvmOverloads constructor(
         updateIsLoadingEpisode(true)
 
         val idx = videoList.value.indexOf(video)
+
+        updatePausedState()
+        // Pause until everything has loaded
+        pause()
 
         activity.setVideoList(
             qualityIndex = idx,
@@ -524,6 +532,22 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun updateReadAhead(value: Long) {
         _readAhead.update { value.toFloat() }
+    }
+
+    private fun updatePausedState() {
+        _pausedState.update { _ -> paused.value }
+    }
+
+    private fun setPausedState() {
+        pausedState.value?.let {
+            if (it) {
+                pause()
+            } else {
+                unpause()
+            }
+
+            _pausedState.update { _ -> null }
+        }
     }
 
     fun pauseUnpause() {
@@ -1108,7 +1132,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
                 // Write to mpv table
                 MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
-                MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
+                MPVLib.setPropertyInt("user-data/current-anime/intro-length", getAnimeSkipIntroLength())
                 MPVLib.setPropertyString(
                     "user-data/current-anime/category",
                     getAnimeCategories.await(anime.id).joinToString {
@@ -1483,10 +1507,26 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     /**
+     * Returns the skipIntroLength used by this anime or the default one.
+     */
+    fun getAnimeSkipIntroLength(): Int {
+        val default = gesturePreferences.defaultIntroLength().get()
+        val anime = currentAnime.value ?: return default
+        val skipIntroLength = anime.skipIntroLength
+        val skipIntroDisable = anime.skipIntroDisable
+        return when {
+            skipIntroDisable -> 0
+            skipIntroLength <= 0 -> default
+            else -> anime.skipIntroLength
+        }
+    }
+
+    /**
      * Updates the skipIntroLength for the open anime.
      */
     fun setAnimeSkipIntroLength(skipIntroLength: Long) {
         val anime = currentAnime.value ?: return
+        if (!anime.favorite) return
         viewModelScope.launchIO {
             setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength)
             logcat(LogPriority.INFO) { "New Skip Intro Length is ${anime.skipIntroLength}" }
