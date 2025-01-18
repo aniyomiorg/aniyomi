@@ -1108,7 +1108,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
                 // Write to mpv table
                 MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
-                MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
+                MPVLib.setPropertyInt("user-data/current-anime/intro-length", getAnimeSkipIntroLength())
                 MPVLib.setPropertyString(
                     "user-data/current-anime/category",
                     getAnimeCategories.await(anime.id).joinToString {
@@ -1483,10 +1483,26 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     /**
+     * Returns the skipIntroLength used by this anime or the default one.
+     */
+    fun getAnimeSkipIntroLength(): Int {
+        val default = gesturePreferences.defaultIntroLength().get()
+        val anime = currentAnime.value ?: return default
+        val skipIntroLength = anime.skipIntroLength
+        val skipIntroDisable = anime.skipIntroDisable
+        return when {
+            skipIntroDisable -> 0
+            skipIntroLength <= 0 -> default
+            else -> anime.skipIntroLength
+        }
+    }
+
+    /**
      * Updates the skipIntroLength for the open anime.
      */
     fun setAnimeSkipIntroLength(skipIntroLength: Long) {
         val anime = currentAnime.value ?: return
+        if (!anime.favorite) return
         viewModelScope.launchIO {
             setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength)
             logcat(LogPriority.INFO) { "New Skip Intro Length is ${anime.skipIntroLength}" }
