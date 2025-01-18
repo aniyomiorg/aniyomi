@@ -12,6 +12,8 @@ import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.data.track.shikimori.dto.SMOAuth
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -173,6 +175,13 @@ class Shikimori(id: Long) :
             track.total_episodes = remoteTrack.total_episodes
         } ?: throw Exception("Could not find anime")
         return track
+    }
+
+    override suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata? {
+        return api.getMangaMetadata(track)
+    }
+    override suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
+        return api.getAnimeMetadata(track)
     }
 
     override fun getLogo() = R.drawable.ic_tracker_shikimori

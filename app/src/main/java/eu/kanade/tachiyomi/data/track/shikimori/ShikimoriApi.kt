@@ -6,8 +6,11 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.data.track.shikimori.dto.SMAddEntryResponse
 import eu.kanade.tachiyomi.data.track.shikimori.dto.SMEntry
+import eu.kanade.tachiyomi.data.track.shikimori.dto.SMMetadata
 import eu.kanade.tachiyomi.data.track.shikimori.dto.SMOAuth
 import eu.kanade.tachiyomi.data.track.shikimori.dto.SMUser
 import eu.kanade.tachiyomi.data.track.shikimori.dto.SMUserListEntry
@@ -226,6 +229,124 @@ class ShikimoriApi(
         }
     }
 
+    suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata {
+        return withIOContext {
+            val query = """
+                |query(${'$'}ids: String!) {
+                    |mangas(ids: ${'$'}ids) {
+                        |id
+                        |name
+                        |description
+                        |poster {
+                            |originalUrl
+                        |}
+                        |personRoles {
+                            |person {
+                                |name
+                            |}
+                            |rolesEn
+                        |}
+                    |}
+                |}
+            """.trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("ids", "${track.remoteId}")
+                }
+            }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        "https://shikimori.one/api/graphql",
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<SMMetadata>()
+                    .let {
+                        if (it.data.mangas.isEmpty()) throw Exception("Could not get metadata from Shikimori")
+                        val manga = it.data.mangas[0]
+                        TrackMangaMetadata(
+                            remoteId = manga.id.toLong(),
+                            title = manga.name,
+                            thumbnailUrl = manga.poster.originalUrl,
+                            description = manga.description,
+                            authors = manga.personRoles
+                                .filter { it.rolesEn.contains("Story") || it.rolesEn.contains("Story & Art") }
+                                .map { it.person.name }
+                                .joinToString(", ")
+                                .ifEmpty { null },
+                            artists = manga.personRoles
+                                .filter { it.rolesEn.contains("Art") || it.rolesEn.contains("Story & Art") }
+                                .map { it.person.name }
+                                .joinToString(", ")
+                                .ifEmpty { null },
+                        )
+                    }
+            }
+        }
+    }
+
+    suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata {
+        return withIOContext {
+            val query = """
+                |query(${'$'}ids: String!) {
+                    |animes(ids: ${'$'}ids) {
+                        |id
+                        |name
+                        |description
+                        |poster {
+                            |originalUrl
+                        |}
+                        |personRoles {
+                            |person {
+                                |name
+                            |}
+                            |rolesEn
+                        |}
+                    |}
+                |}
+            """.trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("ids", "${track.remoteId}")
+                }
+            }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        "https://shikimori.one/api/graphql",
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<SMMetadata>()
+                    .let {
+                        if (it.data.mangas.isEmpty()) throw Exception("Could not get metadata from Shikimori")
+                        val anime = it.data.mangas[0]
+                        TrackAnimeMetadata(
+                            remoteId = anime.id.toLong(),
+                            title = anime.name,
+                            thumbnailUrl = anime.poster.originalUrl,
+                            description = anime.description,
+                            authors = anime.personRoles
+                                .filter { it.rolesEn.contains("Story") || it.rolesEn.contains("Story & Art") }
+                                .map { it.person.name }
+                                .joinToString(", ")
+                                .ifEmpty { null },
+                            artists = anime.personRoles
+                                .filter { it.rolesEn.contains("Art") || it.rolesEn.contains("Story & Art") }
+                                .map { it.person.name }
+                                .joinToString(", ")
+                                .ifEmpty { null },
+                        )
+                    }
+            }
+        }
+    }
+
     suspend fun accessToken(code: String): SMOAuth {
         return withIOContext {
             with(json) {
@@ -253,7 +374,7 @@ class ShikimoriApi(
         private const val OAUTH_URL = "$BASE_URL/oauth/token"
         private const val LOGIN_URL = "$BASE_URL/oauth/authorize"
 
-        private const val REDIRECT_URL = "aniyomi://shikimori-auth"
+        private const val REDIRECT_URL = "animetail://shikimori-auth"
 
         private const val CLIENT_ID = "aOAYRqOLwxpA8skpcQIXetNy4cw2rn2fRzScawlcQ5U"
         private const val CLIENT_SECRET = "jqjmORn6bh2046ulkm4lHEwJ3OA1RmO3FD2sR9f6Clw"

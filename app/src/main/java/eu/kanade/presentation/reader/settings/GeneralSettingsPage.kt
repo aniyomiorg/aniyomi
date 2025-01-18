@@ -85,10 +85,11 @@ internal fun ColumnScope.GeneralPage(screenModel: ReaderSettingsScreenModel) {
         pref = screenModel.preferences.alwaysShowChapterTransition(),
     )
 
-    CheckboxItem(
+    // SY -->
+    /*CheckboxItem(
         label = stringResource(MR.strings.pref_page_transitions),
         pref = screenModel.preferences.pageTransitions(),
-    )
+    ) SY <-- */
 
     CheckboxItem(
         label = stringResource(MR.strings.pref_flash_page),

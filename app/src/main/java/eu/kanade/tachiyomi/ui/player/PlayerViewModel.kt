@@ -957,7 +957,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    private val incognitoMode = basePreferences.incognitoMode().get()
+    val incognitoMode = basePreferences.incognitoMode().get()
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileWatching().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
@@ -992,7 +992,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private var episodeToDownload: AnimeDownload? = null
 
-    private var currentVideoList: List<Video>? = null
+    var currentVideoList: List<Video>? = null
 
     private fun filterEpisodeList(episodes: List<Episode>): List<Episode> {
         val anime = currentAnime.value ?: return episodes

@@ -2,6 +2,7 @@ plugins {
     id("mihon.library")
     kotlin("android")
     kotlin("plugin.serialization")
+    id("com.github.ben-manes.versions")
 }
 
 android {
@@ -18,7 +19,9 @@ android {
 
 dependencies {
     implementation(projects.i18n)
-
+    // TAIL -->
+    implementation(projects.i18nTail)
+    // TAIL <--
     api(libs.logcat)
 
     api(libs.rxjava)
@@ -50,6 +53,11 @@ dependencies {
 
     // FFmpeg-kit
     implementation(libs.ffmpeg.kit)
+
+    // SY -->
+    implementation(libs.zip4j)
+    implementation(libs.exifinterface)
+    // SY <--
 
     // Tests
     testImplementation(libs.bundles.test)

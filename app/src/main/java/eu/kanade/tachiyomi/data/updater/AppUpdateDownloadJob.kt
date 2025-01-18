@@ -12,56 +12,47 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.network.ProgressListener
-import eu.kanade.tachiyomi.network.await
-import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
 import eu.kanade.tachiyomi.util.storage.getUriCompat
-import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.workManager
-import logcat.LogPriority
-import okhttp3.internal.http2.ErrorCode
-import okhttp3.internal.http2.StreamResetException
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Request
+import okhttp3.Response
+import okio.buffer
+import okio.sink
 import tachiyomi.core.common.i18n.stringResource
-import tachiyomi.core.common.util.lang.withIOContext
-import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import kotlin.coroutines.cancellation.CancellationException
+import java.io.IOException
 
-class AppUpdateDownloadJob(private val context: Context, workerParams: WorkerParameters) :
-    CoroutineWorker(context, workerParams) {
+class AppUpdateDownloadJob(
+    private val context: Context,
+    workerParams: WorkerParameters,
+) : CoroutineWorker(context, workerParams) {
 
     private val notifier = AppUpdateNotifier(context)
     private val network: NetworkHelper by injectLazy()
 
+    @Suppress("SwallowedException")
     override suspend fun doWork(): Result {
-        val url = inputData.getString(EXTRA_DOWNLOAD_URL)
+        val url = inputData.getString(EXTRA_DOWNLOAD_URL) ?: return Result.failure()
         val title = inputData.getString(EXTRA_DOWNLOAD_TITLE) ?: context.stringResource(MR.strings.app_name)
-
-        if (url.isNullOrEmpty()) {
-            return Result.failure()
-        }
-
-        try {
-            setForeground(getForegroundInfo())
-        } catch (e: IllegalStateException) {
-            logcat(LogPriority.ERROR, e) { "Not allowed to run on foreground service" }
-        }
-
-        withIOContext {
+        return try {
             downloadApk(title, url)
+            Result.success()
+        } catch (e: Exception) {
+            notifier.onDownloadError(url)
+            Result.failure()
         }
-
-        return Result.success()
     }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
+        val title = inputData.getString(EXTRA_DOWNLOAD_TITLE) ?: context.stringResource(MR.strings.app_name)
         return ForegroundInfo(
             Notifications.ID_APP_UPDATER,
-            notifier.onDownloadStarted().build(),
+            notifier.onDownloadStarted(title).build(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
             } else {
@@ -75,53 +66,39 @@ class AppUpdateDownloadJob(private val context: Context, workerParams: WorkerPar
      *
      * @param url url location of file
      */
-    private suspend fun downloadApk(title: String, url: String) {
-        // Show notification download starting.
-        notifier.onDownloadStarted(title)
-
-        val progressListener = object : ProgressListener {
-            // Progress of the download
-            var savedProgress = 0
-
-            // Keep track of the last notification sent to avoid posting too many.
-            var lastTick = 0L
-
-            override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-                val progress = (100 * (bytesRead.toFloat() / contentLength)).toInt()
-                val currentTime = System.currentTimeMillis()
-                if (progress > savedProgress && currentTime - 200 > lastTick) {
-                    savedProgress = progress
-                    lastTick = currentTime
-                    notifier.onProgressChange(progress)
-                }
-            }
-        }
-
-        try {
-            // Download the new update.
-            val response = network.client.newCachelessCallWithProgress(GET(url), progressListener)
-                .await()
-
-            // File where the apk will be saved.
-            val apkFile = File(context.externalCacheDir, "update.apk")
-
-            if (response.isSuccessful) {
-                response.body.source().saveTo(apkFile)
-            } else {
-                response.close()
-                throw Exception("Unsuccessful response")
-            }
-            notifier.cancel()
-            notifier.promptInstall(apkFile.getUriCompat(context))
-        } catch (e: Exception) {
-            val shouldCancel = e is CancellationException ||
-                (e is StreamResetException && e.errorCode == ErrorCode.CANCEL)
-            if (shouldCancel) {
-                notifier.cancel()
-            } else {
+    @Suppress("MagicNumber")
+    private fun downloadApk(title: String, url: String) {
+        val request = Request.Builder().url(url).build()
+        network.client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
                 notifier.onDownloadError(url)
             }
-        }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (!response.isSuccessful) {
+                    notifier.onDownloadError(url)
+                    return
+                }
+
+                val body = response.body ?: return
+                val contentLength = body.contentLength()
+                val source = body.source()
+                val file = File(context.externalCacheDir, "update.apk")
+
+                file.sink().buffer().use { sink ->
+                    var totalBytesRead: Long = 0
+                    var bytesRead: Long
+
+                    notifier.onDownloadStarted(title)
+                    while (source.read(sink.buffer, 2048).also { bytesRead = it } != -1L) {
+                        totalBytesRead += bytesRead
+                        val progress = (totalBytesRead * 100 / contentLength).toInt()
+                        notifier.onProgressChange(progress)
+                    }
+                }
+                notifier.promptInstall(file.getUriCompat(context))
+            }
+        })
     }
 
     companion object {

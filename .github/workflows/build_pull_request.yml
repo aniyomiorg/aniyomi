@@ -8,6 +8,8 @@ on:
       - '!i18n/src/commonMain/moko-resources/**/strings.xml'
       - '!i18n/src/commonMain/moko-resources/**/plurals-aniyomi.xml'
       - '!i18n/src/commonMain/moko-resources/**/plurals.xml'
+      - 'i18n-tail/src/commonMain/moko-resources/base/strings.xml'
+      - 'i18n-tail/src/commonMain/moko-resources/base/plurals.xml'
       - 'i18n/src/commonMain/moko-resources/base/strings-aniyomi.xml'
       - 'i18n/src/commonMain/moko-resources/base/strings.xml'
       - 'i18n/src/commonMain/moko-resources/base/plurals-aniyomi.xml'

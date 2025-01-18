@@ -36,7 +36,7 @@ class ChapterLoader(
      * Assigns the chapter's page loader and loads the its pages. Returns immediately if the chapter
      * is already loaded.
      */
-    suspend fun loadChapter(chapter: ReaderChapter) {
+    suspend fun loadChapter(chapter: ReaderChapter, page: Int? = null) {
         if (chapterIsReady(chapter)) {
             return
         }
@@ -50,14 +50,15 @@ class ChapterLoader(
 
                 val pages = loader.getPages()
                     .onEach { it.chapter = chapter }
+
                 if (pages.isEmpty()) {
                     throw Exception(context.stringResource(MR.strings.page_list_empty_error))
                 }
 
                 // If the chapter is partially read, set the starting page to the last the user read
                 // otherwise use the requested page.
-                if (!chapter.chapter.read || readerPreferences.preserveReadingPosition().get()) {
-                    chapter.requestedPage = chapter.chapter.last_page_read
+                if (!chapter.chapter.read || readerPreferences.preserveReadingPosition().get() || page != null) {
+                    chapter.requestedPage = page ?: chapter.chapter.last_page_read
                 }
 
                 chapter.state = ReaderChapter.State.Loaded(pages)
@@ -81,10 +82,10 @@ class ChapterLoader(
     private fun getPageLoader(chapter: ReaderChapter): PageLoader {
         val dbChapter = chapter.chapter
         val isDownloaded = downloadManager.isChapterDownloaded(
-            dbChapter.name,
-            dbChapter.scanlator,
-            manga.title,
-            manga.source,
+            chapterName = dbChapter.name,
+            chapterScanlator = dbChapter.scanlator,
+            mangaTitle = manga.ogTitle,
+            sourceId = manga.source,
             skipCache = true,
         )
         return when {
