@@ -1005,7 +1005,6 @@ class PlayerActivity : BaseActivity() {
         viewModel.updateVideoList(videos ?: emptyList())
         if (videos == null) return
 
-        viewModel.pause()
         videos.getOrNull(qualityIndex)?.let {
             viewModel.setVideoIndex(qualityIndex)
             setHttpOptions(it)
@@ -1058,9 +1057,9 @@ class PlayerActivity : BaseActivity() {
                     toast("An error occurred while loading the video.")
                     return@launch
                 }
+                
                 viewModel.updateVideoList(videos)
                 MPVLib.command(arrayOf("loadfile", parseVideoUrl(vidUrl)))
-                viewModel.unpause()
             }
         }
     }
