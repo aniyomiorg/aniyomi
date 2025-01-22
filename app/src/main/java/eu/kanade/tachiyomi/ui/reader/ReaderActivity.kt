@@ -613,6 +613,9 @@ class ReaderActivity : BaseActivity() {
         viewModel.state.value.viewerChapters?.let {
             viewer.setChaptersDoubleShift(it)
         }
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     private fun setDoublePageMode(viewer: PagerViewer) {
@@ -677,6 +680,9 @@ class ReaderActivity : BaseActivity() {
         binding.readerContainer.addView(loadingIndicator)
 
         startPostponedEnterTransition()
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     private fun openMangaScreen() {
@@ -759,6 +765,9 @@ class ReaderActivity : BaseActivity() {
                 assistUrl = url
             }
         }
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     /**
@@ -783,6 +792,9 @@ class ReaderActivity : BaseActivity() {
         } else {
             viewModel.closeDialog()
         }
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     /**
@@ -804,6 +816,9 @@ class ReaderActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.loadNextChapter()
             moveToPageIndex(0)
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingReader = false)
+            // <-- AM (DISCORD)
         }
     }
 
@@ -815,6 +830,9 @@ class ReaderActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.loadPreviousChapter()
             moveToPageIndex(0)
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingReader = false)
+            // <-- AM (DISCORD)
         }
     }
 
@@ -837,6 +855,10 @@ class ReaderActivity : BaseActivity() {
         }
         viewModel.onPageSelected(page, currentPageText, hasExtraPage)
         // SY <--
+
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     /**
