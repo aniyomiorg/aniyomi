@@ -167,6 +167,9 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _currentSource = MutableStateFlow<AnimeSource?>(null)
     val currentSource = _currentSource.asStateFlow()
 
+    private val _isEpisodeOnline = MutableStateFlow(false)
+    val isEpisodeOnline = _isEpisodeOnline.asStateFlow()
+
     private val _isLoadingEpisode = MutableStateFlow(false)
     val isLoadingEpisode = _isLoadingEpisode.asStateFlow()
 
@@ -1126,6 +1129,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
                 _currentEpisode.update { _ -> episode }
                 _currentSource.update { _ -> source }
+                _isEpisodeOnline.update { _ -> isEpisodeOnline() == true }
 
                 _hasPreviousEpisode.update { _ -> getCurrentEpisodeIndex() != 0 }
                 _hasNextEpisode.update { _ -> getCurrentEpisodeIndex() != currentPlaylist.value.size - 1 }
@@ -1206,6 +1210,7 @@ class PlayerViewModel @JvmOverloads constructor(
         val chosenEpisode = currentPlaylist.value.firstOrNull { ep -> ep.id == episodeId } ?: return null
 
         _currentEpisode.update { _ -> chosenEpisode }
+        _isEpisodeOnline.update { _ -> isEpisodeOnline() == true }
 
         return withIOContext {
             try {
