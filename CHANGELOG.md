@@ -17,10 +17,14 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
 - feat(player): video filters ([@abdallahmehiz](https://github.com/abdallahmehiz)) ([#1698](https://github.com/aniyomiorg/aniyomi/pull/1698))
 - feat(player): Add better auto sub select ([@Secozzi](https://github.com/Secozzi)) ([#1706](https://github.com/aniyomiorg/aniyomi/pull/1706))
 - feat(downloader): Copy the file location when using ext downloader ([@quickdesh](https://github.com/quickdesh)) ([#1758](https://github.com/aniyomiorg/aniyomi/pull/1758))
+- feat: Get manga and Anime info from tracker ([#188](https://github.com/aniyomiorg/aniyomi/pull/1674))
 
 ### Improved
 
 - feat(entry): show "Now" instead of "0 minutes ago" ([@Secozzi](https://github.com/Secozzi)) ([#1715](https://github.com/aniyomiorg/aniyomi/pull/1715))
+- feat: add navbar preferences for updates, history, and label visibility ([#189](https://github.com/aniyomiorg/aniyomi/pull/1674))
+- feat: implement repository hide/show functionality
+- feat: add support for repository icon extensions
 
 ### Fixed
 

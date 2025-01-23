@@ -37,7 +37,7 @@ class AnimeWidgetManager(
                     logcat(LogPriority.ERROR, e) { "Failed to update widget" }
                 }
             }
-            .flowOn(Dispatchers.Default)
+            .flowOn(Dispatchers.IO)
             .launchIn(scope)
     }
 }

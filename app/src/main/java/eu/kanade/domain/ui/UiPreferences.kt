@@ -28,6 +28,8 @@ class UiPreferences(
         },
     )
 
+    fun colorTheme() = preferenceStore.getInt("pref_color_theme", 0)
+
     fun themeDarkAmoled() = preferenceStore.getBoolean("pref_theme_dark_amoled_key", false)
 
     fun relativeTime() = preferenceStore.getBoolean("relative_time_v2", true)
@@ -39,6 +41,12 @@ class UiPreferences(
     fun startScreen() = preferenceStore.getEnum("start_screen", StartScreen.ANIME)
 
     fun navStyle() = preferenceStore.getEnum("bottom_rail_nav_style", NavStyle.MOVE_HISTORY_TO_MORE)
+
+    // SY -->
+    fun showNavUpdates() = preferenceStore.getBoolean("pref_show_updates_button", true)
+    fun showNavHistory() = preferenceStore.getBoolean("pref_show_history_button", true)
+    fun bottomBarLabels() = preferenceStore.getBoolean("pref_show_bottom_bar_labels", true)
+    // SY <--
 
     companion object {
         fun dateFormat(format: String): DateTimeFormatter = when (format) {

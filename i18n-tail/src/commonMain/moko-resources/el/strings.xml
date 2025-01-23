@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Κατάσταση παρακολούθησης</string>
+  <string name="tag">Ετικέτες</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Δεν παρακολουθείται</string>
+  <string name="group" comment="group More Info Menu">Ομάδα</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Ενημέρωση δυναμικής κατηγορίας βιβλιοθήκης Anime</string>
+  <string name="manga_library_group_updates">Δυναμικές ενημερώσεις κατηγορίας Manga Library</string>
+  <string name="library_group_updates_global">Εκκίνηση καθολικών ενημερώσεων πάντα</string>
+  <string name="library_group_updates_all_but_ungrouped">Εκκίνηση καθολικών ενημερώσεων μόνο για μη ομαδοποιημένες, ενημερώσεις κατηγορίας για άλλους</string>
+  <string name="library_group_updates_all">Εκκίνηση ενημερώσεων κατηγορίας όλη την ώρα</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Επαναφορά Ετικετών</string>
+  <string name="add_tag">Προσθήκη Ετικέτας</string>
+  <string name="title_hint">Τίτλος: %1$s</string>
+  <string name="description_hint">Περιγραφή: %1$s</string>
+  <string name="author_hint">Συγγραφέας: %1$s</string>
+  <string name="artist_hint">Καλλιτέχνης: %1$s</string>
+  <string name="custom_entry_info">Πληροφορίες προσαρμοσμένης καταχώρησης</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Preferences">Ρυθμίσεις Cast</string>
+  <string name="pref_enable_cast">Ενεργοποίηση ή απενεργοποίηση Cast</string>
+  <string name="action_cast">Αποστολή στο Cast</string>
+  <string name="pref_show_downloaded_episode_file_size">Εμφάνιση του ληφθέντος μεγέθους αρχείου επεισοδίου</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Ρυθμίσεις Fork</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Επεξεργασία πληροφοριών</string>
+  <string name="special_services" comment="special_services Connections section">Ειδικές Υπηρεσίες</string>
+  <string name="pref_category_connections">Συνδέσεις</string>
+  <string name="pref_connections_summary">Discord, περισσότερα για να έρθει..</string>
+  <string name="connections_info">Ειδικές Υπηρεσίες που είναι μοναδικές για την Animetail και ενισχύουν τον τρόπο με τον οποίο χρησιμοποιείτε την εφαρμογή</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Αυτή η υπηρεσία του Discord λειτουργεί μέσω καταγραφής συμβόλων. Χρησιμοποιήστε το με δική σας ευθύνη. Το διακριτικό αποθηκεύεται τοπικά και το Animetail δεν το μοιράζεται πουθενά αλλού</string>
+  <string name="pref_discord_rpc">Discord Πλούσια Παρουσία</string>
+  <string name="show_chapters_titles_title">Εμφάνιση Τίτλων Επεισόδια/Κεφάλαια</string>
+  <string name="show_chapters_titles_subtitle">Εμφάνιση του τίτλου του επεισοδίου/κεφαλαίου που διαβάζετε</string>
+  <string name="pref_enable_discord_rpc">Ενεργοποίηση Discord Rich Presence</string>
+  <string name="pref_discord_status">Κατάσταση Discord</string>
+  <string name="pref_discord_dnd">⛔ Μην Ενοχλείτε</string>
+  <string name="pref_discord_idle">🌙 Αδρανής</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Ανώνυμη περιήγηση σε Discord</string>
+  <string name="pref_discord_incognito_summary">Αντικαταστάθηκε όταν είναι ενεργοποιημένη η λειτουργία ανώνυμης περιήγησης</string>
+  <string name="pref_discord_incognito_categories_details">Οι καταχωρήσεις στις κατηγορίες που περιλαμβάνονται δεν θα εμφανίζονται στο Discord</string>
+  <string name="browsing" comment="browsing Discord section">Περιήγηση</string>
+  <string name="scrolling">Κύλιση μέσα</string>
+  <string name="messing">Ανταλλαγή μηνυμάτων με</string>
+  <string name="video">Βίντεο</string>
+  <string name="comic">Κόμικς</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Ο παίκτης Amnis πρέπει να εγκατασταθεί</string>
+  <string name="pref_category_torrentserver">Προτιμήσεις TorrentServer</string>
+  <string name="pref_torrentserver_port">Θύρα TorrentServer</string>
+  <string name="torrentserver_is_running">Ο διακομιστής Torrent εκτελείται</string>
+  <string name="pref_torrent_trackers">Ανιχνευτές Torrent</string>
+  <string name="pref_reset_torrent_trackers_string">Επαναφορά προεπιλεγμένης συμβολοσειράς torrent trackers</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Ποσό προφόρτωσης σελίδας</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Διατήρηση της θέσης ανάγνωσης στις καταχωρήσεις ανάγνωσης</string>
+  <string name="reader_bottom_buttons">Κουμπιά Κάτω Ανάγνωσης</string>
+  <string name="reader_bottom_buttons_summary">Προσαρμόστε ποια κουμπιά εμφανίζονται στο κάτω μέρος του αναγνώστη</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Ορισμός πρώτης σελίδας ως εξώφυλλο</string>
+  <string name="action_set_second_page_cover">Ορισμός δεύτερης σελίδας ως εξώφυλλο</string>
+  <string name="action_save_first_page">Αποθήκευση πρώτης σελίδας</string>
+  <string name="action_save_second_page">Αποθήκευση δεύτερης σελίδας</string>
+  <string name="action_share_first_page">Κοινή χρήση της πρώτης σελίδας</string>
+  <string name="action_share_second_page">Κοινή χρήση δεύτερης σελίδας</string>
+  <string name="action_save_combined_page">Αποθήκευση συνδυασμένης σελίδας</string>
+  <string name="action_share_combined_page">Κοινοποίηση συνδυασμένης σελίδας</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, σελίδες %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Διάταξη σελίδας</string>
+  <string name="shift_double_pages">Μετακίνηση μιας σελίδας πάνω</string>
+  <string name="double_pages">Διπλές σελίδες</string>
+  <string name="single_page">Μονή σελίδα</string>
+  <string name="automatic_orientation">Αυτόματο (βασισμένο στον προσανατολισμό)</string>
+  <string name="automatic_can_still_switch">Κατά τη χρήση αυτόματης διάταξης σελίδας, μπορείτε να κάνετε εναλλαγή μεταξύ διατάξεων κατά την ανάγνωση χωρίς να παρακάμψετε αυτή τη ρύθμιση</string>
+  <string name="invert_double_pages">Αντιστροφή διπλών σελίδων </string>
+  <string name="center_margin" comment="center_margin Center margin">Κεντρικό Περιθώριο</string>
+  <string name="center_margin_none">Κανένα</string>
+  <string name="center_margin_double_page">Προσθήκη σε διπλή σελίδα</string>
+  <string name="center_margin_wide_page">Προσθήκη σε ευρεία σελίδα</string>
+  <string name="center_margin_double_and_wide_page">Προσθήκη και στα δύο</string>
+  <string name="pref_center_margin">Τύπος περιθωρίου κέντρου</string>
+  <string name="pref_center_margin_summary">Τοποθετήστε κενό για να φιλοξενήσει νεκρό χώρο σε αναδιπλούμενες συσκευές.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Προσαρμοσμένος Επιλογέας Χρώματος</string>
+  <string name="custom_color_description">Επιλέξτε ένα χρώμα για το προσαρμοσμένο θέμα</string>
+  <string name="theme_custom">Προσαρμοσμένο Θέμα</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Αντίγραφα Ασφαλείας</string>
+  <string name="label_sync">Συγχρονισμός</string>
+  <string name="label_triggers">Εναύσματα</string>
+  <string name="pref_backup_and_sync_summary">Χειροκίνητη &amp; αυτόματη δημιουργία αντιγράφων ασφαλείας και συγχρονισμός</string>
+  <string name="update_30min">Κάθε 30 λεπτά</string>
+  <string name="update_1hour">Κάθε ώρα</string>
+  <string name="update_3hour">Κάθε 3 ώρες</string>
+  <string name="sync_error">Ο συγχρονισμός βιβλιοθήκης απέτυχε</string>
+  <string name="sync_complete">Ο συγχρονισμός βιβλιοθήκης ολοκληρώθηκε</string>
+  <string name="sync_in_progress">Ο συγχρονισμός είναι ήδη σε εξέλιξη</string>
+  <string name="pref_sync_host">Διακομιστής</string>
+  <string name="pref_sync_host_summ">Εισάγετε τη διεύθυνση κεντρικού υπολογιστή για το συγχρονισμό της βιβλιοθήκης σας</string>
+  <string name="pref_sync_api_key">API κλειδί</string>
+  <string name="pref_sync_api_key_summ">Εισάγετε το κλειδί API για το συγχρονισμό της βιβλιοθήκης σας</string>
+  <string name="pref_sync_now_group_title">Ενέργειες Συγχρονισμού</string>
+  <string name="pref_sync_now">Συγχρονισμός τώρα</string>
+  <string name="pref_sync_confirmation_title">Επιβεβαίωση συγχρονισμού</string>
+  <string name="pref_sync_now_subtitle">Ξεκινήστε τον άμεσο συγχρονισμό των δεδομένων σας</string>
+  <string name="pref_sync_confirmation_message">Ο συγχρονισμός θα αντικαταστήσει την τοπική βιβλιοθήκη σας με την απομακρυσμένη βιβλιοθήκη. Είστε βέβαιοι ότι θέλετε να συνεχίσετε?</string>
+  <string name="pref_sync_service">Υπηρεσία</string>
+  <string name="pref_sync_service_summ">Επιλέξτε την υπηρεσία για συγχρονισμό της βιβλιοθήκης σας με</string>
+  <string name="pref_sync_service_category">Συγχρονισμός</string>
+  <string name="pref_sync_automatic_category">Αυτόματος Συγχρονισμός</string>
+  <string name="pref_sync_interval">Συχνότητα συγχρονισμού</string>
+  <string name="pref_choose_what_to_sync">Επιλέξτε τι να συγχρονίσετε</string>
+  <string name="success_reset_sync_timestamp">Τελευταίος συγχρονισμός χρονοσήμανσης</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Ολοκληρώθηκε στο %1$s</string>
+  <string name="last_synchronization">Τελευταίος Συγχρονισμός: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Σύνδεση</string>
+  <string name="google_drive_sign_in_success">Σύνδεση με επιτυχία</string>
+  <string name="google_drive_sign_in_failed">Η σύνδεση απέτυχε</string>
+  <string name="authentication">Ταυτοποίηση</string>
+  <string name="pref_google_drive_purge_sync_data">Εκκαθάριση δεδομένων συγχρονισμού από το Google Drive</string>
+  <string name="google_drive_sync_data_purged">Συγχρονισμός δεδομένων που εκκαθαρίζονται από το Google Drive</string>
+  <string name="google_drive_sync_data_not_found">Δεν βρέθηκαν δεδομένα συγχρονισμού στο Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">Σφάλμα καθαρισμού δεδομένων συγχρονισμού από το Google Drive, Προσπαθήστε να συνδεθείτε ξανά.</string>
+  <string name="google_drive_login_success">Συνδεδεμένος στο Google Drive</string>
+  <string name="google_drive_login_failed">Αποτυχία σύνδεσης στο Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">Δεν έχετε συνδεθεί στο Google Drive</string>
+  <string name="error_uploading_sync_data">Σφάλμα κατά το ανέβασμα δεδομένων συγχρονισμού στο Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Σφάλμα Διαγραφής Αρχείου Κλειδώματος Google Drive</string>
+  <string name="error_before_sync_gdrive">Σφάλμα πριν τον συγχρονισμό: %s</string>
+  <string name="pref_purge_confirmation_title">Επιβεβαίωση εκκαθάρισης</string>
+  <string name="pref_purge_confirmation_message">Purging συγχρονισμού δεδομένων θα διαγράψει όλα τα δεδομένα συγχρονισμού σας από το Google Drive. Είστε σίγουροι ότι θέλετε να συνεχίσετε?</string>
+  <string name="pref_sync_options">Δημιουργία εναυσμάτων συγχρονισμού</string>
+  <string name="pref_sync_options_summ">Μπορεί να χρησιμοποιηθεί για τον ορισμό εναυσμάτων συγχρονισμού</string>
+  <string name="sync_on_chapter_read">Συγχρονισμός σε Διάβασμα Κεφαλαίου</string>
+  <string name="sync_on_chapter_open">Συγχρονισμός κατά το άνοιγμα κεφαλαίου</string>
+  <string name="sync_on_episode_seen">Συγχρονισμός στο επεισόδιο</string>
+  <string name="sync_on_episode_open">Συγχρονισμός στο Ανοικτό Επεισόδιο</string>
+  <string name="sync_on_app_start">Συγχρονισμός κατά την εκκίνηση της εφαρμογής</string>
+  <string name="sync_on_app_resume">Συγχρονισμός στη συνέχιση εφαρμογής</string>
+  <string name="sync_library">Συγχρονισμός βιβλιοθήκης</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Ανανέωση επέκτασης σελίδας για ενημέρωση λίστας.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Γραμμή Πλοήγησης</string>
+  <string name="pref_hide_updates_button">Εμφάνιση ενημερώσεων στο nav</string>
+  <string name="pref_hide_history_button">Εμφάνιση ιστορικού στο nav</string>
+  <string name="pref_show_bottom_bar_labels">Να εμφανίζονται πάντα οι ετικέτες</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Επιλέξτε έναν ανιχνευτή</string>
+  <string name="entry_not_tracked">Η καταχώρηση δεν παρακολουθείται.</string>
+  <string name="fill_from_tracker">Συμπλήρωση από ιχνηλάτη</string>
+</resources>

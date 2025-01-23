@@ -190,6 +190,14 @@ class MangaUpdatesApi(
         }
     }
 
+    suspend fun getSeries(track: DomainTrack): MURecord {
+        return with(json) {
+            client.newCall(GET("$BASE_URL/v1/series/${track.remoteId}"))
+                .awaitSuccess()
+                .parseAs<MURecord>()
+        }
+    }
+
     companion object {
         private const val BASE_URL = "https://api.mangaupdates.com"
         private val CONTENT_TYPE = "application/vnd.api+json".toMediaType()

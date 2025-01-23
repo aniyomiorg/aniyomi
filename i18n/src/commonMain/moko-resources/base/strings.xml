@@ -7,7 +7,11 @@
     <string name="not_selected">Not selected</string>
     <string name="action_menu_overflow_description">More options</string>
     <string name="action_bar_up_description">Navigate up</string>
-    <string name="app_name" translatable="false">Aniyomi</string>
+
+    <string name="app_name" translatable="false">Animetail</string>
+    <!-- unpublished -> 4C1B4D71 / published -> F033F567 -->
+    <string name="app_cast_id" translatable="false">F033F567</string>
+    <string name="media_route_menu_title">EXTEND</string>
     <string name="name">Name</string>
     <string name="categories">Categories</string>
     <string name="manga">Manga</string>
@@ -613,7 +617,7 @@
     <string name="information_empty_repos">You have no repos set.</string>
     <string name="action_add_repo">Add repo</string>
     <string name="label_add_repo_input">Repo URL</string>
-    <string name="action_add_repo_message">Add additional repos to Aniyomi. This should be a URL that ends with \"index.min.json\".</string>
+    <string name="action_add_repo_message">Add additional repos to Animetail. This should be a URL that ends with \"index.min.json\".</string>
     <string name="error_repo_exists">This repo already exists!</string>
     <string name="action_delete_repo">Delete repo</string>
     <string name="invalid_repo_name">Invalid repo URL</string>
@@ -1271,7 +1275,7 @@
     <string name="episode_progress_no_total">Progress: %1$s</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Animetail. Tap to learn more.</string>
     <string name="video_list_empty_error">No video found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <string name="information_no_recent_anime">Nothing watched recently</string>
@@ -1329,7 +1333,7 @@
     <string name="unseen">Unseen</string>
     <string name="label_manga_extension_repos">Manga extension repos</string>
     <string name="label_anime_extension_repos">Anime extension repos</string>
-    <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
+    <string name="onboarding_storage_action_create_folder">Create default animetail folder</string>
     <string name="safe_download">Safe downloading mode for anime</string>
     <string name="safe_download_summary">Enable single thread and no range downloading mode</string>
     <string name="download_threads_number">Thread count</string>

@@ -39,6 +39,11 @@ private val uiPreferences: UiPreferences = Injekt.get()
 interface Tab : cafe.adriel.voyager.navigator.tab.Tab {
     suspend fun onReselect(navigator: Navigator) {}
 
+    // SY -->
+    @Composable
+    fun isEnabled(): Boolean = true
+    // SY <--
+
     @Composable
     fun currentNavigationStyle(): NavStyle = uiPreferences.navStyle().collectAsState().value
 }

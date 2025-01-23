@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">トラッキングステータス</string>
+  <string name="tag">タグ</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">追跡されていません</string>
+  <string name="group" comment="group More Info Menu">グループ</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">アニメライブラリの動的カテゴリの更新</string>
+  <string name="manga_library_group_updates">マンガライブラリの動的カテゴリの更新</string>
+  <string name="library_group_updates_global">常にグローバルアップデートを起動</string>
+  <string name="library_group_updates_all_but_ungrouped">グループ化されていないカテゴリの更新に対してのみグローバルアップデートを起動</string>
+  <string name="library_group_updates_all">いつでもカテゴリの更新を起動します</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">タグをリセット</string>
+  <string name="add_tag">タグを追加</string>
+  <string name="title_hint">タイトル: %1$s</string>
+  <string name="description_hint">説明： %1$s</string>
+  <string name="author_hint">作成者: %1$s</string>
+  <string name="artist_hint">アーティスト： %1$s</string>
+  <string name="custom_entry_info">カスタムエントリ情報</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Preferences">キャスト設定</string>
+  <string name="pref_enable_cast">キャストの有効化または無効化</string>
+  <string name="action_cast">キャストに送る</string>
+  <string name="pref_show_downloaded_episode_file_size">ダウンロードしたエピソードのファイルサイズを表示</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">フォーク設定</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">情報を編集</string>
+  <string name="special_services" comment="special_services Connections section">特別サービス</string>
+  <string name="pref_category_connections">コネクション</string>
+  <string name="pref_connections_summary">不一致、もっと来るべきchar@@0</string>
+  <string name="connections_info">Animetailならではのスペシャルサービス</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">このDiscordサービスはトークンロギングを通じて機能します。自己責任で使用してください。あなたのトークンはローカルに保存され、Animetailは他のどこにも共有しません。</string>
+  <string name="pref_discord_rpc">Discord Rich Presence</string>
+  <string name="show_chapters_titles_title">エピソード/章タイトルを表示</string>
+  <string name="show_chapters_titles_subtitle">読んでいるエピソード/チャプターのタイトルを表示する</string>
+  <string name="pref_enable_discord_rpc">Discord Rich Presenceを有効にする</string>
+  <string name="pref_discord_status">Discord ステータス</string>
+  <string name="pref_discord_dnd">⛔ マナーモード</string>
+  <string name="pref_discord_idle">🌙 Idle</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Discordシークレットモード</string>
+  <string name="pref_discord_incognito_summary">シークレットモードが有効になっているときにオーバーライドする</string>
+  <string name="pref_discord_incognito_categories_details">含まれるカテゴリのエントリはDiscordに表示されません</string>
+  <string name="browsing" comment="browsing Discord section">閲覧</string>
+  <string name="scrolling">スクロール中</string>
+  <string name="messing">ふざけてる人</string>
+  <string name="video">ビデオ</string>
+  <string name="comic">コミック</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Playerをインストールする必要があります</string>
+  <string name="pref_category_torrentserver">Torrentサーバーの設定</string>
+  <string name="pref_torrentserver_port">TorrentServer ポート</string>
+  <string name="torrentserver_is_running">Torrent サーバーを実行しています</string>
+  <string name="pref_torrent_trackers">Torrent トラッカー</string>
+  <string name="pref_reset_torrent_trackers_string">デフォルトの Torrent トラッカーの文字列をリセット</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">ページプリロード量</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">読み取りエントリの読み取り位置を保持する</string>
+  <string name="reader_bottom_buttons">リーダーボトムボタン</string>
+  <string name="reader_bottom_buttons_summary">リーダーの下部に表示されるボタンをカスタマイズします</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">最初のページをカバーとして設定</string>
+  <string name="action_set_second_page_cover">2ページ目をカバーとして設定</string>
+  <string name="action_save_first_page">最初のページを保存</string>
+  <string name="action_save_second_page">2番目のページを保存</string>
+  <string name="action_share_first_page">最初のページを共有</string>
+  <string name="action_share_second_page">2ページ目を共有</string>
+  <string name="action_save_combined_page">結合ページを保存</string>
+  <string name="action_share_combined_page">組み合わせページを共有</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, ページ %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">ページレイアウト</string>
+  <string name="shift_double_pages">1ページ以上シフト</string>
+  <string name="double_pages">2 ページ</string>
+  <string name="single_page">単一ページ</string>
+  <string name="automatic_orientation">自動 (方向に基づく)</string>
+  <string name="automatic_can_still_switch">自動ページレイアウトを使用している間は、この設定を上書きせずに、読み取り中にレイアウトを切り替えることができます。</string>
+  <string name="invert_double_pages">ダブルページを反転 </string>
+  <string name="center_margin" comment="center_margin Center margin">中央マージン（中央マージン）</string>
+  <string name="center_margin_none">なし</string>
+  <string name="center_margin_double_page">ダブルページに追加</string>
+  <string name="center_margin_wide_page">幅広いページに追加</string>
+  <string name="center_margin_double_and_wide_page">両方に追加</string>
+  <string name="pref_center_margin">中央マージンタイプ</string>
+  <string name="pref_center_margin_summary">折り畳み式デバイスにデッドスペースを収容するスペースを挿入します。</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">カスタムカラーピッカー</string>
+  <string name="custom_color_description">カスタムテーマの色を選択</string>
+  <string name="theme_custom">カスタムテーマ</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">バックアップ</string>
+  <string name="label_sync">同期</string>
+  <string name="label_triggers">トリガー</string>
+  <string name="pref_backup_and_sync_summary">手動 &amp; 自動バックアップと同期</string>
+  <string name="update_30min">30分ごと</string>
+  <string name="update_1hour">1時間ごと</string>
+  <string name="update_3hour">3時間ごと</string>
+  <string name="sync_error">ライブラリの同期に失敗しました</string>
+  <string name="sync_complete">ライブラリの同期が完了しました</string>
+  <string name="sync_in_progress">同期は既に進行中です</string>
+  <string name="pref_sync_host">ホスト</string>
+  <string name="pref_sync_host_summ">ライブラリを同期するためのホストアドレスを入力してください</string>
+  <string name="pref_sync_api_key">API キー</string>
+  <string name="pref_sync_api_key_summ">ライブラリを同期するための API キーを入力してください</string>
+  <string name="pref_sync_now_group_title">アクションを同期</string>
+  <string name="pref_sync_now">今すぐ同期</string>
+  <string name="pref_sync_confirmation_title">同期の確認</string>
+  <string name="pref_sync_now_subtitle">データの即時同期を開始する</string>
+  <string name="pref_sync_confirmation_message">同期すると、ローカルライブラリがリモートライブラリに上書きされます。続行してもよろしいですか？</string>
+  <string name="pref_sync_service">サービス</string>
+  <string name="pref_sync_service_summ">ライブラリを同期するサービスを選択してください</string>
+  <string name="pref_sync_service_category">同期</string>
+  <string name="pref_sync_automatic_category">自動同期</string>
+  <string name="pref_sync_interval">同期周波数</string>
+  <string name="pref_choose_what_to_sync">同期するものを選択してください</string>
+  <string name="success_reset_sync_timestamp">前回の同期タイムスタンプのリセット</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">%1$s で完了</string>
+  <string name="last_synchronization">前回の同期: %1$s</string>
+  <string name="google_drive">Google ドライブ</string>
+  <string name="pref_google_drive_sign_in">サインイン</string>
+  <string name="google_drive_sign_in_success">正常にサインインしました</string>
+  <string name="google_drive_sign_in_failed">ログインに失敗しました</string>
+  <string name="authentication">認証</string>
+  <string name="pref_google_drive_purge_sync_data">Google ドライブからデータの同期をクリア</string>
+  <string name="google_drive_sync_data_purged">Google ドライブから削除されたデータを同期</string>
+  <string name="google_drive_sync_data_not_found">Google ドライブに同期データが見つかりません</string>
+  <string name="google_drive_sync_data_purge_error">Google ドライブから同期データのパージ中にエラーが発生しました。もう一度サインインしてみてください。</string>
+  <string name="google_drive_login_success">Google ドライブにログインしました</string>
+  <string name="google_drive_login_failed">Google ドライブにログインできませんでした: %s</string>
+  <string name="google_drive_not_signed_in">Google ドライブにサインインしていません</string>
+  <string name="error_uploading_sync_data">Google ドライブに同期データをアップロード中にエラーが発生しました</string>
+  <string name="error_deleting_google_drive_lock_file">Google ドライブロックファイルの削除エラー</string>
+  <string name="error_before_sync_gdrive">同期前のエラー: %s</string>
+  <string name="pref_purge_confirmation_title">パージの確認</string>
+  <string name="pref_purge_confirmation_message">同期データを消去すると、Google ドライブからすべての同期データが削除されます。続行してもよろしいですか？</string>
+  <string name="pref_sync_options">同期トリガーを作成</string>
+  <string name="pref_sync_options_summ">同期トリガーの設定に使用できます。</string>
+  <string name="sync_on_chapter_read">チャプター読み上げ時に同期</string>
+  <string name="sync_on_chapter_open">チャプター開き時に同期</string>
+  <string name="sync_on_episode_seen">見られたエピソードで同期</string>
+  <string name="sync_on_episode_open">エピソードオープン時に同期</string>
+  <string name="sync_on_app_start">アプリ起動時に同期</string>
+  <string name="sync_on_app_resume">アプリの再開時に同期</string>
+  <string name="sync_library">ライブラリを同期</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">リストを更新するにはエクステンションページを更新してください。</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">ナビゲーションバー</string>
+  <string name="pref_hide_updates_button">ナビゲーションの更新を表示する</string>
+  <string name="pref_hide_history_button">ナビゲーションの履歴を表示する</string>
+  <string name="pref_show_bottom_bar_labels">常にナビラベルを表示</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">トラッカーを選択</string>
+  <string name="entry_not_tracked">エントリは追跡されません。</string>
+  <string name="fill_from_tracker">トラッカーから入力</string>
+</resources>

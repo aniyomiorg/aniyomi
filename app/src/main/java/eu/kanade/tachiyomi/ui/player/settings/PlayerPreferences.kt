@@ -47,6 +47,8 @@ class PlayerPreferences(
 
     // External player
 
+    fun enableCast() = preferenceStore.getBoolean("pref_enable_cast", false)
+
     fun alwaysUseExternalPlayer() = preferenceStore.getBoolean(
         "pref_always_use_external_player",
         false,

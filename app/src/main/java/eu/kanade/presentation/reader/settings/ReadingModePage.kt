@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsScreenModel
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import eu.kanade.tachiyomi.ui.reader.viewer.webtoon.WebtoonViewer
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.SettingsChipRow
@@ -101,6 +102,19 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
         }
     }
 
+    // SY -->
+    val pageLayout by screenModel.preferences.pageLayout().collectAsState()
+    SettingsChipRow(TLMR.strings.page_layout) {
+        ReaderPreferences.PageLayouts.mapIndexed { index, text ->
+            FilterChip(
+                selected = pageLayout == index,
+                onClick = { screenModel.preferences.pageLayout().set(index) },
+                label = { Text(stringResource(text)) },
+            )
+        }
+    }
+    // SY <--
+
     CheckboxItem(
         label = stringResource(MR.strings.pref_crop_borders),
         pref = screenModel.preferences.cropBorders(),
@@ -119,13 +133,13 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
     val dualPageSplitPaged by screenModel.preferences.dualPageSplitPaged().collectAsState()
     CheckboxItem(
         label = stringResource(MR.strings.pref_dual_page_split),
-        pref = screenModel.preferences.dualPageInvertPaged(),
+        pref = screenModel.preferences.dualPageSplitPaged(),
     )
 
     if (dualPageSplitPaged) {
         CheckboxItem(
             label = stringResource(MR.strings.pref_dual_page_invert),
-            pref = screenModel.preferences.dualPageRotateToFitInvert(),
+            pref = screenModel.preferences.dualPageInvertPaged(),
         )
     }
 
@@ -141,6 +155,29 @@ private fun ColumnScope.PagerViewerSettings(screenModel: ReaderSettingsScreenMod
             pref = screenModel.preferences.dualPageRotateToFitInvert(),
         )
     }
+
+    // SY -->
+    CheckboxItem(
+        label = stringResource(MR.strings.pref_page_transitions),
+        pref = screenModel.preferences.pageTransitionsPager(),
+    )
+
+    CheckboxItem(
+        label = stringResource(TLMR.strings.invert_double_pages),
+        pref = screenModel.preferences.invertDoublePages(),
+    )
+
+    val centerMarginType by screenModel.preferences.centerMarginType().collectAsState()
+    SettingsChipRow(TLMR.strings.pref_center_margin) {
+        ReaderPreferences.CenterMarginTypes.mapIndexed { index, text ->
+            FilterChip(
+                selected = centerMarginType == index,
+                onClick = { screenModel.preferences.centerMarginType().set(index) },
+                label = { Text(stringResource(text)) },
+            )
+        }
+    }
+    // SY <--
 }
 
 @Composable

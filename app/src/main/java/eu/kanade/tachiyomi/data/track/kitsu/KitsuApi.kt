@@ -7,16 +7,20 @@ import eu.kanade.tachiyomi.data.track.kitsu.dto.KitsuAddEntryResult
 import eu.kanade.tachiyomi.data.track.kitsu.dto.KitsuAlgoliaSearchResult
 import eu.kanade.tachiyomi.data.track.kitsu.dto.KitsuCurrentUserResult
 import eu.kanade.tachiyomi.data.track.kitsu.dto.KitsuListSearchResult
+import eu.kanade.tachiyomi.data.track.kitsu.dto.KitsuMangaMetadata
 import eu.kanade.tachiyomi.data.track.kitsu.dto.KitsuOAuth
 import eu.kanade.tachiyomi.data.track.kitsu.dto.KitsuSearchResult
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.network.DELETE
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
+import eu.kanade.tachiyomi.util.lang.htmlDecode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
@@ -419,7 +423,141 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
             }
         }
     }
+    suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata {
+        return withIOContext {
+            val query = """
+            |query(${'$'}libraryId: ID!, ${'$'}staffCount: Int) {
+                |findLibraryEntryById(id: ${'$'}libraryId) {
+                    |media {
+                        |id
+                        |titles {
+                            |preferred
+                        |}
+                        |posterImage {
+                            |original {
+                                |url
+                            |}
+                        |}
+                        |description
+                        |staff(first: ${'$'}staffCount) {
+                            |nodes {
+                                |role
+                                |person {
+                                    |name
+                                |}
+                            |}
+                        |}
+                    |}
+                |}
+            |}
+            """.trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("libraryId", track.remoteId)
+                    put("staffCount", 25) // 25 based on nothing
+                }
+            }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        GRAPHQL_URL,
+                        headers = headersOf("Accept-Language", "en"),
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<KitsuMangaMetadata>()
+                    .let {
+                        val manga = it.data.findLibraryEntryById.media
+                        TrackMangaMetadata(
+                            remoteId = manga.id.toLong(),
+                            title = manga.titles.preferred,
+                            thumbnailUrl = manga.posterImage.original.url,
+                            description = manga.description.en?.htmlDecode()?.ifEmpty { null },
+                            authors = manga.staff.nodes
+                                .filter { it.role == "Story" || it.role == "Story & Art" }
+                                .map { it.person.name }
+                                .joinToString(", ")
+                                .ifEmpty { null },
+                            artists = manga.staff.nodes
+                                .filter { it.role == "Art" || it.role == "Story & Art" }
+                                .map { it.person.name }
+                                .joinToString(", ")
+                                .ifEmpty { null },
+                        )
+                    }
+            }
+        }
+    }
 
+    suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata {
+        return withIOContext {
+            val query = """
+            |query(${'$'}libraryId: ID!, ${'$'}staffCount: Int) {
+                |findLibraryEntryById(id: ${'$'}libraryId) {
+                    |media {
+                        |id
+                        |titles {
+                            |preferred
+                        |}
+                        |posterImage {
+                            |original {
+                                |url
+                            |}
+                        |}
+                        |description
+                        |staff(first: ${'$'}staffCount) {
+                            |nodes {
+                                |role
+                                |person {
+                                    |name
+                                |}
+                            |}
+                        |}
+                    |}
+                |}
+            |}
+            """.trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("libraryId", track.remoteId)
+                    put("staffCount", 25) // 25 based on nothing
+                }
+            }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        GRAPHQL_URL,
+                        headers = headersOf("Accept-Language", "en"),
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<KitsuMangaMetadata>()
+                    .let {
+                        val anime = it.data.findLibraryEntryById.media
+                        TrackAnimeMetadata(
+                            remoteId = anime.id.toLong(),
+                            title = anime.titles.preferred,
+                            thumbnailUrl = anime.posterImage.original.url,
+                            description = anime.description.en?.htmlDecode()?.ifEmpty { null },
+                            authors = anime.staff.nodes
+                                .filter { it.role == "Story" || it.role == "Story & Art" }
+                                .map { it.person.name }
+                                .joinToString(", ")
+                                .ifEmpty { null },
+                            artists = anime.staff.nodes
+                                .filter { it.role == "Art" || it.role == "Story & Art" }
+                                .map { it.person.name }
+                                .joinToString(", ")
+                                .ifEmpty { null },
+                        )
+                    }
+            }
+        }
+    }
     companion object {
         private const val CLIENT_ID =
             "dd031b32d2f56c990b1425efe6c42ad847e7fe3ab46bf1299f05ecd856bdb7dd"
@@ -427,6 +565,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
             "54d7307928f63414defd96399fc31ba847961ceaecef3a5fd93144e960c0e151"
 
         private const val BASE_URL = "https://kitsu.app/api/edge/"
+        private const val GRAPHQL_URL = "https://kitsu.app/api/graphql"
         private const val LOGIN_URL = "https://kitsu.app/api/oauth/token"
         private const val BASE_MANGA_URL = "https://kitsu.app/manga/"
         private const val BASE_ANIME_URL = "https://kitsu.app/anime/"

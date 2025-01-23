@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Stav sledování</string>
+  <string name="tag">Štítky</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Nesledováno</string>
+  <string name="group" comment="group More Info Menu">Skupina</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Aktualizace dynamických kategorií Anime knihovny</string>
+  <string name="manga_library_group_updates">Aktualizace dynamických kategorií v Manga knihovně</string>
+  <string name="library_group_updates_global">Vždy spouštět globální aktualizace</string>
+  <string name="library_group_updates_all_but_ungrouped">Spustit globální aktualizace pouze pro neseskupené, aktualizace kategorií pro ostatní</string>
+  <string name="library_group_updates_all">Spustit aktualizace kategorií po celou dobu</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Resetovat štítky</string>
+  <string name="add_tag">Přidat značku</string>
+  <string name="title_hint">Název: %1$s</string>
+  <string name="description_hint">Popis: %1$s</string>
+  <string name="author_hint">Autor: %1$s</string>
+  <string name="artist_hint">Umělec: %1$s</string>
+  <string name="custom_entry_info">Vlastní informace o záznamu</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Preferences">Nastavení vysílání</string>
+  <string name="pref_enable_cast">Povolit nebo zakázat vysílání</string>
+  <string name="action_cast">Poslat do Cast</string>
+  <string name="pref_show_downloaded_episode_file_size">Zobrazit velikost souboru s epizodou</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Nastavení rozštěpení</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Upravit informace</string>
+  <string name="special_services" comment="special_services Connections section">Speciální služby</string>
+  <string name="pref_category_connections">Kontakty</string>
+  <string name="pref_connections_summary">Discord, více k nám.</string>
+  <string name="connections_info">Speciální služby, které jsou unikátní pro animetail a vylepšují způsob, jakým používáte aplikaci</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Tato Discord služba funguje pomocí logování tokenů. Použijte na vlastní riziko. Tvůj token je uložen lokálně a Animetail ji nesdílejí nikde jinde</string>
+  <string name="pref_discord_rpc">Discord Rich Presence</string>
+  <string name="show_chapters_titles_title">Zobrazit názvy epizod/kapitol</string>
+  <string name="show_chapters_titles_subtitle">Zobrazit název epizody/kapitoly, kterou čtete</string>
+  <string name="pref_enable_discord_rpc">Povolit Discord Rich Presence</string>
+  <string name="pref_discord_status">Stav Discordu</string>
+  <string name="pref_discord_dnd">⛔ Režim Nerušit</string>
+  <string name="pref_discord_idle">🌙 Nečinný</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Discord anonymní režim</string>
+  <string name="pref_discord_incognito_summary">Přepsáno při povoleném anonymním režimu</string>
+  <string name="pref_discord_incognito_categories_details">Položky v zahrnutých kategoriích nebudou zobrazeny v Discordu</string>
+  <string name="browsing" comment="browsing Discord section">Procházení</string>
+  <string name="scrolling">Posunutí přes</string>
+  <string name="messing">Poslání s</string>
+  <string name="video">Video</string>
+  <string name="comic">Komikál</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player musí být nainstalován</string>
+  <string name="pref_category_torrentserver">Předvolby Torrentserveru</string>
+  <string name="pref_torrentserver_port">Port Torrentserveru</string>
+  <string name="torrentserver_is_running">Torrent Server je spuštěn</string>
+  <string name="pref_torrent_trackers">Torrent Trackery</string>
+  <string name="pref_reset_torrent_trackers_string">Obnovit výchozí řetězec torrent trackerů</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Počet přednačtení stránky</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Zachovat pozici čtení u čtení záznamů</string>
+  <string name="reader_bottom_buttons">Spodní tlačítka pro čtení</string>
+  <string name="reader_bottom_buttons_summary">Přizpůsobte si, jaká tlačítka se zobrazí v dolní části čtenáře</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Nastavit první stránku jako obal</string>
+  <string name="action_set_second_page_cover">Nastavit druhou stránku jako obal</string>
+  <string name="action_save_first_page">Uložit první stránku</string>
+  <string name="action_save_second_page">Uložit druhou stránku</string>
+  <string name="action_share_first_page">Sdílet první stránku</string>
+  <string name="action_share_second_page">Sdílet druhou stránku</string>
+  <string name="action_save_combined_page">Uložit společnou stránku</string>
+  <string name="action_share_combined_page">Sdílet společnou stránku</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, stránky %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Rozložení stránky</string>
+  <string name="shift_double_pages">Přesunout na jednu stránku</string>
+  <string name="double_pages">Dvojité stránky</string>
+  <string name="single_page">Jedna stránka</string>
+  <string name="automatic_orientation">Automatický (na základě orientace)</string>
+  <string name="automatic_can_still_switch">Při použití automatického rozvržení stránky můžete stále přepínat mezi rozloženími při čtení bez přepsání tohoto nastavení</string>
+  <string name="invert_double_pages">Invertovat dvojité stránky </string>
+  <string name="center_margin" comment="center_margin Center margin">Okraj uprostřed</string>
+  <string name="center_margin_none">Nic</string>
+  <string name="center_margin_double_page">Přidat na dvojitou stránku</string>
+  <string name="center_margin_wide_page">Přidat na širokou stránku</string>
+  <string name="center_margin_double_and_wide_page">Přidat do obou</string>
+  <string name="pref_center_margin">Typ marže uprostřed</string>
+  <string name="pref_center_margin_summary">Vložte mezeru pro uložení mrtvého prostoru na skládacích zařízeních.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Výběr vlastní barvy</string>
+  <string name="custom_color_description">Vyberte barvu pro vlastní šablonu</string>
+  <string name="theme_custom">Vlastní šablona</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Záloha</string>
+  <string name="label_sync">Synchronizovat</string>
+  <string name="label_triggers">Spouštěče</string>
+  <string name="pref_backup_and_sync_summary">Manuální &amp; automatické zálohování a synchronizace</string>
+  <string name="update_30min">Každých 30 minut</string>
+  <string name="update_1hour">Každou hodinu</string>
+  <string name="update_3hour">Každé 3 hodiny</string>
+  <string name="sync_error">Synchronizace knihovny se nezdařila</string>
+  <string name="sync_complete">Synchronizace knihovny dokončena</string>
+  <string name="sync_in_progress">Synchronizace již probíhá</string>
+  <string name="pref_sync_host">Hostitel</string>
+  <string name="pref_sync_host_summ">Zadejte adresu hostitele pro synchronizaci vaší knihovny</string>
+  <string name="pref_sync_api_key">Klíč API</string>
+  <string name="pref_sync_api_key_summ">Zadejte API klíč pro synchronizaci knihovny</string>
+  <string name="pref_sync_now_group_title">Synchronizovat akce</string>
+  <string name="pref_sync_now">Synchronizovat nyní</string>
+  <string name="pref_sync_confirmation_title">Potvrzení synchronizace</string>
+  <string name="pref_sync_now_subtitle">Spusťte okamžitou synchronizaci dat</string>
+  <string name="pref_sync_confirmation_message">Synchronizace přepíše místní knihovnu vzdálenou knihovnou. Opravdu chcete pokračovat?</string>
+  <string name="pref_sync_service">Servis</string>
+  <string name="pref_sync_service_summ">Vyberte službu pro synchronizaci knihovny s</string>
+  <string name="pref_sync_service_category">Synchronizovat</string>
+  <string name="pref_sync_automatic_category">Automatická synchronizace</string>
+  <string name="pref_sync_interval">Frekvence synchronizace</string>
+  <string name="pref_choose_what_to_sync">Vyberte co synchronizovat</string>
+  <string name="success_reset_sync_timestamp">Obnovení časového razítka poslední synchronizace</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Dokončeno v %1$s</string>
+  <string name="last_synchronization">Poslední synchronizace: %1$s</string>
+  <string name="google_drive">Disk Google</string>
+  <string name="pref_google_drive_sign_in">Přihlásit se</string>
+  <string name="google_drive_sign_in_success">Úspěšně přihlášen</string>
+  <string name="google_drive_sign_in_failed">Přihlášení se nezdařilo</string>
+  <string name="authentication">Ověření</string>
+  <string name="pref_google_drive_purge_sync_data">Vymazat synchronizaci z Google Drive</string>
+  <string name="google_drive_sync_data_purged">Synchronizovat vymazaná data z Google Drive</string>
+  <string name="google_drive_sync_data_not_found">V Google Drive nebyla nalezena žádná synchronizace</string>
+  <string name="google_drive_sync_data_purge_error">Chyba při mazání synchronizace z Google Drive, zkuste se znovu přihlásit.</string>
+  <string name="google_drive_login_success">Přihlášen do Google Drive</string>
+  <string name="google_drive_login_failed">Nepodařilo se přihlásit do Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">Nepřihlášen do Google Drive</string>
+  <string name="error_uploading_sync_data">Chyba při nahrávání synchronizačních dat na Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Chyba při mazání souboru Google Drive Lock</string>
+  <string name="error_before_sync_gdrive">Chyba před synchronizací: %s</string>
+  <string name="pref_purge_confirmation_title">Potvrzení odstranění</string>
+  <string name="pref_purge_confirmation_message">Vymazání dat synchronizace smaže všechna data synchronizace z Google Drive. Jste si jisti, že chcete pokračovat?</string>
+  <string name="pref_sync_options">Vytvořit spouštěče synchronizace</string>
+  <string name="pref_sync_options_summ">Lze použít k nastavení spouštěčů synchronizace</string>
+  <string name="sync_on_chapter_read">Synchronizovat při čtení kapitoly</string>
+  <string name="sync_on_chapter_open">Synchronizovat při otevření kapitoly</string>
+  <string name="sync_on_episode_seen">Synchronizovat při epizodě</string>
+  <string name="sync_on_episode_open">Synchronizovat při otevření epizody</string>
+  <string name="sync_on_app_start">Synchronizovat při spuštění aplikace</string>
+  <string name="sync_on_app_resume">Synchronizovat při pokračování aplikace</string>
+  <string name="sync_library">Synchronizovat knihovnu</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Aktualizovat rozšířenou stránku pro aktualizaci seznamu.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Navigační panel</string>
+  <string name="pref_hide_updates_button">Zobrazit aktualizace v nav</string>
+  <string name="pref_hide_history_button">Zobrazit historii v nav</string>
+  <string name="pref_show_bottom_bar_labels">Vždy zobrazovat nav popisky</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Vyberte tracker</string>
+  <string name="entry_not_tracked">Vstup není sledován.</string>
+  <string name="fill_from_tracker">Vyplnit ze sledovače</string>
+</resources>

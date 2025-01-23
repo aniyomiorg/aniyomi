@@ -138,7 +138,7 @@ class WebtoonRecyclerView @JvmOverloads constructor(
         val animatorSet = AnimatorSet()
 
         if (velocityX != 0) {
-            val dx = distanceTimeFactor * velocityX / 2
+            val dx = (distanceTimeFactor * velocityX / 2)
             val newX = getPositionX(x + dx)
             val translationXAnimator = ValueAnimator.ofFloat(x, newX)
             translationXAnimator.addUpdateListener { animation ->
@@ -149,7 +149,7 @@ class WebtoonRecyclerView @JvmOverloads constructor(
             animatorSet.play(translationXAnimator)
         }
         if (velocityY != 0 && (atFirstPosition || atLastPosition)) {
-            val dy = distanceTimeFactor * velocityY / 2
+            val dy = (distanceTimeFactor * velocityY / 2)
             val newY = getPositionY(y + dy)
             val translationYAnimator = ValueAnimator.ofFloat(y, newY)
             translationYAnimator.addUpdateListener { animation ->

@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.simkl.dto.SimklAnimeResponse
 import eu.kanade.tachiyomi.data.track.simkl.dto.SimklOAuth
 import eu.kanade.tachiyomi.data.track.simkl.dto.SimklSearchResult
 import eu.kanade.tachiyomi.data.track.simkl.dto.SimklSyncResult
@@ -27,6 +29,7 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.common.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
 class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) {
 
@@ -203,7 +206,6 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             listAnime.toAnimeTrack(typeName, type, status)
         }
     }
-
     fun getCurrentUser(): Int {
         return runBlocking {
             with(json) {
@@ -211,6 +213,31 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                     .awaitSuccess()
                     .parseAs<SimklUser>()
                     .account.id
+            }
+        }
+    }
+    suspend fun getSimklAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata {
+        return withIOContext {
+            val type = track.remoteUrl
+                .substringAfter("/")
+                .substringBefore("/")
+            Log.d("SimklApi", "Fetching metadata for track: $type")
+            val url = "$API_URL/$type/${track.remoteId}?extended=full&client_id=$CLIENT_ID"
+            Log.d("SimklApi", "Requesting URL: $url")
+            with(json) {
+                authClient.newCall(GET(url))
+                    .awaitSuccess()
+                    .parseAs<SimklAnimeResponse>()
+                    .let {
+                        TrackAnimeMetadata(
+                            remoteId = it.id,
+                            title = it.title,
+                            thumbnailUrl = it.poster,
+                            description = it.overview,
+                            authors = if (type == "movies") it.director else it.network,
+                            artists = it.network,
+                        )
+                    }
             }
         }
     }
@@ -237,8 +264,8 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     )
 
     companion object {
-        const val CLIENT_ID = "aa62a7da32518aae5d5049a658b87fa4837c3b739e06ed250b315aab6af82b0e"
-        private const val CLIENT_SECRET = "2bec9c1d0c00a1e9b0e9e096a71f88d555a6f52da7923df07906df3b21351783"
+        const val CLIENT_ID = "125476f936eaf8029970919c3c77b63b9ecb1aa5d34f55c9255602e52042f5c2"
+        private const val CLIENT_SECRET = "2f8200f7ec4c3743bd9efbb7f004a53d0d2f8551d7668750e37bbb88b8c4069c"
 
         private const val BASE_URL = "https://simkl.com"
         private const val API_URL = "https://api.simkl.com"
@@ -246,7 +273,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         private const val LOGIN_URL = "$BASE_URL/oauth/authorize"
         const val POSTERS_URL = "https://simkl.in/posters/"
 
-        private const val REDIRECT_URL = "aniyomi://simkl-auth"
+        private const val REDIRECT_URL = "animetail://simkl-auth"
 
         fun authUrl(): Uri =
             LOGIN_URL.toUri().buildUpon()
