@@ -28,7 +28,6 @@ import android.media.AudioManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
@@ -179,6 +178,9 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _currentSource = MutableStateFlow<AnimeSource?>(null)
     val currentSource = _currentSource.asStateFlow()
 
+    private val _isEpisodeOnline = MutableStateFlow(false)
+    val isEpisodeOnline = _isEpisodeOnline.asStateFlow()
+
     private val _isLoadingEpisode = MutableStateFlow(false)
     val isLoadingEpisode = _isLoadingEpisode.asStateFlow()
 
@@ -231,6 +233,10 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private val _paused = MutableStateFlow(false)
     val paused = _paused.asStateFlow()
+
+    // False because the video shouldn't start paused
+    private val _pausedState = MutableStateFlow<Boolean?>(false)
+    val pausedState = _pausedState.asStateFlow()
 
     private val _controlsShown = MutableStateFlow(!playerPreferences.hideControls().get())
     val controlsShown = _controlsShown.asStateFlow()
@@ -420,7 +426,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
         isLoadingTracks.update { _ -> true }
         updateIsLoadingEpisode(false)
-        unpause()
+        setPausedState()
     }
 
     @Immutable
@@ -525,6 +531,22 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun updateReadAhead(value: Long) {
         _readAhead.update { value.toFloat() }
+    }
+
+    private fun updatePausedState() {
+        _pausedState.update { _ -> paused.value }
+    }
+
+    private fun setPausedState() {
+        pausedState.value?.let {
+            if (it) {
+                pause()
+            } else {
+                unpause()
+            }
+
+            _pausedState.update { _ -> null }
+        }
     }
 
     fun pauseUnpause() {
@@ -1121,6 +1143,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
                 _currentEpisode.update { _ -> episode }
                 _currentSource.update { _ -> source }
+                _isEpisodeOnline.update { _ -> isEpisodeOnline() == true }
 
                 _hasPreviousEpisode.update { _ -> getCurrentEpisodeIndex() != 0 }
                 _hasNextEpisode.update { _ -> getCurrentEpisodeIndex() != currentPlaylist.value.size - 1 }
@@ -1339,6 +1362,7 @@ class PlayerViewModel @JvmOverloads constructor(
         val chosenEpisode = currentPlaylist.value.firstOrNull { ep -> ep.id == episodeId } ?: return null
 
         _currentEpisode.update { _ -> chosenEpisode }
+        _isEpisodeOnline.update { _ -> isEpisodeOnline() == true }
 
         return withIOContext {
             try {
@@ -1645,10 +1669,26 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     /**
+     * Returns the skipIntroLength used by this anime or the default one.
+     */
+    fun getAnimeSkipIntroLength(): Int {
+        val default = gesturePreferences.defaultIntroLength().get()
+        val anime = currentAnime.value ?: return default
+        val skipIntroLength = anime.skipIntroLength
+        val skipIntroDisable = anime.skipIntroDisable
+        return when {
+            skipIntroDisable -> 0
+            skipIntroLength <= 0 -> default
+            else -> anime.skipIntroLength
+        }
+    }
+
+    /**
      * Updates the skipIntroLength for the open anime.
      */
     fun setAnimeSkipIntroLength(skipIntroLength: Long) {
         val anime = currentAnime.value ?: return
+        if (!anime.favorite) return
         viewModelScope.launchIO {
             setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength)
             logcat(LogPriority.INFO) { "New Skip Intro Length is ${anime.skipIntroLength}" }

@@ -417,6 +417,7 @@ fun PlayerControls(
                 }
                 // Top right controls
                 val autoPlayEnabled by playerPreferences.autoplayEnabled().collectAsState()
+                val isEpisodeOnline by viewModel.isEpisodeOnline.collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
                     enter = if (!reduceMotion) {
@@ -444,7 +445,7 @@ fun PlayerControls(
                         onAudioClick = { viewModel.showSheet(Sheets.AudioTracks) },
                         onAudioLongClick = { viewModel.showPanel(Panels.AudioDelay) },
                         onQualityClick = { viewModel.showSheet(Sheets.QualityTracks) },
-                        isEpisodeOnline = viewModel.isEpisodeOnline(),
+                        isEpisodeOnline = isEpisodeOnline,
                         onMoreClick = { viewModel.showSheet(Sheets.More) },
                         onMoreLongClick = { viewModel.showPanel(Panels.VideoFilters) },
                     )
