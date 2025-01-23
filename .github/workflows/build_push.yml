@@ -6,8 +6,8 @@ permissions:
 on:
   push:
     branches:
-      - master
-      - Anitail-prev
+
+      - '*'
     tags:
       - v*
 
