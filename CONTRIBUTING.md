@@ -43,7 +43,7 @@ When creating a fork, remember to:
     - Change the app name
     - Change the app icon
 
-    - Change or disable the [app update checker](https://github.com/Dark25/animetail2/blob/master/app/src/main/java/eu/kanade/tachiyomi/data/updater/AppUpdateChecker.kt)
+    - Change or disable the [app update checker](https://github.com/Dark25/animetail2/blob/master/app/src/master/java/eu/kanade/tachiyomi/data/updater/AppUpdateChecker.kt)
 - To avoid installation conflicts:
     - Change the `applicationId` in [`build.gradle.kts`](https://github.com/Dark25/animetail2/blob/master/app/build.gradle.kts)
 - To avoid having your data polluting the main app's analytics and crash report services:
