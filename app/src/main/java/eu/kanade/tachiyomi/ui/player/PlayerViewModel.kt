@@ -534,7 +534,9 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     private fun updatePausedState() {
-        _pausedState.update { _ -> paused.value }
+        if (pausedState.value == null) {
+            _pausedState.update { _ -> paused.value }
+        }
     }
 
     private fun setPausedState() {
@@ -918,6 +920,7 @@ class PlayerViewModel @JvmOverloads constructor(
         }
 
         getHosterVideoLinksJob?.cancel()
+        _pausedState.update { _ -> false }
         _hosterState.update { _ -> emptyList() }
         _hosterList.update { _ -> emptyList() }
         _hosterExpandedList.update { _ -> emptyList() }
@@ -1137,13 +1140,12 @@ class PlayerViewModel @JvmOverloads constructor(
                 updateEpisodeList(initEpisodeList(anime))
 
                 val episode = currentPlaylist.value.first { it.id == episodeId }
-                mediaTitle.update { _ -> episode.name }
-
                 val source = sourceManager.getOrStub(anime.source)
 
                 _currentEpisode.update { _ -> episode }
                 _currentSource.update { _ -> source }
-                _isEpisodeOnline.update { _ -> isEpisodeOnline() == true }
+
+                updateEpisode(episode)
 
                 _hasPreviousEpisode.update { _ -> getCurrentEpisodeIndex() != 0 }
                 _hasNextEpisode.update { _ -> getCurrentEpisodeIndex() != currentPlaylist.value.size - 1 }
@@ -1151,7 +1153,6 @@ class PlayerViewModel @JvmOverloads constructor(
                 // Write to mpv table
                 MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
                 MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
-                // MPVLib.setPropertyDouble("user-data/current-anime/episode-number", episode.episode_number.toDouble())
                 MPVLib.setPropertyString(
                     "user-data/current-anime/category",
                     getAnimeCategories.await(anime.id).joinToString {
@@ -1189,6 +1190,12 @@ class PlayerViewModel @JvmOverloads constructor(
         } catch (e: Throwable) {
             Pair(defaultResult, Result.failure(e))
         }
+    }
+
+    private fun updateEpisode(episode: Episode) {
+        mediaTitle.update { _ -> episode.name }
+        _isEpisodeOnline.update { _ -> isEpisodeOnline() == true }
+        MPVLib.setPropertyDouble("user-data/current-anime/episode-number", episode.episode_number.toDouble())
     }
 
     private fun initEpisodeList(anime: Anime): List<Episode> {
@@ -1305,6 +1312,10 @@ class PlayerViewModel @JvmOverloads constructor(
     private suspend fun loadVideo(video: Video, hosterIndex: Int, videoIndex: Int) {
         updateIsLoadingEpisode(true)
 
+        updatePausedState()
+        // Pause until everything has loaded
+        pause()
+
         _currentVideo.update { _ -> video }
         _selectedHosterVideoIndex.update { _ -> Pair(hosterIndex, videoIndex) }
         qualityIndex = Pair(hosterIndex, videoIndex)
@@ -1362,7 +1373,7 @@ class PlayerViewModel @JvmOverloads constructor(
         val chosenEpisode = currentPlaylist.value.firstOrNull { ep -> ep.id == episodeId } ?: return null
 
         _currentEpisode.update { _ -> chosenEpisode }
-        _isEpisodeOnline.update { _ -> isEpisodeOnline() == true }
+        updateEpisode(chosenEpisode)
 
         return withIOContext {
             try {

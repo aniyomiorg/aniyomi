@@ -1168,9 +1168,6 @@ class PlayerActivity : BaseActivity() {
         val anime = viewModel.currentAnime.value ?: return
         val episode = viewModel.currentEpisode.value ?: return
 
-        viewModel.animeTitle.update { _ -> anime.title }
-        viewModel.mediaTitle.update { _ -> episode.name }
-
         // Write to mpv table
         MPVLib.setPropertyString("user-data/current-anime/episode-title", episode.name)
 
