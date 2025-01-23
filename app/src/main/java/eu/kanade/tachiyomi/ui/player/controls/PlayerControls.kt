@@ -417,7 +417,6 @@ fun PlayerControls(
                 }
                 // Top right controls
                 val autoPlayEnabled by playerPreferences.autoplayEnabled().collectAsState()
-                val videoList by viewModel.videoList.collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
                     enter = if (!reduceMotion) {
@@ -444,11 +443,7 @@ fun PlayerControls(
                         onSubtitlesLongClick = { viewModel.showPanel(Panels.SubtitleSettings) },
                         onAudioClick = { viewModel.showSheet(Sheets.AudioTracks) },
                         onAudioLongClick = { viewModel.showPanel(Panels.AudioDelay) },
-                        onQualityClick = {
-                            if (videoList.isNotEmpty()) {
-                                viewModel.showSheet(Sheets.QualityTracks)
-                            }
-                        },
+                        onQualityClick = { viewModel.showSheet(Sheets.QualityTracks) },
                         isEpisodeOnline = viewModel.isEpisodeOnline(),
                         onMoreClick = { viewModel.showSheet(Sheets.More) },
                         onMoreLongClick = { viewModel.showPanel(Panels.VideoFilters) },
@@ -541,8 +536,10 @@ fun PlayerControls(
         val selectedSubtitles by viewModel.selectedSubtitles.collectAsState()
         val audioTracks by viewModel.audioTracks.collectAsState()
         val selectedAudio by viewModel.selectedAudio.collectAsState()
-        val videoList by viewModel.videoList.collectAsState()
-        val selectedVideoIndex by viewModel.selectedVideoIndex.collectAsState()
+        val isLoadingHosters by viewModel.isLoadingHosters.collectAsState()
+        val hosterState by viewModel.hosterState.collectAsState()
+        val expandedState by viewModel.hosterExpandedList.collectAsState()
+        val selectedHosterVideoIndex by viewModel.selectedHosterVideoIndex.collectAsState()
         val decoder by viewModel.currentDecoder.collectAsState()
         val speed by viewModel.playbackSpeed.collectAsState()
         val sleepTimerTimeRemaining by viewModel.remainingTime.collectAsState()
@@ -559,9 +556,13 @@ fun PlayerControls(
             onAddAudio = viewModel::addAudio,
             onSelectAudio = viewModel::selectAudio,
 
-            videoList = videoList.toImmutableList(),
-            currentVideo = videoList.getOrNull(selectedVideoIndex),
-            onSelectVideo = { viewModel.selectVideo(it) },
+            isLoadingHosters = isLoadingHosters,
+
+            hosterState = hosterState,
+            expandedState = expandedState,
+            selectedVideoIndex = selectedHosterVideoIndex,
+            onClickHoster = viewModel::onHosterClicked,
+            onClickVideo = viewModel::onVideoClicked,
 
             chapter = currentChapter?.toSegment(),
             chapters = chapters.map { it.toSegment() }.toImmutableList(),

@@ -79,9 +79,10 @@ class ExternalIntents {
         anime = getAnime.await(animeId) ?: return null
         source = sourceManager.get(anime.source) ?: return null
         episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
+        val hosters = EpisodeLoader.getHosters(episode, anime, source)
 
         val video = chosenVideo
-            ?: EpisodeLoader.getLinks(episode, anime, source).firstOrNull()
+            ?: EpisodeLoader.getVideos(source, hosters.first()).firstOrNull()
             ?: throw Exception("Video list is empty")
 
         val videoUrl = getVideoUrl(context, video) ?: return null

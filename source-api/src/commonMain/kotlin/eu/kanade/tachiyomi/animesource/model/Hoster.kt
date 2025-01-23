@@ -22,6 +22,29 @@ open class Hoster(
         READY,
         ERROR,
     }
+
+    fun copy(
+        hosterUrl: String = this.hosterUrl,
+        hosterName: String = this.hosterName,
+        videoList: List<Video>? = this.videoList,
+        internalData: String = this.internalData,
+    ): Hoster {
+        return Hoster(hosterUrl, hosterName, videoList, internalData)
+    }
+
+    companion object {
+        const val NO_HOSTER_LIST = "no_hoster_list"
+
+        fun List<Video>.toHosterList(): List<Hoster> {
+            return listOf(
+                Hoster(
+                    hosterUrl = "",
+                    hosterName = NO_HOSTER_LIST,
+                    videoList = this,
+                ),
+            )
+        }
+    }
 }
 
 @Serializable

@@ -125,7 +125,9 @@ class EpisodeOptionsDialogScreenModel(
 
             val result = withIOContext {
                 try {
-                    val results = EpisodeLoader.getLinks(episode, anime, source)
+                    val hosters = EpisodeLoader.getHosters(episode, anime, source)
+
+                    val results = EpisodeLoader.getVideos(source, hosters.first())
                     Result.success(results)
                 } catch (e: Throwable) {
                     Result.failure(e)
