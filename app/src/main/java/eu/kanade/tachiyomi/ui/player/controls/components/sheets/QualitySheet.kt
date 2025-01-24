@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.player.controls.components.sheets
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -9,10 +8,12 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,8 +30,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +49,11 @@ sealed class HosterState(open val name: String) {
     data class Idle(override val name: String) : HosterState(name)
     data class Loading(override val name: String) : HosterState(name)
     data class Error(override val name: String) : HosterState(name)
-    data class Ready(override val name: String, val videoList: List<Video>) : HosterState(name)
+    data class Ready(
+        override val name: String,
+        val videoList: List<Video>,
+        val videoState: List<Video.State>,
+    ) : HosterState(name)
 }
 
 @Composable
@@ -62,16 +65,14 @@ fun QualitySheet(
     onClickHoster: (Int) -> Unit,
     onClickVideo: (Int, Int) -> Unit,
     onDismissRequest: () -> Unit,
+    dismissSheet: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    var shouldDismissSheet by remember(hosterState) { mutableStateOf(false) }
-
     PlayerSheet(
         onDismissRequest = {
-            shouldDismissSheet = false
             onDismissRequest()
         },
-        dismissEvent = shouldDismissSheet,
+        dismissEvent = dismissSheet,
         modifier = modifier,
     ) {
         AnimatedVisibility(
@@ -108,11 +109,9 @@ fun QualitySheet(
             ) {
                 QualitySheetVideoContent(
                     videoList = (hosterState.first() as HosterState.Ready).videoList,
+                    videoState = (hosterState.first() as HosterState.Ready).videoState,
                     selectedVideoIndex = selectedVideoIndex.second,
-                    onClickVideo = { h, v ->
-                        onClickVideo(h, v)
-                        shouldDismissSheet = true
-                    },
+                    onClickVideo = onClickVideo,
                     modifier = modifier,
                 )
             } else {
@@ -121,10 +120,7 @@ fun QualitySheet(
                     expandedState = expandedState,
                     selectedVideoIndex = selectedVideoIndex,
                     onClickHoster = onClickHoster,
-                    onClickVideo = { h, v ->
-                        onClickVideo(h, v)
-                        shouldDismissSheet = true
-                    },
+                    onClickVideo = onClickVideo,
                     modifier = modifier,
                 )
             }
@@ -135,6 +131,7 @@ fun QualitySheet(
 @Composable
 fun QualitySheetVideoContent(
     videoList: List<Video>,
+    videoState: List<Video.State>,
     selectedVideoIndex: Int,
     onClickVideo: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -147,6 +144,7 @@ fun QualitySheetVideoContent(
         itemsIndexed(videoList) { videoIdx, video ->
             VideoTrack(
                 video = video,
+                videoState = videoState[videoIdx],
                 selected = selectedVideoIndex == videoIdx,
                 onClick = { onClickVideo(0, videoIdx) },
                 noHoster = true,
@@ -191,6 +189,7 @@ fun QualitySheetHosterContent(
                         (hoster as HosterState.Ready).videoList.forEachIndexed { videoIdx, video ->
                             VideoTrack(
                                 video = video,
+                                videoState = hoster.videoState[videoIdx],
                                 selected = selectedVideoIndex == Pair(hosterIdx, videoIdx),
                                 onClick = { onClickVideo(hosterIdx, videoIdx) },
                                 noHoster = false,
@@ -259,8 +258,66 @@ fun HosterTrack(
 @Composable
 fun VideoTrack(
     video: Video,
+    videoState: Video.State,
     selected: Boolean,
     onClick: () -> Unit,
+    noHoster: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(
+                horizontal = MaterialTheme.padding.small,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
+    ) {
+        if (noHoster) {
+            VideoText(video, selected, true, modifier)
+            Spacer(modifier = Modifier.weight(1f))
+            VideoIcon(videoState, true)
+        } else {
+            VideoIcon(videoState, false)
+            VideoText(video, selected, false, modifier)
+        }
+    }
+}
+
+@Composable
+private fun VideoIcon(
+    videoState: Video.State,
+    noHoster: Boolean,
+) {
+    Box(
+        modifier = Modifier.size(if (noHoster) 28.dp else 20.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        when (videoState) {
+            Video.State.QUEUE, Video.State.READY -> {}
+            Video.State.LOAD_VIDEO -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.fillMaxSize(),
+                    strokeWidth = 2.dp,
+                )
+            }
+            Video.State.ERROR -> {
+                Icon(
+                    Icons.Default.ErrorOutline,
+                    null,
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun VideoText(
+    video: Video,
+    selected: Boolean,
     noHoster: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -273,13 +330,8 @@ fun VideoTrack(
         maxLines = 3,
         overflow = TextOverflow.Ellipsis,
         modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
             .padding(
-                start = if (noHoster) MaterialTheme.padding.small else MaterialTheme.padding.large,
-                top = if (noHoster) MaterialTheme.padding.small else MaterialTheme.padding.extraSmall,
-                bottom = if (noHoster) MaterialTheme.padding.small else MaterialTheme.padding.extraSmall,
-                end = MaterialTheme.padding.small,
+                vertical = if (noHoster) MaterialTheme.padding.small else MaterialTheme.padding.extraSmall,
             ),
     )
 }

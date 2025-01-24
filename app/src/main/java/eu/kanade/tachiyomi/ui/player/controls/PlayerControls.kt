@@ -533,6 +533,7 @@ fun PlayerControls(
         }
 
         val sheetShown by viewModel.sheetShown.collectAsState()
+        val dismissSheet by viewModel.dismissSheet.collectAsState()
         val subtitles by viewModel.subtitleTracks.collectAsState()
         val selectedSubtitles by viewModel.selectedSubtitles.collectAsState()
         val audioTracks by viewModel.audioTracks.collectAsState()
@@ -592,6 +593,7 @@ fun PlayerControls(
             },
             onOpenPanel = viewModel::showPanel,
             onDismissRequest = { viewModel.showSheet(Sheets.None) },
+            dismissSheet = dismissSheet,
         )
         val panel by viewModel.panelShown.collectAsState()
         PlayerPanels(

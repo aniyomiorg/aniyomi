@@ -93,6 +93,7 @@ fun PlayerSheets(
 
     onOpenPanel: (Panels) -> Unit,
     onDismissRequest: () -> Unit,
+    dismissSheet: Boolean,
 ) {
     when (sheetShown) {
         Sheets.None -> {}
@@ -140,6 +141,7 @@ fun PlayerSheets(
                 onClickHoster = onClickHoster,
                 onClickVideo = onClickVideo,
                 onDismissRequest = onDismissRequest,
+                dismissSheet = dismissSheet,
             )
         }
 

@@ -84,6 +84,32 @@ open class Video(
             field = value
         }
 
+    fun copy(
+        videoUrl: String = this.videoUrl,
+        videoTitle: String = this.videoTitle,
+        resolution: Int? = this.resolution,
+        bitrate: Int? = this.bitrate,
+        headers: Headers? = this.headers,
+        preferred: Boolean = this.preferred,
+        subtitleTracks: List<Track> = this.subtitleTracks,
+        audioTracks: List<Track> = this.audioTracks,
+        timestamps: List<TimeStamp> = this.timestamps,
+        videoPageUrl: String = this.videoPageUrl,
+    ): Video {
+        return Video(
+            videoUrl = videoUrl,
+            videoTitle = videoTitle,
+            resolution = resolution,
+            bitrate = bitrate,
+            headers = headers,
+            preferred = preferred,
+            subtitleTracks = subtitleTracks,
+            audioTracks = audioTracks,
+            timestamps = timestamps,
+            videoPageUrl = videoPageUrl,
+        )
+    }
+
     enum class State {
         QUEUE,
         LOAD_VIDEO,

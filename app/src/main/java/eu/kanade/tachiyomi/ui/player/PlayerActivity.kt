@@ -232,7 +232,9 @@ class PlayerActivity : BaseActivity() {
         setupPlayerOrientation()
 
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
-            toast(throwable.message)
+            runOnUiThread {
+                toast(throwable.message)
+            }
             logcat(LogPriority.ERROR, throwable)
             finish()
         }
