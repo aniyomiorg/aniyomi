@@ -568,6 +568,7 @@ fun PlayerControls(
             chapters = chapters.map { it.toSegment() }.toImmutableList(),
             onSeekToChapter = {
                 viewModel.selectChapter(it)
+                viewModel.showSheet(Sheets.None)
                 viewModel.unpause()
             },
             decoder = decoder,
