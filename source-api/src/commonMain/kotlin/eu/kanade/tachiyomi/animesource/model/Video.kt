@@ -61,7 +61,7 @@ open class Video(
     ) : this(
         videoPageUrl = url,
         videoTitle = quality,
-        videoUrl = videoUrl ?: "",
+        videoUrl = videoUrl ?: "null",
         headers = headers,
         subtitleTracks = subtitleTracks,
         audioTracks = audioTracks,

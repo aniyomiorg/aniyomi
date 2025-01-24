@@ -129,6 +129,7 @@ class EpisodeLoader {
          */
         suspend fun getVideos(source: AnimeSource, hoster: Hoster): List<Video> {
             return when {
+                hoster.videoList != null && source is AnimeHttpSource -> hoster.videoList!!.parseVideoUrls(source)
                 hoster.videoList != null -> hoster.videoList!!
                 source is AnimeHttpSource -> getVideosOnHttp(source, hoster)
                 else -> error("source not supported")
@@ -142,7 +143,17 @@ class EpisodeLoader {
          * @param hoster the hoster.
          */
         private suspend fun getVideosOnHttp(source: AnimeHttpSource, hoster: Hoster): List<Video> {
-            return source.getVideoList(hoster)
+            return source.getVideoList(hoster).parseVideoUrls(source)
+        }
+
+        // TODO(1.6): Remove after ext lib bump
+        private suspend fun List<Video>.parseVideoUrls(source: AnimeHttpSource): List<Video> {
+            return this.map { video ->
+                if (video.videoUrl != "null") return@map video
+
+                val newVideoUrl = source.getVideoUrl(video)
+                video.copy(videoUrl = newVideoUrl)
+            }
         }
     }
 }
