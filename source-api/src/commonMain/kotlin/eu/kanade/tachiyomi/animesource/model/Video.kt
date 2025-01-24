@@ -68,6 +68,30 @@ open class Video(
     )
 
     // TODO(1.6): Remove after ext lib bump
+    constructor(
+        videoUrl: String = "",
+        videoTitle: String = "",
+        resolution: Int? = null,
+        bitrate: Int? = null,
+        headers: Headers? = null,
+        preferred: Boolean = false,
+        subtitleTracks: List<Track> = emptyList(),
+        audioTracks: List<Track> = emptyList(),
+        timestamps: List<TimeStamp> = emptyList(),
+    ) : this(
+        videoUrl = videoUrl,
+        videoTitle = videoTitle,
+        resolution = resolution,
+        bitrate = bitrate,
+        headers = headers,
+        preferred = preferred,
+        subtitleTracks = subtitleTracks,
+        audioTracks = audioTracks,
+        timestamps = timestamps,
+        videoPageUrl = "",
+    )
+
+    // TODO(1.6): Remove after ext lib bump
     @Suppress("UNUSED_PARAMETER")
     constructor(
         url: String,
