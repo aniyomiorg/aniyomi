@@ -61,7 +61,9 @@ import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.HosterState
+import eu.kanade.tachiyomi.ui.player.controls.components.sheets.getChangedAt
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
@@ -83,9 +85,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -1252,7 +1252,7 @@ class PlayerViewModel @JvmOverloads constructor(
                         HosterState.Ready(
                             hoster.hosterName,
                             videoList,
-                            List(videoList.size) { Video.State.LOAD_VIDEO },
+                            List(videoList.size) { Video.State.QUEUE },
                         )
                     }
                 }
@@ -1298,7 +1298,11 @@ class PlayerViewModel @JvmOverloads constructor(
                     }
 
                     if (hasFoundPreferredVideo.compareAndSet(false, true)) {
-                        val (hosterIdx, videoIdx) = selectBestVideo()
+                        val (hosterIdx, videoIdx) = HosterLoader.selectBestVideo(hosterState.value)
+                        if (hosterIdx == -1) {
+                            throw NoSuchElementException("No available videos")
+                        }
+
                         val video = (hosterState.value[hosterIdx] as HosterState.Ready).videoList[videoIdx]
 
                         loadVideo(source, video, hosterIdx, videoIdx)
@@ -1312,69 +1316,6 @@ class PlayerViewModel @JvmOverloads constructor(
                 throw e
             }
         }
-    }
-
-    /**
-     * Check for the best video from the current hosterState.
-     *
-     * The first video with the `preferred` attribute is selected, however
-     * if no such video is selected the first video with a non-empty url is selected.
-     * If there are no viable videos at all, an error is thrown.
-     *
-     * @return the indices of the hoster & video
-     */
-    private fun selectBestVideo(): Pair<Int, Int> {
-        val availableHosters = hosterState.value.withIndex()
-            .filter { (_, state) -> state is HosterState.Ready }
-
-        // Check for first preferred
-        val isPreferred: (Pair<Video, Video.State>) -> Boolean = { (v, s) ->
-            v.preferred && (s == Video.State.READY || s == Video.State.QUEUE)
-        }
-        val prefHosterIdx = availableHosters.indexOfFirst {
-            (it.value as HosterState.Ready).let { hoster ->
-                hoster.videoList zip hoster.videoState
-            }.any(isPreferred)
-        }
-        if (prefHosterIdx != -1) {
-            val videoList = (availableHosters[prefHosterIdx].value as HosterState.Ready).let { hoster ->
-                hoster.videoList zip hoster.videoState
-            }
-            val prefVideoIdx = videoList.indexOfFirst(isPreferred)
-            return availableHosters[prefHosterIdx].index to prefVideoIdx
-        }
-
-        // Check for first video with non-empty url
-        val firstValid: (Pair<Video, Video.State>) -> Boolean = { (v, s) ->
-            v.videoUrl.isNotEmpty() && (s == Video.State.READY || s == Video.State.QUEUE)
-        }
-        val firstAvailableHosterIdx = availableHosters.indexOfFirst {
-            (it.value as HosterState.Ready).let { hoster ->
-                hoster.videoList zip hoster.videoState
-            }.any(firstValid)
-        }
-        if (firstAvailableHosterIdx != -1) {
-            val videoList = (availableHosters[firstAvailableHosterIdx].value as HosterState.Ready).let { hoster ->
-                hoster.videoList zip hoster.videoState
-            }
-            val firstVideoIdx = videoList.indexOfFirst(firstValid)
-            return availableHosters[firstAvailableHosterIdx].index to firstVideoIdx
-        }
-
-        // No success
-        throw Exception("No available videos")
-    }
-
-    private fun HosterState.Ready.getChangedAt(index: Int, newVideo: Video, newState: Video.State): HosterState.Ready {
-        return HosterState.Ready(
-            name = this.name,
-            videoList = this.videoList.mapIndexed { idx, video ->
-                if (idx == index) newVideo else video
-            },
-            videoState = this.videoState.mapIndexed { idx, state ->
-                if (idx == index) newState else state
-            },
-        )
     }
 
     private suspend fun loadVideo(source: AnimeSource?, video: Video, hosterIndex: Int, videoIndex: Int): Boolean {
@@ -1394,7 +1335,8 @@ class PlayerViewModel @JvmOverloads constructor(
         pause()
 
         val newVideoUrl = if (source is AnimeHttpSource &&
-            selectedHosterState.videoState[videoIndex] != Video.State.READY
+            selectedHosterState.videoState[videoIndex] != Video.State.READY &&
+            !video.initialized
         ) {
             try {
                 source.resolveVideoUrl(video)
@@ -1416,7 +1358,11 @@ class PlayerViewModel @JvmOverloads constructor(
                     selectedHosterState.getChangedAt(videoIndex, video, Video.State.ERROR),
                 )
 
-                val (newHosterIdx, newVideoIdx) = selectBestVideo()
+                val (newHosterIdx, newVideoIdx) = HosterLoader.selectBestVideo(hosterState.value)
+                if (newHosterIdx == -1) {
+                    throw NoSuchElementException("No available videos")
+                }
+
                 val newVideo = (hosterState.value[newHosterIdx] as HosterState.Ready).videoList[newVideoIdx]
 
                 return loadVideo(source, newVideo, newHosterIdx, newVideoIdx)
@@ -1430,7 +1376,7 @@ class PlayerViewModel @JvmOverloads constructor(
             }
         }
 
-        val newVideo = video.copy(videoUrl = newVideoUrl)
+        val newVideo = video.copy(videoUrl = newVideoUrl, initialized = true)
         _hosterState.updateAt(
             hosterIndex,
             selectedHosterState.getChangedAt(videoIndex, newVideo, Video.State.READY),

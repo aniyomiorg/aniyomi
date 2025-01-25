@@ -56,6 +56,18 @@ sealed class HosterState(open val name: String) {
     ) : HosterState(name)
 }
 
+fun HosterState.Ready.getChangedAt(index: Int, newVideo: Video, newState: Video.State): HosterState.Ready {
+    return HosterState.Ready(
+        name = this.name,
+        videoList = this.videoList.mapIndexed { idx, video ->
+            if (idx == index) newVideo else video
+        },
+        videoState = this.videoState.mapIndexed { idx, state ->
+            if (idx == index) newState else state
+        },
+    )
+}
+
 @Composable
 fun QualitySheet(
     isLoadingHosters: Boolean,
@@ -112,7 +124,7 @@ fun QualitySheet(
                     videoState = (hosterState.first() as HosterState.Ready).videoState,
                     selectedVideoIndex = selectedVideoIndex.second,
                     onClickVideo = onClickVideo,
-                    modifier = modifier,
+                    modifier = modifier.padding(MaterialTheme.padding.medium),
                 )
             } else {
                 QualitySheetHosterContent(
@@ -121,7 +133,7 @@ fun QualitySheet(
                     selectedVideoIndex = selectedVideoIndex,
                     onClickHoster = onClickHoster,
                     onClickVideo = onClickVideo,
-                    modifier = modifier,
+                    modifier = modifier.padding(MaterialTheme.padding.medium),
                 )
             }
         }
@@ -138,8 +150,7 @@ fun QualitySheetVideoContent(
 ) {
     LazyColumn(
         modifier
-            .fillMaxWidth()
-            .padding(MaterialTheme.padding.medium),
+            .fillMaxWidth(),
     ) {
         itemsIndexed(videoList) { videoIdx, video ->
             VideoTrack(
@@ -163,9 +174,7 @@ fun QualitySheetHosterContent(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier
-            .fillMaxWidth()
-            .padding(MaterialTheme.padding.medium),
+        modifier.fillMaxWidth(),
     ) {
         hosterState.forEachIndexed { hosterIdx, hoster ->
             val isExpanded = expandedState.getOrNull(hosterIdx) ?: false
@@ -267,10 +276,7 @@ fun VideoTrack(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(
-                horizontal = MaterialTheme.padding.small,
-            ),
+            .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
     ) {

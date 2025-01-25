@@ -21,7 +21,6 @@ import uy.kohesive.injekt.api.get
  * Loader used to retrieve the hosters for a given episode.
  */
 class EpisodeLoader {
-
     companion object {
 
         /**
@@ -130,7 +129,7 @@ class EpisodeLoader {
          * @param source the source of the anime.
          * @param hoster the hoster.
          */
-        suspend fun getVideos(source: AnimeSource, hoster: Hoster): List<Video> {
+        private suspend fun getVideos(source: AnimeSource, hoster: Hoster): List<Video> {
             return when {
                 hoster.videoList != null && source is AnimeHttpSource -> hoster.videoList!!.parseVideoUrls(source)
                 hoster.videoList != null -> hoster.videoList!!
