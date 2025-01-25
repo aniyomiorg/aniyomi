@@ -146,4 +146,14 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Velg en tracker</string>
   <string name="entry_not_tracked">Oppføringen kan ikke spores.</string>
   <string name="fill_from_tracker">Fyll fra tracker</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr virker. Brukeragent oppdatert. Start appen på nytt</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr fungerer ikke. Brukeragent ikke oppdatert. Kontroller innstillingene dine</string>
+  <string name="flare_solver_error">Feil under kontakt med FlareSolverr</string>
+  <string name="flare_solver_error_webview">Feil under retting av WebView</string>
+  <string name="pref_enable_flare_solverr">Aktiver FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Bruk FlareSolverr for å bypass Cloudflare\'s anti-bot beskyttelse</string>
+  <string name="pref_flare_solverr_url">URL til FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL-adressen til FlareSolverr for eksempel å bruke http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr og oppdater brukeragent</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr for å oppdatere brukeragenten. Bare påkrevd én gang, og veksling etter behov.</string>
 </resources>
