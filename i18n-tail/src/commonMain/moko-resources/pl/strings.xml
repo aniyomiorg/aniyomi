@@ -146,4 +146,14 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Wybierz tracker</string>
   <string name="entry_not_tracked">Wpis nie jest śledzony.</string>
   <string name="fill_from_tracker">Wypełnij z trackera</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr działa. Agent użytkownika zaktualizowany. Uruchom ponownie aplikację</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr nie działa. Agent użytkownika nie zaktualizowany. Sprawdź swoje ustawienia</string>
+  <string name="flare_solver_error">Błąd podczas kontaktu z FlareSolverr</string>
+  <string name="flare_solver_error_webview">Błąd rozwiązywania z WebView</string>
+  <string name="pref_enable_flare_solverr">Włącz FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Użyj FlareSolverr, aby ominąć ochronę przeciwbota chmur</string>
+  <string name="pref_flare_solverr_url">Adres URL FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">Adres URL instancji FlareSolverr do użycia na przykład http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Testuj FlareSolverr i zaktualizuj agenta użytkownika</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Przetestuj FlareSolverr aby zaktualizować agenta użytkownika. Wymagane tylko raz; następnie przełącz w razie potrzeby.</string>
 </resources>
