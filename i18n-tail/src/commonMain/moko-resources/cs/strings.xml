@@ -146,4 +146,14 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Vyberte tracker</string>
   <string name="entry_not_tracked">Vstup není sledován.</string>
   <string name="fill_from_tracker">Vyplnit ze sledovače</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr funguje. Uživatelský agent aktualizován. Restartujte aplikaci</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr nefunguje. Uživatelský agent není aktualizován. Zkontrolujte prosím vaše nastavení</string>
+  <string name="flare_solver_error">Chyba při kontaktování FlareSolverru</string>
+  <string name="flare_solver_error_webview">Chyba při řešení s WebView</string>
+  <string name="pref_enable_flare_solverr">Povolit FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Použij FlareSolverr k obejití ochrany proti boku Cloudflareu</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">Adresa URL instance FlareSolverr pro použití například http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Otestuj FlareSolverr a aktualizuj uživatelské agenta</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Otestujte FlareSolverr pro aktualizaci uživatelského agenta. Vyžadováno pouze jednou; poté přepněte podle potřeby.</string>
 </resources>
