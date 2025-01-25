@@ -146,4 +146,14 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Вибрати трекер</string>
   <string name="entry_not_tracked">Запис не відстежується.</string>
   <string name="fill_from_tracker">Заповнити з трекера</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr працює. User Agent оновлено. Будь ласка, перезапустіть програму</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr не працює. Користувацький агент не оновився. Будь ласка, перевірте ваші налаштування</string>
+  <string name="flare_solver_error">Помилка під час звернення FlareSolverr</string>
+  <string name="flare_solver_error_webview">Помилка вирішення проблеми з WebView</string>
+  <string name="pref_enable_flare_solverr">Увімкнути FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Використовуйте FlareSolverr для обходу захисту Cloudflare-бота</string>
+  <string name="pref_flare_solverr_url">URL-адреса FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL-адреса екземпляра FlareSolverr, наприклад, http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Тест FlareSolverr та оновлення користувацького агента</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Тест FlareSolverr для оновлення користувацького агента. Потрібно лише один раз; потім ввімкнути як необхідно.</string>
 </resources>
