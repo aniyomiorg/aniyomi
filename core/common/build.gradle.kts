@@ -56,6 +56,9 @@ dependencies {
 
     // SY -->
     implementation(libs.zip4j)
+    // TLMR -->
+    implementation(libs.injekt)
+    // TLMR <--
     implementation(libs.exifinterface)
     // SY <--
 
