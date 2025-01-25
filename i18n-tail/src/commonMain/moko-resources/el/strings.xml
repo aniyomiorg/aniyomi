@@ -146,4 +146,14 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Επιλέξτε έναν ανιχνευτή</string>
   <string name="entry_not_tracked">Η καταχώρηση δεν παρακολουθείται.</string>
   <string name="fill_from_tracker">Συμπλήρωση από ιχνηλάτη</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">Το FlareSolverr λειτουργεί. Ο χρήστης πράκτορας ενημερώθηκε. Παρακαλώ επανεκκινήστε την εφαρμογή</string>
+  <string name="flare_solver_update_user_agent_failed">Το FlareSolverr δεν λειτουργεί. Ο πράκτορας χρήστη δεν ενημερώθηκε. Παρακαλώ ελέγξτε τις ρυθμίσεις σας</string>
+  <string name="flare_solver_error">Σφάλμα επικοινωνίας με το FlareSolverr</string>
+  <string name="flare_solver_error_webview">Σφάλμα στην επίλυση με WebView</string>
+  <string name="pref_enable_flare_solverr">Ενεργοποίηση FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Χρησιμοποιήστε το FlareSolverr για να παρακάμψετε την προστασία αντι-bot του Cloudflare</string>
+  <string name="pref_flare_solverr_url">Σύνδεσμος FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL για την παρουσία FlareSolverr για χρήση π.χ. http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Δοκιμή FlareSolverr και ενημέρωση πράκτορα χρήστη</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Δοκιμάστε το FlareSolverr για να ενημερώσετε τον πράκτορα του χρήστη. Απαιτείται μόνο μία φορά, στη συνέχεια, εναλλάσσετε όπως απαιτείται.</string>
 </resources>
