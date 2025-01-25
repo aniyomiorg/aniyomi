@@ -146,4 +146,14 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Bir takipçi seçin</string>
   <string name="entry_not_tracked">Girdi takip edilmiyor.</string>
   <string name="fill_from_tracker">Takipçiden Doldur</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr is working. User agent updated. Please restart the app</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr is not working. User agent not updated. Please check your settings</string>
+  <string name="flare_solver_error">Error contacting FlareSolverr</string>
+  <string name="flare_solver_error_webview">Error resolving with WebView</string>
+  <string name="pref_enable_flare_solverr">Enable FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Use FlareSolverr to bypass Cloudflare\'s anti-bot protection</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">URL of the FlareSolverr instance to use for example http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr and update user agent</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr to update the user agent. Only required once; then toggle as needed.</string>
 </resources>
