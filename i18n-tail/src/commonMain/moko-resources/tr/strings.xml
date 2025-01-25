@@ -1,105 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Tracking status</string>
-  <string name="tag">Tags</string>
-  <string name="ungrouped">Ungrouped</string>
-  <string name="not_tracked">Not tracked</string>
-  <string name="group" comment="group More Info Menu">Group</string>
-  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Library dynamic category updates</string>
-  <string name="manga_library_group_updates">Manga Library dynamic category updates</string>
-  <string name="library_group_updates_global">Always launch global updates</string>
-  <string name="library_group_updates_all_but_ungrouped">Launch global updates only for ungrouped, category updates for others</string>
-  <string name="library_group_updates_all">Launch category updates all the time</string>
-  <string name="reset_tags" comment="reset_tags Entry Info Edit">Reset Tags</string>
-  <string name="add_tag">Add Tag</string>
-  <string name="title_hint">Title: %1$s</string>
-  <string name="description_hint">Description: %1$s</string>
-  <string name="author_hint">Author: %1$s</string>
-  <string name="artist_hint">Artist: %1$s</string>
-  <string name="custom_entry_info">Custom entry info</string>
-  <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Cast Settings</string>
-  <string name="pref_enable_cast">Enable or disable Cast</string>
-  <string name="action_cast">Send to Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Show downloaded episode file size</string>
-  <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Settings</string>
-  <string name="action_edit_info" comment="action_edit_info Actions">Edit info</string>
-  <string name="special_services" comment="special_services Connections section">Special Services</string>
-  <string name="pref_category_connections">Connections</string>
-  <string name="pref_connections_summary">Discord, more to come..</string>
-  <string name="connections_info">Special Services that are unique to Animetail and enhance the way you use the app</string>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Takip durumu</string>
+  <string name="tag">Etiketler</string>
+  <string name="ungrouped">Gruplandırılmamış</string>
+  <string name="not_tracked">Takip edilmiyor</string>
+  <string name="group" comment="group More Info Menu">Grup</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Kütüphanesi dinamik kategori güncellemeleri</string>
+  <string name="manga_library_group_updates">Manga Kütüphanesi dinamik kategori güncellemeleri</string>
+  <string name="library_group_updates_global">Küresel güncellemeleri her zaman başlat</string>
+  <string name="library_group_updates_all_but_ungrouped">Sadece gruplandırılmamış öğeler için küresel güncellemeleri başlat, diğerleri için kategori güncellemelerini başlat</string>
+  <string name="library_group_updates_all">Kategori güncellemelerini sürekli olarak başlat</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Etiketleri sıfırla</string>
+  <string name="add_tag">Etiket ekle</string>
+  <string name="title_hint">Başlık: %1$s</string>
+  <string name="description_hint">Açıklama: %1$s</string>
+  <string name="author_hint">Yazar: %1$s</string>
+  <string name="artist_hint">Sanatçı: %1$s</string>
+  <string name="custom_entry_info">Özel giriş bilgisi</string>
+  <string name="reset_info">Bilgileri sıfırla</string>
+  <string name="pref_category_cast" comment="pref_category_cast Preferences">Yayıncı Ayarları</string>
+  <string name="pref_enable_cast">Yayını aç veya kapat</string>
+  <string name="action_cast">Yayını gönder</string>
+  <string name="pref_show_downloaded_episode_file_size">İndirilen bölüm dosyasının boyutunu göster</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Ayarları</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Bilgileri düzenle</string>
+  <string name="special_services" comment="special_services Connections section">Özel Servis</string>
+  <string name="pref_category_connections">Bağlantılar</string>
+  <string name="pref_connections_summary">Discord, yakında daha fazlası gelecek..</string>
+  <string name="connections_info">Animetail\'e özgü ve uygulamayı kullanım şeklinizi geliştiren özel hizmetler</string>
   <string name="connections_discord">Discord</string>
-  <string name="connections_discord_info">This Discord Service works through token logging. Use at your own risk. Your token is stored locally and Animetail does not share it anywhere else</string>
-  <string name="pref_discord_rpc">Discord Rich Presence</string>
-  <string name="show_chapters_titles_title">Show Episodes/Chapters Titles</string>
-  <string name="show_chapters_titles_subtitle">Show the title of the episode/chapter you are reading</string>
-  <string name="pref_enable_discord_rpc">Enable Discord Rich Presence</string>
-  <string name="pref_discord_status">Discord Status</string>
-  <string name="pref_discord_dnd">⛔ Do Not Disturb</string>
-  <string name="pref_discord_idle">🌙 Idle</string>
-  <string name="pref_discord_online">🟢 Online</string>
-  <string name="pref_category_discord_incognito">RPC Incognito</string>
-  <string name="pref_discord_incognito">Discord Incognito mode</string>
-  <string name="pref_discord_incognito_summary">Overridden when Incognito Mode is enabled</string>
-  <string name="pref_discord_incognito_categories_details">Entries in included categories will not be displayed in Discord</string>
-  <string name="browsing" comment="browsing Discord section">Browsing</string>
-  <string name="scrolling">Scrolling through</string>
-  <string name="messing">Messing around with</string>
+  <string name="connections_discord_info">Bu Discord Hizmeti, token kaydı üzerinden çalışır. Kendi riskinizle kullanın. Token\'ınız yerel olarak saklanır ve Animetail bunu başka hiçbir yerde paylaşmaz.</string>
+  <string name="pref_discord_rpc">Discord Zengin Varlık Durumu</string>
+  <string name="show_chapters_titles_title">Bölüm/Konu Başlıklarını Göster</string>
+  <string name="show_chapters_titles_subtitle">Okuduğunuz bölüm/konunun başlığını göster</string>
+  <string name="pref_enable_discord_rpc">Discord Zengin Durum Özelliğini Aç</string>
+  <string name="pref_discord_status">Discord Durumu</string>
+  <string name="pref_discord_dnd">⛔ Rahatsız Etme</string>
+  <string name="pref_discord_idle">🌙 Boşta</string>
+  <string name="pref_discord_online">🟢 Aktif</string>
+  <string name="pref_category_discord_incognito">RPC Gizlilik Modu</string>
+  <string name="pref_discord_incognito">Gizli modu kapat</string>
+  <string name="pref_discord_incognito_summary">Gizli Mod açıldığında devre dışı bırakılır</string>
+  <string name="pref_discord_incognito_categories_details">Dahil edilen kategorilerdeki girişler Discord\'da görüntülenmeyecek</string>
+  <string name="browsing" comment="browsing Discord section">Tarayıcı</string>
+  <string name="scrolling">Kaydırmak</string>
+  <string name="messing">İle vakit geçirmek</string>
   <string name="video">Video</string>
-  <string name="comic">Comic</string>
-  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player needs to be installed</string>
-  <string name="pref_category_torrentserver">TorrentServer Preferences</string>
-  <string name="pref_torrentserver_port">TorrentServer Port</string>
-  <string name="torrentserver_is_running">Torrent Server is running</string>
-  <string name="pref_torrent_trackers">Torrent Trackers</string>
-  <string name="pref_reset_torrent_trackers_string">Reset default torrent trackers string</string>
-  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Page preload amount</string>
-  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Preserve reading position on read entries</string>
-  <string name="reader_bottom_buttons">Reader Bottom Buttons</string>
-  <string name="reader_bottom_buttons_summary">Customize what buttons appear at the bottom of the reader</string>
-  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Set first page as cover</string>
-  <string name="action_set_second_page_cover">Set second page as cover</string>
-  <string name="action_save_first_page">Save first page</string>
-  <string name="action_save_second_page">Save second page</string>
-  <string name="action_share_first_page">Share first page</string>
-  <string name="action_share_second_page">Share second page</string>
-  <string name="action_save_combined_page">Save combined page</string>
-  <string name="action_share_combined_page">Share combined page</string>
-  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, pages %3$s</string>
-  <string name="page_layout" comment="page_layout Double page spread">Page layout</string>
-  <string name="shift_double_pages">Shift one page over</string>
-  <string name="double_pages">Double pages</string>
-  <string name="single_page">Single page</string>
-  <string name="automatic_orientation">Automatic (based on orientation)</string>
-  <string name="automatic_can_still_switch">While using automatic page layout, you can still switch between layouts while reading without overriding this setting</string>
-  <string name="invert_double_pages">Invert double pages </string>
-  <string name="center_margin" comment="center_margin Center margin">Center Margin</string>
-  <string name="center_margin_none">None</string>
-  <string name="center_margin_double_page">Add to double Page</string>
-  <string name="center_margin_wide_page">Add to wide Page</string>
-  <string name="center_margin_double_and_wide_page">Add to both</string>
-  <string name="pref_center_margin">Center margin type</string>
-  <string name="pref_center_margin_summary">Insert spacer to accommodate deadspace on foldable devices.</string>
-  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Custom Color Picker</string>
-  <string name="custom_color_description">Pick a color for the custom Theme</string>
-  <string name="theme_custom">Custom Theme</string>
-  <string name="label_backup" comment="label_backup Cross Device Sync">Backup</string>
-  <string name="label_sync">Sync</string>
-  <string name="label_triggers">Triggers</string>
-  <string name="pref_backup_and_sync_summary">Manual &amp; automatic backups and sync</string>
-  <string name="update_30min">Every 30 minutes</string>
-  <string name="update_1hour">Every hour</string>
-  <string name="update_3hour">Every 3 hours</string>
-  <string name="sync_error">Syncing library failed</string>
-  <string name="sync_complete">Syncing library complete</string>
-  <string name="sync_in_progress">Sync is already in progress</string>
-  <string name="pref_sync_host">Host</string>
-  <string name="pref_sync_host_summ">Enter the host address for synchronizing your library</string>
-  <string name="pref_sync_api_key">API key</string>
-  <string name="pref_sync_api_key_summ">Enter the API key to synchronize your library</string>
-  <string name="pref_sync_now_group_title">Sync Actions</string>
-  <string name="pref_sync_now">Sync now</string>
-  <string name="pref_sync_confirmation_title">Sync confirmation</string>
+  <string name="comic">Çizgi Roman</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player\'ın kurulması gerekiyor</string>
+  <string name="pref_category_torrentserver">TorrentServer Ayarları</string>
+  <string name="pref_torrentserver_port">TorrentServer Portu</string>
+  <string name="torrentserver_is_running">Torrent Server aktif</string>
+  <string name="pref_torrent_trackers">Torrent İzleyicileri</string>
+  <string name="pref_reset_torrent_trackers_string">Varsayılan torrent izleyicileri dizesini sıfırla</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Sayfa ön yükleme oranı</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Okunan öğelerde okuma konumunu koru</string>
+  <string name="reader_bottom_buttons">Okuyucu Alt Kısımdaki Butonlar</string>
+  <string name="reader_bottom_buttons_summary">Okuyucunun altındaki butonları özelleştir</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">İlk sayfayı kapak olarak ayarla</string>
+  <string name="action_set_second_page_cover">İkinci sayfayı kapak olarak ayarla</string>
+  <string name="action_save_first_page">İlk sayfayı kaydet</string>
+  <string name="action_save_second_page">İkinci sayfayı kaydet</string>
+  <string name="action_share_first_page">İlk sayfayı paylaş</string>
+  <string name="action_share_second_page">İkinci sayfayı paylaş</string>
+  <string name="action_save_combined_page">Birleştirilmiş sayfayı kaydet</string>
+  <string name="action_share_combined_page">Birleştirilmiş sayfayı paylaş</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, sayfa %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Sayfa düzeni</string>
+  <string name="shift_double_pages">Bir sayfa kaydır</string>
+  <string name="double_pages">İki sayfa</string>
+  <string name="single_page">Tek sayfa</string>
+  <string name="automatic_orientation">Otomatik (yönlendirmeye göre)</string>
+  <string name="automatic_can_still_switch">Otomatik sayfa düzenini kullanırken, bu ayarı geçersiz kılmadan okuma sırasında düzenler arasında geçiş yapabilirsiniz</string>
+  <string name="invert_double_pages">Çift sayfaları ters çevir</string>
+  <string name="center_margin" comment="center_margin Center margin">Merkez Kenar Boşluğu</string>
+  <string name="center_margin_none">Hiçbiri</string>
+  <string name="center_margin_double_page">Çift Sayfaya Ekle</string>
+  <string name="center_margin_wide_page">Geniş Sayfaya Ekle</string>
+  <string name="center_margin_double_and_wide_page">Her ikisine de ekle</string>
+  <string name="pref_center_margin">Merkez kenar boşluğu türü</string>
+  <string name="pref_center_margin_summary">Katlanabilir cihazlarda ölü alanı karşılamak için ara parçayı takın.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Özel renk filtresi</string>
+  <string name="custom_color_description">Özel Tema için bir renk seçin</string>
+  <string name="theme_custom">Temayı Özelleştir</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Yedekle ve geri yükle</string>
+  <string name="label_sync">senkronize et</string>
+  <string name="label_triggers">tetikleyiciler</string>
+  <string name="pref_backup_and_sync_summary">Manuel &amp; otomatik yedeklemeler ve senkronizasyon</string>
+  <string name="update_30min">Her 30 dakikada bir</string>
+  <string name="update_1hour">Her saatte bir</string>
+  <string name="update_3hour">Her 3 saatte bir</string>
+  <string name="sync_error">Kütüphane senkronizasyonu başarısız oldu</string>
+  <string name="sync_complete">Kütüphane senkronizasyonu tamamlandı</string>
+  <string name="sync_in_progress">Senkronizasyon halihazırda devam ediyor</string>
+  <string name="pref_sync_host">Sunucu</string>
+  <string name="pref_sync_host_summ">Kütüphanenizi senkronize etmek için ana bilgisayar adresini girin.</string>
+  <string name="pref_sync_api_key">API anahtarı</string>
+  <string name="pref_sync_api_key_summ">Kütüphanenizi senkronize etmek için API anahtarını girin.</string>
+  <string name="pref_sync_now_group_title">Senkronizasyon İşlemleri</string>
+  <string name="pref_sync_now">Şimdi senkronize et</string>
+  <string name="pref_sync_confirmation_title">Senkronizasyon onayı</string>
   <string name="pref_sync_now_subtitle">Initiate immediate synchronization of your data</string>
   <string name="pref_sync_confirmation_message">Syncing will overwrite your local library with the remote library. Are you sure you want to continue?</string>
   <string name="pref_sync_service">Service</string>
