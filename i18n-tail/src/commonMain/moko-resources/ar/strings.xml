@@ -146,4 +146,14 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">حدد متتبع</string>
   <string name="entry_not_tracked">لم يتم تتبع الدخول.</string>
   <string name="fill_from_tracker">ملء من المتتبع</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr يعمل. تم تحديث وكيل المستخدم. يرجى إعادة تشغيل التطبيق</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr لا يعمل. لم يتم تحديث عميل المستخدم. الرجاء التحقق من الإعدادات الخاصة بك</string>
+  <string name="flare_solver_error">خطأ في الاتصال بـ FlareSolverr</string>
+  <string name="flare_solver_error_webview">خطأ في حل مع WebView</string>
+  <string name="pref_enable_flare_solverr">تمكين FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">استخدام FlareSolverr لتجاوز الحماية المضادة للبوت</string>
+  <string name="pref_flare_solverr_url">رابط FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">عنوان URL لمثيل FlareSolverr للاستخدام على سبيل المثال http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">اختبار FlareSolverr وتحديث وكيل المستخدم</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">اختبار FlareSolverr لتحديث وكيل المستخدم. مطلوب مرة واحدة فقط؛ ثم قم بتبديل حسب الحاجة.</string>
 </resources>
