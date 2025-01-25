@@ -7,6 +7,9 @@ import eu.kanade.tachiyomi.animesource.model.Hoster.Companion.toHosterList
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
+import eu.kanade.tachiyomi.ui.player.controls.components.sheets.HosterState
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
@@ -153,6 +156,16 @@ class EpisodeLoader {
 
                 val newVideoUrl = source.getVideoUrl(video)
                 video.copy(videoUrl = newVideoUrl)
+            }
+        }
+
+        suspend fun loadHosterVideos(source: AnimeSource, hoster: Hoster): HosterState {
+            return try {
+                val videos = getVideos(source, hoster)
+                HosterState.Ready(hoster.hosterName, videos, List(videos.size) { Video.State.QUEUE })
+            } catch (e: Exception) {
+                currentCoroutineContext().ensureActive()
+                HosterState.Error(hoster.hosterName)
             }
         }
     }

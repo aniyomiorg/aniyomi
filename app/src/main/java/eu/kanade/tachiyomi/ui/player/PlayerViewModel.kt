@@ -1262,7 +1262,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 coroutineScope {
                     val deferredHosters = hosterList.map { hoster ->
                         async {
-                            loadHosterVideos(source, hoster)
+                            EpisodeLoader.loadHosterVideos(source, hoster)
                         }
                     }
 
@@ -1363,16 +1363,6 @@ class PlayerViewModel @JvmOverloads constructor(
 
         // No success
         throw Exception("No available videos")
-    }
-
-    private suspend fun loadHosterVideos(source: AnimeSource, hoster: Hoster): HosterState {
-        return try {
-            val videos = EpisodeLoader.getVideos(source, hoster)
-            HosterState.Ready(hoster.hosterName, videos, List(videos.size) { Video.State.QUEUE })
-        } catch (e: Exception) {
-            currentCoroutineContext().ensureActive()
-            HosterState.Error(hoster.hosterName)
-        }
     }
 
     private fun HosterState.Ready.getChangedAt(index: Int, newVideo: Video, newState: Video.State): HosterState.Ready {
@@ -1481,7 +1471,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 _hosterState.updateAt(index, HosterState.Loading(hosterName))
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    val hosterState = loadHosterVideos(currentSource.value!!, hosterList.value[index])
+                    val hosterState = EpisodeLoader.loadHosterVideos(currentSource.value!!, hosterList.value[index])
                     _hosterState.updateAt(index, hosterState)
                 }
             }
