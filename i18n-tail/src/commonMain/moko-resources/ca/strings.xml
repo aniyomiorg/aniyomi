@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Tracking status</string>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Estat de seguiment</string>
   <string name="tag">Tags</string>
   <string name="ungrouped">Ungrouped</string>
   <string name="not_tracked">Not tracked</string>
@@ -48,8 +48,8 @@
   <string name="video">Video</string>
   <string name="comic">Comic</string>
   <string name="install_amnis" comment="install_amnis Torrent">Amnis Player needs to be installed</string>
-  <string name="pref_category_torrentserver">TorrentServer Preferences</string>
-  <string name="pref_torrentserver_port">TorrentServer Port</string>
+  <string name="pref_category_torrentserver">Preferències de serveis de Torrent</string>
+  <string name="pref_torrentserver_port">Port de Servidor de Torrent</string>
   <string name="torrentserver_is_running">Torrent Server is running</string>
   <string name="pref_torrent_trackers">Torrent Trackers</string>
   <string name="pref_reset_torrent_trackers_string">Reset default torrent trackers string</string>
