@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Tracking status</string>
-  <string name="tag">Tags</string>
-  <string name="ungrouped">Ungrouped</string>
-  <string name="not_tracked">Not tracked</string>
-  <string name="group" comment="group More Info Menu">Group</string>
-  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Library dynamic category updates</string>
-  <string name="manga_library_group_updates">Manga Library dynamic category updates</string>
-  <string name="library_group_updates_global">Always launch global updates</string>
-  <string name="library_group_updates_all_but_ungrouped">Launch global updates only for ungrouped, category updates for others</string>
-  <string name="library_group_updates_all">Launch category updates all the time</string>
-  <string name="reset_tags" comment="reset_tags Entry Info Edit">Reset Tags</string>
-  <string name="add_tag">Add Tag</string>
-  <string name="title_hint">Title: %1$s</string>
-  <string name="description_hint">Description: %1$s</string>
-  <string name="author_hint">Author: %1$s</string>
-  <string name="artist_hint">Artist: %1$s</string>
-  <string name="custom_entry_info">Custom entry info</string>
-  <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Cast Settings</string>
-  <string name="pref_enable_cast">Enable or disable Cast</string>
-  <string name="action_cast">Send to Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Show downloaded episode file size</string>
-  <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Settings</string>
-  <string name="action_edit_info" comment="action_edit_info Actions">Edit info</string>
-  <string name="special_services" comment="special_services Connections section">Special Services</string>
-  <string name="pref_category_connections">Connections</string>
-  <string name="pref_connections_summary">Discord, more to come..</string>
-  <string name="connections_info">Special Services that are unique to Animetail and enhance the way you use the app</string>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Takip durumu</string>
+  <string name="tag">Etiketler</string>
+  <string name="ungrouped">Gruplandırılmamış</string>
+  <string name="not_tracked">Takip edilmiyor</string>
+  <string name="group" comment="group More Info Menu">Grup</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Kütüphanesi dinamik kategori güncellemeleri</string>
+  <string name="manga_library_group_updates">Manga Kütüphanesi dinamik kategori güncellemeleri</string>
+  <string name="library_group_updates_global">Küresel güncellemeleri her zaman başlat</string>
+  <string name="library_group_updates_all_but_ungrouped">Sadece gruplandırılmamış öğeler için küresel güncellemeleri başlat, diğerleri için kategori güncellemelerini başlat</string>
+  <string name="library_group_updates_all">Kategori güncellemelerini sürekli olarak başlat</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Etiketleri sıfırla</string>
+  <string name="add_tag">Etiket ekle</string>
+  <string name="title_hint">Başlık: %1$s</string>
+  <string name="description_hint">Açıklama: %1$s</string>
+  <string name="author_hint">Yazar: %1$s</string>
+  <string name="artist_hint">Sanatçı: %1$s</string>
+  <string name="custom_entry_info">Özel giriş bilgisi</string>
+  <string name="reset_info">Bilgileri sıfırla</string>
+  <string name="pref_category_cast" comment="pref_category_cast Preferences">Yayıncı Ayarları</string>
+  <string name="pref_enable_cast">Yayını aç veya kapat</string>
+  <string name="action_cast">Yayını gönder</string>
+  <string name="pref_show_downloaded_episode_file_size">İndirilen bölüm dosyasının boyutunu göster</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Ayarları</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Bilgileri düzenle</string>
+  <string name="special_services" comment="special_services Connections section">Özel Servis</string>
+  <string name="pref_category_connections">Bağlantılar</string>
+  <string name="pref_connections_summary">Discord, yakında daha fazlası gelecek..</string>
+  <string name="connections_info">Animetail\'e özgü ve uygulamayı kullanım şeklinizi geliştiren özel hizmetler</string>
   <string name="connections_discord">Discord</string>
-  <string name="connections_discord_info">This Discord Service works through token logging. Use at your own risk. Your token is stored locally and Animetail does not share it anywhere else</string>
-  <string name="pref_discord_rpc">Discord Rich Presence</string>
-  <string name="show_chapters_titles_title">Show Episodes/Chapters Titles</string>
-  <string name="show_chapters_titles_subtitle">Show the title of the episode/chapter you are reading</string>
-  <string name="pref_enable_discord_rpc">Enable Discord Rich Presence</string>
-  <string name="pref_discord_status">Discord Status</string>
-  <string name="pref_discord_dnd">⛔ Do Not Disturb</string>
-  <string name="pref_discord_idle">🌙 Idle</string>
-  <string name="pref_discord_online">🟢 Online</string>
-  <string name="pref_category_discord_incognito">RPC Incognito</string>
-  <string name="pref_discord_incognito">Discord Incognito mode</string>
-  <string name="pref_discord_incognito_summary">Overridden when Incognito Mode is enabled</string>
-  <string name="pref_discord_incognito_categories_details">Entries in included categories will not be displayed in Discord</string>
-  <string name="browsing" comment="browsing Discord section">Browsing</string>
-  <string name="scrolling">Scrolling through</string>
-  <string name="messing">Messing around with</string>
+  <string name="connections_discord_info">Bu Discord Hizmeti, token kaydı üzerinden çalışır. Kendi riskinizle kullanın. Token\'ınız yerel olarak saklanır ve Animetail bunu başka hiçbir yerde paylaşmaz.</string>
+  <string name="pref_discord_rpc">Discord Zengin Varlık Durumu</string>
+  <string name="show_chapters_titles_title">Bölüm/Konu Başlıklarını Göster</string>
+  <string name="show_chapters_titles_subtitle">Okuduğunuz bölüm/konunun başlığını göster</string>
+  <string name="pref_enable_discord_rpc">Discord Zengin Durum Özelliğini Aç</string>
+  <string name="pref_discord_status">Discord Durumu</string>
+  <string name="pref_discord_dnd">⛔ Rahatsız Etme</string>
+  <string name="pref_discord_idle">🌙 Boşta</string>
+  <string name="pref_discord_online">🟢 Aktif</string>
+  <string name="pref_category_discord_incognito">RPC Gizlilik Modu</string>
+  <string name="pref_discord_incognito">Gizli modu kapat</string>
+  <string name="pref_discord_incognito_summary">Gizli Mod açıldığında devre dışı bırakılır</string>
+  <string name="pref_discord_incognito_categories_details">Dahil edilen kategorilerdeki girişler Discord\'da görüntülenmeyecek</string>
+  <string name="browsing" comment="browsing Discord section">Tarayıcı</string>
+  <string name="scrolling">Kaydırmak</string>
+  <string name="messing">İle vakit geçirmek</string>
   <string name="video">Video</string>
-  <string name="comic">Comic</string>
-  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player needs to be installed</string>
-  <string name="pref_category_torrentserver">TorrentServer Preferences</string>
-  <string name="pref_torrentserver_port">TorrentServer Port</string>
+  <string name="comic">Çizgi Roman</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player\'ın kurulması gerekiyor</string>
+  <string name="pref_category_torrentserver">TorrentServer Ayarları</string>
+  <string name="pref_torrentserver_port">TorrentServer Portu</string>
   <string name="torrentserver_is_running">Torrent Server is running</string>
   <string name="pref_torrent_trackers">Torrent Trackers</string>
   <string name="pref_reset_torrent_trackers_string">Reset default torrent trackers string</string>
