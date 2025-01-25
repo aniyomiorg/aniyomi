@@ -146,4 +146,14 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Valitse seurantaohjelma</string>
   <string name="entry_not_tracked">Merkintää ei jäljitetä.</string>
   <string name="fill_from_tracker">Täytä seurantapalvelusta</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr toimii. Käyttäjäagentti päivitetty. Käynnistä sovellus uudelleen</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr ei toimi. Käyttäjäagenttia ei ole päivitetty. Tarkista asetuksesi</string>
+  <string name="flare_solver_error">Virhe yhteyttä FlareSolverriin</string>
+  <string name="flare_solver_error_webview">Virhe selvitettäessä WebView:ää</string>
+  <string name="pref_enable_flare_solverr">Salli FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Käytä FlareSolverria ohittaaksesi Cloudflaren anti-bottisuojan</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">FlareSolverrin ilmentymän URL-osoite, jota käytetään esimerkiksi http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Testaa FlareSolverr ja päivitä käyttäjä agentti</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testaa FlareSolverr päivittääksesi käyttäjän agentin. Tarvittava vain kerran; ota sitten tarvittaessa käyttöön.</string>
 </resources>
