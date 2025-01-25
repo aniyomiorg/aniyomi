@@ -83,6 +83,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -1260,42 +1261,43 @@ class PlayerViewModel @JvmOverloads constructor(
 
             try {
                 coroutineScope {
-                    val deferredHosters = hosterList.map { hoster ->
+                    hosterList.mapIndexed { hosterIdx, hoster ->
                         async {
-                            EpisodeLoader.loadHosterVideos(source, hoster)
-                        }
-                    }
+                            val hosterState = EpisodeLoader.loadHosterVideos(source, hoster)
 
-                    deferredHosters.forEachIndexed { hosterIdx, dHoster ->
-                        val hosterState = dHoster.await()
+                            _hosterState.updateAt(hosterIdx, hosterState)
 
-                        _hosterState.updateAt(hosterIdx, hosterState)
-
-                        if (hosterState is HosterState.Ready) {
-                            if (hosterIdx == hosterIndex) {
-                                hosterState.videoList.getOrNull(videoIndex)?.let {
-                                    hasFoundPreferredVideo.set(true)
-                                    val success = loadVideo(source, it, hosterIndex, videoIndex)
-                                    if (!success) {
-                                        hasFoundPreferredVideo.set(false)
-                                    }
-                                }
-                            }
-
-                            val prefIndex = hosterState.videoList.indexOfFirst { it.preferred }
-                            if (prefIndex != -1 && hosterIndex == -1) {
-                                if (hasFoundPreferredVideo.compareAndSet(false, true)) {
-                                    if (selectedHosterVideoIndex.value == Pair(-1, -1)) {
-                                        val success =
-                                            loadVideo(source, hosterState.videoList[prefIndex], hosterIdx, prefIndex)
+                            if (hosterState is HosterState.Ready) {
+                                if (hosterIdx == hosterIndex) {
+                                    hosterState.videoList.getOrNull(videoIndex)?.let {
+                                        hasFoundPreferredVideo.set(true)
+                                        val success = loadVideo(source, it, hosterIndex, videoIndex)
                                         if (!success) {
                                             hasFoundPreferredVideo.set(false)
                                         }
                                     }
                                 }
+
+                                val prefIndex = hosterState.videoList.indexOfFirst { it.preferred }
+                                if (prefIndex != -1 && hosterIndex == -1) {
+                                    if (hasFoundPreferredVideo.compareAndSet(false, true)) {
+                                        if (selectedHosterVideoIndex.value == Pair(-1, -1)) {
+                                            val success =
+                                                loadVideo(
+                                                    source,
+                                                    hosterState.videoList[prefIndex],
+                                                    hosterIdx,
+                                                    prefIndex,
+                                                )
+                                            if (!success) {
+                                                hasFoundPreferredVideo.set(false)
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
+                    }.awaitAll()
 
                     if (hasFoundPreferredVideo.compareAndSet(false, true)) {
                         val (hosterIdx, videoIdx) = HosterLoader.selectBestVideo(hosterState.value)
@@ -1360,7 +1362,12 @@ class PlayerViewModel @JvmOverloads constructor(
 
                 val (newHosterIdx, newVideoIdx) = HosterLoader.selectBestVideo(hosterState.value)
                 if (newHosterIdx == -1) {
-                    throw NoSuchElementException("No available videos")
+                    if (_hosterState.value.any { it is HosterState.Loading }) {
+                        _selectedHosterVideoIndex.update { _ -> Pair(-1, -1) }
+                        return false
+                    } else {
+                        throw NoSuchElementException("No available videos")
+                    }
                 }
 
                 val newVideo = (hosterState.value[newHosterIdx] as HosterState.Ready).videoList[newVideoIdx]

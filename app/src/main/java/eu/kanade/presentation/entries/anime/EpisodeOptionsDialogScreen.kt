@@ -65,6 +65,7 @@ import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -213,28 +214,26 @@ class EpisodeOptionsDialogScreenModel(
             _hosterState.update { _ -> Result.success(initialHosterState) }
 
             try {
-                val deferredHosters = hosterList.map { hoster ->
+                hosterList.mapIndexed { hosterIdx, hoster ->
                     async {
-                        EpisodeLoader.loadHosterVideos(source, hoster)
-                    }
-                }
+                        val hosterState = EpisodeLoader.loadHosterVideos(source, hoster)
 
-                deferredHosters.forEachIndexed { hosterIdx, dHoster ->
-                    val hosterState = dHoster.await()
-                    _hosterState.updateAt(hosterIdx, hosterState)
+                        _hosterState.updateAt(hosterIdx, hosterState)
 
-                    if (hosterState is HosterState.Ready) {
-                        val prefIndex = hosterState.videoList.indexOfFirst { it.preferred }
-                        if (prefIndex != -1) {
-                            if (hasFoundPreferredVideo.compareAndSet(false, true)) {
-                                val success = loadVideo(source, hosterState.videoList[prefIndex], hosterIdx, prefIndex)
-                                if (!success) {
-                                    hasFoundPreferredVideo.set(false)
+                        if (hosterState is HosterState.Ready) {
+                            val prefIndex = hosterState.videoList.indexOfFirst { it.preferred }
+                            if (prefIndex != -1) {
+                                if (hasFoundPreferredVideo.compareAndSet(false, true)) {
+                                    val success =
+                                        loadVideo(source, hosterState.videoList[prefIndex], hosterIdx, prefIndex)
+                                    if (!success) {
+                                        hasFoundPreferredVideo.set(false)
+                                    }
                                 }
                             }
                         }
                     }
-                }
+                }.awaitAll()
 
                 if (hasFoundPreferredVideo.compareAndSet(false, true)) {
                     val hosterStateList = hosterState.value!!.getOrThrow()
