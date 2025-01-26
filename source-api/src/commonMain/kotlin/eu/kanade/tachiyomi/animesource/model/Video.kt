@@ -33,10 +33,11 @@ open class Video(
     val bitrate: Int? = null,
     val headers: Headers? = null,
     val preferred: Boolean = false,
-    val initialized: Boolean = false,
     val subtitleTracks: List<Track> = emptyList(),
     val audioTracks: List<Track> = emptyList(),
     val timestamps: List<TimeStamp> = emptyList(),
+    val internalData: String = "",
+    val initialized: Boolean = false,
     // TODO(1.6): Remove after ext lib bump
     val videoPageUrl: String = "",
 ) {
@@ -79,6 +80,7 @@ open class Video(
         subtitleTracks: List<Track> = emptyList(),
         audioTracks: List<Track> = emptyList(),
         timestamps: List<TimeStamp> = emptyList(),
+        internalData: String = "",
     ) : this(
         videoUrl = videoUrl,
         videoTitle = videoTitle,
@@ -89,6 +91,7 @@ open class Video(
         subtitleTracks = subtitleTracks,
         audioTracks = audioTracks,
         timestamps = timestamps,
+        internalData = internalData,
         videoPageUrl = "",
     )
 
@@ -116,10 +119,11 @@ open class Video(
         bitrate: Int? = this.bitrate,
         headers: Headers? = this.headers,
         preferred: Boolean = this.preferred,
-        initialized: Boolean = this.initialized,
         subtitleTracks: List<Track> = this.subtitleTracks,
         audioTracks: List<Track> = this.audioTracks,
         timestamps: List<TimeStamp> = this.timestamps,
+        internalData: String = this.internalData,
+        initialized: Boolean = this.initialized,
         videoPageUrl: String = this.videoPageUrl,
     ): Video {
         return Video(
@@ -129,10 +133,11 @@ open class Video(
             bitrate = bitrate,
             headers = headers,
             preferred = preferred,
-            initialized = initialized,
             subtitleTracks = subtitleTracks,
             audioTracks = audioTracks,
             timestamps = timestamps,
+            internalData = internalData,
+            initialized = initialized,
             videoPageUrl = videoPageUrl,
         )
     }
@@ -153,10 +158,11 @@ data class SerializableVideo(
     val bitrate: Int? = null,
     val headers: List<Pair<String, String>>? = null,
     val preferred: Boolean = false,
-    val initialized: Boolean = false,
     val subtitleTracks: List<Track> = emptyList(),
     val audioTracks: List<Track> = emptyList(),
     val timestamps: List<TimeStamp> = emptyList(),
+    val internalData: String = "",
+    val initialized: Boolean = false,
     // TODO(1.6): Remove after ext lib bump
     val videoPageUrl: String = "",
 ) {
@@ -172,10 +178,11 @@ data class SerializableVideo(
                         vid.bitrate,
                         vid.headers?.toList(),
                         vid.preferred,
-                        vid.initialized,
                         vid.subtitleTracks,
                         vid.audioTracks,
                         vid.timestamps,
+                        vid.internalData,
+                        vid.initialized,
                         vid.videoPageUrl,
                     )
                 },
@@ -193,10 +200,11 @@ data class SerializableVideo(
                             ?.flatMap { it.toList() }
                             ?.let { Headers.headersOf(*it.toTypedArray()) },
                         sVid.preferred,
-                        sVid.initialized,
                         sVid.subtitleTracks,
                         sVid.audioTracks,
                         sVid.timestamps,
+                        sVid.internalData,
+                        sVid.initialized,
                         sVid.videoPageUrl,
                     )
                 }
