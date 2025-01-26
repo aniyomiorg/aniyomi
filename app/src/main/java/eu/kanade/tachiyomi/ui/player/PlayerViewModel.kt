@@ -1390,9 +1390,6 @@ class PlayerViewModel @JvmOverloads constructor(
         )
 
         _currentVideo.update { _ -> newVideo }
-        if (sheetShown.value == Sheets.QualityTracks) {
-            dismissSheet()
-        }
 
         qualityIndex = Pair(hosterIndex, videoIndex)
 
@@ -1408,7 +1405,11 @@ class PlayerViewModel @JvmOverloads constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             val success = loadVideo(currentSource.value, video, hosterIndex, videoIndex)
-            if (!success) {
+            if (success) {
+                if (sheetShown.value == Sheets.QualityTracks) {
+                    dismissSheet()
+                }
+            } else {
                 updateIsLoadingEpisode(false)
             }
         }
