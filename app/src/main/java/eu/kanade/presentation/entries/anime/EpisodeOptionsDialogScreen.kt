@@ -270,24 +270,13 @@ class EpisodeOptionsDialogScreenModel(
             selectedHosterState.getChangedAt(videoIndex, video, Video.State.LOAD_VIDEO),
         )
 
-        val newVideoUrl = if (source is AnimeHttpSource &&
-            selectedHosterState.videoState[videoIndex] != Video.State.READY &&
-            !video.initialized
-        ) {
-            try {
-                source.resolveVideoUrl(video)
-            } catch (e: Exception) {
-                if (e is CancellationException) {
-                    throw e
-                }
-
-                ""
-            }
+        val resolvedVideo = if (selectedHosterState.videoState[videoIndex] != Video.State.READY) {
+            HosterLoader.getResolvedVideo(source, video)
         } else {
-            video.videoUrl
+            video
         }
 
-        if (newVideoUrl.isEmpty()) {
+        if (resolvedVideo == null || resolvedVideo.videoUrl.isEmpty()) {
             if (currentVideo.value == null) {
                 _hosterState.updateAt(
                     hosterIndex,
@@ -317,12 +306,11 @@ class EpisodeOptionsDialogScreenModel(
             }
         }
 
-        val newVideo = video.copy(videoUrl = newVideoUrl, initialized = true)
         _hosterState.updateAt(
             hosterIndex,
-            selectedHosterState.getChangedAt(videoIndex, newVideo, Video.State.READY),
+            selectedHosterState.getChangedAt(videoIndex, resolvedVideo, Video.State.READY),
         )
-        _currentVideo.update { _ -> newVideo }
+        _currentVideo.update { _ -> resolvedVideo }
 
         return true
     }

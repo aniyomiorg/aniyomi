@@ -95,16 +95,16 @@ class HosterLoader {
                                             Video.State.LOAD_VIDEO,
                                         )
 
-                                    val newVideo = getResolvedVideo(source, video)
-                                    if (newVideo.videoUrl.isNotEmpty()) {
+                                    val resolvedVideo = getResolvedVideo(source, video)
+                                    if (resolvedVideo?.videoUrl?.isNotEmpty() == true) {
                                         coroutineContext.cancelChildren()
-                                        throw EarlyReturnException(newVideo)
+                                        throw EarlyReturnException(resolvedVideo)
                                     }
 
                                     hosterStates[hosterIdx] =
                                         (hosterStates[hosterIdx] as HosterState.Ready).getChangedAt(
                                             prefIndex,
-                                            newVideo,
+                                            video,
                                             Video.State.ERROR,
                                         )
                                 }
@@ -123,16 +123,16 @@ class HosterLoader {
                                 Video.State.LOAD_VIDEO,
                             )
 
-                        val newVideo = getResolvedVideo(source, video)
-                        if (newVideo.videoUrl.isNotEmpty()) {
+                        val resolvedVideo = getResolvedVideo(source, video)
+                        if (resolvedVideo?.videoUrl?.isNotEmpty() == true) {
                             coroutineContext.cancelChildren()
-                            return@coroutineScope newVideo
+                            return@coroutineScope resolvedVideo
                         }
 
                         hosterStates[hosterIdx] =
                             (hosterStates[hosterIdx] as HosterState.Ready).getChangedAt(
                                 videoIdx,
-                                newVideo,
+                                video,
                                 Video.State.ERROR,
                             )
                         val newResult = selectBestVideo(hosterStates)
@@ -148,22 +148,22 @@ class HosterLoader {
             }
         }
 
-        private suspend fun getResolvedVideo(source: AnimeSource, video: Video): Video {
-            val newVideoUrl = if (source is AnimeHttpSource && !video.initialized) {
+        suspend fun getResolvedVideo(source: AnimeSource?, video: Video): Video? {
+            val resolvedVideo = if (source is AnimeHttpSource && !video.initialized) {
                 try {
-                    source.resolveVideoUrl(video)
+                    source.resolveVideo(video)
                 } catch (e: Exception) {
                     if (e is CancellationException) {
                         throw e
                     }
 
-                    ""
+                    null
                 }
             } else {
-                video.videoUrl
+                video
             }
 
-            return video.copy(videoUrl = newVideoUrl, initialized = true)
+            return resolvedVideo?.copy(initialized = true)
         }
     }
 }

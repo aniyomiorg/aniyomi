@@ -367,15 +367,15 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     protected abstract fun videoListParse(response: Response, hoster: Hoster): List<Video>
 
     /**
-     * Returns the resolved url of the episode link. Override only if it's needed to resolve
-     * the url.
+     * Returns the resolved video of the episode link. Override only if it's needed to resolve
+     * the video.
      *
      * @since extensions-lib 16
      * @param video the video information.
-     * @return the direct url to the video
+     * @return the resolved video, or null on failure
      */
-    open suspend fun resolveVideoUrl(video: Video): String {
-        return video.videoUrl
+    open suspend fun resolveVideo(video: Video): Video? {
+        return video
     }
 
     /**

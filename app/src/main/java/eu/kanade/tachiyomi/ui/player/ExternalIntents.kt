@@ -108,17 +108,13 @@ class ExternalIntents {
      * @param video the video being sent to the external player.
      */
     private suspend fun getVideoUrl(source: AnimeSource, context: Context, video: Video): Uri? {
-        val newVideoUrl = if (!video.initialized && source is AnimeHttpSource) {
-            source.resolveVideoUrl(video)
-        } else {
-            video.videoUrl
-        }
+        val resolvedVideo = HosterLoader.getResolvedVideo(source, video)
 
-        if (newVideoUrl.isEmpty()) {
+        if (resolvedVideo == null || resolvedVideo.videoUrl.isEmpty()) {
             makeErrorToast(context, Exception("Video URL is empty."))
             return null
         } else {
-            val uri = newVideoUrl.toUri()
+            val uri = resolvedVideo.videoUrl.toUri()
 
             val isOnDevice = if (anime.source == LocalAnimeSource.ID) {
                 true
