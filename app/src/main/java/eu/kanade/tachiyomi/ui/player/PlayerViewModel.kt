@@ -1386,10 +1386,18 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     fun onVideoClicked(hosterIndex: Int, videoIndex: Int) {
-        val video = (_hosterState.value[hosterIndex] as? HosterState.Ready)
-            ?.videoList
+        val hosterState = _hosterState.value[hosterIndex] as? HosterState.Ready
+        val video = hosterState?.videoList
             ?.getOrNull(videoIndex)
             ?: return // Shouldn't happen, but just in case™
+
+        val videoState = hosterState.videoState
+            .getOrNull(videoIndex)
+            ?: return
+
+        if (videoState == Video.State.ERROR) {
+            return
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             val success = loadVideo(currentSource.value, video, hosterIndex, videoIndex)
@@ -1408,7 +1416,7 @@ class PlayerViewModel @JvmOverloads constructor(
             is HosterState.Ready -> {
                 _hosterExpandedList.updateAt(index, !_hosterExpandedList.value[index])
             }
-            is HosterState.Error, is HosterState.Idle -> {
+            is HosterState.Idle -> {
                 val hosterName = hosterList.value[index].hosterName
                 _hosterState.updateAt(index, HosterState.Loading(hosterName))
 
@@ -1417,7 +1425,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     _hosterState.updateAt(index, hosterState)
                 }
             }
-            is HosterState.Loading -> {}
+            is HosterState.Loading, is HosterState.Error -> {}
         }
     }
 
