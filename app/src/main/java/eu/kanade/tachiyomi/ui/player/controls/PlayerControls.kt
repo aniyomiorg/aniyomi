@@ -546,6 +546,8 @@ fun PlayerControls(
         val speed by viewModel.playbackSpeed.collectAsState()
         val sleepTimerTimeRemaining by viewModel.remainingTime.collectAsState()
         val showSubtitles by subtitlePreferences.screenshotSubtitles().collectAsState()
+        val showFailedHosters by playerPreferences.showFailedHosters().collectAsState()
+        val emptyHosters by playerPreferences.showEmptyHosters().collectAsState()
 
         PlayerSheets(
             sheetShown = sheetShown,
@@ -565,6 +567,7 @@ fun PlayerControls(
             selectedVideoIndex = selectedHosterVideoIndex,
             onClickHoster = viewModel::onHosterClicked,
             onClickVideo = viewModel::onVideoClicked,
+            displayHosters = Pair(showFailedHosters, emptyHosters),
 
             chapter = currentChapter?.toSegment(),
             chapters = chapters.map { it.toSegment() }.toImmutableList(),

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
@@ -29,8 +30,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -76,6 +75,7 @@ fun QualitySheet(
     selectedVideoIndex: Pair<Int, Int>,
     onClickHoster: (Int) -> Unit,
     onClickVideo: (Int, Int) -> Unit,
+    displayHosters: Pair<Boolean, Boolean>,
     onDismissRequest: () -> Unit,
     dismissSheet: Boolean,
     modifier: Modifier = Modifier,
@@ -133,6 +133,7 @@ fun QualitySheet(
                     selectedVideoIndex = selectedVideoIndex,
                     onClickHoster = onClickHoster,
                     onClickVideo = onClickVideo,
+                    displayHosters = displayHosters,
                     modifier = modifier.padding(MaterialTheme.padding.medium),
                 )
             }
@@ -171,31 +172,80 @@ fun QualitySheetHosterContent(
     selectedVideoIndex: Pair<Int, Int>,
     onClickHoster: (Int) -> Unit,
     onClickVideo: (Int, Int) -> Unit,
+    displayHosters: Pair<Boolean, Boolean>,
     modifier: Modifier = Modifier,
 ) {
+    val validHosters = hosterState.withIndex().filter { (_, state) ->
+        state is HosterState.Idle || state is HosterState.Loading || (state is HosterState.Ready && state.videoList.isNotEmpty())
+    }
+    val failedHosters = hosterState.withIndex().filter { (_, state) ->
+        state is HosterState.Error
+    }
+    val emptyHosters = hosterState.withIndex().filter { (_, state) ->
+        state is HosterState.Ready && state.videoList.isEmpty()
+    }
+
     LazyColumn(
         modifier.fillMaxWidth(),
     ) {
-        hosterState.forEachIndexed { hosterIdx, hoster ->
-            val isExpanded = expandedState.getOrNull(hosterIdx) ?: false
+        hosterContent(
+            hosters = validHosters,
+            expandedState = expandedState,
+            selectedVideoIndex = selectedVideoIndex,
+            onClickHoster = onClickHoster,
+            onClickVideo = onClickVideo,
+        )
 
-            item {
-                HosterTrack(
-                    hoster = hoster,
-                    selected = selectedVideoIndex.first == hosterIdx,
-                    isExpanded = isExpanded,
-                    onClick = { onClickHoster(hosterIdx) },
-                )
+        if (displayHosters.first) {
+            hosterContent(
+                hosters = failedHosters,
+                expandedState = expandedState,
+                selectedVideoIndex = selectedVideoIndex,
+                onClickHoster = onClickHoster,
+                onClickVideo = onClickVideo,
+            )
+        }
 
-                AnimatedVisibility(
-                    visible = hoster is HosterState.Ready && isExpanded,
-                    enter = expandVertically(),
-                    exit = shrinkVertically(),
-                ) {
+        if (displayHosters.second) {
+            hosterContent(
+                hosters = emptyHosters,
+                expandedState = expandedState,
+                selectedVideoIndex = selectedVideoIndex,
+                onClickHoster = onClickHoster,
+                onClickVideo = onClickVideo,
+            )
+        }
+    }
+}
+
+internal fun LazyListScope.hosterContent(
+    hosters: List<IndexedValue<HosterState>>,
+    expandedState: List<Boolean>,
+    selectedVideoIndex: Pair<Int, Int>,
+    onClickHoster: (Int) -> Unit,
+    onClickVideo: (Int, Int) -> Unit,
+) {
+    hosters.forEach { (hosterIdx, hoster) ->
+        val isExpanded = expandedState.getOrNull(hosterIdx) ?: false
+
+        item {
+            HosterTrack(
+                hoster = hoster,
+                selected = selectedVideoIndex.first == hosterIdx,
+                isExpanded = isExpanded,
+                onClick = { onClickHoster(hosterIdx) },
+            )
+
+            AnimatedVisibility(
+                visible = hoster is HosterState.Ready && isExpanded,
+                enter = expandVertically(),
+                exit = shrinkVertically(),
+            ) {
+                (hoster as? HosterState.Ready)?.let {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        (hoster as HosterState.Ready).videoList.forEachIndexed { videoIdx, video ->
+                        it.videoList.forEachIndexed { videoIdx, video ->
                             VideoTrack(
                                 video = video,
                                 videoState = hoster.videoState[videoIdx],

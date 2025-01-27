@@ -585,6 +585,7 @@ private fun VideoList(
                         selectedVideoIndex = selectedHosterVideoIndex,
                         onClickHoster = onClickHoster,
                         onClickVideo = onClickVideo,
+                        displayHosters = Pair(false, false),
                     )
                 }
             }

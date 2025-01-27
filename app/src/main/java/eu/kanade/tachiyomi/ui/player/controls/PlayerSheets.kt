@@ -62,6 +62,7 @@ fun PlayerSheets(
     selectedVideoIndex: Pair<Int, Int>,
     onClickHoster: (Int) -> Unit,
     onClickVideo: (Int, Int) -> Unit,
+    displayHosters: Pair<Boolean, Boolean>,
 
     // chapters sheet
     chapter: Segment?,
@@ -140,6 +141,7 @@ fun PlayerSheets(
                 selectedVideoIndex = selectedVideoIndex,
                 onClickHoster = onClickHoster,
                 onClickVideo = onClickVideo,
+                displayHosters = displayHosters,
                 onDismissRequest = onDismissRequest,
                 dismissSheet = dismissSheet,
             )
