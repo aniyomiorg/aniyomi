@@ -36,6 +36,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
@@ -1128,6 +1129,11 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private var currentHosterList: List<Hoster>? = null
 
+    class ExceptionWithStringResource(
+        message: String,
+        val stringResource: StringResource,
+    ) : Exception(message)
+
     suspend fun init(
         animeId: Long,
         initialEpisodeId: Long,
@@ -1170,11 +1176,15 @@ class PlayerViewModel @JvmOverloads constructor(
                     },
                 )
 
-                val currentEp = currentEpisode.value ?: throw Exception("No episode loaded.")
+                val currentEp = currentEpisode.value
+                    ?: throw ExceptionWithStringResource("No episode loaded", MR.strings.no_episode_loaded)
                 if (hostList.isNotBlank()) {
                     currentHosterList = hostList.toHosterList().ifEmpty {
                         currentHosterList = null
-                        throw Exception("Hoster selected from empty list?")
+                        throw ExceptionWithStringResource(
+                            "Hoster selected from empty list",
+                            MR.strings.select_hoster_from_empty_list,
+                        )
                     }
                     qualityIndex = Pair(hostIndex, vidIndex)
                 } else {
@@ -1183,7 +1193,7 @@ class PlayerViewModel @JvmOverloads constructor(
                         ?.also { currentHosterList = it }
                         ?: run {
                             currentHosterList = null
-                            throw Exception("Hoster list is empty.")
+                            throw ExceptionWithStringResource("Hoster list is empty", MR.strings.no_hosters)
                         }
                 }
 
@@ -1302,7 +1312,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     if (hasFoundPreferredVideo.compareAndSet(false, true)) {
                         val (hosterIdx, videoIdx) = HosterLoader.selectBestVideo(hosterState.value)
                         if (hosterIdx == -1) {
-                            throw NoSuchElementException("No available videos")
+                            throw ExceptionWithStringResource("No available videos", MR.strings.no_available_videos)
                         }
 
                         val video = (hosterState.value[hosterIdx] as HosterState.Ready).videoList[videoIdx]
@@ -1355,7 +1365,7 @@ class PlayerViewModel @JvmOverloads constructor(
                         _selectedHosterVideoIndex.update { _ -> Pair(-1, -1) }
                         return false
                     } else {
-                        throw NoSuchElementException("No available videos")
+                        throw ExceptionWithStringResource("No available videos", MR.strings.no_available_videos)
                     }
                 }
 
@@ -1454,7 +1464,9 @@ class PlayerViewModel @JvmOverloads constructor(
 
         return withIOContext {
             try {
-                val currentEpisode = currentEpisode.value ?: throw Exception("No episode loaded.")
+                val currentEpisode =
+                    currentEpisode.value
+                        ?: throw ExceptionWithStringResource("No episode loaded", MR.strings.no_episode_loaded)
                 currentHosterList = EpisodeLoader.getHosters(
                     currentEpisode.toDomainEpisode()!!,
                     anime,

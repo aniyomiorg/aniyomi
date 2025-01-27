@@ -980,7 +980,10 @@ class PlayerActivity : BaseActivity() {
                     if (switchMethod.hosterList != null) {
                         when {
                             switchMethod.hosterList.isEmpty() -> setInitialEpisodeError(
-                                Exception("Video list is empty."),
+                                PlayerViewModel.ExceptionWithStringResource(
+                                    "Hoster list is empty",
+                                    MR.strings.no_hosters,
+                                ),
                             )
                             else -> {
                                 viewModel.loadHosters(
@@ -1041,7 +1044,11 @@ class PlayerActivity : BaseActivity() {
      * this case the activity is closed and a toast is shown to the user.
      */
     private fun setInitialEpisodeError(error: Throwable) {
-        toast(error.message)
+        if (error is PlayerViewModel.ExceptionWithStringResource) {
+            toast(error.stringResource)
+        } else {
+            toast(error.message)
+        }
         logcat(LogPriority.ERROR, error)
         finish()
     }
