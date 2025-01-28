@@ -169,7 +169,7 @@ class EpisodeOptionsDialogScreenModel(
     init {
         val hasFoundPreferredVideo = AtomicBoolean(false)
 
-        screenModelScope.launch {
+        screenModelScope.launch(Dispatchers.IO) {
             val episode = Injekt.get<GetEpisode>().await(episodeId)!!
             val anime = Injekt.get<GetAnime>().await(animeId)!!
             val source = sourceManager.getOrStub(sourceId)
