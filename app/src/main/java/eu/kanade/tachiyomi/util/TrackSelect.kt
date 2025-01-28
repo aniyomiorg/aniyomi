@@ -2,18 +2,35 @@ package eu.kanade.tachiyomi.util
 
 import androidx.core.os.LocaleListCompat
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
+import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.Locale
 
-class SubtitleSelect(private val subtitlePreferences: SubtitlePreferences) {
+class TrackSelect(
+    private val subtitlePreferences: SubtitlePreferences = Injekt.get(),
+    private val audioPreferences: AudioPreferences = Injekt.get(),
+) {
 
-    fun getPreferredSubtitleIndex(tracks: List<VideoTrack>): VideoTrack? {
-        val prefLangs = subtitlePreferences.preferredSubLanguages().get().split(",")
-            .filter { it.isNotEmpty() }
-        val whitelist = subtitlePreferences.subtitleWhitelist().get().split(",")
-            .filter { it.isNotEmpty() }
-        val blacklist = subtitlePreferences.subtitleBlacklist().get().split(",")
-            .filter { it.isNotEmpty() }
+    fun getPreferredTrackIndex(tracks: List<VideoTrack>, subtitle: Boolean = true): VideoTrack? {
+        val prefLangs = if (subtitle) {
+            subtitlePreferences.preferredSubLanguages().get()
+        } else {
+            audioPreferences.preferredAudioLanguages().get()
+        }.split(",").filter { it.isNotEmpty() }
+
+        val whitelist = if (subtitle) {
+            subtitlePreferences.subtitleWhitelist().get()
+        } else {
+            ""
+        }.split(",").filter { it.isNotEmpty() }
+
+        val blacklist = if (subtitle) {
+            subtitlePreferences.subtitleBlacklist().get()
+        } else {
+            ""
+        }.split(",").filter { it.isNotEmpty() }
 
         val locales = prefLangs.map(::Locale).ifEmpty {
             listOf(LocaleListCompat.getDefault()[0]!!)
