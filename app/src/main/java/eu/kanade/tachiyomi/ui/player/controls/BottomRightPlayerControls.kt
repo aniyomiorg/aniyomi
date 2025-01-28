@@ -48,6 +48,8 @@ fun BottomRightPlayerControls(
     onPipClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val clickEvent = LocalPlayerButtonsClickEvent.current
+
     Row(modifier) {
         if (aniskipButton != null) {
             Box(
@@ -60,7 +62,10 @@ fun BottomRightPlayerControls(
                     modifier = Modifier
                         .matchParentSize()
                         .combinedClickable(
-                            onClick = onPressAniSkipButton,
+                            onClick = {
+                                clickEvent()
+                                onPressAniSkipButton()
+                            },
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
                         ),
@@ -77,7 +82,10 @@ fun BottomRightPlayerControls(
                     modifier = Modifier
                         .matchParentSize()
                         .combinedClickable(
-                            onClick = { customButton.execute() },
+                            onClick = {
+                                clickEvent()
+                                customButton.execute()
+                            },
                             onLongClick = { customButton.executeLongPress() },
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,

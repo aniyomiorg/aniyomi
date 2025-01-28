@@ -66,6 +66,7 @@ import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
+import eu.kanade.tachiyomi.util.TrackSelect
 import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.episode.filterDownloadedEpisodes
 import eu.kanade.tachiyomi.util.lang.byteSize
@@ -146,6 +147,7 @@ class PlayerViewModel @JvmOverloads constructor(
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
     private val basePreferences: BasePreferences = Injekt.get(),
     private val getCustomButtons: GetCustomButtons = Injekt.get(),
+    private val trackSelect: TrackSelect = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
 
@@ -398,11 +400,20 @@ class PlayerViewModel @JvmOverloads constructor(
         }
     }
 
+    /**
+     * When all subtitle/audio tracks are loaded, select the preferred one based on preferences,
+     * or select the first one in the list if trackSelect fails.
+     */
     fun onFinishLoadingTracks() {
-        val preferredSubtitle = activity.subtitleSelect.getPreferredSubtitleIndex(subtitleTracks.value)
-        preferredSubtitle?.let {
+        val preferredSubtitle = trackSelect.getPreferredTrackIndex(subtitleTracks.value)
+        (preferredSubtitle ?: subtitleTracks.value.firstOrNull())?.let {
             activity.player.sid = it.id
             activity.player.secondarySid = -1
+        }
+
+        val preferredAudio = trackSelect.getPreferredTrackIndex(audioTracks.value, subtitle = false)
+        (preferredAudio ?: audioTracks.value.getOrNull(1))?.let {
+            activity.player.aid = it.id
         }
 
         isLoadingTracks.update { _ -> true }
