@@ -1,7 +1,8 @@
-package eu.kanade.tachiyomi.animesource.model
+package aniyomix.source
 
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.toVideoList
+import eu.kanade.tachiyomi.animesource.model.Video
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

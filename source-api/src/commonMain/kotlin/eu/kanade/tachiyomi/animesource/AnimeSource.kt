@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.animesource
 
-import eu.kanade.tachiyomi.animesource.model.Hoster
+import aniyomix.source.Hoster
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
