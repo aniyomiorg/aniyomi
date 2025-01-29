@@ -955,12 +955,14 @@ class PlayerActivity : BaseActivity() {
         viewModel.panelShown.update { _ -> Panels.None }
         viewModel.pause()
         viewModel.isLoading.update { _ -> true }
+        viewModel.resetHosterState()
 
         aniskipStamps = emptyList()
 
         lifecycleScope.launch {
             viewModel.updateIsLoadingEpisode(true)
             viewModel.updateIsLoadingHosters(true)
+            viewModel.cancelHosterVideoLinksJob()
 
             val pipEpisodeToasts = playerPreferences.pipEpisodeToasts().get()
             val switchMethod = viewModel.loadEpisode(episodeId)

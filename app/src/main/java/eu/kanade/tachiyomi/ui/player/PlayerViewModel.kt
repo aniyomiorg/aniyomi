@@ -919,6 +919,14 @@ class PlayerViewModel @JvmOverloads constructor(
         if (gesturePreferences.showSeekBar().get()) showSeekBar()
     }
 
+    fun resetHosterState() {
+        _pausedState.update { _ -> false }
+        _hosterState.update { _ -> emptyList() }
+        _hosterList.update { _ -> emptyList() }
+        _hosterExpandedList.update { _ -> emptyList() }
+        _selectedHosterVideoIndex.update { _ -> Pair(-1, -1) }
+    }
+
     fun changeEpisode(previous: Boolean, autoPlay: Boolean = false) {
         if (previous && !hasPreviousEpisode.value) {
             activity.toast(activity.stringResource(MR.strings.no_prev_episode))
@@ -929,13 +937,6 @@ class PlayerViewModel @JvmOverloads constructor(
             activity.toast(activity.stringResource(MR.strings.no_next_episode))
             return
         }
-
-        getHosterVideoLinksJob?.cancel()
-        _pausedState.update { _ -> false }
-        _hosterState.update { _ -> emptyList() }
-        _hosterList.update { _ -> emptyList() }
-        _hosterExpandedList.update { _ -> emptyList() }
-        _selectedHosterVideoIndex.update { _ -> Pair(-1, -1) }
 
         activity.changeEpisode(
             episodeId = getAdjacentEpisodeId(previous = previous),
@@ -1240,6 +1241,10 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     private var getHosterVideoLinksJob: Job? = null
+
+    fun cancelHosterVideoLinksJob() {
+        getHosterVideoLinksJob?.cancel()
+    }
 
     /**
      * Set the video list for hosters.
