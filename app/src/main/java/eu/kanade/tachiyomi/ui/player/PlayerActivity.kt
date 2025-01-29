@@ -40,12 +40,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.util.Patterns
 import android.util.Rational
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.boundsInWindow
@@ -61,6 +63,9 @@ import androidx.media.AudioManagerCompat
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaLoadRequestData
 import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.cast.MediaTrack.Builder
+import com.google.android.gms.cast.MediaTrack.SUBTYPE_SUBTITLES
+import com.google.android.gms.cast.MediaTrack.TYPE_TEXT
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManagerListener
@@ -70,6 +75,7 @@ import com.google.android.gms.common.images.WebImage
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.presentation.theme.TachiyomiTheme
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -96,6 +102,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -111,6 +118,7 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -138,6 +146,8 @@ class PlayerActivity : BaseActivity() {
     private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
     private val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
+
+    // Cast -->
     private var mCastContext: CastContext? = null
     private var mSessionManagerListener: SessionManagerListener<CastSession>? = null
     internal var mCastSession: CastSession? = null
@@ -187,6 +197,7 @@ class PlayerActivity : BaseActivity() {
     private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
     // <-- AM (CONNECTIONS)
 
+    @SuppressLint("MissingSuperCall")
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
@@ -264,7 +275,7 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             .launchIn(lifecycleScope)
-        viewModel.viewModelScope.launchUI {
+        viewModel.viewModelScope.launchIO {
             // AM (DISCORD) -->
             updateDiscordRPC(exitingPlayer = false)
 
@@ -330,7 +341,6 @@ class PlayerActivity : BaseActivity() {
         // AM (DISCORD) -->
         updateDiscordRPC(exitingPlayer = true)
         // <-- AM (DISCORD)
-
         super.onDestroy()
     }
 
@@ -359,6 +369,7 @@ class PlayerActivity : BaseActivity() {
         super.onStop()
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onUserLeaveHint() {
         if (isPipSupportedAndEnabled && player.paused == false && playerPreferences.pipOnExit().get()) {
             enterPictureInPictureMode()
@@ -412,6 +423,16 @@ class PlayerActivity : BaseActivity() {
             }
         }
         updateDiscordRPC(exitingPlayer = false)
+
+        // Verificar si hay una sesión de casting activa
+        if (isCastApiAvailable) {
+            mCastContext?.sessionManager?.let { sessionManager ->
+                val castSession = sessionManager.currentCastSession
+                if (castSession != null && castSession.isConnected) {
+                    onApplicationConnected(castSession)
+                }
+            }
+        }
     }
 
     private fun executeMPVCommand(commands: Array<String>) {
@@ -547,7 +568,7 @@ class PlayerActivity : BaseActivity() {
                 append(
                     "package.path = package.path .. ';' .. lua_modules .. '/?.lua;' .. lua_modules .. '/?/init.lua;' .. '",
                 )
-                append(scriptsDir()!!.filePath)
+                append(scriptsDir()!!)
                 appendLine("' .. '/?.lua'")
                 appendLine("end")
                 appendLine("local aniyomi = require 'aniyomi'")
@@ -630,11 +651,11 @@ class PlayerActivity : BaseActivity() {
             GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
         try {
             if (isCastApiAvailable) {
-                mCastContext!!.sessionManager.addSessionManagerListener(
+                mCastContext?.sessionManager?.addSessionManagerListener(
                     mSessionManagerListener!!,
                     CastSession::class.java,
                 )
-                isInCastMode = mCastSession != null && mCastSession!!.isConnected
+                isInCastMode = true && mCastSession?.isConnected ?: false
             }
         } catch (_: Exception) {
         }
@@ -908,7 +929,7 @@ class PlayerActivity : BaseActivity() {
                             ConnectionResult.SUCCESS
                         try {
                             if (isCastApiAvailable) {
-                                mCastContext!!.sessionManager.removeSessionManagerListener(
+                                mCastContext?.sessionManager?.removeSessionManagerListener(
                                     mSessionManagerListener!!,
                                     CastSession::class.java,
                                 )
@@ -1405,7 +1426,32 @@ class PlayerActivity : BaseActivity() {
     }
     // <-- AM (DISCORD)
 
-// -- CAST --
+    // -- CAST --
+
+    private fun onApplicationConnected(castSession: CastSession) {
+        mCastSession = castSession
+        if (player.timePos != null) {
+            player.paused = true
+            loadRemoteMedia()
+        }
+        isInCastMode = true
+        invalidateOptionsMenu()
+    }
+
+    private fun showQualitySelectionDialog(onQualitySelected: () -> Unit) {
+        val qualities = viewModel.videoList.value.map { it.quality }
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.choose_video_quality))
+            .setSingleChoiceItems(qualities.toTypedArray(), viewModel.selectedVideoIndex.value) { dialog, which ->
+                viewModel.setVideoIndex(which)
+                dialog.dismiss()
+                onQualitySelected()
+            }
+            .setOnCancelListener {
+                mCastContext?.sessionManager?.endCurrentSession(true)
+            }
+            .show()
+    }
 
     private fun setupCastListener() {
         mSessionManagerListener = object : SessionManagerListener<CastSession> {
@@ -1423,6 +1469,20 @@ class PlayerActivity : BaseActivity() {
 
             override fun onSessionStarted(session: CastSession, sessionId: String) {
                 onApplicationConnected(session)
+                viewModel.videoList
+                    .filter { it.isNotEmpty() }
+                    .onEach { videos ->
+                        if (videos.size > 1) {
+                            runOnUiThread {
+                                showQualitySelectionDialog {
+                                    loadRemoteMedia()
+                                }
+                            }
+                        } else {
+                            loadRemoteMedia()
+                        }
+                    }
+                    .launchIn(lifecycleScope)
             }
 
             override fun onSessionStartFailed(session: CastSession, error: Int) {
@@ -1436,10 +1496,6 @@ class PlayerActivity : BaseActivity() {
 
             private fun onApplicationConnected(castSession: CastSession) {
                 mCastSession = castSession
-                if (player.timePos != null) {
-                    player.paused = true
-                    loadRemoteMedia()
-                }
                 isInCastMode = true
                 invalidateOptionsMenu()
             }
@@ -1453,43 +1509,67 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun loadRemoteMedia() {
-        // Validar que las dependencias necesarias estén inicializadas
-        if (mCastSession == null || viewModel.currentAnime.value == null || viewModel.currentEpisode.value == null) {
-            logcat(LogPriority.ERROR) { "Cannot load remote media: Missing session or data" }
-            return
-        }
-        val remoteMediaClient = mCastSession!!.remoteMediaClient ?: return
+        if (!isCastSessionActive()) return
+
+        val remoteMediaClient = mCastSession?.remoteMediaClient ?: return
         try {
+            val mediaInfo = buildMediaInfo()
             remoteMediaClient.load(
                 MediaLoadRequestData.Builder()
-                    .setMediaInfo(buildMediaInfo())
+                    .setMediaInfo(mediaInfo)
                     .setAutoplay(true)
                     .setCurrentTime((player.timePos ?: 0).toLong() * 1000)
                     .build(),
             )
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e) { "Error loading remote media" }
+            logcat(LogPriority.ERROR, e) { "Error loading cast media" }
         }
     }
 
     private fun buildMediaInfo(): MediaInfo {
-        val currentAnime = viewModel.currentAnime.value ?: throw IllegalStateException("Anime data not available")
-        val currentvideo = viewModel.videoList.value[viewModel.selectedVideoIndex.value]
-        val cuarenteEpisode =
-            viewModel.currentEpisode.value ?: throw IllegalStateException("Episode data not available")
+        val currentVideo = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
+            ?: throw IllegalStateException(TLMR.strings.error_Cast_loading_video.toString())
 
-        val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE).apply {
-            putString(MediaMetadata.KEY_TITLE, currentAnime.title)
-            putString(MediaMetadata.KEY_SUBTITLE, cuarenteEpisode.name)
-            addImage(WebImage(Uri.parse(currentAnime.thumbnailUrl)))
+        val videoUrl = currentVideo.videoUrl?.takeIf { Patterns.WEB_URL.matcher(it).matches() }
+            ?: throw IllegalStateException(TLMR.strings.error_Cast_loading_video.toString())
+
+        val metadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE).apply {
+            putString(MediaMetadata.KEY_TITLE, viewModel.currentAnime.value?.title ?: "")
+            putString(MediaMetadata.KEY_SUBTITLE, viewModel.currentEpisode.value?.name ?: "")
+            addImage(WebImage(Uri.parse(viewModel.currentAnime.value?.thumbnailUrl)))
         }
-        val videoUrl = currentvideo.videoUrl ?: throw IllegalStateException("Video URL not available")
 
-        return MediaInfo.Builder(videoUrl)
-            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+        val mediaInfoBuilder = MediaInfo.Builder(videoUrl)
             .setContentType("video/mp4")
-            .setMetadata(movieMetadata)
-            .setStreamDuration((player.duration ?: 0).toLong())
-            .build()
+            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+            .setMetadata(metadata)
+            .setStreamDuration((player.duration ?: 0).toLong() * 1000)
+
+        addSubtitlesToCast(mediaInfoBuilder)
+
+        return mediaInfoBuilder.build()
+    }
+
+    private fun addSubtitlesToCast(mediaInfoBuilder: MediaInfo.Builder) {
+        val subtitleTracks = viewModel.videoList.value
+            .getOrNull(viewModel.selectedVideoIndex.value)
+            ?.subtitleTracks
+            ?.takeIf { it.isNotEmpty() }
+
+        subtitleTracks?.let { subs ->
+            val mediaTracks = subs.mapIndexed { index, sub ->
+                Builder(index.toLong(), TYPE_TEXT)
+                    .setContentId(sub.url)
+                    .setSubtype(SUBTYPE_SUBTITLES)
+                    .setName(sub.lang)
+                    .build()
+            }
+            mediaInfoBuilder.setMediaTracks(mediaTracks)
+        }
+    }
+
+    private fun isCastSessionActive(): Boolean {
+        return mCastSession?.isConnected ?: false
     }
 }
+// -- CAST --

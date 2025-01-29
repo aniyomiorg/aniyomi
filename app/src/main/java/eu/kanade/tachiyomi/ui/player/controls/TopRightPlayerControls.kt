@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.framework.CastButtonFactory
+import eu.kanade.tachiyomi.ui.player.CustomCastThemeFactory
 import eu.kanade.tachiyomi.ui.player.controls.components.AutoPlaySwitch
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import tachiyomi.presentation.core.components.material.padding
@@ -82,6 +83,7 @@ fun TopRightPlayerControls(
                 factory = { context ->
                     MediaRouteButton(context).apply {
                         CastButtonFactory.setUpMediaRouteButton(context, this)
+                        dialogFactory = CustomCastThemeFactory()
                     }
                 },
                 modifier = Modifier
