@@ -1,15 +1,14 @@
 package eu.kanade.tachiyomi.ui.player.loader
 
-import aniyomix.source.Hoster
-import aniyomix.source.Hoster.Companion.toHosterList
+import aniyomix.source.model.Hoster
+import aniyomix.source.model.Hoster.Companion.toHosterList
 import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.HosterState
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.CancellationException
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
@@ -163,7 +162,10 @@ class EpisodeLoader {
                 val videos = getVideos(source, hoster)
                 HosterState.Ready(hoster.hosterName, videos, List(videos.size) { Video.State.QUEUE })
             } catch (e: Exception) {
-                currentCoroutineContext().ensureActive()
+                if (e is CancellationException) {
+                    throw e
+                }
+
                 HosterState.Error(hoster.hosterName)
             }
         }

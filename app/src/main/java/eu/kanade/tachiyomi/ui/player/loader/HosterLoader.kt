@@ -1,15 +1,16 @@
 package eu.kanade.tachiyomi.ui.player.loader
 
-import aniyomix.source.Hoster
+import aniyomix.source.model.Hoster
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.HosterState
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.getChangedAt
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
 
 class HosterLoader {
@@ -78,7 +79,7 @@ class HosterLoader {
             val hosterStates = MutableList<HosterState>(hosterList.size) { HosterState.Idle("") }
 
             return try {
-                coroutineScope {
+                withContext(Dispatchers.IO) {
                     hosterList.mapIndexed { hosterIdx, hoster ->
                         async {
                             val hosterState = EpisodeLoader.loadHosterVideos(source, hoster)
@@ -126,7 +127,7 @@ class HosterLoader {
                         val resolvedVideo = getResolvedVideo(source, video)
                         if (resolvedVideo?.videoUrl?.isNotEmpty() == true) {
                             coroutineContext.cancelChildren()
-                            return@coroutineScope resolvedVideo
+                            return@withContext resolvedVideo
                         }
 
                         hosterStates[hosterIdx] =
@@ -141,7 +142,7 @@ class HosterLoader {
                     }
 
                     coroutineContext.cancelChildren()
-                    return@coroutineScope null
+                    return@withContext null
                 }
             } catch (e: EarlyReturnException) {
                 e.video

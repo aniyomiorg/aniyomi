@@ -34,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -45,7 +44,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import aniyomix.source.Hoster
+import aniyomix.source.model.Hoster
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -62,7 +61,6 @@ import eu.kanade.tachiyomi.ui.player.controls.components.sheets.getChangedAt
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.util.system.toast
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,6 +68,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.logcat
@@ -82,7 +81,6 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
-import tachiyomi.presentation.core.util.plus
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.atomic.AtomicBoolean
@@ -169,7 +167,7 @@ class EpisodeOptionsDialogScreenModel(
     init {
         val hasFoundPreferredVideo = AtomicBoolean(false)
 
-        screenModelScope.launch(Dispatchers.IO) {
+        screenModelScope.launchIO {
             val episode = Injekt.get<GetEpisode>().await(episodeId)!!
             val anime = Injekt.get<GetAnime>().await(animeId)!!
             val source = sourceManager.getOrStub(sourceId)
@@ -188,7 +186,7 @@ class EpisodeOptionsDialogScreenModel(
 
             if (hosterListResult.isFailure) {
                 _hosterState.update { _ -> Result.failure(hosterListResult.exceptionOrNull()!!) }
-                return@launch
+                return@launchIO
             }
 
             val hosterList = hosterListResult.getOrThrow()
@@ -241,7 +239,7 @@ class EpisodeOptionsDialogScreenModel(
                         _hosterState.update { _ ->
                             Result.failure(NoSuchElementException("No available videos"))
                         }
-                        return@launch
+                        return@launchIO
                     }
 
                     val video = (hosterStateList[hosterIdx] as HosterState.Ready).videoList[videoIdx]
@@ -345,7 +343,7 @@ class EpisodeOptionsDialogScreenModel(
                 val hosterName = hosterState.name
                 _hosterState.updateAt(hosterIndex, HosterState.Loading(hosterName))
 
-                screenModelScope.launch(Dispatchers.IO) {
+                screenModelScope.launchIO {
                     val newHosterState = EpisodeLoader.loadHosterVideos(
                         _source.value!!,
                         _hosterList.value[hosterIndex],
@@ -363,7 +361,7 @@ class EpisodeOptionsDialogScreenModel(
             ?.getOrNull(videoIndex)
             ?: return
 
-        screenModelScope.launch(Dispatchers.IO) {
+        screenModelScope.launchIO {
             val success = loadVideo(_source.value!!, video, hosterIndex, videoIndex)
             if (success) {
                 _showAllQualities.update { _ -> false }

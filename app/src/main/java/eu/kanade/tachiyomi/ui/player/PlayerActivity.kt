@@ -58,8 +58,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.media.AudioAttributesCompat
 import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
-import aniyomix.source.Hoster
-import aniyomix.source.SerializableHoster.Companion.serialize
+import aniyomix.source.model.Hoster
+import aniyomix.source.model.SerializableHoster.Companion.serialize
 import com.hippo.unifile.UniFile
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.animesource.model.Video

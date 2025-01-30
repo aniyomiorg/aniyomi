@@ -36,8 +36,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import aniyomix.source.Hoster
-import aniyomix.source.SerializableHoster.Companion.toHosterList
+import aniyomix.source.model.Hoster
+import aniyomix.source.model.SerializableHoster.Companion.toHosterList
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
@@ -81,7 +81,6 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -297,7 +296,7 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launchIO {
             try {
                 val buttons = getCustomButtons.getAll()
                 buttons.firstOrNull { it.isFavorite }?.let {
@@ -1258,7 +1257,7 @@ class PlayerViewModel @JvmOverloads constructor(
         }
 
         getHosterVideoLinksJob?.cancel()
-        getHosterVideoLinksJob = viewModelScope.launch(Dispatchers.IO) {
+        getHosterVideoLinksJob = viewModelScope.launchIO {
             _hosterState.update { _ ->
                 hosterList.map { hoster ->
                     if (hoster.videoList == null) {
@@ -1414,7 +1413,7 @@ class PlayerViewModel @JvmOverloads constructor(
             return
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launchIO {
             val success = loadVideo(currentSource.value, video, hosterIndex, videoIndex)
             if (success) {
                 if (sheetShown.value == Sheets.QualityTracks) {
@@ -1435,7 +1434,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 val hosterName = hosterList.value[index].hosterName
                 _hosterState.updateAt(index, HosterState.Loading(hosterName))
 
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launchIO {
                     val hosterState = EpisodeLoader.loadHosterVideos(currentSource.value!!, hosterList.value[index])
                     _hosterState.updateAt(index, hosterState)
                 }
