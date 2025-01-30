@@ -18,10 +18,10 @@
   <string name="artist_hint">Artist: %1$s</string>
   <string name="custom_entry_info">Egendefinert oppføringsinformasjon</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Innstillinger for søppelpost</string>
+  <string name="pref_category_cast">Innstillinger for søppelpost</string>
   <string name="pref_enable_cast">Aktiver eller deaktiver Cast</string>
   <string name="action_cast">Send til Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Vis nedlastede episode-filstørrelse</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Vis nedlastede episode-filstørrelse</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork innstillinger</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Rediger info</string>
   <string name="special_services" comment="special_services Connections section">Spesielle tjenester</string>
@@ -156,4 +156,5 @@
   <string name="pref_flare_solverr_url_summary">URL-adressen til FlareSolverr for eksempel å bruke http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr og oppdater brukeragent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr for å oppdatere brukeragenten. Bare påkrevd én gang, og veksling etter behov.</string>
+  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
