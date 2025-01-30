@@ -40,14 +40,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.util.Patterns
 import android.util.Rational
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.boundsInWindow
@@ -60,22 +58,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.media.AudioAttributesCompat
 import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
-import com.google.android.gms.cast.MediaInfo
-import com.google.android.gms.cast.MediaLoadRequestData
-import com.google.android.gms.cast.MediaMetadata
-import com.google.android.gms.cast.MediaTrack.Builder
-import com.google.android.gms.cast.MediaTrack.SUBTYPE_SUBTITLES
-import com.google.android.gms.cast.MediaTrack.TYPE_TEXT
-import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.cast.framework.CastSession
-import com.google.android.gms.cast.framework.SessionManagerListener
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.common.images.WebImage
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SerializableVideo.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -102,7 +87,6 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -118,7 +102,6 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
-import tachiyomi.i18n.tail.TLMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -148,11 +131,7 @@ class PlayerActivity : BaseActivity() {
     private val storageManager: StorageManager = Injekt.get()
 
     // Cast -->
-    private var mCastContext: CastContext? = null
-    private var mSessionManagerListener: SessionManagerListener<CastSession>? = null
-    internal var mCastSession: CastSession? = null
-    private var isInCastMode: Boolean = false
-    private var isCastApiAvailable = false
+    private lateinit var castManager: CastManager
 
     private var audioFocusRequest: AudioFocusRequestCompat? = null
     private var restoreAudioFocus: () -> Unit = {}
@@ -307,17 +286,10 @@ class PlayerActivity : BaseActivity() {
                 )
             }
         }
-        isCastApiAvailable =
-            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
-        try {
-            if (isCastApiAvailable) {
-                mCastContext = CastContext.getSharedInstance(this)
-                mCastSession = mCastContext!!.sessionManager.currentCastSession
-                setupCastListener()
-            }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e) { "Service the google play services not available" }
-        }
+
+        // Cast -->
+        castManager = CastManager(this, this)
+        // <-- Cast
 
         onNewIntent(this.intent)
     }
@@ -337,6 +309,7 @@ class PlayerActivity : BaseActivity() {
         MPVLib.removeLogObserver(playerObserver)
         MPVLib.removeObserver(playerObserver)
         player.destroy()
+        castManager.cleanup()
 
         // AM (DISCORD) -->
         updateDiscordRPC(exitingPlayer = true)
@@ -424,14 +397,16 @@ class PlayerActivity : BaseActivity() {
         }
         updateDiscordRPC(exitingPlayer = false)
 
-        // Verificar si hay una sesión de casting activa
-        if (isCastApiAvailable) {
-            mCastContext?.sessionManager?.let { sessionManager ->
-                val castSession = sessionManager.currentCastSession
-                if (castSession != null && castSession.isConnected) {
-                    onApplicationConnected(castSession)
-                }
+        castManager.apply {
+            // Registrar listener de sesión Cast
+            registerSessionListener()
+
+            // Actualizar estado actual de Cast
+            if (castState.value == CastManager.CastState.CONNECTED) {
+                updateCastState(CastManager.CastState.CONNECTED)
             }
+            // Sincronizar estado inicial con ViewModel
+            viewModel.isCasting.value = castState.value == CastManager.CastState.CONNECTED
         }
     }
 
@@ -647,17 +622,14 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        isCastApiAvailable =
-            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
-        try {
-            if (isCastApiAvailable) {
-                mCastContext?.sessionManager?.addSessionManagerListener(
-                    mSessionManagerListener!!,
-                    CastSession::class.java,
-                )
-                isInCastMode = true && mCastSession?.isConnected ?: false
+        castManager.apply {
+            // Actualizar contexto Cast después de pausas cortas
+            refreshCastContext()
+
+            // Si está en modo Cast, sincronizar controles UI
+            if (castState.value == CastManager.CastState.CONNECTED) {
+                updateCastState(CastManager.CastState.CONNECTED)
             }
-        } catch (_: Exception) {
         }
         super.onResume()
 
@@ -924,17 +896,16 @@ class PlayerActivity : BaseActivity() {
                     }
 
                     override fun onPause() {
-                        isCastApiAvailable =
-                            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this@PlayerActivity) ==
-                            ConnectionResult.SUCCESS
-                        try {
-                            if (isCastApiAvailable) {
-                                mCastContext?.sessionManager?.removeSessionManagerListener(
-                                    mSessionManagerListener!!,
-                                    CastSession::class.java,
-                                )
+                        castManager.apply {
+                            // Liberar recursos solo si no está en PiP
+                            if (!isInPictureInPictureMode) {
+                                unregisterSessionListener()
                             }
-                        } catch (_: Exception) {
+
+                            // Si está transmitiendo, mantener sesión activa
+                            if (castState.value == CastManager.CastState.CONNECTED) {
+                                maintainCastSessionBackground()
+                            }
                         }
                         when (playAction) {
                             SingleActionGesture.None -> {}
@@ -1424,152 +1395,4 @@ class PlayerActivity : BaseActivity() {
             }
         }
     }
-    // <-- AM (DISCORD)
-
-    // -- CAST --
-
-    private fun onApplicationConnected(castSession: CastSession) {
-        mCastSession = castSession
-        if (player.timePos != null) {
-            player.paused = true
-            loadRemoteMedia()
-        }
-        isInCastMode = true
-        invalidateOptionsMenu()
-    }
-
-    private fun showQualitySelectionDialog(onQualitySelected: () -> Unit) {
-        val qualities = viewModel.videoList.value.map { it.quality }
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.choose_video_quality))
-            .setSingleChoiceItems(qualities.toTypedArray(), viewModel.selectedVideoIndex.value) { dialog, which ->
-                viewModel.setVideoIndex(which)
-                dialog.dismiss()
-                onQualitySelected()
-            }
-            .setOnCancelListener {
-                mCastContext?.sessionManager?.endCurrentSession(true)
-            }
-            .show()
-    }
-
-    private fun setupCastListener() {
-        mSessionManagerListener = object : SessionManagerListener<CastSession> {
-            override fun onSessionEnded(session: CastSession, error: Int) {
-                onApplicationDisconnected()
-            }
-
-            override fun onSessionResumed(session: CastSession, wasSuspended: Boolean) {
-                onApplicationConnected(session)
-            }
-
-            override fun onSessionResumeFailed(session: CastSession, error: Int) {
-                onApplicationDisconnected()
-            }
-
-            override fun onSessionStarted(session: CastSession, sessionId: String) {
-                onApplicationConnected(session)
-                viewModel.videoList
-                    .filter { it.isNotEmpty() }
-                    .onEach { videos ->
-                        if (videos.size > 1) {
-                            runOnUiThread {
-                                showQualitySelectionDialog {
-                                    loadRemoteMedia()
-                                }
-                            }
-                        } else {
-                            loadRemoteMedia()
-                        }
-                    }
-                    .launchIn(lifecycleScope)
-            }
-
-            override fun onSessionStartFailed(session: CastSession, error: Int) {
-                onApplicationDisconnected()
-            }
-
-            override fun onSessionStarting(session: CastSession) {}
-            override fun onSessionEnding(session: CastSession) {}
-            override fun onSessionResuming(session: CastSession, sessionId: String) {}
-            override fun onSessionSuspended(session: CastSession, reason: Int) {}
-
-            private fun onApplicationConnected(castSession: CastSession) {
-                mCastSession = castSession
-                isInCastMode = true
-                invalidateOptionsMenu()
-            }
-
-            private fun onApplicationDisconnected() {
-                player.paused = true
-                isInCastMode = false
-                invalidateOptionsMenu()
-            }
-        }
-    }
-
-    private fun loadRemoteMedia() {
-        if (!isCastSessionActive()) return
-
-        val remoteMediaClient = mCastSession?.remoteMediaClient ?: return
-        try {
-            val mediaInfo = buildMediaInfo()
-            remoteMediaClient.load(
-                MediaLoadRequestData.Builder()
-                    .setMediaInfo(mediaInfo)
-                    .setAutoplay(true)
-                    .setCurrentTime((player.timePos ?: 0).toLong() * 1000)
-                    .build(),
-            )
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e) { "Error loading cast media" }
-        }
-    }
-
-    private fun buildMediaInfo(): MediaInfo {
-        val currentVideo = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
-            ?: throw IllegalStateException(TLMR.strings.error_Cast_loading_video.toString())
-
-        val videoUrl = currentVideo.videoUrl?.takeIf { Patterns.WEB_URL.matcher(it).matches() }
-            ?: throw IllegalStateException(TLMR.strings.error_Cast_loading_video.toString())
-
-        val metadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE).apply {
-            putString(MediaMetadata.KEY_TITLE, viewModel.currentAnime.value?.title ?: "")
-            putString(MediaMetadata.KEY_SUBTITLE, viewModel.currentEpisode.value?.name ?: "")
-            addImage(WebImage(Uri.parse(viewModel.currentAnime.value?.thumbnailUrl)))
-        }
-
-        val mediaInfoBuilder = MediaInfo.Builder(videoUrl)
-            .setContentType("video/mp4")
-            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-            .setMetadata(metadata)
-            .setStreamDuration((player.duration ?: 0).toLong() * 1000)
-
-        addSubtitlesToCast(mediaInfoBuilder)
-
-        return mediaInfoBuilder.build()
-    }
-
-    private fun addSubtitlesToCast(mediaInfoBuilder: MediaInfo.Builder) {
-        val subtitleTracks = viewModel.videoList.value
-            .getOrNull(viewModel.selectedVideoIndex.value)
-            ?.subtitleTracks
-            ?.takeIf { it.isNotEmpty() }
-
-        subtitleTracks?.let { subs ->
-            val mediaTracks = subs.mapIndexed { index, sub ->
-                Builder(index.toLong(), TYPE_TEXT)
-                    .setContentId(sub.url)
-                    .setSubtype(SUBTYPE_SUBTITLES)
-                    .setName(sub.lang)
-                    .build()
-            }
-            mediaInfoBuilder.setMediaTracks(mediaTracks)
-        }
-    }
-
-    private fun isCastSessionActive(): Boolean {
-        return mCastSession?.isConnected ?: false
-    }
 }
-// -- CAST --

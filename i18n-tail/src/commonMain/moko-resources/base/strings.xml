@@ -28,10 +28,6 @@
     <string name="custom_entry_info">Custom entry info</string>
     <string name="reset_info">Reset Info</string>
     <!-- Preferences -->
-    <string name="pref_category_cast">Cast Settings</string>
-    <string name="pref_enable_cast">Enable or disable Cast</string>
-    <string name="action_cast">Send to Cast</string>
-    <string name="error_Cast_loading_video">Error loading video for Cast</string>
     <string name="pref_show_downloaded_episode_file_size">Show downloaded episode file size</string>
     <!-- Subsections -->
     <string name="pref_category_fork">Fork Settings</string>
@@ -200,4 +196,9 @@
     <string name="pref_flare_solverr_url_summary">URL of the FlareSolverr instance to use for example http://192.168.1.202:8191/v1</string>
     <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr and update user agent</string>
     <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr to update the user agent. Only required once; then toggle as needed.</string>
+    !-- Cast -->
+    <string name="pref_category_cast">Cast Settings</string>
+    <string name="pref_enable_cast">Enable or disable Cast</string>
+    <string name="action_cast">Send to Cast</string>
+    <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
