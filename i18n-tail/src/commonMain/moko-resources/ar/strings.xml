@@ -18,10 +18,10 @@
   <string name="artist_hint">الفنان: %1$s</string>
   <string name="custom_entry_info">معلومات الإدخال المخصصة</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">إعدادات القصة</string>
+  <string name="pref_category_cast">إعدادات القصة</string>
   <string name="pref_enable_cast">تمكين أو تعطيل المشاهدة</string>
   <string name="action_cast">إرسال إلى الكشوف</string>
-  <string name="pref_show_downloaded_episode_file_size">إظهار حجم ملف الحلقة التي تم تنزيلها</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">إظهار حجم ملف الحلقة التي تم تنزيلها</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">إعدادات الفتح</string>
   <string name="action_edit_info" comment="action_edit_info Actions">تعديل المعلومات</string>
   <string name="special_services" comment="special_services Connections section">الخدمات الخاصة</string>
@@ -156,4 +156,5 @@
   <string name="pref_flare_solverr_url_summary">عنوان URL لمثيل FlareSolverr للاستخدام على سبيل المثال http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">اختبار FlareSolverr وتحديث وكيل المستخدم</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">اختبار FlareSolverr لتحديث وكيل المستخدم. مطلوب مرة واحدة فقط؛ ثم قم بتبديل حسب الحاجة.</string>
+  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
