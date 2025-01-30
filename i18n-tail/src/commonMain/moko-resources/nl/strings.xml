@@ -18,10 +18,10 @@
   <string name="artist_hint">Artiest: %1$s</string>
   <string name="custom_entry_info">Aangepaste invoer informatie</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Cast Instellingen</string>
+  <string name="pref_category_cast">Cast Instellingen</string>
   <string name="pref_enable_cast">Casten in- of uitschakelen</string>
   <string name="action_cast">Stuur naar Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Toon gedownloade aflevering bestand grootte</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Toon gedownloade aflevering bestand grootte</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Instellingen vork</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Info bewerken</string>
   <string name="special_services" comment="special_services Connections section">Speciale diensten</string>
@@ -146,4 +146,15 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Selecteer een tracker</string>
   <string name="entry_not_tracked">Item wordt niet getrackt.</string>
   <string name="fill_from_tracker">Vul van tracker</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr werkt. Gebruikersagent bijgewerkt. Start de app opnieuw op</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr werkt niet. Gebruikersagent is niet bijgewerkt. Controleer uw instellingen</string>
+  <string name="flare_solver_error">Fout bij contact opnemen FlareSolverr</string>
+  <string name="flare_solver_error_webview">Fout bij het oplossen met WebView</string>
+  <string name="pref_enable_flare_solverr">FlareSolverr inschakelen</string>
+  <string name="pref_enable_flare_solverr_summary">Gebruik FlareSolverr om Cloudflare-\'s anti-bot beveiliging te omzeilen</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">URL van de FlareSolverr versie die bijvoorbeeld http://192.168.1.202:8191/v1 gebruikt kan worden</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr en update gebruikersagent</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr om de user agent bij te werken. Slechts één keer nodig; schakel daarna de schakelaar indien nodig.</string>
+  <string name="title_cast_quality">Kies Cast-kwaliteit/provider</string>
 </resources>

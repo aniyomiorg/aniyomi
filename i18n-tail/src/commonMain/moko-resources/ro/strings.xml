@@ -18,10 +18,10 @@
   <string name="artist_hint">Artist: %1$s</string>
   <string name="custom_entry_info">Informații despre intrare personalizate</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Setări de distribuție</string>
+  <string name="pref_category_cast">Setări de distribuție</string>
   <string name="pref_enable_cast">Activează sau dezactivează Cast</string>
   <string name="action_cast">Trimite în Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Arată dimensiunea episodului descărcat</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Arată dimensiunea episodului descărcat</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Setări furcă</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Editare informaţii</string>
   <string name="special_services" comment="special_services Connections section">Servicii speciale</string>
@@ -146,4 +146,15 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Selectează un tracker</string>
   <string name="entry_not_tracked">Intrarea nu este urmărită.</string>
   <string name="fill_from_tracker">Completează de la tracker</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr funcționează. Agentul utilizatorului a fost actualizat. Vă rugăm să reporniți aplicația</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr nu funcţionează. Agentul utilizatorului nu este actualizat. Vă rugăm să verificaţi setările</string>
+  <string name="flare_solver_error">Eroare la contactarea FlareSolverr</string>
+  <string name="flare_solver_error_webview">Eroare la rezolvarea cu WebView</string>
+  <string name="pref_enable_flare_solverr">Activează FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Utilizaţi FlareSolverr pentru a ocoli protecţia anti-bot a Cloudflare</string>
+  <string name="pref_flare_solverr_url">URL FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL-ul instanţei FlareSolverr de utilizat, de exemplu, http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Testaţi FlareSolverr şi actualizaţi agentul utilizatorului</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testează FlareSolverr pentru a actualiza agentul utilizator. Doar o singură dată; apoi comută după cum este necesar.</string>
+  <string name="title_cast_quality">Alegeți calitatea/furnizorul în distribuție</string>
 </resources>

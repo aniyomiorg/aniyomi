@@ -18,10 +18,10 @@
   <string name="artist_hint">Artista: %1$s</string>
   <string name="custom_entry_info">Información de entrada personalizada</string>
   <string name="reset_info">Restablecer información</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Configuración de transmisión</string>
+  <string name="pref_category_cast">Configuración de transmisión</string>
   <string name="pref_enable_cast">Habilitar o deshabilitar la transmisión</string>
   <string name="action_cast">Enviar a la transmisión</string>
-  <string name="pref_show_downloaded_episode_file_size">Mostrar el tamaño del archivo del episodio descargado</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Mostrar el tamaño del archivo del episodio descargado</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Ajustes de bifurcación</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Editar info</string>
   <string name="special_services" comment="special_services Connections section">Servicios Especiales</string>
@@ -146,4 +146,15 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Seleccionar un rastreador</string>
   <string name="entry_not_tracked">No se ha realizado seguimiento de la entrada.</string>
   <string name="fill_from_tracker">Rellenar desde el rastreador</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr operativo. Agente actualizado. Reinicie la aplicación</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr inactivo. Agente no actualizado. Verifique la configuración</string>
+  <string name="flare_solver_error">Error de conexión con FlareSolverr</string>
+  <string name="flare_solver_error_webview">Fallo en la resolución con WebView</string>
+  <string name="pref_enable_flare_solverr">Habilitar FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Utiliza FlareSolverr para superar la protección antibots de Cloudflare</string>
+  <string name="pref_flare_solverr_url">URL de FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL de la instancia de FlareSolverr a utilizar, por ejemplo: http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Probar FlareSolverr y actualizar el agente de usuario</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Pruebe FlareSolverr para actualizar el agente de usuario. Solo es necesario una vez; luego cambie según sea necesario.</string>
+  <string name="title_cast_quality">Elige calidad/proveedor de transmisión</string>
 </resources>

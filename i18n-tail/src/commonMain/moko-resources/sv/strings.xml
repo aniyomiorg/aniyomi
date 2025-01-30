@@ -18,10 +18,10 @@
   <string name="artist_hint">Konstnär: %1$s</string>
   <string name="custom_entry_info">Anpassad post info</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Casta inställningar</string>
+  <string name="pref_category_cast">Casta inställningar</string>
   <string name="pref_enable_cast">Aktivera eller inaktivera Cast</string>
   <string name="action_cast">Skicka till Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Visa hämtade avsnittets filstorlek</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Visa hämtade avsnittets filstorlek</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Inställningar</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Redigera information</string>
   <string name="special_services" comment="special_services Connections section">Särskilda tjänster</string>
@@ -146,4 +146,15 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Välj en spårare</string>
   <string name="entry_not_tracked">Inlägget spåras inte.</string>
   <string name="fill_from_tracker">Fyll från tracker</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr fungerar. Användaragent uppdaterad. Starta om appen</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr fungerar inte. Användaragenten har inte uppdaterats. Vänligen kontrollera dina inställningar</string>
+  <string name="flare_solver_error">Fel vid kontakt med FlareSolverr</string>
+  <string name="flare_solver_error_webview">Fel vid lösning med WebView</string>
+  <string name="pref_enable_flare_solverr">Aktivera FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Använd FlareSolverr för att kringgå Cloudflare\'s anti-bot skydd</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">URL till FlareSolverr instansen att använda till exempel http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Testa FlareSolverr och uppdatera användaragenten</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testa FlareSolverr för att uppdatera användaragenten. Krävs endast en gång, växla sedan vid behov.</string>
+  <string name="title_cast_quality">Välj gjutkvalitet/leverantör</string>
 </resources>

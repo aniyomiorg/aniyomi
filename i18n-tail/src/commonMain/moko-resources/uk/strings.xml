@@ -18,10 +18,10 @@
   <string name="artist_hint">Artist: %1$s</string>
   <string name="custom_entry_info">Додаткова інформація</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Налаштування трансляції</string>
+  <string name="pref_category_cast">Налаштування трансляції</string>
   <string name="pref_enable_cast">Увімкнути або вимкнути Cast</string>
   <string name="action_cast">Відправити в Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Показати завантажену серію розмір файлу</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Показати завантажену серію розмір файлу</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Налаштування Форка</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Редагувати інформацію</string>
   <string name="special_services" comment="special_services Connections section">Спеціальні послуги</string>
@@ -146,4 +146,15 @@
   <string name="select_tracker" comment="select_tracker tracker anime e manga details">Вибрати трекер</string>
   <string name="entry_not_tracked">Запис не відстежується.</string>
   <string name="fill_from_tracker">Заповнити з трекера</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr працює. User Agent оновлено. Будь ласка, перезапустіть програму</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr не працює. Користувацький агент не оновився. Будь ласка, перевірте ваші налаштування</string>
+  <string name="flare_solver_error">Помилка під час звернення FlareSolverr</string>
+  <string name="flare_solver_error_webview">Помилка вирішення проблеми з WebView</string>
+  <string name="pref_enable_flare_solverr">Увімкнути FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Використовуйте FlareSolverr для обходу захисту Cloudflare-бота</string>
+  <string name="pref_flare_solverr_url">URL-адреса FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL-адреса екземпляра FlareSolverr, наприклад, http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Тест FlareSolverr та оновлення користувацького агента</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Тест FlareSolverr для оновлення користувацького агента. Потрібно лише один раз; потім ввімкнути як необхідно.</string>
+  <string name="title_cast_quality">Вибрати кількість запису і провайдера</string>
 </resources>

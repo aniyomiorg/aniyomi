@@ -18,10 +18,10 @@
   <string name="artist_hint">Sanatçı: %1$s</string>
   <string name="custom_entry_info">Özel giriş bilgisi</string>
   <string name="reset_info">Bilgileri sıfırla</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Yayıncı Ayarları</string>
+  <string name="pref_category_cast">Yayıncı Ayarları</string>
   <string name="pref_enable_cast">Yayını aç veya kapat</string>
   <string name="action_cast">Yayını gönder</string>
-  <string name="pref_show_downloaded_episode_file_size">İndirilen bölüm dosyasının boyutunu göster</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">İndirilen bölüm dosyasının boyutunu göster</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Ayarları</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Bilgileri düzenle</string>
   <string name="special_services" comment="special_services Connections section">Özel Servis</string>
@@ -100,50 +100,61 @@
   <string name="pref_sync_now_group_title">Senkronizasyon İşlemleri</string>
   <string name="pref_sync_now">Şimdi senkronize et</string>
   <string name="pref_sync_confirmation_title">Senkronizasyon onayı</string>
-  <string name="pref_sync_now_subtitle">Initiate immediate synchronization of your data</string>
-  <string name="pref_sync_confirmation_message">Syncing will overwrite your local library with the remote library. Are you sure you want to continue?</string>
-  <string name="pref_sync_service">Service</string>
-  <string name="pref_sync_service_summ">Select the service to sync your library with</string>
-  <string name="pref_sync_service_category">Sync</string>
-  <string name="pref_sync_automatic_category">Automatic Synchronization</string>
-  <string name="pref_sync_interval">Synchronization frequency</string>
-  <string name="pref_choose_what_to_sync">Choose what to sync</string>
-  <string name="success_reset_sync_timestamp">Last sync timestamp reset</string>
-  <string name="syncyomi">SyncYomi</string>
-  <string name="sync_completed_message">Done in %1$s</string>
-  <string name="last_synchronization">Last Synchronization: %1$s</string>
+  <string name="pref_sync_now_subtitle">Verilerinizin derhal senkronizasyonunu başlatın.</string>
+  <string name="pref_sync_confirmation_message">Senkronizasyon, yerel kütüphanenizin uzak kütüphane ile üzerine yazılmasına neden olacaktır. Devam etmek istediğinizden emin misiniz?</string>
+  <string name="pref_sync_service">Servis</string>
+  <string name="pref_sync_service_summ">Kütüphanenizi senkronize etmek için hizmeti seçin.</string>
+  <string name="pref_sync_service_category">Senkronize Et</string>
+  <string name="pref_sync_automatic_category">Otomatik Senkronizasyon</string>
+  <string name="pref_sync_interval">Senkronizasyon sıklığı</string>
+  <string name="pref_choose_what_to_sync">Senkronize edilecek öğeleri seçin.</string>
+  <string name="success_reset_sync_timestamp">Son senkronizasyon zaman damgası sıfırlandı.</string>
+  <string name="syncyomi">SyncYomi\'yi Senkronize Et</string>
+  <string name="sync_completed_message">%1$s içinde tamamlandı.</string>
+  <string name="last_synchronization">Son Senkronizasyon: %1$s</string>
   <string name="google_drive">Google Drive</string>
-  <string name="pref_google_drive_sign_in">Sign in</string>
-  <string name="google_drive_sign_in_success">Signed in successfully</string>
-  <string name="google_drive_sign_in_failed">Sign in failed</string>
-  <string name="authentication">Authentication</string>
-  <string name="pref_google_drive_purge_sync_data">Clear Sync Data from Google Drive</string>
-  <string name="google_drive_sync_data_purged">Sync data purged from Google Drive</string>
-  <string name="google_drive_sync_data_not_found">No sync data found in Google Drive</string>
-  <string name="google_drive_sync_data_purge_error">Error purging sync data from Google Drive, Try to sign in again.</string>
-  <string name="google_drive_login_success">Logged in to Google Drive</string>
-  <string name="google_drive_login_failed">Failed to log in to Google Drive: %s</string>
-  <string name="google_drive_not_signed_in">Not signed in to Google Drive</string>
-  <string name="error_uploading_sync_data">Error uploading sync data to Google Drive</string>
-  <string name="error_deleting_google_drive_lock_file">Error Deleting Google Drive Lock File</string>
-  <string name="error_before_sync_gdrive">Error before sync: %s</string>
-  <string name="pref_purge_confirmation_title">Purge confirmation</string>
-  <string name="pref_purge_confirmation_message">Purging sync data will delete all your sync data from Google Drive. Are you sure you want to continue?</string>
-  <string name="pref_sync_options">Create sync triggers</string>
-  <string name="pref_sync_options_summ">Can be used to set sync triggers</string>
-  <string name="sync_on_chapter_read">Sync on Chapter Read</string>
-  <string name="sync_on_chapter_open">Sync on Chapter Open</string>
-  <string name="sync_on_episode_seen">Sync on Episode Seen</string>
-  <string name="sync_on_episode_open">Sync on Episode Open</string>
-  <string name="sync_on_app_start">Sync on App Start</string>
-  <string name="sync_on_app_resume">Sync on App Resume</string>
-  <string name="sync_library">Sync library</string>
-  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Refresh extension page to update list.</string>
+  <string name="pref_google_drive_sign_in">Giriş yap</string>
+  <string name="google_drive_sign_in_success">Giriş yapma başarılı</string>
+  <string name="google_drive_sign_in_failed">Giriş yapma başarısız</string>
+  <string name="authentication">Kimlik Doğrulama</string>
+  <string name="pref_google_drive_purge_sync_data">Google Drive\'dan Senkronizasyon Verilerini Temizle</string>
+  <string name="google_drive_sync_data_purged">Google Drive\'dan senkronizasyon verileri silindi</string>
+  <string name="google_drive_sync_data_not_found">Google Drive\'da senkronizasyon verisi bulunamadı.</string>
+  <string name="google_drive_sync_data_purge_error">Google Drive\'dan senkronizasyon verisi silinirken hata oluştu, lütfen tekrar giriş yapmayı deneyin.</string>
+  <string name="google_drive_login_success">Google Drive\'a giriş yapıldı</string>
+  <string name="google_drive_login_failed">Google Drive\'a giriş yapılamadı: %s</string>
+  <string name="google_drive_not_signed_in">Google Drive\'a giriş yapılmadı.</string>
+  <string name="error_uploading_sync_data">Google Drive\'a senkronizasyon verisi yüklenirken hata oluştu.</string>
+  <string name="error_deleting_google_drive_lock_file">Google Drive kilit dosyası silinirken hata oluştu.</string>
+  <string name="error_before_sync_gdrive">Senkronizasyondan önce hata oluştu: %s</string>
+  <string name="pref_purge_confirmation_title">Temizleme onayı</string>
+  <string name="pref_purge_confirmation_message">Senkronizasyon verilerini temizlemek, Google Drive\'daki tüm senkronizasyon verilerinizi silecektir. Devam etmek istediğinizden emin misiniz?</string>
+  <string name="pref_sync_options">Senkronizasyon tetikleyicileri oluştur.</string>
+  <string name="pref_sync_options_summ">Senkronizasyon tetikleyicilerini ayarlamak için kullanılabilir.</string>
+  <string name="sync_on_chapter_read">Bölüm Okunduğunda Senkronize Et</string>
+  <string name="sync_on_chapter_open">Bölüm Açıldığında Senkronize Et</string>
+  <string name="sync_on_episode_seen">Bölüm Görüldüğünde Senkronize Et</string>
+  <string name="sync_on_episode_open">Bölüm Açıldığında Senkronize Et</string>
+  <string name="sync_on_app_start">Uygulama açıldığında Senkronize Et</string>
+  <string name="sync_on_app_resume">Uygulama Yeniden Başlatıldığında Senkronize Et</string>
+  <string name="sync_library">Kütüphaneyi Senkronize Et</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Listeyi güncellemek için uzantı sayfasını yenileyin.</string>
   <string name="pref_category_navbar" comment="pref_category_navbar navigation">Navbar</string>
-  <string name="pref_hide_updates_button">Show updates in the nav</string>
-  <string name="pref_hide_history_button">Show history in the nav</string>
-  <string name="pref_show_bottom_bar_labels">Always show nav labels</string>
-  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Select a tracker</string>
-  <string name="entry_not_tracked">Entry is not tracked.</string>
-  <string name="fill_from_tracker">Fill from tracker</string>
+  <string name="pref_hide_updates_button">Güncellemeleri gezinme çubuğunda göster</string>
+  <string name="pref_hide_history_button">Geçmişi gezinme çubuğunda göster</string>
+  <string name="pref_show_bottom_bar_labels">Gezinme etiketlerini her zaman göster</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Bir takipçi seçin</string>
+  <string name="entry_not_tracked">Girdi takip edilmiyor.</string>
+  <string name="fill_from_tracker">Takipçiden Doldur</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr is working. User agent updated. Please restart the app</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr is not working. User agent not updated. Please check your settings</string>
+  <string name="flare_solver_error">Error contacting FlareSolverr</string>
+  <string name="flare_solver_error_webview">Error resolving with WebView</string>
+  <string name="pref_enable_flare_solverr">Enable FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Use FlareSolverr to bypass Cloudflare\'s anti-bot protection</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">URL of the FlareSolverr instance to use for example http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr and update user agent</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr to update the user agent. Only required once; then toggle as needed.</string>
+  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
