@@ -18,10 +18,10 @@
   <string name="artist_hint">Sanatçı: %1$s</string>
   <string name="custom_entry_info">Özel giriş bilgisi</string>
   <string name="reset_info">Bilgileri sıfırla</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Yayıncı Ayarları</string>
+  <string name="pref_category_cast">Yayıncı Ayarları</string>
   <string name="pref_enable_cast">Yayını aç veya kapat</string>
   <string name="action_cast">Yayını gönder</string>
-  <string name="pref_show_downloaded_episode_file_size">İndirilen bölüm dosyasının boyutunu göster</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">İndirilen bölüm dosyasının boyutunu göster</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Ayarları</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Bilgileri düzenle</string>
   <string name="special_services" comment="special_services Connections section">Özel Servis</string>
@@ -156,4 +156,5 @@
   <string name="pref_flare_solverr_url_summary">URL of the FlareSolverr instance to use for example http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr and update user agent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr to update the user agent. Only required once; then toggle as needed.</string>
+  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
