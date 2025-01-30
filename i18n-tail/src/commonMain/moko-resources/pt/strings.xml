@@ -18,10 +18,10 @@
   <string name="artist_hint">Artista: %1$s</string>
   <string name="custom_entry_info">Informação de entrada personalizada</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Configurações de transmissão</string>
+  <string name="pref_category_cast">Configurações de transmissão</string>
   <string name="pref_enable_cast">Habilitar ou desabilitar o elenco</string>
   <string name="action_cast">Enviar para elenco</string>
-  <string name="pref_show_downloaded_episode_file_size">Exibir tamanho do arquivo episódio baixado</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Exibir tamanho do arquivo episódio baixado</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Configurações de bifurcação</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Editar informações</string>
   <string name="special_services" comment="special_services Connections section">Serviços Especiais</string>
@@ -156,4 +156,5 @@
   <string name="pref_flare_solverr_url_summary">URL da instância FlareSolverr para usar, por exemplo, http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Teste o sinalizadorSolverr e atualize o agente do usuário</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Teste o FlareSolverr para atualizar o agente do usuário. Somente uma vez necessário; em seguida, alterne conforme necessário.</string>
+  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
