@@ -18,10 +18,10 @@
   <string name="artist_hint">Artiest: %1$s</string>
   <string name="custom_entry_info">Aangepaste invoer informatie</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Cast Instellingen</string>
+  <string name="pref_category_cast">Cast Instellingen</string>
   <string name="pref_enable_cast">Casten in- of uitschakelen</string>
   <string name="action_cast">Stuur naar Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Toon gedownloade aflevering bestand grootte</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Toon gedownloade aflevering bestand grootte</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Instellingen vork</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Info bewerken</string>
   <string name="special_services" comment="special_services Connections section">Speciale diensten</string>
@@ -156,4 +156,5 @@
   <string name="pref_flare_solverr_url_summary">URL van de FlareSolverr versie die bijvoorbeeld http://192.168.1.202:8191/v1 gebruikt kan worden</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr en update gebruikersagent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr om de user agent bij te werken. Slechts één keer nodig; schakel daarna de schakelaar indien nodig.</string>
+  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
