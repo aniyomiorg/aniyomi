@@ -18,10 +18,10 @@
   <string name="artist_hint">Umělec: %1$s</string>
   <string name="custom_entry_info">Vlastní informace o záznamu</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Nastavení vysílání</string>
+  <string name="pref_category_cast">Nastavení vysílání</string>
   <string name="pref_enable_cast">Povolit nebo zakázat vysílání</string>
   <string name="action_cast">Poslat do Cast</string>
-  <string name="pref_show_downloaded_episode_file_size">Zobrazit velikost souboru s epizodou</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Zobrazit velikost souboru s epizodou</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Nastavení rozštěpení</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Upravit informace</string>
   <string name="special_services" comment="special_services Connections section">Speciální služby</string>
@@ -156,4 +156,5 @@
   <string name="pref_flare_solverr_url_summary">Adresa URL instance FlareSolverr pro použití například http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Otestuj FlareSolverr a aktualizuj uživatelské agenta</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Otestujte FlareSolverr pro aktualizaci uživatelského agenta. Vyžadováno pouze jednou; poté přepněte podle potřeby.</string>
+  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
