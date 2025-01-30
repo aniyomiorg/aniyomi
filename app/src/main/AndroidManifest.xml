@@ -221,11 +221,11 @@
         </activity>
 
 
-        <activity android:name=".ui.player.ExpandedControlsActivity"/>
+        <activity android:name=".ui.player.cast.ExpandedControlsActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="eu.kanade.tachiyomi.ui.player.CastOptionsProvider" />
+            android:value="eu.kanade.tachiyomi.ui.player.cast.CastOptionsProvider" />
 
         <activity
             android:name=".ui.security.UnlockActivity"

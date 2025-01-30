@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player
+package eu.kanade.tachiyomi.ui.player.cast
 
 import android.view.Menu
 import com.google.android.gms.cast.framework.CastButtonFactory

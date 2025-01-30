@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player
+package eu.kanade.tachiyomi.ui.player.cast
 
 import android.annotation.SuppressLint
 import android.content.Context
