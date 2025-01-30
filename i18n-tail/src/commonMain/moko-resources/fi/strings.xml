@@ -18,10 +18,10 @@
   <string name="artist_hint">Esittäjä: %1$s</string>
   <string name="custom_entry_info">Mukautetut tietueen tiedot</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast" comment="pref_category_cast Preferences">Lähetyksen Asetukset</string>
+  <string name="pref_category_cast">Lähetyksen Asetukset</string>
   <string name="pref_enable_cast">Ota käyttöön tai poista käytöstä</string>
   <string name="action_cast">Lähetä lähetykseen</string>
-  <string name="pref_show_downloaded_episode_file_size">Näytä ladatun jakson tiedoston koko</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Näytä ladatun jakson tiedoston koko</string>
   <string name="pref_category_fork" comment="pref_category_fork Subsections">Forkin Asetukset</string>
   <string name="action_edit_info" comment="action_edit_info Actions">Muokkaa tietoja</string>
   <string name="special_services" comment="special_services Connections section">Erityiset Palvelut</string>
@@ -156,4 +156,5 @@
   <string name="pref_flare_solverr_url_summary">FlareSolverrin ilmentymän URL-osoite, jota käytetään esimerkiksi http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Testaa FlareSolverr ja päivitä käyttäjä agentti</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testaa FlareSolverr päivittääksesi käyttäjän agentin. Tarvittava vain kerran; ota sitten tarvittaessa käyttöön.</string>
+  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
 </resources>
