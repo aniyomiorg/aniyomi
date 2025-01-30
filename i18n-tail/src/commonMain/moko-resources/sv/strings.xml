@@ -156,5 +156,5 @@
   <string name="pref_flare_solverr_url_summary">URL till FlareSolverr instansen att använda till exempel http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Testa FlareSolverr och uppdatera användaragenten</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testa FlareSolverr för att uppdatera användaragenten. Krävs endast en gång, växla sedan vid behov.</string>
-  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
+  <string name="title_cast_quality">Välj gjutkvalitet/leverantör</string>
 </resources>
