@@ -156,5 +156,5 @@
   <string name="pref_flare_solverr_url_summary">URL der FlareSolverr-Instanz zum Beispiel http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">FlareSolverr testen und User-Agent aktualisieren</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testen Sie FlareSolverr um den User-Agent zu aktualisieren. Nur einmal erforderlich; dann bei Bedarf umschalten.</string>
-  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
+  <string name="title_cast_quality">Wähle Übertragungsqualität/Anbieter</string>
 </resources>
