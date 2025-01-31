@@ -346,15 +346,30 @@ fun VideoTrack(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         if (noHoster) {
-            VideoText(video, selected, true, modifier)
-            Spacer(modifier = Modifier.weight(1f))
-            VideoIcon(videoState, true)
+            VideoText(
+                video = video,
+                selected = selected,
+                noHoster = true,
+                modifier = Modifier.weight(1f),
+            )
+            VideoIcon(
+                videoState = videoState,
+                noHoster = true,
+            )
         } else {
-            VideoIcon(videoState, false)
-            VideoText(video, selected, false, modifier)
+            VideoIcon(
+                videoState = videoState,
+                noHoster = false,
+            )
+            VideoText(
+                video = video,
+                selected = selected,
+                noHoster = false,
+                modifier = Modifier.weight(1f),
+            )
         }
     }
 }
@@ -401,7 +416,7 @@ private fun VideoText(
         fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Normal,
         style = MaterialTheme.typography.bodyMedium,
         color = if (selected) MaterialTheme.colorScheme.primary else Color.Unspecified,
-        maxLines = 3,
+        maxLines = 6,
         overflow = TextOverflow.Ellipsis,
         modifier = modifier
             .padding(
