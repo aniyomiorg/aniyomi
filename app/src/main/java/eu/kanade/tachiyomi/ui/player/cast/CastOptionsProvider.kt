@@ -16,7 +16,6 @@ import com.google.android.gms.cast.framework.media.MediaIntentReceiver
 import com.google.android.gms.cast.framework.media.NotificationAction
 import com.google.android.gms.cast.framework.media.NotificationActionsProvider
 import com.google.android.gms.cast.framework.media.NotificationOptions
-import com.google.android.gms.cast.framework.media.widget.ExpandedControllerActivity
 import com.google.android.gms.common.images.WebImage
 import eu.kanade.tachiyomi.R
 
@@ -101,7 +100,7 @@ open class CastOptionsProvider : OptionsProvider {
         val mediaOptions = CastMediaOptions.Builder()
             .setImagePicker(ImagePickerImpl())
             .setNotificationOptions(notificationOptions)
-            .setExpandedControllerActivityClassName(ExpandedControllerActivity::class.java.name)
+            .setExpandedControllerActivityClassName(ExpandedControlsActivity::class.java.name)
             .build()
 
         return CastOptions.Builder()

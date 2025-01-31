@@ -63,6 +63,7 @@ fun TopRightPlayerControls(
 
     // cast
     isCastEnabled: () -> Boolean,
+    onCastLongClick: () -> Unit,
 
     modifier: Modifier = Modifier,
 ) {
@@ -84,10 +85,15 @@ fun TopRightPlayerControls(
                     MediaRouteButton(context).apply {
                         CastButtonFactory.setUpMediaRouteButton(context, this)
                         dialogFactory = CustomCastThemeFactory()
+
+                        setOnLongClickListener {
+                            onCastLongClick()
+                            true
+                        }
                     }
                 },
                 modifier = Modifier
-                    .padding(vertical = MaterialTheme.padding.medium, horizontal = MaterialTheme.padding.mediumSmall),
+                    .padding(horizontal = MaterialTheme.padding.mediumSmall),
             )
         }
         ControlsButton(

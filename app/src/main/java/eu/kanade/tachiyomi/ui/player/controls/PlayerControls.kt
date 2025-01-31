@@ -17,6 +17,7 @@
 
 package eu.kanade.tachiyomi.ui.player.controls
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
@@ -57,6 +58,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import eu.kanade.presentation.more.settings.screen.player.custombutton.getButtons
 import eu.kanade.presentation.theme.playerRippleConfiguration
+import eu.kanade.tachiyomi.ui.player.CastManager
 import eu.kanade.tachiyomi.ui.player.Dialogs
 import eu.kanade.tachiyomi.ui.player.Panels
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
@@ -99,7 +101,6 @@ fun PlayerControls(
     val audioPreferences = remember { Injekt.get<AudioPreferences>() }
     val subtitlePreferences = remember { Injekt.get<SubtitlePreferences>() }
     val interactionSource = remember { MutableInteractionSource() }
-
     val controlsShown by viewModel.controlsShown.collectAsState()
     val areControlsLocked by viewModel.areControlsLocked.collectAsState()
     val seekBarShown by viewModel.seekBarShown.collectAsState()
@@ -438,6 +439,7 @@ fun PlayerControls(
                         end.linkTo(parent.end)
                     },
                 ) {
+                    val activity = LocalContext.current as PlayerActivity
                     TopRightPlayerControls(
                         autoPlayEnabled = autoPlayEnabled,
                         onToggleAutoPlay = { viewModel.setAutoPlay(it) },
@@ -454,6 +456,13 @@ fun PlayerControls(
                         onMoreClick = { viewModel.showSheet(Sheets.More) },
                         onMoreLongClick = { viewModel.showPanel(Panels.VideoFilters) },
                         isCastEnabled = { playerPreferences.enableCast().get() },
+                        onCastLongClick = {
+                            if (activity.castManager.castState.value == CastManager.CastState.CONNECTED) {
+                                activity.castManager.handleQualitySelection()
+                            } else {
+                                Toast.makeText(activity, "Cast is not connected", Toast.LENGTH_SHORT).show()
+                            }
+                        },
                     )
                 }
                 // Bottom right controls
