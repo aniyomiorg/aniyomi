@@ -131,7 +131,10 @@ class PlayerActivity : BaseActivity() {
     private val storageManager: StorageManager = Injekt.get()
 
     // Cast -->
-    private lateinit var castManager: CastManager
+    val castManager: CastManager by lazy {
+        CastManager(context = this, activity = this)
+    }
+    // <-- Cast
 
     private var audioFocusRequest: AudioFocusRequestCompat? = null
     private var restoreAudioFocus: () -> Unit = {}
@@ -260,6 +263,9 @@ class PlayerActivity : BaseActivity() {
 
             // <-- AM (DISCORD)
         }
+        // Cast -->
+        castManager
+        // <-- Cast
 
         binding.controls.setContent {
             TachiyomiTheme {
@@ -286,10 +292,6 @@ class PlayerActivity : BaseActivity() {
                 )
             }
         }
-
-        // Cast -->
-        castManager = CastManager(this, this)
-        // <-- Cast
 
         onNewIntent(this.intent)
     }
@@ -398,14 +400,10 @@ class PlayerActivity : BaseActivity() {
         updateDiscordRPC(exitingPlayer = false)
 
         castManager.apply {
-            // Registrar listener de sesión Cast
             registerSessionListener()
-
-            // Actualizar estado actual de Cast
             if (castState.value == CastManager.CastState.CONNECTED) {
                 updateCastState(CastManager.CastState.CONNECTED)
             }
-            // Sincronizar estado inicial con ViewModel
             viewModel.isCasting.value = castState.value == CastManager.CastState.CONNECTED
         }
     }
@@ -622,15 +620,14 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        // Cast -->
         castManager.apply {
-            // Actualizar contexto Cast después de pausas cortas
             refreshCastContext()
-
-            // Si está en modo Cast, sincronizar controles UI
             if (castState.value == CastManager.CastState.CONNECTED) {
                 updateCastState(CastManager.CastState.CONNECTED)
             }
         }
+        // <-- Cast
         super.onResume()
 
         viewModel.currentVolume.update {
@@ -896,8 +893,8 @@ class PlayerActivity : BaseActivity() {
                     }
 
                     override fun onPause() {
+                        // Cast -->
                         castManager.apply {
-                            // Liberar recursos solo si no está en PiP
                             if (!isInPictureInPictureMode) {
                                 unregisterSessionListener()
                             }
@@ -907,6 +904,7 @@ class PlayerActivity : BaseActivity() {
                                 maintainCastSessionBackground()
                             }
                         }
+                        //
                         when (playAction) {
                             SingleActionGesture.None -> {}
                             SingleActionGesture.Seek -> {}

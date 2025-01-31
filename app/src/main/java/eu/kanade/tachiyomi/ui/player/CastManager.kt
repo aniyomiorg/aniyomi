@@ -2,10 +2,12 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.cast.MediaLoadRequestData
+import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.common.ConnectionResult
@@ -33,7 +35,7 @@ class CastManager(
     })
     private val player by lazy { activity.player }
 
-    private var castContext: CastContext? = null
+    var castContext: CastContext? = null
     private var castSession: CastSession? = null
     private var sessionListener: CastSessionListener? = null
     private val mediaBuilder = CastMediaBuilder(viewModel, activity)
@@ -90,7 +92,11 @@ class CastManager(
                     dialog.dismiss()
                     loadRemoteMediaWithState()
                 }
-                .setOnCancelListener { endSession() }
+                .setCancelable(false)
+                .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                    endSession()
+                }
                 .show()
         }
     }
@@ -103,22 +109,38 @@ class CastManager(
     @SuppressLint("SuspiciousIndentation")
     private fun loadRemoteMedia() {
         if (!isCastApiAvailable) return
-
         val remoteMediaClient = castSession?.remoteMediaClient ?: return
 
         try {
-            val mediaInfo = mediaBuilder.buildMediaInfo()
-            remoteMediaClient.load(
-                MediaLoadRequestData.Builder()
-                    .setMediaInfo(mediaInfo)
-                    .setAutoplay(autoplayEnabled)
-                    .setCurrentTime((player.timePos ?: 0).toLong() * 1000)
-                    .build(),
-            )
-            _castState.value = CastState.CONNECTED
+            val selectedIndex = viewModel.selectedVideoIndex.value
+            val mediaInfo = mediaBuilder.buildMediaInfo(selectedIndex)
+            // si ya hay un video colocado entonce agregar a la cola
+            if (remoteMediaClient.mediaQueue.itemCount > 0) {
+                remoteMediaClient.queueAppendItem(
+                    MediaQueueItem.Builder(mediaInfo).build(),
+                    null,
+                )
+
+                activity.runOnUiThread {
+                    Toast.makeText(context, "Video agregado a la cola", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                // Iniciar nueva reproducción
+                remoteMediaClient.load(
+                    MediaLoadRequestData.Builder()
+                        .setMediaInfo(mediaInfo)
+                        .setAutoplay(autoplayEnabled)
+                        .setCurrentTime((player.timePos ?: 0).toLong() * 1000)
+                        .build(),
+                )
+                _castState.value = CastState.CONNECTED
+            }
         } catch (e: Exception) {
             _castState.value = CastState.DISCONNECTED
             logcat(LogPriority.ERROR, e)
+            activity.runOnUiThread {
+                Toast.makeText(context, "Error al cargar el video", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

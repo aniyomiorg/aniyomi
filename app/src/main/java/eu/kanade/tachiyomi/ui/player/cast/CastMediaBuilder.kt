@@ -11,15 +11,15 @@ import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 class CastMediaBuilder(private val viewModel: PlayerViewModel, private val activity: PlayerActivity) {
     private val player by lazy { activity.player }
 
-    fun buildMediaInfo(): MediaInfo {
-        val currentVideo = viewModel.videoList.value.getOrNull(viewModel.selectedVideoIndex.value)
-            ?: throw IllegalStateException("Invalid video selection")
+    fun buildMediaInfo(index: Int): MediaInfo {
+        val video = viewModel.videoList.value.getOrNull(index)
+            ?: throw IllegalStateException("Invalid video index: $index")
 
-        return MediaInfo.Builder(currentVideo.videoUrl!!)
+        return MediaInfo.Builder(video.videoUrl!!)
             .setContentType("video/mp4")
             .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
             .apply { addMetadata() }
-            .apply { addTracks() }
+            .apply { addTracks(index) }
             .setStreamDuration((player.duration ?: 0).toLong() * 1000)
             .build()
     }
@@ -33,44 +33,32 @@ class CastMediaBuilder(private val viewModel: PlayerViewModel, private val activ
         return setMetadata(metadata)
     }
 
-    private fun MediaInfo.Builder.addTracks(): MediaInfo.Builder {
-        addSubtitlesToCast(this)
-        buildAudioTracks(this)
-        return this
-    }
+    private fun addSubtitlesToCast(index: Int): List<MediaTrack> {
+        val subtitleTracks = viewModel.videoList.value[index].subtitleTracks
 
-    private fun addSubtitlesToCast(mediaInfoBuilder: MediaInfo.Builder) {
-        val subtitleTracks = viewModel.videoList.value
-            .getOrNull(viewModel.selectedVideoIndex.value)
-            ?.subtitleTracks
-            ?.takeIf { it.isNotEmpty() }
-
-        subtitleTracks?.let { subs ->
-            val mediaTracks = subs.mapIndexed { index, sub ->
-                MediaTrack.Builder(index.toLong(), MediaTrack.TYPE_TEXT)
-                    .setContentId(sub.url)
-                    .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
-                    .setName(sub.lang)
-                    .build()
-            }
-            mediaInfoBuilder.setMediaTracks(mediaTracks)
+        return subtitleTracks.mapIndexed { trackIndex, sub ->
+            MediaTrack.Builder(trackIndex.toLong(), MediaTrack.TYPE_TEXT)
+                .setContentId(sub.url)
+                .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                .setName(sub.lang)
+                .build()
         }
     }
 
-    private fun buildAudioTracks(mediaInfoBuilder: MediaInfo.Builder) {
-        val audioTracks = viewModel.videoList.value
-            .getOrNull(viewModel.selectedVideoIndex.value)
-            ?.audioTracks
-            ?.takeIf { it.isNotEmpty() }
+    private fun buildAudioTracks(index: Int): List<MediaTrack> {
+        val audioTracks = viewModel.videoList.value[index].audioTracks
 
-        audioTracks?.let { tracks ->
-            val mediaTracks = tracks.mapIndexed { index, audio ->
-                MediaTrack.Builder(index.toLong(), MediaTrack.TYPE_AUDIO)
-                    .setContentId(audio.url)
-                    .setName(audio.lang)
-                    .build()
-            }
-            mediaInfoBuilder.setMediaTracks(mediaTracks)
+        return audioTracks.mapIndexed { trackIndex, audio ->
+            MediaTrack.Builder(trackIndex.toLong(), MediaTrack.TYPE_AUDIO)
+                .setContentId(audio.url)
+                .setName(audio.lang)
+                .build()
         }
+    }
+
+    private fun MediaInfo.Builder.addTracks(index: Int): MediaInfo.Builder {
+        val subtitleTracks = addSubtitlesToCast(index)
+        val audioTracks = buildAudioTracks(index)
+        return setMediaTracks(subtitleTracks + audioTracks)
     }
 }
