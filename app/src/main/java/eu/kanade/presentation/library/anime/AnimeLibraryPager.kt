@@ -14,8 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import eu.kanade.core.preference.PreferenceMutableState
@@ -42,8 +44,13 @@ fun AnimeLibraryPager(
     onLongClickAnime: (LibraryAnime) -> Unit,
     onClickContinueWatching: ((LibraryAnime) -> Unit)?,
 ) {
+    var containerHeight by remember { mutableIntStateOf(0) }
     HorizontalPager(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .onGloballyPositioned { layoutCoordinates ->
+                containerHeight = layoutCoordinates.size.height
+            },
         state = state,
         verticalAlignment = Alignment.Top,
     ) { page ->
@@ -64,19 +71,16 @@ fun AnimeLibraryPager(
         }
 
         val displayMode by getDisplayMode(page)
-        val columns by if (displayMode != LibraryDisplayMode.List) {
-            val configuration = LocalConfiguration.current
-            val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-            remember(isLandscape) { getColumnsForOrientation(isLandscape) }
-        } else {
-            remember { mutableIntStateOf(0) }
-        }
+        val configuration = LocalConfiguration.current
+        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val columns by remember(isLandscape) { getColumnsForOrientation(isLandscape) }
 
         when (displayMode) {
             LibraryDisplayMode.List -> {
                 AnimeLibraryList(
                     items = library,
+                    entries = columns,
+                    containerHeight = containerHeight,
                     contentPadding = contentPadding,
                     selection = selectedAnime,
                     onClick = onClickAnime,
