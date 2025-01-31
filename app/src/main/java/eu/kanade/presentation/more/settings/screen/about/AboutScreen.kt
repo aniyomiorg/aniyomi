@@ -187,7 +187,7 @@ object AboutScreen : Screen() {
                         LinkIcon(
                             label = "GitHub",
                             icon = CustomIcons.Github,
-                            url = "https://github.com/Dark25/animetail2",
+                            url = "https://github.com/Animetailapp/Animetail",
                         )
                     }
                 }

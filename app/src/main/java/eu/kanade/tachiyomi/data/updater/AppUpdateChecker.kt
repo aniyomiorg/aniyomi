@@ -34,7 +34,7 @@ val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
         "dark25/animetail-preview"
     } else {
-        "dark25/animetail2"
+        "Animetailapp/Animetail"
     }
 }
 
