@@ -32,7 +32,7 @@ class AppUpdateChecker(private val context: Context) {
 
 val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
-        "dark25/animetail-preview"
+        "Animetailapp/animetail-preview"
     } else {
         "Animetailapp/Animetail"
     }
