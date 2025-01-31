@@ -342,16 +342,22 @@ fun EntryListItem(
     entries: Int = -1,
     containerHeight: Int = 0,
 ) {
-    val density =  LocalDensity.current
+    val density = LocalDensity.current
     Row(
         modifier = Modifier
             .selectedBackground(isSelected)
             .height(
                 when (entries) {
-                    -1 ->   { 76.dp }
-                     0 ->   { with(density){(containerHeight / 7).toDp()} - (3/7).dp }
-                    else -> { with(density){(containerHeight / entries).toDp()} - (3/entries).dp }
-                }
+                    -1 -> {
+                        76.dp
+                    }
+                    0 -> {
+                        with(density) { (containerHeight / 7).toDp() } - (3 / 7).dp
+                    }
+                    else -> {
+                        with(density) { (containerHeight / entries).toDp() } - (3 / entries).dp
+                    }
+                },
             )
             .combinedClickable(
                 onClick = onClick,
@@ -371,7 +377,7 @@ fun EntryListItem(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .weight(1f),
-            //maxLines = 2,
+            // maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyMedium,
         )

@@ -264,7 +264,7 @@ private fun ColumnScope.DisplayPage(
             max = 10,
             value = columns,
             valueText = if (columns > 0) {
-                pluralStringResource(MR.plurals.pref_library_entries_in_column, columns, columns,)
+                pluralStringResource(MR.plurals.pref_library_entries_in_column, columns, columns)
             } else {
                 stringResource(MR.strings.label_default)
             },
@@ -276,7 +276,7 @@ private fun ColumnScope.DisplayPage(
             max = 10,
             value = columns,
             valueText = if (columns > 0) {
-                stringResource(MR.strings.pref_library_columns_per_row, columns,)
+                stringResource(MR.strings.pref_library_columns_per_row, columns)
             } else {
                 stringResource(MR.strings.label_default)
             },
