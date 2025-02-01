@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.animesource.online
 
-import aniyomix.source.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
+import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -194,37 +194,6 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      * @param element an element obtained from [hosterListSelector].
      */
     protected abstract fun hosterFromElement(element: Element): Hoster
-
-    /**
-     * Parses the response from the hoster and returns the video list.
-     *
-     * @since extensions-lib 16
-     * @param response the response from the site.
-     * @return the list of hosters.
-     */
-    override fun videoListParse(response: Response, hoster: Hoster): List<Video> {
-        val document = response.asJsoup()
-        return document.select(videoListSelector(hoster)).map { element ->
-            videoFromElement(element, hoster)
-        }
-    }
-
-    /**
-     * Returns the Jsoup selector that returns a list of [Element] corresponding to each video.
-     *
-     * @since extensions-lib 16
-     * @param hoster the hoster.
-     */
-    protected abstract fun videoListSelector(hoster: Hoster): String
-
-    /**
-     * Returns a video from the given element.
-     *
-     * @since extensions-lib 16
-     * @param element an element obtained from [videoListSelector].
-     * @param hoster the hoster.
-     */
-    protected abstract fun videoFromElement(element: Element, hoster: Hoster): Video
 
     /**
      * Parses the response from the site and returns the page list.
