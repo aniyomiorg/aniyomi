@@ -31,13 +31,13 @@ fun BrowseAnimeSourceList(
     onAnimeClick: (Anime) -> Unit,
     onAnimeLongClick: (Anime) -> Unit,
 ) {
-    var containerHeight by remember { mutableIntStateOf(0)}
+    var containerHeight by remember { mutableIntStateOf(0) }
     LazyColumn(
         contentPadding = contentPadding + PaddingValues(vertical = 8.dp),
         modifier = Modifier
             .onGloballyPositioned { layoutCoordinates ->
-            containerHeight = layoutCoordinates.size.height - topBarHeight
-        }
+                containerHeight = layoutCoordinates.size.height - topBarHeight
+            },
     ) {
         item {
             if (animeList.loadState.prepend is LoadState.Loading) {

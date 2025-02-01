@@ -130,11 +130,12 @@ data class BrowseMangaSourceScreen(
         var topBarHeight by remember { mutableIntStateOf(0) }
         Scaffold(
             topBar = {
-                Column(modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surface)
-                    .onGloballyPositioned { layoutCoordinates ->
-                        topBarHeight = layoutCoordinates.size.height
-                    },
+                Column(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surface)
+                        .onGloballyPositioned { layoutCoordinates ->
+                            topBarHeight = layoutCoordinates.size.height
+                        },
                 ) {
                     BrowseMangaSourceToolbar(
                         searchQuery = state.toolbarQuery,

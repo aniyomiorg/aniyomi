@@ -36,7 +36,7 @@ fun BrowseMangaSourceList(
         modifier = Modifier
             .onGloballyPositioned { layoutCoordinates ->
                 containerHeight = layoutCoordinates.size.height - topBarHeight
-            }
+            },
     ) {
         item {
             if (mangaList.loadState.prepend is LoadState.Loading) {

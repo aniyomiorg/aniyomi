@@ -135,7 +135,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     // returns the number from the size slider
-    fun getColumnsPreferenceForCurrentOrientation(orientation: Int) : Int {
+    fun getColumnsPreferenceForCurrentOrientation(orientation: Int): Int {
         val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE
         return if (isLandscape) {
             libraryPreferences.animeLandscapeColumns()
