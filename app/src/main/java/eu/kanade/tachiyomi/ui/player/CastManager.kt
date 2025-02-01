@@ -122,7 +122,7 @@ class CastManager(
                 )
 
                 activity.runOnUiThread {
-                    Toast.makeText(context, "Video agregado a la cola", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.stringResource(TLMR.strings.cast_video_added_to_queue), Toast.LENGTH_SHORT).show()
                 }
             } else {
                 // Iniciar nueva reproducción
@@ -139,7 +139,7 @@ class CastManager(
             _castState.value = CastState.DISCONNECTED
             logcat(LogPriority.ERROR, e)
             activity.runOnUiThread {
-                Toast.makeText(context, "Error al cargar el video", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.stringResource(TLMR.strings.cast_error_loading), Toast.LENGTH_SHORT).show()
             }
         }
     }

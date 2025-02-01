@@ -28,7 +28,7 @@ fun CastMiniController(
 
     LaunchedEffect(playerActivity) {
         val castContext = playerActivity?.castManager?.castContext ?: return@LaunchedEffect
-        // Update state with current value and listen for changes
+        // Actualiza el estado con el valor actual y escucha los cambios
         castState = castContext.castState
         castContext.addCastStateListener { state ->
             castState = state
@@ -37,8 +37,8 @@ fun CastMiniController(
 
     if (castState == CastState.CONNECTED) {
         AndroidView(
-            factory = { context ->
-                FragmentContainerView(context).apply {
+            factory = { ctx ->
+                FragmentContainerView(ctx).apply {
                     id = R.id.castMiniController
                     layoutParams = FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -47,8 +47,10 @@ fun CastMiniController(
                 }
             },
             update = { view ->
+                // Usa conversión segura para asegurarnos de que el contexto sea un FragmentActivity
+                val fragmentActivity = context as? FragmentActivity ?: return@AndroidView
                 val fragment = MiniControllerFragment()
-                val fragmentManager = (context as FragmentActivity).supportFragmentManager
+                val fragmentManager = fragmentActivity.supportFragmentManager
                 fragmentManager.beginTransaction()
                     .replace(view.id, fragment)
                     .commitNowAllowingStateLoss()

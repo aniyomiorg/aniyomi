@@ -58,6 +58,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import eu.kanade.presentation.more.settings.screen.player.custombutton.getButtons
 import eu.kanade.presentation.theme.playerRippleConfiguration
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.CastManager
 import eu.kanade.tachiyomi.ui.player.Dialogs
 import eu.kanade.tachiyomi.ui.player.Panels
@@ -462,7 +463,7 @@ fun PlayerControls(
                             if (activity.castManager.castState.value == CastManager.CastState.CONNECTED) {
                                 activity.castManager.handleQualitySelection()
                             } else {
-                                Toast.makeText(activity, "Cast is not connected", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, activity.getString(R.string.cast_not_connected), Toast.LENGTH_SHORT).show()
                             }
                         },
                     )
