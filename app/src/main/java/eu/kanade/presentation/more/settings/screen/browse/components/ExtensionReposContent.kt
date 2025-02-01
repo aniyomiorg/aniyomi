@@ -36,6 +36,8 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
+import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo.Companion.ANIMETAIL_SIGNATURE
+import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo.Companion.KEIYOUSHI_SIGNATURE
 import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
@@ -101,7 +103,7 @@ private fun ExtensionRepoListItem(
             modifier = Modifier
                 .padding(start = MaterialTheme.padding.medium),
         ) {
-            val resId = repoResId(repo.baseUrl)
+            val resId = repoResId(repo.signingKeyFingerprint)
             Image(
                 bitmap = ImageBitmap.imageResource(id = resId),
                 contentDescription = null,
@@ -180,9 +182,8 @@ private fun ExtensionRepoListItem(
 
 // KMK -->
 fun repoResId(baseUrl: String) = when (baseUrl) {
-    "https://raw.githubusercontent.com/Dark25/aniyomi-extensions/repo" -> R.mipmap.animetail
-    "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo" -> R.mipmap.aniyomi
-    "https://raw.githubusercontent.com/keiyoushi/extensions/repo" -> R.mipmap.keiyoushi
+    ANIMETAIL_SIGNATURE -> R.mipmap.animetail
+    KEIYOUSHI_SIGNATURE-> R.mipmap.keiyoushi
     else -> R.mipmap.extension
 }
 
@@ -190,6 +191,8 @@ fun repoResId(baseUrl: String) = when (baseUrl) {
 @Composable
 fun ExtensionReposContentPreview() {
     val repos = persistentSetOf(
+        ExtensionRepo("https://repo", "Animetail", "", "", ANIMETAIL_SIGNATURE),
+        ExtensionRepo("https://repo", "Keiyoushi", "", "", KEIYOUSHI_SIGNATURE),
         ExtensionRepo("https://repo", "Other", "", "", "key2"),
     )
     ExtensionReposContent(
