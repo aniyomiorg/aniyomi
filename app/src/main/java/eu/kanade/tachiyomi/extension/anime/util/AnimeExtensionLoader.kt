@@ -22,8 +22,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo.Companion.KEIYOUSHI_REPO_SIGNATURE
-import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo.Companion.OFFICIAL_REPO_SIGNATURE
+import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo.Companion.ANIMETAIL_SIGNATURE
 import mihon.domain.extensionrepo.anime.interactor.GetAnimeExtensionRepo
 import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.core.common.util.system.logcat
@@ -409,11 +408,7 @@ internal object AnimeExtensionLoader {
     }
 
     private fun isOfficiallySigned(signatures: List<String>): Boolean {
-        return signatures.all { it == OFFICIAL_REPO_SIGNATURE }
-    }
-
-    private fun isKeiyoushiSigned(signatures: List<String>): Boolean {
-        return signatures.all { it == KEIYOUSHI_REPO_SIGNATURE }
+        return signatures.all { it == ANIMETAIL_SIGNATURE }
     }
 
     /**
