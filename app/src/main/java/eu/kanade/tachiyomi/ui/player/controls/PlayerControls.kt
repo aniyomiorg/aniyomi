@@ -463,7 +463,11 @@ fun PlayerControls(
                             if (activity.castManager.castState.value == CastManager.CastState.CONNECTED) {
                                 activity.castManager.handleQualitySelection()
                             } else {
-                                Toast.makeText(activity, activity.getString(R.string.cast_not_connected), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    activity,
+                                    activity.getString(R.string.cast_not_connected),
+                                    Toast.LENGTH_SHORT,
+                                ).show()
                             }
                         },
                     )

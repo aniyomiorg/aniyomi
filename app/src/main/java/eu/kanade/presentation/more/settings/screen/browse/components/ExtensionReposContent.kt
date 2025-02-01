@@ -183,7 +183,7 @@ private fun ExtensionRepoListItem(
 // KMK -->
 fun repoResId(baseUrl: String) = when (baseUrl) {
     ANIMETAIL_SIGNATURE -> R.mipmap.animetail
-    KEIYOUSHI_SIGNATURE-> R.mipmap.keiyoushi
+    KEIYOUSHI_SIGNATURE -> R.mipmap.keiyoushi
     else -> R.mipmap.extension
 }
 
