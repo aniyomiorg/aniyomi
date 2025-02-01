@@ -131,6 +131,7 @@ internal class HttpPageLoader(
         if (page.status == Page.State.ERROR) {
             page.status = Page.State.QUEUE
         }
+
         queue.offer(PriorityPage(page, 2))
     }
 

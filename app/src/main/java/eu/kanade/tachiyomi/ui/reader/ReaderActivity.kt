@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -39,7 +40,9 @@ import androidx.core.transition.doOnEnd
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.elevation.SurfaceColors
@@ -66,6 +69,7 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.ReaderActivityBinding
 import eu.kanade.tachiyomi.source.manga.isNsfw
+import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -82,6 +86,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerViewer
+import eu.kanade.tachiyomi.ui.reader.viewer.webtoon.WebtoonViewer
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.hasDisplayCutout
 import eu.kanade.tachiyomi.util.system.isNightMode
@@ -91,16 +96,20 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.common.i18n.pluralStringResource
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
@@ -113,6 +122,7 @@ import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.ByteArrayOutputStream
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("LargeClass")
 class ReaderActivity : BaseActivity() {
@@ -475,6 +485,16 @@ class ReaderActivity : BaseActivity() {
                 },
                 onClickSettings = viewModel::openSettingsDialog,
                 // SY -->
+                isExhToolsVisible = state.ehUtilsVisible,
+                onSetExhUtilsVisibility = viewModel::showEhUtils,
+                isAutoScroll = state.autoScroll,
+                isAutoScrollEnabled = state.isAutoScrollEnabled,
+                onToggleAutoscroll = viewModel::toggleAutoScroll,
+                autoScrollFrequency = state.ehAutoscrollFreq,
+                onSetAutoScrollFrequency = viewModel::setAutoScrollFrequency,
+                onClickAutoScrollHelp = viewModel::openAutoScrollHelpDialog,
+                onClickRetryAll = ::exhRetryAll,
+                onClickRetryAllHelp = viewModel::openRetryAllHelp,
                 currentPageText = state.currentPageText,
                 enabledButtons = readerBottomButtons,
                 dualPageSplitEnabled = dualPageSplitPaged,
@@ -557,6 +577,39 @@ class ReaderActivity : BaseActivity() {
                         hasExtraPage = (state.dialog as? ReaderViewModel.Dialog.PageActions)?.extraPage != null,
                     )
                 }
+                // SY -->
+                ReaderViewModel.Dialog.AutoScrollHelp -> AlertDialog(
+                    onDismissRequest = onDismissRequest,
+                    confirmButton = {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(text = stringResource(MR.strings.action_ok))
+                        }
+                    },
+                    title = { Text(text = stringResource(TLMR.strings.eh_autoscroll_help)) },
+                    text = { Text(text = stringResource(TLMR.strings.eh_autoscroll_help_message)) },
+                )
+                ReaderViewModel.Dialog.BoostPageHelp -> AlertDialog(
+                    onDismissRequest = onDismissRequest,
+                    confirmButton = {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(text = stringResource(MR.strings.action_ok))
+                        }
+                    },
+                    title = { Text(text = stringResource(TLMR.strings.eh_boost_page_help)) },
+                    text = { Text(text = stringResource(TLMR.strings.eh_boost_page_help_message)) },
+                )
+                ReaderViewModel.Dialog.RetryAllHelp -> AlertDialog(
+                    onDismissRequest = onDismissRequest,
+                    confirmButton = {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(text = stringResource(MR.strings.action_ok))
+                        }
+                    },
+                    title = { Text(text = stringResource(TLMR.strings.eh_retry_all_help)) },
+                    text = { Text(text = stringResource(TLMR.strings.eh_retry_all_help_message)) },
+                )
+                // SY <--
+
                 null -> {}
             }
         }
@@ -589,6 +642,67 @@ class ReaderActivity : BaseActivity() {
                     WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
         }
+    }
+
+    private fun enableExhAutoScroll() {
+        readerPreferences.autoscrollInterval().changes()
+            .combine(viewModel.state.map { it.autoScroll }.distinctUntilChanged()) { interval, enabled ->
+                interval.toDouble() to enabled
+            }.mapLatest { (intervalFloat, enabled) ->
+                if (enabled) {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        val interval = intervalFloat.seconds
+                        while (true) {
+                            if (!viewModel.state.value.menuVisible) {
+                                viewModel.state.value.viewer.let { v ->
+                                    when (v) {
+                                        is PagerViewer -> v.moveToNext()
+                                        is WebtoonViewer -> {
+                                            if (readerPreferences.smoothAutoScroll().get()) {
+                                                v.linearScroll(interval)
+                                            } else {
+                                                v.scrollDown()
+                                            }
+                                        }
+                                    }
+                                }
+                                delay(interval)
+                            } else {
+                                delay(100)
+                            }
+                        }
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun exhRetryAll() {
+        var retried = 0
+
+        viewModel.state.value.viewerChapters
+            ?.currChapter
+            ?.pages
+            ?.forEachIndexed { _, page ->
+                var shouldQueuePage = false
+                if (page.status == Page.State.ERROR) {
+                    shouldQueuePage = true
+                }
+                /*else if (page.status == Page.LOAD_PAGE ||
+                   page.status == Page.DOWNLOAD_IMAGE) {
+                 // Do nothing
+              }*/
+
+                if (shouldQueuePage) {
+                    page.status = Page.State.QUEUE
+                } else {
+                    return@forEachIndexed
+                }
+
+                retried++
+            }
+
+        toast(pluralStringResource(TLMR.plurals.eh_retry_toast, retried, retried))
     }
 
     // SY -->
@@ -1142,6 +1256,9 @@ class ReaderActivity : BaseActivity() {
 
             // Trigger relayout
             setMenuVisibility(viewModel.state.value.menuVisible)
+            // SY -->
+            enableExhAutoScroll()
+            // SY <--
         }
 
         /**

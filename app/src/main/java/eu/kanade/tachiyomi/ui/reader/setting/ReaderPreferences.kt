@@ -143,6 +143,14 @@ class ReaderPreferences(
 
     fun showNavigationOverlayOnStart() = preferenceStore.getBoolean("reader_navigation_overlay_on_start", false)
 
+    // sy -->
+    fun readerInstantRetry() = preferenceStore.getBoolean("eh_reader_instant_retry", true)
+
+    fun autoscrollInterval() = preferenceStore.getFloat("eh_util_autoscroll_interval", 3f)
+
+    fun smoothAutoScroll() = preferenceStore.getBoolean("smooth_auto_scroll", true)
+    // sy <--
+
     // J2K -->
     fun preloadSize() = preferenceStore.getInt("reader_preload_size", PRELOAD_SIZE_MIN)
     // J2K <--
