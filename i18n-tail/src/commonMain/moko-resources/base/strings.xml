@@ -204,4 +204,22 @@
     <string name="cast_not_connected">Cast not connected</string>
     <string name="cast_video_added_to_queue">Video added to queue</string>
     <string name="cast_error_loading">Error loading video from Cast</string>
+
+    <!-- Auto scroll -->
+    <string name="eh_autoscroll">Autoscroll</string>
+    <string name="eh_retry_all">Retry all</string>
+    <string name="eh_boost_page">Boost page</string>
+    <string name="eh_autoscroll_help">Autoscroll help</string>
+    <string name="eh_autoscroll_help_message">Automatically scroll to the next page in the specified interval. Interval is specified in seconds.</string>
+    <string name="eh_autoscroll_freq_invalid">Invalid frequency</string>
+    <string name="eh_retry_all_help">Retry all help</string>
+    <string name="eh_retry_all_help_message">Re-add all failed pages to the download queue.</string>
+    <string name="eh_boost_page_help">Boost page help</string>
+    <string name="eh_boost_page_help_message">Normally the downloader can only download a specific amount of pages at the same time. This means you can be waiting for a page to download but the downloader will not start downloading the page until it has a free download slot. Pressing \'Boost page\' will force the downloader to begin downloading the current page, regardless of whether or not there is an available slot.</string>
+    <string name="eh_boost_page_invalid">This page cannot be boosted (invalid page)!</string>
+    <string name="eh_boost_page_errored">Page failed to load, press the retry button instead!</string>
+    <string name="eh_boost_page_downloading">This page is already downloading!</string>
+    <string name="eh_boost_page_downloaded">This page has already been downloaded!</string>
+    <string name="eh_boost_boosted">Boosted current page!</string>
+    <string name="eh_boost_invalid_loader">This page cannot be boosted (invalid page loader)!</string>
 </resources>

@@ -77,7 +77,7 @@ object HomeScreen : Screen() {
     private const val TAB_FADE_DURATION = 200
     private const val TAB_NAVIGATOR_KEY = "HomeTabs"
 
-    private val uiPreferences: UiPreferences by injectLazy()
+    val uiPreferences: UiPreferences by injectLazy()
     private val defaultTab = uiPreferences.startScreen().get().tab
     private val moreTab = uiPreferences.navStyle().get().moreTab
 

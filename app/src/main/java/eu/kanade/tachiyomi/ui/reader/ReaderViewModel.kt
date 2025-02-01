@@ -28,6 +28,7 @@ import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.ui.home.HomeScreen.uiPreferences
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
 import eu.kanade.tachiyomi.ui.reader.loader.DownloadPageLoader
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
@@ -59,6 +60,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
@@ -95,7 +97,7 @@ import java.util.Date
 @Suppress("LargeClass")
 class ReaderViewModel @JvmOverloads constructor(
     private val savedState: SavedStateHandle,
-    private val sourceManager: MangaSourceManager = Injekt.get(),
+    val sourceManager: MangaSourceManager = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadProvider: MangaDownloadProvider = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
@@ -255,6 +257,23 @@ class ReaderViewModel @JvmOverloads constructor(
                 chapterId = currentChapter.chapter.id!!
             }
             .launchIn(viewModelScope)
+        // SY -->
+        state.mapLatest { it.ehAutoscrollFreq }
+            .distinctUntilChanged()
+            .drop(1)
+            .onEach { text ->
+                val parsed = text.toDoubleOrNull()
+
+                if (parsed == null || parsed <= 0 || parsed > 9999) {
+                    readerPreferences.autoscrollInterval().set(-1f)
+                    mutableState.update { it.copy(isAutoScrollEnabled = false) }
+                } else {
+                    readerPreferences.autoscrollInterval().set(parsed.toFloat())
+                    mutableState.update { it.copy(isAutoScrollEnabled = true) }
+                }
+            }
+            .launchIn(viewModelScope)
+        // SY <--
     }
 
     override fun onCleared() {
@@ -293,7 +312,21 @@ class ReaderViewModel @JvmOverloads constructor(
                 val manga = getManga.await(mangaId)
                 if (manga != null) {
                     sourceManager.isInitialized.first { it }
-                    mutableState.update { it.copy(manga = manga) }
+                    val relativeTime = uiPreferences.relativeTime().get()
+                    val autoScrollFreq = readerPreferences.autoscrollInterval().get()
+                    mutableState.update {
+                        it.copy(
+                            manga = manga,
+                            dateRelativeTime = relativeTime,
+                            ehAutoscrollFreq = if (autoScrollFreq == -1f) {
+                                ""
+                            } else {
+                                autoScrollFreq.toString()
+                            },
+                            isAutoScrollEnabled = autoScrollFreq != -1f,
+                            /* SY <-- */
+                        )
+                    }
                     if (chapterId == -1L) chapterId = initialChapterId
 
                     val context = Injekt.get<Application>()
@@ -792,6 +825,29 @@ class ReaderViewModel @JvmOverloads constructor(
     }
 
     // SY -->
+    fun showEhUtils(visible: Boolean) {
+        mutableState.update { it.copy(ehUtilsVisible = visible) }
+    }
+
+    fun openAutoScrollHelpDialog() {
+        mutableState.update { it.copy(dialog = Dialog.AutoScrollHelp) }
+    }
+
+    fun openBoostPageHelp() {
+        mutableState.update { it.copy(dialog = Dialog.BoostPageHelp) }
+    }
+
+    fun openRetryAllHelp() {
+        mutableState.update { it.copy(dialog = Dialog.RetryAllHelp) }
+    }
+
+    fun toggleAutoScroll(enabled: Boolean) {
+        mutableState.update { it.copy(autoScroll = enabled) }
+    }
+
+    fun setAutoScrollFrequency(frequency: String) {
+        mutableState.update { it.copy(ehAutoscrollFreq = frequency) }
+    }
     fun setDoublePages(doublePages: Boolean) {
         mutableState.update { it.copy(doublePages = doublePages) }
     }
@@ -1134,9 +1190,14 @@ class ReaderViewModel @JvmOverloads constructor(
         // SY -->
         val currentPageText: String = "",
         val lastShiftDoubleState: Boolean? = null,
+        val ehUtilsVisible: Boolean = false,
         val indexPageToShift: Int? = null,
         val indexChapterToShift: Long? = null,
         val doublePages: Boolean = false,
+        val dateRelativeTime: Boolean = true,
+        val autoScroll: Boolean = false,
+        val isAutoScrollEnabled: Boolean = false,
+        val ehAutoscrollFreq: String = "",
         // SY <--
     ) {
         val currentChapter: ReaderChapter?
@@ -1155,6 +1216,12 @@ class ReaderViewModel @JvmOverloads constructor(
             val page: ReaderPage,
             val extraPage: ReaderPage? = null,
         ) : Dialog
+
+        // SY -->
+        data object AutoScrollHelp : Dialog
+        data object RetryAllHelp : Dialog
+        data object BoostPageHelp : Dialog
+        // SY <--
     }
 
     sealed interface Event {
