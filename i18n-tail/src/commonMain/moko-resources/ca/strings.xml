@@ -18,7 +18,7 @@
   <string name="artist_hint">Artist: %1$s</string>
   <string name="custom_entry_info">Custom entry info</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Cast Settings</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Cast Settings</string>
   <string name="pref_enable_cast">Enable or disable Cast</string>
   <string name="action_cast">Send to Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Show downloaded episode file size</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr and update user agent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr to update the user agent. Only required once; then toggle as needed.</string>
   <string name="title_cast_quality">Choose Cast Quality/Provider</string>
+  <string name="cast_not_connected">Cast not connected</string>
+  <string name="cast_video_added_to_queue">Video added to queue</string>
+  <string name="cast_error_loading">Error loading video from Cast</string>
+  <string name="server_local_notification_casting">The local server is running. Tap to stop it.</string>
+  <string name="server_local_notification_channel_description">Local server notification channel</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscroll</string>
+  <string name="eh_retry_all">Retry all</string>
+  <string name="eh_boost_page">Boost page</string>
+  <string name="eh_autoscroll_help">Autoscroll help</string>
+  <string name="eh_autoscroll_help_message">Automatically scroll to the next page in the specified interval. Interval is specified in seconds.</string>
+  <string name="eh_autoscroll_freq_invalid">Invalid frequency</string>
+  <string name="eh_retry_all_help">Retry all help</string>
+  <string name="eh_retry_all_help_message">Re-add all failed pages to the download queue.</string>
+  <string name="eh_boost_page_help">Boost page help</string>
+  <string name="eh_boost_page_help_message">Normally the downloader can only download a specific amount of pages at the same time. This means you can be waiting for a page to download but the downloader will not start downloading the page until it has a free download slot. Pressing \'Boost page\' will force the downloader to begin downloading the current page, regardless of whether or not there is an available slot.</string>
+  <string name="eh_boost_page_invalid">This page cannot be boosted (invalid page)!</string>
+  <string name="eh_boost_page_errored">Page failed to load, press the retry button instead!</string>
+  <string name="eh_boost_page_downloading">This page is already downloading!</string>
+  <string name="eh_boost_page_downloaded">This page has already been downloaded!</string>
+  <string name="eh_boost_boosted">Boosted current page!</string>
+  <string name="eh_boost_invalid_loader">This page cannot be boosted (invalid page loader)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Retrying %1$d failed page…</item>
+    <item quantity="other">Retrying %1$d failed pages…</item>
+  </plurals>
 </resources>
