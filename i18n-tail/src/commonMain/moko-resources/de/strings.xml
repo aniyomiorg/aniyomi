@@ -18,7 +18,7 @@
   <string name="artist_hint">Interpret: %1$s</string>
   <string name="custom_entry_info">Benutzerdefinierte Eintrags-Info</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Cast-Einstellungen</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Cast-Einstellungen</string>
   <string name="pref_enable_cast">Cast aktivieren oder deaktivieren</string>
   <string name="action_cast">An Cast senden</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Dateigröße der heruntergeladenen Episoden anzeigen</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">FlareSolverr testen und User-Agent aktualisieren</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testen Sie FlareSolverr um den User-Agent zu aktualisieren. Nur einmal erforderlich; dann bei Bedarf umschalten.</string>
   <string name="title_cast_quality">Wähle Übertragungsqualität/Anbieter</string>
+  <string name="cast_not_connected">Cast nicht verbunden</string>
+  <string name="cast_video_added_to_queue">Video zur Warteschlange hinzugefügt</string>
+  <string name="cast_error_loading">Fehler beim Laden des Videos vom Cast</string>
+  <string name="server_local_notification_casting">Der lokale Server läuft. Tippen, um ihn zu stoppen.</string>
+  <string name="server_local_notification_channel_description">Lokaler Server Benachrichtigungskanal</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscrollen</string>
+  <string name="eh_retry_all">Alle wiederholen</string>
+  <string name="eh_boost_page">Boost-Seite</string>
+  <string name="eh_autoscroll_help">Autoscroll-Hilfe</string>
+  <string name="eh_autoscroll_help_message">Scrollen Sie automatisch zur nächsten Seite im angegebenen Intervall. Intervall wird in Sekunden angegeben.</string>
+  <string name="eh_autoscroll_freq_invalid">Ungültige Frequenz</string>
+  <string name="eh_retry_all_help">Alle Hilfe wiederholen</string>
+  <string name="eh_retry_all_help_message">Fügen Sie alle fehlgeschlagenen Seiten erneut zur Download-Warteschlange hinzu.</string>
+  <string name="eh_boost_page_help">Seiten-Hilfe erhöhen</string>
+  <string name="eh_boost_page_help_message">Normalerweise kann der Downloader nur eine bestimmte Anzahl von Seiten gleichzeitig herunterladen. Das bedeutet, dass Sie auf eine Seite warten können, die Sie herunterladen können, aber der Downloader wird nicht mit dem Herunterladen der Seite beginnen, bis es einen kostenlosen Download-Slot. Durch Drücken der \'Boost-Seite\' wird der Downloader gezwungen, die aktuelle Seite herunterzuladen, unabhängig davon, ob es einen verfügbaren Platz gibt oder nicht.</string>
+  <string name="eh_boost_page_invalid">Diese Seite kann nicht geboostet werden (ungültige Seite)!</string>
+  <string name="eh_boost_page_errored">Seite konnte nicht geladen werden, drücken Sie stattdessen die Schaltfläche \"Wiederholen\"!</string>
+  <string name="eh_boost_page_downloading">Diese Seite wird bereits heruntergeladen!</string>
+  <string name="eh_boost_page_downloaded">Diese Seite wurde bereits heruntergeladen!</string>
+  <string name="eh_boost_boosted">Aktuelle Seite geboostet!</string>
+  <string name="eh_boost_invalid_loader">Diese Seite kann nicht geboostet werden (ungültiger Seiten-Loader)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Retrying %1$d failed page…</item>
+    <item quantity="other">Retrying %1$d failed pages…</item>
+  </plurals>
 </resources>
