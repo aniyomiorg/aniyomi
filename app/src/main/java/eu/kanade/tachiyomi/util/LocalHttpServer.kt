@@ -30,7 +30,6 @@ class LocalHttpServer(
 
         val mimeType = URLConnection.guessContentTypeFromName(uri.toString()) ?: "application/octet-stream"
 
-        // Abrir el archivo como un InputStream y obtener su tamaño
         val assetFileDescriptor = try {
             contentResolver.openAssetFileDescriptor(uri, "r")
         } catch (e: Exception) {
@@ -39,21 +38,18 @@ class LocalHttpServer(
 
         val fileLength = assetFileDescriptor?.length ?: -1L
 
-        // Verificar si se incluye el header "Range"
         val rangeHeader = session.headers["range"]
         if (rangeHeader != null && fileLength > 0) {
             try {
-                // Se espera el formato "bytes=start-end"
+
                 val range = rangeHeader.replace("bytes=", "").split("-")
                 val start = range.getOrNull(0)?.toLongOrNull() ?: 0L
-                // Si no se especifica el final, usamos el tamaño del archivo - 1
                 val end = range.getOrNull(1)?.toLongOrNull() ?: (fileLength - 1)
                 val length = end - start + 1
 
                 val inputStream = contentResolver.openInputStream(uri)
                 inputStream?.skip(start)
 
-                // Responder con Partial Content
                 val response = newFixedLengthResponse(Response.Status.PARTIAL_CONTENT, mimeType, inputStream, length)
                 response.addHeader("Content-Range", "bytes $start-$end/$fileLength")
                 response.addHeader("Accept-Ranges", "bytes")
@@ -64,7 +60,6 @@ class LocalHttpServer(
             }
         }
 
-        // Sin Range header, enviar el archivo completo
         val inputStream = contentResolver.openInputStream(uri)
         return if (inputStream != null) {
             val response = newChunkedResponse(Response.Status.OK, mimeType, inputStream)

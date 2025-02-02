@@ -23,11 +23,9 @@ class CastMediaBuilder(private val viewModel: PlayerViewModel, private val activ
         val video = viewModel.videoList.value.getOrNull(index)
             ?: throw IllegalStateException("Invalid video index: $index")
 
-        // Obtener la URL original
         var videoUrl = video.videoUrl ?: throw IllegalStateException("Video URL is null")
         logcat(LogPriority.DEBUG) { "Video URL: $videoUrl" }
 
-        // Si es un URI local, convertirlo a URL accesible vía HTTP
         if (videoUrl.startsWith("content://")) {
             videoUrl = getLocalServerUrl(videoUrl)
             logcat(LogPriority.DEBUG) { "Local Server URL: $videoUrl" }
