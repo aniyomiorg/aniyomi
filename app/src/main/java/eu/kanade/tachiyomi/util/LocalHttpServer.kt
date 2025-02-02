@@ -41,7 +41,6 @@ class LocalHttpServer(
         val rangeHeader = session.headers["range"]
         if (rangeHeader != null && fileLength > 0) {
             try {
-
                 val range = rangeHeader.replace("bytes=", "").split("-")
                 val start = range.getOrNull(0)?.toLongOrNull() ?: 0L
                 val end = range.getOrNull(1)?.toLongOrNull() ?: (fileLength - 1)
