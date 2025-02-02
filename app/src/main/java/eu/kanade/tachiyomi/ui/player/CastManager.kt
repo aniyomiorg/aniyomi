@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.cast.MediaLoadRequestData
 import com.google.android.gms.cast.MediaQueueItem
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.system.logcat
@@ -30,24 +32,23 @@ class CastManager(
     private val context: Context,
     private val activity: PlayerActivity,
 ) {
-    private val viewModel by activity.viewModels<PlayerViewModel>(factoryProducer = {
-        PlayerViewModelProviderFactory(activity)
-    })
+
+    private val viewModel by activity.viewModels<PlayerViewModel> { PlayerViewModelProviderFactory(activity) }
     private val player by lazy { activity.player }
+    private val playerPreferences: PlayerPreferences by lazy { viewModel.playerPreferences }
+    private val autoplayEnabled = playerPreferences.autoplayEnabled().get()
+
+    private val _castState = MutableStateFlow(CastState.DISCONNECTED)
+    val castState: StateFlow<CastState> = _castState.asStateFlow()
 
     var castContext: CastContext? = null
+        private set
     private var castSession: CastSession? = null
     private var sessionListener: CastSessionListener? = null
     private val mediaBuilder = CastMediaBuilder(viewModel, activity)
 
-    private val _castState = MutableStateFlow(CastState.DISCONNECTED)
-    val castState: StateFlow<CastState> = _castState.asStateFlow()
-    private val playerPreferences: PlayerPreferences by lazy { viewModel.playerPreferences }
-    private val autoplayEnabled = playerPreferences.autoplayEnabled().get()
-
-    private val isCastApiAvailable
-        get() = GoogleApiAvailability.getInstance()
-            .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
+    private val isCastApiAvailable: Boolean
+        get() = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
 
     init {
         initializeCast()
@@ -55,7 +56,6 @@ class CastManager(
 
     private fun initializeCast() {
         if (!isCastApiAvailable) return
-
         try {
             castContext = CastContext.getSharedInstance(context.applicationContext)
             sessionListener = CastSessionListener(this)
@@ -65,14 +65,69 @@ class CastManager(
         }
     }
 
+    fun registerSessionListener() {
+        sessionListener?.let { listener ->
+            castContext?.sessionManager?.addSessionManagerListener(listener, CastSession::class.java)
+        }
+    }
+
+    fun unregisterSessionListener() {
+        sessionListener?.let { listener ->
+            castContext?.sessionManager?.removeSessionManagerListener(listener, CastSession::class.java)
+        }
+    }
+
+    fun refreshCastContext() {
+        castSession = castContext?.sessionManager?.currentCastSession
+        castSession?.takeIf { it.isConnected }?.let {
+            updateCastState(CastState.CONNECTED)
+        }
+    }
+
+    private fun endSession() {
+        castContext?.sessionManager?.endCurrentSession(true)
+        updateCastState(CastState.DISCONNECTED)
+    }
+
+    fun cleanup() {
+        unregisterSessionListener()
+        castSession = null
+    }
+
+    fun onSessionConnected(session: CastSession) {
+        castSession = session
+        updateCastState(CastState.CONNECTED)
+    }
+
+    fun onSessionEnded() {
+        castSession = null
+        updateCastState(CastState.DISCONNECTED)
+    }
+
+    fun updateCastState(state: CastState) {
+        _castState.value = state
+        when (state) {
+            CastState.CONNECTED -> {
+                player.paused = true
+                activity.invalidateOptionsMenu()
+            }
+            CastState.DISCONNECTED -> {
+                activity.invalidateOptionsMenu()
+            }
+            CastState.CONNECTING -> { }
+        }
+    }
+
+    fun maintainCastSessionBackground() {
+        castSession?.remoteMediaClient?.takeIf { it.isPlaying }?.pause()
+    }
+
     fun handleQualitySelection() {
         viewModel.videoList
             .filter { it.isNotEmpty() }
             .onEach { videos ->
                 if (videos.size > 1) {
-                    activity.runOnUiThread {
-                        showQualitySelectionDialog()
-                    }
+                    activity.runOnUiThread { showQualitySelectionDialog() }
                 } else {
                     loadRemoteMedia()
                 }
@@ -95,7 +150,6 @@ class CastManager(
                 .setCancelable(false)
                 .setNegativeButton(android.R.string.cancel) { dialog, _ ->
                     dialog.dismiss()
-                    endSession()
                 }
                 .show()
         }
@@ -110,112 +164,43 @@ class CastManager(
     private fun loadRemoteMedia() {
         if (!isCastApiAvailable) return
         val remoteMediaClient = castSession?.remoteMediaClient ?: return
-
-        try {
-            val selectedIndex = viewModel.selectedVideoIndex.value
-            val mediaInfo = mediaBuilder.buildMediaInfo(selectedIndex)
-            // si ya hay un video colocado entonce agregar a la cola
-            if (remoteMediaClient.mediaQueue.itemCount > 0) {
-                remoteMediaClient.queueAppendItem(
-                    MediaQueueItem.Builder(mediaInfo).build(),
-                    null,
-                )
-
+        activity.lifecycleScope.launch {
+            try {
+                val selectedIndex = viewModel.selectedVideoIndex.value
+                val mediaInfo = mediaBuilder.buildMediaInfo(selectedIndex)
+                if (remoteMediaClient.mediaQueue.itemCount > 0) {
+                    remoteMediaClient.queueAppendItem(
+                        MediaQueueItem.Builder(mediaInfo).build(),
+                        null,
+                    )
+                    activity.runOnUiThread {
+                        Toast.makeText(
+                            context,
+                            context.stringResource(TLMR.strings.cast_video_added_to_queue),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                } else {
+                    remoteMediaClient.load(
+                        MediaLoadRequestData.Builder()
+                            .setMediaInfo(mediaInfo)
+                            .setAutoplay(autoplayEnabled)
+                            .setCurrentTime((player.timePos ?: 0).toLong() * 1000)
+                            .build(),
+                    )
+                    _castState.value = CastState.CONNECTED
+                }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e)
                 activity.runOnUiThread {
                     Toast.makeText(
                         context,
-                        context.stringResource(TLMR.strings.cast_video_added_to_queue),
+                        context.stringResource(TLMR.strings.cast_error_loading),
                         Toast.LENGTH_SHORT,
                     ).show()
                 }
-            } else {
-                // Iniciar nueva reproducción
-                remoteMediaClient.load(
-                    MediaLoadRequestData.Builder()
-                        .setMediaInfo(mediaInfo)
-                        .setAutoplay(autoplayEnabled)
-                        .setCurrentTime((player.timePos ?: 0).toLong() * 1000)
-                        .build(),
-                )
-                _castState.value = CastState.CONNECTED
-            }
-        } catch (e: Exception) {
-            _castState.value = CastState.DISCONNECTED
-            logcat(LogPriority.ERROR, e)
-            activity.runOnUiThread {
-                Toast.makeText(
-                    context,
-                    context.stringResource(TLMR.strings.cast_error_loading),
-                    Toast.LENGTH_SHORT,
-                ).show()
             }
         }
-    }
-
-    fun onSessionConnected(session: CastSession) {
-        castSession = session
-        updateCastState(CastState.CONNECTED)
-    }
-
-    fun onSessionEnded() {
-        castSession = null
-        updateCastState(CastState.DISCONNECTED)
-    }
-
-    fun updateCastState(state: CastState) {
-        _castState.value = state
-
-        when (state) {
-            CastState.CONNECTED -> {
-                player.paused = true
-                activity.invalidateOptionsMenu()
-            }
-            CastState.DISCONNECTED -> {
-                activity.invalidateOptionsMenu()
-            }
-            CastState.CONNECTING -> {}
-        }
-    }
-
-    fun registerSessionListener() {
-        sessionListener?.let {
-            castContext?.sessionManager?.addSessionManagerListener(
-                it,
-                CastSession::class.java,
-            )
-        }
-    }
-
-    fun unregisterSessionListener() {
-        sessionListener?.let {
-            castContext?.sessionManager?.removeSessionManagerListener(
-                it,
-                CastSession::class.java,
-            )
-        }
-    }
-
-    fun refreshCastContext() {
-        castSession = castContext?.sessionManager?.currentCastSession
-        castSession?.let {
-            if (it.isConnected) updateCastState(CastState.CONNECTED)
-        }
-    }
-
-    fun maintainCastSessionBackground() {
-        castSession?.remoteMediaClient?.apply {
-            if (isPlaying) pause()
-        }
-    }
-
-    private fun endSession() {
-        castContext?.sessionManager?.endCurrentSession(true)
-        updateCastState(CastState.DISCONNECTED)
-    }
-
-    fun cleanup() {
-        unregisterSessionListener()
-        castSession = null
     }
 
     enum class CastState {

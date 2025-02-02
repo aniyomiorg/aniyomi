@@ -86,6 +86,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -1050,6 +1051,7 @@ class PlayerActivity : BaseActivity() {
         )
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun setVideoList(
         qualityIndex: Int,
         videos: List<Video>?,

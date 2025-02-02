@@ -54,7 +54,6 @@ class LocalHttpServer(
                 response.addHeader("Accept-Ranges", "bytes")
                 return response
             } catch (e: Exception) {
-                // En caso de error, se envía el archivo completo
                 logcat(LogPriority.ERROR, e) { "Error processing Range header" }
             }
         }
