@@ -18,7 +18,7 @@
   <string name="artist_hint">Kunstner: %1$s</string>
   <string name="custom_entry_info">Brugerdefineret indtastningsinfo</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Cast Indstillinger</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Cast Indstillinger</string>
   <string name="pref_enable_cast">Aktiver eller deaktiver Cast</string>
   <string name="action_cast">Send til Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Vis downloadet episode filstørrelse</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr og opdater brugeragent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr for at opdatere brugeragent. Kun påkrævet én gang, og skift derefter efter behov.</string>
   <string name="title_cast_quality">Vælg Medvirkende Kvalitet/Udbyder</string>
+  <string name="cast_not_connected">Cast ikke forbundet</string>
+  <string name="cast_video_added_to_queue">Video tilføjet til kø</string>
+  <string name="cast_error_loading">Fejl ved indlæsning af video fra Cast</string>
+  <string name="server_local_notification_casting">Den lokale server kører. Tryk for at stoppe den.</string>
+  <string name="server_local_notification_channel_description">Lokal server notifikationskanal</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">AutoRul</string>
+  <string name="eh_retry_all">Prøv alle igen</string>
+  <string name="eh_boost_page">Boost side</string>
+  <string name="eh_autoscroll_help">Autorul hjælp</string>
+  <string name="eh_autoscroll_help_message">Rul automatisk til næste side i det angivne interval. Interval er angivet i sekunder.</string>
+  <string name="eh_autoscroll_freq_invalid">Ugyldig frekvens</string>
+  <string name="eh_retry_all_help">Prøv al hjælp igen</string>
+  <string name="eh_retry_all_help_message">Gentilføj alle mislykkede sider til downloadkøen.</string>
+  <string name="eh_boost_page_help">Boost sidehjælp</string>
+  <string name="eh_boost_page_help_message">Normalt kan downloaderen kun downloade en bestemt mængde sider på samme tid. Det betyder, at du kan vente på en side til download, men downloaderen vil ikke begynde at downloade siden, før det har en gratis download slot. Tryk på \'Boost-side\' vil tvinge downloaderen til at begynde at downloade den aktuelle side, uanset om der er en ledig plads eller ej.</string>
+  <string name="eh_boost_page_invalid">Denne side kan ikke boostes (ugyldig side)!</string>
+  <string name="eh_boost_page_errored">Siden kunne ikke indlæses, tryk på genprøv knappen i stedet!</string>
+  <string name="eh_boost_page_downloading">Denne side downloades allerede!</string>
+  <string name="eh_boost_page_downloaded">Denne side er allerede downloadet!</string>
+  <string name="eh_boost_boosted">Boostet aktuelle side!</string>
+  <string name="eh_boost_invalid_loader">Denne side kan ikke boostes (ugyldig side loader)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Gentagelse af %1$d mislykkedes side…</item>
+    <item quantity="other">Prøver %1$d mislykkede sider…</item>
+  </plurals>
 </resources>
