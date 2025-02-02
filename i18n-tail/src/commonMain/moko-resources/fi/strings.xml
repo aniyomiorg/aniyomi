@@ -18,7 +18,7 @@
   <string name="artist_hint">Esittäjä: %1$s</string>
   <string name="custom_entry_info">Mukautetut tietueen tiedot</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Lähetyksen Asetukset</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Lähetyksen Asetukset</string>
   <string name="pref_enable_cast">Ota käyttöön tai poista käytöstä</string>
   <string name="action_cast">Lähetä lähetykseen</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Näytä ladatun jakson tiedoston koko</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Testaa FlareSolverr ja päivitä käyttäjä agentti</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testaa FlareSolverr päivittääksesi käyttäjän agentin. Tarvittava vain kerran; ota sitten tarvittaessa käyttöön.</string>
   <string name="title_cast_quality">Valitse Cast Quality/Provider</string>
+  <string name="cast_not_connected">Suora ei yhdistetty</string>
+  <string name="cast_video_added_to_queue">Video lisätty jonoon</string>
+  <string name="cast_error_loading">Virhe ladattaessa videota Cast</string>
+  <string name="server_local_notification_casting">Paikallinen palvelin on käynnissä. Napauta pysäyttääksesi sen.</string>
+  <string name="server_local_notification_channel_description">Paikallisen palvelimen ilmoituskanava</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Automaattinen Vieritys</string>
+  <string name="eh_retry_all">Yritä uudelleen</string>
+  <string name="eh_boost_page">Tehosta sivu</string>
+  <string name="eh_autoscroll_help">Automaattinen vieritysohje</string>
+  <string name="eh_autoscroll_help_message">Vieritä automaattisesti seuraavalle sivulle määritetyllä ajanjaksolla. Aikaväli on määritetty sekunneissa.</string>
+  <string name="eh_autoscroll_freq_invalid">Virheellinen taajuus</string>
+  <string name="eh_retry_all_help">Yritä uudelleen kaikkea apua</string>
+  <string name="eh_retry_all_help_message">Lisää kaikki epäonnistuneet sivut uudelleen latausjonoon.</string>
+  <string name="eh_boost_page_help">Tehosta sivun ohje</string>
+  <string name="eh_boost_page_help_message">Normaalisti lataaja voi ladata vain tietyn määrän sivuja samaan aikaan. Tämä tarkoittaa, että voit odottaa sivun lataamista, mutta lataaja ei aloita sivun lataamista, ennen kuin sillä on ilmainen latauspaikka. Painamalla \'Boost page\' pakottaa lataajan aloittamaan nykyisen sivun lataamisen riippumatta siitä, onko olemassa saatavilla oleva paikka.</string>
+  <string name="eh_boost_page_invalid">Sivua ei voi lisätä (virheellinen sivu)!</string>
+  <string name="eh_boost_page_errored">Sivua ei voitu ladata. Paina sen sijaan uudelleen -painiketta!</string>
+  <string name="eh_boost_page_downloading">Tämä sivu on jo ladataan!</string>
+  <string name="eh_boost_page_downloaded">Tämä sivu on jo ladattu!</string>
+  <string name="eh_boost_boosted">Tehostettu nykyinen sivu!</string>
+  <string name="eh_boost_invalid_loader">Sivua ei voi lisätä (virheellinen sivun lataus)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Retrying %1$d failed page…</item>
+    <item quantity="other">Noudetaan %1$d epäonnistunutta sivua…</item>
+  </plurals>
 </resources>
