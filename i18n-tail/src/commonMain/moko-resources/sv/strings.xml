@@ -18,7 +18,7 @@
   <string name="artist_hint">Konstnär: %1$s</string>
   <string name="custom_entry_info">Anpassad post info</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Casta inställningar</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Casta inställningar</string>
   <string name="pref_enable_cast">Aktivera eller inaktivera Cast</string>
   <string name="action_cast">Skicka till Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Visa hämtade avsnittets filstorlek</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Testa FlareSolverr och uppdatera användaragenten</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testa FlareSolverr för att uppdatera användaragenten. Krävs endast en gång, växla sedan vid behov.</string>
   <string name="title_cast_quality">Välj gjutkvalitet/leverantör</string>
+  <string name="cast_not_connected">Cast ej ansluten</string>
+  <string name="cast_video_added_to_queue">Video tillagd i kö</string>
+  <string name="cast_error_loading">Fel vid laddning av video från Cast</string>
+  <string name="server_local_notification_casting">Den lokala servern körs. Tryck för att stoppa den.</string>
+  <string name="server_local_notification_channel_description">Kanal för lokal server avisering</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Skrolla automatiskt</string>
+  <string name="eh_retry_all">Försök igen alla</string>
+  <string name="eh_boost_page">Öka sidan</string>
+  <string name="eh_autoscroll_help">Autoscroll hjälp</string>
+  <string name="eh_autoscroll_help_message">Rulla automatiskt till nästa sida i det angivna intervallet. Intervall anges i sekunder.</string>
+  <string name="eh_autoscroll_freq_invalid">Ogiltig frekvens</string>
+  <string name="eh_retry_all_help">Försök igen all hjälp</string>
+  <string name="eh_retry_all_help_message">Lägg till alla misslyckade sidor till nedladdningskön.</string>
+  <string name="eh_boost_page_help">Öka sidans hjälp</string>
+  <string name="eh_boost_page_help_message">Normalt kan nerladdaren bara ladda ner en viss mängd sidor samtidigt. Detta innebär att du kan vänta på en sida för att ladda ner, men nedladdaren kommer inte att börja ladda ner sidan förrän den har en gratis nedladdning slot. Genom att trycka på \"Boost page\" kommer nedladdningsanvändaren att börja ladda ner den aktuella sidan, oavsett om det finns en ledig plats eller inte.</string>
+  <string name="eh_boost_page_invalid">Denna sida kan inte boostas (ogiltig sida)!</string>
+  <string name="eh_boost_page_errored">Sidan kunde inte laddas, tryck på knappen igen istället!</string>
+  <string name="eh_boost_page_downloading">Den här sidan laddas redan ner!</string>
+  <string name="eh_boost_page_downloaded">Denna sida har redan hämtats!</string>
+  <string name="eh_boost_boosted">Förstärkt aktuell sida!</string>
+  <string name="eh_boost_invalid_loader">Denna sida kan inte boostas (ogiltig sidladdare)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Försök igen med %1$d misslyckades sida…</item>
+    <item quantity="other">Försök igen med %1$d misslyckade sidor…</item>
+  </plurals>
 </resources>
