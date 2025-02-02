@@ -18,7 +18,7 @@
   <string name="artist_hint">Artista: %1$s</string>
   <string name="custom_entry_info">Informazioni sulla voce personalizzata</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Impostazioni Trasmetti</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Impostazioni Trasmetti</string>
   <string name="pref_enable_cast">Abilita o disabilita Cast</string>
   <string name="action_cast">Invia a Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Mostra la dimensione del file dell\'episodio scaricato</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Prova FlareSolverr e aggiorna l\'user agent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Prova FlareSolverr per aggiornare l\'user agent. Richiesto solo una volta, quindi attiva/disattiva quando necessario.</string>
   <string name="title_cast_quality">Scegli Qualità Trasparente/Fornitore</string>
+  <string name="cast_not_connected">Trasmetti non connesso</string>
+  <string name="cast_video_added_to_queue">Video aggiunto alla coda</string>
+  <string name="cast_error_loading">Errore nel caricare il video da Cast</string>
+  <string name="server_local_notification_casting">Il server locale è in esecuzione. Tocca per fermarlo.</string>
+  <string name="server_local_notification_channel_description">Canale di notifica server locale</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscroll</string>
+  <string name="eh_retry_all">Riprova tutti</string>
+  <string name="eh_boost_page">Boost page</string>
+  <string name="eh_autoscroll_help">Guida all\'autoscroll</string>
+  <string name="eh_autoscroll_help_message">Scorri automaticamente alla pagina successiva nell\'intervallo specificato. L\'intervallo è specificato in secondi.</string>
+  <string name="eh_autoscroll_freq_invalid">Frequenza non valida</string>
+  <string name="eh_retry_all_help">Riprova tutto l\'aiuto</string>
+  <string name="eh_retry_all_help_message">Re-aggiungi tutte le pagine fallite alla coda di download.</string>
+  <string name="eh_boost_page_help">Guida della pagina di potenziamento</string>
+  <string name="eh_boost_page_help_message">Normalmente il downloader può scaricare solo una quantità specifica di pagine allo stesso tempo. Questo significa che si può essere in attesa di una pagina da scaricare, ma il downloader non inizierà a scaricare la pagina fino a quando non ha un download gratuito slot. Premendo \'Boost page\' lo scaricatore comincerà a scaricare la pagina corrente, indipendentemente dal fatto che ci sia o meno uno slot disponibile.</string>
+  <string name="eh_boost_page_invalid">Questa pagina non può essere potenziata (pagina non valida)!</string>
+  <string name="eh_boost_page_errored">Impossibile caricare la pagina, premi il pulsante di riprova!</string>
+  <string name="eh_boost_page_downloading">Questa pagina è già in download!</string>
+  <string name="eh_boost_page_downloaded">Questa pagina è già stata scaricata!</string>
+  <string name="eh_boost_boosted">Pagina corrente potenziata!</string>
+  <string name="eh_boost_invalid_loader">Questa pagina non può essere potenziata (caricamento pagina non valido)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Riprovare %1$d pagina non riuscita…</item>
+    <item quantity="other">Riprovare le pagine di %1$d fallite…</item>
+  </plurals>
 </resources>
