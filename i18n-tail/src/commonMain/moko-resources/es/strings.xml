@@ -18,7 +18,7 @@
   <string name="artist_hint">Artista: %1$s</string>
   <string name="custom_entry_info">Información de entrada personalizada</string>
   <string name="reset_info">Restablecer información</string>
-  <string name="pref_category_cast">Configuración de transmisión</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Configuración de transmisión</string>
   <string name="pref_enable_cast">Habilitar o deshabilitar la transmisión</string>
   <string name="action_cast">Enviar a la transmisión</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Mostrar el tamaño del archivo del episodio descargado</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Probar FlareSolverr y actualizar el agente de usuario</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Pruebe FlareSolverr para actualizar el agente de usuario. Solo es necesario una vez; luego cambie según sea necesario.</string>
   <string name="title_cast_quality">Elige calidad/proveedor de transmisión</string>
+  <string name="cast_not_connected">Transmisión no establecida</string>
+  <string name="cast_video_added_to_queue">Vídeo añadido a la cola</string>
+  <string name="cast_error_loading">Error al cargar el video desde el Cast</string>
+  <string name="server_local_notification_casting">El servidor local está en ejecución. Toca para detenerlo.</string>
+  <string name="server_local_notification_channel_description">Canal de notificación del servidor local</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">AutoScroll</string>
+  <string name="eh_retry_all">Reintentar todo</string>
+  <string name="eh_boost_page">Potenciar página</string>
+  <string name="eh_autoscroll_help">Ayuda para el AutoScroll</string>
+  <string name="eh_autoscroll_help_message">Desplazamiento automático a la siguiente página en el intervalo especificado. El intervalo se especifica en segundos.</string>
+  <string name="eh_autoscroll_freq_invalid">Frecuencia no válida</string>
+  <string name="eh_retry_all_help">Ayuda el Reintentar todo</string>
+  <string name="eh_retry_all_help_message">Vuelve a agregar todas las páginas fallidas a la cola de descargas.</string>
+  <string name="eh_boost_page_help">Ayuda con el potenciador de página</string>
+  <string name="eh_boost_page_help_message">Normalmente, el descargador solo puede descargar una cantidad específica de páginas al mismo tiempo. Esto significa que puedes estar esperando a que se descargue una página, pero el descargador no comenzará a descargarla hasta que tenga un espacio de descarga disponible. Al presionar \'Potenciar página\', se forzará al descargador a comenzar a descargar la página actual, sin importar si hay o no un espacio disponible.</string>
+  <string name="eh_boost_page_invalid">¡Esta página no puede ser potenciada (página inválida)!</string>
+  <string name="eh_boost_page_errored">La página no se cargó, ¡presiona el botón de reintentar!</string>
+  <string name="eh_boost_page_downloading">¡Esta página ya se está descargando!</string>
+  <string name="eh_boost_page_downloaded">¡Esta página ya se está descargando!</string>
+  <string name="eh_boost_boosted">¡Página actual potenciada!</string>
+  <string name="eh_boost_invalid_loader">¡Esta página no puede ser potenciada (cargador de página inválido)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Reintentando %1$d página fallida…</item>
+    <item quantity="other">Reintentando %1$d páginas fallidas…</item>
+  </plurals>
 </resources>
