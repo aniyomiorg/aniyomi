@@ -293,6 +293,8 @@ dependencies {
     implementation(libs.torrentserver)
     // Cast
     implementation(libs.bundles.cast)
+    // nanohttpd server
+    implementation(libs.nanohttpd)
 }
 
 androidComponents {
