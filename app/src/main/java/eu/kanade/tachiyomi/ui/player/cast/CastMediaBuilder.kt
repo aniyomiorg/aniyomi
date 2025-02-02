@@ -38,7 +38,8 @@ class CastMediaBuilder(
             videoUrl.startsWith("content://") -> getLocalServerUrl(videoUrl)
             videoUrl.startsWith(
                 "magnet",
-            ) || videoUrl.endsWith(".torrent") -> torrentLinkHandler(videoUrl, video.quality)
+            ) ||
+                videoUrl.endsWith(".torrent") -> torrentLinkHandler(videoUrl, video.quality)
             else -> videoUrl
         }
 
