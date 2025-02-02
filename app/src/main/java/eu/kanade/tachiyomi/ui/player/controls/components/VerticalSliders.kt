@@ -35,6 +35,7 @@ import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.BrightnessHigh
 import androidx.compose.material.icons.filled.BrightnessLow
 import androidx.compose.material.icons.filled.BrightnessMedium
+import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -138,7 +139,8 @@ fun VerticalSlider(
 @Composable
 fun BrightnessSlider(
     brightness: Float,
-    range: ClosedFloatingPointRange<Float>,
+    positiveRange: ClosedFloatingPointRange<Float>,
+    negativeRange: ClosedFloatingPointRange<Float>,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -151,11 +153,14 @@ fun BrightnessSlider(
             style = MaterialTheme.typography.bodySmall,
         )
         VerticalSlider(
-            brightness,
-            range,
+            value = brightness.coerceIn(0f, 1f),
+            range = positiveRange,
+            overflowRange = negativeRange,
+            overflowValue = (-brightness).coerceIn(0f..0.75f),
         )
         Icon(
-            when (percentage(brightness, range)) {
+            when (percentage(brightness, positiveRange)) {
+                in -1f..0f -> Icons.Default.ModeNight
                 in 0f..0.3f -> Icons.Default.BrightnessLow
                 in 0.3f..0.6f -> Icons.Default.BrightnessMedium
                 in 0.6f..1f -> Icons.Default.BrightnessHigh

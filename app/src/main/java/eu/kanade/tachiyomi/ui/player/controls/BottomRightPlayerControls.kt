@@ -17,27 +17,22 @@
 
 package eu.kanade.tachiyomi.ui.player.controls
 
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AspectRatio
 import androidx.compose.material.icons.filled.PictureInPictureAlt
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
-import tachiyomi.presentation.core.components.material.Button
-import tachiyomi.presentation.core.components.material.padding
+import eu.kanade.tachiyomi.ui.player.controls.components.FilledControlsButton
+import eu.kanade.tachiyomi.ui.player.execute
+import eu.kanade.tachiyomi.ui.player.executeLongPress
+import tachiyomi.domain.custombuttons.model.CustomButton
 
 @Composable
 fun BottomRightPlayerControls(
-    // TODO(customButton)
-    // customButton: CustomButtonEntity?,
+    customButton: CustomButton?,
+    customButtonTitle: String,
     aniskipButton: String?,
     onPressAniSkipButton: () -> Unit,
     isPipAvailable: Boolean,
@@ -47,43 +42,18 @@ fun BottomRightPlayerControls(
 ) {
     Row(modifier) {
         if (aniskipButton != null) {
-            Box(
-                modifier = Modifier.padding(end = MaterialTheme.padding.small),
-            ) {
-                Button(onClick = {}) {
-                    Text(text = aniskipButton)
-                }
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .combinedClickable(
-                            onClick = onPressAniSkipButton,
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                        ),
-                )
-            }
+            FilledControlsButton(
+                text = aniskipButton,
+                onClick = onPressAniSkipButton,
+                onLongClick = {},
+            )
+        } else if (customButton != null) {
+            FilledControlsButton(
+                text = customButtonTitle,
+                onClick = customButton::execute,
+                onLongClick = customButton::executeLongPress,
+            )
         }
-        // TODO(customButton)
-        // if (customButton != null) {
-        //     Box(
-        //         modifier = Modifier.padding(end = MaterialTheme.spacing.smaller),
-        //     ) {
-        //         Button(onClick = {}) {
-        //             Text(text = customButton.title)
-        //         }
-        //         Box(
-        //             modifier = Modifier
-        //                 .matchParentSize()
-        //                 .combinedClickable(
-        //                     onClick = customButton::execute,
-        //                     onLongClick = customButton::executeLongClick,
-        //                     interactionSource = remember { MutableInteractionSource() },
-        //                     indication = null,
-        //                 ),
-        //         )
-        //     }
-        // }
 
         if (isPipAvailable) {
             ControlsButton(

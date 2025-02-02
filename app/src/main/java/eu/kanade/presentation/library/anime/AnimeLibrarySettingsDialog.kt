@@ -36,6 +36,7 @@ import tachiyomi.presentation.core.components.SettingsChipRow
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
+import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
@@ -178,12 +179,12 @@ private fun ColumnScope.SortPage(
         }
         listOfNotNull(
             MR.strings.action_sort_alpha to AnimeLibrarySort.Type.Alphabetical,
-            MR.strings.action_sort_total to AnimeLibrarySort.Type.TotalEpisodes,
-            MR.strings.action_sort_last_read to AnimeLibrarySort.Type.LastSeen,
-            MR.strings.action_sort_last_manga_update to AnimeLibrarySort.Type.LastUpdate,
-            MR.strings.action_sort_unread_count to AnimeLibrarySort.Type.UnseenCount,
-            MR.strings.action_sort_latest_chapter to AnimeLibrarySort.Type.LatestEpisode,
-            MR.strings.action_sort_chapter_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
+            MR.strings.action_sort_total_episodes to AnimeLibrarySort.Type.TotalEpisodes,
+            MR.strings.action_sort_last_seen to AnimeLibrarySort.Type.LastSeen,
+            MR.strings.action_sort_last_anime_update to AnimeLibrarySort.Type.LastUpdate,
+            MR.strings.action_sort_unseen_count to AnimeLibrarySort.Type.UnseenCount,
+            MR.strings.action_sort_latest_episode to AnimeLibrarySort.Type.LatestEpisode,
+            MR.strings.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
             MR.strings.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
             trackerMeanPair,
             MR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
@@ -248,17 +249,29 @@ private fun ColumnScope.DisplayPage(
         }
     }
 
-    if (displayMode != LibraryDisplayMode.List) {
-        val configuration = LocalConfiguration.current
-        val columnPreference = remember {
-            if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                screenModel.libraryPreferences.animeLandscapeColumns()
-            } else {
-                screenModel.libraryPreferences.animePortraitColumns()
-            }
+    val configuration = LocalConfiguration.current
+    val columnPreference = remember {
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            screenModel.libraryPreferences.animeLandscapeColumns()
+        } else {
+            screenModel.libraryPreferences.animePortraitColumns()
         }
+    }
 
-        val columns by columnPreference.collectAsState()
+    val columns by columnPreference.collectAsState()
+    if (displayMode == LibraryDisplayMode.List) {
+        SliderItem(
+            label = stringResource(MR.strings.pref_library_rows),
+            max = 10,
+            value = columns,
+            valueText = if (columns > 0) {
+                pluralStringResource(MR.plurals.pref_library_entries_in_column, columns, columns)
+            } else {
+                stringResource(MR.strings.label_default)
+            },
+            onChange = columnPreference::set,
+        )
+    } else {
         SliderItem(
             label = stringResource(MR.strings.pref_library_columns),
             max = 10,

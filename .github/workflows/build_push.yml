@@ -6,8 +6,7 @@ permissions:
 on:
   push:
     branches:
-      - master
-      - dev
+      - '*'
     tags:
       - v*
 

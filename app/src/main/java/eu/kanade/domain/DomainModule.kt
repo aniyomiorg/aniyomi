@@ -41,6 +41,7 @@ import eu.kanade.domain.track.manga.interactor.AddMangaTracks
 import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
 import eu.kanade.domain.track.manga.interactor.SyncChapterProgressWithTrack
 import eu.kanade.domain.track.manga.interactor.TrackChapter
+import eu.kanade.tachiyomi.util.TrackSelect
 import mihon.data.repository.anime.AnimeExtensionRepoRepositoryImpl
 import mihon.data.repository.manga.MangaExtensionRepoRepositoryImpl
 import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo
@@ -64,6 +65,7 @@ import mihon.domain.upcoming.anime.interactor.GetUpcomingAnime
 import mihon.domain.upcoming.manga.interactor.GetUpcomingManga
 import tachiyomi.data.category.anime.AnimeCategoryRepositoryImpl
 import tachiyomi.data.category.manga.MangaCategoryRepositoryImpl
+import tachiyomi.data.custombutton.CustomButtonRepositoryImpl
 import tachiyomi.data.entries.anime.AnimeRepositoryImpl
 import tachiyomi.data.entries.manga.MangaRepositoryImpl
 import tachiyomi.data.history.anime.AnimeHistoryRepositoryImpl
@@ -105,6 +107,13 @@ import tachiyomi.domain.category.manga.interactor.SetMangaDisplayMode
 import tachiyomi.domain.category.manga.interactor.SetSortModeForMangaCategory
 import tachiyomi.domain.category.manga.interactor.UpdateMangaCategory
 import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
+import tachiyomi.domain.custombuttons.interactor.CreateCustomButton
+import tachiyomi.domain.custombuttons.interactor.DeleteCustomButton
+import tachiyomi.domain.custombuttons.interactor.GetCustomButtons
+import tachiyomi.domain.custombuttons.interactor.ReorderCustomButton
+import tachiyomi.domain.custombuttons.interactor.ToggleFavoriteCustomButton
+import tachiyomi.domain.custombuttons.interactor.UpdateCustomButton
+import tachiyomi.domain.custombuttons.repository.CustomButtonRepository
 import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetAnimeByUrlAndSourceId
@@ -369,5 +378,15 @@ class DomainModule : InjektModule {
         addFactory { DeleteMangaExtensionRepo(get()) }
         addFactory { ReplaceMangaExtensionRepo(get()) }
         addFactory { UpdateMangaExtensionRepo(get(), get()) }
+
+        addSingletonFactory<CustomButtonRepository> { CustomButtonRepositoryImpl(get()) }
+        addFactory { CreateCustomButton(get()) }
+        addFactory { DeleteCustomButton(get()) }
+        addFactory { GetCustomButtons(get()) }
+        addFactory { UpdateCustomButton(get()) }
+        addFactory { ReorderCustomButton(get()) }
+        addFactory { ToggleFavoriteCustomButton(get()) }
+
+        addFactory { TrackSelect(get(), get()) }
     }
 }

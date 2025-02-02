@@ -206,7 +206,7 @@ fun GestureHandler(
                                     .coerceIn(0 - startingPosition, (duration - startingPosition).toInt()),
                             )
                         }
-                        viewModel.seekTo(it, preciseSeeking)
+                        viewModel.seekTo(it.coerceIn(0, duration.toInt()), preciseSeeking)
                     }
 
                     if (showSeekbar) viewModel.showSeekBar()
@@ -331,7 +331,7 @@ fun DoubleTapToSeekOvals(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         DoubleTapSeekTriangles(isForward = amount > 0)
                         Text(
-                            text = pluralStringResource(MR.plurals.seconds, amount, amount),
+                            text = text ?: pluralStringResource(MR.plurals.seconds, amount, amount),
                             fontSize = 12.sp,
                             textAlign = TextAlign.Center,
                             color = Color.White,

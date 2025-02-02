@@ -64,7 +64,6 @@ fun ScreenshotSheet(
                     icon = Icons.Outlined.Share,
                     onClick = {
                         onShare { takeScreenshot(cachePath, showSubtitles)!! }
-                        onDismissRequest()
                     },
                 )
                 ActionButton(
@@ -73,7 +72,6 @@ fun ScreenshotSheet(
                     icon = Icons.Outlined.Save,
                     onClick = {
                         onSave { takeScreenshot(cachePath, showSubtitles)!! }
-                        onDismissRequest()
                     },
                 )
             }
@@ -99,7 +97,7 @@ fun ScreenshotSheet(
 
     if (showSetCoverDialog) {
         PlayerDialog(
-            titleRes = MR.strings.confirm_set_image_as_cover,
+            title = stringResource(MR.strings.confirm_set_image_as_cover),
             modifier = Modifier.fillMaxWidth(fraction = 0.6F).padding(MaterialTheme.padding.medium),
             onConfirmRequest = {
                 onSetAsCover {
