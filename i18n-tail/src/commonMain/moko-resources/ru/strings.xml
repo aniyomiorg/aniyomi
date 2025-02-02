@@ -18,7 +18,7 @@
   <string name="artist_hint">Художник: %1$s</string>
   <string name="custom_entry_info">Дополнительная информация</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Настройки отдачи</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Настройки отдачи</string>
   <string name="pref_enable_cast">Включить или отключить Cast</string>
   <string name="action_cast">Отправить в Заявку</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Показать размер загруженного файла эпизода</string>
@@ -157,4 +157,31 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Тест FlareSolverr и обновление агента пользователя</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Протестируйте FlareSolverr, чтобы обновить агента пользователя. Требуется только один раз; затем переключитесь по мере необходимости.</string>
   <string name="title_cast_quality">Выберите Качество/Провайдер</string>
+  <string name="cast_not_connected">Передача не подключена</string>
+  <string name="cast_video_added_to_queue">Видео добавлено в очередь</string>
+  <string name="cast_error_loading">Ошибка загрузки видео из Cast</string>
+  <string name="server_local_notification_casting">Локальный сервер запущен. Нажмите, чтобы остановить его.</string>
+  <string name="server_local_notification_channel_description">Локальный канал уведомлений сервера</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Автопрокрутка</string>
+  <string name="eh_retry_all">Повторить все</string>
+  <string name="eh_boost_page">Ускорить страницу</string>
+  <string name="eh_autoscroll_help">Помощь автопрокрутки</string>
+  <string name="eh_autoscroll_help_message">Автоматически прокручивать до следующей страницы в указанном интервале. Интервал задается в секундах.</string>
+  <string name="eh_autoscroll_freq_invalid">Недопустимая частота</string>
+  <string name="eh_retry_all_help">Повторить всю помощь</string>
+  <string name="eh_retry_all_help_message">Повторно добавить все сбойные страницы в очередь загрузки.</string>
+  <string name="eh_boost_page_help">Помощь по страницам</string>
+  <string name="eh_boost_page_help_message">Обычно скачиватель может загружать только определенное количество страниц одновременно. Это означает, что вы можете ждать загрузки страницы, но скачатель не начнет загружать страницу до тех пор, пока она не загрузится бесплатно. Нажатие кнопки \"Помощь\" заставит загрузчика начать загрузку текущей страницы, независимо от того, есть ли этот слот или нет.</string>
+  <string name="eh_boost_page_invalid">Эта страница не может быть улучшена (неверная страница)!</string>
+  <string name="eh_boost_page_errored">Не удалось загрузить страницу, нажмите кнопку повтора!</string>
+  <string name="eh_boost_page_downloading">Эта страница уже загружается!</string>
+  <string name="eh_boost_page_downloaded">Эта страница уже загружена!</string>
+  <string name="eh_boost_boosted">Увеличить текущую страницу!</string>
+  <string name="eh_boost_invalid_loader">Эта страница не может быть усилена (неверный загрузчик страницы)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Повторная попытка %1$d не удалось страницы…</item>
+    <item quantity="few">Повторная попытка %1$d не удалось страниц…</item>
+    <item quantity="many">Повторная попытка %1$d не удалось страниц…</item>
+    <item quantity="other">Повторная попытка %1$d не удалось страниц…</item>
+  </plurals>
 </resources>
