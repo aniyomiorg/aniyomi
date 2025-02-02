@@ -18,7 +18,7 @@
   <string name="artist_hint">Καλλιτέχνης: %1$s</string>
   <string name="custom_entry_info">Πληροφορίες προσαρμοσμένης καταχώρησης</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Ρυθμίσεις Cast</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Ρυθμίσεις Cast</string>
   <string name="pref_enable_cast">Ενεργοποίηση ή απενεργοποίηση Cast</string>
   <string name="action_cast">Αποστολή στο Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Εμφάνιση του ληφθέντος μεγέθους αρχείου επεισοδίου</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Δοκιμή FlareSolverr και ενημέρωση πράκτορα χρήστη</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Δοκιμάστε το FlareSolverr για να ενημερώσετε τον πράκτορα του χρήστη. Απαιτείται μόνο μία φορά, στη συνέχεια, εναλλάσσετε όπως απαιτείται.</string>
   <string name="title_cast_quality">Επιλογή Ποιότητας/Παροχής Cast</string>
+  <string name="cast_not_connected">Η μετάδοση δεν συνδέθηκε</string>
+  <string name="cast_video_added_to_queue">Το βίντεο προστέθηκε στην ουρά</string>
+  <string name="cast_error_loading">Σφάλμα κατά τη φόρτωση βίντεο από το Cast</string>
+  <string name="server_local_notification_casting">Ο τοπικός διακομιστής εκτελείται. Πατήστε για να τον σταματήσετε.</string>
+  <string name="server_local_notification_channel_description">Κανάλι ειδοποίησης τοπικού διακομιστή</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Αυτόματο Μηχάνημα</string>
+  <string name="eh_retry_all">Επανάληψη όλων</string>
+  <string name="eh_boost_page">Ενίσχυση σελίδας</string>
+  <string name="eh_autoscroll_help">Βοήθεια Autoscroll</string>
+  <string name="eh_autoscroll_help_message">Αυτόματη μετάβαση στην επόμενη σελίδα στο καθορισμένο διάστημα. Το διάστημα καθορίζεται σε δευτερόλεπτα.</string>
+  <string name="eh_autoscroll_freq_invalid">Μη έγκυρη συχνότητα</string>
+  <string name="eh_retry_all_help">Επανάληψη όλης της βοήθειας</string>
+  <string name="eh_retry_all_help_message">Επανπροσθήκη όλων των αποτυχημένων σελίδων στην ουρά λήψης.</string>
+  <string name="eh_boost_page_help">Ενίσχυση της σελίδας βοήθεια</string>
+  <string name="eh_boost_page_help_message">Κανονικά ο downloader μπορεί να κατεβάσει μόνο ένα συγκεκριμένο ποσό σελίδων ταυτόχρονα. Αυτό σημαίνει ότι μπορείτε να είστε σε αναμονή για μια σελίδα για να κατεβάσετε, αλλά ο downloader δεν θα ξεκινήσει τη λήψη της σελίδας μέχρι να έχει μια δωρεάν υποδοχή λήψης. Πατώντας το \'Boost page\' ο downloader θα αναγκάσει τον downloader να ξεκινήσει τη λήψη της τρέχουσας σελίδας, ανεξάρτητα από το αν υπάρχει ή όχι διαθέσιμη υποδοχή.</string>
+  <string name="eh_boost_page_invalid">Αυτή η σελίδα δεν μπορεί να ενισχυθεί (μη έγκυρη σελίδα)!</string>
+  <string name="eh_boost_page_errored">Η σελίδα απέτυχε να φορτωθεί, πατήστε το κουμπί επανάληψης!</string>
+  <string name="eh_boost_page_downloading">Αυτή η σελίδα γίνεται ήδη λήψη!</string>
+  <string name="eh_boost_page_downloaded">Αυτή η σελίδα έχει ήδη ληφθεί!</string>
+  <string name="eh_boost_boosted">Ενισχυμένη τρέχουσα σελίδα!</string>
+  <string name="eh_boost_invalid_loader">Αυτή η σελίδα δεν μπορεί να ενισχυθεί (μη έγκυρος φορτωτής σελίδας)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Επανάληψη %1$d απέτυχε η σελίδα…</item>
+    <item quantity="other">Επανάληψη %1$d απέτυχε σελίδες…</item>
+  </plurals>
 </resources>
