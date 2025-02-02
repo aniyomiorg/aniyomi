@@ -18,7 +18,7 @@
   <string name="artist_hint">Artist: %1$s</string>
   <string name="custom_entry_info">Egendefinert oppføringsinformasjon</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Innstillinger for søppelpost</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Innstillinger for søppelpost</string>
   <string name="pref_enable_cast">Aktiver eller deaktiver Cast</string>
   <string name="action_cast">Send til Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Vis nedlastede episode-filstørrelse</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr og oppdater brukeragent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr for å oppdatere brukeragenten. Bare påkrevd én gang, og veksling etter behov.</string>
   <string name="title_cast_quality">Velg underliggende kvalitet/leverandør</string>
+  <string name="cast_not_connected">Medvirkende ikke tilkoblet</string>
+  <string name="cast_video_added_to_queue">Video lagt til i køen</string>
+  <string name="cast_error_loading">Feil under lasting av video fra Cast</string>
+  <string name="server_local_notification_casting">Den lokale serveren kjører. Trykk for å stoppe den.</string>
+  <string name="server_local_notification_channel_description">Varsel om lokal server</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autosserull</string>
+  <string name="eh_retry_all">Prøv alle igjen</string>
+  <string name="eh_boost_page">Boost side</string>
+  <string name="eh_autoscroll_help">Autolagring hjelp</string>
+  <string name="eh_autoscroll_help_message">Automatisk rull til neste side i det angitte intervallet. Intervallet er angitt om sekunder.</string>
+  <string name="eh_autoscroll_freq_invalid">Ugyldig frekvens</string>
+  <string name="eh_retry_all_help">Prøv all hjelp</string>
+  <string name="eh_retry_all_help_message">Legg til alle kan ikke finnes i nedlastningskøen.</string>
+  <string name="eh_boost_page_help">Boost page help</string>
+  <string name="eh_boost_page_help_message">Normalt kan nedlasteren bare laste ned et bestemt antall sider samtidig. Dette betyr at du kan vente på at en side skal lastes ned, men at nedlasteren ikke vil starte å laste ned siden før den har en gratis nedlastingsspor. Ved å trykke \"Boost page\" tvinger nedlastingen til å begynne å laste ned den gjeldende siden, uansett om det finnes en tilgjengelig plass eller ikke.</string>
+  <string name="eh_boost_page_invalid">Denne siden kan ikke bli forsterket (ugyldig side)!</string>
+  <string name="eh_boost_page_errored">Siden kunne ikke lastes, trykk på knappen på nytt i stedet!</string>
+  <string name="eh_boost_page_downloading">Denne siden lastes ned allerede!</string>
+  <string name="eh_boost_page_downloaded">Denne siden er allerede lastet ned!</string>
+  <string name="eh_boost_boosted">Forsterket aktiv side!</string>
+  <string name="eh_boost_invalid_loader">Denne siden kan ikke bli forsterket (ugyldig sidelaster)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Prøver %1$d på nytt siden…</item>
+    <item quantity="other">Prøver %1$d mislykkede sider…</item>
+  </plurals>
 </resources>
