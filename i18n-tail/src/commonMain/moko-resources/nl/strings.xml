@@ -18,7 +18,7 @@
   <string name="artist_hint">Artiest: %1$s</string>
   <string name="custom_entry_info">Aangepaste invoer informatie</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Cast Instellingen</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Cast Instellingen</string>
   <string name="pref_enable_cast">Casten in- of uitschakelen</string>
   <string name="action_cast">Stuur naar Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Toon gedownloade aflevering bestand grootte</string>
@@ -157,4 +157,29 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr en update gebruikersagent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr om de user agent bij te werken. Slechts één keer nodig; schakel daarna de schakelaar indien nodig.</string>
   <string name="title_cast_quality">Kies Cast-kwaliteit/provider</string>
+  <string name="cast_not_connected">Cast niet verbonden</string>
+  <string name="cast_video_added_to_queue">Video toegevoegd aan de wachtrij</string>
+  <string name="cast_error_loading">Fout bij het laden van video van Cast</string>
+  <string name="server_local_notification_casting">De lokale server is actief. Tik om deze te stoppen.</string>
+  <string name="server_local_notification_channel_description">Lokaal server meldingskanaal</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscrollen</string>
+  <string name="eh_retry_all">Alles opnieuw proberen</string>
+  <string name="eh_boost_page">Boost pagina</string>
+  <string name="eh_autoscroll_help">Autoscrol hulp</string>
+  <string name="eh_autoscroll_help_message">Automatisch naar de volgende pagina scrollen in de opgegeven interval. Interval is opgegeven in seconden.</string>
+  <string name="eh_autoscroll_freq_invalid">Ongeldige frequentie</string>
+  <string name="eh_retry_all_help">Probeer alle hulp opnieuw</string>
+  <string name="eh_retry_all_help_message">Alle mislukte pagina\'s opnieuw toevoegen aan de wachtrij voor downloaden.</string>
+  <string name="eh_boost_page_help">Boost pagina help</string>
+  <string name="eh_boost_page_help_message">Normaal gesproken kan de downloader alleen een bepaald aantal pagina\'s tegelijk downloaden. Dit betekent dat je kan wachten op een pagina om te downloaden, maar de downloader zal de pagina niet starten totdat het een gratis downloadvak heeft. Het indrukken van de \'Boost page\' zal de downloader dwingen om de huidige pagina te downloaden, ongeacht of er een beschikbaar slot is of niet.</string>
+  <string name="eh_boost_page_invalid">Deze pagina kan niet worden geboost (ongeldige pagina)!</string>
+  <string name="eh_boost_page_errored">Pagina kan niet worden geladen, druk in plaats daarvan op de knop \'Opnieuw proberen\'!</string>
+  <string name="eh_boost_page_downloading">Deze pagina wordt al gedownload!</string>
+  <string name="eh_boost_page_downloaded">Deze pagina is al gedownload!</string>
+  <string name="eh_boost_boosted">Geboost huidige pagina!</string>
+  <string name="eh_boost_invalid_loader">Deze pagina kan niet worden geboost (ongeldige pagina-loader)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Opnieuw proberen van %1$d mislukte pagina…</item>
+    <item quantity="other">Opnieuw proberen %1$d mislukte pagina\'s…</item>
+  </plurals>
 </resources>
