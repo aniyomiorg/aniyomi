@@ -182,4 +182,6 @@
     <item quantity="one">Réessayer la page %1$d a échoué…</item>
     <item quantity="other">Réessayer %1$d pages échouées…</item>
   </plurals>
+  <string name="pref_category_castserver">Cast Server</string>
+  <string name="pref_cast_server_port">Cast Server Port</string>
 </resources>
