@@ -182,4 +182,6 @@
     <item quantity="one">Retrying %1$d failed page…</item>
     <item quantity="other">Noudetaan %1$d epäonnistunutta sivua…</item>
   </plurals>
+  <string name="pref_category_castserver">Cast Server</string>
+  <string name="pref_cast_server_port">Cast Server Port</string>
 </resources>
