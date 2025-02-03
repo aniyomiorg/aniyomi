@@ -108,6 +108,5 @@ class PreferenceModule(val app: Application) : InjektModule {
             LocalHttpServerHolder(get())
         }
         // <-- Cast Server
-
     }
 }

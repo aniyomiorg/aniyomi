@@ -39,9 +39,9 @@ class LocalHttpServerService : Service() {
             }
         }
     }
-    private val prefserver:  LocalHttpServerHolder by injectLazy()
+    private val prefserver: LocalHttpServerHolder by injectLazy()
     private var port = prefserver.port().get()
-     var server: LocalHttpServer? = null
+    var server: LocalHttpServer? = null
 
     override fun onCreate() {
         super.onCreate()

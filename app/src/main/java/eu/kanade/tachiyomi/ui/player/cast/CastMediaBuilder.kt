@@ -27,7 +27,7 @@ class CastMediaBuilder(
 ) {
 
     private val player by lazy { activity.player }
-    private val prefserver:  LocalHttpServerHolder by injectLazy()
+    private val prefserver: LocalHttpServerHolder by injectLazy()
     private val port = prefserver.port().get()
 
     suspend fun buildMediaInfo(index: Int): MediaInfo = withContext(Dispatchers.IO) {
@@ -127,7 +127,7 @@ class CastMediaBuilder(
         context.startService(Intent(context, LocalHttpServerService::class.java))
         val ip = getLocalIpAddress()
         val encodedUri = URLEncoder.encode(contentUri, "UTF-8")
-        return "http://$ip:${port}/file?uri=$encodedUri"
+        return "http://$ip:$port/file?uri=$encodedUri"
     }
 
     private fun getLocalIpAddress(): String {

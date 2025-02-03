@@ -326,6 +326,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             ),
         )
     }
+
     @Composable
     private fun geCastServerGroup(
         localHttpServerHolder: LocalHttpServerHolder,
@@ -349,7 +350,6 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             ),
         )
     }
-
 }
 
 val externalPlayers = listOf(
