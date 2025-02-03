@@ -182,6 +182,6 @@
     <item quantity="one">Prøver %1$d på nytt siden…</item>
     <item quantity="other">Prøver %1$d mislykkede sider…</item>
   </plurals>
-  <string name="pref_category_castserver">Cast Server</string>
-  <string name="pref_cast_server_port">Cast Server Port</string>
+  <string name="pref_category_castserver">Kast server</string>
+  <string name="pref_cast_server_port">Kast serverport</string>
 </resources>
