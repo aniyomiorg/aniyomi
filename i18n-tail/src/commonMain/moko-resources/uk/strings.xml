@@ -184,6 +184,6 @@
     <item quantity="many">Retrying %1$d failed pages…</item>
     <item quantity="other">Retrying %1$d failed pages…</item>
   </plurals>
-  <string name="pref_category_castserver">Cast Server</string>
-  <string name="pref_cast_server_port">Cast Server Port</string>
+  <string name="pref_category_castserver">Сервер Трансляції</string>
+  <string name="pref_cast_server_port">Порт сервера Cast</string>
 </resources>
