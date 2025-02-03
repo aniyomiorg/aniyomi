@@ -11,11 +11,13 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService.Companion.applicationContext
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.tail.TLMR
+import uy.kohesive.injekt.injectLazy
 import java.io.IOException
 
 class LocalHttpServerService : Service() {
@@ -23,18 +25,31 @@ class LocalHttpServerService : Service() {
     companion object {
         const val CHANNEL_ID = "LocalHttpServerChannel"
         const val NOTIFICATION_ID = 1
+        const val ACTION_START = "eu.kanade.tachiyomi.ACTION_START_SERVER"
         const val ACTION_STOP = "eu.kanade.tachiyomi.ACTION_STOP_SERVER"
+        fun stop() {
+            try {
+                val intent =
+                    Intent(applicationContext, LocalHttpServerService::class.java).apply {
+                        action = ACTION_STOP
+                    }
+                applicationContext.startService(intent)
+            } catch (e: Exception) {
+                println(e.stackTrace)
+            }
+        }
     }
-
-    private var server: LocalHttpServer? = null
+    private val prefserver:  LocalHttpServerHolder by injectLazy()
+    private var port = prefserver.port().get()
+     var server: LocalHttpServer? = null
 
     override fun onCreate() {
         super.onCreate()
 
-        server = LocalHttpServer(LocalHttpServerHolder.PORT, contentResolver)
+        server = LocalHttpServer(port, contentResolver)
         try {
             server?.start()
-            logcat(LogPriority.DEBUG) { "Local HTTP server started at  ${LocalHttpServerHolder.PORT}" }
+            logcat(LogPriority.DEBUG) { "Local HTTP server started at $port" }
         } catch (e: IOException) {
             logcat(LogPriority.ERROR) { "Error to start local HTTP server" }
             stopSelf()

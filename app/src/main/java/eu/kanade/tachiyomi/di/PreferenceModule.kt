@@ -17,6 +17,7 @@ import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
+import eu.kanade.tachiyomi.util.LocalHttpServerHolder
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import tachiyomi.core.common.preference.AndroidPreferenceStore
 import tachiyomi.core.common.preference.PreferenceStore
@@ -102,5 +103,11 @@ class PreferenceModule(val app: Application) : InjektModule {
         addSingletonFactory {
             SyncPreferences(get())
         }
+        // Cast Server -->
+        addSingletonFactory {
+            LocalHttpServerHolder(get())
+        }
+        // <-- Cast Server
+
     }
 }

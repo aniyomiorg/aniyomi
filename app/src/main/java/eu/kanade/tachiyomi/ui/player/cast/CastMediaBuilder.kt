@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import logcat.LogPriority
 import tachiyomi.core.common.util.system.logcat
+import uy.kohesive.injekt.injectLazy
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.net.URLEncoder
@@ -26,6 +27,8 @@ class CastMediaBuilder(
 ) {
 
     private val player by lazy { activity.player }
+    private val prefserver:  LocalHttpServerHolder by injectLazy()
+    private val port = prefserver.port().get()
 
     suspend fun buildMediaInfo(index: Int): MediaInfo = withContext(Dispatchers.IO) {
         val video = viewModel.videoList.value.getOrNull(index)
@@ -124,7 +127,7 @@ class CastMediaBuilder(
         context.startService(Intent(context, LocalHttpServerService::class.java))
         val ip = getLocalIpAddress()
         val encodedUri = URLEncoder.encode(contentUri, "UTF-8")
-        return "http://$ip:${LocalHttpServerHolder.PORT}/file?uri=$encodedUri"
+        return "http://$ip:${port}/file?uri=$encodedUri"
     }
 
     private fun getLocalIpAddress(): String {
