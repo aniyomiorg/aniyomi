@@ -182,6 +182,6 @@
     <item quantity="one">Riprovare %1$d pagina non riuscita…</item>
     <item quantity="other">Riprovare le pagine di %1$d fallite…</item>
   </plurals>
-  <string name="pref_category_castserver">Cast Server</string>
-  <string name="pref_cast_server_port">Cast Server Port</string>
+  <string name="pref_category_castserver">Trasmetti Server</string>
+  <string name="pref_cast_server_port">Porta Del Server Cast</string>
 </resources>
