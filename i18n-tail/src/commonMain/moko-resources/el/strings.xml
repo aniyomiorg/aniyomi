@@ -182,4 +182,6 @@
     <item quantity="one">Επανάληψη %1$d απέτυχε η σελίδα…</item>
     <item quantity="other">Επανάληψη %1$d απέτυχε σελίδες…</item>
   </plurals>
+  <string name="pref_category_castserver">Cast Server</string>
+  <string name="pref_cast_server_port">Cast Server Port</string>
 </resources>
