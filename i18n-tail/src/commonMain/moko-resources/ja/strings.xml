@@ -181,6 +181,6 @@
   <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
     <item quantity="other">Retrying %1$d failed pages…</item>
   </plurals>
-  <string name="pref_category_castserver">Cast Server</string>
-  <string name="pref_cast_server_port">Cast Server Port</string>
+  <string name="pref_category_castserver">キャストサーバー</string>
+  <string name="pref_cast_server_port">サーバーポートのキャスト</string>
 </resources>
