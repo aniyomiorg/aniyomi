@@ -184,6 +184,6 @@
     <item quantity="many">Ponawianie %1$d nieudanych stron…</item>
     <item quantity="other">Ponawianie %1$d nieudanych stron…</item>
   </plurals>
-  <string name="pref_category_castserver">Cast Server</string>
-  <string name="pref_cast_server_port">Cast Server Port</string>
+  <string name="pref_category_castserver">Serwer Cast</string>
+  <string name="pref_cast_server_port">Port serwera</string>
 </resources>
