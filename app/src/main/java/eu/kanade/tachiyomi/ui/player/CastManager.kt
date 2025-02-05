@@ -16,6 +16,8 @@ import com.google.android.gms.common.GoogleApiAvailability
 import eu.kanade.tachiyomi.ui.player.cast.CastMediaBuilder
 import eu.kanade.tachiyomi.ui.player.cast.CastSessionListener
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,7 +34,6 @@ class CastManager(
     private val context: Context,
     private val activity: PlayerActivity,
 ) {
-
     private val viewModel by activity.viewModels<PlayerViewModel> { PlayerViewModelProviderFactory(activity) }
     private val player by lazy { activity.player }
     private val playerPreferences: PlayerPreferences by lazy { viewModel.playerPreferences }
@@ -46,6 +47,7 @@ class CastManager(
     private var castSession: CastSession? = null
     private var sessionListener: CastSessionListener? = null
     private val mediaBuilder = CastMediaBuilder(viewModel, activity)
+    private var castProgressJob: Job? = null
 
     private val isCastApiAvailable: Boolean
         get() = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
@@ -79,14 +81,7 @@ class CastManager(
 
     fun refreshCastContext() {
         castSession = castContext?.sessionManager?.currentCastSession
-        castSession?.takeIf { it.isConnected }?.let {
-            updateCastState(CastState.CONNECTED)
-        }
-    }
-
-    private fun endSession() {
-        castContext?.sessionManager?.endCurrentSession(true)
-        updateCastState(CastState.DISCONNECTED)
+        if (castSession?.isConnected == true) updateCastState(CastState.CONNECTED)
     }
 
     fun cleanup() {
@@ -97,25 +92,22 @@ class CastManager(
     fun onSessionConnected(session: CastSession) {
         castSession = session
         updateCastState(CastState.CONNECTED)
+        startTrackingCastProgress()
     }
 
     fun onSessionEnded() {
+        castProgressJob?.cancel()
+        val lastPosition = getCurrentCastPosition()
+        if (lastPosition > 0) viewModel.updateCastProgress(lastPosition.toFloat() / 1000)
         castSession = null
         updateCastState(CastState.DISCONNECTED)
+        viewModel.resumeFromCast()
     }
 
     fun updateCastState(state: CastState) {
         _castState.value = state
-        when (state) {
-            CastState.CONNECTED -> {
-                player.paused = true
-                activity.invalidateOptionsMenu()
-            }
-            CastState.DISCONNECTED -> {
-                activity.invalidateOptionsMenu()
-            }
-            CastState.CONNECTING -> { }
-        }
+        if (state == CastState.CONNECTED) player.paused = true
+        activity.invalidateOptionsMenu()
     }
 
     fun maintainCastSessionBackground() {
@@ -123,8 +115,7 @@ class CastManager(
     }
 
     fun handleQualitySelection() {
-        viewModel.videoList
-            .filter { it.isNotEmpty() }
+        viewModel.videoList.filter { it.isNotEmpty() }
             .onEach { videos ->
                 if (videos.size > 1) {
                     activity.runOnUiThread { showQualitySelectionDialog() }
@@ -148,9 +139,7 @@ class CastManager(
                     loadRemoteMediaWithState()
                 }
                 .setCancelable(false)
-                .setNegativeButton(android.R.string.cancel) { dialog, _ ->
-                    dialog.dismiss()
-                }
+                .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss() }
                 .show()
         }
     }
@@ -163,16 +152,18 @@ class CastManager(
     @SuppressLint("SuspiciousIndentation")
     private fun loadRemoteMedia() {
         if (!isCastApiAvailable) return
+
         val remoteMediaClient = castSession?.remoteMediaClient ?: return
+
         activity.lifecycleScope.launch {
             try {
                 val selectedIndex = viewModel.selectedVideoIndex.value
                 val mediaInfo = mediaBuilder.buildMediaInfo(selectedIndex)
+                val currentLocalPosition = (player.timePos ?: 0).toLong()
+                viewModel.updateCastProgress(currentLocalPosition.toFloat())
+
                 if (remoteMediaClient.mediaQueue.itemCount > 0) {
-                    remoteMediaClient.queueAppendItem(
-                        MediaQueueItem.Builder(mediaInfo).build(),
-                        null,
-                    )
+                    remoteMediaClient.queueAppendItem(MediaQueueItem.Builder(mediaInfo).build(), null)
                     activity.runOnUiThread {
                         Toast.makeText(
                             context,
@@ -185,11 +176,11 @@ class CastManager(
                         MediaLoadRequestData.Builder()
                             .setMediaInfo(mediaInfo)
                             .setAutoplay(autoplayEnabled)
-                            .setCurrentTime((player.timePos ?: 0).toLong() * 1000)
+                            .setCurrentTime(currentLocalPosition * 1000)
                             .build(),
                     )
-                    _castState.value = CastState.CONNECTED
                 }
+                _castState.value = CastState.CONNECTED
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e)
                 activity.runOnUiThread {
@@ -201,6 +192,21 @@ class CastManager(
                 }
             }
         }
+    }
+
+    private fun startTrackingCastProgress() {
+        castProgressJob?.cancel()
+        castProgressJob = activity.lifecycleScope.launch {
+            while (castSession?.isConnected == true) {
+                val currentPosition = getCurrentCastPosition()
+                viewModel.updateCastProgress(currentPosition.toFloat() / 1000)
+                delay(1000)
+            }
+        }
+    }
+
+    private fun getCurrentCastPosition(): Long {
+        return castSession?.remoteMediaClient?.approximateStreamPosition ?: 0
     }
 
     enum class CastState {

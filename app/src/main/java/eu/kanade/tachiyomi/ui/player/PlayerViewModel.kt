@@ -210,6 +210,8 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _pos = MutableStateFlow(0f)
     val pos = _pos.asStateFlow()
 
+    private var castProgressJob: Job? = null
+
     val duration = MutableStateFlow(0f)
 
     private val _readAhead = MutableStateFlow(0f)
@@ -987,6 +989,20 @@ class PlayerViewModel @JvmOverloads constructor(
             episodeToDownload?.let {
                 downloadManager.addDownloadsToStartOfQueue(listOf(it))
             }
+        }
+    }
+
+    fun updateCastProgress(position: Float) {
+        _pos.update { position }
+    }
+
+    fun resumeFromCast() {
+        val lastPosition = _pos.value
+
+        logcat { "Reanudando el video local desde: $lastPosition segundos" }
+
+        if (lastPosition > 0) {
+            seekTo(lastPosition.toInt()) // Mueve el reproductor local a la última posición
         }
     }
 
