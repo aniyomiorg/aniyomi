@@ -18,7 +18,7 @@
   <string name="artist_hint">Artysta: %1$s</string>
   <string name="custom_entry_info">Własne informacje o wpisach</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Ustawienia wyglądu</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Ustawienia wyglądu</string>
   <string name="pref_enable_cast">Włącz lub wyłącz Cast</string>
   <string name="action_cast">Wyślij do Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Pokaż rozmiar pliku pobranego odcinka</string>
@@ -157,4 +157,33 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Testuj FlareSolverr i zaktualizuj agenta użytkownika</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Przetestuj FlareSolverr aby zaktualizować agenta użytkownika. Wymagane tylko raz; następnie przełącz w razie potrzeby.</string>
   <string name="title_cast_quality">Wybierz Jakość/Dostawcę</string>
+  <string name="cast_not_connected">Nie połączono</string>
+  <string name="cast_video_added_to_queue">Film dodany do kolejki</string>
+  <string name="cast_error_loading">Błąd ładowania wideo z Cast</string>
+  <string name="server_local_notification_casting">Serwer lokalny jest uruchomiony. Dotknij, aby go zatrzymać.</string>
+  <string name="server_local_notification_channel_description">Lokalny kanał powiadomień serwera</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Automatyczne przewijanie</string>
+  <string name="eh_retry_all">Ponów wszystkie</string>
+  <string name="eh_boost_page">Strona podbicia</string>
+  <string name="eh_autoscroll_help">Pomoc autoprzewijania</string>
+  <string name="eh_autoscroll_help_message">Automatycznie przewiń do następnej strony w określonym przedziale. Interwał jest określony w sekundach.</string>
+  <string name="eh_autoscroll_freq_invalid">Nieprawidłowa częstotliwość</string>
+  <string name="eh_retry_all_help">Ponów całą pomoc</string>
+  <string name="eh_retry_all_help_message">Dodaj ponownie wszystkie nieudane strony do kolejki pobierania.</string>
+  <string name="eh_boost_page_help">Pomoc na stronie</string>
+  <string name="eh_boost_page_help_message">Zwykle pobierający może pobrać tylko określoną liczbę stron w tym samym czasie. Oznacza to, że możesz czekać na stronę do pobrania, ale pobierający nie rozpocznie pobierania strony, dopóki nie będzie miał darmowego slotu. Naciśnięcie \"Przyspieszona strona\" zmusi pobieracz do rozpoczęcia pobierania bieżącej strony, niezależnie od tego, czy jest dostępne miejsce czy nie.</string>
+  <string name="eh_boost_page_invalid">Ta strona nie może być wzmocniona (nieprawidłowa strona)!</string>
+  <string name="eh_boost_page_errored">Nie udało się załadować strony, wciśnij przycisk ponów próbę!</string>
+  <string name="eh_boost_page_downloading">Ta strona jest już pobierana!</string>
+  <string name="eh_boost_page_downloaded">Ta strona została już pobrana!</string>
+  <string name="eh_boost_boosted">Wzmocniono bieżącą stronę!</string>
+  <string name="eh_boost_invalid_loader">Ta strona nie może być wzmocniona (nieprawidłowy ładunek stron)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Ponawianie %1$d nieudana strona…</item>
+    <item quantity="few">Ponawianie %1$d nieudanych stron…</item>
+    <item quantity="many">Ponawianie %1$d nieudanych stron…</item>
+    <item quantity="other">Ponawianie %1$d nieudanych stron…</item>
+  </plurals>
+  <string name="pref_category_castserver">Serwer Cast</string>
+  <string name="pref_cast_server_port">Port serwera</string>
 </resources>

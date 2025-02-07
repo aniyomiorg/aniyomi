@@ -18,7 +18,7 @@
   <string name="artist_hint">Artiste : %1$s</string>
   <string name="custom_entry_info">Infos sur les entrées personnalisées</string>
   <string name="reset_info">Réinitialiser les informations</string>
-  <string name="pref_category_cast">Paramètres de cast</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Paramètres de cast</string>
   <string name="pref_enable_cast">Activé ou désactiver le cast</string>
   <string name="action_cast">Envoyer au cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Afficher la taille du fichier de l\'épisode téléchargé</string>
@@ -157,4 +157,31 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Tester FlareSolverr et mettre à jour l\'agent utilisateur</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testez FlareSolverr pour mettre à jour l\'agent utilisateur. Une seule fois, puis basculez si nécessaire.</string>
   <string name="title_cast_quality">Choisissez la qualité de diffusion/fournisseur</string>
+  <string name="cast_not_connected">Casting non connecté</string>
+  <string name="cast_video_added_to_queue">Vidéo ajoutée à la file d\'attente</string>
+  <string name="cast_error_loading">Erreur lors du chargement de la vidéo depuis le casting</string>
+  <string name="server_local_notification_casting">Le serveur local est en cours d\'exécution. Appuyez pour l\'arrêter.</string>
+  <string name="server_local_notification_channel_description">Canal de notification du serveur local</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Défilement automatique</string>
+  <string name="eh_retry_all">Réessayer tout</string>
+  <string name="eh_boost_page">Boost de la page</string>
+  <string name="eh_autoscroll_help">Aide de défilement automatique</string>
+  <string name="eh_autoscroll_help_message">Défilement automatique vers la page suivante dans l\'intervalle spécifié. L\'intervalle est spécifié en secondes.</string>
+  <string name="eh_autoscroll_freq_invalid">Fréquence invalide</string>
+  <string name="eh_retry_all_help">Réessayer toute l\'aide</string>
+  <string name="eh_retry_all_help_message">Ré-ajouter toutes les pages échouées à la file d\'attente de téléchargement.</string>
+  <string name="eh_boost_page_help">Améliorer l\'aide de la page</string>
+  <string name="eh_boost_page_help_message">Normalement, le téléchargeur ne peut télécharger qu\'un certain nombre de pages en même temps. Cela signifie que vous pouvez attendre qu\'une page soit téléchargée mais le téléchargeur ne commencera pas à télécharger la page tant qu\'il n\'aura pas un emplacement de téléchargement gratuit. Appuyer sur « Page de démarrage» forcera le téléchargeur à commencer à télécharger la page actuelle, qu\'il y ait ou non un emplacement disponible.</string>
+  <string name="eh_boost_page_invalid">Cette page ne peut pas être boostée (page invalide)!</string>
+  <string name="eh_boost_page_errored">La page n\'a pas pu être chargée, appuyez sur le bouton \"Recommencer\" à la place!</string>
+  <string name="eh_boost_page_downloading">Cette page est déjà en cours de téléchargement!</string>
+  <string name="eh_boost_page_downloaded">Cette page a déjà été téléchargée !</string>
+  <string name="eh_boost_boosted">Page actuelle boostée !</string>
+  <string name="eh_boost_invalid_loader">Cette page ne peut pas être boostée (chargeur de pages non valide)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Réessayer la page %1$d a échoué…</item>
+    <item quantity="other">Réessayer %1$d pages échouées…</item>
+  </plurals>
+  <string name="pref_category_castserver">Serveur de diffusion</string>
+  <string name="pref_cast_server_port">Port du serveur Cast</string>
 </resources>

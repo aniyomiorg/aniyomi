@@ -18,7 +18,7 @@
   <string name="artist_hint">Umělec: %1$s</string>
   <string name="custom_entry_info">Vlastní informace o záznamu</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Nastavení vysílání</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Nastavení vysílání</string>
   <string name="pref_enable_cast">Povolit nebo zakázat vysílání</string>
   <string name="action_cast">Poslat do Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Zobrazit velikost souboru s epizodou</string>
@@ -157,4 +157,33 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Otestuj FlareSolverr a aktualizuj uživatelské agenta</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Otestujte FlareSolverr pro aktualizaci uživatelského agenta. Vyžadováno pouze jednou; poté přepněte podle potřeby.</string>
   <string name="title_cast_quality">Vybrat kvalifikaci/poskytovatele obsazení</string>
+  <string name="cast_not_connected">Vysílání není připojeno</string>
+  <string name="cast_video_added_to_queue">Video přidáno do fronty</string>
+  <string name="cast_error_loading">Chyba při načítání videa z vysílání</string>
+  <string name="server_local_notification_casting">Místní server je spuštěn. Klepnutím ho zastavíte.</string>
+  <string name="server_local_notification_channel_description">Indikační kanál místního serveru</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Automatický posun</string>
+  <string name="eh_retry_all">Opakovat vše</string>
+  <string name="eh_boost_page">Stránka pro podporu</string>
+  <string name="eh_autoscroll_help">Nápověda k automatickému rolování</string>
+  <string name="eh_autoscroll_help_message">Automaticky přejít na další stránku v zadaném intervalu. Interval je zadán v sekundách.</string>
+  <string name="eh_autoscroll_freq_invalid">Neplatná frekvence</string>
+  <string name="eh_retry_all_help">Opakovat všechny nápovědy</string>
+  <string name="eh_retry_all_help_message">Znovu přidat všechny neúspěšné stránky do fronty stahování.</string>
+  <string name="eh_boost_page_help">Nápověda na podporu stránky</string>
+  <string name="eh_boost_page_help_message">Za normálních okolností může stahovatel stahovat pouze určité množství stránek současně. To znamená, že můžete čekat na stažení stránky, ale stahovatel nezačne stahovat stránku, dokud nebude mít volné místo ke stažení. Stisknutím \'Zesílit stránku\' bude stahování nuceno začít stahovat aktuální stránku, bez ohledu na to, zda existuje nebo není dostupný slot.</string>
+  <string name="eh_boost_page_invalid">Tuto stránku nelze zvýšit (neplatná stránka)!</string>
+  <string name="eh_boost_page_errored">Stránka se nepodařilo načíst, stiskněte tlačítko opakovat!</string>
+  <string name="eh_boost_page_downloading">Tato stránka se již stahuje!</string>
+  <string name="eh_boost_page_downloaded">Tato stránka již byla stažena!</string>
+  <string name="eh_boost_boosted">Zesílená aktuální stránka!</string>
+  <string name="eh_boost_invalid_loader">Tato stránka nemůže být boostnuta (neplatný vyhledávač stránky)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Opakování %1$d selhalo strana…</item>
+    <item quantity="few">Retrying %1$d failed pages…</item>
+    <item quantity="many">Retrying %1$d failed pages…</item>
+    <item quantity="other">Retrying %1$d failed pages…</item>
+  </plurals>
+  <string name="pref_category_castserver">Vysílající server</string>
+  <string name="pref_cast_server_port">Port serveru odeslání</string>
 </resources>

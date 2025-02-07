@@ -18,7 +18,7 @@
   <string name="artist_hint">Artista: %1$s</string>
   <string name="custom_entry_info">Informação de entrada personalizada</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Configurações de transmissão</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Configurações de transmissão</string>
   <string name="pref_enable_cast">Habilitar ou desabilitar o elenco</string>
   <string name="action_cast">Enviar para elenco</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Exibir tamanho do arquivo episódio baixado</string>
@@ -157,4 +157,31 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Teste o sinalizadorSolverr e atualize o agente do usuário</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Teste o FlareSolverr para atualizar o agente do usuário. Somente uma vez necessário; em seguida, alterne conforme necessário.</string>
   <string name="title_cast_quality">Escolher Qualidade do Transmissão/Provedor</string>
+  <string name="cast_not_connected">Transmitir não conectado</string>
+  <string name="cast_video_added_to_queue">Vídeo adicionado à fila</string>
+  <string name="cast_error_loading">Erro ao carregar o vídeo do Cast</string>
+  <string name="server_local_notification_casting">O servidor local está em execução. Toque para pará-lo.</string>
+  <string name="server_local_notification_channel_description">Canal de notificação do servidor local</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autocroll</string>
+  <string name="eh_retry_all">Repetir tudo</string>
+  <string name="eh_boost_page">Otimizar página</string>
+  <string name="eh_autoscroll_help">Ajuda Autoscroll</string>
+  <string name="eh_autoscroll_help_message">Rola automaticamente para a próxima página no intervalo especificado. Intervalo é especificado em segundos.</string>
+  <string name="eh_autoscroll_freq_invalid">Frequência inválida</string>
+  <string name="eh_retry_all_help">Repetir toda a ajuda</string>
+  <string name="eh_retry_all_help_message">Adicionar novamente todas as páginas que falharam na fila de download.</string>
+  <string name="eh_boost_page_help">Otimizar ajuda da página</string>
+  <string name="eh_boost_page_help_message">Normalmente, o downloader só pode baixar uma quantidade específica de páginas ao mesmo tempo. Isto significa que você pode estar esperando uma página para baixar, mas o download não iniciará o download da página até que ele tenha um slot para download gratuito. Pressionar \'Página de impulso\' irá forçar o baixador a começar a baixar a página atual, independente se há ou não um espaço disponível.</string>
+  <string name="eh_boost_page_invalid">Esta página não pode ser otimizada (página inválida)!</string>
+  <string name="eh_boost_page_errored">Falha ao carregar a página, pressione o botão de repetir em vez disso!</string>
+  <string name="eh_boost_page_downloading">Esta página já está baixando!</string>
+  <string name="eh_boost_page_downloaded">Esta página já foi baixada!</string>
+  <string name="eh_boost_boosted">Página atual otimizada!</string>
+  <string name="eh_boost_invalid_loader">Esta página não pode ser otimizada (carregador de página inválido)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Repetindo a página %1$d que falhou…</item>
+    <item quantity="other">Repetindo as páginas %1$d que falharam…</item>
+  </plurals>
+  <string name="pref_category_castserver">Servidor de Transmissão</string>
+  <string name="pref_cast_server_port">Transmitir porta do servidor</string>
 </resources>

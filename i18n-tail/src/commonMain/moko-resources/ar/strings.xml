@@ -18,7 +18,7 @@
   <string name="artist_hint">الفنان: %1$s</string>
   <string name="custom_entry_info">معلومات الإدخال المخصصة</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">إعدادات القصة</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">إعدادات القصة</string>
   <string name="pref_enable_cast">تمكين أو تعطيل المشاهدة</string>
   <string name="action_cast">إرسال إلى الكشوف</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">إظهار حجم ملف الحلقة التي تم تنزيلها</string>
@@ -157,4 +157,35 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">اختبار FlareSolverr وتحديث وكيل المستخدم</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">اختبار FlareSolverr لتحديث وكيل المستخدم. مطلوب مرة واحدة فقط؛ ثم قم بتبديل حسب الحاجة.</string>
   <string name="title_cast_quality">اختيار جودة المسطح/المزود</string>
+  <string name="cast_not_connected">البث غير متصل</string>
+  <string name="cast_video_added_to_queue">تم إضافة الفيديو إلى قائمة الانتظار</string>
+  <string name="cast_error_loading">خطأ في تحميل الفيديو من القصة</string>
+  <string name="server_local_notification_casting">الخادم المحلي قيد التشغيل. انقر لإيقافه.</string>
+  <string name="server_local_notification_channel_description">قناة إشعارات الخادم المحلية</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">تمرير تلقائي</string>
+  <string name="eh_retry_all">إعادة المحاولة الكل</string>
+  <string name="eh_boost_page">صفحة التعزيز</string>
+  <string name="eh_autoscroll_help">مساعدة التمرير التلقائي</string>
+  <string name="eh_autoscroll_help_message">التمرير تلقائياً إلى الصفحة التالية في الفاصل الزمني المحدد. يتم تحديد الفاصل الزمني في ثوان.</string>
+  <string name="eh_autoscroll_freq_invalid">تردد غير صالح</string>
+  <string name="eh_retry_all_help">إعادة محاولة كل المساعدة</string>
+  <string name="eh_retry_all_help_message">إعادة إضافة جميع الصفحات الفاشلة إلى قائمة انتظار التنزيل.</string>
+  <string name="eh_boost_page_help">مساعدة صفحة التعزيز</string>
+  <string name="eh_boost_page_help_message">عادة ما يمكن تحميل عدد محدد من الصفحات فقط في نفس الوقت. هذا يعني أنه يمكنك الانتظار حتى يتم تنزيل صفحة ولكن مدير التحميل لن يبدأ في تنزيل الصفحة حتى يكون لديه فتحة تنزيل مجانية. الضغط على \'صفحة التعزيز\' سيجبر المحمل على بدء تحميل الصفحة الحالية، بغض النظر عما إذا كان هناك فتحة متاحة أم لا.</string>
+  <string name="eh_boost_page_invalid">لا يمكن ترقية هذه الصفحة (صفحة غير صالحة)!</string>
+  <string name="eh_boost_page_errored">فشل في تحميل الصفحة، اضغط على زر إعادة المحاولة بدلاً من ذلك!</string>
+  <string name="eh_boost_page_downloading">هذه الصفحة قيد التحميل مسبقاً!</string>
+  <string name="eh_boost_page_downloaded">تم تحميل هذه الصفحة مسبقاً!</string>
+  <string name="eh_boost_boosted">تم تعزيز الصفحة الحالية!</string>
+  <string name="eh_boost_invalid_loader">لا يمكن ترقية هذه الصفحة (تحميل الصفحة غير صالح)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="zero">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+    <item quantity="one">إعادة محاولة %1$d فشل الصفحة…</item>
+    <item quantity="two">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+    <item quantity="few">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+    <item quantity="many">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+    <item quantity="other">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+  </plurals>
+  <string name="pref_category_castserver">خادم القصة</string>
+  <string name="pref_cast_server_port">منفذ الخادم المسقط</string>
 </resources>

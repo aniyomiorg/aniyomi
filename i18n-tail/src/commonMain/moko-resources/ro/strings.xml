@@ -18,7 +18,7 @@
   <string name="artist_hint">Artist: %1$s</string>
   <string name="custom_entry_info">Informații despre intrare personalizate</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Setări de distribuție</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Setări de distribuție</string>
   <string name="pref_enable_cast">Activează sau dezactivează Cast</string>
   <string name="action_cast">Trimite în Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Arată dimensiunea episodului descărcat</string>
@@ -157,4 +157,32 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Testaţi FlareSolverr şi actualizaţi agentul utilizatorului</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testează FlareSolverr pentru a actualiza agentul utilizator. Doar o singură dată; apoi comută după cum este necesar.</string>
   <string name="title_cast_quality">Alegeți calitatea/furnizorul în distribuție</string>
+  <string name="cast_not_connected">Transmite neconectate</string>
+  <string name="cast_video_added_to_queue">Video adăugat la coadă</string>
+  <string name="cast_error_loading">Eroare la încărcarea videoclipului din Cast</string>
+  <string name="server_local_notification_casting">Serverul local rulează. Atingeți pentru a-l opri.</string>
+  <string name="server_local_notification_channel_description">Canal de notificare local server</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscroll</string>
+  <string name="eh_retry_all">Reîncercați toate</string>
+  <string name="eh_boost_page">Amplificare pagină</string>
+  <string name="eh_autoscroll_help">Ajutor Autoscroll</string>
+  <string name="eh_autoscroll_help_message">Derulează automat la pagina următoare în intervalul specificat. Interval este specificat în secunde.</string>
+  <string name="eh_autoscroll_freq_invalid">Frecvență nevalidă</string>
+  <string name="eh_retry_all_help">Reîncercați tot ajutorul</string>
+  <string name="eh_retry_all_help_message">Readăugați toate paginile eșuate la coada de descărcare.</string>
+  <string name="eh_boost_page_help">Ajutor pagină de accelerare</string>
+  <string name="eh_boost_page_help_message">În mod normal, downloader-ul poate descărca doar un anumit număr de pagini în același timp. Asta înseamnă că poți aștepta descărcarea unei pagini, dar descărcătorul nu va începe să descarce pagina până când nu are un slot de descărcare gratuit. Apăsarea \'Mărire pagină\' va forța downloader-ul să înceapă descărcarea paginii curente, indiferent dacă există sau nu un slot disponibil.</string>
+  <string name="eh_boost_page_invalid">Această pagină nu poate fi amplificată (pagina invalidă)!</string>
+  <string name="eh_boost_page_errored">Pagina a eșuat, apasă butonul de reîncercare în schimb!</string>
+  <string name="eh_boost_page_downloading">Această pagină se descarcă deja!</string>
+  <string name="eh_boost_page_downloaded">Această pagină a fost deja descărcată!</string>
+  <string name="eh_boost_boosted">Pagină curentă!</string>
+  <string name="eh_boost_invalid_loader">Această pagină nu poate fi amplificată (loaderul paginii este invalid)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Reîncercarea paginii %1$d a eșuat…</item>
+    <item quantity="few">Reîncercare %1$d pagini eșuate…</item>
+    <item quantity="other">Reîncercare %1$d pagini eșuate…</item>
+  </plurals>
+  <string name="pref_category_castserver">Distribuie server</string>
+  <string name="pref_cast_server_port">Port server trecut</string>
 </resources>

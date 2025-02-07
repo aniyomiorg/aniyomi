@@ -18,7 +18,7 @@
   <string name="artist_hint">アーティスト： %1$s</string>
   <string name="custom_entry_info">カスタムエントリ情報</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">キャスト設定</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">キャスト設定</string>
   <string name="pref_enable_cast">キャストの有効化または無効化</string>
   <string name="action_cast">キャストに送る</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">ダウンロードしたエピソードのファイルサイズを表示</string>
@@ -157,4 +157,30 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">FlareSolverrをテストし、ユーザーエージェントを更新</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">ユーザーエージェントを更新するためにFlareSolverをテストします。必要に応じて一度だけ必要です。その後、必要に応じて切り替えます。</string>
   <string name="title_cast_quality">キャスト品質/プロバイダーを選択</string>
+  <string name="cast_not_connected">キャストが接続されていません</string>
+  <string name="cast_video_added_to_queue">キューにビデオを追加しました</string>
+  <string name="cast_error_loading">キャストからのビデオ読み込みエラー</string>
+  <string name="server_local_notification_casting">ローカルサーバーが実行されています。タップして停止します。</string>
+  <string name="server_local_notification_channel_description">ローカルサーバー通知チャンネル</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">オートクロル</string>
+  <string name="eh_retry_all">すべて再試行する</string>
+  <string name="eh_boost_page">ブーストページ</string>
+  <string name="eh_autoscroll_help">自動クロールヘルプ</string>
+  <string name="eh_autoscroll_help_message">指定した間隔の次のページまで自動的にスクロールします。間隔は秒単位で指定します。</string>
+  <string name="eh_autoscroll_freq_invalid">無効な周波数</string>
+  <string name="eh_retry_all_help">すべてのヘルプを再試行する</string>
+  <string name="eh_retry_all_help_message">失敗したすべてのページをダウンロードキューに再度追加します。</string>
+  <string name="eh_boost_page_help">ブーストページのヘルプ</string>
+  <string name="eh_boost_page_help_message">通常、ダウンローダーは、同時に特定の量のページをダウンロードすることができます。 これは、ページがダウンロードされるのを待つことができることを意味しますが、無料のダウンロードスロットがあるまでダウンローダーはページのダウンロードを開始しません。 「ブーストページ」を押すと、利用可能なスロットがあるかどうかにかかわらず、ダウンローダーは現在のページのダウンロードを強制的に開始します。</string>
+  <string name="eh_boost_page_invalid">このページはブーストできません（無効なページ）</string>
+  <string name="eh_boost_page_errored">ページの読み込みに失敗しました。代わりに再試行ボタンを押してください！</string>
+  <string name="eh_boost_page_downloading">このページは既にダウンロードされています！</string>
+  <string name="eh_boost_page_downloaded">このページは既にダウンロードされています！</string>
+  <string name="eh_boost_boosted">ブーストされた現在のページ！</string>
+  <string name="eh_boost_invalid_loader">このページはブーストできません（無効なページローダー）！</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="other">Retrying %1$d failed pages…</item>
+  </plurals>
+  <string name="pref_category_castserver">キャストサーバー</string>
+  <string name="pref_cast_server_port">サーバーポートのキャスト</string>
 </resources>

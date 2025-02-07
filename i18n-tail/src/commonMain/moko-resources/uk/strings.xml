@@ -18,7 +18,7 @@
   <string name="artist_hint">Artist: %1$s</string>
   <string name="custom_entry_info">Додаткова інформація</string>
   <string name="reset_info">Reset Info</string>
-  <string name="pref_category_cast">Налаштування трансляції</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Налаштування трансляції</string>
   <string name="pref_enable_cast">Увімкнути або вимкнути Cast</string>
   <string name="action_cast">Відправити в Cast</string>
   <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Показати завантажену серію розмір файлу</string>
@@ -157,4 +157,33 @@
   <string name="pref_test_flare_solverr_and_update_user_agent">Тест FlareSolverr та оновлення користувацького агента</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Тест FlareSolverr для оновлення користувацького агента. Потрібно лише один раз; потім ввімкнути як необхідно.</string>
   <string name="title_cast_quality">Вибрати кількість запису і провайдера</string>
+  <string name="cast_not_connected">Трансляція не підключена</string>
+  <string name="cast_video_added_to_queue">Відео додано в чергу</string>
+  <string name="cast_error_loading">Помилка при завантаженні відео з Cast</string>
+  <string name="server_local_notification_casting">Локальний сервер працює. Торкніться, щоб зупинити його.</string>
+  <string name="server_local_notification_channel_description">Канал сповіщень локального сервера</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Автопрокрутка</string>
+  <string name="eh_retry_all">Повторити все</string>
+  <string name="eh_boost_page">Підвищити сторінку</string>
+  <string name="eh_autoscroll_help">Автопрокрутка допомога</string>
+  <string name="eh_autoscroll_help_message">Автоматичне прокручування до наступної сторінки за вказаний проміжок. Інтервал задається в секундах.</string>
+  <string name="eh_autoscroll_freq_invalid">Частота недійсна</string>
+  <string name="eh_retry_all_help">Спробувати ще раз допомогти</string>
+  <string name="eh_retry_all_help_message">Повторне додавання всіх невдалих сторінок до черги завантаження.</string>
+  <string name="eh_boost_page_help">Пришвидшити довідку</string>
+  <string name="eh_boost_page_help_message">Зазвичай завантажувач може завантажити тільки певну кількість сторінок одночасно. Це означає, що ви можете чекати, щоб завантажити сторінку, але завантажувач не почне завантажувати сторінку, поки вона не стане безкоштовним слотом для завантаження. Натиснення кнопки \"Прискорити\" змусить завантажувач почати завантаження поточної сторінки, незалежно від того, чи є там доступний слот.</string>
+  <string name="eh_boost_page_invalid">Ця сторінка не може бути передмухнута (невірна сторінка)!</string>
+  <string name="eh_boost_page_errored">Не вдалося завантажити сторінку, замість неї натисніть кнопку повторити спробу!</string>
+  <string name="eh_boost_page_downloading">Ця сторінка вже завантажується!</string>
+  <string name="eh_boost_page_downloaded">Ця сторінка вже завантажена!</string>
+  <string name="eh_boost_boosted">Передмухнув(-ла) поточну сторінку!</string>
+  <string name="eh_boost_invalid_loader">Неможливо передмухнути цю сторінку (невірний завантажувач сторінки)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Retrying %1$d failed page…</item>
+    <item quantity="few">Retrying %1$d failed pages…</item>
+    <item quantity="many">Retrying %1$d failed pages…</item>
+    <item quantity="other">Retrying %1$d failed pages…</item>
+  </plurals>
+  <string name="pref_category_castserver">Сервер Трансляції</string>
+  <string name="pref_cast_server_port">Порт сервера Cast</string>
 </resources>
