@@ -2,13 +2,18 @@ package eu.kanade.tachiyomi.data.torrentServer
 
 import eu.kanade.tachiyomi.data.torrentServer.model.FileStat
 import eu.kanade.tachiyomi.data.torrentServer.model.Torrent
+import logcat.LogPriority
+import tachiyomi.core.common.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import java.net.Inet4Address
+import java.net.NetworkInterface
 import java.net.URLEncoder
 
 object TorrentServerUtils {
     private val preferences: TorrentServerPreferences by injectLazy()
-    val hostUrl = "http://127.0.0.1:${preferences.port().get()}"
+
+    val hostUrl = "http://${getLocalIpAddress()}:${preferences.port().get()}"
 
     // Is necessary separate the trackers by comma because is hardcoded in go-torrent-server
     private val animeTrackers = preferences.trackers().get().split("\n").joinToString(",\n")
@@ -30,6 +35,25 @@ object TorrentServerUtils {
             }
         }
         return null
+    }
+
+    private fun getLocalIpAddress(): String {
+        try {
+            val interfaces = NetworkInterface.getNetworkInterfaces()
+            while (interfaces.hasMoreElements()) {
+                val intf = interfaces.nextElement()
+                val addresses = intf.inetAddresses
+                while (addresses.hasMoreElements()) {
+                    val addr = addresses.nextElement()
+                    if (!addr.isLoopbackAddress && addr is Inet4Address) {
+                        return addr.hostAddress ?: "127.0.0.1"
+                    }
+                }
+            }
+        } catch (ex: Exception) {
+            logcat(LogPriority.DEBUG) { "Error getting local IP address" }
+        }
+        return "127.0.0.1"
     }
 
     private fun String.urlEncode(): String = URLEncoder.encode(this, "utf8")

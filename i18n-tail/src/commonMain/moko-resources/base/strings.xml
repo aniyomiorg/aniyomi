@@ -196,7 +196,7 @@
     <string name="pref_flare_solverr_url_summary">URL of the FlareSolverr instance to use for example http://192.168.1.202:8191/v1</string>
     <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr and update user agent</string>
     <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr to update the user agent. Only required once; then toggle as needed.</string>
-    !-- Cast -->
+    <!-- Cast -->
     <string name="pref_category_cast">Cast Settings</string>
     <string name="pref_enable_cast">Enable or disable Cast</string>
     <string name="action_cast">Send to Cast</string>
@@ -204,6 +204,11 @@
     <string name="cast_not_connected">Cast not connected</string>
     <string name="cast_video_added_to_queue">Video added to queue</string>
     <string name="cast_error_loading">Error loading video from Cast</string>
+    <string name="server_local_notification_casting">The local server is running. Tap to stop it.</string>
+    <string name="server_local_notification_channel_description">Local server notification channel</string>
+    <string name="pref_category_castserver">Cast Server</string>
+    <string name="pref_cast_server_port">Cast Server Port</string>
+
 
     <!-- Auto scroll -->
     <string name="eh_autoscroll">Autoscroll</string>
