@@ -105,13 +105,13 @@ jobs:
 
       - name: Get tag name
 
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'dark25/Animetail2'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Animetailapp/animetail'
         run: |
           set -x
           echo "VERSION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Sign APK
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'dark25/Animetail2'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Animetailapp/animetail'
         uses: r0adkll/sign-android-release@349ebdef58775b1e0d8099458af0816dc79b6407 # v1
         with:
           releaseDirectory: app/build/outputs/apk/standard/release
@@ -123,7 +123,7 @@ jobs:
           BUILD_TOOLS_VERSION: "34.0.0"
 
       - name: Clean up build artifacts
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'dark25/Animetail2'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Animetailapp/animetail'
         run: |
           set -e
 
@@ -148,7 +148,7 @@ jobs:
           echo "APK_X86_64_SHA=$sha" >> $GITHUB_ENV
 
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'dark25/Animetail2'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Animetailapp/animetail'
         uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
         with:
           tag_name: ${{ env.VERSION_TAG }}
