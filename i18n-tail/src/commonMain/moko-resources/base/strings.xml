@@ -227,4 +227,19 @@
     <string name="eh_boost_page_downloaded">This page has already been downloaded!</string>
     <string name="eh_boost_boosted">Boosted current page!</string>
     <string name="eh_boost_invalid_loader">This page cannot be boosted (invalid page loader)!</string>
+
+    <!-- Discord RPC Customization -->
+    <string name="pref_category_discord_customization">Discord Customization</string>
+    <string name="pref_discord_custom_message">Custom Message</string>
+    <string name="pref_discord_custom_message_summary">Custom message that will be displayed on Discord</string>
+    <string name="pref_discord_show_progress">Show Progress</string>
+    <string name="pref_discord_show_progress_summary">Display the current episode/chapter progress</string>
+    <string name="pref_discord_show_timestamp">Show Time</string>
+    <string name="pref_discord_show_timestamp_summary">Display elapsed/remaining time</string>
+    <string name="pref_discord_show_buttons">Show Buttons</string>
+    <string name="pref_discord_show_buttons_summary">Display buttons to download the app or join the Discord server</string>
+    <string name="pref_discord_show_download_button">Show Download Button</string>
+    <string name="pref_discord_show_download_button_summary">Displays a button to download the app</string>
+    <string name="pref_discord_show_discord_button">Show Discord Button</string>
+    <string name="pref_discord_show_discord_button_summary">Displays a button to join the Discord server</string>
 </resources>
