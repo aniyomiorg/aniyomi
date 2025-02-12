@@ -151,7 +151,7 @@ class CastManager(
     }
 
     private fun clearQueue() {
-        mediaQueue.clear() // Limpiar cola local
+        mediaQueue.clear()
         castSession?.remoteMediaClient?.let { client ->
             client.stop()
             client.load(
@@ -300,30 +300,25 @@ class CastManager(
                 val currentLocalPosition = (player.timePos ?: 0).toLong()
 
                 if (remoteMediaClient.mediaQueue.itemCount > 0) {
-                    // Optimización: Pre-construir QueueItem
                     val queueItem = MediaQueueItem.Builder(mediaInfo)
                         .setAutoplay(autoplayEnabled)
                         .build()
 
-                    // Agregar a cola local
                     mediaQueue.add(queueItem)
 
-                    // Optimizar carga en lotes
                     if (mediaQueue.size >= BATCH_SIZE) {
                         loadQueueBatch(remoteMediaClient)
                     } else {
-                        // Cargar individual si no hay suficientes items
                         remoteMediaClient.queueAppendItem(queueItem, null)
                         showAddedToQueueToast()
                     }
                 } else {
-                    // Primera carga: Optimizar metadatos
                     remoteMediaClient.load(
                         MediaLoadRequestData.Builder()
                             .setMediaInfo(mediaInfo)
                             .setAutoplay(autoplayEnabled)
                             .setCurrentTime(currentLocalPosition * 1000)
-                            .setCustomData(null) // Optimización: No enviar datos innecesarios
+                            .setCustomData(null)
                             .build(),
                     )
                 }
@@ -389,7 +384,7 @@ class CastManager(
     }
 
     companion object {
-        private const val BATCH_SIZE = 5 // Tamaño óptimo para carga en lotes
+        private const val BATCH_SIZE = 5
     }
 
     enum class CastState {
