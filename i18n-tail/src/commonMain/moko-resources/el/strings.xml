@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL για την παρουσία FlareSolverr για χρήση π.χ. http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Δοκιμή FlareSolverr και ενημέρωση πράκτορα χρήστη</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Δοκιμάστε το FlareSolverr για να ενημερώσετε τον πράκτορα του χρήστη. Απαιτείται μόνο μία φορά, στη συνέχεια, εναλλάσσετε όπως απαιτείται.</string>
-  <string name="title_cast_quality">Επιλογή Ποιότητας/Παροχής Cast</string>
+  <string-array name="title_cast_quality">
+    <item>Επιλογή Ποιότητας/Παροχής Cast</item>
+    <item>Επιλογή Ποιότητας</item>
+  </string-array>
   <string name="cast_not_connected">Η μετάδοση δεν συνδέθηκε</string>
-  <string name="cast_video_added_to_queue">Το βίντεο προστέθηκε στην ουρά</string>
-  <string name="cast_error_loading">Σφάλμα κατά τη φόρτωση βίντεο από το Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Το βίντεο προστέθηκε στην ουρά</item>
+    <item>Το βίντεο προστέθηκε στην ουρά</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Σφάλμα κατά τη φόρτωση βίντεο από το Cast</item>
+    <item>Σφάλμα φόρτωσης βίντεο</item>
+  </string-array>
   <string name="server_local_notification_casting">Ο τοπικός διακομιστής εκτελείται. Πατήστε για να τον σταματήσετε.</string>
   <string name="server_local_notification_channel_description">Κανάλι ειδοποίησης τοπικού διακομιστή</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Αυτόματο Μηχάνημα</string>
@@ -184,4 +193,27 @@
   </plurals>
   <string name="pref_category_castserver">Μετάδοση Διακομιστή</string>
   <string name="pref_cast_server_port">Θύρα Διακομιστή Cast</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Προσαρμογή Discord</string>
+  <string name="pref_discord_custom_message">Προσαρμοσμένο Μήνυμα</string>
+  <string name="pref_discord_custom_message_summary">Προσαρμοσμένο μήνυμα που θα εμφανίζεται στο Discord</string>
+  <string name="pref_discord_show_progress">Εμφάνιση Προόδου</string>
+  <string name="pref_discord_show_progress_summary">Εμφάνιση προόδου τρέχοντος επεισοδίου/κεφαλαίου</string>
+  <string name="pref_discord_show_timestamp">Εμφάνιση Ώρας</string>
+  <string name="pref_discord_show_timestamp_summary">Εμφάνιση παρήλθε/υπόλοιπος χρόνος</string>
+  <string name="pref_discord_show_buttons">Εμφάνιση Κουμπιών</string>
+  <string name="pref_discord_show_buttons_summary">Εμφάνιση κουμπιών για λήψη της εφαρμογής ή σύνδεση με τον διακομιστή Discord</string>
+  <string name="pref_discord_show_download_button">Εμφάνιση Κουμπιού Λήψης</string>
+  <string name="pref_discord_show_download_button_summary">Εμφανίζει ένα κουμπί για λήψη της εφαρμογής</string>
+  <string name="pref_discord_show_discord_button">Εμφάνιση Κουμπιού Discord</string>
+  <string name="pref_discord_show_discord_button_summary">Εμφανίζει ένα κουμπί για να συνδεθεί με τον διακομιστή του Discord</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Ουρά Αναπαραγωγής</string>
+  <string name="action_clear_queue">Εκκαθάριση Ουράς</string>
+  <string name="cast_remove_from_queue">Αφαίρεση από την ουρά</string>
+  <string name="move_to_top">Μετακίνηση στην κορυφή</string>
+  <string name="move_to_position">Μετακίνηση στη θέση</string>
+  <string name="position">Θέση</string>
+  <string name="select_position">Επιλογή Θέσης</string>
+  <string name="remove_from_queue_confirmation">Αφαίρεση από την ουρά?</string>
+  <string name="clear_queue_confirmation">Εκκαθάριση Ουράς</string>
+  <string name="clear_queue_confirmation_message">Είστε βέβαιοι ότι θέλετε να καθαρίσετε ολόκληρη την ουρά?</string>
 </resources>

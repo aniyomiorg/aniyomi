@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL-ul instanţei FlareSolverr de utilizat, de exemplu, http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Testaţi FlareSolverr şi actualizaţi agentul utilizatorului</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testează FlareSolverr pentru a actualiza agentul utilizator. Doar o singură dată; apoi comută după cum este necesar.</string>
-  <string name="title_cast_quality">Alegeți calitatea/furnizorul în distribuție</string>
+  <string-array name="title_cast_quality">
+    <item>Alegeți calitatea/furnizorul în distribuție</item>
+    <item>Selectaţi calitatea</item>
+  </string-array>
   <string name="cast_not_connected">Transmite neconectate</string>
-  <string name="cast_video_added_to_queue">Video adăugat la coadă</string>
-  <string name="cast_error_loading">Eroare la încărcarea videoclipului din Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video adăugat la coadă</item>
+    <item>Video adăugat la coadă</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Eroare la încărcarea videoclipului din Cast</item>
+    <item>Eroare la încărcarea videoclipului</item>
+  </string-array>
   <string name="server_local_notification_casting">Serverul local rulează. Atingeți pentru a-l opri.</string>
   <string name="server_local_notification_channel_description">Canal de notificare local server</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscroll</string>
@@ -185,4 +194,27 @@
   </plurals>
   <string name="pref_category_castserver">Distribuie server</string>
   <string name="pref_cast_server_port">Port server trecut</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Personalizare Discord</string>
+  <string name="pref_discord_custom_message">Mesaj personalizat</string>
+  <string name="pref_discord_custom_message_summary">Mesaj personalizat care va fi afișat pe Discord</string>
+  <string name="pref_discord_show_progress">Arată progresul</string>
+  <string name="pref_discord_show_progress_summary">Afișează progresul episodului curent/capitolului</string>
+  <string name="pref_discord_show_timestamp">Arată timpul</string>
+  <string name="pref_discord_show_timestamp_summary">Afișează timpul scurs/rămas</string>
+  <string name="pref_discord_show_buttons">Arată butoanele</string>
+  <string name="pref_discord_show_buttons_summary">Afișează butoane pentru a descărca aplicația sau pentru a se alătura serverului Discord</string>
+  <string name="pref_discord_show_download_button">Arată butonul de Descărcare</string>
+  <string name="pref_discord_show_download_button_summary">Afișează un buton pentru descărcarea aplicației</string>
+  <string name="pref_discord_show_discord_button">Arată butonul Discord</string>
+  <string name="pref_discord_show_discord_button_summary">Afișează un buton pentru a se alătura serverului Discord</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Lista de redare</string>
+  <string name="action_clear_queue">Șterge coada</string>
+  <string name="cast_remove_from_queue">Elimină din coadă</string>
+  <string name="move_to_top">Mută sus</string>
+  <string name="move_to_position">Mută la poziție</string>
+  <string name="position">Poziție</string>
+  <string name="select_position">Selectaţi poziţia</string>
+  <string name="remove_from_queue_confirmation">Eliminați din coadă?</string>
+  <string name="clear_queue_confirmation">Șterge coada</string>
+  <string name="clear_queue_confirmation_message">Sunteţi sigur că doriţi să ştergeţi întreaga listă?</string>
 </resources>

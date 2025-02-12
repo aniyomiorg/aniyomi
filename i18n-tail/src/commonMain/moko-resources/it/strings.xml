@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL dell\'istanza FlareSolverr da usare per esempio http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Prova FlareSolverr e aggiorna l\'user agent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Prova FlareSolverr per aggiornare l\'user agent. Richiesto solo una volta, quindi attiva/disattiva quando necessario.</string>
-  <string name="title_cast_quality">Scegli Qualità Trasparente/Fornitore</string>
+  <string-array name="title_cast_quality">
+    <item>Scegli Qualità Trasparente/Fornitore</item>
+    <item>Seleziona Qualità</item>
+  </string-array>
   <string name="cast_not_connected">Trasmetti non connesso</string>
-  <string name="cast_video_added_to_queue">Video aggiunto alla coda</string>
-  <string name="cast_error_loading">Errore nel caricare il video da Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video aggiunto alla coda</item>
+    <item>Video aggiunto alla coda</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Errore nel caricare il video da Cast</item>
+    <item>Errore nel caricare il video</item>
+  </string-array>
   <string name="server_local_notification_casting">Il server locale è in esecuzione. Tocca per fermarlo.</string>
   <string name="server_local_notification_channel_description">Canale di notifica server locale</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscroll</string>
@@ -184,4 +193,27 @@
   </plurals>
   <string name="pref_category_castserver">Trasmetti Server</string>
   <string name="pref_cast_server_port">Porta Del Server Cast</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Personalizzazione Discord</string>
+  <string name="pref_discord_custom_message">Messaggio Personalizzato</string>
+  <string name="pref_discord_custom_message_summary">Messaggio personalizzato che verrà visualizzato su Discord</string>
+  <string name="pref_discord_show_progress">Mostra Progresso</string>
+  <string name="pref_discord_show_progress_summary">Visualizza l\'avanzamento corrente dell\'episodio/capitolo</string>
+  <string name="pref_discord_show_timestamp">Mostra Ora</string>
+  <string name="pref_discord_show_timestamp_summary">Mostra tempo trascorso/rimasto</string>
+  <string name="pref_discord_show_buttons">Mostra Pulsanti</string>
+  <string name="pref_discord_show_buttons_summary">Mostra i pulsanti per scaricare l\'applicazione o unisciti al server Discord</string>
+  <string name="pref_discord_show_download_button">Mostra Pulsante Download</string>
+  <string name="pref_discord_show_download_button_summary">Mostra un pulsante per scaricare l\'app</string>
+  <string name="pref_discord_show_discord_button">Mostra Pulsante Discord</string>
+  <string name="pref_discord_show_discord_button_summary">Mostra un pulsante per entrare nel server Discord</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Coda Di Riproduzione</string>
+  <string name="action_clear_queue">Cancella Coda</string>
+  <string name="cast_remove_from_queue">Rimuovi dalla coda</string>
+  <string name="move_to_top">Sposta in alto</string>
+  <string name="move_to_position">Sposta in posizione</string>
+  <string name="position">Posizione</string>
+  <string name="select_position">Seleziona Posizione</string>
+  <string name="remove_from_queue_confirmation">Rimuovere dalla coda?</string>
+  <string name="clear_queue_confirmation">Cancella Coda</string>
+  <string name="clear_queue_confirmation_message">Sei sicuro di voler cancellare l\'intera coda?</string>
 </resources>

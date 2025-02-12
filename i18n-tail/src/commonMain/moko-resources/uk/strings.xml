@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL-адреса екземпляра FlareSolverr, наприклад, http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Тест FlareSolverr та оновлення користувацького агента</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Тест FlareSolverr для оновлення користувацького агента. Потрібно лише один раз; потім ввімкнути як необхідно.</string>
-  <string name="title_cast_quality">Вибрати кількість запису і провайдера</string>
+  <string-array name="title_cast_quality">
+    <item>Вибрати кількість запису і провайдера</item>
+    <item>Вибрати якість</item>
+  </string-array>
   <string name="cast_not_connected">Трансляція не підключена</string>
-  <string name="cast_video_added_to_queue">Відео додано в чергу</string>
-  <string name="cast_error_loading">Помилка при завантаженні відео з Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Відео додано в чергу</item>
+    <item>Відео додано в чергу</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Помилка при завантаженні відео з Cast</item>
+    <item>Помилка при завантаженні відео</item>
+  </string-array>
   <string name="server_local_notification_casting">Локальний сервер працює. Торкніться, щоб зупинити його.</string>
   <string name="server_local_notification_channel_description">Канал сповіщень локального сервера</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Автопрокрутка</string>
@@ -186,4 +195,27 @@
   </plurals>
   <string name="pref_category_castserver">Сервер Трансляції</string>
   <string name="pref_cast_server_port">Порт сервера Cast</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Налаштування Discord</string>
+  <string name="pref_discord_custom_message">Повідомлення при вимкненому сайті</string>
+  <string name="pref_discord_custom_message_summary">Користувацькі повідомлення, які будуть відображатися в Discord</string>
+  <string name="pref_discord_show_progress">Показувати поступ</string>
+  <string name="pref_discord_show_progress_summary">Відображати поточний стан епізодів/розділу</string>
+  <string name="pref_discord_show_timestamp">Відображати час</string>
+  <string name="pref_discord_show_timestamp_summary">Відображення elapsed/Залишилося часу</string>
+  <string name="pref_discord_show_buttons">Показати кнопки</string>
+  <string name="pref_discord_show_buttons_summary">Показувати кнопки для завантаження програми або приєднання до сервера Discord</string>
+  <string name="pref_discord_show_download_button">Показувати кнопку завантаження</string>
+  <string name="pref_discord_show_download_button_summary">Відображає кнопку для завантаження програми</string>
+  <string name="pref_discord_show_discord_button">Показувати кнопку Discord</string>
+  <string name="pref_discord_show_discord_button_summary">Відображає кнопку для приєднання до серверу Discord</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Черга відтворення</string>
+  <string name="action_clear_queue">Очистити чергу</string>
+  <string name="cast_remove_from_queue">Видалити з черги</string>
+  <string name="move_to_top">Нагору</string>
+  <string name="move_to_position">Перемістити на позицію</string>
+  <string name="position">Позиція</string>
+  <string name="select_position">Виберіть позицію</string>
+  <string name="remove_from_queue_confirmation">Видалити з черги?</string>
+  <string name="clear_queue_confirmation">Очистити чергу</string>
+  <string name="clear_queue_confirmation_message">Ви впевнені, що хочете очистити всю чергу?</string>
 </resources>

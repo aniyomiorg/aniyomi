@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">FlareSolverrin ilmentymän URL-osoite, jota käytetään esimerkiksi http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Testaa FlareSolverr ja päivitä käyttäjä agentti</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testaa FlareSolverr päivittääksesi käyttäjän agentin. Tarvittava vain kerran; ota sitten tarvittaessa käyttöön.</string>
-  <string name="title_cast_quality">Valitse Cast Quality/Provider</string>
+  <string-array name="title_cast_quality">
+    <item>Valitse Cast Quality/Provider</item>
+    <item>Valitse Laatu</item>
+  </string-array>
   <string name="cast_not_connected">Suora ei yhdistetty</string>
-  <string name="cast_video_added_to_queue">Video lisätty jonoon</string>
-  <string name="cast_error_loading">Virhe ladattaessa videota Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video lisätty jonoon</item>
+    <item>Video lisätty jonoon</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Virhe ladattaessa videota Cast</item>
+    <item>Virhe ladattaessa videota</item>
+  </string-array>
   <string name="server_local_notification_casting">Paikallinen palvelin on käynnissä. Napauta pysäyttääksesi sen.</string>
   <string name="server_local_notification_channel_description">Paikallisen palvelimen ilmoituskanava</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Automaattinen Vieritys</string>
@@ -184,4 +193,27 @@
   </plurals>
   <string name="pref_category_castserver">Lähetä Palvelin</string>
   <string name="pref_cast_server_port">Lähetä Palvelimen Portti</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discordin Mukauttaminen</string>
+  <string name="pref_discord_custom_message">Mukautettu Viesti</string>
+  <string name="pref_discord_custom_message_summary">Mukautettu viesti, joka näytetään Discordissa</string>
+  <string name="pref_discord_show_progress">Näytä Edistyminen</string>
+  <string name="pref_discord_show_progress_summary">Näytä nykyisen jakson/luvun edistyminen</string>
+  <string name="pref_discord_show_timestamp">Näytä Aika</string>
+  <string name="pref_discord_show_timestamp_summary">Näyttö kulunut / jäljellä oleva aika</string>
+  <string name="pref_discord_show_buttons">Näytä Painikkeet</string>
+  <string name="pref_discord_show_buttons_summary">Näytä painikkeet, joilla voit ladata sovelluksen tai liittyä Discord-palvelimeen</string>
+  <string name="pref_discord_show_download_button">Näytä Latauspainike</string>
+  <string name="pref_discord_show_download_button_summary">Näyttää painikkeen, jolla sovellus ladataan</string>
+  <string name="pref_discord_show_discord_button">Näytä Discord-painike</string>
+  <string name="pref_discord_show_discord_button_summary">Näyttää painikkeen, jolla voit liittyä Discord-palvelimeen</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Soiton Jono</string>
+  <string name="action_clear_queue">Tyhjennä Jono</string>
+  <string name="cast_remove_from_queue">Poista jonosta</string>
+  <string name="move_to_top">Siirrä ylimmäksi</string>
+  <string name="move_to_position">Siirrä sijaintiin</string>
+  <string name="position">Sijainti</string>
+  <string name="select_position">Valitse Sijainti</string>
+  <string name="remove_from_queue_confirmation">Poistetaanko jonosta?</string>
+  <string name="clear_queue_confirmation">Tyhjennä Jono</string>
+  <string name="clear_queue_confirmation_message">Oletko varma, että haluat tyhjentää koko jonon?</string>
 </resources>

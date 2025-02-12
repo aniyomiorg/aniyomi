@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL of the FlareSolverr instance to use for example http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr and update user agent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr to update the user agent. Only required once; then toggle as needed.</string>
-  <string name="title_cast_quality">Choose Cast Quality/Provider</string>
+  <string-array name="title_cast_quality">
+    <item>Choose Cast Quality/Provider</item>
+    <item>Select Quality</item>
+  </string-array>
   <string name="cast_not_connected">Cast not connected</string>
-  <string name="cast_video_added_to_queue">Video added to queue</string>
-  <string name="cast_error_loading">Error loading video from Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video added to queue</item>
+    <item>Video added to queue</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Error loading video from Cast</item>
+    <item>Error loading video</item>
+  </string-array>
   <string name="server_local_notification_casting">The local server is running. Tap to stop it.</string>
   <string name="server_local_notification_channel_description">Local server notification channel</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscroll</string>
@@ -183,4 +192,27 @@
   </plurals>
   <string name="pref_category_castserver">Cast Server</string>
   <string name="pref_cast_server_port">Cast Server Port</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discord Customization</string>
+  <string name="pref_discord_custom_message">Custom Message</string>
+  <string name="pref_discord_custom_message_summary">Custom message that will be displayed on Discord</string>
+  <string name="pref_discord_show_progress">Show Progress</string>
+  <string name="pref_discord_show_progress_summary">Display the current episode/chapter progress</string>
+  <string name="pref_discord_show_timestamp">Show Time</string>
+  <string name="pref_discord_show_timestamp_summary">Display elapsed/remaining time</string>
+  <string name="pref_discord_show_buttons">Show Buttons</string>
+  <string name="pref_discord_show_buttons_summary">Display buttons to download the app or join the Discord server</string>
+  <string name="pref_discord_show_download_button">Show Download Button</string>
+  <string name="pref_discord_show_download_button_summary">Displays a button to download the app</string>
+  <string name="pref_discord_show_discord_button">Show Discord Button</string>
+  <string name="pref_discord_show_discord_button_summary">Displays a button to join the Discord server</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Playback Queue</string>
+  <string name="action_clear_queue">Clear Queue</string>
+  <string name="cast_remove_from_queue">Remove from queue</string>
+  <string name="move_to_top">Move to Top</string>
+  <string name="move_to_position">Move to Position</string>
+  <string name="position">Position</string>
+  <string name="select_position">Select Position</string>
+  <string name="remove_from_queue_confirmation">Remove from Queue?</string>
+  <string name="clear_queue_confirmation">Clear Queue</string>
+  <string name="clear_queue_confirmation_message">Are you sure you want to clear the entire queue?</string>
 </resources>

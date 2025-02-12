@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL-adressen til FlareSolverr for eksempel å bruke http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr og oppdater brukeragent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr for å oppdatere brukeragenten. Bare påkrevd én gang, og veksling etter behov.</string>
-  <string name="title_cast_quality">Velg underliggende kvalitet/leverandør</string>
+  <string-array name="title_cast_quality">
+    <item>Velg underliggende kvalitet/leverandør</item>
+    <item>Velg kvalitet</item>
+  </string-array>
   <string name="cast_not_connected">Medvirkende ikke tilkoblet</string>
-  <string name="cast_video_added_to_queue">Video lagt til i køen</string>
-  <string name="cast_error_loading">Feil under lasting av video fra Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video lagt til i køen</item>
+    <item>Video lagt til i køen</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Feil under lasting av video fra Cast</item>
+    <item>Feil under lasting av video</item>
+  </string-array>
   <string name="server_local_notification_casting">Den lokale serveren kjører. Trykk for å stoppe den.</string>
   <string name="server_local_notification_channel_description">Varsel om lokal server</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autosserull</string>
@@ -184,4 +193,27 @@
   </plurals>
   <string name="pref_category_castserver">Kast server</string>
   <string name="pref_cast_server_port">Kast serverport</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discord tilpasning</string>
+  <string name="pref_discord_custom_message">Tilpasset melding</string>
+  <string name="pref_discord_custom_message_summary">Egendefinert melding som vises på Discord</string>
+  <string name="pref_discord_show_progress">Vis fremdrift</string>
+  <string name="pref_discord_show_progress_summary">Vis nåværende episode/kapittel fremgang</string>
+  <string name="pref_discord_show_timestamp">Vis tid</string>
+  <string name="pref_discord_show_timestamp_summary">Vis elapsed/gjenværende tid</string>
+  <string name="pref_discord_show_buttons">Vis knapper</string>
+  <string name="pref_discord_show_buttons_summary">Vis knappene for å laste ned appen eller bli med på Discord-serveren</string>
+  <string name="pref_discord_show_download_button">Vis nedlastingsknapp</string>
+  <string name="pref_discord_show_download_button_summary">Viser en knapp som skal laste ned appen</string>
+  <string name="pref_discord_show_discord_button">Vis Discord-knapp</string>
+  <string name="pref_discord_show_discord_button_summary">Viser en knapp som vil bli med i Discord-serveren</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Avspillingskø</string>
+  <string name="action_clear_queue">Tøm kø</string>
+  <string name="cast_remove_from_queue">Fjern fra køen</string>
+  <string name="move_to_top">Flytt til toppen</string>
+  <string name="move_to_position">Flytt til posisjon</string>
+  <string name="position">Posisjon</string>
+  <string name="select_position">Velg posisjon</string>
+  <string name="remove_from_queue_confirmation">Fjerne fra køen?</string>
+  <string name="clear_queue_confirmation">Tøm kø</string>
+  <string name="clear_queue_confirmation_message">Er du sikker på at du vil tømme hele køen?</string>
 </resources>

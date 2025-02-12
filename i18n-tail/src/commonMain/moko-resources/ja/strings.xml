@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">例えば使用する FlareSolverr インスタンスの URL http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">FlareSolverrをテストし、ユーザーエージェントを更新</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">ユーザーエージェントを更新するためにFlareSolverをテストします。必要に応じて一度だけ必要です。その後、必要に応じて切り替えます。</string>
-  <string name="title_cast_quality">キャスト品質/プロバイダーを選択</string>
+  <string-array name="title_cast_quality">
+    <item>キャスト品質/プロバイダーを選択</item>
+    <item>画質を選択</item>
+  </string-array>
   <string name="cast_not_connected">キャストが接続されていません</string>
-  <string name="cast_video_added_to_queue">キューにビデオを追加しました</string>
-  <string name="cast_error_loading">キャストからのビデオ読み込みエラー</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>キューにビデオを追加しました</item>
+    <item>キューにビデオを追加しました</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>キャストからのビデオ読み込みエラー</item>
+    <item>ビデオの読み込みエラー</item>
+  </string-array>
   <string name="server_local_notification_casting">ローカルサーバーが実行されています。タップして停止します。</string>
   <string name="server_local_notification_channel_description">ローカルサーバー通知チャンネル</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">オートクロル</string>
@@ -183,4 +192,27 @@
   </plurals>
   <string name="pref_category_castserver">キャストサーバー</string>
   <string name="pref_cast_server_port">サーバーポートのキャスト</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discordのカスタマイズ</string>
+  <string name="pref_discord_custom_message">カスタムメッセージ</string>
+  <string name="pref_discord_custom_message_summary">Discordに表示されるカスタムメッセージ</string>
+  <string name="pref_discord_show_progress">進行状況を表示</string>
+  <string name="pref_discord_show_progress_summary">現在のエピソード/チャプターの進行状況を表示する</string>
+  <string name="pref_discord_show_timestamp">時間を表示</string>
+  <string name="pref_discord_show_timestamp_summary">経過時間/残り時間を表示</string>
+  <string name="pref_discord_show_buttons">ボタンを表示</string>
+  <string name="pref_discord_show_buttons_summary">アプリをダウンロードしたりDiscordサーバーに参加するボタンを表示します</string>
+  <string name="pref_discord_show_download_button">ダウンロードボタンを表示</string>
+  <string name="pref_discord_show_download_button_summary">アプリをダウンロードするボタンを表示します</string>
+  <string name="pref_discord_show_discord_button">Discordボタンを表示</string>
+  <string name="pref_discord_show_discord_button_summary">Discordサーバーに参加するボタンを表示します</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">再生キュー</string>
+  <string name="action_clear_queue">キューをクリア</string>
+  <string name="cast_remove_from_queue">キューから削除</string>
+  <string name="move_to_top">上部に移動</string>
+  <string name="move_to_position">位置に移動</string>
+  <string name="position">位置</string>
+  <string name="select_position">ポジションを選択</string>
+  <string name="remove_from_queue_confirmation">キューから削除しますか？</string>
+  <string name="clear_queue_confirmation">キューをクリア</string>
+  <string name="clear_queue_confirmation_message">キュー全体をクリアしてもよろしいですか？</string>
 </resources>

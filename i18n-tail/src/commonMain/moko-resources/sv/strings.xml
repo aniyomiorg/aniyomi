@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL till FlareSolverr instansen att använda till exempel http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Testa FlareSolverr och uppdatera användaragenten</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testa FlareSolverr för att uppdatera användaragenten. Krävs endast en gång, växla sedan vid behov.</string>
-  <string name="title_cast_quality">Välj gjutkvalitet/leverantör</string>
+  <string-array name="title_cast_quality">
+    <item>Välj gjutkvalitet/leverantör</item>
+    <item>Välj kvalitet</item>
+  </string-array>
   <string name="cast_not_connected">Cast ej ansluten</string>
-  <string name="cast_video_added_to_queue">Video tillagd i kö</string>
-  <string name="cast_error_loading">Fel vid laddning av video från Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video tillagd i kö</item>
+    <item>Video tillagd i kö</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Fel vid laddning av video från Cast</item>
+    <item>Fel vid inläsning av video</item>
+  </string-array>
   <string name="server_local_notification_casting">Den lokala servern körs. Tryck för att stoppa den.</string>
   <string name="server_local_notification_channel_description">Kanal för lokal server avisering</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Skrolla automatiskt</string>
@@ -184,4 +193,27 @@
   </plurals>
   <string name="pref_category_castserver">Casta server</string>
   <string name="pref_cast_server_port">Gjuten serverport</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discords anpassning</string>
+  <string name="pref_discord_custom_message">Anpassat meddelande</string>
+  <string name="pref_discord_custom_message_summary">Anpassat meddelande som kommer att visas på Discord</string>
+  <string name="pref_discord_show_progress">Visa framsteg</string>
+  <string name="pref_discord_show_progress_summary">Visa pågående avsnitt/kapitel framsteg</string>
+  <string name="pref_discord_show_timestamp">Visa tid</string>
+  <string name="pref_discord_show_timestamp_summary">Visa förfluten / återstående tid</string>
+  <string name="pref_discord_show_buttons">Visa knappar</string>
+  <string name="pref_discord_show_buttons_summary">Visa knappar för att ladda ner appen eller gå med i Discord-servern</string>
+  <string name="pref_discord_show_download_button">Visa nedladdningsknapp</string>
+  <string name="pref_discord_show_download_button_summary">Visar en knapp för att ladda ner appen</string>
+  <string name="pref_discord_show_discord_button">Visa Discord-knapp</string>
+  <string name="pref_discord_show_discord_button_summary">Visar en knapp för att ansluta till Discord-servern</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Uppspelningskö</string>
+  <string name="action_clear_queue">Rensa kö</string>
+  <string name="cast_remove_from_queue">Ta bort från kön</string>
+  <string name="move_to_top">Flytta längst upp</string>
+  <string name="move_to_position">Flytta till position</string>
+  <string name="position">Befattning</string>
+  <string name="select_position">Välj position</string>
+  <string name="remove_from_queue_confirmation">Ta bort från kön?</string>
+  <string name="clear_queue_confirmation">Rensa kö</string>
+  <string name="clear_queue_confirmation_message">Är du säker på att du vill rensa hela kön?</string>
 </resources>

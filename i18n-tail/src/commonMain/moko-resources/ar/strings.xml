@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">عنوان URL لمثيل FlareSolverr للاستخدام على سبيل المثال http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">اختبار FlareSolverr وتحديث وكيل المستخدم</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">اختبار FlareSolverr لتحديث وكيل المستخدم. مطلوب مرة واحدة فقط؛ ثم قم بتبديل حسب الحاجة.</string>
-  <string name="title_cast_quality">اختيار جودة المسطح/المزود</string>
+  <string-array name="title_cast_quality">
+    <item>اختيار جودة المسطح/المزود</item>
+    <item>حدد الجودة</item>
+  </string-array>
   <string name="cast_not_connected">البث غير متصل</string>
-  <string name="cast_video_added_to_queue">تم إضافة الفيديو إلى قائمة الانتظار</string>
-  <string name="cast_error_loading">خطأ في تحميل الفيديو من القصة</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>تم إضافة الفيديو إلى قائمة الانتظار</item>
+    <item>تم إضافة الفيديو إلى قائمة الانتظار</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>خطأ في تحميل الفيديو من القصة</item>
+    <item>خطأ في تحميل الفيديو</item>
+  </string-array>
   <string name="server_local_notification_casting">الخادم المحلي قيد التشغيل. انقر لإيقافه.</string>
   <string name="server_local_notification_channel_description">قناة إشعارات الخادم المحلية</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">تمرير تلقائي</string>
@@ -188,4 +197,27 @@
   </plurals>
   <string name="pref_category_castserver">خادم القصة</string>
   <string name="pref_cast_server_port">منفذ الخادم المسقط</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">تخصيص ديسكورد</string>
+  <string name="pref_discord_custom_message">رسالة مخصصة</string>
+  <string name="pref_discord_custom_message_summary">رسالة مخصصة سيتم عرضها على ديسكورد</string>
+  <string name="pref_discord_show_progress">إظهار التقدم</string>
+  <string name="pref_discord_show_progress_summary">عرض تقدم الحلقة/الفصل الحالي</string>
+  <string name="pref_discord_show_timestamp">إظهار الوقت</string>
+  <string name="pref_discord_show_timestamp_summary">عرض بعد الانقضائ/الوقت المتبقي</string>
+  <string name="pref_discord_show_buttons">إظهار الأزرار</string>
+  <string name="pref_discord_show_buttons_summary">عرض الأزرار لتنزيل التطبيق أو الانضمام إلى خادم ديسكورد</string>
+  <string name="pref_discord_show_download_button">إظهار زر التحميل</string>
+  <string name="pref_discord_show_download_button_summary">يعرض زر لتنزيل التطبيق</string>
+  <string name="pref_discord_show_discord_button">إظهار زر ديسكورد</string>
+  <string name="pref_discord_show_discord_button_summary">يعرض زرًا للانضمام إلى خادم ديسكورد</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">قائمة انتظار التشغيل</string>
+  <string name="action_clear_queue">مسح قائمة الانتظار</string>
+  <string name="cast_remove_from_queue">إزالة من قائمة الانتظار</string>
+  <string name="move_to_top">الانتقال إلى الأعلى</string>
+  <string name="move_to_position">الانتقال إلى الموضع</string>
+  <string name="position">الموضع</string>
+  <string name="select_position">حدد الموضع</string>
+  <string name="remove_from_queue_confirmation">إزالة من قائمة الانتظار؟</string>
+  <string name="clear_queue_confirmation">مسح قائمة الانتظار</string>
+  <string name="clear_queue_confirmation_message">هل أنت متأكد من أنك تريد مسح قائمة الانتظار بأكملها؟</string>
 </resources>

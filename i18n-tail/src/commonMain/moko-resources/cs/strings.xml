@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">Adresa URL instance FlareSolverr pro použití například http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Otestuj FlareSolverr a aktualizuj uživatelské agenta</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Otestujte FlareSolverr pro aktualizaci uživatelského agenta. Vyžadováno pouze jednou; poté přepněte podle potřeby.</string>
-  <string name="title_cast_quality">Vybrat kvalifikaci/poskytovatele obsazení</string>
+  <string-array name="title_cast_quality">
+    <item>Vybrat kvalifikaci/poskytovatele obsazení</item>
+    <item>Vybrat kvalitu</item>
+  </string-array>
   <string name="cast_not_connected">Vysílání není připojeno</string>
-  <string name="cast_video_added_to_queue">Video přidáno do fronty</string>
-  <string name="cast_error_loading">Chyba při načítání videa z vysílání</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video přidáno do fronty</item>
+    <item>Video přidáno do fronty</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Chyba při načítání videa z vysílání</item>
+    <item>Chyba při načítání videa</item>
+  </string-array>
   <string name="server_local_notification_casting">Místní server je spuštěn. Klepnutím ho zastavíte.</string>
   <string name="server_local_notification_channel_description">Indikační kanál místního serveru</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Automatický posun</string>
@@ -186,4 +195,27 @@
   </plurals>
   <string name="pref_category_castserver">Vysílající server</string>
   <string name="pref_cast_server_port">Port serveru odeslání</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Přizpůsobení Discordu</string>
+  <string name="pref_discord_custom_message">Vlastní zpráva</string>
+  <string name="pref_discord_custom_message_summary">Vlastní zpráva, která bude zobrazena na Discordu</string>
+  <string name="pref_discord_show_progress">Zobrazit průběh</string>
+  <string name="pref_discord_show_progress_summary">Zobrazit aktuální epizodu/kapitolu</string>
+  <string name="pref_discord_show_timestamp">Zobrazit čas</string>
+  <string name="pref_discord_show_timestamp_summary">Zobrazení uplynulého/zbývajícího času</string>
+  <string name="pref_discord_show_buttons">Zobrazit tlačítka</string>
+  <string name="pref_discord_show_buttons_summary">Zobrazit tlačítka ke stažení aplikace nebo se připojit k Discord serveru</string>
+  <string name="pref_discord_show_download_button">Zobrazit tlačítko Stahování</string>
+  <string name="pref_discord_show_download_button_summary">Zobrazí tlačítko ke stažení aplikace</string>
+  <string name="pref_discord_show_discord_button">Zobrazit Discord tlačítko</string>
+  <string name="pref_discord_show_discord_button_summary">Zobrazí tlačítko pro připojení k Discord serveru</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Fronta přehrávání</string>
+  <string name="action_clear_queue">Vymazat frontu</string>
+  <string name="cast_remove_from_queue">Odebrat z fronty</string>
+  <string name="move_to_top">Přesunout nahoru</string>
+  <string name="move_to_position">Přesunout na pozici</string>
+  <string name="position">Pozice</string>
+  <string name="select_position">Vybrat pozici</string>
+  <string name="remove_from_queue_confirmation">Odstranit z fronty?</string>
+  <string name="clear_queue_confirmation">Vymazat frontu</string>
+  <string name="clear_queue_confirmation_message">Jste si jisti, že chcete vymazat celou frontu?</string>
 </resources>

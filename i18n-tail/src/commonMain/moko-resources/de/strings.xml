@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL der FlareSolverr-Instanz zum Beispiel http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">FlareSolverr testen und User-Agent aktualisieren</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testen Sie FlareSolverr um den User-Agent zu aktualisieren. Nur einmal erforderlich; dann bei Bedarf umschalten.</string>
-  <string name="title_cast_quality">Wähle Übertragungsqualität/Anbieter</string>
+  <string-array name="title_cast_quality">
+    <item>Wähle Übertragungsqualität/Anbieter</item>
+    <item>Qualität auswählen</item>
+  </string-array>
   <string name="cast_not_connected">Cast nicht verbunden</string>
-  <string name="cast_video_added_to_queue">Video zur Warteschlange hinzugefügt</string>
-  <string name="cast_error_loading">Fehler beim Laden des Videos vom Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video zur Warteschlange hinzugefügt</item>
+    <item>Video zur Warteschlange hinzugefügt</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Fehler beim Laden des Videos vom Cast</item>
+    <item>Fehler beim Laden des Videos</item>
+  </string-array>
   <string name="server_local_notification_casting">Der lokale Server läuft. Tippen, um ihn zu stoppen.</string>
   <string name="server_local_notification_channel_description">Lokaler Server Benachrichtigungskanal</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscrollen</string>
@@ -184,4 +193,27 @@
   </plurals>
   <string name="pref_category_castserver">Cast Server</string>
   <string name="pref_cast_server_port">Cast Server Port</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discord Anpassung</string>
+  <string name="pref_discord_custom_message">Eigene Nachricht</string>
+  <string name="pref_discord_custom_message_summary">Benutzerdefinierte Nachricht, die auf Discord angezeigt wird</string>
+  <string name="pref_discord_show_progress">Zeige Fortschritt</string>
+  <string name="pref_discord_show_progress_summary">Zeige den aktuellen Episoden/Kapitel Fortschritt</string>
+  <string name="pref_discord_show_timestamp">Zeit anzeigen</string>
+  <string name="pref_discord_show_timestamp_summary">Verfallen/verbleibende Zeit anzeigen</string>
+  <string name="pref_discord_show_buttons">Tasten anzeigen</string>
+  <string name="pref_discord_show_buttons_summary">Zeige Schaltflächen, um die App herunterzuladen oder dem Discord Server beizutreten</string>
+  <string name="pref_discord_show_download_button">Download-Button anzeigen</string>
+  <string name="pref_discord_show_download_button_summary">Zeigt einen Button zum Herunterladen der App an</string>
+  <string name="pref_discord_show_discord_button">Discord Button anzeigen</string>
+  <string name="pref_discord_show_discord_button_summary">Zeigt einen Button um dem Discord Server beizutreten</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Playback-Warteschlange</string>
+  <string name="action_clear_queue">Warteschlange leeren</string>
+  <string name="cast_remove_from_queue">Aus der Warteschlange entfernen</string>
+  <string name="move_to_top">Nach oben</string>
+  <string name="move_to_position">In Position verschieben</string>
+  <string name="position">Position</string>
+  <string name="select_position">Position auswählen</string>
+  <string name="remove_from_queue_confirmation">Aus der Warteschlange entfernen?</string>
+  <string name="clear_queue_confirmation">Warteschlange leeren</string>
+  <string name="clear_queue_confirmation_message">Sind Sie sicher, dass Sie die gesamte Warteschlange löschen möchten?</string>
 </resources>

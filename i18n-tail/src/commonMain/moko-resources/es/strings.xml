@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL de la instancia de FlareSolverr a utilizar, por ejemplo: http://192.168.1.202:8191/v1</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Probar FlareSolverr y actualizar el agente de usuario</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Pruebe FlareSolverr para actualizar el agente de usuario. Solo es necesario una vez; luego cambie según sea necesario.</string>
-  <string name="title_cast_quality">Elige calidad/proveedor de transmisión</string>
+  <string-array name="title_cast_quality">
+    <item>Elige calidad/proveedor de transmisión</item>
+    <item>Seleccionar Calidad</item>
+  </string-array>
   <string name="cast_not_connected">Transmisión no establecida</string>
-  <string name="cast_video_added_to_queue">Vídeo añadido a la cola</string>
-  <string name="cast_error_loading">Error al cargar el video desde el Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Vídeo añadido a la cola</item>
+    <item>Vídeo añadido a la cola</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Error al cargar el video desde el Cast</item>
+    <item>Error al cargar el video</item>
+  </string-array>
   <string name="server_local_notification_casting">El servidor local está en ejecución. Toca para detenerlo.</string>
   <string name="server_local_notification_channel_description">Canal de notificación del servidor local</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">AutoScroll</string>
@@ -184,4 +193,27 @@
   </plurals>
   <string name="pref_category_castserver">Cast Server</string>
   <string name="pref_cast_server_port">Puerto para el Servidor Cast</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Personalizar Discord</string>
+  <string name="pref_discord_custom_message">Mensaje personalizado</string>
+  <string name="pref_discord_custom_message_summary">Mensaje personalizado que se mostrará en Discord</string>
+  <string name="pref_discord_show_progress">Mostrar barra de progreso</string>
+  <string name="pref_discord_show_progress_summary">Mostrar el progreso actual del episodio/capítulo</string>
+  <string name="pref_discord_show_timestamp">Mostrar Tiempo</string>
+  <string name="pref_discord_show_timestamp_summary">Mostrar el tiempo transcurrido/restante</string>
+  <string name="pref_discord_show_buttons">Mostrar Botones</string>
+  <string name="pref_discord_show_buttons_summary">Mostrar botones para descargar la aplicación o unirse al servidor de Discord</string>
+  <string name="pref_discord_show_download_button">Mostrar el botón de descarga</string>
+  <string name="pref_discord_show_download_button_summary">Muestra un botón para descargar la aplicación</string>
+  <string name="pref_discord_show_discord_button">Mostrar el botón de Discord</string>
+  <string name="pref_discord_show_discord_button_summary">Muestra un botón para unirse al servidor de Discord</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Cola de Reproducción</string>
+  <string name="action_clear_queue">Vaciar Cola</string>
+  <string name="cast_remove_from_queue">Quitar de la cola</string>
+  <string name="move_to_top">Mover al principio</string>
+  <string name="move_to_position">Mover a la posición</string>
+  <string name="position">Posición</string>
+  <string name="select_position">Seleccionar posición</string>
+  <string name="remove_from_queue_confirmation">¿Quitar de la cola?</string>
+  <string name="clear_queue_confirmation">Vaciar Cola</string>
+  <string name="clear_queue_confirmation_message">¿Estás seguro de que quieres vaciar toda la cola?</string>
 </resources>

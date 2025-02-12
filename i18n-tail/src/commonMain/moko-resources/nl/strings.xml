@@ -156,10 +156,19 @@
   <string name="pref_flare_solverr_url_summary">URL van de FlareSolverr versie die bijvoorbeeld http://192.168.1.202:8191/v1 gebruikt kan worden</string>
   <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr en update gebruikersagent</string>
   <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr om de user agent bij te werken. Slechts één keer nodig; schakel daarna de schakelaar indien nodig.</string>
-  <string name="title_cast_quality">Kies Cast-kwaliteit/provider</string>
+  <string-array name="title_cast_quality">
+    <item>Kies Cast-kwaliteit/provider</item>
+    <item>Selecteer kwaliteit</item>
+  </string-array>
   <string name="cast_not_connected">Cast niet verbonden</string>
-  <string name="cast_video_added_to_queue">Video toegevoegd aan de wachtrij</string>
-  <string name="cast_error_loading">Fout bij het laden van video van Cast</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video toegevoegd aan de wachtrij</item>
+    <item>Video toegevoegd aan de wachtrij</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Fout bij het laden van video van Cast</item>
+    <item>Fout bij laden video</item>
+  </string-array>
   <string name="server_local_notification_casting">De lokale server is actief. Tik om deze te stoppen.</string>
   <string name="server_local_notification_channel_description">Lokaal server meldingskanaal</string>
   <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscrollen</string>
@@ -184,4 +193,27 @@
   </plurals>
   <string name="pref_category_castserver">Server casten</string>
   <string name="pref_cast_server_port">Castserver poort</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discord aanpassingen</string>
+  <string name="pref_discord_custom_message">Aangepast bericht</string>
+  <string name="pref_discord_custom_message_summary">Aangepast bericht dat zal worden getoond op Discord</string>
+  <string name="pref_discord_show_progress">Toon voortgang</string>
+  <string name="pref_discord_show_progress_summary">Toon de huidige aflevering/hoofdstuk voortgang</string>
+  <string name="pref_discord_show_timestamp">Toon tijd</string>
+  <string name="pref_discord_show_timestamp_summary">Verlengde/resterende tijd weergeven</string>
+  <string name="pref_discord_show_buttons">Knoppen weergeven</string>
+  <string name="pref_discord_show_buttons_summary">Toon knoppen om de app te downloaden of toe te treden tot de Discord server</string>
+  <string name="pref_discord_show_download_button">Downloadknop weergeven</string>
+  <string name="pref_discord_show_download_button_summary">Toont een knop om de app te downloaden</string>
+  <string name="pref_discord_show_discord_button">Toon Discord knop</string>
+  <string name="pref_discord_show_discord_button_summary">Toont een knop om toe te treden tot de Discord server</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Wachtrij afspelen</string>
+  <string name="action_clear_queue">Wachtrij wissen</string>
+  <string name="cast_remove_from_queue">Verwijderen uit wachtrij</string>
+  <string name="move_to_top">Naar Boven Verplaatsen</string>
+  <string name="move_to_position">Verplaats naar Positie</string>
+  <string name="position">Positie</string>
+  <string name="select_position">Positie selecteren</string>
+  <string name="remove_from_queue_confirmation">Uit de wachtrij verwijderen?</string>
+  <string name="clear_queue_confirmation">Wachtrij wissen</string>
+  <string name="clear_queue_confirmation_message">Weet u zeker dat u de hele wachtrij wilt wissen?</string>
 </resources>
