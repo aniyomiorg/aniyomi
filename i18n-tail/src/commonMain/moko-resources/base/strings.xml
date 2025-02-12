@@ -209,7 +209,6 @@
     <string name="pref_category_castserver">Cast Server</string>
     <string name="pref_cast_server_port">Cast Server Port</string>
 
-
     <!-- Auto scroll -->
     <string name="eh_autoscroll">Autoscroll</string>
     <string name="eh_retry_all">Retry all</string>
@@ -242,4 +241,18 @@
     <string name="pref_discord_show_download_button_summary">Displays a button to download the app</string>
     <string name="pref_discord_show_discord_button">Show Discord Button</string>
     <string name="pref_discord_show_discord_button_summary">Displays a button to join the Discord server</string>
+    <!-- Cast Queue Management -->
+    <string name="cast_queue_title">Playback Queue</string>
+    <string name="action_clear_queue">Clear Queue</string>
+    <string name="cast_video_added_to_queue">Video added to queue</string>
+    <string name="cast_error_loading">Error loading video</string>
+    <string name="title_cast_quality">Select Quality</string>
+    <string name="cast_remove_from_queue">Remove from queue</string>
+    <string name="move_to_top">Move to Top</string>
+    <string name="move_to_position">Move to Position</string>
+    <string name="position">Position</string>
+    <string name="select_position">Select Position</string>
+    <string name="remove_from_queue_confirmation">Remove from Queue?</string>
+    <string name="clear_queue_confirmation">Clear Queue</string>
+    <string name="clear_queue_confirmation_message">Are you sure you want to clear the entire queue?</string>
 </resources>

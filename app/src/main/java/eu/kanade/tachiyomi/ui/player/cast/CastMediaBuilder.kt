@@ -61,6 +61,13 @@ class CastMediaBuilder(
             .build()
     }
 
+    fun buildEmptyMediaInfo(): MediaInfo {
+        return MediaInfo.Builder("")
+            .setStreamType(MediaInfo.STREAM_TYPE_NONE)
+            .setContentType("video/mp4")
+            .build()
+    }
+
     private fun torrentLinkHandler(videoUrl: String, quality: String): String {
         var index = 0
 

@@ -18,6 +18,11 @@ class CastSessionListener(
 
     override fun onSessionResumed(session: CastSession, wasSuspended: Boolean) {
         castManager.onSessionConnected(session)
+        session.remoteMediaClient?.let { client ->
+            if (client.mediaQueue.itemCount == 0) {
+                castManager.handleQualitySelection()
+            }
+        }
     }
 
     override fun onSessionResumeFailed(session: CastSession, error: Int) {
