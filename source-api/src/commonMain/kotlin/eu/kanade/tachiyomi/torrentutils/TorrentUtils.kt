@@ -11,7 +11,8 @@ object TorrentUtils {
         url: String,
         title: String,
     ): TorrentInfo {
-        @Suppress("SwallowedException") try {
+        @Suppress("SwallowedException")
+        try {
             val torrent = TorrentServerApi.addTorrent(url, title, "", "", false)
             return TorrentInfo(
                 torrent.title,

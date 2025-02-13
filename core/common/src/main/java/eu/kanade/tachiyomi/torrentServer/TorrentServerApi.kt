@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.torrentServer
 
 import dev.icerock.moko.graphics.BuildConfig
-import eu.kanade.tachiyomi.torrentServer.model.Torrent
-import eu.kanade.tachiyomi.torrentServer.model.TorrentRequest
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.POST
+import eu.kanade.tachiyomi.torrentServer.model.Torrent
+import eu.kanade.tachiyomi.torrentServer.model.TorrentRequest
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
