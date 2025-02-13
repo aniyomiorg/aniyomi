@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.data.torrentServer
+package eu.kanade.tachiyomi.torrentServer
 
 import tachiyomi.core.common.preference.PreferenceStore
 

@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.data.torrentServer.model
+package eu.kanade.tachiyomi.torrentServer.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json

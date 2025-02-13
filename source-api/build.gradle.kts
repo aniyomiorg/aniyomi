@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.ide.kmp.KotlinAndroidSourceSetMarker.Companion.android
+
 plugins {
     id("mihon.library")
     kotlin("multiplatform")
@@ -40,6 +42,7 @@ android {
     defaultConfig {
         consumerProguardFile("consumer-proguard.pro")
     }
+
 }
 
 tasks {

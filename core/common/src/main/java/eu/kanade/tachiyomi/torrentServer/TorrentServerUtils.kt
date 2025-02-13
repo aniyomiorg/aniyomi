@@ -1,7 +1,7 @@
-package eu.kanade.tachiyomi.data.torrentServer
+package eu.kanade.tachiyomi.torrentServer
 
-import eu.kanade.tachiyomi.data.torrentServer.model.FileStat
-import eu.kanade.tachiyomi.data.torrentServer.model.Torrent
+import eu.kanade.tachiyomi.torrentServer.model.FileStat
+import eu.kanade.tachiyomi.torrentServer.model.Torrent
 import logcat.LogPriority
 import tachiyomi.core.common.util.system.logcat
 import uy.kohesive.injekt.injectLazy

@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.exifinterface)
     // SY <--
 
+    // TAIL
+    implementation(libs.torrentserver)
+
     // Tests
     testImplementation(libs.bundles.test)
 }
