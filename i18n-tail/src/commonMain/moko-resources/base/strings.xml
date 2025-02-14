@@ -247,6 +247,7 @@
     <string name="cast_video_added_to_queue">Video added to queue</string>
     <string name="cast_error_loading">Error loading video</string>
     <string name="title_cast_quality">Select Quality</string>
+    <string name="queue">Queue</string>
     <string name="cast_remove_from_queue">Remove from queue</string>
     <string name="move_to_top">Move to Top</string>
     <string name="move_to_position">Move to Position</string>
@@ -255,4 +256,5 @@
     <string name="remove_from_queue_confirmation">Remove from Queue?</string>
     <string name="clear_queue_confirmation">Clear Queue</string>
     <string name="clear_queue_confirmation_message">Are you sure you want to clear the entire queue?</string>
+    <string name="action_end_session">End Cast Session</string>
 </resources>
