@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
-import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,7 +34,9 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.ui.player.CastManager
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.material.TextButton
+import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
 fun CastPlayerDialog(
@@ -56,7 +57,6 @@ fun CastPlayerDialog(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    // Mostrar imagen solo en vertical
                     if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                         if (!mediaInfo.value?.thumbnail.isNullOrEmpty()) {
                             Box(
@@ -74,44 +74,44 @@ fun CastPlayerDialog(
                         }
                     }
 
-                    // Subtítulo
                     Text(
                         text = mediaInfo.value?.subtitle ?: "",
                         style = MaterialTheme.typography.bodyMedium,
                     )
 
-                    // Controles de reproducción
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         IconButton(onClick = { castManager.previousVideo() }) {
-                            Icon(Icons.Default.SkipPrevious, "Previous video")
+                            Icon(Icons.Default.SkipPrevious, stringResource(TLMR.strings.cast_previous_video))
                         }
                         IconButton(onClick = { castManager.seekRelative(-30) }) {
-                            Icon(Icons.Default.FastRewind, "Rewind 30s")
-                        }
-                        IconButton(onClick = { castManager.stop() }) {
-                            Icon(Icons.Default.Stop, "Stop")
+                            Icon(Icons.Default.FastRewind, stringResource(TLMR.strings.cast_rewind_30s))
                         }
                         IconButton(onClick = { castManager.playPause() }) {
                             Icon(
                                 if (isPlaying.value) Icons.Default.Pause else Icons.Default.PlayArrow,
-                                if (isPlaying.value) "Pause" else "Play",
+                                if (isPlaying.value) {
+                                    stringResource(
+                                        TLMR.strings.cast_pause,
+                                    )
+                                } else {
+                                    stringResource(TLMR.strings.cast_play)
+                                },
                             )
                         }
                         IconButton(onClick = { castManager.seekRelative(30) }) {
-                            Icon(Icons.Default.FastForward, "Forward 30s")
+                            Icon(Icons.Default.FastForward, stringResource(TLMR.strings.cast_forward_30s))
                         }
                         IconButton(onClick = { castManager.nextVideo() }) {
-                            Icon(Icons.Default.SkipNext, "Next video")
+                            Icon(Icons.Default.SkipNext, stringResource(TLMR.strings.cast_next_video))
                         }
                     }
 
-                    // Control de volumen con etiqueta
                     Column {
                         Text(
-                            text = "Volume: ${(volume.value * 100).toInt()}%",
+                            text = "${stringResource(TLMR.strings.cast_volume)}: ${(volume.value * 100).toInt()}%",
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(horizontal = 16.dp),
                         )
@@ -144,10 +144,10 @@ fun CastPlayerDialog(
                     ) {
                         Icon(
                             Icons.AutoMirrored.Filled.ExitToApp,
-                            contentDescription = "End session",
+                            contentDescription = stringResource(TLMR.strings.cast_end_session),
                             modifier = Modifier.padding(end = 8.dp),
                         )
-                        Text("End Cast Session")
+                        Text(text = stringResource(TLMR.strings.cast_end_session))
                     }
                 }
             },

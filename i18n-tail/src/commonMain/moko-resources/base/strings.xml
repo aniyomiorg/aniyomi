@@ -250,6 +250,7 @@
     <string name="queue">Queue</string>
     <string name="cast_remove_from_queue">Remove from queue</string>
     <string name="move_to_top">Move to Top</string>
+    <string name="move_to_bottom">Move to Bottom</string>
     <string name="move_to_position">Move to Position</string>
     <string name="position">Position</string>
     <string name="select_position">Select Position</string>
@@ -257,4 +258,15 @@
     <string name="clear_queue_confirmation">Clear Queue</string>
     <string name="clear_queue_confirmation_message">Are you sure you want to clear the entire queue?</string>
     <string name="action_end_session">End Cast Session</string>
+    <!-- Cast device picker -->
+   <string name="cast_available_devices">Available Devices</string>
+    <string name="cast_media_info">Media Info</string>
+    <string name="cast_previous_video">Previous Video</string>
+    <string name="cast_next_video">Next Video</string>
+    <string name="cast_play">Play</string>
+    <string name="cast_pause">Pause</string>
+    <string name="cast_rewind_30s">Rewind 30s</string>
+    <string name="cast_forward_30s">Forward 30s</string>
+    <string name="cast_volume">Volume</string>
+    <string name="cast_end_session">End Cast Session</string>
 </resources>

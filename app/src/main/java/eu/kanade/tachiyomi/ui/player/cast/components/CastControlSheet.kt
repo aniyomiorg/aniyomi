@@ -9,8 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -48,16 +48,14 @@ fun CastControlSheet(
             .fillMaxWidth()
             .padding(16.dp),
     ) {
-        // Current media info
         ListItem(
             headlineContent = { Text(viewModel.mediaTitle.value) },
             leadingContent = { Icon(Icons.Default.PlayArrow, null) },
             modifier = Modifier.clickable { showPlayerDialog = true },
         )
 
-        Divider()
+        HorizontalDivider()
 
-        // Botones de control
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -70,7 +68,6 @@ fun CastControlSheet(
             }
         }
 
-        // Cola de reproducción
         if (queueItems.isNotEmpty()) {
             Text(
                 text = stringResource(TLMR.strings.queue),
@@ -88,7 +85,6 @@ fun CastControlSheet(
         }
     }
 
-    // Diálogos
     if (showQualityDialog) {
         CastQualityDialog(
             viewModel = viewModel,

@@ -104,20 +104,19 @@ fun QueueItemRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp), // Padding reducido
+            .padding(horizontal = 16.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            // Usa weight para el texto
             Text(
                 text = metadata?.getString(MediaMetadata.KEY_TITLE) ?: "Unknown",
                 style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1, // Limita a una línea
+                maxLines = 1,
             )
             Text(
                 text = metadata?.getString(MediaMetadata.KEY_SUBTITLE) ?: "",
                 style = MaterialTheme.typography.bodySmall,
-                maxLines = 1, // Limita a una línea
+                maxLines = 1,
             )
         }
         Row(
@@ -126,21 +125,21 @@ fun QueueItemRow(
         ) {
             IconButton(
                 onClick = { castManager.moveQueueItem(item.itemId, 0) },
-                modifier = Modifier.size(32.dp), // Botones más pequeños
+                modifier = Modifier.size(32.dp),
             ) {
-                Icon(Icons.Default.KeyboardArrowUp, "Move to top", Modifier.size(20.dp))
+                Icon(Icons.Default.KeyboardArrowUp, stringResource(TLMR.strings.move_to_top), Modifier.size(20.dp))
             }
             IconButton(
                 onClick = { castManager.moveQueueItem(item.itemId, Int.MAX_VALUE) },
                 modifier = Modifier.size(32.dp),
             ) {
-                Icon(Icons.Default.KeyboardArrowDown, "Move to bottom", Modifier.size(20.dp))
+                Icon(Icons.Default.KeyboardArrowDown, stringResource(TLMR.strings.move_to_bottom), Modifier.size(20.dp))
             }
             IconButton(
                 onClick = { castManager.removeQueueItem(item.itemId) },
                 modifier = Modifier.size(32.dp),
             ) {
-                Icon(Icons.Default.Close, "Remove", Modifier.size(20.dp))
+                Icon(Icons.Default.Close, stringResource(TLMR.strings.cast_remove_from_queue), Modifier.size(20.dp))
             }
         }
     }

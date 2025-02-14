@@ -50,12 +50,10 @@ fun CastSheet(
     var showQualityDialog by remember { mutableStateOf(false) }
     var showPlayerDialog by remember { mutableStateOf(false) }
 
-    // Llamar a startDeviceDiscovery siempre al inicio
     LaunchedEffect(Unit) {
         castManager.startDeviceDiscovery()
     }
 
-    // Solo buscar dispositivos cuando estamos en estado CONNECTING
     LaunchedEffect(castState) {
         if (castState == CastManager.CastState.CONNECTING) {
             while (true) {
@@ -74,14 +72,13 @@ fun CastSheet(
                     .fillMaxWidth()
                     .padding(16.dp),
             ) {
-                // Dispositivos disponibles
                 Text(
-                    text = "Available devices",
+                    text = stringResource(TLMR.strings.cast_available_devices),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
                 LazyColumn(
-                    modifier = Modifier.height(120.dp), // Altura más reducida para dispositivos
+                    modifier = Modifier.height(120.dp),
                 ) {
                     items(devices) { device ->
                         ListItem(
@@ -112,18 +109,16 @@ fun CastSheet(
                     }
                 }
 
-                // Cola de reproducción
                 if (castState == CastManager.CastState.CONNECTED) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    // Botones más compactos
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp), // Menos espacio entre botones
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         FilledTonalButton(
                             onClick = { showQualityDialog = true },
                             modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(vertical = 8.dp), // Botones más pequeños verticalmente
+                            contentPadding = PaddingValues(vertical = 8.dp),
                         ) {
                             Text(stringResource(TLMR.strings.title_cast_quality))
                         }
@@ -132,11 +127,10 @@ fun CastSheet(
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(vertical = 8.dp),
                         ) {
-                            Text("Media Info")
+                            Text(stringResource(TLMR.strings.cast_media_info))
                         }
                     }
 
-                    // Queue con título
                     val queueItems by castManager.queueItems.collectAsState()
                     if (queueItems.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(8.dp))
@@ -158,7 +152,6 @@ fun CastSheet(
         }
     }
 
-    // Mostrar diálogos solo cuando hay conexión
     if (castState == CastManager.CastState.CONNECTED) {
         if (showQualityDialog) {
             CastQualityDialog(
@@ -174,35 +167,4 @@ fun CastSheet(
             )
         }
     }
-}
-
-@Composable
-private fun DeviceList(
-    devices: List<CastManager.CastDevice>,
-    onDeviceClick: (CastManager.CastDevice) -> Unit,
-) {
-    LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        items(devices) { device ->
-            DeviceItem(device = device, onClick = { onDeviceClick(device) })
-        }
-    }
-}
-
-@Composable
-private fun DeviceItem(
-    device: CastManager.CastDevice,
-    onClick: () -> Unit,
-) {
-    ListItem(
-        headlineContent = { Text(device.name) },
-        leadingContent = {
-            Icon(
-                if (device.isConnected) Icons.Default.CastConnected else Icons.Default.Cast,
-                contentDescription = null,
-            )
-        },
-        modifier = Modifier.clickable(onClick = onClick),
-    )
 }

@@ -445,7 +445,6 @@ fun PlayerControls(
                         end.linkTo(parent.end)
                     },
                 ) {
-                    val activity = LocalContext.current as PlayerActivity
                     TopRightPlayerControls(
                         autoPlayEnabled = autoPlayEnabled,
                         onToggleAutoPlay = { viewModel.setAutoPlay(it) },

@@ -57,7 +57,6 @@ class CastManager(
     private val mediaQueue = LinkedList<MediaQueueItem>()
     private var isLoadingMedia = false
 
-    // Agregar nuevos StateFlows para Compose
     private val _queueItems = MutableStateFlow<List<MediaQueueItem>>(emptyList())
     val queueItems: StateFlow<List<MediaQueueItem>> = _queueItems.asStateFlow()
 
@@ -67,7 +66,6 @@ class CastManager(
     private val _availableDevices = MutableStateFlow<List<CastDevice>>(emptyList())
     val availableDevices: StateFlow<List<CastDevice>> = _availableDevices.asStateFlow()
 
-    // Nuevos estados para el reproductor
     private val _currentMedia = MutableStateFlow<CastMedia?>(null)
     val currentMedia: StateFlow<CastMedia?> = _currentMedia.asStateFlow()
 
@@ -111,11 +109,6 @@ class CastManager(
         }
     }
 
-    fun refreshCastContext() {
-        castSession = castContext?.sessionManager?.currentCastSession
-        if (castSession?.isConnected == true) updateCastState(CastState.CONNECTED)
-    }
-
     fun cleanup() {
         unregisterSessionListener()
         castSession = null
@@ -127,8 +120,6 @@ class CastManager(
         updateCastState(CastState.CONNECTED)
         startTrackingCastProgress()
         updateCurrentMedia()
-
-        // Actualizar cola inmediatamente al conectar
         updateQueueItems()
 
         session.remoteMediaClient?.registerCallback(
@@ -178,15 +169,6 @@ class CastManager(
             .launchIn(viewModel.viewModelScope)
     }
 
-    // Queue Management
-    private fun getQueueItems(): List<MediaQueueItem> {
-        return castSession?.remoteMediaClient?.mediaQueue?.let { queue ->
-            (0 until queue.itemCount).mapNotNull { index ->
-                queue.getItemAtIndex(index)
-            }
-        } ?: emptyList()
-    }
-
     fun removeQueueItem(itemId: Int) {
         castSession?.remoteMediaClient?.queueRemoveItem(itemId, null)
         updateQueueItems()
@@ -194,20 +176,6 @@ class CastManager(
 
     fun moveQueueItem(itemId: Int, newIndex: Int) {
         castSession?.remoteMediaClient?.queueMoveItemToNewIndex(itemId, newIndex, null)
-        updateQueueItems()
-    }
-
-    fun clearQueue() {
-        mediaQueue.clear()
-        castSession?.remoteMediaClient?.let { client ->
-            client.stop()
-            client.load(
-                MediaLoadRequestData.Builder()
-                    .setMediaInfo(mediaBuilder.buildEmptyMediaInfo())
-                    .setAutoplay(false)
-                    .build(),
-            )
-        }
         updateQueueItems()
     }
 
@@ -225,7 +193,6 @@ class CastManager(
                 val mediaInfo = mediaBuilder.buildMediaInfo(selectedIndex)
                 val currentLocalPosition = (player.timePos ?: 0).toLong()
 
-                // Actualizar cola antes y después de cargar nuevo medio
                 updateQueueItems()
                 if (remoteMediaClient.mediaQueue.itemCount > 0) {
                     val queueItem = MediaQueueItem.Builder(mediaInfo)
@@ -244,7 +211,7 @@ class CastManager(
                             .build(),
                     )
                 }
-                updateQueueItems() // Actualizar cola después de cargar
+                updateQueueItems()
                 _castState.value = CastState.CONNECTED
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e)
@@ -294,7 +261,6 @@ class CastManager(
     fun maintainCastSessionBackground() {
         castSession?.let { session ->
             if (session.isConnected) {
-                // Mantener la sesión activa pero pausado
                 session.remoteMediaClient?.pause()
                 _isPlaying.value = false
             }
@@ -309,7 +275,6 @@ class CastManager(
         } ?: emptyList()
     }
 
-    // Agregar función para resetear el estado
     fun reset() {
         mediaQueue.clear()
         _queueItems.value = emptyList()
@@ -319,20 +284,17 @@ class CastManager(
         castSession = null
     }
 
-    // Agregar función para reconectar
     fun reconnect() {
         if (!isCastApiAvailable) return
         try {
             castContext = CastContext.getSharedInstance(context.applicationContext)
             castSession = castContext?.sessionManager?.currentCastSession
             if (castSession?.isConnected == true) {
-                // Reconectar y restaurar estado
                 updateCastState(CastState.CONNECTED)
                 startTrackingCastProgress()
                 updateQueueItems()
                 updateCurrentMedia()
 
-                // Registrar callbacks nuevamente
                 castSession?.remoteMediaClient?.registerCallback(
                     object : RemoteMediaClient.Callback() {
                         override fun onStatusUpdated() {
@@ -355,7 +317,6 @@ class CastManager(
         }
     }
 
-    // Corrección: Usar MediaRouter para buscar dispositivos
     private val mediaRouter by lazy {
         androidx.mediarouter.media.MediaRouter.getInstance(context)
     }
@@ -365,7 +326,6 @@ class CastManager(
 
         try {
             castContext?.let { castContext ->
-                // No cambiar el estado a CONNECTING si ya está conectado
                 if (_castState.value != CastState.CONNECTED) {
                     _castState.value = CastState.CONNECTING
                 }
@@ -404,7 +364,6 @@ class CastManager(
             }
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
-            // No cambiar el estado a DISCONNECTED si ya está conectado
             if (_castState.value != CastState.CONNECTED) {
                 _castState.value = CastState.DISCONNECTED
             }
@@ -416,7 +375,7 @@ class CastManager(
             if (!route.isDefault) {
                 CastDevice(
                     id = route.id,
-                    name = route.name ?: "Unknown Device",
+                    name = route.name,
                     isConnected = route.id == currentSession?.castDevice?.deviceId,
                 )
             } else {
@@ -426,9 +385,6 @@ class CastManager(
 
         _availableDevices.value = devices
 
-        // Solo actualizar el estado si:
-        // 1. Hay un dispositivo conectado y no estábamos en estado CONNECTED
-        // 2. No hay dispositivos y no estábamos en estado DISCONNECTED
         if (devices.any { it.isConnected }) {
             if (_castState.value != CastState.CONNECTED) {
                 _castState.value = CastState.CONNECTED
@@ -442,7 +398,6 @@ class CastManager(
         try {
             val route = mediaRouter.routes.find { it.id == deviceId }
             if (route != null) {
-                // Si el dispositivo ya está conectado, no hacer nada
                 if (route.id == castSession?.castDevice?.deviceId) {
                     return
                 }
@@ -453,7 +408,6 @@ class CastManager(
         }
     }
 
-    // Agregar data class para dispositivos Cast
     data class CastDevice(
         val id: String,
         val name: String,
@@ -475,7 +429,6 @@ class CastManager(
     fun setVolume(volume: Float) {
         try {
             castSession?.let { session ->
-                // El volumen de Cast va de 0.0 a 1.0
                 val newVolume = volume.coerceIn(0f, 1f)
                 session.volume = newVolume.toDouble()
                 _volume.value = newVolume
@@ -541,12 +494,8 @@ class CastManager(
     fun endSession() {
         val mSessionManager = castContext!!.sessionManager
         mSessionManager.endCurrentSession(true)
-        reset() // Limpia el estado actual
+        reset()
         _castState.value = CastState.DISCONNECTED
-    }
-
-    companion object {
-        private const val BATCH_SIZE = 5
     }
 
     enum class CastState {
