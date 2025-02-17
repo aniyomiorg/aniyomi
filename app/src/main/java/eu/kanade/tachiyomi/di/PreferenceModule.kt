@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.torrentServer.TorrentServerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
+import eu.kanade.tachiyomi.ui.player.settings.CastSubtitlePreferences
 import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -106,6 +107,9 @@ class PreferenceModule(val app: Application) : InjektModule {
         // Cast Server -->
         addSingletonFactory {
             LocalHttpServerHolder(get())
+        }
+        addSingletonFactory {
+            CastSubtitlePreferences(get())
         }
         // <-- Cast Server
     }

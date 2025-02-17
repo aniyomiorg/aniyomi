@@ -132,9 +132,7 @@ class PlayerActivity : BaseActivity() {
     private val storageManager: StorageManager = Injekt.get()
 
     // Cast -->
-    val castManager: CastManager by lazy {
-        CastManager(context = this, activity = this)
-    }
+    val castManager: CastManager by lazy { CastManager(this, Injekt.get()) }
     // <-- Cast
 
     private var audioFocusRequest: AudioFocusRequestCompat? = null
