@@ -16,6 +16,9 @@ android {
 dependencies {
     api(projects.core.common)
     api(projects.i18n)
+    // TAIL -->
+    api(projects.i18nTail)
+    // TAIL <--
 
     // Compose
     implementation(compose.activity)

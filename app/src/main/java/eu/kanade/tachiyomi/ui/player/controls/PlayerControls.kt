@@ -57,6 +57,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import eu.kanade.presentation.more.settings.screen.player.custombutton.getButtons
 import eu.kanade.presentation.theme.playerRippleConfiguration
+import eu.kanade.tachiyomi.ui.player.CastManager
 import eu.kanade.tachiyomi.ui.player.Dialogs
 import eu.kanade.tachiyomi.ui.player.Panels
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
@@ -64,6 +65,7 @@ import eu.kanade.tachiyomi.ui.player.PlayerUpdates
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.VideoAspect
+import eu.kanade.tachiyomi.ui.player.cast.components.CastSheet
 import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessOverlay
 import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessSlider
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
@@ -91,16 +93,19 @@ val LocalPlayerButtonsClickEvent = staticCompositionLocalOf { {} }
 @Composable
 fun PlayerControls(
     viewModel: PlayerViewModel,
+    castManager: CastManager,
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showCastSheet by remember { mutableStateOf(false) }
+    val castState by castManager.castState.collectAsState()
+
     val spacing = MaterialTheme.padding
     val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
     val gesturePreferences = remember { Injekt.get<GesturePreferences>() }
     val audioPreferences = remember { Injekt.get<AudioPreferences>() }
     val subtitlePreferences = remember { Injekt.get<SubtitlePreferences>() }
     val interactionSource = remember { MutableInteractionSource() }
-
     val controlsShown by viewModel.controlsShown.collectAsState()
     val areControlsLocked by viewModel.areControlsLocked.collectAsState()
     val seekBarShown by viewModel.seekBarShown.collectAsState()
@@ -167,13 +172,13 @@ fun PlayerControls(
                     )
                     .padding(horizontal = MaterialTheme.padding.medium),
             ) {
-                val (topLeftControls, topRightControls) = createRefs()
-                val (volumeSlider, brightnessSlider) = createRefs()
-                val unlockControlsButton = createRef()
-                val (bottomRightControls, bottomLeftControls) = createRefs()
-                val centerControls = createRef()
-                val seekbar = createRef()
-                val (playerUpdates) = createRefs()
+                val (
+                    topLeftControls, topRightControls, castButton,
+                    volumeSlider, brightnessSlider,
+                    unlockControlsButton,
+                    bottomRightControls, bottomLeftControls,
+                    centerControls, seekbar, playerUpdates,
+                ) = createRefs()
 
                 val hasPreviousEpisode by viewModel.hasPreviousEpisode.collectAsState()
                 val hasNextEpisode by viewModel.hasNextEpisode.collectAsState()
@@ -455,6 +460,9 @@ fun PlayerControls(
                         isEpisodeOnline = isEpisodeOnline,
                         onMoreClick = { viewModel.showSheet(Sheets.More) },
                         onMoreLongClick = { viewModel.showPanel(Panels.VideoFilters) },
+                        castState = castState,
+                        onCastClick = { showCastSheet = true },
+                        isCastEnabled = { playerPreferences.enableCast().get() },
                     )
                 }
                 // Bottom right controls
@@ -623,6 +631,14 @@ fun PlayerControls(
 
         BrightnessOverlay(
             brightness = currentBrightness,
+        )
+    }
+
+    if (showCastSheet) {
+        CastSheet(
+            castManager = castManager,
+            viewModel = viewModel,
+            onDismissRequest = { showCastSheet = false },
         )
     }
 }

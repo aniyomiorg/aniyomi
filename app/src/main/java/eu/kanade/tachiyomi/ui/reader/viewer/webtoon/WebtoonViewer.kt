@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.animation.LinearInterpolator
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -27,6 +28,7 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.time.Duration
 
 /**
  * Implementation of a [Viewer] to display pages with a [RecyclerView].
@@ -70,7 +72,7 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
     /**
      * Currently active item. It can be a chapter page or a chapter transition.
      */
-    private var currentPage: Any? = null
+    var currentPage: Any? = null
 
     private val threshold: Int =
         Injekt.get<ReaderPreferences>()
@@ -293,12 +295,24 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
     /**
      * Scrolls down by [scrollDistance].
      */
-    private fun scrollDown() {
+    fun scrollDown() {
         if (config.usePageTransitions) {
             recycler.smoothScrollBy(0, scrollDistance)
         } else {
             recycler.scrollBy(0, scrollDistance)
         }
+    }
+
+    /**
+     * Scrolls one screen over a period of time
+     */
+    fun linearScroll(duration: Duration) {
+        recycler.smoothScrollBy(
+            0,
+            activity.resources.displayMetrics.heightPixels,
+            LinearInterpolator(),
+            duration.inWholeMilliseconds.toInt(),
+        )
     }
 
     /**

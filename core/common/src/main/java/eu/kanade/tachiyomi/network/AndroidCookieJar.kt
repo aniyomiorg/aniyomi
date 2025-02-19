@@ -51,4 +51,25 @@ class AndroidCookieJar : CookieJar {
     fun removeAll() {
         manager.removeAllCookies {}
     }
+
+    // TLMR -->
+    fun addAll(url: HttpUrl, cookies: List<Cookie>) {
+        val urlString = url.toString()
+
+        // Get existing cookies for the URL
+        val existingCookies = manager.getCookie(urlString)?.split("; ")?.associate {
+            val (name, value) = it.split('=', limit = 2)
+            name to value
+        }?.toMutableMap() ?: mutableMapOf()
+
+        // Add or update the cookies
+        cookies.forEach { newCookie ->
+            existingCookies[newCookie.name] = newCookie.value
+        }
+
+        // Convert the map back to a string and set it in the cookie manager
+        val finalCookiesString = existingCookies.entries.joinToString("; ") { "${it.key}=${it.value}" }
+        manager.setCookie(urlString, finalCookiesString)
+    }
+    // <-- TLMR
 }

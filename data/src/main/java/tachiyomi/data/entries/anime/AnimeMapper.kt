@@ -3,7 +3,6 @@ package tachiyomi.data.entries.anime
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.library.anime.LibraryAnime
-
 object AnimeMapper {
     fun mapAnime(
         id: Long,
@@ -43,12 +42,14 @@ object AnimeMapper {
         episodeFlags = chapterFlags,
         coverLastModified = coverLastModified,
         url = url,
-        title = title,
-        artist = artist,
-        author = author,
-        description = description,
-        genre = genre,
-        status = status,
+        // SY -->
+        ogTitle = title,
+        ogArtist = artist,
+        ogAuthor = author,
+        ogDescription = description,
+        ogGenre = genre,
+        ogStatus = status,
+        // SY <--
         thumbnailUrl = thumbnailUrl,
         updateStrategy = updateStrategy,
         initialized = initialized,

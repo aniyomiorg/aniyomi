@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.core.view.isVisible
+import coil3.Bitmap
 import eu.kanade.tachiyomi.databinding.ReaderErrorBinding
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
@@ -14,6 +15,7 @@ import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.widget.ViewPagerAdapter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -25,6 +27,8 @@ import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.ImageUtil
 import tachiyomi.core.common.util.system.logcat
+import tachiyomi.decoder.ImageDecoder
+import kotlin.math.max
 
 /**
  * View of the ViewPager that contains a page of a chapter.
@@ -34,13 +38,14 @@ class PagerPageHolder(
     readerThemedContext: Context,
     val viewer: PagerViewer,
     val page: ReaderPage,
+    private var extraPage: ReaderPage? = null,
 ) : ReaderPageImageView(readerThemedContext), ViewPagerAdapter.PositionableView {
 
     /**
      * Item that identifies this view. Needed by the adapter to not recreate views.
      */
     override val item
-        get() = page
+        get() = page to extraPage
 
     /**
      * Loading progress bar to indicate the current progress.
@@ -59,8 +64,14 @@ class PagerPageHolder(
      */
     private var loadJob: Job? = null
 
+    /**
+     * Job for loading the page.
+     */
+    private var extraLoadJob: Job? = null
+
     init {
-        loadJob = scope.launch { loadPageAndProcessStatus() }
+        loadJob = scope.launch { loadPageAndProcessStatus(1) }
+        extraLoadJob = scope.launch { loadPageAndProcessStatus(2) }
     }
 
     /**
@@ -71,6 +82,8 @@ class PagerPageHolder(
         super.onDetachedFromWindow()
         loadJob?.cancel()
         loadJob = null
+        extraLoadJob?.cancel()
+        extraLoadJob = null
     }
 
     private fun initProgressIndicator() {
@@ -87,9 +100,12 @@ class PagerPageHolder(
      * Otherwise, this function does not return. It will continue to process status changes until
      * the Job is cancelled.
      */
-    private suspend fun loadPageAndProcessStatus() {
+    private suspend fun loadPageAndProcessStatus(pageIndex: Int) {
+        // SY -->
+        val page = if (pageIndex == 1) page else extraPage
+        page ?: return
+        // SY <--
         val loader = page.chapter.pageLoader ?: return
-
         supervisorScope {
             launchIO {
                 loader.loadPage(page)
@@ -141,21 +157,42 @@ class PagerPageHolder(
     /**
      * Called when the page is ready.
      */
+    @Suppress("MagicNumber", "LongMethod")
     private suspend fun setImage() {
-        progressIndicator?.setProgress(0)
+        if (extraPage == null) {
+            progressIndicator?.setProgress(0)
+        } else {
+            progressIndicator?.setProgress(95)
+        }
 
         val streamFn = page.stream ?: return
+        val streamFn2 = extraPage?.stream
 
         try {
             val (source, isAnimated, background) = withIOContext {
-                val source = streamFn().use { process(item, Buffer().readFrom(it)) }
-                val isAnimated = ImageUtil.isAnimatedAndSupported(source)
-                val background = if (!isAnimated && viewer.config.automaticBackground) {
-                    ImageUtil.chooseBackground(context, source.peek().inputStream())
-                } else {
-                    null
+                streamFn().buffered(16).use { source ->
+                    // SY -->
+                    if (extraPage != null) {
+                        streamFn2?.invoke()
+                            ?.buffered(16)
+                    } else {
+                        null
+                    }.use { source2 ->
+                        val itemSource = if (viewer.config.dualPageSplit) {
+                            process(item.first, Buffer().readFrom(source))
+                        } else {
+                            mergePages(Buffer().readFrom(source), source2?.let { Buffer().readFrom(it) })
+                        }
+                        // SY <--
+                        val isAnimated = ImageUtil.isAnimatedAndSupported(itemSource)
+                        val background = if (!isAnimated && viewer.config.automaticBackground) {
+                            ImageUtil.chooseBackground(context, itemSource.peek())
+                        } else {
+                            null
+                        }
+                        Triple(itemSource, isAnimated, background)
+                    }
                 }
-                Triple(source, isAnimated, background)
             }
             withUIContext {
                 setImage(
@@ -194,8 +231,9 @@ class PagerPageHolder(
         if (page is InsertPage) {
             return splitInHalf(imageSource)
         }
-
-        val isDoublePage = ImageUtil.isWideImage(imageSource)
+        val isDoublePage = ImageUtil.isWideImage(
+            imageSource,
+        )
         if (!isDoublePage) {
             return imageSource
         }
@@ -206,7 +244,9 @@ class PagerPageHolder(
     }
 
     private fun rotateDualPage(imageSource: BufferedSource): BufferedSource {
-        val isDoublePage = ImageUtil.isWideImage(imageSource)
+        val isDoublePage = ImageUtil.isWideImage(
+            imageSource,
+        )
         return if (isDoublePage) {
             val rotation = if (viewer.config.dualPageRotateToFitInvert) -90f else 90f
             ImageUtil.rotateImage(imageSource, rotation)
@@ -215,6 +255,138 @@ class PagerPageHolder(
         }
     }
 
+    @Suppress(
+        "ReturnCount",
+        "TooGenericExceptionCaught",
+        "MagicNumber",
+        "LongMethod",
+        "CyclomaticComplexMethod",
+        "ComplexCondition",
+    )
+    private fun mergePages(imageSource: BufferedSource, imageSource2: BufferedSource?): BufferedSource {
+        // Handle adding a center margin to wide images if requested
+        if (imageSource2 == null) {
+            return handleWideImage(imageSource)
+        }
+
+        if (page.fullPage) return imageSource
+        if (ImageUtil.isAnimatedAndSupported(imageSource)) {
+            page.fullPage = true
+            splitDoublePages()
+            return imageSource
+        } else if (ImageUtil.isAnimatedAndSupported(imageSource2)) {
+            page.isolatedPage = true
+            extraPage?.fullPage = true
+            splitDoublePages()
+            return imageSource
+        }
+
+        val imageBitmap = decodeImage(imageSource)
+        if (imageBitmap == null) {
+            imageSource2.close()
+            page.fullPage = true
+            splitDoublePages()
+            logcat(LogPriority.ERROR) { "Cannot combine pages" }
+            return imageSource
+        }
+
+        scope.launch { progressIndicator?.setProgress(96) }
+        if (imageBitmap.height < imageBitmap.width) {
+            imageSource2.close()
+            page.fullPage = true
+            splitDoublePages()
+            return imageSource
+        }
+
+        val imageBitmap2 = decodeImage(imageSource2)
+        if (imageBitmap2 == null) {
+            imageSource2.close()
+            extraPage?.fullPage = true
+            page.isolatedPage = true
+            splitDoublePages()
+            logcat(LogPriority.ERROR) { "Cannot combine pages" }
+            return imageSource
+        }
+
+        scope.launch { progressIndicator?.setProgress(97) }
+        if (imageBitmap2.height < imageBitmap2.width) {
+            imageSource2.close()
+            extraPage?.fullPage = true
+            page.isolatedPage = true
+            splitDoublePages()
+            return imageSource
+        }
+
+        val isLTR = (viewer !is R2LPagerViewer) xor viewer.config.invertDoublePages
+        val centerMargin = calculateCenterMargin(imageBitmap.height, imageBitmap2.height)
+
+        imageSource.close()
+        imageSource2.close()
+
+        return ImageUtil.mergeBitmaps(imageBitmap, imageBitmap2, isLTR, centerMargin, viewer.config.pageCanvasColor) {
+            updateProgress(it)
+        }
+    }
+
+    @Suppress("ComplexCondition")
+    private fun handleWideImage(imageSource: BufferedSource): BufferedSource {
+        return if (
+            !ImageUtil.isAnimatedAndSupported(imageSource) &&
+            ImageUtil.isWideImage(imageSource) &&
+            viewer.config.centerMarginType and PagerConfig.CenterMarginType.WIDE_PAGE_CENTER_MARGIN > 0 &&
+            !viewer.config.imageCropBorders
+        ) {
+            ImageUtil.addHorizontalCenterMargin(imageSource, height, context)
+        } else {
+            imageSource
+        }
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    private fun decodeImage(imageSource: BufferedSource): Bitmap? {
+        return try {
+            ImageDecoder.newInstance(imageSource.inputStream())?.decode()
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Cannot decode image" }
+            null
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun calculateCenterMargin(height: Int, height2: Int): Int {
+        return if (viewer.config.centerMarginType and PagerConfig.CenterMarginType.DOUBLE_PAGE_CENTER_MARGIN > 0 &&
+            !viewer.config.imageCropBorders
+        ) {
+            96 / (this.height.coerceAtLeast(1) / max(height, height2).coerceAtLeast(1))
+                .coerceAtLeast(1)
+        } else {
+            0
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun updateProgress(progress: Int) {
+        scope.launch {
+            if (progress == 100) {
+                progressIndicator?.hide()
+            } else {
+                progressIndicator?.setProgress(progress)
+            }
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun splitDoublePages() {
+        scope.launch {
+            delay(100)
+            viewer.splitDoublePages(page)
+            if (extraPage?.fullPage == true || page.fullPage) {
+                extraPage = null
+            }
+        }
+    }
+
+    @Suppress("MagicNumber", "CyclomaticComplexMethod")
     private fun splitInHalf(imageSource: BufferedSource): BufferedSource {
         var side = when {
             viewer is L2RPagerViewer && page is InsertPage -> ImageUtil.Side.RIGHT
@@ -231,7 +403,19 @@ class PagerPageHolder(
             }
         }
 
-        return ImageUtil.splitInHalf(imageSource, side)
+        val sideMargin = if ((
+                viewer.config.centerMarginType and PagerConfig.CenterMarginType
+                    .DOUBLE_PAGE_CENTER_MARGIN
+                ) > 0 &&
+            viewer.config.doublePages &&
+            !viewer.config.imageCropBorders
+        ) {
+            48
+        } else {
+            0
+        }
+
+        return ImageUtil.splitInHalf(imageSource, side, sideMargin)
     }
 
     private fun onPageSplit(page: ReaderPage) {

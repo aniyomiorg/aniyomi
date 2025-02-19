@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Повторная попытка %1$d не удалось страницы…</item>
+    <item quantity="few">Повторная попытка %1$d не удалось страниц…</item>
+    <item quantity="many">Повторная попытка %1$d не удалось страниц…</item>
+    <item quantity="other">Повторная попытка %1$d не удалось страниц…</item>
+  </plurals>
+</resources>

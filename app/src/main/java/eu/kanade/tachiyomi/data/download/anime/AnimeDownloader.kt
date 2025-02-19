@@ -20,7 +20,10 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownloadPart
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.network.ProgressListener
+import eu.kanade.tachiyomi.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.torrentServer.TorrentServerUtils
 import eu.kanade.tachiyomi.util.size
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
@@ -484,10 +487,14 @@ class AnimeDownloader(
 
             if (downloadScope.isActive) {
                 file = try {
-                    if (isHls(download.video!!) || isMpd(download.video!!)) {
-                        ffmpegDownload(download, tmpDir, filename)
+                    if (isTor(download.video!!)) {
+                        torrentDownload(download, tmpDir, filename)
                     } else {
-                        httpDownload(download, tmpDir, filename, newThreads, safe)
+                        if (isHls(download.video!!) || isMpd(download.video!!)) {
+                            ffmpegDownload(download, tmpDir, filename)
+                        } else {
+                            httpDownload(download, tmpDir, filename, newThreads, safe)
+                        }
                     }
                 } catch (e: Exception) {
                     notifier.onError(
@@ -529,6 +536,33 @@ class AnimeDownloader(
 
     private fun isHls(video: Video): Boolean {
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
+    }
+
+    private fun isTor(video: Video): Boolean {
+        return (video.videoUrl?.startsWith("magnet") == true || video.videoUrl?.endsWith(".torrent") == true)
+    }
+
+    private fun torrentDownload(
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String,
+    ): UniFile {
+        val video = download.video!!
+        TorrentServerService.start()
+        TorrentServerService.wait(10)
+        val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
+        var index = 0
+        if (video.videoUrl!!.contains("index=")) {
+            index = try {
+                video.videoUrl?.substringAfter("index=")
+                    ?.substringBefore("&")?.toInt() ?: 0
+            } catch (_: Exception) {
+                0
+            }
+        }
+        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+        video.videoUrl = torrentUrl
+        return ffmpegDownload(download, tmpDir, filename)
     }
 
     // ffmpeg is always on safe mode
@@ -686,6 +720,13 @@ class AnimeDownloader(
         threadNumber: Int,
         safeDownload: Boolean,
     ): UniFile {
+        // check if url is from torrent server
+        if (download.video!!.videoUrl!!.startsWith(TorrentServerUtils.hostUrl)) {
+            // start torrent server if not running
+            TorrentServerService.start()
+            TorrentServerService.wait(2)
+        }
+
         val downloadScope = CoroutineScope(coroutineContext)
         val video = download.video!!
 
@@ -1042,7 +1083,6 @@ class AnimeDownloader(
 
         return sinkFile
     }
-
     private fun getComplementaryRanges(
         range: Pair<Long, Long>,
         toRemove: List<Pair<Long, Long>>,
@@ -1062,7 +1102,6 @@ class AnimeDownloader(
 
         return result.toList()
     }
-
     private fun getDownloadParts(
         download: AnimeDownload,
         video: Video,

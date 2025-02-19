@@ -7,6 +7,8 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.data.track.simkl.dto.SimklOAuth
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -15,6 +17,7 @@ import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
 
@@ -131,6 +134,14 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
 
     fun saveToken(oauth: SimklOAuth?) {
         trackPreferences.trackToken(this).set(json.encodeToString(oauth))
+    }
+
+    override suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
+        return api.getSimklAnimeMetadata(track)
+    }
+
+    override suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata? {
+        throw NotImplementedError("Not implemented.")
     }
 
     fun restoreToken(): SimklOAuth? {

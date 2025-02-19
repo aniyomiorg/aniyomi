@@ -195,6 +195,7 @@ class PlayerViewModel @JvmOverloads constructor(
     val selectedAudio = _selectedAudio.asStateFlow()
 
     val isLoadingTracks = MutableStateFlow(true)
+    val isCasting = MutableStateFlow(false)
 
     private val _videoList = MutableStateFlow<List<Video>>(emptyList())
     val videoList = _videoList.asStateFlow()
@@ -208,6 +209,8 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private val _pos = MutableStateFlow(0f)
     val pos = _pos.asStateFlow()
+
+    private var castProgressJob: Job? = null
 
     val duration = MutableStateFlow(0f)
 
@@ -989,12 +992,26 @@ class PlayerViewModel @JvmOverloads constructor(
         }
     }
 
+    fun updateCastProgress(position: Float) {
+        _pos.update { position }
+    }
+
+    fun resumeFromCast() {
+        val lastPosition = _pos.value
+
+        logcat { "Reanudando el video local desde: $lastPosition segundos" }
+
+        if (lastPosition > 0) {
+            seekTo(lastPosition.toInt()) // Mueve el reproductor local a la última posición
+        }
+    }
+
     // ====== OLD ======
 
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    private val incognitoMode = basePreferences.incognitoMode().get()
+    val incognitoMode = basePreferences.incognitoMode().get()
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileWatching().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
@@ -1029,7 +1046,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private var episodeToDownload: AnimeDownload? = null
 
-    private var currentVideoList: List<Video>? = null
+    var currentVideoList: List<Video>? = null
 
     private fun filterEpisodeList(episodes: List<Episode>): List<Episode> {
         val anime = currentAnime.value ?: return episodes

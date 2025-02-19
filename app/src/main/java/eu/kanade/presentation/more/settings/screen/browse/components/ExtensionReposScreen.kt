@@ -30,6 +30,10 @@ fun ExtensionReposScreen(
     onClickCreate: () -> Unit,
     onOpenWebsite: (ExtensionRepo) -> Unit,
     onClickDelete: (String) -> Unit,
+    // KMK -->
+    onClickEnable: (String) -> Unit,
+    onClickDisable: (String) -> Unit,
+    // KMK <--
     onClickRefresh: () -> Unit,
     navigateUp: () -> Unit,
 ) {
@@ -72,6 +76,11 @@ fun ExtensionReposScreen(
                 PaddingValues(horizontal = MaterialTheme.padding.medium),
             onOpenWebsite = onOpenWebsite,
             onClickDelete = onClickDelete,
+            // KMK -->
+            onClickEnable = onClickEnable,
+            onClickDisable = onClickDisable,
+            disabledRepos = state.disabledRepos,
+            // KMK <--
         )
     }
 }

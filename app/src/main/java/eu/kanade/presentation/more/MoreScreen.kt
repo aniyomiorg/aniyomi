@@ -45,6 +45,10 @@ fun MoreScreen(
     incognitoMode: Boolean,
     onIncognitoModeChange: (Boolean) -> Unit,
     isFDroid: Boolean,
+    // SY -->
+    showNavUpdates: Boolean,
+    showNavHistory: Boolean,
+    // SY <--
     navStyle: NavStyle,
     onClickAlt: () -> Unit,
     onClickDownloadQueue: () -> Unit,

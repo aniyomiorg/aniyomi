@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Réessayer la page %1$d a échoué…</item>
+    <item quantity="other">Réessayer %1$d pages échouées…</item>
+  </plurals>
+</resources>
