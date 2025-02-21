@@ -218,4 +218,53 @@
   <string name="remove_from_queue_confirmation">Usunąć z kolejki?</string>
   <string name="clear_queue_confirmation">Wyczyść kolejkę</string>
   <string name="clear_queue_confirmation_message">Czy na pewno chcesz wyczyścić całą kolejkę?</string>
+  <string name="queue">Kolejka</string>
+  <string name="move_to_bottom">Przenieś na dół</string>
+  <string name="action_end_session">Zakończ sesję Obsady</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dostępne urządzenia</string>
+  <string name="cast_media_info">Informacje o mediach</string>
+  <string name="cast_previous_video">Poprzedni film</string>
+  <string name="cast_next_video">Następne wideo</string>
+  <string name="cast_play">Odtwórz</string>
+  <string name="cast_pause">Wstrzymaj</string>
+  <string name="cast_rewind_30s">Przewiń 30s</string>
+  <string name="cast_forward_30s">Do przodu 30s</string>
+  <string name="cast_volume">Objętość</string>
+  <string name="cast_end_session">Zakończ sesję Obsady</string>
+  <string name="empty_queue">Kolejka jest pusta</string>
+  <string name="cast_end_session_message">Czy na pewno chcesz zakończyć bieżącą sesję transmisji?</string>
+  <string name="cast_end_session_confirm">Zakończ sesję</string>
+  <string name="cast_end_session_cancel">Anuluj</string>
+  <string name="playback_speed">Prędkość odtwarzania</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Ustawienia napisów</item>
+    <item>Ustawienia napisów</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Kolor tekstu</string>
+  <string name="cast_subtitle_background">Kontekst</string>
+  <string name="cast_subtitle_shadow">Cień</string>
+  <string name="cast_subtitle_apply">Zastosuj</string>
+  <string name="cast_subtitle_reset">Przywróć domyślne</string>
+  <string name="cast_subtitle_shadow_None">Brak</string>
+  <string name="cast_subtitle_shadow_Light">Światło</string>
+  <string name="cast_subtitle_shadow_Medium">Średni</string>
+  <string name="cast_subtitle_shadow_Strong">Silny</string>
+  <string name="cast_subtitle_preview">Podgląd tekstu &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">Wybierz napisy/ścieżkę audio</string>
+  <string name="cast_volume_down">Głośność w dół</string>
+  <string name="cast_volume_up">Głośność w górę</string>
+  <string name="cast_subtitles">Napisy</string>
+  <string name="cast_audio_tracks">Ścieżki audio</string>
+  <string name="cast_no_subtitles">Brak napisów</string>
+  <string name="cast_close">Zamknij</string>
+  <string name="cast_subtitle_font_family">Rodzina czcionek</string>
+  <string name="cast_subtitle_border_style">Styl obramowania</string>
+  <string name="cast_subtitle_border_none">Brak</string>
+  <string name="cast_subtitle_border_outline">Kontury</string>
+  <string name="cast_subtitle_border_drop_shadow">Upuść cień</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Miękki cień</string>
+  <string name="cast_subtitle_border_raised">Podniesiony</string>
+  <string name="cast_subtitle_border_depressed">Depresowany</string>
+  <string name="cast_connection_error">Błąd połączenia</string>
 </resources>

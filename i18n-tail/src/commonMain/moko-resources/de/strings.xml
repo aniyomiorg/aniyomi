@@ -216,4 +216,53 @@
   <string name="remove_from_queue_confirmation">Aus der Warteschlange entfernen?</string>
   <string name="clear_queue_confirmation">Warteschlange leeren</string>
   <string name="clear_queue_confirmation_message">Sind Sie sicher, dass Sie die gesamte Warteschlange löschen möchten?</string>
+  <string name="queue">Warteschlange</string>
+  <string name="move_to_bottom">Nach unten verschieben</string>
+  <string name="action_end_session">Sitzung beenden</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Verfügbare Geräte</string>
+  <string name="cast_media_info">Medien-Info</string>
+  <string name="cast_previous_video">Vorheriges Video</string>
+  <string name="cast_next_video">Nächstes Video</string>
+  <string name="cast_play">Abspielen</string>
+  <string name="cast_pause">Pause</string>
+  <string name="cast_rewind_30s">30 Sekunden zurückziehen</string>
+  <string name="cast_forward_30s">30s weiterleiten</string>
+  <string name="cast_volume">Lautstärke</string>
+  <string name="cast_end_session">Sitzung beenden</string>
+  <string name="empty_queue">Warteschlange ist leer</string>
+  <string name="cast_end_session_message">Bist du sicher, dass du die aktuelle Cast-Sitzung beenden möchtest?</string>
+  <string name="cast_end_session_confirm">Sitzung beenden</string>
+  <string name="cast_end_session_cancel">Abbrechen</string>
+  <string name="playback_speed">Wiedergabegeschwindigkeit</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Untertiteleinstellungen</item>
+    <item>Untertiteleinstellungen</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Textfarbe</string>
+  <string name="cast_subtitle_background">Hintergrund</string>
+  <string name="cast_subtitle_shadow">Schatten</string>
+  <string name="cast_subtitle_apply">Anwenden</string>
+  <string name="cast_subtitle_reset">Auf Standard zurücksetzen</string>
+  <string name="cast_subtitle_shadow_None">Keine</string>
+  <string name="cast_subtitle_shadow_Light">Hell</string>
+  <string name="cast_subtitle_shadow_Medium">Mittel</string>
+  <string name="cast_subtitle_shadow_Strong">Stark</string>
+  <string name="cast_subtitle_preview">Vorschau des Textes &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">Untertitel/Audiospur auswählen</string>
+  <string name="cast_volume_down">Lautstärke runter</string>
+  <string name="cast_volume_up">Lautstärke hoch</string>
+  <string name="cast_subtitles">Untertitel</string>
+  <string name="cast_audio_tracks">Audiospuren</string>
+  <string name="cast_no_subtitles">Keine Untertitel</string>
+  <string name="cast_close">Schließen</string>
+  <string name="cast_subtitle_font_family">Schriftfamilie</string>
+  <string name="cast_subtitle_border_style">Rahmenstil</string>
+  <string name="cast_subtitle_border_none">Keine</string>
+  <string name="cast_subtitle_border_outline">Umriss</string>
+  <string name="cast_subtitle_border_drop_shadow">Drop Schatten</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Weicher Drop Schatten</string>
+  <string name="cast_subtitle_border_raised">Aufgenommen</string>
+  <string name="cast_subtitle_border_depressed">Deprimiert</string>
+  <string name="cast_connection_error">Verbindungsfehler</string>
 </resources>

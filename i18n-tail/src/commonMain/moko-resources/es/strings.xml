@@ -216,4 +216,53 @@
   <string name="remove_from_queue_confirmation">¿Quitar de la cola?</string>
   <string name="clear_queue_confirmation">Vaciar Cola</string>
   <string name="clear_queue_confirmation_message">¿Estás seguro de que quieres vaciar toda la cola?</string>
+  <string name="queue">Cola de Reproducción</string>
+  <string name="move_to_bottom">Mover hacia abajo</string>
+  <string name="action_end_session">Finalizar Sesión Cast</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dispositivos Disponibles</string>
+  <string name="cast_media_info">Media info</string>
+  <string name="cast_previous_video">Video Anterior</string>
+  <string name="cast_next_video">Siguiente Video</string>
+  <string name="cast_play">Reproducir</string>
+  <string name="cast_pause">Pausar</string>
+  <string name="cast_rewind_30s">Rebobinar 30s</string>
+  <string name="cast_forward_30s">Avanzar 30s</string>
+  <string name="cast_volume">Volumen</string>
+  <string name="cast_end_session">Finalizar Sesión Cast</string>
+  <string name="empty_queue">La cola está vacía</string>
+  <string name="cast_end_session_message">¿Seguro que quieres finalizar la transmisión actual?</string>
+  <string name="cast_end_session_confirm">Terminar sesión</string>
+  <string name="cast_end_session_cancel">Cancelar</string>
+  <string name="playback_speed">Velocidad de reproducción</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Configuración de subtítulos</item>
+    <item>Configuración de subtítulos</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Tamaño de fuente</string>
+  <string name="cast_subtitle_text_color">Color del texto</string>
+  <string name="cast_subtitle_background">Fondo</string>
+  <string name="cast_subtitle_shadow">Sombras</string>
+  <string name="cast_subtitle_apply">Aplicar</string>
+  <string name="cast_subtitle_reset">Restablecer valores predeterminados</string>
+  <string name="cast_subtitle_shadow_None">Nada</string>
+  <string name="cast_subtitle_shadow_Light">Claro</string>
+  <string name="cast_subtitle_shadow_Medium">Mediano</string>
+  <string name="cast_subtitle_shadow_Strong">Negrita</string>
+  <string name="cast_subtitle_preview">Vista previa del texto あ漢</string>
+  <string name="cast_tracks">Seleccionar Subtítulo/Audio</string>
+  <string name="cast_volume_down">Bajar Volumen</string>
+  <string name="cast_volume_up">Subir Volumen</string>
+  <string name="cast_subtitles">Subtítulos</string>
+  <string name="cast_audio_tracks">Audio</string>
+  <string name="cast_no_subtitles">Sin subtítulos</string>
+  <string name="cast_close">Cerrar</string>
+  <string name="cast_subtitle_font_family">Familia de la fuente</string>
+  <string name="cast_subtitle_border_style">Estilo del borde</string>
+  <string name="cast_subtitle_border_none">Nada</string>
+  <string name="cast_subtitle_border_outline">Contorno</string>
+  <string name="cast_subtitle_border_drop_shadow">Sombra paralela</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Sombra Suave</string>
+  <string name="cast_subtitle_border_raised">Elevado</string>
+  <string name="cast_subtitle_border_depressed">Melancólico</string>
+  <string name="cast_connection_error">Error de Conexión</string>
 </resources>

@@ -218,4 +218,53 @@
   <string name="remove_from_queue_confirmation">Remove from Queue?</string>
   <string name="clear_queue_confirmation">Clear Queue</string>
   <string name="clear_queue_confirmation_message">Are you sure you want to clear the entire queue?</string>
+  <string name="queue">Queue</string>
+  <string name="move_to_bottom">Move to Bottom</string>
+  <string name="action_end_session">End Cast Session</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
+  <string name="cast_media_info">Media Info</string>
+  <string name="cast_previous_video">Previous Video</string>
+  <string name="cast_next_video">Next Video</string>
+  <string name="cast_play">Play</string>
+  <string name="cast_pause">Pause</string>
+  <string name="cast_rewind_30s">Rewind 30s</string>
+  <string name="cast_forward_30s">Forward 30s</string>
+  <string name="cast_volume">Volume</string>
+  <string name="cast_end_session">End Cast Session</string>
+  <string name="empty_queue">Queue is empty</string>
+  <string name="cast_end_session_message">Are you sure you want to end the current cast session?</string>
+  <string name="cast_end_session_confirm">End Session</string>
+  <string name="cast_end_session_cancel">Cancel</string>
+  <string name="playback_speed">Playback Speed</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Subtitle Settings</item>
+    <item>Subtitle Settings</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Text Color</string>
+  <string name="cast_subtitle_background">Background</string>
+  <string name="cast_subtitle_shadow">Shadow</string>
+  <string name="cast_subtitle_apply">Apply</string>
+  <string name="cast_subtitle_reset">Reset to Default</string>
+  <string name="cast_subtitle_shadow_None">None</string>
+  <string name="cast_subtitle_shadow_Light">Light</string>
+  <string name="cast_subtitle_shadow_Medium">Medium</string>
+  <string name="cast_subtitle_shadow_Strong">Strong</string>
+  <string name="cast_subtitle_preview">Preview Text あ漢</string>
+  <string name="cast_tracks">Select Subtitle/Audio Track</string>
+  <string name="cast_volume_down">Volume Down</string>
+  <string name="cast_volume_up">Volume Up</string>
+  <string name="cast_subtitles">Subtitles</string>
+  <string name="cast_audio_tracks">Audio Tracks</string>
+  <string name="cast_no_subtitles">No Subtitles</string>
+  <string name="cast_close">Close</string>
+  <string name="cast_subtitle_font_family">Font Family</string>
+  <string name="cast_subtitle_border_style">Border Style</string>
+  <string name="cast_subtitle_border_none">None</string>
+  <string name="cast_subtitle_border_outline">Outline</string>
+  <string name="cast_subtitle_border_drop_shadow">Drop Shadow</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Soft Drop Shadow</string>
+  <string name="cast_subtitle_border_raised">Raised</string>
+  <string name="cast_subtitle_border_depressed">Depressed</string>
+  <string name="cast_connection_error">Connection Error</string>
 </resources>

@@ -218,4 +218,53 @@
   <string name="remove_from_queue_confirmation">Удалить из очереди?</string>
   <string name="clear_queue_confirmation">Очистить очередь</string>
   <string name="clear_queue_confirmation_message">Вы уверены, что хотите очистить всю очередь?</string>
+  <string name="queue">Очередь</string>
+  <string name="move_to_bottom">Переместить вниз</string>
+  <string name="action_end_session">Завершение сеанса</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Доступные устройства</string>
+  <string name="cast_media_info">Информация о медиа</string>
+  <string name="cast_previous_video">Предыдущее видео</string>
+  <string name="cast_next_video">Следующее видео</string>
+  <string name="cast_play">Играть</string>
+  <string name="cast_pause">Пауза</string>
+  <string name="cast_rewind_30s">Перемотать 30 секунд</string>
+  <string name="cast_forward_30s">Вперед 30 сек</string>
+  <string name="cast_volume">Объем</string>
+  <string name="cast_end_session">Завершение сеанса</string>
+  <string name="empty_queue">Очередь пуста</string>
+  <string name="cast_end_session_message">Вы уверены, что хотите завершить текущий сеанс?</string>
+  <string name="cast_end_session_confirm">Завершить сеанс</string>
+  <string name="cast_end_session_cancel">Отмена</string>
+  <string name="playback_speed">Скорость воспроизведения</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Настройки субтитров</item>
+    <item>Настройки субтитров</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Цвет текста</string>
+  <string name="cast_subtitle_background">Справочная информация</string>
+  <string name="cast_subtitle_shadow">Тень</string>
+  <string name="cast_subtitle_apply">Применить</string>
+  <string name="cast_subtitle_reset">Сброс по умолчанию</string>
+  <string name="cast_subtitle_shadow_None">Нет</string>
+  <string name="cast_subtitle_shadow_Light">Светлая</string>
+  <string name="cast_subtitle_shadow_Medium">Средний</string>
+  <string name="cast_subtitle_shadow_Strong">Крепкий</string>
+  <string name="cast_subtitle_preview">Предпросмотр &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">Выберите субтитры/аудиодорожку</string>
+  <string name="cast_volume_down">Громкость вниз</string>
+  <string name="cast_volume_up">Громкость вверх</string>
+  <string name="cast_subtitles">Субтитры</string>
+  <string name="cast_audio_tracks">Аудио треки</string>
+  <string name="cast_no_subtitles">Без субтитров</string>
+  <string name="cast_close">Закрыть</string>
+  <string name="cast_subtitle_font_family">Семейство шрифтов</string>
+  <string name="cast_subtitle_border_style">Стиль границы</string>
+  <string name="cast_subtitle_border_none">Нет</string>
+  <string name="cast_subtitle_border_outline">Контур</string>
+  <string name="cast_subtitle_border_drop_shadow">Тень</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Мягкая тень</string>
+  <string name="cast_subtitle_border_raised">Поднято</string>
+  <string name="cast_subtitle_border_depressed">Депрессия</string>
+  <string name="cast_connection_error">Ошибка соединения</string>
 </resources>

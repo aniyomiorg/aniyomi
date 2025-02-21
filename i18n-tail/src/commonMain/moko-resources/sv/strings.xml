@@ -216,4 +216,53 @@
   <string name="remove_from_queue_confirmation">Ta bort från kön?</string>
   <string name="clear_queue_confirmation">Rensa kö</string>
   <string name="clear_queue_confirmation_message">Är du säker på att du vill rensa hela kön?</string>
+  <string name="queue">Kö</string>
+  <string name="move_to_bottom">Flytta längst ned</string>
+  <string name="action_end_session">Avsluta Cast-sessionen</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Tillgängliga enheter</string>
+  <string name="cast_media_info">Media Information</string>
+  <string name="cast_previous_video">Föregående video</string>
+  <string name="cast_next_video">Nästa video</string>
+  <string name="cast_play">Spela</string>
+  <string name="cast_pause">Pausa</string>
+  <string name="cast_rewind_30s">Spola tillbaka 30s</string>
+  <string name="cast_forward_30s">Vidarebefordra 30s</string>
+  <string name="cast_volume">Volym</string>
+  <string name="cast_end_session">Avsluta Cast-sessionen</string>
+  <string name="empty_queue">Kön är tom</string>
+  <string name="cast_end_session_message">Är du säker på att du vill avsluta den aktuella sändningssessionen?</string>
+  <string name="cast_end_session_confirm">Avsluta sessionen</string>
+  <string name="cast_end_session_cancel">Avbryt</string>
+  <string name="playback_speed">Uppspelningshastighet</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Inställningar för undertext</item>
+    <item>Inställningar för undertext</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Text Färg</string>
+  <string name="cast_subtitle_background">Bakgrund</string>
+  <string name="cast_subtitle_shadow">Skugga</string>
+  <string name="cast_subtitle_apply">Tillämpa</string>
+  <string name="cast_subtitle_reset">Återställ till standard</string>
+  <string name="cast_subtitle_shadow_None">Ingen</string>
+  <string name="cast_subtitle_shadow_Light">Ljus</string>
+  <string name="cast_subtitle_shadow_Medium">Medel</string>
+  <string name="cast_subtitle_shadow_Strong">Stark</string>
+  <string name="cast_subtitle_preview">Förhandsgranska text &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">Välj undertext/ljudspår</string>
+  <string name="cast_volume_down">Volym ned</string>
+  <string name="cast_volume_up">Volym upp</string>
+  <string name="cast_subtitles">Undertexter</string>
+  <string name="cast_audio_tracks">Ljudspår</string>
+  <string name="cast_no_subtitles">Inga undertexter</string>
+  <string name="cast_close">Stäng</string>
+  <string name="cast_subtitle_font_family">Teckensnittsfamilj</string>
+  <string name="cast_subtitle_border_style">Kantens stil</string>
+  <string name="cast_subtitle_border_none">Ingen</string>
+  <string name="cast_subtitle_border_outline">Kontur</string>
+  <string name="cast_subtitle_border_drop_shadow">Släpp skugga</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Mjuk droppe skugga</string>
+  <string name="cast_subtitle_border_raised">Upphöjd</string>
+  <string name="cast_subtitle_border_depressed">Deponerad</string>
+  <string name="cast_connection_error">Anslutningsfel</string>
 </resources>

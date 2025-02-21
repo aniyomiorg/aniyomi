@@ -218,4 +218,53 @@
   <string name="remove_from_queue_confirmation">Odstranit z fronty?</string>
   <string name="clear_queue_confirmation">Vymazat frontu</string>
   <string name="clear_queue_confirmation_message">Jste si jisti, že chcete vymazat celou frontu?</string>
+  <string name="queue">Fronta</string>
+  <string name="move_to_bottom">Přesunout dolů</string>
+  <string name="action_end_session">Ukončit relaci</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dostupná zařízení</string>
+  <string name="cast_media_info">Informace o médiích</string>
+  <string name="cast_previous_video">Předchozí video</string>
+  <string name="cast_next_video">Další video</string>
+  <string name="cast_play">Hrát</string>
+  <string name="cast_pause">Pozastavit</string>
+  <string name="cast_rewind_30s">Převrátit 30 s</string>
+  <string name="cast_forward_30s">Přeposlat 30 s</string>
+  <string name="cast_volume">Objem</string>
+  <string name="cast_end_session">Ukončit relaci</string>
+  <string name="empty_queue">Fronta je prázdná</string>
+  <string name="cast_end_session_message">Jste si jisti, že chcete ukončit aktuální relaci?</string>
+  <string name="cast_end_session_confirm">Ukončit relaci</string>
+  <string name="cast_end_session_cancel">Zrušit</string>
+  <string name="playback_speed">Rychlost přehrávání</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Nastavení titulků</item>
+    <item>Nastavení titulků</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Barva textu</string>
+  <string name="cast_subtitle_background">Pozadí</string>
+  <string name="cast_subtitle_shadow">Stín</string>
+  <string name="cast_subtitle_apply">Použít</string>
+  <string name="cast_subtitle_reset">Obnovit výchozí</string>
+  <string name="cast_subtitle_shadow_None">Nic</string>
+  <string name="cast_subtitle_shadow_Light">Světlý</string>
+  <string name="cast_subtitle_shadow_Medium">Střední</string>
+  <string name="cast_subtitle_shadow_Strong">Silný</string>
+  <string name="cast_subtitle_preview">Náhled textu &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">Vybrat stopu titulků/zvuku</string>
+  <string name="cast_volume_down">Hlasitost dolů</string>
+  <string name="cast_volume_up">Hlasitost nahoru</string>
+  <string name="cast_subtitles">Titulky</string>
+  <string name="cast_audio_tracks">Zvukové stopy</string>
+  <string name="cast_no_subtitles">Žádné titulky</string>
+  <string name="cast_close">Zavřít</string>
+  <string name="cast_subtitle_font_family">Rodina písma</string>
+  <string name="cast_subtitle_border_style">Styl rámečku</string>
+  <string name="cast_subtitle_border_none">Nic</string>
+  <string name="cast_subtitle_border_outline">Obrys</string>
+  <string name="cast_subtitle_border_drop_shadow">Zahodit stín</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Měkký shadow</string>
+  <string name="cast_subtitle_border_raised">Aktivováno</string>
+  <string name="cast_subtitle_border_depressed">Deprimováno</string>
+  <string name="cast_connection_error">Chyba připojení</string>
 </resources>

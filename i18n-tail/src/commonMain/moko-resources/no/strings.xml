@@ -216,4 +216,53 @@
   <string name="remove_from_queue_confirmation">Fjerne fra køen?</string>
   <string name="clear_queue_confirmation">Tøm kø</string>
   <string name="clear_queue_confirmation_message">Er du sikker på at du vil tømme hele køen?</string>
+  <string name="queue">Kø</string>
+  <string name="move_to_bottom">Flytt til bunnen</string>
+  <string name="action_end_session">Avslutt østens sesjon</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Tilgjengelige Enheter</string>
+  <string name="cast_media_info">Media informasjon</string>
+  <string name="cast_previous_video">Forrige video</string>
+  <string name="cast_next_video">Neste video</string>
+  <string name="cast_play">Spill</string>
+  <string name="cast_pause">pause</string>
+  <string name="cast_rewind_30s">Spol tilbake 30s</string>
+  <string name="cast_forward_30s">Videresend 30 sekunder</string>
+  <string name="cast_volume">Volum</string>
+  <string name="cast_end_session">Avslutt østens sesjon</string>
+  <string name="empty_queue">Kø er tom</string>
+  <string name="cast_end_session_message">Er du sikker på at du vil avslutte den gjeldende cast økten?</string>
+  <string name="cast_end_session_confirm">Avslutt økt</string>
+  <string name="cast_end_session_cancel">Avbryt</string>
+  <string name="playback_speed">Avspillingshastighet</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Innstillinger for teksting</item>
+    <item>Innstillinger for teksting</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Tekst farge</string>
+  <string name="cast_subtitle_background">Bakgrunn</string>
+  <string name="cast_subtitle_shadow">Skygge</string>
+  <string name="cast_subtitle_apply">Bruk</string>
+  <string name="cast_subtitle_reset">Tilbakestill til standard</string>
+  <string name="cast_subtitle_shadow_None">Ingen</string>
+  <string name="cast_subtitle_shadow_Light">Lys</string>
+  <string name="cast_subtitle_shadow_Medium">Middels</string>
+  <string name="cast_subtitle_shadow_Strong">Sterk</string>
+  <string name="cast_subtitle_preview">Forhåndsvis tekst ° °</string>
+  <string name="cast_tracks">Velg undertittel/Lydspor</string>
+  <string name="cast_volume_down">Volum ned</string>
+  <string name="cast_volume_up">Volum opp</string>
+  <string name="cast_subtitles">Undertekster</string>
+  <string name="cast_audio_tracks">Sporing av lyd</string>
+  <string name="cast_no_subtitles">Ingen undertekster</string>
+  <string name="cast_close">Lukk</string>
+  <string name="cast_subtitle_font_family">Skriftfamilie</string>
+  <string name="cast_subtitle_border_style">Ramme stil</string>
+  <string name="cast_subtitle_border_none">Ingen</string>
+  <string name="cast_subtitle_border_outline">Omriss</string>
+  <string name="cast_subtitle_border_drop_shadow">Slipp skygge</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Myk fall-skygge</string>
+  <string name="cast_subtitle_border_raised">Hevet</string>
+  <string name="cast_subtitle_border_depressed">Deprimert</string>
+  <string name="cast_connection_error">Feil ved tilkobling</string>
 </resources>

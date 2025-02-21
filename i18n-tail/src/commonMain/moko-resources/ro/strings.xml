@@ -217,4 +217,53 @@
   <string name="remove_from_queue_confirmation">Eliminați din coadă?</string>
   <string name="clear_queue_confirmation">Șterge coada</string>
   <string name="clear_queue_confirmation_message">Sunteţi sigur că doriţi să ştergeţi întreaga listă?</string>
+  <string name="queue">Coadă</string>
+  <string name="move_to_bottom">Mută în jos</string>
+  <string name="action_end_session">Sfârșit sesiunea în distribuție</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dispozitive disponibile</string>
+  <string name="cast_media_info">Informații media</string>
+  <string name="cast_previous_video">Videoclip anterior</string>
+  <string name="cast_next_video">Următorul videoclip</string>
+  <string name="cast_play">Redare</string>
+  <string name="cast_pause">Întrerupeți</string>
+  <string name="cast_rewind_30s">Rulează 30 de ani</string>
+  <string name="cast_forward_30s">Redirecționare 30s</string>
+  <string name="cast_volume">Volum</string>
+  <string name="cast_end_session">Sfârșit sesiunea în distribuție</string>
+  <string name="empty_queue">Coada este goală</string>
+  <string name="cast_end_session_message">Ești sigur că vrei să închizi sesiunea de redare curentă?</string>
+  <string name="cast_end_session_confirm">Sfârșit sesiune</string>
+  <string name="cast_end_session_cancel">Anulează</string>
+  <string name="playback_speed">Viteza de redare</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Setări subtitrare</item>
+    <item>Setări subtitrare</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Culoare text</string>
+  <string name="cast_subtitle_background">Context</string>
+  <string name="cast_subtitle_shadow">Umbră</string>
+  <string name="cast_subtitle_apply">Aplică</string>
+  <string name="cast_subtitle_reset">Resetare la valorile implicite</string>
+  <string name="cast_subtitle_shadow_None">Niciunul</string>
+  <string name="cast_subtitle_shadow_Light">Lumină</string>
+  <string name="cast_subtitle_shadow_Medium">Medie</string>
+  <string name="cast_subtitle_shadow_Strong">Puternic</string>
+  <string name="cast_subtitle_preview">Previzualizare Text &lt;unk&gt;</string>
+  <string name="cast_tracks">Selectaţi subtitlu/piesă audio</string>
+  <string name="cast_volume_down">Volum Jos</string>
+  <string name="cast_volume_up">Volum Sus</string>
+  <string name="cast_subtitles">Subtitrări</string>
+  <string name="cast_audio_tracks">Piese audio</string>
+  <string name="cast_no_subtitles">Nici o subtitrare</string>
+  <string name="cast_close">Inchide</string>
+  <string name="cast_subtitle_font_family">Familia de fonturi</string>
+  <string name="cast_subtitle_border_style">Stil Frontieră</string>
+  <string name="cast_subtitle_border_none">Niciunul</string>
+  <string name="cast_subtitle_border_outline">Conturul</string>
+  <string name="cast_subtitle_border_drop_shadow">Lasă Umbra</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Umbra plutitoare</string>
+  <string name="cast_subtitle_border_raised">Ridicat</string>
+  <string name="cast_subtitle_border_depressed">Deprimat</string>
+  <string name="cast_connection_error">Eroare de conexiune</string>
 </resources>

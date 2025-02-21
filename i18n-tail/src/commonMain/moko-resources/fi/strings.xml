@@ -216,4 +216,53 @@
   <string name="remove_from_queue_confirmation">Poistetaanko jonosta?</string>
   <string name="clear_queue_confirmation">Tyhjennä Jono</string>
   <string name="clear_queue_confirmation_message">Oletko varma, että haluat tyhjentää koko jonon?</string>
+  <string name="queue">Jono</string>
+  <string name="move_to_bottom">Siirrä alimmaksi</string>
+  <string name="action_end_session">Lopeta Cast Istunto</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Käytettävissä Olevat Laitteet</string>
+  <string name="cast_media_info">Median Tiedot</string>
+  <string name="cast_previous_video">Edellinen Video</string>
+  <string name="cast_next_video">Seuraava Video</string>
+  <string name="cast_play">Toista</string>
+  <string name="cast_pause">Tauko</string>
+  <string name="cast_rewind_30s">Rewind 30s</string>
+  <string name="cast_forward_30s">Eteenpäin 30s</string>
+  <string name="cast_volume">Tilavuus</string>
+  <string name="cast_end_session">Lopeta Cast Istunto</string>
+  <string name="empty_queue">Jono on tyhjä</string>
+  <string name="cast_end_session_message">Oletko varma, että haluat lopettaa nykyisen heitetyn istunnon?</string>
+  <string name="cast_end_session_confirm">Lopeta Istunto</string>
+  <string name="cast_end_session_cancel">Peruuta</string>
+  <string name="playback_speed">Toiston Nopeus</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Tekstityksen Asetukset</item>
+    <item>Tekstityksen Asetukset</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Tekstin Väri</string>
+  <string name="cast_subtitle_background">Tausta</string>
+  <string name="cast_subtitle_shadow">Varjo</string>
+  <string name="cast_subtitle_apply">Käytä</string>
+  <string name="cast_subtitle_reset">Palauta oletukset</string>
+  <string name="cast_subtitle_shadow_None">Ei Mitään</string>
+  <string name="cast_subtitle_shadow_Light">Vaalea</string>
+  <string name="cast_subtitle_shadow_Medium">Keskitaso</string>
+  <string name="cast_subtitle_shadow_Strong">Vahva</string>
+  <string name="cast_subtitle_preview">Esikatsele Tekstiä -</string>
+  <string name="cast_tracks">Valitse Tekstitys/Ääniraita</string>
+  <string name="cast_volume_down">Taltio Alas</string>
+  <string name="cast_volume_up">Äänenvoimakkuus Ylös</string>
+  <string name="cast_subtitles">Tekstitykset</string>
+  <string name="cast_audio_tracks">Ääni Kappaleet</string>
+  <string name="cast_no_subtitles">Ei Tekstityksiä</string>
+  <string name="cast_close">Sulje</string>
+  <string name="cast_subtitle_font_family">Kirjasinperhe</string>
+  <string name="cast_subtitle_border_style">Reunuksen Tyyli</string>
+  <string name="cast_subtitle_border_none">Ei Mitään</string>
+  <string name="cast_subtitle_border_outline">Ääriviiva</string>
+  <string name="cast_subtitle_border_drop_shadow">Pudota Varjo</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Pehmeä Pudota Varjo</string>
+  <string name="cast_subtitle_border_raised">Nostettu</string>
+  <string name="cast_subtitle_border_depressed">Masennettu</string>
+  <string name="cast_connection_error">Virhe Yhteydessä</string>
 </resources>

@@ -216,4 +216,53 @@
   <string name="remove_from_queue_confirmation">Uit de wachtrij verwijderen?</string>
   <string name="clear_queue_confirmation">Wachtrij wissen</string>
   <string name="clear_queue_confirmation_message">Weet u zeker dat u de hele wachtrij wilt wissen?</string>
+  <string name="queue">Wachtrij</string>
+  <string name="move_to_bottom">Naar beneden verplaatsen</string>
+  <string name="action_end_session">Beëindig sessie</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Beschikbare apparaten</string>
+  <string name="cast_media_info">Media informatie</string>
+  <string name="cast_previous_video">Vorige video</string>
+  <string name="cast_next_video">Volgende video</string>
+  <string name="cast_play">Afspelen</string>
+  <string name="cast_pause">Onderbreken</string>
+  <string name="cast_rewind_30s">30s terugspoelen</string>
+  <string name="cast_forward_30s">30 seconden vooruit</string>
+  <string name="cast_volume">Volume</string>
+  <string name="cast_end_session">Beëindig sessie</string>
+  <string name="empty_queue">Wachtrij is leeg</string>
+  <string name="cast_end_session_message">Weet u zeker dat u de huidige cast sessie wilt beëindigen?</string>
+  <string name="cast_end_session_confirm">Sessie beëindigen</string>
+  <string name="cast_end_session_cancel">annuleren</string>
+  <string name="playback_speed">Afspeel snelheid</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Ondertiteling instellingen</item>
+    <item>Ondertiteling instellingen</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Tekst kleur</string>
+  <string name="cast_subtitle_background">Achtergrond</string>
+  <string name="cast_subtitle_shadow">Schaduw</string>
+  <string name="cast_subtitle_apply">Toepassen</string>
+  <string name="cast_subtitle_reset">Standaardinstellingen herstellen</string>
+  <string name="cast_subtitle_shadow_None">geen</string>
+  <string name="cast_subtitle_shadow_Light">Licht</string>
+  <string name="cast_subtitle_shadow_Medium">Middelgroot</string>
+  <string name="cast_subtitle_shadow_Strong">Sterk</string>
+  <string name="cast_subtitle_preview">Voorbeeldweergave tekst ≤</string>
+  <string name="cast_tracks">Selecteer ondertiteling/Audio Track</string>
+  <string name="cast_volume_down">Volume omlaag</string>
+  <string name="cast_volume_up">Volume Omhoog</string>
+  <string name="cast_subtitles">Ondertiteling</string>
+  <string name="cast_audio_tracks">Audio tracks</string>
+  <string name="cast_no_subtitles">Geen ondertiteling</string>
+  <string name="cast_close">Afsluiten</string>
+  <string name="cast_subtitle_font_family">Lettertype Familie</string>
+  <string name="cast_subtitle_border_style">Rand stijl</string>
+  <string name="cast_subtitle_border_none">geen</string>
+  <string name="cast_subtitle_border_outline">Omlijning</string>
+  <string name="cast_subtitle_border_drop_shadow">Schaduw laten vallen</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Zacht Drop Schaduw</string>
+  <string name="cast_subtitle_border_raised">Opgeroepen</string>
+  <string name="cast_subtitle_border_depressed">Verdrietig</string>
+  <string name="cast_connection_error">Verbindingsfout</string>
 </resources>

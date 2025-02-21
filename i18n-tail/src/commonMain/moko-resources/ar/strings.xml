@@ -220,4 +220,53 @@
   <string name="remove_from_queue_confirmation">إزالة من قائمة الانتظار؟</string>
   <string name="clear_queue_confirmation">مسح قائمة الانتظار</string>
   <string name="clear_queue_confirmation_message">هل أنت متأكد من أنك تريد مسح قائمة الانتظار بأكملها؟</string>
+  <string name="queue">قائمة الانتظار</string>
+  <string name="move_to_bottom">الانتقال إلى الأسفل</string>
+  <string name="action_end_session">إنهاء الجلسة المسماة</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">الأجهزة المتاحة</string>
+  <string name="cast_media_info">معلومات الوسائط</string>
+  <string name="cast_previous_video">الفيديو السابق</string>
+  <string name="cast_next_video">الفيديو التالي</string>
+  <string name="cast_play">تشغيل</string>
+  <string name="cast_pause">إيقاف</string>
+  <string name="cast_rewind_30s">إرجاع 30 ثانية</string>
+  <string name="cast_forward_30s">إعادة توجيه 30 ثانية</string>
+  <string name="cast_volume">حجم</string>
+  <string name="cast_end_session">إنهاء الجلسة المسماة</string>
+  <string name="empty_queue">قائمة الانتظار فارغة</string>
+  <string name="cast_end_session_message">هل أنت متأكد من أنك تريد إنهاء جلسة البث الحالية؟</string>
+  <string name="cast_end_session_confirm">إنهاء الجلسة</string>
+  <string name="cast_end_session_cancel">إلغاء</string>
+  <string name="playback_speed">سرعة التشغيل</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">إعدادات الترجمة</item>
+    <item>إعدادات الترجمة</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">لون النص</string>
+  <string name="cast_subtitle_background">الخلفية</string>
+  <string name="cast_subtitle_shadow">ظل</string>
+  <string name="cast_subtitle_apply">تطبيق</string>
+  <string name="cast_subtitle_reset">إعادة التعيين إلى الافتراضي</string>
+  <string name="cast_subtitle_shadow_None">لا</string>
+  <string name="cast_subtitle_shadow_Light">فاتح</string>
+  <string name="cast_subtitle_shadow_Medium">متوسط</string>
+  <string name="cast_subtitle_shadow_Strong">قوي</string>
+  <string name="cast_subtitle_preview">معاينة النص &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">حدد العنوان الفرعي/المسار الصوتي</string>
+  <string name="cast_volume_down">خفض مستوى الصوت</string>
+  <string name="cast_volume_up">رفع الصوت</string>
+  <string name="cast_subtitles">ترجمات</string>
+  <string name="cast_audio_tracks">مسارات الصوت</string>
+  <string name="cast_no_subtitles">لا توجد ترجمات</string>
+  <string name="cast_close">أغلق</string>
+  <string name="cast_subtitle_font_family">عائلة الخط</string>
+  <string name="cast_subtitle_border_style">نمط الحدود</string>
+  <string name="cast_subtitle_border_none">لا</string>
+  <string name="cast_subtitle_border_outline">مخطط</string>
+  <string name="cast_subtitle_border_drop_shadow">إسقاط الظل</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">ظل السقوط الناعم</string>
+  <string name="cast_subtitle_border_raised">رفعت</string>
+  <string name="cast_subtitle_border_depressed">الكساد</string>
+  <string name="cast_connection_error">خطأ في الاتصال</string>
 </resources>

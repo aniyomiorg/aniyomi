@@ -216,4 +216,53 @@
   <string name="remove_from_queue_confirmation">Αφαίρεση από την ουρά?</string>
   <string name="clear_queue_confirmation">Εκκαθάριση Ουράς</string>
   <string name="clear_queue_confirmation_message">Είστε βέβαιοι ότι θέλετε να καθαρίσετε ολόκληρη την ουρά?</string>
+  <string name="queue">Ουρά</string>
+  <string name="move_to_bottom">Μετακίνηση στο κάτω μέρος</string>
+  <string name="action_end_session">Τέλος Συνεδρίας Cast</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Διαθέσιμες Συσκευές</string>
+  <string name="cast_media_info">Πληροφορίες Πολυμέσων</string>
+  <string name="cast_previous_video">Προηγούμενο Βίντεο</string>
+  <string name="cast_next_video">Επόμενο Βίντεο</string>
+  <string name="cast_play">Αναπαραγωγή</string>
+  <string name="cast_pause">Παύση</string>
+  <string name="cast_rewind_30s">Επαναφορά 30S</string>
+  <string name="cast_forward_30s">Εμπρός 30δ</string>
+  <string name="cast_volume">Όγκος</string>
+  <string name="cast_end_session">Τέλος Συνεδρίας Cast</string>
+  <string name="empty_queue">Ουρά είναι κενή</string>
+  <string name="cast_end_session_message">Είστε βέβαιοι ότι θέλετε να τερματίσετε την τρέχουσα συνεδρία cast?</string>
+  <string name="cast_end_session_confirm">Τέλος Συνεδρίας</string>
+  <string name="cast_end_session_cancel">Ακύρωση</string>
+  <string name="playback_speed">Ταχύτητα Αναπαραγωγής</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Ρυθμίσεις Υποτίτλων</item>
+    <item>Ρυθμίσεις Υποτίτλων</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Χρώμα Κειμένου</string>
+  <string name="cast_subtitle_background">Φόντο</string>
+  <string name="cast_subtitle_shadow">Σκιά</string>
+  <string name="cast_subtitle_apply">Εφαρμογή</string>
+  <string name="cast_subtitle_reset">Επαναφορά προεπιλογών</string>
+  <string name="cast_subtitle_shadow_None">Κανένα</string>
+  <string name="cast_subtitle_shadow_Light">Φωτεινό</string>
+  <string name="cast_subtitle_shadow_Medium">Μεσαίο</string>
+  <string name="cast_subtitle_shadow_Strong">Ισχυρός</string>
+  <string name="cast_subtitle_preview">Προεπισκόπηση Κειμένου...</string>
+  <string name="cast_tracks">Επιλογή Υπότιτλου/Κομματιού Ήχου</string>
+  <string name="cast_volume_down">Μείωση Έντασης</string>
+  <string name="cast_volume_up">Αύξηση Έντασης</string>
+  <string name="cast_subtitles">Υπότιτλοι</string>
+  <string name="cast_audio_tracks">Κομμάτια Ήχου</string>
+  <string name="cast_no_subtitles">Χωρίς Υπότιτλους</string>
+  <string name="cast_close">Κλείσιμο</string>
+  <string name="cast_subtitle_font_family">Οικογένεια Γραμματοσειρών</string>
+  <string name="cast_subtitle_border_style">Στυλ Περιγράμματος</string>
+  <string name="cast_subtitle_border_none">Κανένα</string>
+  <string name="cast_subtitle_border_outline">Περίγραμμα</string>
+  <string name="cast_subtitle_border_drop_shadow">Πτώση Σκιάς</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Σκιά Γρήγορης Πτώσης</string>
+  <string name="cast_subtitle_border_raised">Αυξήθηκε</string>
+  <string name="cast_subtitle_border_depressed">Καταπιεσμένο</string>
+  <string name="cast_connection_error">Σφάλμα Σύνδεσης</string>
 </resources>

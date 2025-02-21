@@ -218,4 +218,53 @@
   <string name="remove_from_queue_confirmation">Видалити з черги?</string>
   <string name="clear_queue_confirmation">Очистити чергу</string>
   <string name="clear_queue_confirmation_message">Ви впевнені, що хочете очистити всю чергу?</string>
+  <string name="queue">Черга</string>
+  <string name="move_to_bottom">Донизу</string>
+  <string name="action_end_session">Кінцева сесія</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Доступні пристрої</string>
+  <string name="cast_media_info">Інформація про медіа</string>
+  <string name="cast_previous_video">Попереднє відео</string>
+  <string name="cast_next_video">Наступне відео</string>
+  <string name="cast_play">Відтворити</string>
+  <string name="cast_pause">Пауза</string>
+  <string name="cast_rewind_30s">Перемотати 30-ті роки</string>
+  <string name="cast_forward_30s">Переслати 30-ті</string>
+  <string name="cast_volume">Об\'єм</string>
+  <string name="cast_end_session">Кінцева сесія</string>
+  <string name="empty_queue">Черга порожня</string>
+  <string name="cast_end_session_message">Ви дійсно бажаєте завершити поточний сеанс?</string>
+  <string name="cast_end_session_confirm">Завершити сеанс</string>
+  <string name="cast_end_session_cancel">Скасувати</string>
+  <string name="playback_speed">Швидкість відтворення</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Параметри субтитрів</item>
+    <item>Параметри субтитрів</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Колір тексту</string>
+  <string name="cast_subtitle_background">Фон</string>
+  <string name="cast_subtitle_shadow">Тінь</string>
+  <string name="cast_subtitle_apply">Прийняти</string>
+  <string name="cast_subtitle_reset">Відновити за замовчуванням</string>
+  <string name="cast_subtitle_shadow_None">Без ефекту</string>
+  <string name="cast_subtitle_shadow_Light">Світла</string>
+  <string name="cast_subtitle_shadow_Medium">Медіум</string>
+  <string name="cast_subtitle_shadow_Strong">Сильний</string>
+  <string name="cast_subtitle_preview">Попередній перегляд тексту &lt;unk&gt;</string>
+  <string name="cast_tracks">Виберіть Subtitle/звукову доріжку</string>
+  <string name="cast_volume_down">Зменшити гучність</string>
+  <string name="cast_volume_up">Збільшити гучність</string>
+  <string name="cast_subtitles">Субтитри</string>
+  <string name="cast_audio_tracks">Аудіотреки</string>
+  <string name="cast_no_subtitles">Без субтитрів</string>
+  <string name="cast_close">Закрити</string>
+  <string name="cast_subtitle_font_family">Шрифт</string>
+  <string name="cast_subtitle_border_style">Стиль рамки</string>
+  <string name="cast_subtitle_border_none">Без ефекту</string>
+  <string name="cast_subtitle_border_outline">Контур</string>
+  <string name="cast_subtitle_border_drop_shadow">Тінь</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">М\'які рідини</string>
+  <string name="cast_subtitle_border_raised">Піднятий</string>
+  <string name="cast_subtitle_border_depressed">Скорочений</string>
+  <string name="cast_connection_error">Помилка підключення</string>
 </resources>

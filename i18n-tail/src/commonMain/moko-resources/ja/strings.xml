@@ -215,4 +215,53 @@
   <string name="remove_from_queue_confirmation">キューから削除しますか？</string>
   <string name="clear_queue_confirmation">キューをクリア</string>
   <string name="clear_queue_confirmation_message">キュー全体をクリアしてもよろしいですか？</string>
+  <string name="queue">キュー</string>
+  <string name="move_to_bottom">一番下に移動</string>
+  <string name="action_end_session">キャストセッションを終了</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">利用可能なデバイス</string>
+  <string name="cast_media_info">メディア情報</string>
+  <string name="cast_previous_video">前のビデオ</string>
+  <string name="cast_next_video">次のビデオ</string>
+  <string name="cast_play">再生</string>
+  <string name="cast_pause">一時停止</string>
+  <string name="cast_rewind_30s">30秒巻き戻し</string>
+  <string name="cast_forward_30s">30秒前</string>
+  <string name="cast_volume">音量</string>
+  <string name="cast_end_session">キャストセッションを終了</string>
+  <string name="empty_queue">キューが空です</string>
+  <string name="cast_end_session_message">現在のキャストセッションを終了してもよろしいですか？</string>
+  <string name="cast_end_session_confirm">セッションを終了</string>
+  <string name="cast_end_session_cancel">キャンセル</string>
+  <string name="playback_speed">再生速度</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">字幕の設定</item>
+    <item>字幕の設定</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">テキストの色</string>
+  <string name="cast_subtitle_background">背景</string>
+  <string name="cast_subtitle_shadow">影</string>
+  <string name="cast_subtitle_apply">適用</string>
+  <string name="cast_subtitle_reset">デフォルトにリセット</string>
+  <string name="cast_subtitle_shadow_None">なし</string>
+  <string name="cast_subtitle_shadow_Light">ライト</string>
+  <string name="cast_subtitle_shadow_Medium">ミディアム</string>
+  <string name="cast_subtitle_shadow_Strong">強い</string>
+  <string name="cast_subtitle_preview">プレビューテキスト &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">字幕/オーディオトラックを選択</string>
+  <string name="cast_volume_down">音量ダウン</string>
+  <string name="cast_volume_up">音量上</string>
+  <string name="cast_subtitles">字幕</string>
+  <string name="cast_audio_tracks">オーディオトラック</string>
+  <string name="cast_no_subtitles">字幕なし</string>
+  <string name="cast_close">閉じる</string>
+  <string name="cast_subtitle_font_family">フォントファミリー</string>
+  <string name="cast_subtitle_border_style">枠線スタイル</string>
+  <string name="cast_subtitle_border_none">なし</string>
+  <string name="cast_subtitle_border_outline">概要</string>
+  <string name="cast_subtitle_border_drop_shadow">影をドロップ</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">ソフトドロップシャドウ</string>
+  <string name="cast_subtitle_border_raised">育てられた</string>
+  <string name="cast_subtitle_border_depressed">Depressed</string>
+  <string name="cast_connection_error">接続エラー</string>
 </resources>

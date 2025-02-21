@@ -216,4 +216,53 @@
   <string name="remove_from_queue_confirmation">Remover da Fila?</string>
   <string name="clear_queue_confirmation">Limpar fila</string>
   <string name="clear_queue_confirmation_message">Tem certeza de que deseja limpar toda a fila?</string>
+  <string name="queue">Fila</string>
+  <string name="move_to_bottom">Mover para o Inferior</string>
+  <string name="action_end_session">Encerrar Sessão de Transmissão</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dispositivos Disponíveis</string>
+  <string name="cast_media_info">Informações de mídia</string>
+  <string name="cast_previous_video">Vídeo anterior</string>
+  <string name="cast_next_video">Próximo Vídeo</string>
+  <string name="cast_play">Reproduzir</string>
+  <string name="cast_pause">Suspender</string>
+  <string name="cast_rewind_30s">Retroceder 30s</string>
+  <string name="cast_forward_30s">Avançar 30s</string>
+  <string name="cast_volume">Volume</string>
+  <string name="cast_end_session">Encerrar Sessão de Transmissão</string>
+  <string name="empty_queue">A fila está vazia</string>
+  <string name="cast_end_session_message">Tem certeza que deseja terminar a sessão atual de lançamento?</string>
+  <string name="cast_end_session_confirm">Finalizar a sessão</string>
+  <string name="cast_end_session_cancel">cancelar</string>
+  <string name="playback_speed">Velocidade de reprodução</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Configurações de legenda</item>
+    <item>Configurações de legenda</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Cor do texto</string>
+  <string name="cast_subtitle_background">Fundo</string>
+  <string name="cast_subtitle_shadow">Sombra</string>
+  <string name="cast_subtitle_apply">Aplicar</string>
+  <string name="cast_subtitle_reset">Restaurar ao Padrão</string>
+  <string name="cast_subtitle_shadow_None">Nenhuma</string>
+  <string name="cast_subtitle_shadow_Light">Fino</string>
+  <string name="cast_subtitle_shadow_Medium">Média</string>
+  <string name="cast_subtitle_shadow_Strong">Forte</string>
+  <string name="cast_subtitle_preview">Pré-visualizar texto ringue</string>
+  <string name="cast_tracks">Selecionar legenda/faixa de áudio</string>
+  <string name="cast_volume_down">Diminuir Volume</string>
+  <string name="cast_volume_up">Aumentar Volume</string>
+  <string name="cast_subtitles">Legendas</string>
+  <string name="cast_audio_tracks">Faixas de Áudio</string>
+  <string name="cast_no_subtitles">Sem legendas</string>
+  <string name="cast_close">FECHAR</string>
+  <string name="cast_subtitle_font_family">Família de fonte</string>
+  <string name="cast_subtitle_border_style">Estilo da Borda</string>
+  <string name="cast_subtitle_border_none">Nenhuma</string>
+  <string name="cast_subtitle_border_outline">Contorno</string>
+  <string name="cast_subtitle_border_drop_shadow">Derrubar Sombra</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Sombra Suave</string>
+  <string name="cast_subtitle_border_raised">Levantado</string>
+  <string name="cast_subtitle_border_depressed">Rebaixado</string>
+  <string name="cast_connection_error">Erro de conexão</string>
 </resources>
