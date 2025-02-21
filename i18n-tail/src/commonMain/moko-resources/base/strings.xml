@@ -249,6 +249,7 @@
     <string name="title_cast_quality">Select Quality</string>
     <string name="queue">Queue</string>
     <string name="cast_remove_from_queue">Remove from queue</string>
+    <string name="empty_queue">Queue is empty</string>
     <string name="move_to_top">Move to Top</string>
     <string name="move_to_bottom">Move to Bottom</string>
     <string name="move_to_position">Move to Position</string>
@@ -270,6 +271,7 @@
     <string name="cast_pause">Pause</string>
     <string name="cast_rewind_30s">Rewind 30s</string>
     <string name="cast_forward_30s">Forward 30s</string>
+    <string name="playback_speed">Playback Speed</string>
     <string name="cast_volume">Volume</string>
     <string name="cast_end_session">End Cast Session</string>
 
@@ -302,4 +304,5 @@
     <string name="cast_subtitle_border_drop_shadow_soft">Soft Drop Shadow</string>
     <string name="cast_subtitle_border_raised">Raised</string>
     <string name="cast_subtitle_border_depressed">Depressed</string>
+    <string name="cast_connection_error">Connection Error</string>
 </resources>
