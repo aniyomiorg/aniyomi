@@ -95,6 +95,7 @@ fun ExpandedControllerScreen(
     castManager: CastManager,
     castContext: CastContext,
     onBackPressed: () -> Unit,
+    navigationIcon: @Composable () -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -175,6 +176,7 @@ fun ExpandedControllerScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TopAppBar(
+                navigationIcon = navigationIcon,
                 title = {
                     Column(
                         modifier = Modifier.padding(start = 8.dp),

@@ -93,7 +93,7 @@ class CastManager(
 
     var castContext: CastContext? = null
         private set
-    private var castSession: CastSession? = null
+    var castSession: CastSession? = null
     private var sessionListener: CastSessionListener? = null
     private var castProgressJob: Job? = null
     private var discoveryRetryJob: Job? = null
