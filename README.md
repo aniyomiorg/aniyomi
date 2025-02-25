@@ -18,7 +18,7 @@ Discover and watch anime, cartoons, series, and more – easier than ever on you
 
 ## Download
 
-[![Animetail Stable](https://img.shields.io/github/release/Animetailapp/aniyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/Animetailapp/Animetail/releases)
+[![Animetail Stable](https://img.shields.io/github/release/Animetailapp/animetail.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/Animetailapp/Animetail/releases)
 [![Animetail Preview](https://img.shields.io/github/v/release/Animetailapp/animetail-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/Animetailapp/animetail-preview/releases)
 
 *Requires Android 8.0 or higher.*
