@@ -91,8 +91,7 @@ class CastManager(
     private val _castState = MutableStateFlow(CastState.DISCONNECTED)
     val castState: StateFlow<CastState> = _castState.asStateFlow()
 
-    var castContext: CastContext? = null
-        private set
+    private var castContext: CastContext? = null
     var castSession: CastSession? = null
     private var sessionListener: CastSessionListener? = null
     private var castProgressJob: Job? = null
@@ -532,8 +531,21 @@ class CastManager(
 
     fun playPause() {
         castSession?.remoteMediaClient?.let { client ->
-            if (client.isPlaying) client.pause() else client.play()
-            _isPlaying.value = !_isPlaying.value
+            val newState = !client.isPaused
+            _isPlaying.value = newState
+            if (newState) {
+                client.play().setResultCallback { result ->
+                    if (!result.status.isSuccess) {
+                        _isPlaying.value = false
+                    }
+                }
+            } else {
+                client.pause().setResultCallback { result ->
+                    if (!result.status.isSuccess) {
+                        _isPlaying.value = true
+                    }
+                }
+            }
         }
     }
 
@@ -681,13 +693,21 @@ class CastManager(
 
                     val wasPlaying = client.isPlaying
                     val activeTrackIds = client.mediaStatus?.activeTrackIds ?: longArrayOf()
-                    client.setTextTrackStyle(textTrackStyle).await()
-                    delay(100)
 
-                    if (activeTrackIds.isNotEmpty()) {
-                        client.setActiveMediaTracks(longArrayOf()).await()
-                        if (wasPlaying) {
-                            client.play().await()
+                    val setStyleTask = client.setTextTrackStyle(textTrackStyle)
+                    setStyleTask.addStatusListener { result ->
+                        if (result.isSuccess) {
+                            activity.lifecycleScope.launch {
+                                delay(100)
+                                if (activeTrackIds.isNotEmpty()) {
+                                    val setTracksTask = client.setActiveMediaTracks(longArrayOf())
+                                    setTracksTask.addStatusListener { tracksResult ->
+                                        if (tracksResult.isSuccess && wasPlaying) {
+                                            client.play()
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     logcat(LogPriority.INFO) { "Successfully applied subtitle settings" }

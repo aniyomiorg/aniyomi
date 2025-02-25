@@ -29,9 +29,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -42,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.google.android.gms.cast.framework.media.RemoteMediaClient
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.CastManager
 import kotlinx.coroutines.delay
@@ -57,54 +60,48 @@ fun CastMiniController(
 
     val currentMedia by castManager.currentMedia.collectAsState()
     val isPlaying by castManager.isPlaying.collectAsState()
-    val currentPosition by remember(castManager) {
-        derivedStateOf {
-            val client = castManager.castSession?.remoteMediaClient
-            client?.approximateStreamPosition ?: 0L
-        }
-    }
-    val duration by remember(castManager) {
-        derivedStateOf {
-            val client = castManager.castSession?.remoteMediaClient
-            client?.mediaInfo?.streamDuration ?: 0L
-        }
-    }
+
+    var client by remember { mutableStateOf<RemoteMediaClient?>(null) }
+    var currentPosition by remember { mutableLongStateOf(0L) }
+    var duration by remember { mutableLongStateOf(0L) }
 
     LaunchedEffect(Unit) {
         while (isActive) {
-            val client = castManager.castSession?.remoteMediaClient
-            if (client != null) {
-                delay(1000)
-            } else {
-                delay(1000)
+            castManager.castSession?.remoteMediaClient?.let { remoteClient ->
+                client = remoteClient
+                currentPosition = remoteClient.approximateStreamPosition
+                duration = remoteClient.mediaInfo?.streamDuration ?: 0L
             }
+            delay(200)
         }
     }
 
     val animatedProgress by animateFloatAsState(
-        targetValue = (currentPosition.toFloat() / duration).coerceIn(0f, 1f),
+        targetValue = (currentPosition.toFloat() / duration.coerceAtLeast(1)).coerceIn(0f, 1f),
         label = "progress",
     )
 
     Surface(
-        modifier = modifier.clickable(
-            onClick = {
-                context.startActivity(
-                    Intent(context, ExpandedControlsActivity::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-                )
-                (context as? ComponentActivity)?.overridePendingTransition(
-                    R.anim.fade_in,
-                    R.anim.slide_out_up,
-                )
-            },
-        ),
+        modifier = modifier,
         tonalElevation = 4.dp,
         shadowElevation = 4.dp,
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(
+                    onClick = {
+                        context.startActivity(
+                            Intent(context, ExpandedControlsActivity::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                        )
+                        (context as? ComponentActivity)?.overridePendingTransition(
+                            R.anim.fade_in,
+                            R.anim.slide_out_up,
+                        )
+                    },
+                ),
         ) {
             Row(
                 modifier = Modifier
@@ -190,7 +187,11 @@ fun CastMiniController(
                     }
 
                     IconButton(
-                        onClick = { castManager.playPause() },
+                        onClick = {
+                            client?.let { remoteClient ->
+                                if (isPlaying) remoteClient.pause() else remoteClient.play()
+                            }
+                        },
                         modifier = Modifier.size(48.dp),
                     ) {
                         Icon(
