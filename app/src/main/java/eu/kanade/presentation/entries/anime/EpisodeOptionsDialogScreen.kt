@@ -413,10 +413,7 @@ fun EpisodeOptionsDialog(
             .animateContentSize()
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
-            .padding(
-                top = TabbedDialogPaddings.Vertical,
-                bottom = TabbedDialogPaddings.Vertical + MaterialTheme.padding.medium,
-            )
+            .padding(vertical = TabbedDialogPaddings.Vertical)
             .windowInsetsPadding(WindowInsets.systemBars),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
