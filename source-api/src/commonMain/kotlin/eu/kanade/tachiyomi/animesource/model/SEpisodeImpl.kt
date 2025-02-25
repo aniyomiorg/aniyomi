@@ -13,4 +13,6 @@ class SEpisodeImpl : SEpisode {
     override var episode_number: Float = -1f
 
     override var scanlator: String? = null
+
+    override var summary: String? = null
 }

@@ -16,12 +16,15 @@ interface SEpisode : Serializable {
 
     var scanlator: String?
 
+    var summary: String?
+
     fun copyFrom(other: SEpisode) {
         name = other.name
         url = other.url
         date_upload = other.date_upload
         episode_number = other.episode_number
         scanlator = other.scanlator
+        summary = other.summary
     }
 
     companion object {

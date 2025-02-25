@@ -14,6 +14,7 @@ data class EpisodeUpdate(
     val dateUpload: Long? = null,
     val episodeNumber: Double? = null,
     val scanlator: String? = null,
+    val summary: String? = null,
     val version: Long? = null,
 )
 
@@ -32,6 +33,7 @@ fun Episode.toEpisodeUpdate(): EpisodeUpdate {
         dateUpload,
         episodeNumber,
         scanlator,
+        summary,
         version,
     )
 }

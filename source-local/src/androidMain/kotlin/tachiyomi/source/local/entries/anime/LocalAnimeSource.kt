@@ -212,6 +212,7 @@ actual class LocalAnimeSource(
                             data.name?.also { name = it }
                             data.date_upload?.also { date_upload = parseDate(it) }
                             scanlator = data.scanlator
+                            summary = data.summary
                         }
                     }
                 }
