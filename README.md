@@ -9,17 +9,17 @@
 ### Full-featured player and reader, based on ~~Tachiyomi~~ Mihon.
 Discover and watch anime, cartoons, series, and more – easier than ever on your Android device.
 
-[![Discord server](https://img.shields.io/discord/841701076242530374.svg?label=&labelColor=6A7EC2&color=7389D8&logo=discord&logoColor=FFFFFF)](https://discord.gg/F32UjdJZrR)
-[![GitHub downloads](https://img.shields.io/github/downloads/Dark25/animetail2/total?label=downloads&labelColor=27303D&color=0D1117&logo=github&logoColor=FFFFFF&style=flat)](https://github.com/aniyomiorg/aniyomi/releases)
+[![Discord server](https://img.shields.io/discord/841701076242530374.svg?label=&labelColor=6A7EC2&color=7389D8&logo=discord&logoColor=FFFFFF)](https://discord.gg/fvskrQZb9j)
+[![GitHub downloads](https://img.shields.io/github/downloads/Animetailapp/animetail/total?label=downloads&labelColor=27303D&color=0D1117&logo=github&logoColor=FFFFFF&style=flat)](https://github.com/Animetailapp/Animetail/releases)
 
-[![CI](https://img.shields.io/github/actions/workflow/status/Dark25/animetail2/build_push.yml?labelColor=27303D)](https://github.com/aniyomiorg/aniyomi/actions/workflows/build_push.yml)
-[![License: Apache-2.0](https://img.shields.io/github/license/Dark25/aniyomi?labelColor=27303D&color=818cf8)](/LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/Animetailapp/animetail/build_push.yml?labelColor=27303D)](https://github.com/Animetailapp/Animetail/actions/workflows/build_push.yml)
+[![License: Apache-2.0](https://img.shields.io/github/license/Animetailapp/Animetail?labelColor=27303D&color=818cf8)](/LICENSE)
 [![Crowdin](https://badges.crowdin.net/animetail/localized.svg)](https://crowdin.com/project/animetail)
 
 ## Download
 
-[![Animetail Stable](https://img.shields.io/github/release/Dark25/aniyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/Dark25/Animetail2/releases)
-[![Animetail Preview](https://img.shields.io/github/v/release/Dark25/animetail-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/dark25/animetail-preview/releases)
+[![Animetail Stable](https://img.shields.io/github/release/Animetailapp/aniyomi.svg?maxAge=3600&label=Stable&labelColor=06599d&color=043b69)](https://github.com/Animetailapp/Animetail/releases)
+[![Animetail Preview](https://img.shields.io/github/v/release/Animetailapp/animetail-preview.svg?maxAge=3600&label=Beta&labelColor=2c2c47&color=1c1c39)](https://github.com/Animetailapp/animetail-preview/releases)
 
 *Requires Android 8.0 or higher.*
 
@@ -71,7 +71,7 @@ Features include:
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Before reporting a new issue, take a look at the [FAQ](https://aniyomi.org/docs/faq/general), the [changelog](https://aniyomi.org/changelogs/) and the already opened [issues](https://github.com/Dark25/animetail2/issues); if you got any questions, join our [Discord server](https://discord.gg/F32UjdJZrR).
+Before reporting a new issue, take a look at the [FAQ](https://aniyomi.org/docs/faq/general), the [changelog](https://aniyomi.org/changelogs/) and the already opened [issues](https://github.com/Animetailapp/animetail/issues); if you got any questions, join our [Discord server](https://discord.gg/F32UjdJZrR).
 
 ### Repositories
 
@@ -82,8 +82,8 @@ Before reporting a new issue, take a look at the [FAQ](https://aniyomi.org/docs/
 
 Thank you to all the people who have contributed!
 
-<a href="https://github.com/Dark25/Animetail2/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=Dark25/Animetail2" alt="Aniyomi app contributors" title="Aniyomi app contributors" width="800"/>
+<a href="https://github.com/Animetailapp/Animetail/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=Animetailapp/Animetail" alt="Animetail app contributors" title="Animetail app contributors" width="800"/>
 </a>
 
 ### Disclaimer
@@ -96,6 +96,7 @@ The developer(s) of this application does not have any affiliation with the cont
 Copyright © 2015 Javier Tomás
 Copyright © 2024 The Mihon Open Source Project
 Copyright © 2024 The Aniyomi Open Source Project
+Copyright © 2024 The Animetail Open Source Project
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
