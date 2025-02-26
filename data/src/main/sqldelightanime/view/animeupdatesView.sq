@@ -7,6 +7,7 @@ SELECT
     episodes.scanlator,
     episodes.seen,
     episodes.bookmark,
+    episodes.fillermark,
     episodes.last_second_seen,
     episodes.total_seconds AS totalSeconds,
     animes.source,

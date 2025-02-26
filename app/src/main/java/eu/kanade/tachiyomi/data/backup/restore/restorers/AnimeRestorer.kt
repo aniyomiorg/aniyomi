@@ -166,6 +166,7 @@ class AnimeRestorer(
                     .copy(
                         id = dbEpisode.id,
                         bookmark = episode.bookmark || dbEpisode.bookmark,
+                        fillermark = episode.fillermark || dbEpisode.fillermark,
                     )
                 if (dbEpisode.seen && !updatedEpisode.seen) {
                     updatedEpisode = updatedEpisode.copy(
@@ -200,6 +201,7 @@ class AnimeRestorer(
                     episode.previewUrl,
                     episode.seen,
                     episode.bookmark,
+                    episode.fillermark,
                     episode.lastSecondSeen,
                     episode.totalSeconds,
                     episode.episodeNumber,
@@ -224,6 +226,7 @@ class AnimeRestorer(
                     previewUrl = null,
                     seen = episode.seen,
                     bookmark = episode.bookmark,
+                    fillermark = episode.fillermark,
                     lastSecondSeen = episode.lastSecondSeen,
                     totalSeconds = episode.totalSeconds,
                     episodeNumber = null,
