@@ -1,0 +1,34 @@
+import kotlin.Boolean;
+
+ALTER TABLE episodes
+RENAME TO episodes_tmp;
+
+CREATE TABLE episodes(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    anime_id INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    name TEXT NOT NULL,
+    scanlator TEXT,
+    summary TEXT,
+    preview_url TEXT,
+    seen INTEGER AS Boolean NOT NULL,
+    bookmark INTEGER AS Boolean NOT NULL,
+    fillermark INTEGER AS Boolean NOT NULL,
+    last_second_seen INTEGER NOT NULL,
+    total_seconds INTEGER NOT NULL,
+    episode_number REAL NOT NULL,
+    source_order INTEGER NOT NULL,
+    date_fetch INTEGER NOT NULL,
+    date_upload INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL DEFAULT 0,
+    version INTEGER NOT NULL DEFAULT 0,
+    is_syncing INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY(anime_id) REFERENCES animes (_id)
+    ON DELETE CASCADE
+);
+
+INSERT INTO episodes(_id, anime_id, url, name, scanlator, seen, bookmark, fillermark, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at, version, is_syncing)
+SELECT _id, anime_id, url, name, scanlator, seen, bookmark, 0, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at, version, is_syncing
+FROM episodes_tmp;
+
+DROP TABLE episodes_tmp;
