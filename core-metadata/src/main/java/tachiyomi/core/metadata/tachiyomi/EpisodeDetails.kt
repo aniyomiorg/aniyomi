@@ -9,4 +9,5 @@ class EpisodeDetails(
     val date_upload: String? = null,
     val scanlator: String? = null,
     val summary: String? = null,
+    val preview_url: String? = null,
 )

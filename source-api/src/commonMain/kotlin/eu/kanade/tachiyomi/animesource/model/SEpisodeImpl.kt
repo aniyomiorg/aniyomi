@@ -15,4 +15,6 @@ class SEpisodeImpl : SEpisode {
     override var scanlator: String? = null
 
     override var summary: String? = null
+
+    override var preview_url: String? = null
 }

@@ -46,6 +46,7 @@ fun Episode.toDomainEpisode(): DomainEpisode? {
         episodeNumber = episode_number.toDouble(),
         scanlator = scanlator,
         summary = summary,
+        previewUrl = preview_url,
         lastModifiedAt = last_modified,
         version = version,
     )

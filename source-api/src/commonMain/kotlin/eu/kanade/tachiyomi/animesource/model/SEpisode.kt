@@ -18,6 +18,8 @@ interface SEpisode : Serializable {
 
     var summary: String?
 
+    var preview_url: String?
+
     fun copyFrom(other: SEpisode) {
         name = other.name
         url = other.url
@@ -25,6 +27,7 @@ interface SEpisode : Serializable {
         episode_number = other.episode_number
         scanlator = other.scanlator
         summary = other.summary
+        preview_url = other.preview_url
     }
 
     companion object {

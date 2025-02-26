@@ -16,6 +16,8 @@ class EpisodeImpl : Episode {
 
     override var summary: String? = null
 
+    override var preview_url: String? = null
+
     override var seen: Boolean = false
 
     override var bookmark: Boolean = false
