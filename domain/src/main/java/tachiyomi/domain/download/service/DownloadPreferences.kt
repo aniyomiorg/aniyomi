@@ -34,6 +34,8 @@ class DownloadPreferences(
 
     fun removeBookmarkedChapters() = preferenceStore.getBoolean("pref_remove_bookmarked", false)
 
+    fun downloadFillermarkedItems() = preferenceStore.getBoolean("pref_download_fillermarked", false)
+
     fun removeExcludeCategories() = preferenceStore.getStringSet(
         "remove_exclude_categories",
         emptySet(),

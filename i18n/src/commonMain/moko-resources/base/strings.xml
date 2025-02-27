@@ -43,6 +43,7 @@
     <string name="action_filter">Filter</string>
     <string name="action_set_interval">Set interval</string>
     <string name="action_filter_bookmarked">Bookmarked</string>
+    <string name="action_filter_fillermarked">Fillermarked</string>
     <string name="action_filter_tracked">Tracked</string>
     <string name="action_filter_unread">Unread</string>
     <string name="action_filter_started">Started</string>
@@ -1173,6 +1174,8 @@
     <string name="action_download_unseen">Download unseen episodes</string>
     <string name="action_bookmark_episode">Bookmark episode</string>
     <string name="action_remove_bookmark_episode">Unbookmark episode</string>
+    <string name="action_fillermark_episode">Fillermark episode</string>
+    <string name="action_remove_fillermark_episode">Unfillermark episode</string>
     <string name="action_edit_anime_categories">Edit anime categories</string>
     <string name="action_edit_manga_categories">Edit manga categories</string>
     <string name="action_view_episodes">View episodes</string>
@@ -1208,6 +1211,7 @@
     <string name="pref_remove_after_marked_as_read">After manually marked as read/watched</string>
     <string name="pref_remove_after_read">After reading/watching automatically delete</string>
     <string name="pref_remove_bookmarked_chapters">Allow deleting bookmarked chapters/episodes</string>
+    <string name="pref_download_fillermarked_items">Allow downloading of fillermarked episodes</string>
     <string name="pref_remove_exclude_categories_manga">Excluded manga categories</string>
     <string name="pref_remove_exclude_categories_anime">Excluded anime categories</string>
     <string name="pref_category_external_downloader">External downloader</string>

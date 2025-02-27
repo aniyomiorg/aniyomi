@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
+import androidx.compose.material.icons.automirrored.outlined.LabelOff
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.BookmarkAdd
@@ -17,6 +19,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.FileDownloadOff
+import androidx.compose.material.icons.outlined.NewLabel
 import androidx.compose.material.icons.outlined.RemoveDone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -57,6 +60,7 @@ fun AnimeEpisodeListItem(
     scanlator: String?,
     seen: Boolean,
     bookmark: Boolean,
+    fillermark: Boolean,
     selected: Boolean,
     downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> AnimeDownload.State,
@@ -73,6 +77,7 @@ fun AnimeEpisodeListItem(
         action = episodeSwipeStartAction,
         seen = seen,
         bookmark = bookmark,
+        fillermark = fillermark,
         downloadState = downloadStateProvider(),
         background = MaterialTheme.colorScheme.primaryContainer,
         onSwipe = { onEpisodeSwipe(episodeSwipeStartAction) },
@@ -81,6 +86,7 @@ fun AnimeEpisodeListItem(
         action = episodeSwipeEndAction,
         seen = seen,
         bookmark = bookmark,
+        fillermark = fillermark,
         downloadState = downloadStateProvider(),
         background = MaterialTheme.colorScheme.primaryContainer,
         onSwipe = { onEpisodeSwipe(episodeSwipeEndAction) },
@@ -125,6 +131,15 @@ fun AnimeEpisodeListItem(
                         Icon(
                             imageVector = Icons.Filled.Bookmark,
                             contentDescription = stringResource(MR.strings.action_filter_bookmarked),
+                            modifier = Modifier
+                                .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                    if (fillermark) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Label,
+                            contentDescription = stringResource(MR.strings.action_filter_fillermarked),
                             modifier = Modifier
                                 .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
                             tint = MaterialTheme.colorScheme.primary,
@@ -190,6 +205,7 @@ private fun getSwipeAction(
     action: LibraryPreferences.EpisodeSwipeAction,
     seen: Boolean,
     bookmark: Boolean,
+    fillermark: Boolean,
     downloadState: AnimeDownload.State,
     background: Color,
     onSwipe: () -> Unit,
@@ -205,6 +221,12 @@ private fun getSwipeAction(
             icon = if (!bookmark) Icons.Outlined.BookmarkAdd else Icons.Outlined.BookmarkRemove,
             background = background,
             isUndo = bookmark,
+            onSwipe = onSwipe,
+        )
+        LibraryPreferences.EpisodeSwipeAction.ToggleFillermark -> swipeAction(
+            icon = if (!fillermark) Icons.Outlined.NewLabel else Icons.AutoMirrored.Outlined.LabelOff,
+            background = background,
+            isUndo = fillermark,
             onSwipe = onSwipe,
         )
         LibraryPreferences.EpisodeSwipeAction.Download -> swipeAction(

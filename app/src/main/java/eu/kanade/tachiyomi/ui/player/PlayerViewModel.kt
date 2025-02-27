@@ -1058,7 +1058,11 @@ class PlayerViewModel @JvmOverloads constructor(
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_BOOKMARKED &&
                 !it.bookmark ||
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_NOT_BOOKMARKED &&
-                it.bookmark
+                it.bookmark ||
+                anime.fillermarkedFilterRaw == Anime.EPISODE_SHOW_FILLERMARKED &&
+                !it.fillermark ||
+                anime.fillermarkedFilterRaw == Anime.EPISODE_SHOW_NOT_FILLERMARKED &&
+                it.fillermark
         }.toMutableList()
 
         if (episodesForPlayer.all { it.id != episodeId }) {
@@ -1342,6 +1346,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     id = episode.id!!,
                     seen = episode.seen,
                     bookmark = episode.bookmark,
+                    fillermark = episode.fillermark,
                     lastSecondSeen = episode.last_second_seen,
                     totalSeconds = episode.total_seconds,
                 ),
@@ -1371,6 +1376,20 @@ class PlayerViewModel @JvmOverloads constructor(
                 EpisodeUpdate(
                     id = episodeId!!,
                     bookmark = bookmarked,
+                ),
+            )
+        }
+    }
+
+    /**
+     * Fillermarks the currently active episode.
+     */
+    fun fillermarkEpisode(episodeId: Long?, fillermarked: Boolean) {
+        viewModelScope.launchNonCancellable {
+            updateEpisode.await(
+                EpisodeUpdate(
+                    id = episodeId!!,
+                    fillermark = fillermarked,
                 ),
             )
         }
