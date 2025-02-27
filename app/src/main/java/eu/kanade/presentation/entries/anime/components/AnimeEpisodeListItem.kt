@@ -142,7 +142,7 @@ fun AnimeEpisodeListItem(
                             contentDescription = stringResource(MR.strings.action_filter_fillermarked),
                             modifier = Modifier
                                 .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = MaterialTheme.colorScheme.tertiary,
                         )
                     }
                     Text(

@@ -614,6 +614,7 @@ fun PlayerControls(
             dateRelativeTime = viewModel.relativeTime,
             dateFormat = viewModel.dateFormat,
             onBookmarkClicked = viewModel::bookmarkEpisode,
+            onFillermarkClicked = viewModel::fillermarkEpisode,
             onEpisodeClicked = {
                 viewModel.showDialog(Dialogs.None)
                 activity.changeEpisode(it)

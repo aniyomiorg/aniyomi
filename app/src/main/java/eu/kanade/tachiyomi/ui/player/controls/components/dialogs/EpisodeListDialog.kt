@@ -13,8 +13,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -56,6 +56,7 @@ fun EpisodeListDialog(
     dateRelativeTime: Boolean,
     dateFormat: DateTimeFormatter,
     onBookmarkClicked: (Long?, Boolean) -> Unit,
+    onFillermarkClicked: (Long?, Boolean) -> Unit,
     onEpisodeClicked: (Long?) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -111,6 +112,7 @@ fun EpisodeListDialog(
                         title = title,
                         date = date,
                         onBookmarkClicked = onBookmarkClicked,
+                        onFillermarkClicked = onFillermarkClicked,
                         onEpisodeClicked = onEpisodeClicked,
                     )
                 }
@@ -126,14 +128,25 @@ private fun EpisodeListItem(
     title: String,
     date: String?,
     onBookmarkClicked: (Long?, Boolean) -> Unit,
+    onFillermarkClicked: (Long?, Boolean) -> Unit,
     onEpisodeClicked: (Long?) -> Unit,
 ) {
     var isBookmarked by remember { mutableStateOf(episode.bookmark) }
+    var isFillermarked by remember { mutableStateOf(episode.fillermark) }
     var textHeight by remember { mutableStateOf(0) }
 
-    val bookmarkIcon = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.Bookmark
+    val defaultColor = MaterialTheme.colorScheme.onSurface
     val bookmarkAlpha = if (isBookmarked) 1f else DISABLED_ALPHA
-    val episodeColor = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+    val bookmarkColor = if (isBookmarked) MaterialTheme.colorScheme.primary else defaultColor
+    val fillermarkAlpha = if (isFillermarked) 1f else DISABLED_ALPHA
+    val fillermarkColor = if (isFillermarked) MaterialTheme.colorScheme.tertiary else defaultColor
+    val episodeColor = if (isBookmarked) {
+        bookmarkColor
+    } else if (isFillermarked) {
+        fillermarkColor
+    } else {
+        defaultColor
+    }
     val textAlpha = if (episode.seen) DISABLED_ALPHA else 1f
     val textWeight = if (isCurrentEpisode) FontWeight.Bold else FontWeight.Normal
     val textStyle = if (isCurrentEpisode) FontStyle.Italic else FontStyle.Normal
@@ -144,20 +157,37 @@ private fun EpisodeListItem(
         onBookmarkClicked(episode.id, bookmarked)
     }
 
+    val clickFillermark: (Boolean) -> Unit = { fillermarked ->
+        episode.fillermark = fillermarked
+        isFillermarked = fillermarked
+        onFillermarkClicked(episode.id, fillermarked)
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = { onEpisodeClicked(episode.id) })
-            .padding(vertical = MaterialTheme.padding.small),
+            .padding(vertical = MaterialTheme.padding.extraSmall),
     ) {
         IconButton(onClick = { clickBookmark(!isBookmarked) }) {
             Icon(
-                imageVector = bookmarkIcon,
+                imageVector = Icons.Filled.Bookmark,
                 contentDescription = null,
-                tint = episodeColor,
+                tint = bookmarkColor,
                 modifier = Modifier
                     .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp })
                     .alpha(bookmarkAlpha),
+            )
+        }
+
+        IconButton(onClick = { clickFillermark(!isFillermarked) }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Label,
+                contentDescription = null,
+                tint = fillermarkColor,
+                modifier = Modifier
+                    .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp })
+                    .alpha(fillermarkAlpha),
             )
         }
 
