@@ -22,8 +22,6 @@ import tachiyomi.presentation.core.util.plus
 @Composable
 internal fun MangaLibraryList(
     items: List<MangaLibraryItem>,
-    entries: Int,
-    containerHeight: Int,
     contentPadding: PaddingValues,
     selection: List<LibraryManga>,
     onClick: (LibraryManga) -> Unit,
@@ -76,8 +74,6 @@ internal fun MangaLibraryList(
                 } else {
                     null
                 },
-                entries = entries,
-                containerHeight = containerHeight,
             )
         }
     }

@@ -36,7 +36,6 @@ import tachiyomi.presentation.core.components.SettingsChipRow
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
-import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
@@ -249,29 +248,17 @@ private fun ColumnScope.DisplayPage(
         }
     }
 
-    val configuration = LocalConfiguration.current
-    val columnPreference = remember {
-        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            screenModel.libraryPreferences.animeLandscapeColumns()
-        } else {
-            screenModel.libraryPreferences.animePortraitColumns()
-        }
-    }
-
-    val columns by columnPreference.collectAsState()
-    if (displayMode == LibraryDisplayMode.List) {
-        SliderItem(
-            label = stringResource(MR.strings.pref_library_rows),
-            max = 10,
-            value = columns,
-            valueText = if (columns > 0) {
-                pluralStringResource(MR.plurals.pref_library_entries_in_column, columns, columns)
+    if (displayMode != LibraryDisplayMode.List) {
+        val configuration = LocalConfiguration.current
+        val columnPreference = remember {
+            if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                screenModel.libraryPreferences.animeLandscapeColumns()
             } else {
-                stringResource(MR.strings.label_default)
-            },
-            onChange = columnPreference::set,
-        )
-    } else {
+                screenModel.libraryPreferences.animePortraitColumns()
+            }
+        }
+
+        val columns by columnPreference.collectAsState()
         SliderItem(
             label = stringResource(MR.strings.pref_library_columns),
             max = 10,
