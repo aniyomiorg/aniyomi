@@ -35,12 +35,14 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.tail.TLMR
 import java.util.LinkedList
+import kotlin.coroutines.resume
 
 class CastManager(
     private val activity: ComponentActivity,
@@ -170,9 +172,6 @@ class CastManager(
             override fun onStatusUpdated() {
                 updateCurrentMedia()
                 updateQueueItems()
-                if (session.remoteMediaClient?.hasMediaSession() == true) {
-                    applySubtitleSettings(getDefaultSubtitleSettings())
-                }
             }
 
             override fun onMetadataUpdated() {
@@ -529,26 +528,6 @@ class CastManager(
         }
     }
 
-    fun playPause() {
-        castSession?.remoteMediaClient?.let { client ->
-            val newState = !client.isPaused
-            _isPlaying.value = newState
-            if (newState) {
-                client.play().setResultCallback { result ->
-                    if (!result.status.isSuccess) {
-                        _isPlaying.value = false
-                    }
-                }
-            } else {
-                client.pause().setResultCallback { result ->
-                    if (!result.status.isSuccess) {
-                        _isPlaying.value = true
-                    }
-                }
-            }
-        }
-    }
-
     fun stop() {
         castSession?.remoteMediaClient?.stop()
         _isPlaying.value = false
@@ -626,97 +605,157 @@ class CastManager(
         _castState.value = CastState.DISCONNECTED
     }
 
+    private var lastAppliedSettings: SubtitleSettings? = null
+    private var subtitleSettingsJob: Job? = null
+
     fun applySubtitleSettings(settings: SubtitleSettings) {
-        try {
-            val session = castSession ?: run {
-                castContext?.sessionManager?.currentCastSession?.let { currentSession ->
-                    castSession = currentSession
-                    currentSession
+        subtitleSettingsJob?.cancel()
+        if (lastAppliedSettings == settings) {
+            logcat(LogPriority.INFO) { "Subtitle settings unchanged, skipping update" }
+            return
+        }
+        lastAppliedSettings = settings
+
+        subtitleSettingsJob = activity.lifecycleScope.launch {
+            try {
+                val session = castSession ?: run {
+                    castContext?.sessionManager?.currentCastSession?.also {
+                        castSession = it
+                    } ?: run {
+                        logcat(LogPriority.ERROR) { "No active cast session found" }
+                        null
+                    }
                 } ?: run {
-                    logcat(LogPriority.ERROR) { "No active cast session found, trying to reconnect..." }
-                    reconnect()
-                    castSession
+                    logcat(LogPriority.ERROR) { "Failed to get cast session" }
+                    return@launch
                 }
-            } ?: run {
-                logcat(LogPriority.ERROR) { "Failed to get cast session" }
-                return
-            }
-            val client = session.remoteMediaClient ?: run {
-                logcat(LogPriority.ERROR) { "No remote media client available" }
-                return
-            }
-            subtitlePreferences.saveTextTrackStyle(settings)
-            activity.lifecycleScope.launch {
-                try {
-                    val textTrackStyle = TextTrackStyle().apply {
-                        fontScale = settings.fontSize.value / 20f
-                        foregroundColor = settings.textColor.toArgb()
-                        backgroundColor = settings.backgroundColor.toArgb()
-                        windowColor = android.graphics.Color.TRANSPARENT
-                        if (settings.shadowRadius.value > 0) {
-                            edgeColor = android.graphics.Color.BLACK
-                            edgeType = when {
-                                settings.shadowRadius.value <= 3 -> TextTrackStyle.EDGE_TYPE_DEPRESSED
-                                settings.shadowRadius.value <= 6 -> TextTrackStyle.EDGE_TYPE_DROP_SHADOW
-                                else -> TextTrackStyle.EDGE_TYPE_OUTLINE
-                            }
-                        } else {
-                            edgeType = TextTrackStyle.EDGE_TYPE_NONE
-                        }
 
-                        when (settings.fontFamily) {
-                            FontFamily.Default -> setFontFamily("SANS_SERIF")
-                            FontFamily.SansSerif -> setFontFamily("SANS_SERIF")
-                            FontFamily.Serif -> setFontFamily("SERIF")
-                            FontFamily.Monospace -> setFontFamily("MONOSPACE")
-                            FontFamily.Cursive -> setFontFamily("CURSIVE")
-                            else -> setFontFamily("SANS_SERIF")
-                        }
+                val client = session.remoteMediaClient ?: run {
+                    logcat(LogPriority.ERROR) { "No remote media client available" }
+                    return@launch
+                }
+                if (!client.hasMediaSession()) {
+                    logcat(LogPriority.ERROR) { "No active media session found" }
+                    return@launch
+                }
 
-                        fontStyle = TextTrackStyle.FONT_STYLE_NORMAL
-                        fontGenericFamily = when (settings.fontFamily) {
-                            FontFamily.SansSerif -> TextTrackStyle.FONT_FAMILY_SANS_SERIF
-                            FontFamily.Serif -> TextTrackStyle.FONT_FAMILY_SERIF
-                            FontFamily.Monospace -> TextTrackStyle.FONT_FAMILY_MONOSPACED_SANS_SERIF
-                            FontFamily.Cursive -> TextTrackStyle.FONT_FAMILY_CURSIVE
-                            else -> TextTrackStyle.FONT_FAMILY_SANS_SERIF
-                        }
+                subtitlePreferences.saveTextTrackStyle(settings)
 
+                val textTrackStyle = TextTrackStyle().apply {
+                    fontScale = settings.fontSize.value / 20f
+                    foregroundColor = settings.textColor.toArgb()
+                    backgroundColor = settings.backgroundColor.toArgb()
+                    windowColor = android.graphics.Color.TRANSPARENT
+
+                    if (settings.shadowRadius.value > 0) {
+                        edgeColor = android.graphics.Color.BLACK
+                        edgeType = when {
+                            settings.shadowRadius.value <= 3 -> TextTrackStyle.EDGE_TYPE_DEPRESSED
+                            settings.shadowRadius.value <= 6 -> TextTrackStyle.EDGE_TYPE_DROP_SHADOW
+                            else -> TextTrackStyle.EDGE_TYPE_OUTLINE
+                        }
+                    } else {
+                        edgeType = TextTrackStyle.EDGE_TYPE_NONE
+                    }
+
+                    when (settings.fontFamily) {
+                        FontFamily.Default -> setFontFamily("SANS_SERIF")
+                        FontFamily.SansSerif -> setFontFamily("SANS_SERIF")
+                        FontFamily.Serif -> setFontFamily("SERIF")
+                        FontFamily.Monospace -> setFontFamily("MONOSPACE")
+                        FontFamily.Cursive -> setFontFamily("CURSIVE")
+                        else -> setFontFamily("SANS_SERIF")
+                    }
+
+                    fontStyle = TextTrackStyle.FONT_STYLE_NORMAL
+                    fontGenericFamily = when (settings.fontFamily) {
+                        FontFamily.SansSerif -> TextTrackStyle.FONT_FAMILY_SANS_SERIF
+                        FontFamily.Serif -> TextTrackStyle.FONT_FAMILY_SERIF
+                        FontFamily.Monospace -> TextTrackStyle.FONT_FAMILY_MONOSPACED_SANS_SERIF
+                        FontFamily.Cursive -> TextTrackStyle.FONT_FAMILY_CURSIVE
+                        else -> TextTrackStyle.FONT_FAMILY_SANS_SERIF
+                    }
+
+                    if (settings.borderStyle != BorderStyle.NONE) {
                         edgeType = when (settings.borderStyle) {
-                            BorderStyle.NONE -> TextTrackStyle.EDGE_TYPE_NONE
                             BorderStyle.OUTLINE -> TextTrackStyle.EDGE_TYPE_OUTLINE
                             BorderStyle.DROP_SHADOW -> TextTrackStyle.EDGE_TYPE_DROP_SHADOW
                             BorderStyle.RAISED -> TextTrackStyle.EDGE_TYPE_RAISED
                             BorderStyle.DEPRESSED -> TextTrackStyle.EDGE_TYPE_DEPRESSED
+                            else -> TextTrackStyle.EDGE_TYPE_NONE
                         }
                     }
+                }
 
-                    val wasPlaying = client.isPlaying
-                    val activeTrackIds = client.mediaStatus?.activeTrackIds ?: longArrayOf()
+                val wasPlaying = client.isPlaying
+                val activeTrackIds = client.mediaStatus?.activeTrackIds ?: longArrayOf()
 
-                    val setStyleTask = client.setTextTrackStyle(textTrackStyle)
-                    setStyleTask.addStatusListener { result ->
-                        if (result.isSuccess) {
-                            activity.lifecycleScope.launch {
-                                delay(100)
-                                if (activeTrackIds.isNotEmpty()) {
-                                    val setTracksTask = client.setActiveMediaTracks(longArrayOf())
-                                    setTracksTask.addStatusListener { tracksResult ->
-                                        if (tracksResult.isSuccess && wasPlaying) {
-                                            client.play()
-                                        }
-                                    }
-                                }
+                val styleApplied = suspendCancellableCoroutine { continuation ->
+                    val task = client.setTextTrackStyle(textTrackStyle)
+                    task.setResultCallback { result ->
+                        if (continuation.isActive) {
+                            val success = result.status.isSuccess
+                            continuation.resume(success)
+                        }
+                    }
+                    continuation.invokeOnCancellation {
+                        task.cancel()
+                    }
+                }
+
+                if (!styleApplied) {
+                    logcat(LogPriority.ERROR) { "Failed to apply text track style" }
+                    return@launch
+                }
+
+                if (activeTrackIds.isNotEmpty()) {
+                    val tracksDisabled = suspendCancellableCoroutine { continuation ->
+                        val task = client.setActiveMediaTracks(longArrayOf())
+                        task.setResultCallback { result ->
+                            if (continuation.isActive) {
+                                val success = result.status.isSuccess
+                                continuation.resume(success)
                             }
                         }
+                        continuation.invokeOnCancellation {
+                            task.cancel()
+                        }
                     }
-                    logcat(LogPriority.INFO) { "Successfully applied subtitle settings" }
-                } catch (e: Exception) {
-                    logcat(LogPriority.ERROR) { "Error applying subtitle settings: ${e.message}" }
+
+                    if (!tracksDisabled) {
+                        logcat(LogPriority.ERROR) { "Failed to disable tracks" }
+                    } else {
+                        delay(500)
+                        val tracksEnabled = suspendCancellableCoroutine { continuation ->
+                            val task = client.setActiveMediaTracks(activeTrackIds)
+                            task.setResultCallback { result ->
+                                if (continuation.isActive) {
+                                    val success = result.status.isSuccess
+                                    continuation.resume(success)
+                                }
+                            }
+                            continuation.invokeOnCancellation {
+                                task.cancel()
+                            }
+                        }
+
+                        if (!tracksEnabled) {
+                            logcat(LogPriority.ERROR) { "Failed to re-enable tracks" }
+                        } else if (wasPlaying) {
+                            delay(100)
+                            client.play()
+                            logcat(LogPriority.INFO) { "Playback resumed" }
+                        }
+                    }
+                } else {
+                    logcat(LogPriority.INFO) { "No active tracks found, skipping refresh" }
                 }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR) { "Error applying subtitle settings: ${e.message}" }
+                e.printStackTrace()
+            } finally {
+                subtitleSettingsJob = null
             }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR) { "Error in applySubtitleSettings: ${e.message}" }
         }
     }
 

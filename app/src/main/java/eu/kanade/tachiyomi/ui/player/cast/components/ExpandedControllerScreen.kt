@@ -518,6 +518,7 @@ fun ExpandedControllerScreen(
     if (showTracksDialog) {
         TracksSelectionDialog(
             client = client,
+            castManager = castManager,
             onDismiss = { showTracksDialog = false },
         )
     }
@@ -895,6 +896,7 @@ private fun ExpandedControllerQueueItem(
 @Composable
 private fun TracksSelectionDialog(
     client: RemoteMediaClient?,
+    castManager: CastManager,
     onDismiss: () -> Unit,
 ) {
     val tracks = remember(client) {
@@ -902,6 +904,29 @@ private fun TracksSelectionDialog(
     }
     var activeTrackIds by remember(client) {
         mutableStateOf(client?.mediaStatus?.activeTrackIds?.toSet() ?: emptySet())
+    }
+
+    DisposableEffect(client) {
+        val callback = object : RemoteMediaClient.Callback() {
+            override fun onStatusUpdated() {
+                val currentActiveTrackIds = client?.mediaStatus?.activeTrackIds?.toSet() ?: emptySet()
+                if (currentActiveTrackIds != activeTrackIds) {
+                    activeTrackIds = currentActiveTrackIds
+                    val hasSubtitleTracks = currentActiveTrackIds.any { id ->
+                        tracks.find { it.id == id }?.type == MediaTrack.TYPE_TEXT
+                    }
+
+                    if (hasSubtitleTracks) {
+                        castManager.applySubtitleSettings(castManager.getDefaultSubtitleSettings())
+                    }
+                }
+            }
+        }
+
+        client?.registerCallback(callback)
+        onDispose {
+            client?.unregisterCallback(callback)
+        }
     }
 
     AlertDialog(
@@ -919,6 +944,7 @@ private fun TracksSelectionDialog(
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(vertical = 8.dp),
                         )
+
                         TrackItem(
                             track = null,
                             name = stringResource(TLMR.strings.cast_no_subtitles),
@@ -927,14 +953,16 @@ private fun TracksSelectionDialog(
                             },
                             onSelected = { selected ->
                                 if (selected) {
-                                    activeTrackIds = activeTrackIds.filter { id ->
+                                    val newTrackIds = activeTrackIds.filter { id ->
                                         tracks.find { it.id == id }?.type != MediaTrack.TYPE_TEXT
                                     }.toSet()
-                                    client?.setActiveMediaTracks(activeTrackIds.toLongArray())
+                                    activeTrackIds = newTrackIds
+                                    client?.setActiveMediaTracks(newTrackIds.toLongArray())
                                 }
                             },
                         )
                     }
+
                     items(subtitleTracks) { track ->
                         TrackItem(
                             track = track,
@@ -948,6 +976,9 @@ private fun TracksSelectionDialog(
                                 }
                                 activeTrackIds = newTrackIds
                                 client?.setActiveMediaTracks(newTrackIds.toLongArray())
+                                if (selected) {
+                                    castManager.applySubtitleSettings(castManager.getDefaultSubtitleSettings())
+                                }
                             },
                         )
                     }
@@ -961,6 +992,7 @@ private fun TracksSelectionDialog(
                             modifier = Modifier.padding(vertical = 8.dp),
                         )
                     }
+
                     items(audioTracks) { track ->
                         TrackItem(
                             track = track,
