@@ -1054,9 +1054,9 @@
     <string name="download_notifier_download_finish">Download completato</string>
     <string name="download_threads_number_summary">Il numero di thread da utilizzare per il download potrebbe bloccare il tuo IP se troppo alto, in genere 4 è un buon numero per evitare un carico pesante sui server di origine.</string>
     <string name="pref_gpu_next_title">Abilita il rendering dell\'anteprima</string>
-    <string name="pref_gpu_next_subtitle">Un nuovo backend per il video rendering</string>
+    <string name="pref_gpu_next_subtitle">Viene eseguito il rendering di un nuovo video in background</string>
     <string name="safe_download">Modalità sicura per scaricare gli anime</string>
-    <string name="safe_download_summary">Attiva la modalità di download a singolo thread e no range</string>
+    <string name="safe_download_summary">Abilita la modalità di download singolo e senza interruzioni</string>
     <string name="download_threads_number">Numero di thread</string>
     <string name="label_upcoming">In arrivo</string>
     <string name="relative_time_now">Ora</string>
