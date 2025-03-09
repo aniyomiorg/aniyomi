@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Αυξήθηκε</string>
   <string name="cast_subtitle_border_depressed">Καταπιεσμένο</string>
   <string name="cast_connection_error">Σφάλμα Σύνδεσης</string>
+  <string name="discord_accounts">Λογαριασμοί Discord</string>
+  <string name="active_account">Ενεργός Λογαριασμός</string>
+  <string name="no_accounts_found">Δεν βρέθηκαν λογαριασμοί</string>
+  <string name="login_failed">Αποτυχία σύνδεσης</string>
 </resources>

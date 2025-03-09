@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Nostettu</string>
   <string name="cast_subtitle_border_depressed">Masennettu</string>
   <string name="cast_connection_error">Virhe Yhteydessä</string>
+  <string name="discord_accounts">Discordin Tilit</string>
+  <string name="active_account">Aktiivinen Tili</string>
+  <string name="no_accounts_found">Tilejä ei löytynyt</string>
+  <string name="login_failed">Kirjautuminen epäonnistui</string>
 </resources>

@@ -266,4 +266,8 @@
   <string name="cast_subtitle_border_raised">Ridicat</string>
   <string name="cast_subtitle_border_depressed">Deprimat</string>
   <string name="cast_connection_error">Eroare de conexiune</string>
+  <string name="discord_accounts">Conturi Discord</string>
+  <string name="active_account">Cont activ</string>
+  <string name="no_accounts_found">Nici un cont găsit</string>
+  <string name="login_failed">Autentificare eșuată</string>
 </resources>

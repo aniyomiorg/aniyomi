@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Opgeroepen</string>
   <string name="cast_subtitle_border_depressed">Verdrietig</string>
   <string name="cast_connection_error">Verbindingsfout</string>
+  <string name="discord_accounts">Discord accounts</string>
+  <string name="active_account">Actieve account</string>
+  <string name="no_accounts_found">Geen accounts gevonden</string>
+  <string name="login_failed">Inloggen mislukt</string>
 </resources>

@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Upphöjd</string>
   <string name="cast_subtitle_border_depressed">Deponerad</string>
   <string name="cast_connection_error">Anslutningsfel</string>
+  <string name="discord_accounts">Discord-konton</string>
+  <string name="active_account">Aktivt konto</string>
+  <string name="no_accounts_found">Inga konton hittades</string>
+  <string name="login_failed">Kunde inte logga in</string>
 </resources>

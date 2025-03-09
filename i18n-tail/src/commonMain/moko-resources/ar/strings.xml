@@ -269,4 +269,8 @@
   <string name="cast_subtitle_border_raised">رفعت</string>
   <string name="cast_subtitle_border_depressed">الكساد</string>
   <string name="cast_connection_error">خطأ في الاتصال</string>
+  <string name="discord_accounts">حسابات ديسكورد</string>
+  <string name="active_account">الحساب النشط</string>
+  <string name="no_accounts_found">لم يتم العثور على حسابات</string>
+  <string name="login_failed">فشل في تسجيل الدخول</string>
 </resources>

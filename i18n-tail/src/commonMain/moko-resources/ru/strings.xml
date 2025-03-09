@@ -267,4 +267,8 @@
   <string name="cast_subtitle_border_raised">Поднято</string>
   <string name="cast_subtitle_border_depressed">Депрессия</string>
   <string name="cast_connection_error">Ошибка соединения</string>
+  <string name="discord_accounts">Аккаунты Discord</string>
+  <string name="active_account">Активный аккаунт</string>
+  <string name="no_accounts_found">Аккаунтов не найдено</string>
+  <string name="login_failed">Не удалось войти</string>
 </resources>

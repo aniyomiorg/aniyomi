@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Aktiveret</string>
   <string name="cast_subtitle_border_depressed">Depresseret</string>
   <string name="cast_connection_error">Forbindelsesfejl</string>
+  <string name="discord_accounts">Discord Konti</string>
+  <string name="active_account">Aktiv Konto</string>
+  <string name="no_accounts_found">Ingen konti fundet</string>
+  <string name="login_failed">Kunne ikke logge ind</string>
 </resources>

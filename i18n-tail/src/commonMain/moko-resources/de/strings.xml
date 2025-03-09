@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Aufgenommen</string>
   <string name="cast_subtitle_border_depressed">Deprimiert</string>
   <string name="cast_connection_error">Verbindungsfehler</string>
+  <string name="discord_accounts">Discord Konten</string>
+  <string name="active_account">Aktives Konto</string>
+  <string name="no_accounts_found">Keine Konten gefunden</string>
+  <string name="login_failed">Login fehlgeschlagen</string>
 </resources>

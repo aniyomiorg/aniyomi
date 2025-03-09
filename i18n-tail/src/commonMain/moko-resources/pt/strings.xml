@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Levantado</string>
   <string name="cast_subtitle_border_depressed">Rebaixado</string>
   <string name="cast_connection_error">Erro de conexão</string>
+  <string name="discord_accounts">Contas do Discord</string>
+  <string name="active_account">Conta ativa</string>
+  <string name="no_accounts_found">Nenhuma conta encontrada</string>
+  <string name="login_failed">Falha ao logar</string>
 </resources>

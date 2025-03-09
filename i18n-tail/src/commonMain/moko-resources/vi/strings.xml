@@ -264,4 +264,8 @@
   <string name="cast_subtitle_border_raised">Raised</string>
   <string name="cast_subtitle_border_depressed">Depressed</string>
   <string name="cast_connection_error">Connection Error</string>
+  <string name="discord_accounts">Discord Accounts</string>
+  <string name="active_account">Active Account</string>
+  <string name="no_accounts_found">No accounts found</string>
+  <string name="login_failed">Failed to login</string>
 </resources>

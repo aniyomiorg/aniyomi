@@ -267,4 +267,8 @@
   <string name="cast_subtitle_border_raised">Podniesiony</string>
   <string name="cast_subtitle_border_depressed">Depresowany</string>
   <string name="cast_connection_error">Błąd połączenia</string>
+  <string name="discord_accounts">Konta Discorda</string>
+  <string name="active_account">Aktywne konto</string>
+  <string name="no_accounts_found">Nie znaleziono kont</string>
+  <string name="login_failed">Logowanie nie powiodło się</string>
 </resources>

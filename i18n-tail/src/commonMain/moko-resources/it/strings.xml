@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Cresciuto</string>
   <string name="cast_subtitle_border_depressed">Depressed</string>
   <string name="cast_connection_error">Errore Di Connessione</string>
+  <string name="discord_accounts">Account Discord</string>
+  <string name="active_account">Account Attivo</string>
+  <string name="no_accounts_found">Nessun account trovato</string>
+  <string name="login_failed">Accesso non riuscito</string>
 </resources>

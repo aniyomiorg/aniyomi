@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Hevet</string>
   <string name="cast_subtitle_border_depressed">Deprimert</string>
   <string name="cast_connection_error">Feil ved tilkobling</string>
+  <string name="discord_accounts">Discord kontoer</string>
+  <string name="active_account">Aktiv konto</string>
+  <string name="no_accounts_found">Ingen kontoer funnet</string>
+  <string name="login_failed">Kunne ikke logge inn</string>
 </resources>

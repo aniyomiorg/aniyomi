@@ -267,4 +267,8 @@
   <string name="cast_subtitle_border_raised">Піднятий</string>
   <string name="cast_subtitle_border_depressed">Скорочений</string>
   <string name="cast_connection_error">Помилка підключення</string>
+  <string name="discord_accounts">Облікові записи Discord</string>
+  <string name="active_account">Активний обліковий запис</string>
+  <string name="no_accounts_found">Рахунків не знайдено</string>
+  <string name="login_failed">Не вдалося увійти</string>
 </resources>

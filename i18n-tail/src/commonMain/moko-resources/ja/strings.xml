@@ -264,4 +264,8 @@
   <string name="cast_subtitle_border_raised">育てられた</string>
   <string name="cast_subtitle_border_depressed">Depressed</string>
   <string name="cast_connection_error">接続エラー</string>
+  <string name="discord_accounts">Discordアカウント</string>
+  <string name="active_account">アクティブなアカウント</string>
+  <string name="no_accounts_found">アカウントが見つかりません</string>
+  <string name="login_failed">ログインに失敗しました</string>
 </resources>

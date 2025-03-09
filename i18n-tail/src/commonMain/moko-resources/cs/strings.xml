@@ -267,4 +267,8 @@
   <string name="cast_subtitle_border_raised">Aktivováno</string>
   <string name="cast_subtitle_border_depressed">Deprimováno</string>
   <string name="cast_connection_error">Chyba připojení</string>
+  <string name="discord_accounts">Discord účty</string>
+  <string name="active_account">Aktivní účet</string>
+  <string name="no_accounts_found">Nebyly nalezeny žádné účty</string>
+  <string name="login_failed">Přihlášení se nezdařilo</string>
 </resources>

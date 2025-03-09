@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Elevado</string>
   <string name="cast_subtitle_border_depressed">Melancólico</string>
   <string name="cast_connection_error">Error de Conexión</string>
+  <string name="discord_accounts">Cuentas de Discord</string>
+  <string name="active_account">Cuenta Activa</string>
+  <string name="no_accounts_found">No se encontraron cuentas</string>
+  <string name="login_failed">No se ha podido iniciar sesión</string>
 </resources>

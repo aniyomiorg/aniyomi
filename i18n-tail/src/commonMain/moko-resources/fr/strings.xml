@@ -265,4 +265,8 @@
   <string name="cast_subtitle_border_raised">Déclenché</string>
   <string name="cast_subtitle_border_depressed">Déprimé</string>
   <string name="cast_connection_error">Erreur de connexion</string>
+  <string name="discord_accounts">Comptes Discord</string>
+  <string name="active_account">Compte actif</string>
+  <string name="no_accounts_found">Aucun compte trouvé</string>
+  <string name="login_failed">Échec de la connexion</string>
 </resources>
