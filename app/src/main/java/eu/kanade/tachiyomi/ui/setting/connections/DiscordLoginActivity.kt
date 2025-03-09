@@ -12,6 +12,7 @@ import android.webkit.WebViewClient
 import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.connections.ConnectionsManager
+import eu.kanade.tachiyomi.data.connections.discord.DiscordAccount
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.util.system.toast
 import tachiyomi.i18n.MR
@@ -58,6 +59,41 @@ class DiscordLoginActivity : BaseActivity() {
     }
 
     private fun login(token: String) {
+        Thread {
+            try {
+                val response = okhttp3.OkHttpClient().newCall(
+                    okhttp3.Request.Builder()
+                        .url("https://discord.com/api/v10/users/@me")
+                        .addHeader("Authorization", token)
+                        .build(),
+                ).execute()
+
+                if (response.isSuccessful) {
+                    val body = response.body.string()
+                    val jsonObject = org.json.JSONObject(body!!)
+                    val id = jsonObject.getString("id")
+                    val username = jsonObject.getString("username")
+                    val avatarId = jsonObject.optString("avatar")
+                    val avatarUrl = if (avatarId.isNotEmpty()) {
+                        "https://cdn.discordapp.com/avatars/$id/$avatarId.png"
+                    } else {
+                        null
+                    }
+
+                    val account = DiscordAccount(
+                        id = id,
+                        username = username,
+                        avatarUrl = avatarUrl,
+                        token = token,
+                        isActive = true,
+                    )
+                    connectionsManager.discord.addAccount(account)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
+
         connectionsPreferences.connectionsToken(connectionsManager.discord).set(token)
         connectionsPreferences.setConnectionsCredentials(
             connectionsManager.discord,
@@ -66,6 +102,7 @@ class DiscordLoginActivity : BaseActivity() {
         )
         toast(MR.strings.login_success)
         applicationInfo.dataDir.let { File("$it/app_webview/").deleteRecursively() }
+        setResult(RESULT_OK)
         finish()
     }
 }

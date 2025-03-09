@@ -54,6 +54,9 @@
     <string name="pref_discord_incognito">Discord Incognito mode</string>
     <string name="pref_discord_incognito_summary">Overridden when Incognito Mode is enabled</string>
     <string name="pref_discord_incognito_categories_details">Entries in included categories will not be displayed in Discord</string>
+    <string name="discord_accounts">Discord Accounts</string>
+    <string name="active_account">Active Account</string>
+    <string name="no_accounts_found">No accounts found</string>
 
     <!-- Discord section -->
     <string name="browsing">Browsing</string>
@@ -263,7 +266,7 @@
     <string name="cast_end_session_confirm">End Session</string>
     <string name="cast_end_session_cancel">Cancel</string>
     <!-- Cast device picker -->
-   <string name="cast_available_devices">Available Devices</string>
+    <string name="cast_available_devices">Available Devices</string>
     <string name="cast_media_info">Media Info</string>
     <string name="cast_previous_video">Previous Video</string>
     <string name="cast_next_video">Next Video</string>
@@ -305,4 +308,5 @@
     <string name="cast_subtitle_border_raised">Raised</string>
     <string name="cast_subtitle_border_depressed">Depressed</string>
     <string name="cast_connection_error">Connection Error</string>
+    <string name="login_failed">Failed to login</string>
 </resources>
