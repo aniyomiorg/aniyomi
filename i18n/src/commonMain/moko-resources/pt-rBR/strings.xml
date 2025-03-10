@@ -1091,4 +1091,18 @@
     <string name="label_upcoming">Próximos lançamentos</string>
     <string name="action_add_anyway">Adicionar de qualquer maneira</string>
     <string name="action_migrate_duplicate">Migrar para entrada existente</string>
+    <string name="label_player_settings">Configurações do Player</string>
+    <string name="action_sort_random">Aleatório</string>
+    <string name="pref_player_internal_summary">Progresso, controles, orientação</string>
+    <string name="action_search_player_settings">Procurar configurações do Player</string>
+    <string name="pref_player_internal">Player interno</string>
+    <string name="action_copy_link">Copiar Link</string>
+    <string name="pref_controls_allow_gestures_in_panels">Permitir gestos em painéis</string>
+    <string name="rotation_video">Vídeo</string>
+    <string name="pref_category_controls">Controles</string>
+    <string name="pref_controls_show_loading">Mostrar circulo de carregamento</string>
+    <string name="pref_controls_show_chapter_indicator">Mostrar indicador de capítulo atual</string>
+    <string name="pref_controls_show_chapter_indicator_info">Apenas aparece se o vídeo tem capítulos</string>
+    <string name="pref_controls_display_volume_percentage">Mostrar volume como uma porcentagem</string>
+    <string name="pref_show_system_bar">Mostrar barra de status do sistema com controles</string>
 </resources>
