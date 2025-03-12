@@ -721,4 +721,10 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Mangalähteet</string>
     <string name="label_anime_sources">Animelähteet</string>
+    <string name="label_upcoming">Tulossa</string>
+    <string name="selected">Valitut</string>
+    <string name="not_selected">Ei valittu</string>
+    <string name="action_menu_overflow_description">Enemmän vaihtoehtoja</string>
+    <string name="action_bar_up_description">Siirry ylös</string>
+    <string name="delete_downloaded">Poista ladatut</string>
 </resources>
