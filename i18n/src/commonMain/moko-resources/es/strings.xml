@@ -1233,4 +1233,6 @@
     <string name="player_sheets_subtitles_border_style_outline_and_shadow">Contorno y sombra</string>
     <string name="player_sheets_subtitles_border_style_opaque_box">Caja de opacidad</string>
     <string name="player_sheets_subtitles_border_style_background_box">Cuadro de fondo</string>
+    <string name="timer_cancel_timer">Cancelar tenporizador actual</string>
+    <string name="player_sheets_subtitles_footer_secondary_sid_no_styles">Subtitulos secundarios no tendrán formato ASS/SSA.</string>
 </resources>
