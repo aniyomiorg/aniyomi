@@ -555,7 +555,7 @@ class AnimeDownloader(
         val ffmpegOptions = getFFmpegOptions(video, headerOptions, ffmpegFilename())
         val ffprobeCommand = { file: String, ffprobeHeaders: String? ->
             FFmpegKitConfig.parseArguments(
-                "${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries " +
+                "${ffprobeHeaders?.plus(" ") ?: ""}-v quiet -show_entries " +
                     "format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"",
             )
         }
@@ -568,7 +568,9 @@ class AnimeDownloader(
                 parseDuration(log.message)?.let { duration = it }
                 nextLineIsDuration = false
             }
-            if (log.level <= Level.AV_LOG_WARNING) log.message?.let { logcat { it } }
+            if (log.level <= Level.AV_LOG_WARNING) log.message?.let {
+                logcat(LogPriority.ERROR) { it }
+            }
             if (duration != 0L && log.message.startsWith("frame=")) {
                 val outTime = log.message
                     .substringAfter("time=", "")
@@ -640,7 +642,7 @@ class AnimeDownloader(
         return FFmpegKitConfig.parseArguments(
             headerOptions +
                 " -i \"${video.videoUrl}\" " + subtitleInputs +
-                "-map 0:v -map 0:a " + subtitleMaps + " -map 0:s?" +
+                "-map 0:v -map 0:a? " + subtitleMaps + " -map 0:s?" +
                 " -f matroska -c:a copy -c:v copy -c:s ass " +
                 subtitleMetadata +
                 " \"$ffmpegFilename\" -y",
