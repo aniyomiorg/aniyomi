@@ -41,6 +41,14 @@ class SourcePreferences(
 
     fun mangaExtensionRepos() = preferenceStore.getStringSet("extension_repos", emptySet())
 
+    // KMK -->
+    fun hideInLibraryFeedItems() = preferenceStore.getBoolean("feed_hide_in_library_items", false)
+    fun lastUsedSource() = preferenceStore.getLong(
+        Preference.appStateKey("last_anime_catalogue_source"),
+        -1,
+    )
+    // KMK <--
+
     fun trustedExtensions() = preferenceStore.getStringSet(
         Preference.appStateKey("trusted_extensions"),
         emptySet(),
@@ -83,6 +91,9 @@ class SourcePreferences(
 
     // KMK -->
     fun disabledRepos() = preferenceStore.getStringSet("disabled_repos", emptySet())
+    fun disabledSources() = preferenceStore.getStringSet("hidden_anime_catalogues", emptySet())
+
+    fun pinnedSources() = preferenceStore.getStringSet("pinned_anime_catalogues", emptySet())
     // KMK <--
 
     // SY -->

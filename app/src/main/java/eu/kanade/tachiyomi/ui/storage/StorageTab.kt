@@ -7,11 +7,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.browse.feed.FeedScreenModel
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.storage.anime.animeStorageTab
 import eu.kanade.tachiyomi.ui.storage.manga.mangaStorageTab
@@ -42,11 +44,15 @@ data object StorageTab : Tab {
             mangaStorageTab(),
         )
         val state = rememberPagerState { tabs.size }
+        // KMK -->
+        val feedScreenModel = rememberScreenModel { FeedScreenModel() }
+        // KMK <--
 
         TabbedScreen(
             titleRes = MR.strings.label_storage,
             tabs = tabs,
             state = state,
+            feedScreenModel = feedScreenModel,
         )
 
         LaunchedEffect(Unit) {

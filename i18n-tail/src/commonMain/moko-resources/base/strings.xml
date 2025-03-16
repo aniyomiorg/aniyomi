@@ -309,4 +309,20 @@
     <string name="cast_subtitle_border_depressed">Depressed</string>
     <string name="cast_connection_error">Connection Error</string>
     <string name="login_failed">Failed to login</string>
+    <string name="action_move_up">Move Up</string>
+    <string name="action_move_down">Move Down</string>
+    <!-- Feed Tab -->
+    <string name="too_many_in_feed">Too many sources in your feed, cannot add more than 20</string>
+    <string name="action_sort_feed">Sort feeds</string>
+    <string name="sort_feed_confirmation">Would you like to sort the feeds alphabetically?</string>
+    <string name="saved_searches_feeds">Saved Searches &amp; Feeds</string>
+    <string name="saved_searches_add_feed">Saved Searches (Hold to add to Feed)</string>
+    <string name="pref_hide_feed">Hide Feed tab</string>
+    <string name="pref_feed_position">Feed tab position</string>
+    <string name="pref_feed_position_summery">Do you want the feed tab to be the first tab in browse? This will make it the default tab when opening browse, not recommended if you\'re on data or a metered network</string>
+    <string name="feed">Feed</string>
+    <string name="feed_delete">Delete feed item?</string>
+    <string name="feed_tab_empty">You don\'t have any sources in your feed, navigate to the top right to add one</string>
+    <string name="feed_add">Add %1$s to feed?</string>
+
 </resources>

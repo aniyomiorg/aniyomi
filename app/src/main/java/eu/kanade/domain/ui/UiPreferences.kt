@@ -46,6 +46,8 @@ class UiPreferences(
     fun showNavUpdates() = preferenceStore.getBoolean("pref_show_updates_button", true)
     fun showNavHistory() = preferenceStore.getBoolean("pref_show_history_button", true)
     fun bottomBarLabels() = preferenceStore.getBoolean("pref_show_bottom_bar_labels", true)
+    fun hideFeedTab() = preferenceStore.getBoolean("hide_latest_tab", false)
+    fun feedTabInFront() = preferenceStore.getBoolean("latest_tab_position", false)
     // SY <--
 
     companion object {

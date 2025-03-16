@@ -75,6 +75,8 @@ import tachiyomi.data.items.episode.EpisodeRepositoryImpl
 import tachiyomi.data.release.ReleaseServiceImpl
 import tachiyomi.data.source.anime.AnimeSourceRepositoryImpl
 import tachiyomi.data.source.anime.AnimeStubSourceRepositoryImpl
+import tachiyomi.data.source.anime.FeedSavedSearchRepositoryImpl
+import tachiyomi.data.source.anime.SavedSearchRepositoryImpl
 import tachiyomi.data.source.manga.MangaSourceRepositoryImpl
 import tachiyomi.data.source.manga.MangaStubSourceRepositoryImpl
 import tachiyomi.data.track.anime.AnimeTrackRepositoryImpl
@@ -163,10 +165,19 @@ import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import tachiyomi.domain.release.service.ReleaseService
+import tachiyomi.domain.source.anime.interactor.CountFeedSavedSearchGlobal
+import tachiyomi.domain.source.anime.interactor.DeleteFeedSavedSearchById
 import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAnime
+import tachiyomi.domain.source.anime.interactor.GetFeedSavedSearchGlobal
 import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
+import tachiyomi.domain.source.anime.interactor.GetSavedSearchBySourceId
+import tachiyomi.domain.source.anime.interactor.GetSavedSearchGlobalFeed
+import tachiyomi.domain.source.anime.interactor.InsertFeedSavedSearch
+import tachiyomi.domain.source.anime.interactor.ReorderFeed
 import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
 import tachiyomi.domain.source.anime.repository.AnimeStubSourceRepository
+import tachiyomi.domain.source.anime.repository.FeedSavedSearchRepository
+import tachiyomi.domain.source.anime.repository.SavedSearchRepository
 import tachiyomi.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryManga
 import tachiyomi.domain.source.manga.interactor.GetRemoteManga
 import tachiyomi.domain.source.manga.repository.MangaSourceRepository
@@ -388,5 +399,17 @@ class DomainModule : InjektModule {
         addFactory { ToggleFavoriteCustomButton(get()) }
 
         addFactory { TrackSelect(get(), get()) }
+
+        addSingletonFactory<SavedSearchRepository> { SavedSearchRepositoryImpl(get()) }
+
+        addSingletonFactory<FeedSavedSearchRepository> { FeedSavedSearchRepositoryImpl(get()) }
+        addFactory { GetSavedSearchBySourceId(get()) }
+        addFactory { InsertFeedSavedSearch(get()) }
+        addFactory { DeleteFeedSavedSearchById(get()) }
+        addFactory { GetFeedSavedSearchGlobal(get()) }
+        addFactory { CountFeedSavedSearchGlobal(get()) }
+        addFactory { GetSavedSearchGlobalFeed(get()) }
+        addFactory { ReorderFeed(get()) }
+        // KMK <--
     }
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
+import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.CheckboxItem
@@ -79,6 +80,22 @@ fun SourceFilterAnimeDialog(
 @Composable
 private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
     when (filter) {
+        // SY -->
+        is AnimeFilter.AutoComplete -> {
+            AutoCompleteItem(
+                name = filter.name,
+                state = filter.state.toImmutableList(),
+                hint = filter.hint,
+                values = filter.values.toImmutableList(),
+                skipAutoFillTags = filter.skipAutoFillTags.toImmutableList(),
+                validPrefixes = filter.validPrefixes.toImmutableList(),
+            ) {
+                filter.state = it
+                onUpdate()
+            }
+        }
+        // SY <--
+
         is AnimeFilter.Header -> {
             HeadingItem(filter.name)
         }
