@@ -643,7 +643,7 @@ class AnimeDownloader(
             headerOptions +
                 " -i \"${video.videoUrl}\" " + subtitleInputs +
                 "-map 0:v -map 0:a? " + subtitleMaps + " -map 0:s?" +
-                " -f matroska -c:a copy -c:v copy -c:s ass " +
+                " -f matroska -c:a copy -c:v copy -c:s copy " +
                 subtitleMetadata +
                 " \"$ffmpegFilename\" -y",
         )
