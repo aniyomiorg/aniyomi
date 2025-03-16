@@ -187,7 +187,7 @@
     <string name="snack_categories_deleted">Catégories supprimées</string>
     <string name="action_undo">Annuler</string>
     <string name="categories">Catégories</string>
-    <string name="manga">Entrées de la bibliothèque</string>
+    <string name="manga">Manga</string>
     <string name="history">Historique</string>
     <string name="app_not_available">Application indisponible</string>
     <string name="update_weekly">Chaque semaine</string>
@@ -1080,7 +1080,7 @@
     <string name="resmush">resmush.it</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="label_manga_extension_repos">Repos d\'extensions de manga</string>
-    <string name="label_upcoming">A venir</string>
+    <string name="label_upcoming">À venir</string>
     <string name="action_migrate_duplicate">Migrer l\'entrée existante</string>
     <string name="action_replace_repo_message">Le répertoire %1$s à la meme clé de signature d\'empreinte digitale que %2$s.
 \nSi cela est prévu, %2$s sera remplacé, sinon contacter votre mainteneur de repo.</string>
