@@ -1152,4 +1152,11 @@
     <string name="pref_player_audio_channels_auto_safe">Otomatis-mengamankan</string>
     <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
     <string name="pref_bottom_nav_no_browse">Pindahkan Telusuri ke tab Lainnya</string>
+    <string name="pref_controls_allow_gestures_in_panels">Izinkan gerakan di panel</string>
+    <string name="pref_controls_show_loading">Tampilkan lingkaran memuat</string>
+    <string name="pref_controls_show_chapter_indicator_info">Hanya tampilkan jika video mempunyai bab</string>
+    <string name="pref_controls_display_volume_percentage">Tampilkan volume sebagai presentase</string>
+    <string name="rotation_video">Video</string>
+    <string name="pref_category_controls">Kontrol</string>
+    <string name="pref_controls_show_chapter_indicator">Tampilkan indikator bab saat ini</string>
 </resources>
