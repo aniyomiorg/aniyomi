@@ -523,8 +523,10 @@ class AnimeDownloader(
                 parseDuration(log.message)?.let { duration = it }
                 nextLineIsDuration = false
             }
-            if (log.level <= Level.AV_LOG_WARNING) log.message?.let {
-                logcat(LogPriority.ERROR) { it }
+            if (log.level <= Level.AV_LOG_WARNING) {
+                log.message?.let {
+                    logcat(LogPriority.ERROR) { it }
+                }
             }
             if (duration != 0L && log.message.startsWith("frame=")) {
                 val outTime = log.message
@@ -602,7 +604,7 @@ class AnimeDownloader(
             "-map 0:v", audioMaps, "-map 0:a?", subtitleMaps, "-map 0:s?",
             "-f matroska -c:a copy -c:v copy -c:s copy",
             subtitleMetadata, audioMetadata,
-            "\"$ffmpegFilename\" -y"
+            "\"$ffmpegFilename\" -y",
         )
             .filter(String::isNotBlank)
             .joinToString(" ")
