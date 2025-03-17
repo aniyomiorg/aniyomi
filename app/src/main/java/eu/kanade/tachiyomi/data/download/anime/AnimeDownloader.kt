@@ -14,6 +14,7 @@ import com.arthenica.ffmpegkit.SessionState
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
+import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -627,26 +628,37 @@ class AnimeDownloader(
     }
 
     private fun getFFmpegOptions(video: Video, headerOptions: String, ffmpegFilename: String): Array<String> {
-        val subtitleInputs = video.subtitleTracks.joinToString(" ", postfix = " ") {
-            "-i \"${it.url}\""
+        fun formatInputs(tracks: List<Track>) = tracks.joinToString(" ", postfix = " ") {
+            "$headerOptions -i \"${it.url}\""
         }
-        val subtitleMaps = video.subtitleTracks.indices.joinToString(" ") {
-            val index = it + 1
-            "-map $index:s"
+
+        fun formatMaps(tracks: List<Track>, type: String, offset: Int = 0) = tracks.indices.joinToString(" ") {
+            "-map ${it + 1 + offset}:$type"
         }
-        val subtitleMetadata = video.subtitleTracks.mapIndexed { i, sub ->
-            "-metadata:s:s:$i \"title=${sub.lang}\""
+
+        fun formatMetadata(tracks: List<Track>, type: String) = tracks.mapIndexed { i, track ->
+            "-metadata:s:$type:$i \"title=${track.lang}\""
         }.joinToString(" ")
 
-        Locale("")
-        return FFmpegKitConfig.parseArguments(
-            headerOptions +
-                " -i \"${video.videoUrl}\" " + subtitleInputs +
-                "-map 0:v -map 0:a? " + subtitleMaps + " -map 0:s?" +
-                " -f matroska -c:a copy -c:v copy -c:s copy " +
-                subtitleMetadata +
-                " \"$ffmpegFilename\" -y",
+        val subtitleInputs = formatInputs(video.subtitleTracks)
+        val subtitleMaps = formatMaps(video.subtitleTracks, "s")
+        val subtitleMetadata = formatMetadata(video.subtitleTracks, "s")
+
+        val audioInputs = formatInputs(video.audioTracks)
+        val audioMaps = formatMaps(video.audioTracks, "a", video.subtitleTracks.size)
+        val audioMetadata = formatMetadata(video.audioTracks, "a")
+
+        val command = listOf(
+            headerOptions, "-i \"${video.videoUrl}\"", subtitleInputs, audioInputs,
+            "-map 0:v", audioMaps, "-map 0:a?", subtitleMaps, "-map 0:s?",
+            "-f matroska -c:a copy -c:v copy -c:s copy",
+            subtitleMetadata, audioMetadata,
+            "\"$ffmpegFilename\" -y"
         )
+            .filter(String::isNotBlank)
+            .joinToString(" ")
+
+        return FFmpegKitConfig.parseArguments(command)
     }
 
     private fun getDuration(ffprobeCommand: Array<String>): Float? {
