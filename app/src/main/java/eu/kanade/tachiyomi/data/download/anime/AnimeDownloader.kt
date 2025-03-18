@@ -605,7 +605,7 @@ class AnimeDownloader(
 
         val command = listOf(
             headerOptions, "-i \"${video.videoUrl}\"", subtitleInputs, audioInputs,
-            "-map 0:v", audioMaps, "-map 0:a?", subtitleMaps, "-map 0:s?",
+            "-map 0:v", audioMaps, "-map 0:a?", subtitleMaps, "-map 0:s? -map 0:t?",
             "-f matroska -c:a copy -c:v copy -c:s copy",
             subtitleMetadata, audioMetadata,
             "\"$ffmpegFilename\" -y",
