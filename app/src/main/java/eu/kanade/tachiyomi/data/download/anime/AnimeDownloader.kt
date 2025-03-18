@@ -541,6 +541,10 @@ class AnimeDownloader(
         val inputDuration = getDuration(ffprobeCommand(video.videoUrl!!, headerOptions)) ?: 0F
 
         duration = inputDuration.toLong()
+
+        if (!isFFmpegRunning) {
+            throw Exception("ffmpeg was cancelled")
+        }
         FFmpegKitConfig.ffmpegExecute(session)
 
         return if (ReturnCode.isSuccess(session.returnCode)) {
