@@ -432,9 +432,7 @@
     <string name="pref_dual_page_split">Dividi le pagine larghe</string>
     <string name="pref_dual_page_invert_summary">Se il posizionamento delle pagine larghe divise non corrisponde alla direzione di lettura</string>
     <string name="pref_dual_page_invert">Inverti il posizionamento delle pagine divise</string>
-    <string name="backup_restore_content_full">Verranno recuperati i dati dal file di backup.
-\n
-\nAvrai bisogno di installare le estensioni mancanti ed effettuare l\'accesso ai servizi di tracking per utilizzarli.</string>
+    <string name="backup_restore_content_full">Potrebbe essere necessario installare le estensioni mancanti ed effettuare l\'accesso ai servizi di tracking per utilizzarli.</string>
     <string name="exclude">Escludi: %s</string>
     <string name="include">Includi: %s</string>
     <string name="none">Nessuna</string>
