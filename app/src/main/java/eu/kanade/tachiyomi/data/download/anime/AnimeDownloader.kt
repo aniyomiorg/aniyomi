@@ -13,7 +13,6 @@ import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.ReturnCode
 import com.arthenica.ffmpegkit.SessionState
 import com.hippo.unifile.UniFile
-import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -21,6 +20,8 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
+import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -355,7 +356,9 @@ class AnimeDownloader(
             if (download.video == null) {
                 // Pull video from network and add them to download object
                 try {
-                    val fetchedVideo = download.source.getVideoList(download.episode.toSEpisode()).first()
+                    val hosters = EpisodeLoader.getHosters(download.episode, download.anime, download.source)
+                    val fetchedVideo = HosterLoader.getBestVideo(download.source, hosters)!!
+
                     download.video = fetchedVideo
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)
@@ -363,7 +366,7 @@ class AnimeDownloader(
                 }
             }
 
-            if (download.video!!.videoUrl != null) getOrDownloadVideoFile(download, tmpDir)
+            getOrDownloadVideoFile(download, tmpDir)
 
             ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname)
         } catch (e: Exception) {
@@ -428,7 +431,7 @@ class AnimeDownloader(
                 }
             }
 
-            video.videoUrl = file.uri.path
+            video.videoUrl = file.uri.path ?: ""
             download.progress = 100
             video.status = Video.State.READY
             progressJob?.cancel()
