@@ -63,12 +63,10 @@ class EpisodeLoader {
          * @param source the online source of the episode.
          */
         private suspend fun getHostersOnHttp(episode: Episode, source: AnimeHttpSource): List<Hoster> {
-            // TODO(1.6): Remove try catch when dropping support for ext lib <1.6
-            return try {
+            // TODO(1.6): Remove else block when dropping support for ext lib <1.6
+            return if (source.javaClass.declaredMethods.any { it.name == "getHosterList" }) {
                 source.getHosterList(episode.toSEpisode())
-            } catch (_: AbstractMethodError) {
-                source.getVideoList(episode.toSEpisode()).toHosterList()
-            } catch (_: IllegalArgumentException) {
+            } else {
                 source.getVideoList(episode.toSEpisode()).toHosterList()
             }
         }
