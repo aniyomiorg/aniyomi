@@ -64,7 +64,6 @@ fun ScreenshotSheet(
                     icon = Icons.Outlined.Share,
                     onClick = {
                         onShare { takeScreenshot(cachePath, showSubtitles)!! }
-                        onDismissRequest()
                     },
                 )
                 ActionButton(
@@ -73,7 +72,6 @@ fun ScreenshotSheet(
                     icon = Icons.Outlined.Save,
                     onClick = {
                         onSave { takeScreenshot(cachePath, showSubtitles)!! }
-                        onDismissRequest()
                     },
                 )
             }

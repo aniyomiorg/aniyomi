@@ -75,9 +75,7 @@ import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import eu.kanade.tachiyomi.util.Stamp
-import eu.kanade.tachiyomi.util.SubtitleSelect
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
@@ -120,13 +118,10 @@ class PlayerActivity : BaseActivity() {
     private var mediaSession: MediaSession? = null
     private val gesturePreferences: GesturePreferences by lazy { viewModel.gesturePreferences }
     private val playerPreferences: PlayerPreferences by lazy { viewModel.playerPreferences }
-    private val subtitlePreferences: SubtitlePreferences = Injekt.get()
     private val audioPreferences: AudioPreferences = Injekt.get()
     private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
     private val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
-
-    internal val subtitleSelect by lazy { SubtitleSelect(subtitlePreferences) }
 
     private var audioFocusRequest: AudioFocusRequestCompat? = null
     private var restoreAudioFocus: () -> Unit = {}
@@ -284,17 +279,23 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
+        player.isExiting = true
+
         audioFocusRequest?.let {
             AudioManagerCompat.abandonAudioFocusRequest(audioManager, it)
         }
         audioFocusRequest = null
-        mediaSession?.release()
+
+        mediaSession?.let {
+            it.isActive = false
+            it.release()
+        }
+
         if (noisyReceiver.initialized) {
             unregisterReceiver(noisyReceiver)
             noisyReceiver.initialized = false
         }
 
-        player.isExiting = true
         MPVLib.removeLogObserver(playerObserver)
         MPVLib.removeObserver(playerObserver)
         player.destroy()
@@ -303,16 +304,22 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onPause() {
-        if (!isInPictureInPictureMode) {
-            viewModel.pause()
-        }
         viewModel.saveCurrentEpisodeWatchingProgress()
+
+        if (isInPictureInPictureMode) {
+            super.onPause()
+            return
+        }
+
+        player.isExiting = true
+        if (isFinishing) {
+            MPVLib.command(arrayOf("stop"))
+        }
+
         super.onPause()
     }
 
     override fun onStop() {
-        viewModel.pause()
-        viewModel.saveCurrentEpisodeWatchingProgress()
         window.attributes.screenBrightness.let {
             if (playerPreferences.rememberPlayerBrightness().get() && it != -1f) {
                 playerPreferences.playerBrightnessValue().set(it)
@@ -643,10 +650,10 @@ class PlayerActivity : BaseActivity() {
         if (player.isExiting) return
         when (property) {
             "pause" -> {
-                if (value) {
+                if (value && player.paused == true) {
                     viewModel.pause()
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                } else {
+                } else if (!value && player.paused == false) {
                     viewModel.unpause()
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }

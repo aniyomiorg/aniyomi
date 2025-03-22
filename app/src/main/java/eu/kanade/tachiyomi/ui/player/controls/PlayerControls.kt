@@ -64,6 +64,7 @@ import eu.kanade.tachiyomi.ui.player.PlayerUpdates
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.VideoAspect
+import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessOverlay
 import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessSlider
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import eu.kanade.tachiyomi.ui.player.controls.components.SeekbarWithTimers
@@ -113,6 +114,7 @@ fun PlayerControls(
     val seekText by viewModel.seekText.collectAsState()
     val currentChapter by viewModel.currentChapter.collectAsState()
     val chapters by viewModel.chapters.collectAsState()
+    val currentBrightness by viewModel.currentBrightness.collectAsState()
 
     val playerTimeToDisappear by playerPreferences.playerTimeToDisappear().collectAsState()
     var isSeeking by remember { mutableStateOf(false) }
@@ -224,7 +226,7 @@ fun PlayerControls(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     },
-                ) { BrightnessSlider(brightness, 0f..1f) }
+                ) { BrightnessSlider(brightness, 0f..1f, 0f..0.75f) }
 
                 AnimatedVisibility(
                     isVolumeSliderShown,
@@ -623,6 +625,10 @@ fun PlayerControls(
                 activity.changeEpisode(it)
             },
             onDismissRequest = { viewModel.showDialog(Dialogs.None) },
+        )
+
+        BrightnessOverlay(
+            brightness = currentBrightness,
         )
     }
 }

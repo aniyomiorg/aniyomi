@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.ui.player.controls.LocalPlayerButtonsClickEvent
+import tachiyomi.presentation.core.components.material.Button
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 
@@ -124,6 +125,38 @@ fun ControlsButton(
             text,
             color = color,
             style = MaterialTheme.typography.bodyMedium,
+        )
+    }
+}
+
+@Composable
+fun FilledControlsButton(
+    text: String,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val clickEvent = LocalPlayerButtonsClickEvent.current
+
+    Box(
+        modifier = modifier.padding(end = MaterialTheme.padding.small),
+    ) {
+        Button(onClick = {}) {
+            Text(text = text)
+        }
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .combinedClickable(
+                    onClick = {
+                        clickEvent()
+                        onClick()
+                    },
+                    onLongClick = onLongClick,
+                    interactionSource = interactionSource,
+                    indication = null,
+                ),
         )
     }
 }

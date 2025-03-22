@@ -64,6 +64,9 @@ class ExternalIntents {
     lateinit var source: AnimeSource
     lateinit var episode: Episode
 
+    var animeId: Long? = null
+    var episodeId: Long? = null
+
     /**
      * Returns the [Intent] to be sent to an external player.
      *
@@ -77,9 +80,7 @@ class ExternalIntents {
         episodeId: Long,
         chosenVideo: Video?,
     ): Intent? {
-        anime = getAnime.await(animeId) ?: return null
-        source = sourceManager.get(anime.source) ?: return null
-        episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
+        if (!initAnime(animeId, episodeId)) return null
         val hosters = EpisodeLoader.getHosters(episode, anime, source)
 
         val video = chosenVideo
@@ -99,6 +100,17 @@ class ExternalIntents {
         } else {
             getIntentForPackage(pkgName, context, videoUrl, video)
         }
+    }
+
+    suspend fun initAnime(animeId: Long, episodeId: Long): Boolean {
+        anime = getAnime.await(animeId) ?: return false
+        source = sourceManager.get(anime.source) ?: return false
+        episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return false
+
+        this.animeId = animeId
+        this.episodeId = episodeId
+
+        return true
     }
 
     /**
@@ -343,6 +355,8 @@ class ExternalIntents {
     @Suppress("DEPRECATION")
     fun onActivityResult(intent: Intent?) {
         val data = intent ?: return
+        if (animeId == null || episodeId == null) return
+
         val anime = anime
         val currentExtEpisode = episode
         val currentPosition: Long

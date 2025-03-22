@@ -554,6 +554,7 @@
     <string name="pref_category_display">Display</string>
     <string name="pref_library_columns">Grid size</string>
     <string name="pref_library_columns_per_row">%d per row</string>
+    <string name="pref_library_rows">List size</string>
     <string name="portrait">Portrait</string>
     <string name="landscape">Landscape</string>
     <string name="pref_category_library_update">Global update</string>
@@ -1344,10 +1345,6 @@
     <string name="label_manga_extension_repos">Manga extension repos</string>
     <string name="label_anime_extension_repos">Anime extension repos</string>
     <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
-    <string name="safe_download">Safe downloading mode for anime</string>
-    <string name="safe_download_summary">Enable single thread and no range downloading mode</string>
-    <string name="download_threads_number">Thread count</string>
-    <string name="download_threads_number_summary">Number of threads to use for downloading, might get your IP blocked if too high, usually 4 is a good number to avoid heavy load on source servers.</string>
-    <string name="download_speed_limit">Download speed limit</string>
+    <string name="download_speed_limit">Chapter download speed limit</string>
     <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
 </resources>
