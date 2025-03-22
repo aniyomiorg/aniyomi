@@ -166,7 +166,7 @@ data object DownloadsTab : Tab {
             floatingActionButton = {
                 AnimatedVisibility(
                     visible = when (state.currentPage) {
-                        0 -> animeDownloadList.isNotEmpty()
+                        0 -> false
                         1 -> mangaDownloadList.isNotEmpty()
                         else -> false
                     },
