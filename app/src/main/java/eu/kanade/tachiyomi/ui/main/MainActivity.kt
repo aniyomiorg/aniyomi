@@ -107,6 +107,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import mihon.core.migration.Migrator
 import tachiyomi.core.common.i18n.stringResource
@@ -304,6 +305,15 @@ class MainActivity : BaseActivity() {
             ActivityResultContracts.StartActivityForResult(),
         ) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
+                val animeId = savedInstanceState?.getLong(SAVED_STATE_ANIME_KEY)
+                val episodeId = savedInstanceState?.getLong(SAVED_STATE_EPISODE_KEY)
+
+                if (animeId != null && episodeId != null) {
+                    runBlocking {
+                        ExternalIntents.externalIntents.initAnime(animeId, episodeId)
+                    }
+                }
+
                 ExternalIntents.externalIntents.onActivityResult(result.data)
             }
         }
@@ -536,12 +546,26 @@ class MainActivity : BaseActivity() {
         return true
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        ExternalIntents.externalIntents.animeId?.let {
+            outState.putLong(SAVED_STATE_ANIME_KEY, it)
+        }
+        ExternalIntents.externalIntents.episodeId?.let {
+            outState.putLong(SAVED_STATE_EPISODE_KEY, it)
+        }
+    }
+
     companion object {
         const val INTENT_SEARCH = "eu.kanade.tachiyomi.SEARCH"
         const val INTENT_ANIMESEARCH = "eu.kanade.tachiyomi.ANIMESEARCH"
         const val INTENT_SEARCH_QUERY = "query"
         const val INTENT_SEARCH_FILTER = "filter"
         const val INTENT_SEARCH_TYPE = "type"
+
+        const val SAVED_STATE_ANIME_KEY = "saved_state_anime_key"
+        const val SAVED_STATE_EPISODE_KEY = "saved_state_episode_key"
 
         private var externalPlayerResult: ActivityResultLauncher<Intent>? = null
 
