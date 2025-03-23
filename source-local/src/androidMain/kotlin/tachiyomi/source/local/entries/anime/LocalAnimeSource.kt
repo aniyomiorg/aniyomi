@@ -192,6 +192,7 @@ actual class LocalAnimeSource(
 
         val episodes = fileSystem.getFilesInAnimeDirectory(anime.url)
             // Only keep supported formats
+            .filterNot { it.name.orEmpty().startsWith('.') }
             .filter { ArchiveAnime.isSupported(it) }
             .map { episodeFile ->
                 SEpisode.create().apply {
