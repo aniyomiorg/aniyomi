@@ -568,7 +568,7 @@ private fun VideoList(
                                     episode.name,
                                     episode.lastSecondSeen,
                                     anime.thumbnailUrl.orEmpty(),
-                                    selectedVideo.videoUrl!!,
+                                    currentVideo.videoUrl,
                                 )
                             } else {
                                 context.toast("Cast is disabled")

@@ -204,6 +204,7 @@ class PlayerViewModel @JvmOverloads constructor(
     val selectedAudio = _selectedAudio.asStateFlow()
 
     val isLoadingTracks = MutableStateFlow(true)
+    val isCasting = MutableStateFlow(false)
 
     private val _hosterList = MutableStateFlow<List<Hoster>>(emptyList())
     val hosterList = _hosterList.asStateFlow()
