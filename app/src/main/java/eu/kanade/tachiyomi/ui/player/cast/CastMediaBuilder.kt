@@ -6,6 +6,7 @@ import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaTrack
 import com.google.android.gms.common.images.WebImage
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.torrentServer.TorrentServerApi
 import eu.kanade.tachiyomi.torrentServer.TorrentServerUtils
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
@@ -30,11 +31,8 @@ class CastMediaBuilder(
     private val prefserver: LocalHttpServerHolder by injectLazy()
     private val port = prefserver.port().get()
 
-    suspend fun buildMediaInfo(index: Int): MediaInfo = withContext(Dispatchers.IO) {
-        val video = viewModel.videoList.value.getOrNull(index)
-            ?: throw IllegalStateException("Invalid video index: $index")
-
-        var videoUrl = video.videoUrl ?: throw IllegalStateException("Video URL is null")
+    suspend fun buildMediaInfo(video: Video): MediaInfo = withContext(Dispatchers.IO) {
+        var videoUrl = video.videoUrl
         logcat(LogPriority.DEBUG) { "Video URL: $videoUrl" }
 
         videoUrl = when {
@@ -55,16 +53,9 @@ class CastMediaBuilder(
         MediaInfo.Builder(videoUrl)
             .setContentType(contentType)
             .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-            .addMetadata()
-            .addTracks(index)
+            .addMetadata(video)
+            .addTracks(video)
             .setStreamDuration((player.duration ?: 0).toLong() * 1000)
-            .build()
-    }
-
-    fun buildEmptyMediaInfo(): MediaInfo {
-        return MediaInfo.Builder("")
-            .setStreamType(MediaInfo.STREAM_TYPE_NONE)
-            .setContentType("video/mp4")
             .build()
     }
 
@@ -91,7 +82,7 @@ class CastMediaBuilder(
         return TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
     }
 
-    private fun MediaInfo.Builder.addMetadata(): MediaInfo.Builder {
+    private fun MediaInfo.Builder.addMetadata(video: Video): MediaInfo.Builder {
         val metadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE).apply {
             putString(MediaMetadata.KEY_TITLE, viewModel.currentAnime.value?.title ?: "")
             putString(MediaMetadata.KEY_SUBTITLE, viewModel.currentEpisode.value?.name ?: "")
@@ -102,14 +93,8 @@ class CastMediaBuilder(
         return setMetadata(metadata)
     }
 
-    private fun MediaInfo.Builder.addTracks(index: Int): MediaInfo.Builder {
-        val subtitleTracks = buildSubtitleTracks(index)
-        val audioTracks = buildAudioTracks(index, subtitleTracks.size)
-        return setMediaTracks(subtitleTracks + audioTracks)
-    }
-
-    private fun buildSubtitleTracks(index: Int): List<MediaTrack> {
-        return viewModel.videoList.value[index].subtitleTracks.mapIndexed { trackIndex, sub ->
+    private fun MediaInfo.Builder.addTracks(video: Video): MediaInfo.Builder {
+        val subtitleTracks = video.subtitleTracks.mapIndexed { trackIndex, sub ->
             logcat(LogPriority.DEBUG) { "Subtitle URL: ${sub.url}" }
             MediaTrack.Builder(trackIndex.toLong(), MediaTrack.TYPE_TEXT)
                 .setContentId(sub.url)
@@ -117,16 +102,16 @@ class CastMediaBuilder(
                 .setName(sub.lang)
                 .build()
         }
-    }
 
-    private fun buildAudioTracks(index: Int, idOffset: Int): List<MediaTrack> {
-        return viewModel.videoList.value[index].audioTracks.mapIndexed { trackIndex, audio ->
-            MediaTrack.Builder((idOffset + trackIndex).toLong(), MediaTrack.TYPE_AUDIO)
+        val audioTracks = video.audioTracks.mapIndexed { trackIndex, audio ->
+            MediaTrack.Builder((subtitleTracks.size + trackIndex).toLong(), MediaTrack.TYPE_AUDIO)
                 .setContentId(audio.url)
                 .setName(audio.lang)
                 .setContentType("application/x-mpegURL")
                 .build()
         }
+
+        return setMediaTracks(subtitleTracks + audioTracks)
     }
 
     private fun getLocalServerUrl(contentUri: String): String {

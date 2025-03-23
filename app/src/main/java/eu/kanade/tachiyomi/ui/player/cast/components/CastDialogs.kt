@@ -29,6 +29,7 @@ import com.google.android.gms.cast.MediaQueueItem
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.ui.player.CastManager
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
+import eu.kanade.tachiyomi.ui.player.controls.components.sheets.HosterState
 import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -45,14 +46,21 @@ fun CastQualityDialog(
             title = { Text(stringResource(TLMR.strings.title_cast_quality)) },
             text = {
                 LazyColumn {
-                    items(viewModel.videoList.value.size) { index ->
-                        val video = viewModel.videoList.value[index]
-                        val isSelected = index == viewModel.selectedVideoIndex.value
+                    val hosterState = viewModel.hosterState.value
+                        .filterIsInstance<HosterState.Ready>()
+                        .firstOrNull()
+                    val videoList = hosterState?.videoList ?: emptyList()
+                    items(videoList.size) { index ->
+                        val video = videoList[index]
+                        val isSelected = index == viewModel.selectedHosterVideoIndex.value.second
                         QualityListItem(
                             quality = video.quality,
                             isSelected = isSelected,
                             onClick = {
-                                viewModel.setVideoIndex(index)
+                                viewModel.onVideoClicked(
+                                    hosterIndex = viewModel.selectedHosterVideoIndex.value.first,
+                                    videoIndex = index,
+                                )
                                 castManager.loadRemoteMedia()
                                 onDismiss()
                             },

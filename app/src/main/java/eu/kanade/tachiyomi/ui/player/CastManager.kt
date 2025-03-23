@@ -24,6 +24,7 @@ import eu.kanade.tachiyomi.ui.player.cast.CastMediaBuilder
 import eu.kanade.tachiyomi.ui.player.cast.CastSessionListener
 import eu.kanade.tachiyomi.ui.player.cast.components.BorderStyle
 import eu.kanade.tachiyomi.ui.player.cast.components.SubtitleSettings
+import eu.kanade.tachiyomi.ui.player.controls.components.sheets.HosterState
 import eu.kanade.tachiyomi.ui.player.settings.CastSubtitlePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.Job
@@ -206,7 +207,7 @@ class CastManager(
 
     // Quality Selection
     fun handleQualitySelection() {
-        viewModel?.videoList?.filter { it.isNotEmpty() }
+        viewModel?.hosterList?.filter { it.isNotEmpty() }
             ?.onEach { videos ->
                 val hasQueueItems = (castSession?.remoteMediaClient?.mediaQueue?.itemCount ?: 0) > 0
                 val hasMultipleQualities = videos.size > 1
@@ -245,8 +246,13 @@ class CastManager(
             try {
                 isLoadingMedia = true
                 _isLoading.value = true
-                val selectedIndex = viewModel!!.selectedVideoIndex.value
-                val mediaInfo = mediaBuilder!!.buildMediaInfo(selectedIndex)
+                val selectedHosterIndex = viewModel!!.selectedHosterVideoIndex.value.first
+                val selectedVideoIndex = viewModel!!.selectedHosterVideoIndex.value.second
+
+                val hosterState = viewModel!!.hosterState.value.getOrNull(selectedHosterIndex) as? HosterState.Ready
+                val video = hosterState?.videoList?.getOrNull(selectedVideoIndex) ?: return@launch
+
+                val mediaInfo = mediaBuilder!!.buildMediaInfo(video) // Ahora pasa el objeto `Video` directamente
                 val currentLocalPosition = (player?.timePos ?: 0).toLong()
 
                 updateQueueItems()
