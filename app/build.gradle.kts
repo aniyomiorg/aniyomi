@@ -23,7 +23,7 @@ android {
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 128
+        versionCode = 129
         versionName = "0.16.4.3"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")

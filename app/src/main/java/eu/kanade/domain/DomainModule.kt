@@ -209,7 +209,7 @@ class DomainModule : InjektModule {
         addFactory { ReorderAnimeCategory(get()) }
         addFactory { UpdateAnimeCategory(get()) }
         addFactory { HideAnimeCategory(get()) }
-        addFactory { DeleteAnimeCategory(get()) }
+        addFactory { DeleteAnimeCategory(get(), get(), get()) }
 
         addSingletonFactory<MangaCategoryRepository> { MangaCategoryRepositoryImpl(get()) }
         addFactory { GetMangaCategories(get()) }
@@ -222,7 +222,7 @@ class DomainModule : InjektModule {
         addFactory { ReorderMangaCategory(get()) }
         addFactory { UpdateMangaCategory(get()) }
         addFactory { HideMangaCategory(get()) }
-        addFactory { DeleteMangaCategory(get()) }
+        addFactory { DeleteMangaCategory(get(), get(), get()) }
 
         addSingletonFactory<AnimeRepository> { AnimeRepositoryImpl(get()) }
         addFactory { GetDuplicateLibraryAnime(get()) }
