@@ -99,6 +99,7 @@ import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.lang.toLong
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
@@ -1801,11 +1802,12 @@ class PlayerViewModel @JvmOverloads constructor(
      * Updates the skipIntroLength for the open anime.
      */
     fun setAnimeSkipIntroLength(skipIntroLength: Long) {
+        // Skip unnecessary database operation
+        if (skipIntroLength == getAnimeSkipIntroLength().toLong()) return
         val anime = currentAnime.value ?: return
         if (!anime.favorite) return
         viewModelScope.launchIO {
             setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength)
-            logcat(LogPriority.INFO) { "New Skip Intro Length is ${anime.skipIntroLength}" }
             _currentAnime.update { _ -> getAnime.await(anime.id) }
         }
     }

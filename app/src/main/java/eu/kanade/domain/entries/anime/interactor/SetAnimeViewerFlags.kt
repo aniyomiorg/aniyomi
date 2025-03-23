@@ -18,7 +18,7 @@ class SetAnimeViewerFlags(
                 viewerFlags = anime.viewerFlags
                     .setFlag(flag, Anime.ANIME_INTRO_MASK)
                     // Disable skip intro button if length is set to 0
-                    .setFlag((flag == 0L).toLong(), Anime.ANIME_INTRO_DISABLE_MASK),
+                    .setFlag((flag == 0L).toLong().addHexZeros(14), Anime.ANIME_INTRO_DISABLE_MASK),
             ),
         )
     }
