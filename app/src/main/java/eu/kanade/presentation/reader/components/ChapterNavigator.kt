@@ -43,6 +43,7 @@ import tachiyomi.presentation.core.components.material.Slider
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
+@Suppress("LongMethod")
 fun ChapterNavigator(
     isRtl: Boolean,
     onNextChapter: () -> Unit,
@@ -50,6 +51,9 @@ fun ChapterNavigator(
     onPreviousChapter: () -> Unit,
     enabledPrevious: Boolean,
     currentPage: Int,
+    // SY -->
+    currentPageText: String,
+    // SY <--
     totalPages: Int,
     onPageIndexChange: (Int) -> Unit,
 ) {
@@ -98,8 +102,10 @@ fun ChapterNavigator(
                             .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
+                        // SY -->
                         Box(contentAlignment = Alignment.CenterEnd) {
-                            Text(text = currentPage.toString())
+                            Text(text = currentPageText)
+                            // SY <--
                             // Taking up full length so the slider doesn't shift when 'currentPage' length changes
                             Text(text = totalPages.toString(), color = Color.Transparent)
                         }
@@ -160,6 +166,7 @@ private fun ChapterNavigatorPreview() {
             onPreviousChapter = {},
             enabledPrevious = true,
             currentPage = currentPage,
+            currentPageText = currentPage.toString(),
             totalPages = 10,
             onPageIndexChange = { currentPage = (it + 1) },
         )
