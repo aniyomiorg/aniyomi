@@ -52,4 +52,3 @@ class CategoryPreferencesCleanupMigration : Migration {
         return@withIOContext true
     }
 }
-
