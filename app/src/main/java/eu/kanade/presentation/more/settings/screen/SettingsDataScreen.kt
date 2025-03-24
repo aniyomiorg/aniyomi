@@ -241,8 +241,7 @@ object SettingsDataScreen : SearchableSettings {
 
                 // Automatic backups
                 Preference.PreferenceItem.ListPreference(
-                    pref = backupPreferences.backupInterval(),
-                    title = stringResource(MR.strings.pref_backup_interval),
+                    preference = backupPreferences.backupInterval(),
                     entries = persistentMapOf(
                         0 to stringResource(MR.strings.off),
                         6 to stringResource(MR.strings.update_6hour),
@@ -251,6 +250,7 @@ object SettingsDataScreen : SearchableSettings {
                         48 to stringResource(MR.strings.update_48hour),
                         168 to stringResource(MR.strings.update_weekly),
                     ),
+                    title = stringResource(MR.strings.pref_backup_interval),
                     onValueChanged = {
                         BackupCreateJob.setupTask(context, it)
                         true
@@ -278,7 +278,6 @@ object SettingsDataScreen : SearchableSettings {
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_storage_usage),
             preferenceItems = persistentListOf(
-
                 Preference.PreferenceItem.CustomPreference(
                     title = stringResource(MR.strings.pref_storage_usage),
                 ) {
@@ -318,7 +317,7 @@ object SettingsDataScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.autoClearItemCache(),
+                    preference = libraryPreferences.autoClearItemCache(),
                     title = stringResource(MR.strings.pref_auto_clear_chapter_cache),
                 ),
             ),

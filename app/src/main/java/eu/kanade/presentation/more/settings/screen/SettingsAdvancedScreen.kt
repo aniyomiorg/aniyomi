@@ -109,7 +109,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                 },
             ),
             Preference.PreferenceItem.SwitchPreference(
-                pref = networkPreferences.verboseLogging(),
+                preference = networkPreferences.verboseLogging(),
                 title = stringResource(MR.strings.pref_verbose_logging),
                 subtitle = stringResource(MR.strings.pref_verbose_logging_summary),
                 onValueChanged = {
@@ -257,8 +257,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = networkPreferences.dohProvider(),
-                    title = stringResource(MR.strings.pref_dns_over_https),
+                    preference = networkPreferences.dohProvider(),
                     entries = persistentMapOf(
                         -1 to stringResource(MR.strings.disabled),
                         PREF_DOH_CLOUDFLARE to "Cloudflare",
@@ -275,13 +274,14 @@ object SettingsAdvancedScreen : SearchableSettings {
                         PREF_DOH_SHECAN to "Shecan",
                         PREF_DOH_LIBREDNS to "LibreDNS",
                     ),
+                    title = stringResource(MR.strings.pref_dns_over_https),
                     onValueChanged = {
                         context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
                 Preference.PreferenceItem.EditTextPreference(
-                    pref = userAgentPref,
+                    preference = userAgentPref,
                     title = stringResource(MR.strings.pref_user_agent_string),
                     onValueChanged = {
                         try {
@@ -363,13 +363,7 @@ object SettingsAdvancedScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_category_reader),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = basePreferences.hardwareBitmapThreshold(),
-                    title = stringResource(MR.strings.pref_hardware_bitmap_threshold),
-                    subtitleProvider = { value, options ->
-                        stringResource(MR.strings.pref_hardware_bitmap_threshold_summary, options[value].orEmpty())
-                    },
-                    enabled = !ImageUtil.HARDWARE_BITMAP_UNSUPPORTED &&
-                        GLUtil.DEVICE_TEXTURE_LIMIT > GLUtil.SAFE_TEXTURE_LIMIT,
+                    preference = basePreferences.hardwareBitmapThreshold(),
                     entries = GLUtil.CUSTOM_TEXTURE_LIMIT_OPTIONS
                         .mapIndexed { index, option ->
                             val display = if (index == 0) {
@@ -381,9 +375,15 @@ object SettingsAdvancedScreen : SearchableSettings {
                         }
                         .toMap()
                         .toImmutableMap(),
+                    title = stringResource(MR.strings.pref_hardware_bitmap_threshold),
+                    subtitleProvider = { value, options ->
+                        stringResource(MR.strings.pref_hardware_bitmap_threshold_summary, options[value].orEmpty())
+                    },
+                    enabled = !ImageUtil.HARDWARE_BITMAP_UNSUPPORTED &&
+                        GLUtil.DEVICE_TEXTURE_LIMIT > GLUtil.SAFE_TEXTURE_LIMIT,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = basePreferences.alwaysDecodeLongStripWithSSIV(),
+                    preference = basePreferences.alwaysDecodeLongStripWithSSIV(),
                     title = stringResource(MR.strings.pref_always_decode_long_strip_with_ssiv),
                     subtitle = stringResource(MR.strings.pref_always_decode_long_strip_with_ssiv_summary),
                 ),
@@ -440,8 +440,7 @@ object SettingsAdvancedScreen : SearchableSettings {
             title = stringResource(MR.strings.label_extensions),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = extensionInstallerPref,
-                    title = stringResource(MR.strings.ext_installer_pref),
+                    preference = extensionInstallerPref,
                     entries = extensionInstallerPref.entries
                         .filter {
                             // TODO: allow private option in stable versions once URL handling is more fleshed out
@@ -453,6 +452,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                         }
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
+                    title = stringResource(MR.strings.ext_installer_pref),
                     onValueChanged = {
                         if (it == BasePreferences.ExtensionInstaller.SHIZUKU &&
                             !context.isShizukuInstalled
@@ -485,41 +485,39 @@ object SettingsAdvancedScreen : SearchableSettings {
             title = stringResource(MR.strings.data_saver),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = sourcePreferences.dataSaver(),
-                    title = stringResource(MR.strings.data_saver),
-                    subtitle = stringResource(MR.strings.data_saver_summary),
+                    preference = sourcePreferences.dataSaver(),
                     entries = persistentMapOf(
                         DataSaver.NONE to stringResource(MR.strings.disabled),
                         DataSaver.BANDWIDTH_HERO to stringResource(MR.strings.bandwidth_hero),
                         DataSaver.WSRV_NL to stringResource(MR.strings.wsrv),
                         DataSaver.RESMUSH_IT to stringResource(MR.strings.resmush),
                     ),
+                    title = stringResource(MR.strings.data_saver),
+                    subtitle = stringResource(MR.strings.data_saver_summary),
                 ),
                 Preference.PreferenceItem.EditTextPreference(
-                    pref = sourcePreferences.dataSaverServer(),
+                    preference = sourcePreferences.dataSaverServer(),
                     title = stringResource(MR.strings.bandwidth_data_saver_server),
                     subtitle = stringResource(MR.strings.data_saver_server_summary),
                     enabled = dataSaver == DataSaver.BANDWIDTH_HERO,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = sourcePreferences.dataSaverDownloader(),
+                    preference = sourcePreferences.dataSaverDownloader(),
                     title = stringResource(MR.strings.data_saver_downloader),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = sourcePreferences.dataSaverIgnoreJpeg(),
+                    preference = sourcePreferences.dataSaverIgnoreJpeg(),
                     title = stringResource(MR.strings.data_saver_ignore_jpeg),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = sourcePreferences.dataSaverIgnoreGif(),
+                    preference = sourcePreferences.dataSaverIgnoreGif(),
                     title = stringResource(MR.strings.data_saver_ignore_gif),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = sourcePreferences.dataSaverImageQuality(),
-                    title = stringResource(MR.strings.data_saver_image_quality),
-                    subtitle = stringResource(MR.strings.data_saver_image_quality_summary),
+                    preference = sourcePreferences.dataSaverImageQuality(),
                     entries = listOf(
                         "10%",
                         "20%",
@@ -530,12 +528,14 @@ object SettingsAdvancedScreen : SearchableSettings {
                         "90%",
                         "95%",
                     ).associateBy { it.trimEnd('%').toInt() }.toPersistentMap(),
+                    title = stringResource(MR.strings.data_saver_image_quality),
+                    subtitle = stringResource(MR.strings.data_saver_image_quality_summary),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 kotlin.run {
                     val dataSaverImageFormatJpeg by sourcePreferences.dataSaverImageFormatJpeg().collectAsState()
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.dataSaverImageFormatJpeg(),
+                        preference = sourcePreferences.dataSaverImageFormatJpeg(),
                         title = stringResource(MR.strings.data_saver_image_format),
                         subtitle = if (dataSaverImageFormatJpeg) {
                             stringResource(MR.strings.data_saver_image_format_summary_on)
@@ -546,7 +546,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     )
                 },
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = sourcePreferences.dataSaverColorBW(),
+                    preference = sourcePreferences.dataSaverColorBW(),
                     title = stringResource(MR.strings.data_saver_color_bw),
                     enabled = dataSaver == DataSaver.BANDWIDTH_HERO,
                 ),
