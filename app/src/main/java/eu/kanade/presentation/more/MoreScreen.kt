@@ -1,13 +1,6 @@
 package eu.kanade.presentation.more
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.Label
@@ -25,7 +18,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.vectorResource
 import eu.kanade.domain.ui.model.NavStyle
-import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.tachiyomi.R
@@ -44,7 +36,6 @@ fun MoreScreen(
     onDownloadedOnlyChange: (Boolean) -> Unit,
     incognitoMode: Boolean,
     onIncognitoModeChange: (Boolean) -> Unit,
-    isFDroid: Boolean,
     navStyle: NavStyle,
     onClickAlt: () -> Unit,
     onClickDownloadQueue: () -> Unit,
@@ -58,28 +49,7 @@ fun MoreScreen(
 ) {
     val uriHandler = LocalUriHandler.current
 
-    Scaffold(
-        topBar = {
-            Column(
-                modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.systemBars.only(
-                        WindowInsetsSides.Top + WindowInsetsSides.Horizontal,
-                    ),
-                ),
-            ) {
-                if (isFDroid) {
-                    WarningBanner(
-                        textRes = MR.strings.fdroid_warning,
-                        modifier = Modifier.clickable {
-                            uriHandler.openUri(
-                                "https://aniyomi.org/docs/faq/general#how-do-i-update-from-the-f-droid-builds",
-                            )
-                        },
-                    )
-                }
-            }
-        },
-    ) { contentPadding ->
+    Scaffold { contentPadding ->
         ScrollbarLazyColumn(
             modifier = Modifier.padding(contentPadding),
         ) {
