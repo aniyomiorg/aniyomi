@@ -1,5 +1,3 @@
-@file:Suppress("ChromeOsAbiSupport")
-
 import mihon.buildlogic.getBuildTime
 import mihon.buildlogic.getCommitCount
 import mihon.buildlogic.getGitSha
@@ -12,10 +10,9 @@ plugins {
     alias(libs.plugins.aboutLibraries)
 }
 
-shortcutHelper.setFilePath("./shortcuts.xml")
+val includeUpdater = project.hasProperty("with-updater")
 
-@Suppress("PropertyName")
-val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+shortcutHelper.setFilePath("./shortcuts.xml")
 
 android {
     namespace = "eu.kanade.tachiyomi"
@@ -29,7 +26,7 @@ android {
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
         buildConfigField("String", "BUILD_TIME", "\"${getBuildTime()}\"")
-        buildConfigField("boolean", "INCLUDE_UPDATER", "false")
+        buildConfigField("boolean", "INCLUDE_UPDATER", "$includeUpdater")
         buildConfigField("boolean", "PREVIEW", "false")
 
         // Put these fields in acra.properties
@@ -44,52 +41,44 @@ android {
         // buildConfigField("String", "ACRA_LOGIN", "\"$acraLogin\"")
         // buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
-        ndk {
-            abiFilters += SUPPORTED_ABIS
-        }
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include(*SUPPORTED_ABIS.toTypedArray())
-            isUniversalApk = true
-        }
-    }
-
     buildTypes {
-        named("debug") {
+        val debug by getting {
+            applicationIdSuffix = ".dev"
             versionNameSuffix = "-${getCommitCount()}"
-            applicationIdSuffix = ".debug"
             isPseudoLocalesEnabled = true
         }
-        named("release") {
-            isShrinkResources = true
+        val release by getting {
             isMinifyEnabled = true
+            isShrinkResources = true
+
             proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
         }
         create("preview") {
-            initWith(getByName("release"))
-            buildConfigField("boolean", "PREVIEW", "true")
+            initWith(release)
 
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks.add("release")
-            val debugType = getByName("debug")
-            versionNameSuffix = debugType.versionNameSuffix
-            applicationIdSuffix = debugType.applicationIdSuffix
+            applicationIdSuffix = ".debug"
+
+            versionNameSuffix = debug.versionNameSuffix
+            signingConfig = debug.signingConfig
+
+            matchingFallbacks.add(release.name)
+
+            buildConfigField("boolean", "PREVIEW", "true")
         }
         create("benchmark") {
-            initWith(getByName("release"))
+            initWith(release)
 
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks.add("release")
             isDebuggable = false
             isProfileable = true
             versionNameSuffix = "-benchmark"
             applicationIdSuffix = ".benchmark"
+
+            signingConfig = debug.signingConfig
+
+            matchingFallbacks.add(release.name)
         }
     }
 
@@ -98,33 +87,55 @@ android {
         getByName("benchmark").res.srcDirs("src/debug/res")
     }
 
-    flavorDimensions.add("default")
-
-    productFlavors {
-        create("standard") {
-            buildConfigField("boolean", "INCLUDE_UPDATER", "true")
-            dimension = "default"
-        }
-        create("dev") {
-            dimension = "default"
+    splits {
+        abi {
+            isEnable = true
+            isUniversalApk = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
         }
     }
 
     packaging {
-        resources.excludes.addAll(
-            listOf(
+        jniLibs {
+            keepDebugSymbols += listOf(
+                "libandroidx.graphics.path",
+                "libarchive-jni",
+                "libavcodec",
+                "libavdevice",
+                "libavfilter",
+                "libavformat",
+                "libavutil",
+                "libconscrypt_jni",
+                "libc++_shared",
+                "libffmpegkit_abidetect",
+                "libffmpegkit",
+                "libimagedecoder",
+                "libmpv",
+                "libplayer",
+                "libpostproc",
+                "libquickjs",
+                "libsqlite3x",
+                "libswresample",
+                "libswscale",
+                "libxml2",
+            )
+                .map { "**/$it.so" }
+        }
+        resources {
+            excludes += setOf(
                 "kotlin-tooling-metadata.json",
-                "META-INF/DEPENDENCIES",
                 "LICENSE.txt",
-                "META-INF/LICENSE",
+                "META-INF/**/*.properties",
                 "META-INF/**/LICENSE.txt",
                 "META-INF/*.properties",
-                "META-INF/**/*.properties",
-                "META-INF/README.md",
-                "META-INF/NOTICE",
                 "META-INF/*.version",
-            ),
-        )
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/NOTICE",
+                "META-INF/README.md",
+            )
+        }
     }
 
     dependenciesInfo {
