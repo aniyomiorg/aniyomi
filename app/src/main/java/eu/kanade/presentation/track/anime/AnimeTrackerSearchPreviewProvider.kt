@@ -20,6 +20,7 @@ internal class AnimeTrackerSearchPreviewProvider : PreviewParameterProvider<@Com
             onSelectedChange = {},
             onConfirmSelection = {},
             onDismissRequest = {},
+            supportsPrivateTracking = false,
         )
     }
     private val fullPageWithoutSelected = @Composable {
@@ -31,6 +32,7 @@ internal class AnimeTrackerSearchPreviewProvider : PreviewParameterProvider<@Com
             onSelectedChange = {},
             onConfirmSelection = {},
             onDismissRequest = {},
+            supportsPrivateTracking = false,
         )
     }
     private val loading = @Composable {
@@ -42,12 +44,27 @@ internal class AnimeTrackerSearchPreviewProvider : PreviewParameterProvider<@Com
             onSelectedChange = {},
             onConfirmSelection = {},
             onDismissRequest = {},
+            supportsPrivateTracking = false,
+        )
+    }
+    private val fullPageWithPrivateTracking = @Composable {
+        val items = someTrackSearches().take(30).toList()
+        AnimeTrackerSearch(
+            state = TextFieldState(initialText = "search text"),
+            onDispatchQuery = {},
+            queryResult = Result.success(items),
+            selected = items[1],
+            onSelectedChange = {},
+            onConfirmSelection = {},
+            onDismissRequest = {},
+            supportsPrivateTracking = true,
         )
     }
     override val values: Sequence<@Composable () -> Unit> = sequenceOf(
         fullPageWithSecondSelected,
         fullPageWithoutSelected,
         loading,
+        fullPageWithPrivateTracking,
     )
 
     private fun someTrackSearches(): Sequence<AnimeTrackSearch> = sequence {

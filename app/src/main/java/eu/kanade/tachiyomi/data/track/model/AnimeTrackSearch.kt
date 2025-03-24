@@ -30,6 +30,8 @@ class AnimeTrackSearch : AnimeTrack {
 
     override var finished_watching_date: Long = 0
 
+    override var private: Boolean = false
+
     override lateinit var tracking_url: String
 
     var cover_url: String = ""

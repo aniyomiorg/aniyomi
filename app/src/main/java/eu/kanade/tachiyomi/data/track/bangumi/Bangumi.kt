@@ -28,6 +28,8 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
 
     private val api by lazy { BangumiApi(id, client, interceptor) }
 
+    override val supportsPrivateTracking: Boolean = true
+
     override fun getScoreList(): ImmutableList<String> = SCORE_LIST
 
     override fun indexToScore(index: Int): Double {
@@ -81,7 +83,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         val statusTrack = api.statusLibManga(track, getUsername())
         return if (statusTrack != null) {
-            track.copyPersonalFrom(statusTrack)
+            track.copyPersonalFrom(statusTrack, copyRemotePrivate = false)
             track.library_id = statusTrack.library_id
             track.score = statusTrack.score
             track.last_chapter_read = statusTrack.last_chapter_read
@@ -103,7 +105,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
     override suspend fun bind(track: AnimeTrack, hasSeenEpisodes: Boolean): AnimeTrack {
         val statusTrack = api.statusLibAnime(track, getUsername())
         return if (statusTrack != null) {
-            track.copyPersonalFrom(statusTrack)
+            track.copyPersonalFrom(statusTrack, copyRemotePrivate = false)
             track.library_id = statusTrack.library_id
             track.score = statusTrack.score
             track.last_episode_seen = statusTrack.last_episode_seen

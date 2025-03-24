@@ -10,6 +10,7 @@ fun MangaTrack.copyPersonalFrom(other: MangaTrack): MangaTrack {
         status = other.status,
         startDate = other.startDate,
         finishDate = other.finishDate,
+        private = other.private,
     )
 }
 
@@ -26,6 +27,7 @@ fun MangaTrack.toDbTrack(): DbMangaTrack = DbMangaTrack.create(trackerId).also {
     it.tracking_url = remoteUrl
     it.started_reading_date = startDate
     it.finished_reading_date = finishDate
+    it.private = private
 }
 
 fun DbMangaTrack.toDomainTrack(idRequired: Boolean = true): MangaTrack? {
@@ -44,5 +46,6 @@ fun DbMangaTrack.toDomainTrack(idRequired: Boolean = true): MangaTrack? {
         remoteUrl = tracking_url,
         startDate = started_reading_date,
         finishDate = finished_reading_date,
+        private = private,
     )
 }

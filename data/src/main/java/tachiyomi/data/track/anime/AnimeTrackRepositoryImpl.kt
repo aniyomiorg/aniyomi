@@ -64,6 +64,7 @@ class AnimeTrackRepositoryImpl(
                     remoteUrl = animeTrack.remoteUrl,
                     startDate = animeTrack.startDate,
                     finishDate = animeTrack.finishDate,
+                    private = animeTrack.private,
                 )
             }
         }

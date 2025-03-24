@@ -17,6 +17,7 @@ object AnimeTrackMapper {
         remoteUrl: String,
         startDate: Long,
         finishDate: Long,
+        private: Boolean,
     ): AnimeTrack = AnimeTrack(
         id = id,
         animeId = animeId,
@@ -31,5 +32,6 @@ object AnimeTrackMapper {
         remoteUrl = remoteUrl,
         startDate = startDate,
         finishDate = finishDate,
+        private = private,
     )
 }

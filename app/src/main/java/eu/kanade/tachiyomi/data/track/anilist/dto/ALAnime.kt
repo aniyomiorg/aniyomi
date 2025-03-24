@@ -49,6 +49,7 @@ data class ALUserAnime(
     val startDateFuzzy: Long,
     val completedDateFuzzy: Long,
     val anime: ALAnime,
+    val private: Boolean,
 ) {
     fun toTrack() = AnimeTrack.create(TrackerManager.ANILIST).apply {
         remote_id = anime.remoteId
@@ -60,6 +61,7 @@ data class ALUserAnime(
         last_episode_seen = episodesSeen.toDouble()
         library_id = libraryId
         total_episodes = anime.totalEpisodes
+        private = this@ALUserAnime.private
     }
 
     private fun toTrackStatus() = when (listStatus) {
