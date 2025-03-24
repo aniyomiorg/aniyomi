@@ -91,7 +91,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
                 track.status = if (hasReadChapters) READING else statusTrack.status
             }
 
-            track
+            update(track)
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasReadChapters) READING else PLAN_TO_READ
@@ -113,7 +113,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
                 track.status = if (hasSeenEpisodes) READING else statusTrack.status
             }
 
-            track
+            update(track)
         } else {
             // Set default fields if it's not found in the list
             track.status = if (hasSeenEpisodes) READING else PLAN_TO_READ
