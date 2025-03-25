@@ -18,7 +18,9 @@ import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
+import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
+import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
 import eu.kanade.domain.track.model.AutoTrackState
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.entries.DownloadAction
@@ -87,6 +89,8 @@ import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Calendar
+import kotlin.collections.filter
+import kotlin.collections.forEach
 import kotlin.math.floor
 
 class AnimeScreenModel(
@@ -741,6 +745,8 @@ class AnimeScreenModel(
                 return@launchIO
             }
 
+            refreshTrackers()
+
             val tracks = getTracks.await(animeId)
             val maxEpisodeNumber = episodes.maxOf { it.episodeNumber }
             val shouldPromptTrackingUpdate = tracks.any { track -> maxEpisodeNumber > track.lastEpisodeSeen }
@@ -768,6 +774,27 @@ class AnimeScreenModel(
                 trackEpisode.await(context, animeId, maxEpisodeNumber)
             }
         }
+    }
+
+    private suspend fun refreshTrackers(
+        refreshTracks: RefreshAnimeTracks = Injekt.get(),
+    ) {
+        refreshTracks.await(animeId)
+            .filter { it.first != null }
+            .forEach { (track, e) ->
+                logcat(LogPriority.ERROR, e) {
+                    "Failed to refresh track data animeId=$animeId for service ${track!!.id}"
+                }
+                withUIContext {
+                    context.toast(
+                        context.stringResource(
+                            MR.strings.track_error,
+                            track!!.name,
+                            e.message ?: "",
+                        ),
+                    )
+                }
+            }
     }
 
     /**
