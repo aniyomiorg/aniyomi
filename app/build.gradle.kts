@@ -1,3 +1,4 @@
+import mihon.buildlogic.Config
 import mihon.buildlogic.getBuildTime
 import mihon.buildlogic.getCommitCount
 import mihon.buildlogic.getGitSha
@@ -9,15 +10,6 @@ plugins {
     kotlin("plugin.serialization")
     alias(libs.plugins.aboutLibraries)
 }
-
-class ConfigClass {
-    val enableUpdater: Boolean = project.hasProperty("enable-updater")
-    val enableCodeShrink: Boolean = !project.hasProperty("disable-code-shrink")
-    val includeDependencyInfo: Boolean = project.hasProperty("include-dependency-info")
-}
-
-@Suppress("PropertyName")
-val Config = ConfigClass()
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
