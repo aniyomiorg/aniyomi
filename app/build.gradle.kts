@@ -10,7 +10,14 @@ plugins {
     alias(libs.plugins.aboutLibraries)
 }
 
-val includeUpdater = project.hasProperty("with-updater")
+class ConfigClass {
+    val enableUpdater: Boolean = project.hasProperty("enable-updater")
+    val enableCodeShrink: Boolean = !project.hasProperty("disable-code-shrink")
+    val includeDependencyInfo: Boolean = project.hasProperty("include-dependency-info")
+}
+
+@Suppress("PropertyName")
+val Config = ConfigClass()
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
@@ -26,8 +33,7 @@ android {
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
         buildConfigField("String", "BUILD_TIME", "\"${getBuildTime()}\"")
-        buildConfigField("boolean", "INCLUDE_UPDATER", "$includeUpdater")
-        buildConfigField("boolean", "PREVIEW", "false")
+        buildConfigField("boolean", "UPDATER_ENABLED", "${Config.enableUpdater}")
 
         // Put these fields in acra.properties
         // val acraProperties = Properties()
@@ -51,11 +57,14 @@ android {
             isPseudoLocalesEnabled = true
         }
         val release by getting {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = Config.enableCodeShrink
+            isShrinkResources = Config.enableCodeShrink
 
             proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
         }
+
+        val commonMatchingFallbacks = listOf(release.name)
+
         create("preview") {
             initWith(release)
 
@@ -64,9 +73,7 @@ android {
             versionNameSuffix = debug.versionNameSuffix
             signingConfig = debug.signingConfig
 
-            matchingFallbacks.add(release.name)
-
-            buildConfigField("boolean", "PREVIEW", "true")
+            matchingFallbacks.addAll(commonMatchingFallbacks)
         }
         create("benchmark") {
             initWith(release)
@@ -78,7 +85,7 @@ android {
 
             signingConfig = debug.signingConfig
 
-            matchingFallbacks.add(release.name)
+            matchingFallbacks.addAll(commonMatchingFallbacks)
         }
     }
 
@@ -139,7 +146,8 @@ android {
     }
 
     dependenciesInfo {
-        includeInApk = false
+        includeInApk = Config.includeDependencyInfo
+        includeInBundle = Config.includeDependencyInfo
     }
 
     buildFeatures {

@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.data.updater
 
 import android.content.Context
 import eu.kanade.tachiyomi.BuildConfig
+import eu.kanade.tachiyomi.util.system.isPreviewBuildType
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import uy.kohesive.injekt.injectLazy
@@ -19,7 +20,7 @@ class AppUpdateChecker {
         return withIOContext {
             val result = getApplicationRelease.await(
                 GetApplicationRelease.Arguments(
-                    BuildConfig.PREVIEW,
+                    isPreviewBuildType,
                     BuildConfig.COMMIT_COUNT.toInt(),
                     BuildConfig.VERSION_NAME,
                     GITHUB_REPO,
@@ -40,7 +41,7 @@ class AppUpdateChecker {
 }
 
 val GITHUB_REPO: String by lazy {
-    if (BuildConfig.PREVIEW) {
+    if (isPreviewBuildType) {
         "aniyomiorg/aniyomi-preview"
     } else {
         "aniyomiorg/aniyomi"
@@ -48,7 +49,7 @@ val GITHUB_REPO: String by lazy {
 }
 
 val RELEASE_TAG: String by lazy {
-    if (BuildConfig.PREVIEW) {
+    if (isPreviewBuildType) {
         "r${BuildConfig.COMMIT_COUNT}"
     } else {
         "v${BuildConfig.VERSION_NAME}"
