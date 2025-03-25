@@ -92,9 +92,7 @@ private fun CategoryContent(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         state = lazyListState,
-        contentPadding = paddingValues +
-            topSmallPaddingValues +
-            PaddingValues(horizontal = MaterialTheme.padding.medium),
+        contentPadding = PaddingValues(MaterialTheme.padding.medium),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         items(
