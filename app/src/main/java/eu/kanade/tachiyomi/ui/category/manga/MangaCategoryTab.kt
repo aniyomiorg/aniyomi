@@ -14,13 +14,9 @@ import eu.kanade.presentation.category.MangaCategoryScreen
 import eu.kanade.presentation.category.components.CategoryCreateDialog
 import eu.kanade.presentation.category.components.CategoryDeleteDialog
 import eu.kanade.presentation.category.components.CategoryRenameDialog
-import eu.kanade.presentation.category.components.CategorySortAlphabeticallyDialog
-import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -33,15 +29,7 @@ fun Screen.mangaCategoryTab(): TabContent {
     return TabContent(
         titleRes = MR.strings.label_manga,
         searchEnabled = false,
-        actions = persistentListOf(
-            AppBar.Action(
-                title = stringResource(MR.strings.action_sort),
-                icon = Icons.Outlined.SortByAlpha,
-                onClick = { screenModel.showDialog(MangaCategoryDialog.SortAlphabetically) },
-            ),
-        ),
         content = { contentPadding, _ ->
-
             if (state is MangaCategoryScreenState.Loading) {
                 LoadingScreen()
             } else {
@@ -78,12 +66,6 @@ fun Screen.mangaCategoryTab(): TabContent {
                             onDismissRequest = screenModel::dismissDialog,
                             onDelete = { screenModel.deleteCategory(dialog.category.id) },
                             category = dialog.category.name,
-                        )
-                    }
-                    is MangaCategoryDialog.SortAlphabetically -> {
-                        CategorySortAlphabeticallyDialog(
-                            onDismissRequest = screenModel::dismissDialog,
-                            onSort = { screenModel.sortAlphabetically() },
                         )
                     }
                 }

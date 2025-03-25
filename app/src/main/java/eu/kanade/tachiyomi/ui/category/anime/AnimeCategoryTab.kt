@@ -14,13 +14,9 @@ import eu.kanade.presentation.category.AnimeCategoryScreen
 import eu.kanade.presentation.category.components.CategoryCreateDialog
 import eu.kanade.presentation.category.components.CategoryDeleteDialog
 import eu.kanade.presentation.category.components.CategoryRenameDialog
-import eu.kanade.presentation.category.components.CategorySortAlphabeticallyDialog
-import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -33,14 +29,6 @@ fun Screen.animeCategoryTab(): TabContent {
     return TabContent(
         titleRes = MR.strings.label_anime,
         searchEnabled = false,
-        actions =
-        persistentListOf(
-            AppBar.Action(
-                title = stringResource(MR.strings.action_sort),
-                icon = Icons.Outlined.SortByAlpha,
-                onClick = { screenModel.showDialog(AnimeCategoryDialog.SortAlphabetically) },
-            ),
-        ),
         content = { contentPadding, _ ->
             if (state is AnimeCategoryScreenState.Loading) {
                 LoadingScreen()
@@ -78,12 +66,6 @@ fun Screen.animeCategoryTab(): TabContent {
                             onDismissRequest = screenModel::dismissDialog,
                             onDelete = { screenModel.deleteCategory(dialog.category.id) },
                             category = dialog.category.name,
-                        )
-                    }
-                    is AnimeCategoryDialog.SortAlphabetically -> {
-                        CategorySortAlphabeticallyDialog(
-                            onDismissRequest = screenModel::dismissDialog,
-                            onSort = { screenModel.sortAlphabetically() },
                         )
                     }
                 }

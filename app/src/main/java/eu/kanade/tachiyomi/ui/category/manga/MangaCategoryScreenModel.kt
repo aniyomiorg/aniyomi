@@ -92,18 +92,9 @@ class MangaCategoryScreenModel(
         }
     }
 
-    fun sortAlphabetically() {
-        screenModelScope.launch {
-            when (reorderCategory.sortAlphabetically()) {
-                is ReorderMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
-                else -> {}
-            }
-        }
-    }
-
     fun changeOrder(category: Category, newIndex: Int) {
         screenModelScope.launch {
-            when (reorderCategory.changeOrder(category, newIndex)) {
+            when (reorderCategory.await(category, newIndex)) {
                 is ReorderMangaCategory.Result.InternalError -> _events.send(
                     MangaCategoryEvent.InternalError,
                 )
@@ -144,7 +135,6 @@ class MangaCategoryScreenModel(
 
 sealed interface MangaCategoryDialog {
     data object Create : MangaCategoryDialog
-    data object SortAlphabetically : MangaCategoryDialog
     data class Rename(val category: Category) : MangaCategoryDialog
     data class Delete(val category: Category) : MangaCategoryDialog
 }
