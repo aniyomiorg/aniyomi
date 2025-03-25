@@ -1247,4 +1247,10 @@
     <string name="pref_audio_pitch_correction_summary">Impede o áudio de se tornar agudo a velocidades mais altas e grave a velocidades mais baixas</string>
     <string name="player_sheets_add_ext_sub">Adicionar legendas externas</string>
     <string name="player_sheets_subtitles_footer_secondary_sid_no_styles">Legendas segundarias não terão estilos ASS/SSA.</string>
+    <string name="player_sheets_audio_delay_audio_sound_heard">Som ouvido</string>
+    <string name="player_sheets_audio_delay_sound_sound_spotted">Som encontrado</string>
+    <string name="player_sheets_sub_delay_subtitle_voice_heard">Voz ouvida</string>
+    <string name="player_sheets_sub_delay_subtitle_text_seen">Texto visto</string>
+    <string name="player_sheets_sub_delay_audio_sound_heard">Som ouvido</string>
+    <string name="player_sheets_sub_delay_sound_sound_spotted">Som escutado</string>
 </resources>
