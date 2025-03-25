@@ -19,6 +19,7 @@ data class ALAnime(
     val startDateFuzzy: Long,
     val totalEpisodes: Long,
     val averageScore: Int,
+    val studios: ALStudios,
 ) {
     fun toTrack() = AnimeTrackSearch.create(TrackerManager.ANILIST).apply {
         remote_id = remoteId
@@ -38,6 +39,12 @@ data class ALAnime(
                 ""
             }
         }
+
+        authors = studios.edges
+            .filter { it.isMain }
+            .ifEmpty { studios.edges }
+            .take(3)
+            .map { it.node.name }
     }
 }
 

@@ -97,8 +97,12 @@ internal class AnimeTrackerSearchPreviewProvider : PreviewParameterProvider<@Com
         it.summary = lorem((0..40).random()).joinToString()
         it.publishing_status = if (Random.nextBoolean()) "Finished" else ""
         it.publishing_type = if (Random.nextBoolean()) "OVA" else ""
+        it.artists = randomNames()
+        it.authors = randomNames()
         it
     }
+
+    private fun randomNames(): List<String> = (0..(0..3).random()).map { lorem((3..5).random()).joinToString() }
 
     private fun lorem(words: Int): Sequence<String> =
         LoremIpsum(words).values
