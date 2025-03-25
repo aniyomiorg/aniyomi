@@ -28,7 +28,7 @@ class GetApplicationRelease(
             return Result.NoNewUpdate
         }
 
-        val release = service.latest(arguments.repository)
+        val release = service.latest(arguments) ?: return Result.NoNewUpdate
 
         lastChecked.set(now.toEpochMilli())
 

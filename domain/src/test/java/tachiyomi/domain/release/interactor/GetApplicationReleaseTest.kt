@@ -16,9 +16,9 @@ import java.time.Instant
 
 class GetApplicationReleaseTest {
 
-    lateinit var getApplicationRelease: GetApplicationRelease
-    lateinit var releaseService: ReleaseService
-    lateinit var preference: Preference<Long>
+    private lateinit var getApplicationRelease: GetApplicationRelease
+    private lateinit var releaseService: ReleaseService
+    private lateinit var preference: Preference<Long>
 
     @BeforeEach
     fun beforeEach() {
@@ -39,7 +39,7 @@ class GetApplicationReleaseTest {
             "r2000",
             "info",
             "http://example.com/release_link",
-            listOf("http://example.com/assets"),
+            "http://example.com/release_link.apk",
         )
 
         coEvery { releaseService.latest(any()) } returns release
@@ -67,7 +67,7 @@ class GetApplicationReleaseTest {
             "v2.0.0",
             "info",
             "http://example.com/release_link",
-            listOf("http://example.com/assets"),
+            "http://example.com/release_link.apk",
         )
 
         coEvery { releaseService.latest(any()) } returns release
@@ -95,7 +95,7 @@ class GetApplicationReleaseTest {
             "v1.0.0",
             "info",
             "http://example.com/release_link",
-            listOf("http://example.com/assets"),
+            "http://example.com/release_link.apk",
         )
 
         coEvery { releaseService.latest(any()) } returns release
@@ -121,7 +121,7 @@ class GetApplicationReleaseTest {
             "v1.0.0",
             "info",
             "http://example.com/release_link",
-            listOf("http://example.com/assets"),
+            "http://example.com/release_link.apk",
         )
 
         coEvery { releaseService.latest(any()) } returns release
