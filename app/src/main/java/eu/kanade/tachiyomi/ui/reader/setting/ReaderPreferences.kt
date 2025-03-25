@@ -172,8 +172,6 @@ class ReaderPreferences(
         false,
     )
 
-    fun markDuplicateReadChapterAsRead() = preferenceStore.getBoolean("mark_duplicate_chapter_read", false)
-
     // endregion
 
     enum class FlashColor {

@@ -240,7 +240,7 @@ class LibraryPreferences(
         )
     }
 
-    // region Swipe Actions
+    // region Item behavior
 
     fun swipeEpisodeStartAction() =
         preferenceStore.getEnum("pref_episode_swipe_end_action", EpisodeSwipeAction.ToggleSeen)
@@ -257,6 +257,10 @@ class LibraryPreferences(
         "pref_chapter_swipe_start_action",
         ChapterSwipeAction.ToggleBookmark,
     )
+
+    fun markDuplicateReadChapterAsRead() = preferenceStore.getStringSet("mark_duplicate_read_chapter_read", emptySet())
+
+    fun markDuplicateSeenEpisodeAsSeen() = preferenceStore.getStringSet("mark_duplicate_seen_episode_seen", emptySet())
 
     // endregion
 
@@ -283,6 +287,11 @@ class LibraryPreferences(
         const val ENTRY_HAS_UNVIEWED = "manga_fully_read"
         const val ENTRY_NON_VIEWED = "manga_started"
         const val ENTRY_OUTSIDE_RELEASE_PERIOD = "manga_outside_release_period"
+
+        const val MARK_DUPLICATE_CHAPTER_READ_NEW = "new"
+        const val MARK_DUPLICATE_CHAPTER_READ_EXISTING = "existing"
+        const val MARK_DUPLICATE_EPISODE_SEEN_NEW = "new_episode"
+        const val MARK_DUPLICATE_EPISODE_SEEN_EXISTING = "existing_episode"
 
         const val DEFAULT_MANGA_CATEGORY_PREF_KEY = "default_category"
         const val DEFAULT_ANIME_CATEGORY_PREF_KEY = "default_anime_category"

@@ -73,6 +73,7 @@ import tachiyomi.domain.items.chapter.interactor.GetChaptersByMangaId
 import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.service.getChapterSort
+import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
@@ -101,6 +102,7 @@ class ReaderViewModel @JvmOverloads constructor(
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val setMangaViewerFlags: SetMangaViewerFlags = Injekt.get(),
     private val getIncognitoState: GetMangaIncognitoState = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(State())
@@ -536,24 +538,7 @@ class ReaderViewModel @JvmOverloads constructor(
             readerChapter.chapter.last_page_read = pageIndex
 
             if (readerChapter.pages?.lastIndex == pageIndex) {
-                readerChapter.chapter.read = true
-                updateTrackChapterRead(readerChapter)
-                deleteChapterIfNeeded(readerChapter)
-
-                val duplicateUnreadChapters = chapterList
-                    .mapNotNull {
-                        val chapter = it.chapter
-                        if (
-                            !chapter.read &&
-                            chapter.isRecognizedNumber &&
-                            chapter.chapter_number == readerChapter.chapter.chapter_number
-                        ) {
-                            ChapterUpdate(id = chapter.id!!, read = true)
-                        } else {
-                            null
-                        }
-                    }
-                updateChapter.awaitAll(duplicateUnreadChapters)
+                updateChapterProgressOnComplete(readerChapter)
             }
 
             updateChapter.await(
@@ -564,6 +549,31 @@ class ReaderViewModel @JvmOverloads constructor(
                 ),
             )
         }
+    }
+
+    private suspend fun updateChapterProgressOnComplete(readerChapter: ReaderChapter) {
+        readerChapter.chapter.read = true
+        updateTrackChapterRead(readerChapter)
+        deleteChapterIfNeeded(readerChapter)
+
+        val markDuplicateAsRead = libraryPreferences.markDuplicateReadChapterAsRead().get()
+            .contains(LibraryPreferences.MARK_DUPLICATE_CHAPTER_READ_EXISTING)
+        if (!markDuplicateAsRead) return
+
+        val duplicateUnreadChapters = chapterList
+            .mapNotNull {
+                val chapter = it.chapter
+                if (
+                    !chapter.read &&
+                    chapter.isRecognizedNumber &&
+                    chapter.chapter_number == readerChapter.chapter.chapter_number
+                ) {
+                    ChapterUpdate(id = chapter.id!!, read = true)
+                } else {
+                    null
+                }
+            }
+        updateChapter.awaitAll(duplicateUnreadChapters)
     }
 
     fun restartReadTimer() {

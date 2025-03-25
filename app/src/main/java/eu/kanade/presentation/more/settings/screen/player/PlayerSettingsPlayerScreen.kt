@@ -62,10 +62,6 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                 preference = playerPreferences.preserveWatchingPosition(),
                 title = stringResource(MR.strings.pref_preserve_watching_position),
             ),
-            Preference.PreferenceItem.SwitchPreference(
-                preference = playerPreferences.markDuplicateSeenEpisodeAsSeen(),
-                title = stringResource(MR.strings.pref_mark_duplicate_seen_episode_seen),
-            ),
             Preference.PreferenceItem.ListPreference(
                 preference = playerPreferences.defaultPlayerOrientationType(),
                 entries = PlayerOrientation.entries.associateWith {

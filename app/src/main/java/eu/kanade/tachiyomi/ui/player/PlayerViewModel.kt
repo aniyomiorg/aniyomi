@@ -71,6 +71,7 @@ import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
+import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -119,6 +120,7 @@ import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.service.getEpisodeSort
+import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.i18n.MR
@@ -162,6 +164,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val getCustomButtons: GetCustomButtons = Injekt.get(),
     private val trackSelect: TrackSelect = Injekt.get(),
     private val getIncognitoState: GetAnimeIncognitoState = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
 
@@ -1526,24 +1529,8 @@ class PlayerViewModel @JvmOverloads constructor(
         val progress = playerPreferences.progressPreference().get()
         val shouldTrack = !incognitoMode || hasTrackers
         if (seconds >= totalSeconds * progress && shouldTrack) {
-            currentEp.seen = true
-            updateTrackEpisodeSeen(currentEp)
-            deleteEpisodeIfNeeded(currentEp)
-
-            val duplicateUnseenEpisodes = currentPlaylist.value
-                .mapNotNull { episode ->
-                    if (
-                        !episode.seen &&
-                        episode.isRecognizedNumber &&
-                        episode.episode_number == currentEp.episode_number
-                    ) {
-                        EpisodeUpdate(id = episode.id!!, seen = true)
-                    } else {
-                        null
-                    }
-                }
             viewModelScope.launchNonCancellable {
-                updateEpisode.awaitAll(duplicateUnseenEpisodes)
+                updateEpisodeProgressOnComplete(currentEp)
             }
         }
 
@@ -1553,6 +1540,30 @@ class PlayerViewModel @JvmOverloads constructor(
         if (inDownloadRange) {
             downloadNextEpisodes()
         }
+    }
+
+    private suspend fun updateEpisodeProgressOnComplete(currentEp: Episode) {
+        currentEp.seen = true
+        updateTrackEpisodeSeen(currentEp)
+        deleteEpisodeIfNeeded(currentEp)
+
+        val markDuplicateAsSeen = libraryPreferences.markDuplicateSeenEpisodeAsSeen().get()
+            .contains(LibraryPreferences.MARK_DUPLICATE_EPISODE_SEEN_EXISTING)
+        if (!markDuplicateAsSeen) return
+
+        val duplicateUnseenEpisodes = currentPlaylist.value
+            .mapNotNull { episode ->
+                if (
+                    !episode.seen &&
+                    episode.isRecognizedNumber &&
+                    episode.episode_number == currentEp.episode_number
+                ) {
+                    EpisodeUpdate(id = episode.id!!, seen = true)
+                } else {
+                    null
+                }
+            }
+        updateEpisode.awaitAll(duplicateUnseenEpisodes)
     }
 
     private fun downloadNextEpisodes() {

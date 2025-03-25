@@ -37,6 +37,10 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_U
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_CHAPTER_READ_EXISTING
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_CHAPTER_READ_NEW
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_EPISODE_SEEN_EXISTING
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_EPISODE_SEEN_NEW
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
@@ -66,8 +70,8 @@ object SettingsLibraryScreen : SearchableSettings {
                 libraryPreferences,
             ),
             getGlobalUpdateGroup(allCategories, allAnimeCategories, libraryPreferences),
-            getEpisodeSwipeActionsGroup(libraryPreferences),
-            getChapterSwipeActionsGroup(libraryPreferences),
+            getAnimeBehaviorGroup(libraryPreferences),
+            getBehaviorGroup(libraryPreferences),
         )
     }
 
@@ -293,11 +297,11 @@ object SettingsLibraryScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getChapterSwipeActionsGroup(
+    private fun getBehaviorGroup(
         libraryPreferences: LibraryPreferences,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_chapter_swipe),
+            title = stringResource(MR.strings.pref_behavior),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
                     preference = libraryPreferences.swipeChapterStartAction(),
@@ -327,16 +331,26 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                     title = stringResource(MR.strings.pref_chapter_swipe_end),
                 ),
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    preference = libraryPreferences.markDuplicateReadChapterAsRead(),
+                    entries = persistentMapOf(
+                        MARK_DUPLICATE_CHAPTER_READ_EXISTING to
+                            stringResource(MR.strings.pref_mark_duplicate_read_chapter_read_existing),
+                        MARK_DUPLICATE_CHAPTER_READ_NEW to
+                            stringResource(MR.strings.pref_mark_duplicate_read_chapter_read_new),
+                        ),
+                    title = stringResource(MR.strings.pref_mark_duplicate_read_chapter_read),
+                ),
             ),
         )
     }
 
     @Composable
-    private fun getEpisodeSwipeActionsGroup(
+    private fun getAnimeBehaviorGroup(
         libraryPreferences: LibraryPreferences,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_episode_swipe),
+            title = stringResource(MR.strings.pref_behavior_episode),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
                     preference = libraryPreferences.swipeEpisodeStartAction(),
@@ -365,6 +379,16 @@ object SettingsLibraryScreen : SearchableSettings {
                             stringResource(MR.strings.action_download),
                     ),
                     title = stringResource(MR.strings.pref_episode_swipe_end),
+                ),
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    preference = libraryPreferences.markDuplicateSeenEpisodeAsSeen(),
+                    entries = persistentMapOf(
+                        MARK_DUPLICATE_EPISODE_SEEN_EXISTING to
+                            stringResource(MR.strings.pref_mark_duplicate_seen_episode_seen_existing),
+                        MARK_DUPLICATE_EPISODE_SEEN_NEW to
+                            stringResource(MR.strings.pref_mark_duplicate_seen_episode_seen_new),
+                    ),
+                    title = stringResource(MR.strings.pref_mark_duplicate_seen_episode_seen),
                 ),
             ),
         )

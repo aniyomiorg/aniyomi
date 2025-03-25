@@ -34,7 +34,7 @@ class SyncEpisodesWithSource(
     private val updateAnime: UpdateAnime,
     private val updateEpisode: UpdateEpisode,
     private val getEpisodesByAnimeId: GetEpisodesByAnimeId,
-    private val playerPreferences: PlayerPreferences,
+    private val libraryPreferences: LibraryPreferences,
 ) {
 
     /**
@@ -176,7 +176,8 @@ class SyncEpisodesWithSource(
         val deletedEpisodeNumberDateFetchMap = removedEpisodes.sortedByDescending { it.dateFetch }
             .associate { it.episodeNumber to it.dateFetch }
 
-        val markDuplicateAsRead = playerPreferences.markDuplicateSeenEpisodeAsSeen().get()
+        val markDuplicateAsRead = libraryPreferences.markDuplicateSeenEpisodeAsSeen().get()
+            .contains(LibraryPreferences.MARK_DUPLICATE_EPISODE_SEEN_NEW)
 
         // Date fetch is set in such a way that the upper ones will have bigger value than the lower ones
         // Sources MUST return the episodes from most to less recent, which is common.
