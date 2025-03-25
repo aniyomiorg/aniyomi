@@ -256,6 +256,8 @@ class AnimeScreen(
                 onFillermarkedFilterChanged = screenModel::setFillermarkedFilter,
                 onSortModeChanged = screenModel::setSorting,
                 onDisplayModeChanged = screenModel::setDisplayMode,
+                onShowPreviewsEnabled = screenModel::showEpisodePreviews,
+                onShowSummariesEnabled = screenModel::showEpisodeSummaries,
                 onSetAsDefault = screenModel::setCurrentSettingsAsDefault,
             )
             AnimeScreenModel.Dialog.TrackSheet -> {

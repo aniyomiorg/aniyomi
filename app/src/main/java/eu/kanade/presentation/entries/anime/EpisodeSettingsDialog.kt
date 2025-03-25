@@ -25,6 +25,7 @@ import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
@@ -41,6 +42,8 @@ fun EpisodeSettingsDialog(
     onFillermarkedFilterChanged: (TriState) -> Unit,
     onSortModeChanged: (Long) -> Unit,
     onDisplayModeChanged: (Long) -> Unit,
+    onShowPreviewsEnabled: (Long) -> Unit,
+    onShowSummariesEnabled: (Long) -> Unit,
     onSetAsDefault: (applyToExistingAnime: Boolean) -> Unit,
 ) {
     var showSetAsDefaultDialog by rememberSaveable { mutableStateOf(false) }
@@ -97,7 +100,11 @@ fun EpisodeSettingsDialog(
                 2 -> {
                     DisplayPage(
                         displayMode = anime?.displayMode ?: 0,
-                        onItemSelected = onDisplayModeChanged,
+                        onDisplayModeChanged = onDisplayModeChanged,
+                        showPreviews = anime?.showPreviews() ?: true,
+                        onShowPreviewsEnabled = onShowPreviewsEnabled,
+                        showSummaries = anime?.showSummaries() ?: true,
+                        onShowSummariesEnabled = onShowSummariesEnabled,
                     )
                 }
             }
@@ -161,7 +168,11 @@ private fun ColumnScope.SortPage(
 @Composable
 private fun ColumnScope.DisplayPage(
     displayMode: Long,
-    onItemSelected: (Long) -> Unit,
+    onDisplayModeChanged: (Long) -> Unit,
+    showPreviews: Boolean,
+    onShowPreviewsEnabled: (Long) -> Unit,
+    showSummaries: Boolean,
+    onShowSummariesEnabled: (Long) -> Unit,
 ) {
     listOf(
         MR.strings.show_title to Anime.EPISODE_DISPLAY_NAME,
@@ -170,9 +181,21 @@ private fun ColumnScope.DisplayPage(
         RadioItem(
             label = stringResource(titleRes),
             selected = displayMode == mode,
-            onClick = { onItemSelected(mode) },
+            onClick = { onDisplayModeChanged(mode) },
         )
     }
+    val showPreviewsFlag = if (showPreviews) Anime.EPISODE_SHOW_NOT_PREVIEWS else Anime.EPISODE_SHOW_PREVIEWS
+    CheckboxItem(
+        label = stringResource(MR.strings.show_episode_previews),
+        checked = showPreviews,
+        onClick = { onShowPreviewsEnabled(showPreviewsFlag) },
+    )
+    val showSummariesFlag = if (showSummaries) Anime.EPISODE_SHOW_NOT_SUMMARIES else Anime.EPISODE_SHOW_SUMMARIES
+    CheckboxItem(
+        label = stringResource(MR.strings.show_episode_summaries),
+        checked = showSummaries,
+        onClick = { onShowSummariesEnabled(showSummariesFlag) },
+    )
 }
 
 @Composable

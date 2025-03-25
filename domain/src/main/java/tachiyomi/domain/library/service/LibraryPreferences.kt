@@ -219,6 +219,16 @@ class LibraryPreferences(
         Manga.CHAPTER_SORT_DESC,
     )
 
+    fun showEpisodeThumbnailPreviews() = preferenceStore.getLong(
+        "default_episode_show_thumbnail_previews",
+        Anime.EPISODE_SHOW_PREVIEWS,
+    )
+
+    fun showEpisodeSummaries() = preferenceStore.getLong(
+        "default_episode_show_summaries",
+        Anime.EPISODE_SHOW_SUMMARIES,
+    )
+
     fun setEpisodeSettingsDefault(anime: Anime) {
         filterEpisodeBySeen().set(anime.unseenFilterRaw)
         filterEpisodeByDownloaded().set(anime.downloadedFilterRaw)

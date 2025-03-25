@@ -941,6 +941,30 @@ class AnimeScreenModel(
         }
     }
 
+    /**
+     * Sets whether previews are to be shown or not.
+     * @param flag to show previews.
+     */
+    fun showEpisodePreviews(flag: Long) {
+        val anime = successState?.anime ?: return
+
+        screenModelScope.launchNonCancellable {
+            setAnimeEpisodeFlags.awaitShowEpisodePreviews(anime, flag)
+        }
+    }
+
+    /**
+     * Sets whether summaries are to be shown or not.
+     * @param flag to show summaries.
+     */
+    fun showEpisodeSummaries(flag: Long) {
+        val anime = successState?.anime ?: return
+
+        screenModelScope.launchNonCancellable {
+            setAnimeEpisodeFlags.awaitShowEpisodeSummaries(anime, flag)
+        }
+    }
+
     fun setCurrentSettingsAsDefault(applyToExisting: Boolean) {
         val anime = successState?.anime ?: return
         screenModelScope.launchNonCancellable {
@@ -1213,6 +1237,11 @@ class AnimeScreenModel(
                 get() = nextAiringEpisode.second.times(1000L).minus(
                     Calendar.getInstance().timeInMillis,
                 )
+            val showPreviews: Boolean
+                get() = anime.showPreviews()
+
+            val showSummaries: Boolean
+                get() = anime.showSummaries()
 
             /**
              * Applies the view filters to the list of episodes obtained from the database.
