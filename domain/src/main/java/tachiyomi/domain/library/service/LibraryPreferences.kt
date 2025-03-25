@@ -68,6 +68,10 @@ class LibraryPreferences(
 
     fun categorizedDisplaySettings() = preferenceStore.getBoolean("categorized_display", false)
 
+    fun markDuplicateEpisodeRead() = preferenceStore.getBoolean("mark_duplicate_episode_read", false)
+
+    fun markDuplicateChapterRead() = preferenceStore.getBoolean("mark_duplicate_chapter_read", false)
+
     fun hideHiddenCategoriesSettings() = preferenceStore.getBoolean("hidden_categories", false)
 
     fun filterIntervalCustom() = preferenceStore.getEnum(
