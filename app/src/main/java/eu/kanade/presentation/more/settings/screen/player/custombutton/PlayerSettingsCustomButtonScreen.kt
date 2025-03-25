@@ -46,8 +46,7 @@ object PlayerSettingsCustomButtonScreen : Screen() {
             onClickPrimary = { screenModel.togglePrimaryButton(it) },
             onClickEdit = { screenModel.showDialog(CustomButtonDialog.Edit(it)) },
             onClickDelete = { screenModel.showDialog(CustomButtonDialog.Delete(it)) },
-            onClickMoveUp = screenModel::moveUp,
-            onClickMoveDown = screenModel::moveDown,
+            onChangeOrder = screenModel::changeOrder,
             navigateUp = navigator::pop,
         )
 

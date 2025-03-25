@@ -53,8 +53,7 @@ fun Screen.animeCategoryTab(): TabContent {
                     onClickRename = { screenModel.showDialog(AnimeCategoryDialog.Rename(it)) },
                     onClickHide = screenModel::hideCategory,
                     onClickDelete = { screenModel.showDialog(AnimeCategoryDialog.Delete(it)) },
-                    onClickMoveUp = screenModel::moveUp,
-                    onClickMoveDown = screenModel::moveDown,
+                    onChangeOrder = screenModel::changeOrder,
                 )
 
                 when (val dialog = successState.dialog) {
