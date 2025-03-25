@@ -23,9 +23,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
-import tachiyomi.presentation.core.components.material.topSmallPaddingValues
 import tachiyomi.presentation.core.screens.EmptyScreen
-import tachiyomi.presentation.core.util.plus
 
 @Composable
 fun AnimeCategoryScreen(

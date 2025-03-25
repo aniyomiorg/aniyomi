@@ -1,7 +1,5 @@
 package eu.kanade.tachiyomi.ui.category.manga
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SortByAlpha
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
