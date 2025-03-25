@@ -519,12 +519,15 @@ private fun AnimeScreenSmallImpl(
                         anime = state.anime,
                         episodes = listItem,
                         isAnyEpisodeSelected = episodes.fastAny { it.selected },
+                        showSummaries = state.showSummaries,
+                        showPreviews = state.showPreviews,
                         episodeSwipeStartAction = episodeSwipeStartAction,
                         episodeSwipeEndAction = episodeSwipeEndAction,
                         onEpisodeClicked = onEpisodeClicked,
                         onDownloadEpisode = onDownloadEpisode,
                         onEpisodeSelected = onEpisodeSelected,
                         onEpisodeSwipe = onEpisodeSwipe,
+                        onBookmarkClick = onMultiBookmarkClicked,
                     )
                 }
             }
@@ -800,12 +803,15 @@ fun AnimeScreenLargeImpl(
                                 anime = state.anime,
                                 episodes = listItem,
                                 isAnyEpisodeSelected = episodes.fastAny { it.selected },
+                                showSummaries = state.showSummaries,
+                                showPreviews = state.showPreviews,
                                 episodeSwipeStartAction = episodeSwipeStartAction,
                                 episodeSwipeEndAction = episodeSwipeEndAction,
                                 onEpisodeClicked = onEpisodeClicked,
                                 onDownloadEpisode = onDownloadEpisode,
                                 onEpisodeSelected = onEpisodeSelected,
                                 onEpisodeSwipe = onEpisodeSwipe,
+                                onBookmarkClick = onMultiBookmarkClicked,
                             )
                         }
                     }
@@ -877,12 +883,15 @@ private fun LazyListScope.sharedEpisodeItems(
     anime: Anime,
     episodes: List<EpisodeList>,
     isAnyEpisodeSelected: Boolean,
+    showSummaries: Boolean,
+    showPreviews: Boolean,
     episodeSwipeStartAction: LibraryPreferences.EpisodeSwipeAction,
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onEpisodeSelected: (EpisodeList.Item, Boolean, Boolean, Boolean) -> Unit,
     onEpisodeSwipe: (EpisodeList.Item, LibraryPreferences.EpisodeSwipeAction) -> Unit,
+    onBookmarkClick: (List<Episode>, bookmarked: Boolean) -> Unit,
 ) {
     items(
         items = episodes,
@@ -921,6 +930,8 @@ private fun LazyListScope.sharedEpisodeItems(
                             )
                         },
                     scanlator = episodeItem.episode.scanlator.takeIf { !it.isNullOrBlank() },
+                    summary = episodeItem.episode.summary.takeIf { !it.isNullOrBlank() && showSummaries },
+                    previewUrl = episodeItem.episode.previewUrl.takeIf { !it.isNullOrBlank() && showPreviews },
                     seen = episodeItem.episode.seen,
                     bookmark = episodeItem.episode.bookmark,
                     fillermark = episodeItem.episode.fillermark,
@@ -949,6 +960,9 @@ private fun LazyListScope.sharedEpisodeItems(
                     },
                     onEpisodeSwipe = {
                         onEpisodeSwipe(episodeItem, it)
+                    },
+                    onBookmarkClick = {
+                        onBookmarkClick(listOf(episodeItem.episode), it)
                     },
                 )
             }
