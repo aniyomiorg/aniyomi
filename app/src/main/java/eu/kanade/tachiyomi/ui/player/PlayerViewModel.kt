@@ -52,7 +52,9 @@ import eu.kanade.tachiyomi.animesource.model.SerializableHoster.Companion.toHost
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
+import eu.kanade.tachiyomi.data.database.models.anime.isRecognizedNumber
 import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
+import eu.kanade.tachiyomi.data.database.models.manga.isRecognizedNumber
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.saver.Image
@@ -112,6 +114,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.history.anime.interactor.GetNextEpisodes
 import tachiyomi.domain.history.anime.interactor.UpsertAnimeHistory
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
+import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
@@ -1526,6 +1529,22 @@ class PlayerViewModel @JvmOverloads constructor(
             currentEp.seen = true
             updateTrackEpisodeSeen(currentEp)
             deleteEpisodeIfNeeded(currentEp)
+
+            val duplicateUnseenEpisodes = currentPlaylist.value
+                .mapNotNull { episode ->
+                    if (
+                        !episode.seen &&
+                        episode.isRecognizedNumber &&
+                        episode.episode_number == currentEp.episode_number
+                    ) {
+                        EpisodeUpdate(id = episode.id!!, seen = true)
+                    } else {
+                        null
+                    }
+                }
+            viewModelScope.launchNonCancellable {
+                updateEpisode.awaitAll(duplicateUnseenEpisodes)
+            }
         }
 
         saveWatchingProgress(currentEp)

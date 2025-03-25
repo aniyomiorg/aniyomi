@@ -1220,8 +1220,8 @@
     <string name="pref_default_home_tab_library">Set start screen to Manga Tab</string>
     <string name="pref_update_only_completely_read">Skip entries with unseen episode(s)/unread chapter(s)</string>
     <string name="pref_library_update_show_tab_badge">Show unseen/unread count on Updates icon</string>
-    <string name="pref_mark_duplicate_episode_read">Mark new duplicate seen episodes as seen</string>
-    <string name="pref_mark_duplicate_chapter_read">Mark new duplicate read chapters as read</string>
+    <string name="pref_mark_duplicate_read_chapter_read">Mark duplicate read chapters as read</string>
+    <string name="pref_mark_duplicate_seen_episode_seen">Mark duplicate seen episodes as seen</string>
     <string name="default_manga_category">Default manga category</string>
     <string name="default_anime_category">Default anime category</string>
     <string name="pref_manga_library_update_categories_details">Manga in excluded categories will not be updated even if they are also in included categories.</string>

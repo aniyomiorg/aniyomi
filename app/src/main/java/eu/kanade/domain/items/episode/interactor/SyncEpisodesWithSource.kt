@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import tachiyomi.data.items.episode.EpisodeSanitizer
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
@@ -33,7 +34,7 @@ class SyncEpisodesWithSource(
     private val updateAnime: UpdateAnime,
     private val updateEpisode: UpdateEpisode,
     private val getEpisodesByAnimeId: GetEpisodesByAnimeId,
-    private val libraryPreferences: LibraryPreferences,
+    private val playerPreferences: PlayerPreferences,
 ) {
 
     /**
@@ -175,7 +176,7 @@ class SyncEpisodesWithSource(
         val deletedEpisodeNumberDateFetchMap = removedEpisodes.sortedByDescending { it.dateFetch }
             .associate { it.episodeNumber to it.dateFetch }
 
-        val markDuplicateAsRead = libraryPreferences.markDuplicateEpisodeRead().get()
+        val markDuplicateAsRead = playerPreferences.markDuplicateSeenEpisodeAsSeen().get()
 
         // Date fetch is set in such a way that the upper ones will have bigger value than the lower ones
         // Sources MUST return the episodes from most to less recent, which is common.

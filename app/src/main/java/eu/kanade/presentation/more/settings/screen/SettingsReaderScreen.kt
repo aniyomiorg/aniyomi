@@ -201,6 +201,10 @@ object SettingsReaderScreen : SearchableSettings {
                     preference = readerPreferences.preserveReadingPosition(),
                     title = stringResource(MR.strings.pref_preserve_reading_position),
                 ),
+                Preference.PreferenceItem.SwitchPreference(
+                    preference = readerPreferences.markDuplicateReadChapterAsRead(),
+                    title = stringResource(MR.strings.pref_mark_duplicate_read_chapter_read),
+                ),
             ),
         )
     }
