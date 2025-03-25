@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.LabelOff
 import androidx.compose.material.icons.filled.Bookmark
@@ -44,11 +42,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -73,6 +74,7 @@ fun AnimeEpisodeListItem(
     bookmark: Boolean,
     fillermark: Boolean,
     selected: Boolean,
+    isAnyEpisodeSelected: Boolean,
     downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
@@ -119,73 +121,69 @@ fun AnimeEpisodeListItem(
                     onClick = onClick,
                     onLongClick = onLongClick,
                 )
-                .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 4.dp),
+                .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
         ) {
             Column {
                 var textHeight by remember { mutableIntStateOf(0) }
                 var textWidth by remember { mutableIntStateOf(0) }
                 var expandSummary by remember { mutableStateOf(false) }
 
-                BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-                    val w = constraints.maxWidth
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(2.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        if (previewUrl != null) {
-                            ItemCover.Thumb(
-                                modifier = Modifier
-                                    .width((w / 7).dp)
-                                    .padding(end = 8.dp),
-                                data = previewUrl,
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (previewUrl != null) {
+                        ItemCover.Thumb(
+                            modifier = Modifier.fillMaxWidth(0.4f).padding(end = 8.dp),
+                            data = ImageRequest.Builder(LocalContext.current)
+                                .data(previewUrl)
+                                .crossfade(true)
+                                .build(),
+                        )
+                    }
+
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            val titleLines = if (previewUrl == null) 1 else 2
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.labelMedium.copy(lineHeight = 14.sp),
+                                maxLines = titleLines,
+                                minLines = titleLines,
+                                overflow = TextOverflow.Ellipsis,
+                                onTextLayout = {
+                                    textHeight = it.size.height
+                                    textWidth = it.size.width
+                                },
+                                color = LocalContentColor.current.copy(alpha = if (seen) DISABLED_ALPHA else 1f),
                             )
                         }
 
-                        Column {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.fillMaxWidth(),
-                            ) {
-                                Text(
-                                    text = title,
-                                    style = MaterialTheme.typography.labelMedium.copy(lineHeight = 14.sp),
-                                    maxLines = 2,
-                                    minLines = 2,
-                                    overflow = TextOverflow.Ellipsis,
-                                    onTextLayout = {
-                                        textHeight = it.size.height
-                                        textWidth = it.size.width
-                                    },
-                                    color = LocalContentColor.current.copy(alpha = if (seen) DISABLED_ALPHA else 1f),
-                                )
-                            }
+                        val summaryModifier = if (isAnyEpisodeSelected) {
+                            Modifier
+                        } else {
+                            Modifier.clickable { expandSummary = !expandSummary }
+                        }
 
-                            val summaryModifier = if (selected) {
-                                Modifier
-                            } else {
-                                Modifier.clickable {
-                                    expandSummary =
-                                        !expandSummary
-                                }
-                            }
-
-                            if (summary != null) {
-                                Text(
-                                    text = summary,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    maxLines = if (expandSummary) Int.MAX_VALUE else 3,
-                                    minLines = 3,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 10.sp,
-                                    lineHeight = 11.sp,
-                                    overflow = TextOverflow.Ellipsis,
-                                    color = LocalContentColor.current.copy(
-                                        alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA,
-                                    ),
-                                    modifier = summaryModifier,
-                                )
-                            }
+                        if (summary != null) {
+                            Text(
+                                text = summary,
+                                style = MaterialTheme.typography.labelSmall,
+                                maxLines = if (expandSummary) Int.MAX_VALUE else 3,
+                                minLines = 3,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 10.sp,
+                                lineHeight = 11.sp,
+                                overflow = TextOverflow.Ellipsis,
+                                color = LocalContentColor.current.copy(
+                                    alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA,
+                                ),
+                                modifier = summaryModifier,
+                            )
                         }
                     }
                 }
@@ -233,6 +231,7 @@ fun AnimeEpisodeListItem(
                         bookmark = bookmark,
                         textHeight = textHeight,
                         onBookmarkClick = onBookmarkClick,
+                        isAnyEpisodeSelected = isAnyEpisodeSelected,
                         downloadIndicatorEnabled = downloadIndicatorEnabled,
                         downloadStateProvider = downloadStateProvider,
                         downloadProgressProvider = downloadProgressProvider,
@@ -352,6 +351,7 @@ private fun BookmarkDownloadIcons(
     bookmark: Boolean,
     textHeight: Int,
     onBookmarkClick: (Boolean) -> Unit,
+    isAnyEpisodeSelected: Boolean,
     downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
@@ -363,19 +363,26 @@ private fun BookmarkDownloadIcons(
         val bookmarkIcon = if (bookmark) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder
 
         val bookmarkInteraction = remember { MutableInteractionSource() }
+
         Icon(
             imageVector = bookmarkIcon,
             contentDescription = stringResource(MR.strings.action_filter_bookmarked),
             modifier = Modifier
                 .padding(start = 4.dp)
                 .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() * 2 - 2.dp })
-                .clickable(
-                    interactionSource = bookmarkInteraction,
-                    indication = ripple(
-                        bounded = false,
-                        radius = IconButtonTokens.StateLayerSize / 2,
-                    ),
-                ) { onBookmarkClick(!bookmark) },
+                .then(
+                    if (isAnyEpisodeSelected) {
+                        Modifier
+                    } else {
+                        Modifier.clickable(
+                            interactionSource = bookmarkInteraction,
+                            indication = ripple(
+                                bounded = false,
+                                radius = IconButtonTokens.StateLayerSize / 2,
+                            ),
+                        ) { onBookmarkClick(!bookmark) }
+                    },
+                ),
             tint = bookmarkColor,
         )
 

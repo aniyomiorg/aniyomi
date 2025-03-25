@@ -936,6 +936,7 @@ private fun LazyListScope.sharedEpisodeItems(
                     bookmark = episodeItem.episode.bookmark,
                     fillermark = episodeItem.episode.fillermark,
                     selected = episodeItem.selected,
+                    isAnyEpisodeSelected = isAnyEpisodeSelected,
                     downloadIndicatorEnabled = !isAnyEpisodeSelected && !anime.isLocal(),
                     downloadStateProvider = { episodeItem.downloadState },
                     downloadProgressProvider = { episodeItem.downloadProgress },
