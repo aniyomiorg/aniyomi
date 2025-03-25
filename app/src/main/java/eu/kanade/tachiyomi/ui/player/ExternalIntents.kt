@@ -25,6 +25,7 @@ import eu.kanade.tachiyomi.data.track.AnimeTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.source.anime.isNsfw
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.isOnline
@@ -67,6 +68,9 @@ class ExternalIntents {
     lateinit var source: AnimeSource
     lateinit var episode: Episode
 
+    var animeId: Long? = null
+    var episodeId: Long? = null
+
     /**
      * Returns the [Intent] to be sent to an external player.
      *
@@ -80,15 +84,14 @@ class ExternalIntents {
         episodeId: Long,
         chosenVideo: Video?,
     ): Intent? {
-        anime = getAnime.await(animeId) ?: return null
-        source = sourceManager.get(anime.source) ?: return null
-        episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
+        if (!initAnime(animeId, episodeId)) return null
+        val hosters = EpisodeLoader.getHosters(episode, anime, source)
 
         val video = chosenVideo
-            ?: EpisodeLoader.getLinks(episode, anime, source).firstOrNull()
+            ?: HosterLoader.getBestVideo(source, hosters)
             ?: throw Exception("Video list is empty")
 
-        val videoUrl = getVideoUrl(context, video) ?: return null
+        val videoUrl = getVideoUrl(source, context, video) ?: return null
 
         val pkgName = playerPreferences.externalPlayerPreference().get()
 
@@ -121,18 +124,31 @@ class ExternalIntents {
         }
     }
 
+    suspend fun initAnime(animeId: Long, episodeId: Long): Boolean {
+        anime = getAnime.await(animeId) ?: return false
+        source = sourceManager.get(anime.source) ?: return false
+        episode = getEpisodesByAnimeId.await(anime.id).find { it.id == episodeId } ?: return false
+
+        this.animeId = animeId
+        this.episodeId = episodeId
+
+        return true
+    }
+
     /**
      * Returns the [Uri] of the given video.
      *
      * @param context the application context.
      * @param video the video being sent to the external player.
      */
-    private suspend fun getVideoUrl(context: Context, video: Video): Uri? {
-        if (video.videoUrl == null) {
-            makeErrorToast(context, Exception("Video URL is null. Instead watch Suavemente!"))
+    private suspend fun getVideoUrl(source: AnimeSource, context: Context, video: Video): Uri? {
+        val resolvedVideo = HosterLoader.getResolvedVideo(source, video)
+
+        if (resolvedVideo == null || resolvedVideo.videoUrl.isEmpty()) {
+            makeErrorToast(context, Exception("Video URL is empty. Instead watch Suavemente!"))
             return null
         } else {
-            val uri = video.videoUrl!!.toUri()
+            val uri = resolvedVideo.videoUrl.toUri()
 
             val isOnDevice = if (anime.source == LocalAnimeSource.ID) {
                 true
@@ -387,6 +403,8 @@ class ExternalIntents {
     @Suppress("DEPRECATION")
     fun onActivityResult(context: Context, intent: Intent?) {
         val data = intent ?: return
+        if (animeId == null || episodeId == null) return
+
         val anime = anime
         val currentExtEpisode = episode
         val currentPosition: Long

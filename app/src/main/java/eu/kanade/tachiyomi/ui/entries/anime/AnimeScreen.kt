@@ -336,7 +336,13 @@ class AnimeScreen(
                     }
                 }
                 SkipIntroLengthDialog(
-                    initialSkipIntroLength = successState.anime.skipIntroLength,
+                    initialSkipIntroLength = if (!successState.anime.skipIntroDisable &&
+                        successState.anime.skipIntroLength == 0
+                    ) {
+                        screenModel.gesturePreferences.defaultIntroLength().get()
+                    } else {
+                        successState.anime.skipIntroLength
+                    },
                     onDismissRequest = onDismissRequest,
                     onValueChanged = {
                         updateSkipIntroLength(it.toLong())
