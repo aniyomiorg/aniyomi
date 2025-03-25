@@ -51,8 +51,7 @@ object PlayerSettingsAudioScreen : SearchableSettings {
             ),
             Preference.PreferenceItem.SliderPreference(
                 value = boostCap,
-                max = 200,
-                min = 0,
+                valueRange = 0..200,
                 title = stringResource(MR.strings.pref_player_audio_boost_cap),
                 subtitle = boostCap.toString(),
                 onValueChanged = {
