@@ -1051,7 +1051,6 @@
 \nVjerujući ovom proširenju, prihvaćaš te rizike.</string>
     <string name="pref_gpu_next_subtitle">Nov pozadinski sustav za iscrtavanje videa</string>
     <string name="pref_gpu_next_title">Aktiviraj gpu-next</string>
-    <string name="safe_download">Modus sigurnog preuzimanje za anime</string>
     <string name="pref_player_audio_channels">Audio kanali</string>
     <string name="pref_player_audio_channels_auto">Automatski</string>
     <string name="pref_player_audio_channels_mono">Mono</string>
@@ -1087,8 +1086,6 @@
     <string name="pref_display_profile">Prilagođeni profil prikaza</string>
     <string name="action_replace_repo_title">Ključ otiska prsta za potpisivanje već postoji</string>
     <string name="upcoming_calendar_next">Sljedeći mjesec</string>
-    <string name="download_threads_number">Broj niti</string>
-    <string name="download_threads_number_summary">Broj niti koje se koriste pri preuzimanju, može doći do blokade IP adrese ako je broj prevelik, 4 je dobar broj za izbjegavanje visoke opterećenosti servera.</string>
     <string name="label_player_settings">Postavke playera</string>
     <string name="action_search_player_settings">Pretraži postavke playera</string>
     <string name="pref_player_internal">Interni player</string>
@@ -1205,7 +1202,6 @@
     <string name="player_sheets_add_ext_sub">Dodaj eksterne titlove</string>
     <string name="player_sheets_subtitles_footer_secondary_sid_no_styles">Sekundarni titlovi neće imati ASS/SSA stil.</string>
     <string name="confirm_tracker_update">Aktualizirati usluge praćenja do poglavlja %d?</string>
-    <string name="safe_download_summary">Aktiviraj modus preuzimanja s jednom niti</string>
     <string name="pref_controls_display_volume_percentage">Prikaži glasnoću kao postotak</string>
     <string name="pref_player_time_to_disappear_summary">%1$s ms</string>
     <string name="pref_show_system_bar">Prikaži statusnu traku sustava s kontrolama</string>

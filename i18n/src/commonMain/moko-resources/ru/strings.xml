@@ -1045,11 +1045,7 @@
     <string name="theme_matrix">Матрица</string>
     <string name="pref_gpu_next_title">Включить gpu-next</string>
     <string name="pref_gpu_next_subtitle">Новый сервер для рендеринга видео</string>
-    <string name="download_threads_number">Количество потоков</string>
     <string name="pref_bottom_nav_no_browse">Переместить вкладку «Поисковик» на вкладку «Ещё»</string>
-    <string name="safe_download">Режим безопасного скачивания аниме</string>
-    <string name="safe_download_summary">Включить режим скачивания одним потоком без диапазона</string>
-    <string name="download_threads_number_summary">Количество потоков для скачивания: при слишком большом значении возможна блокировка вашего IP. Во избежание чрезмерных нагрузок на сервера, рекомендуется 4.</string>
     <string name="pref_player_audio_channels">Звуковые каналы</string>
     <string name="pref_player_audio_channels_mono">Моно</string>
     <string name="pref_player_audio_channels_stereo">Стерео</string>

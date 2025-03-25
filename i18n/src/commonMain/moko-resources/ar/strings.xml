@@ -1079,10 +1079,6 @@
     <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="anime_interval_expected_update">من المتوقع إصدار حلقات جديدة بعد %1$s، سيتم التحقق كل %2$s.</string>
     <string name="onboarding_storage_action_create_folder">إنشاء مجلد Aniyomi افتراضي</string>
-    <string name="safe_download">وضع التنزيل الآمن للأنمي</string>
-    <string name="safe_download_summary">تمكين وضع التنزيل بخط واحد وبدون نطاق</string>
-    <string name="download_threads_number">عدد الخطوط</string>
-    <string name="download_threads_number_summary">عدد الخطوط المستخدمة للتنزيل، قد يؤدي إلى حظر عنوان IP الخاص بك إذا كان مرتفعًا للغاية، وعادةً ما يكون 4 عددًا جيدًا لتجنب التحميل الثقيل على خوادم المصدر.</string>
     <string name="download_speed_limit">حد سرعة التنزيل</string>
     <string name="download_speed_limit_hint">اضبطه على 0 لتعطيل حد السرعة.</string>
     <string name="pref_mpv_scripts">تمكين سكربتات MPV</string>
