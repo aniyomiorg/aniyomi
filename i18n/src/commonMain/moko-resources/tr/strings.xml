@@ -1039,7 +1039,7 @@
     <string name="local_source_badge">Yerel</string>
     <string name="anime_interval_expected_update">Yeni bölümlerin %1$s içinde yayınlanacağı tahmin ediliyor. %2$s aralıklarla ediliyor.</string>
     <string name="onboarding_storage_action_create_folder">Varsayılan Aniyomi klasörünü oluştur</string>
-    <string name="download_speed_limit">İndirme hızı sınırı</string>
+    <string name="download_speed_limit">Bölüm indirme hızı sınırı</string>
     <string name="download_speed_limit_hint">Hız sınırını devre dışı bırakmak için 0 olarak ayarlayın.</string>
     <string name="download_notifier_download_finish">İndirme tamamlandı</string>
     <string name="action_sort_airing_time">Yayınlama tarihi</string>
@@ -1246,4 +1246,13 @@
     <string name="pref_player_custom_button_add">Buton ekle</string>
     <string name="pref_player_custom_button_guide">Özel butonlar rehberi</string>
     <string name="pref_library_rows">Liste boyutu</string>
+    <string name="pref_hosters">Sunucular</string>
+    <string name="pref_hosters_show_failure">Başarısız sunucuları göster</string>
+    <string name="no_available_videos">Mevcut video yok</string>
+    <string name="no_hosters">Sunucu listesi boş</string>
+    <string name="no_episode_loaded">Herhangi bir bölüm yüklenmedi</string>
+    <string name="select_hoster_from_empty_list">Sunucular boş listeden seçildi</string>
+    <string name="player_hoster_failed">Videolar yüklenemedi</string>
+    <string name="pref_hosters_show_empty">Boş sunucuları göster</string>
+    <string name="player_hoster_tap_to_load">Videoları yüklemek için dokunun</string>
 </resources>
