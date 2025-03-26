@@ -153,7 +153,8 @@ fun PlayerSheets(
                 chapters,
                 currentChapter = chapter,
                 onClick = { onSeekToChapter(chapters.indexOf(it)) },
-                onDismissRequest,
+                onDismissRequest = onDismissRequest,
+                dismissSheet = dismissSheet,
             )
         }
 
