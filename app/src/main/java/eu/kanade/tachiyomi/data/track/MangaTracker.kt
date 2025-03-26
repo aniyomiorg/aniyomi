@@ -103,6 +103,11 @@ interface MangaTracker {
         updateRemote(track)
     }
 
+    suspend fun setRemotePrivate(track: MangaTrack, private: Boolean) {
+        track.private = private
+        updateRemote(track)
+    }
+
     private suspend fun updateRemote(track: MangaTrack): Unit = withIOContext {
         try {
             update(track)

@@ -50,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -1062,7 +1063,7 @@ class PlayerActivity : BaseActivity() {
     }
 
     fun parseVideoUrl(videoUrl: String?): String? {
-        return Uri.parse(videoUrl).resolveUri(this)
+        return videoUrl?.toUri()?.resolveUri(this)
             ?: videoUrl
     }
 

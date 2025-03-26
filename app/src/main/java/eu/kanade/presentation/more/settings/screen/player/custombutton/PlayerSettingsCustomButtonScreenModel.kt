@@ -92,20 +92,9 @@ class PlayerSettingsCustomButtonScreenModel(
         }
     }
 
-    fun moveUp(customButton: CustomButton) {
+    fun changeOrder(customButton: CustomButton, newIndex: Int) {
         screenModelScope.launch {
-            when (reorderCustomButton.moveUp(customButton)) {
-                is ReorderCustomButton.Result.InternalError -> _events.send(
-                    CustomButtonEvent.InternalError,
-                )
-                else -> {}
-            }
-        }
-    }
-
-    fun moveDown(customButton: CustomButton) {
-        screenModelScope.launch {
-            when (reorderCustomButton.moveDown(customButton)) {
+            when (reorderCustomButton.changeOrder(customButton, newIndex)) {
                 is ReorderCustomButton.Result.InternalError -> _events.send(
                     CustomButtonEvent.InternalError,
                 )

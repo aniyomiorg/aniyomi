@@ -92,29 +92,9 @@ class AnimeCategoryScreenModel(
         }
     }
 
-    fun sortAlphabetically() {
+    fun changeOrder(category: Category, newIndex: Int) {
         screenModelScope.launch {
-            when (reorderCategory.sortAlphabetically()) {
-                is ReorderAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
-                else -> {}
-            }
-        }
-    }
-
-    fun moveUp(category: Category) {
-        screenModelScope.launch {
-            when (reorderCategory.moveUp(category)) {
-                is ReorderAnimeCategory.Result.InternalError -> _events.send(
-                    AnimeCategoryEvent.InternalError,
-                )
-                else -> {}
-            }
-        }
-    }
-
-    fun moveDown(category: Category) {
-        screenModelScope.launch {
-            when (reorderCategory.moveDown(category)) {
+            when (reorderCategory.await(category, newIndex)) {
                 is ReorderAnimeCategory.Result.InternalError -> _events.send(
                     AnimeCategoryEvent.InternalError,
                 )
@@ -155,7 +135,6 @@ class AnimeCategoryScreenModel(
 
 sealed interface AnimeCategoryDialog {
     data object Create : AnimeCategoryDialog
-    data object SortAlphabetically : AnimeCategoryDialog
     data class Rename(val category: Category) : AnimeCategoryDialog
     data class Delete(val category: Category) : AnimeCategoryDialog
 }

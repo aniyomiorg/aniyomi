@@ -5,9 +5,13 @@ import tachiyomi.core.common.util.lang.withNonCancellableContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
 import tachiyomi.domain.category.model.CategoryUpdate
+import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.library.service.LibraryPreferences
 
 class DeleteAnimeCategory(
     private val categoryRepository: AnimeCategoryRepository,
+    private val libraryPreferences: LibraryPreferences,
+    private val downloadPreferences: DownloadPreferences,
 ) {
 
     suspend fun await(categoryId: Long) = withNonCancellableContext {
@@ -24,6 +28,25 @@ class DeleteAnimeCategory(
                 id = category.id,
                 order = index.toLong(),
             )
+        }
+
+        val defaultCategory = libraryPreferences.defaultAnimeCategory().get()
+        if (defaultCategory == categoryId.toInt()) {
+            libraryPreferences.defaultAnimeCategory().delete()
+        }
+
+        val categoryPreferences = listOf(
+            libraryPreferences.animeUpdateCategories(),
+            libraryPreferences.animeUpdateCategoriesExclude(),
+            downloadPreferences.removeExcludeAnimeCategories(),
+            downloadPreferences.downloadNewEpisodeCategories(),
+            downloadPreferences.downloadNewEpisodeCategoriesExclude(),
+        )
+        val categoryIdString = categoryId.toString()
+        categoryPreferences.forEach { preference ->
+            val ids = preference.get()
+            if (categoryIdString !in ids) return@forEach
+            preference.set(ids.minus(categoryIdString))
         }
 
         try {

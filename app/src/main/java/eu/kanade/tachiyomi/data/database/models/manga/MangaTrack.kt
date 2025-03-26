@@ -32,12 +32,15 @@ interface MangaTrack : Serializable {
 
     var tracking_url: String
 
-    fun copyPersonalFrom(other: MangaTrack) {
+    var private: Boolean
+
+    fun copyPersonalFrom(other: MangaTrack, copyRemotePrivate: Boolean = true) {
         last_chapter_read = other.last_chapter_read
         score = other.score
         status = other.status
         started_reading_date = other.started_reading_date
         finished_reading_date = other.finished_reading_date
+        if (copyRemotePrivate) private = other.private
     }
 
     companion object {

@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: ❌ Help with Extensions
+    url: https://aniyomi.org/docs/faq/browse/extensions
+    about: For extension-related questions/issues
   - name: 🧑‍💻 Aniyomi help discord
     url: https://discord.gg/F32UjdJZrR
     about: Common questions are answered here

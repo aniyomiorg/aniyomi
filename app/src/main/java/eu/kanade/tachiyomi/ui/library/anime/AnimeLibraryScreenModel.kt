@@ -4,15 +4,15 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastDistinctBy
+import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.fastMapNotNull
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.core.preference.asState
-import eu.kanade.core.util.fastDistinctBy
-import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
-import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.core.util.fastPartition
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
@@ -337,6 +337,7 @@ class AnimeLibraryScreenModel(
     private fun getAnimelibItemPreferencesFlow(): Flow<ItemPreferences> {
         return combine(
             libraryPreferences.downloadBadge().changes(),
+            libraryPreferences.unreadBadge().changes(),
             libraryPreferences.localBadge().changes(),
             libraryPreferences.languageBadge().changes(),
             libraryPreferences.autoUpdateItemRestrictions().changes(),
@@ -351,16 +352,17 @@ class AnimeLibraryScreenModel(
             transform = {
                 ItemPreferences(
                     downloadBadge = it[0] as Boolean,
-                    localBadge = it[1] as Boolean,
-                    languageBadge = it[2] as Boolean,
-                    skipOutsideReleasePeriod = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in (it[3] as Set<*>),
-                    globalFilterDownloaded = it[4] as Boolean,
-                    filterDownloaded = it[5] as TriState,
-                    filterUnseen = it[6] as TriState,
-                    filterStarted = it[7] as TriState,
-                    filterBookmarked = it[8] as TriState,
-                    filterCompleted = it[9] as TriState,
-                    filterIntervalCustom = it[10] as TriState,
+                    unseenBadge = it[1] as Boolean,
+                    localBadge = it[2] as Boolean,
+                    languageBadge = it[3] as Boolean,
+                    skipOutsideReleasePeriod = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in (it[4] as Set<*>),
+                    globalFilterDownloaded = it[5] as Boolean,
+                    filterDownloaded = it[6] as TriState,
+                    filterUnseen = it[7] as TriState,
+                    filterStarted = it[8] as TriState,
+                    filterBookmarked = it[9] as TriState,
+                    filterCompleted = it[10] as TriState,
+                    filterIntervalCustom = it[11] as TriState,
                 )
             },
         )
@@ -385,7 +387,7 @@ class AnimeLibraryScreenModel(
                         } else {
                             0
                         },
-                        unseenCount = animelibAnime.unseenCount,
+                        unseenCount = if (prefs.unseenBadge) animelibAnime.unseenCount else 0,
                         isLocal = if (prefs.localBadge) animelibAnime.anime.isLocal() else false,
                         sourceLanguage = if (prefs.languageBadge) {
                             sourceManager.getOrStub(animelibAnime.anime.source).lang
@@ -730,6 +732,7 @@ class AnimeLibraryScreenModel(
     @Immutable
     private data class ItemPreferences(
         val downloadBadge: Boolean,
+        val unseenBadge: Boolean,
         val localBadge: Boolean,
         val languageBadge: Boolean,
         val skipOutsideReleasePeriod: Boolean,

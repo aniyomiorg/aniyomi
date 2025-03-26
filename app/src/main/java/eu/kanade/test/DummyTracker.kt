@@ -15,6 +15,7 @@ data class DummyTracker(
     override val id: Long,
     override val name: String,
     override val supportsReadingDates: Boolean = false,
+    override val supportsPrivateTracking: Boolean = false,
     override val isLoggedIn: Boolean = false,
     override val isLoggedInFlow: Flow<Boolean> = flowOf(false),
     val valLogoColor: Int = Color.rgb(18, 25, 35),

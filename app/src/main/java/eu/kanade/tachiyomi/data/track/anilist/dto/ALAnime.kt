@@ -19,6 +19,7 @@ data class ALAnime(
     val startDateFuzzy: Long,
     val totalEpisodes: Long,
     val averageScore: Int,
+    val studios: ALStudios,
 ) {
     fun toTrack() = AnimeTrackSearch.create(TrackerManager.ANILIST).apply {
         remote_id = remoteId
@@ -38,6 +39,12 @@ data class ALAnime(
                 ""
             }
         }
+
+        authors = studios.edges
+            .filter { it.isMain }
+            .ifEmpty { studios.edges }
+            .take(3)
+            .map { it.node.name }
     }
 }
 
@@ -49,6 +56,7 @@ data class ALUserAnime(
     val startDateFuzzy: Long,
     val completedDateFuzzy: Long,
     val anime: ALAnime,
+    val private: Boolean,
 ) {
     fun toTrack() = AnimeTrack.create(TrackerManager.ANILIST).apply {
         remote_id = anime.remoteId
@@ -60,6 +68,7 @@ data class ALUserAnime(
         last_episode_seen = episodesSeen.toDouble()
         library_id = libraryId
         total_episodes = anime.totalEpisodes
+        private = this@ALUserAnime.private
     }
 
     private fun toTrackStatus() = when (listStatus) {
