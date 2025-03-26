@@ -338,7 +338,7 @@ object SettingsLibraryScreen : SearchableSettings {
                             stringResource(MR.strings.pref_mark_duplicate_read_chapter_read_existing),
                         MARK_DUPLICATE_CHAPTER_READ_NEW to
                             stringResource(MR.strings.pref_mark_duplicate_read_chapter_read_new),
-                        ),
+                    ),
                     title = stringResource(MR.strings.pref_mark_duplicate_read_chapter_read),
                 ),
             ),

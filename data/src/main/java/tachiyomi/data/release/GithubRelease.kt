@@ -2,7 +2,6 @@ package tachiyomi.data.release
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import tachiyomi.domain.release.model.Release
 
 /**
  * Contains information about the latest release from GitHub.
