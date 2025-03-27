@@ -1,4 +1,7 @@
+import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy;
 import kotlin.Boolean;
+import kotlin.String;
+import kotlin.collections.List;
 
 ALTER TABLE episodes
 RENAME TO episodes_tmp;
@@ -32,6 +35,45 @@ SELECT _id, anime_id, url, name, scanlator, seen, bookmark, 0, last_second_seen,
 FROM episodes_tmp;
 
 DROP TABLE episodes_tmp;
+
+
+ALTER TABLE animes
+RENAME TO animes_tmp;
+
+CREATE TABLE animes(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    source INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    artist TEXT,
+    author TEXT,
+    description TEXT,
+    genre TEXT AS List<String>,
+    title TEXT NOT NULL,
+    status INTEGER NOT NULL,
+    thumbnail_url TEXT,
+    background_url TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    last_update INTEGER,
+    next_update INTEGER,
+    initialized INTEGER AS Boolean NOT NULL,
+    viewer INTEGER NOT NULL,
+    episode_flags INTEGER NOT NULL,
+    cover_last_modified INTEGER NOT NULL,
+    background_last_modified INTEGER NOT NULL,
+    date_added INTEGER NOT NULL,
+    update_strategy INTEGER AS AnimeUpdateStrategy NOT NULL DEFAULT 0,
+    calculate_interval INTEGER DEFAULT 0 NOT NULL,
+    last_modified_at INTEGER NOT NULL DEFAULT 0,
+    favorite_modified_at INTEGER,
+    version INTEGER NOT NULL DEFAULT 0,
+    is_syncing INTEGER NOT NULL DEFAULT 0
+);
+
+INSERT INTO animes(_id, source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, background_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, favorite_modified_at, version, is_syncing)
+SELECT _id, source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, 0, date_added, update_strategy, calculate_interval, last_modified_at, favorite_modified_at, version, is_syncing
+FROM animes_tmp;
+
+DROP TABLE animes_tmp;
 
 
 DROP VIEW IF EXISTS animeupdatesView;

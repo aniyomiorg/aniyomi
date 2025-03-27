@@ -13,6 +13,7 @@ import dataanime.Animes
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
 import eu.kanade.tachiyomi.BuildConfig
+import eu.kanade.tachiyomi.data.cache.AnimeBackgroundCache
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
@@ -51,6 +52,7 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.mi.data.AnimeDatabase
+import tachiyomi.source.local.image.anime.LocalAnimeBackgroundManager
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
 import tachiyomi.source.local.image.anime.LocalEpisodeThumbnailManager
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
@@ -182,6 +184,7 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { MangaCoverCache(app) }
         addSingletonFactory { AnimeCoverCache(app) }
+        addSingletonFactory { AnimeBackgroundCache(app) }
 
         addSingletonFactory { NetworkHelper(app, get()) }
         addSingletonFactory { JavaScriptEngine(app) }
@@ -212,6 +215,7 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { LocalMangaCoverManager(app, get()) }
 
         addSingletonFactory { LocalAnimeSourceFileSystem(get()) }
+        addSingletonFactory { LocalAnimeBackgroundManager(app, get()) }
         addSingletonFactory { LocalAnimeCoverManager(app, get()) }
         addSingletonFactory { LocalEpisodeThumbnailManager(app, get()) }
 

@@ -13,8 +13,9 @@ import coil3.getOrDefault
 import coil3.request.Options
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.cache.AnimeBackgroundCache
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER_KEY
+import eu.kanade.tachiyomi.data.coil.AnimeImageFetcher.Companion.USE_CUSTOM_COVER_KEY
 import eu.kanade.tachiyomi.network.await
 import logcat.LogPriority
 import okhttp3.CacheControl
@@ -45,7 +46,7 @@ import java.io.IOException
  * Available request parameter:
  * - [USE_CUSTOM_COVER_KEY]: Use custom cover if set by user, default is true
  */
-class AnimeCoverFetcher(
+class AnimeImageFetcher(
     private val url: String?,
     private val isLibraryAnime: Boolean,
     private val options: Options,
@@ -300,10 +301,11 @@ class AnimeCoverFetcher(
     ) : Fetcher.Factory<Anime> {
 
         private val coverCache: AnimeCoverCache by injectLazy()
+        private val backgroundCache: AnimeBackgroundCache by injectLazy()
         private val sourceManager: AnimeSourceManager by injectLazy()
 
         override fun create(data: Anime, options: Options, imageLoader: ImageLoader): Fetcher {
-            return AnimeCoverFetcher(
+            return AnimeImageFetcher(
                 url = data.thumbnailUrl,
                 isLibraryAnime = data.favorite,
                 options = options,
@@ -325,7 +327,7 @@ class AnimeCoverFetcher(
         private val sourceManager: AnimeSourceManager by injectLazy()
 
         override fun create(data: AnimeCover, options: Options, imageLoader: ImageLoader): Fetcher {
-            return AnimeCoverFetcher(
+            return AnimeImageFetcher(
                 url = data.url,
                 isLibraryAnime = data.isAnimeFavorite,
                 options = options,
@@ -341,6 +343,8 @@ class AnimeCoverFetcher(
 
     companion object {
         val USE_CUSTOM_COVER_KEY = Extras.Key(true)
+        val ANIME_BACKGROUND_KEY = Extras.Key("background")
+        fun Options.useBackground() = this.extras[ANIME_BACKGROUND_KEY] == "true"
 
         private val CACHE_CONTROL_NO_STORE = CacheControl.Builder().noStore().build()
         private val CACHE_CONTROL_NO_NETWORK_NO_CACHE = CacheControl.Builder().noCache().onlyIfCached().build()

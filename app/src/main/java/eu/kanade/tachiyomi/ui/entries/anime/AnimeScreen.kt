@@ -271,26 +271,27 @@ class AnimeScreen(
                     onDismissRequest = onDismissRequest,
                 )
             }
-            AnimeScreenModel.Dialog.FullCover -> {
-                val sm = rememberScreenModel { AnimeCoverScreenModel(successState.anime.id) }
+            AnimeScreenModel.Dialog.FullCover, AnimeScreenModel.Dialog.BackgroundCover -> {
+                val isCover = dialog == AnimeScreenModel.Dialog.FullCover
+                val sm = rememberScreenModel { AnimeImageScreenModel(successState.anime.id, isCover) }
                 val anime by sm.state.collectAsState()
                 if (anime != null) {
                     val getContent = rememberLauncherForActivityResult(
                         ActivityResultContracts.GetContent(),
                     ) {
                         if (it == null) return@rememberLauncherForActivityResult
-                        sm.editCover(context, it)
+                        sm.editImage(context, it)
                     }
                     AnimeCoverDialog(
                         anime = anime!!,
                         snackbarHostState = sm.snackbarHostState,
                         isCustomCover = remember(anime) { anime!!.hasCustomCover() },
-                        onShareClick = { sm.shareCover(context) },
-                        onSaveClick = { sm.saveCover(context) },
+                        onShareClick = { sm.shareImage(context) },
+                        onSaveClick = { sm.saveImage(context) },
                         onEditClick = {
                             when (it) {
                                 EditCoverAction.EDIT -> getContent.launch("image/*")
-                                EditCoverAction.DELETE -> sm.deleteCustomCover(context)
+                                EditCoverAction.DELETE -> sm.deleteCustomImage(context)
                             }
                         },
                         onDismissRequest = onDismissRequest,

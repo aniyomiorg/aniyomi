@@ -14,6 +14,7 @@ CREATE TABLE animes(
     title TEXT NOT NULL,
     status INTEGER NOT NULL,
     thumbnail_url TEXT,
+    background_url TEXT,
     favorite INTEGER AS Boolean NOT NULL,
     last_update INTEGER,
     next_update INTEGER,
@@ -21,6 +22,7 @@ CREATE TABLE animes(
     viewer INTEGER NOT NULL,
     episode_flags INTEGER NOT NULL,
     cover_last_modified INTEGER NOT NULL,
+    background_last_modified INTEGER NOT NULL,
     date_added INTEGER NOT NULL,
     update_strategy INTEGER AS AnimeUpdateStrategy NOT NULL DEFAULT 0,
     calculate_interval INTEGER DEFAULT 0 NOT NULL,
@@ -148,8 +150,8 @@ DELETE FROM animes
 WHERE favorite = 0 AND source IN :sourceIds;
 
 insert:
-INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version)
-VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :dateAdded, :updateStrategy, :calculateInterval, 0, :version);
+INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, background_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, background_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version)
+VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :backgroundUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :backgroundLastModified,:dateAdded, :updateStrategy, :calculateInterval, 0, :version);
 
 update:
 UPDATE animes SET
@@ -162,6 +164,7 @@ UPDATE animes SET
     title = coalesce(:title, title),
     status = coalesce(:status, status),
     thumbnail_url = coalesce(:thumbnailUrl, thumbnail_url),
+    background_url = coalesce(:backgroundUrl, background_url),
     favorite = coalesce(:favorite, favorite),
     last_update = coalesce(:lastUpdate, last_update),
     next_update = coalesce(:nextUpdate, next_update),
@@ -169,6 +172,7 @@ UPDATE animes SET
     viewer = coalesce(:viewer, viewer),
     episode_flags = coalesce(:episodeFlags, episode_flags),
     cover_last_modified = coalesce(:coverLastModified, cover_last_modified),
+    background_last_modified = coalesce(:backgroundLastModified, background_last_modified),
     date_added = coalesce(:dateAdded, date_added),
     update_strategy = coalesce(:updateStrategy, update_strategy),
     calculate_interval = coalesce(:calculateInterval, calculate_interval),

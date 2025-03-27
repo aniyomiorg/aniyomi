@@ -13,8 +13,10 @@ import androidx.work.WorkerParameters
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
+import eu.kanade.tachiyomi.data.cache.AnimeBackgroundCache
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.util.prepUpdateBackground
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.system.isRunning
 import eu.kanade.tachiyomi.util.system.workManager
@@ -43,6 +45,7 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
 
     private val sourceManager: AnimeSourceManager = Injekt.get()
     private val coverCache: AnimeCoverCache = Injekt.get()
+    private val backgroundCache: AnimeBackgroundCache = Injekt.get()
     private val getLibraryAnime: GetLibraryAnime = Injekt.get()
     private val updateAnime: UpdateAnime = Injekt.get()
 
@@ -122,7 +125,9 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
                                     val source = sourceManager.get(anime.source) ?: return@withUpdateNotification
                                     try {
                                         val networkAnime = source.getAnimeDetails(anime.toSAnime())
-                                        val updatedAnime = anime.prepUpdateCover(coverCache, networkAnime, true)
+                                        val updatedAnime = anime
+                                            .prepUpdateCover(coverCache, networkAnime, true)
+                                            .prepUpdateBackground(backgroundCache, networkAnime, true)
                                             .copyFrom(networkAnime)
                                         try {
                                             updateAnime.await(updatedAnime.toAnimeUpdate())

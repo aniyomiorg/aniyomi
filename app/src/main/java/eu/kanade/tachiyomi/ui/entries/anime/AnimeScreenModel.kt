@@ -1139,6 +1139,7 @@ class AnimeScreenModel(
         data object SettingsSheet : Dialog
         data object TrackSheet : Dialog
         data object FullCover : Dialog
+        data object BackgroundCover : Dialog
     }
 
     fun dismissDialog() {
