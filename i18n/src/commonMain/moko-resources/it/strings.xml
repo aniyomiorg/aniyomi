@@ -1046,7 +1046,7 @@
 \nRendendo attendibile questa estensione, accetti tutti questi rischi.</string>
     <string name="pref_start_screen">Schermata di avvio</string>
     <string name="manga_interval_custom_amount">Personalizza frequenza di aggiornamento:</string>
-    <string name="download_speed_limit">Limite velocità di download</string>
+    <string name="download_speed_limit">Limite velocità di download dei capitoli</string>
     <string name="download_speed_limit_hint">Imposta a 0 per disattivare il limite di velocità.</string>
     <string name="manga_interval_expected_update_soon">A breve</string>
     <string name="download_notifier_download_finish">Download completato</string>
@@ -1248,4 +1248,13 @@
     <string name="action_replace_repo_title">La chiave di firma dell\'impronta digitale esiste già</string>
     <string name="pref_player_audio_channels_auto_safe">Protezione automatica</string>
     <string name="single_action_seek">Scorri</string>
+    <string name="select_hoster_from_empty_list">Hosters selezionato da lista vuota</string>
+    <string name="player_hoster_failed">Caricamento video fallito</string>
+    <string name="no_available_videos">Nessun video disponibile</string>
+    <string name="no_episode_loaded">Nessun episodio caricato</string>
+    <string name="player_hoster_tap_to_load">Tocca per caricare i video</string>
+    <string name="pref_hosters_show_failure">Visualizza hoster falliti</string>
+    <string name="no_hosters">La lista hoster è vuota</string>
+    <string name="pref_hosters_show_empty">Visualizza hoster vuoti</string>
+    <string name="pref_hosters">Hoster</string>
 </resources>
