@@ -23,11 +23,13 @@
 package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.media.AudioManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
@@ -843,31 +845,39 @@ class PlayerViewModel @JvmOverloads constructor(
                     "pauseunpause" -> pauseUnpause()
                 }
             }
-            "seek_with_text" -> {
+            "seek_to_with_text" -> {
                 val (seekValue, text) = data.split("|", limit = 2)
-                if (seekValue.toFloat() < pos.value) {
-                    leftSeekToWithText(seekValue.toInt(), text)
-                } else {
-                    rightSeekToWithText(seekValue.toInt(), text)
-                }
+                seekToWithText(seekValue.toInt(), text)
             }
+            "seek_by_with_text" -> {
+                val (seekValue, text) = data.split("|", limit = 2)
+                seekByWithText(seekValue.toInt(), text)
+            }
+            "seek_by" -> seekByWithText(data.toInt(), null)
+            "seek_to" -> seekToWithText(data.toInt(), null)
             "toggle_button" -> {
-                when (data) {
-                    "h" -> _primaryButton.update { null }
-                    "s" -> {
-                        if (_primaryButton.value == null) {
-                            _primaryButton.update {
-                                _customButtons.value.getButtons().firstOrNull { it.isFavorite }
-                            }
+                fun showButton() {
+                    if (_primaryButton.value == null) {
+                        _primaryButton.update {
+                            customButtons.value.getButtons().firstOrNull { it.isFavorite }
                         }
                     }
                 }
+
+                when (data) {
+                    "show" -> showButton()
+                    "hide" -> _primaryButton.update { null }
+                    "toggle" -> if (_primaryButton.value == null) showButton() else _primaryButton.update { null }
+                }
             }
-            "seek_by" -> {
-                val (dir, seekValue) = data.split("|")
-                when (dir) {
-                    "l" -> leftSeekBy(seekValue.toInt())
-                    "r" -> rightSeekBy(seekValue.toInt())
+
+            "software_keyboard" -> when (data) {
+                "show" -> forceShowSoftwareKeyboard()
+                "hide" -> forceHideSoftwareKeyboard()
+                "toggle" -> if (inputMethodManager.isActive) {
+                    forceHideSoftwareKeyboard()
+                } else {
+                    forceShowSoftwareKeyboard()
                 }
             }
         }
@@ -877,7 +887,34 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private operator fun <T> List<T>.component6(): T = get(5)
 
+    private val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun forceShowSoftwareKeyboard() {
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+    }
+
+    private fun forceHideSoftwareKeyboard() {
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+    }
+
     private val doubleTapToSeekDuration = gesturePreferences.skipLengthPreference().get()
+    private val preciseSeek = gesturePreferences.playerSmoothSeek().get()
+    private val showSeekBar = gesturePreferences.showSeekBar().get()
+
+    private fun seekToWithText(seekValue: Int, text: String?) {
+        _isSeekingForwards.value = seekValue > 0
+        _doubleTapSeekAmount.value = seekValue - pos.value.toInt()
+        _seekText.update { _ -> text }
+        seekTo(seekValue, preciseSeek)
+        if (showSeekBar) showSeekBar()
+    }
+
+    private fun seekByWithText(value: Int, text: String?) {
+        _doubleTapSeekAmount.update { if (value < 0 && it < 0 || pos.value + value > duration.value) 0 else it + value }
+        _seekText.update { text }
+        _isSeekingForwards.value = value > 0
+        seekBy(value, preciseSeek)
+        if (showSeekBar) showSeekBar()
+    }
 
     fun updateSeekAmount(amount: Int) {
         _doubleTapSeekAmount.update { _ -> amount }
@@ -887,46 +924,22 @@ class PlayerViewModel @JvmOverloads constructor(
         _seekText.update { _ -> value }
     }
 
-    fun leftSeekBy(value: Int) {
+    fun leftSeek() {
         if (pos.value > 0) {
-            _doubleTapSeekAmount.value -= value
+            _doubleTapSeekAmount.value -= doubleTapToSeekDuration
         }
         _isSeekingForwards.value = false
-        seekBy(-value, gesturePreferences.playerSmoothSeek().get())
-        if (gesturePreferences.showSeekBar().get()) showSeekBar()
-    }
-
-    fun rightSeekBy(value: Int) {
-        if (pos.value < duration.value) {
-            _doubleTapSeekAmount.value += value
-        }
-        _isSeekingForwards.value = true
-        seekBy(value, gesturePreferences.playerSmoothSeek().get())
-        if (gesturePreferences.showSeekBar().get()) showSeekBar()
-    }
-
-    fun leftSeek() {
-        leftSeekBy(doubleTapToSeekDuration)
+        seekBy(-doubleTapToSeekDuration, preciseSeek)
+        if (showSeekBar) showSeekBar()
     }
 
     fun rightSeek() {
-        rightSeekBy(doubleTapToSeekDuration)
-    }
-
-    private fun leftSeekToWithText(seekValue: Int, text: String?) {
-        _isSeekingForwards.value = false
-        _doubleTapSeekAmount.value = -1
-        _seekText.update { _ -> text }
-        seekTo(seekValue)
-        if (gesturePreferences.showSeekBar().get()) showSeekBar()
-    }
-
-    private fun rightSeekToWithText(seekDuration: Int, text: String?) {
+        if (pos.value < duration.value) {
+            _doubleTapSeekAmount.value += doubleTapToSeekDuration
+        }
         _isSeekingForwards.value = true
-        _doubleTapSeekAmount.value = 1
-        _seekText.update { _ -> text }
-        seekTo(seekDuration)
-        if (gesturePreferences.showSeekBar().get()) showSeekBar()
+        seekBy(doubleTapToSeekDuration, preciseSeek)
+        if (showSeekBar) showSeekBar()
     }
 
     fun resetHosterState() {
@@ -1894,8 +1907,8 @@ class PlayerViewModel @JvmOverloads constructor(
                 showAniskipButton(aniSkipInterval!!, skipType, waitingAniSkip)
                 waitingAniSkip--
             } else if (autoSkipAniSkip) {
-                rightSeekToWithText(
-                    seekDuration = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
+                seekToWithText(
+                    seekValue = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
                     text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString()),
                 )
             } else {
@@ -1929,8 +1942,8 @@ class PlayerViewModel @JvmOverloads constructor(
             if (waitingTime > 0) {
                 updateAniskipButton(activity.stringResource(MR.strings.player_aniskip_dontskip))
             } else {
-                rightSeekToWithText(
-                    seekDuration = skipTime.endTime.toInt(),
+                seekToWithText(
+                    seekValue = skipTime.endTime.toInt(),
                     text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString()),
                 )
             }
@@ -1947,8 +1960,8 @@ class PlayerViewModel @JvmOverloads constructor(
                 waitingAniSkip = -1
                 return
             }
-            rightSeekToWithText(
-                seekDuration = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
+            seekToWithText(
+                seekValue = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
                 text = activity.stringResource(MR.strings.player_aniskip_skip, skipType!!.getString()),
             )
         }

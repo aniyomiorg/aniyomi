@@ -515,25 +515,30 @@ class PlayerActivity : BaseActivity() {
             val primaryButtonId = viewModel.primaryButton.value?.id ?: 0L
 
             val customButtonsContent = buildString {
-                appendLine("local lua_modules = mp.find_config_file('scripts')")
-                appendLine("if lua_modules then")
                 append(
-                    "package.path = package.path .. ';' .. lua_modules .. '/?.lua;' .. lua_modules .. '/?/init.lua;' .. '",
+                    """
+                        local lua_modules = mp.find_config_file('scripts')
+                        if lua_modules then
+                            package.path = package.path .. ';' .. lua_modules .. '/?.lua;' .. lua_modules .. '/?/init.lua;' .. '${scriptsDir()!!.filePath}' .. '/?.lua'
+                        end
+                        local aniyomi = require 'aniyomi'
+                    """.trimIndent(),
                 )
-                append(scriptsDir()!!.filePath)
-                appendLine("' .. '/?.lua'")
-                appendLine("end")
-                appendLine("local aniyomi = require 'aniyomi'")
+
                 buttons.forEach { button ->
-                    appendLine(button.getButtonOnStartup(primaryButtonId))
-                    appendLine("function button${button.id}()")
-                    appendLine(button.getButtonContent(primaryButtonId))
-                    appendLine("end")
-                    appendLine("mp.register_script_message('call_button_${button.id}', button${button.id})")
-                    appendLine("function button${button.id}long()")
-                    appendLine(button.getButtonLongPressContent(primaryButtonId))
-                    appendLine("end")
-                    appendLine("mp.register_script_message('call_button_${button.id}_long', button${button.id}long)")
+                    append(
+                        """
+                            ${button.getButtonOnStartup(primaryButtonId)}
+                            function button${button.id}()
+                                ${button.getButtonContent(primaryButtonId)}
+                            end
+                            mp.register_script_message('call_button_${button.id}', button${button.id})
+                            function button${button.id}long()
+                                ${button.getButtonLongPressContent(primaryButtonId)}
+                            end
+                            mp.register_script_message('call_button_${button.id}_long', button${button.id}long)
+                        """.trimIndent(),
+                    )
                 }
             }
 
@@ -656,6 +661,10 @@ class PlayerActivity : BaseActivity() {
                 } else if (!value && player.paused == false) {
                     viewModel.unpause()
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+
+                runCatching {
+                    setPictureInPictureParams(createPipParams())
                 }
             }
 
