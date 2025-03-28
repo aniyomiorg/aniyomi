@@ -1227,7 +1227,7 @@
     <string name="player_sheets_add_ext_audio">Harici ses kaynakları ekle</string>
     <string name="player_sheets_tracks_off">Kapalı</string>
     <string name="pref_category_player_sliders">Kaydırıcılar</string>
-    <string name="player_sheets_sub_typography_border_style">Kenar stili</string>
+    <string name="player_sheets_sub_typography_border_style">Sınır şekli</string>
     <string name="pref_player_custom_button_summary">Özel butonlarla lua kodları çalıştırın</string>
     <string name="pref_player_custom_button_header">Özel butonları düzenle</string>
     <string name="pref_player_custom_button_empty">Özel buton ayarlamadınız. Bir özel buton oluşturmak için artı butonuna dokunun.</string>
