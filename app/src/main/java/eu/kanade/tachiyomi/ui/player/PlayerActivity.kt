@@ -314,6 +314,8 @@ class PlayerActivity : BaseActivity() {
         player.isExiting = true
         if (isFinishing) {
             MPVLib.command(arrayOf("stop"))
+        } else {
+            viewModel.pause()
         }
 
         super.onPause()
