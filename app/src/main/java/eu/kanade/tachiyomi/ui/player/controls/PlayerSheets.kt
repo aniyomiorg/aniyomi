@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import dev.vivvvek.seeker.Segment
 import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.ui.player.ArtType
 import eu.kanade.tachiyomi.ui.player.Decoder
 import eu.kanade.tachiyomi.ui.player.Panels
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
@@ -79,10 +80,11 @@ fun PlayerSheets(
     buttons: ImmutableList<CustomButton>,
 
     // Screenshot sheet
+    isLocalSource: Boolean,
     showSubtitles: Boolean,
     onToggleShowSubtitles: (Boolean) -> Unit,
     cachePath: String,
-    onSetAsCover: (() -> InputStream) -> Unit,
+    onSetAsArt: (ArtType, (() -> InputStream)) -> Unit,
     onShare: (() -> InputStream) -> Unit,
     onSave: (() -> InputStream) -> Unit,
     takeScreenshot: (String, Boolean) -> InputStream?,
@@ -170,11 +172,12 @@ fun PlayerSheets(
 
         Sheets.Screenshot -> {
             ScreenshotSheet(
+                isLocalSource = isLocalSource,
                 hasSubTracks = subtitles.isNotEmpty(),
                 showSubtitles = showSubtitles,
                 onToggleShowSubtitles = onToggleShowSubtitles,
                 cachePath = cachePath,
-                onSetAsCover = onSetAsCover,
+                onSetAsArt = onSetAsArt,
                 onShare = onShare,
                 onSave = onSave,
                 takeScreenshot = takeScreenshot,

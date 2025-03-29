@@ -67,7 +67,9 @@ import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.TrackSelect
+import eu.kanade.tachiyomi.util.editBackground
 import eu.kanade.tachiyomi.util.editCover
+import eu.kanade.tachiyomi.util.editThumbnail
 import eu.kanade.tachiyomi.util.episode.filterDownloadedEpisodes
 import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
@@ -1478,23 +1480,29 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     /**
-     * Sets the screenshot as cover and notifies the UI of the result.
+     * Sets the screenshot as art and notifies the UI of the result.
      */
-    fun setAsCover(imageStream: () -> InputStream) {
+    fun setAsArt(artType: ArtType, imageStream: () -> InputStream) {
         val anime = currentAnime.value ?: return
+        val episode = currentEpisode.value ?: return
 
         viewModelScope.launchNonCancellable {
             val result = try {
-                anime.editCover(Injekt.get(), imageStream())
+                when(artType){
+                    ArtType.Cover -> anime.editCover(Injekt.get(), imageStream())
+                    ArtType.Background -> anime.editBackground(Injekt.get(), imageStream())
+                    ArtType.Thumbnail -> episode.editThumbnail(anime, Injekt.get(), imageStream())
+                }
+
                 if (anime.isLocal() || anime.favorite) {
-                    SetAsCover.Success
+                    SetAsArt.Success
                 } else {
-                    SetAsCover.AddToLibraryFirst
+                    SetAsArt.AddToLibraryFirst
                 }
             } catch (e: Exception) {
-                SetAsCover.Error
+                SetAsArt.Error
             }
-            eventChannel.send(Event.SetCoverResult(result))
+            eventChannel.send(Event.SetArtResult(result, artType))
         }
     }
 
@@ -1715,7 +1723,7 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     sealed class Event {
-        data class SetCoverResult(val result: SetAsCover) : Event()
+        data class SetArtResult(val result: SetAsArt, val artType: ArtType) : Event()
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
     }

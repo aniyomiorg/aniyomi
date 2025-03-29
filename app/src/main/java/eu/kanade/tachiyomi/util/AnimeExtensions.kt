@@ -11,10 +11,12 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.source.local.entries.anime.isLocal
 import tachiyomi.source.local.image.anime.LocalAnimeBackgroundManager
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
+import tachiyomi.source.local.image.anime.LocalEpisodeThumbnailManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream
 import java.time.Instant
+import eu.kanade.tachiyomi.data.database.models.anime.Episode as SEpisode
 
 /**
  * Call before updating [Anime.thumbnail_url] to ensure old cover can be cleared from cache
@@ -44,7 +46,7 @@ fun Anime.prepUpdateCover(coverCache: AnimeCoverCache, remoteAnime: SAnime, refr
 }
 
 /**
- * Call before updating [Anime.background_url] to ensure old cover can be cleared from cache
+ * Call before updating [Anime.background_url] to ensure old background can be cleared from cache
  */
 fun Anime.prepUpdateBackground(
     backgroundCache: AnimeBackgroundCache,
@@ -119,5 +121,15 @@ suspend fun Anime.editBackground(
     } else if (favorite) {
         backgroundCache.setCustomBackgroundToCache(this, stream)
         updateAnime.awaitUpdateBackgroundLastModified(id)
+    }
+}
+
+fun SEpisode.editThumbnail(
+    anime: Anime,
+    thumbnailManager: LocalEpisodeThumbnailManager,
+    stream: InputStream,
+) {
+    if (anime.isLocal()) {
+        thumbnailManager.update(anime.toSAnime(), this, stream)
     }
 }

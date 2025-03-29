@@ -232,8 +232,8 @@ class PlayerActivity : BaseActivity() {
                     is PlayerViewModel.Event.ShareImage -> {
                         onShareImageResult(event.uri, event.seconds)
                     }
-                    is PlayerViewModel.Event.SetCoverResult -> {
-                        onSetAsCoverResult(event.result)
+                    is PlayerViewModel.Event.SetArtResult -> {
+                        onSetAsArtResult(event.result, event.artType)
                     }
                 }
             }
@@ -1086,15 +1086,20 @@ class PlayerActivity : BaseActivity() {
     }
 
     /**
-     * Called from the presenter when a screenshot is set as cover or fails.
+     * Called from the presenter when a screenshot is set as art or fails.
      * It shows a different message depending on the [result].
      */
-    private fun onSetAsCoverResult(result: SetAsCover) {
+    private fun onSetAsArtResult(result: SetAsArt, artType: ArtType) {
         toast(
             when (result) {
-                SetAsCover.Success -> MR.strings.cover_updated
-                SetAsCover.AddToLibraryFirst -> MR.strings.notification_first_add_to_library
-                SetAsCover.Error -> MR.strings.notification_cover_update_failed
+                SetAsArt.Success ->
+                    when(artType){
+                        ArtType.Cover -> MR.strings.cover_updated
+                        ArtType.Background -> MR.strings.background_updated
+                        ArtType.Thumbnail -> MR.strings.thumbnail_updated
+                    }
+                SetAsArt.AddToLibraryFirst -> MR.strings.notification_first_add_to_library
+                SetAsArt.Error -> MR.strings.notification_cover_update_failed
             },
         )
     }

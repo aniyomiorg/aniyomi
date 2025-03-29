@@ -1004,7 +1004,9 @@
     <string name="set_as_cover">Set as cover</string>
     <string name="cover_updated">Cover updated</string>
     <string name="set_as_background">Set as background</string>
+    <string name="set_as_thumbnail">Set as thumbnail</string>
     <string name="background_updated">Background updated</string>
+    <string name="thumbnail_updated">Thumbnail updated</string>
     <string name="share_page_info">%1$s: %2$s, page %3$d</string>
     <string name="chapter_progress">Page: %1$d</string>
     <string name="no_next_chapter">Next chapter not found</string>
