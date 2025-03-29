@@ -36,6 +36,7 @@ fun Episode.toDomainEpisode(): DomainEpisode? {
         animeId = anime_id!!,
         seen = seen,
         bookmark = bookmark,
+        fillermark = fillermark,
         lastSecondSeen = last_second_seen,
         totalSeconds = total_seconds,
         dateFetch = date_fetch,
@@ -45,6 +46,8 @@ fun Episode.toDomainEpisode(): DomainEpisode? {
         dateUpload = date_upload,
         episodeNumber = episode_number.toDouble(),
         scanlator = scanlator,
+        summary = summary,
+        previewUrl = preview_url,
         lastModifiedAt = last_modified,
         version = version,
     )
