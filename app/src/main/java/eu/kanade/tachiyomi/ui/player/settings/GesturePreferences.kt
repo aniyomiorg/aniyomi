@@ -22,14 +22,6 @@ class GesturePreferences(
     fun skipLengthPreference() = preferenceStore.getInt("pref_skip_length_preference", 10)
     fun playerSmoothSeek() = preferenceStore.getBoolean("pref_player_smooth_seek", false)
 
-    fun aniSkipEnabled() = preferenceStore.getBoolean("pref_enable_ani_skip", false)
-    fun autoSkipAniSkip() = preferenceStore.getBoolean("pref_enable_auto_skip_ani_skip", false)
-    fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean(
-        "pref_enable_netflixStyle_aniskip",
-        false,
-    )
-    fun waitingTimeAniSkip() = preferenceStore.getInt("pref_waiting_time_aniskip", 5)
-
     // Double tap
 
     fun leftDoubleTapGesture() = preferenceStore.getEnum("pref_left_double_tap", SingleActionGesture.Seek)

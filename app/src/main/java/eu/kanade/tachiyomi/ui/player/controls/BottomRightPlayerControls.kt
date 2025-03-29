@@ -33,18 +33,18 @@ import tachiyomi.domain.custombuttons.model.CustomButton
 fun BottomRightPlayerControls(
     customButton: CustomButton?,
     customButtonTitle: String,
-    aniskipButton: String?,
-    onPressAniSkipButton: () -> Unit,
+    skipIntroButton: String?,
+    onPressSkipIntroButton: () -> Unit,
     isPipAvailable: Boolean,
     onAspectClick: () -> Unit,
     onPipClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier) {
-        if (aniskipButton != null) {
+        if (skipIntroButton != null) {
             FilledControlsButton(
-                text = aniskipButton,
-                onClick = onPressAniSkipButton,
+                text = skipIntroButton,
+                onClick = onPressSkipIntroButton,
                 onLongClick = {},
             )
         } else if (customButton != null) {
