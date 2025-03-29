@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import dev.vivvvek.seeker.Seeker
 import dev.vivvvek.seeker.SeekerDefaults
 import dev.vivvvek.seeker.Segment
+import eu.kanade.tachiyomi.animesource.model.ChapterType
 import eu.kanade.tachiyomi.ui.player.controls.LocalPlayerButtonsClickEvent
 import `is`.xyz.mpv.Utils
 import kotlinx.collections.immutable.ImmutableList
@@ -52,6 +53,7 @@ data class IndexedSegment(
     val start: Float,
     val color: Color = Color.Unspecified,
     val index: Int = 0,
+    val chapterType: ChapterType = ChapterType.Other,
 ) {
     companion object {
         val Unspecified = IndexedSegment(name = "", start = 0f)
