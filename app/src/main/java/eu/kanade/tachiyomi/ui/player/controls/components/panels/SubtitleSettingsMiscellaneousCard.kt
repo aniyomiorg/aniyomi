@@ -82,7 +82,6 @@ fun SubtitlesMiscellaneousCard(modifier: Modifier = Modifier) {
                 },
                 content = { Text(stringResource(MR.strings.player_sheets_sub_override_ass)) },
                 modifier = Modifier
-                    .padding(MaterialTheme.padding.medium)
                     .fillMaxWidth(),
             )
             var subScale by remember {

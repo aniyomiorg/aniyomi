@@ -51,7 +51,7 @@ fun ScreenshotSheet(
     ) {
         Column {
             Row(
-                modifier = Modifier.padding(vertical = MaterialTheme.padding.medium),
+                modifier = Modifier.padding(top = MaterialTheme.padding.medium),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
                 ActionButton(
@@ -96,16 +96,12 @@ fun ScreenshotSheet(
                 SwitchPreference(
                     value = showSubtitles,
                     onValueChange = onToggleShowSubtitles,
-                    modifier = Modifier.padding(
-                        start = MaterialTheme.padding.large,
-                        end = MaterialTheme.padding.large
-                    ),
+                    modifier = Modifier.padding(bottom = MaterialTheme.padding.medium),
                     content = {
                         Text(
                             text = stringResource(MR.strings.screenshot_show_subs),
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(horizontal = MaterialTheme.padding.medium)
                         )
                     },
                 )
