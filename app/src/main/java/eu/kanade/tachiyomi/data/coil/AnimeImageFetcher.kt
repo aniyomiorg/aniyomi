@@ -305,12 +305,27 @@ class AnimeImageFetcher(
         private val sourceManager: AnimeSourceManager by injectLazy()
 
         override fun create(data: Anime, options: Options, imageLoader: ImageLoader): Fetcher {
+            val isBackground = options.useBackground
+            val url = if (isBackground) data.backgroundUrl else data.thumbnailUrl
+
+            val coverCacheLazy = if (isBackground) {
+                lazy { backgroundCache.getBackgroundFile(url) }
+            } else {
+                lazy { coverCache.getCoverFile(url) }
+            }
+
+            val customCoverCacheLazy = if (isBackground) {
+                lazy { backgroundCache.getCustomBackgroundFile(data.id) }
+            } else {
+                lazy { coverCache.getCustomCoverFile(data.id) }
+            }
+
             return AnimeImageFetcher(
-                url = data.thumbnailUrl,
+                url = url,
                 isLibraryAnime = data.favorite,
                 options = options,
-                coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnailUrl) },
-                customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
+                coverFileLazy = coverCacheLazy,
+                customCoverFileLazy = customCoverCacheLazy,
                 diskCacheKeyLazy = lazy { imageLoader.components.key(data, options)!! },
                 sourceLazy = lazy { sourceManager.get(data.source) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,
@@ -343,8 +358,6 @@ class AnimeImageFetcher(
 
     companion object {
         val USE_CUSTOM_COVER_KEY = Extras.Key(true)
-        val ANIME_BACKGROUND_KEY = Extras.Key("background")
-        fun Options.useBackground() = this.extras[ANIME_BACKGROUND_KEY] == "true"
 
         private val CACHE_CONTROL_NO_STORE = CacheControl.Builder().noStore().build()
         private val CACHE_CONTROL_NO_NETWORK_NO_CACHE = CacheControl.Builder().noCache().onlyIfCached().build()

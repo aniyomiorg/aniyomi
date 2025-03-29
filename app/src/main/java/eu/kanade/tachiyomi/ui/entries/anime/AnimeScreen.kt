@@ -23,6 +23,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.core.util.ifAnimeSourcesLoaded
+import eu.kanade.domain.entries.anime.model.hasCustomBackground
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
@@ -32,7 +33,7 @@ import eu.kanade.presentation.entries.anime.AnimeScreen
 import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
 import eu.kanade.presentation.entries.anime.EpisodeSettingsDialog
-import eu.kanade.presentation.entries.anime.components.AnimeCoverDialog
+import eu.kanade.presentation.entries.anime.components.AnimeImagesDialog
 import eu.kanade.presentation.entries.components.DeleteItemsDialog
 import eu.kanade.presentation.entries.components.SetIntervalDialog
 import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsGesturesScreen.SkipIntroLengthDialog
@@ -168,7 +169,7 @@ class AnimeScreen(
                 }
             },
             onSearch = { query, global -> scope.launch { performSearch(navigator, query, global) } },
-            onCoverClicked = screenModel::showCoverDialog,
+            onCoverClicked = screenModel::showImagesDialog,
             onShareClicked = {
                 shareAnime(
                     context,
@@ -271,9 +272,8 @@ class AnimeScreen(
                     onDismissRequest = onDismissRequest,
                 )
             }
-            AnimeScreenModel.Dialog.FullCover, AnimeScreenModel.Dialog.BackgroundCover -> {
-                val isCover = dialog == AnimeScreenModel.Dialog.FullCover
-                val sm = rememberScreenModel { AnimeImageScreenModel(successState.anime.id, isCover) }
+            AnimeScreenModel.Dialog.FullImages -> {
+                val sm = rememberScreenModel { AnimeImageScreenModel(successState.anime.id) }
                 val anime by sm.state.collectAsState()
                 if (anime != null) {
                     val getContent = rememberLauncherForActivityResult(
@@ -282,10 +282,12 @@ class AnimeScreen(
                         if (it == null) return@rememberLauncherForActivityResult
                         sm.editImage(context, it)
                     }
-                    AnimeCoverDialog(
+                    AnimeImagesDialog(
                         anime = anime!!,
                         snackbarHostState = sm.snackbarHostState,
+                        pagerState = sm.pagerState,
                         isCustomCover = remember(anime) { anime!!.hasCustomCover() },
+                        isCustomBackground = remember(anime) { anime!!.hasCustomBackground() },
                         onShareClick = { sm.shareImage(context) },
                         onSaveClick = { sm.saveImage(context) },
                         onEditClick = {

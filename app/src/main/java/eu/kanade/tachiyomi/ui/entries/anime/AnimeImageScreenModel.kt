@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.entries.anime
 
 import android.content.Context
 import android.net.Uri
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.SnackbarHostState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -35,15 +36,17 @@ import uy.kohesive.injekt.api.get
 
 class AnimeImageScreenModel(
     private val animeId: Long,
-    private val isCover: Boolean,
     private val getAnime: GetAnime = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val backgroundCache: AnimeBackgroundCache = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
-
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    val pagerState: PagerState = PagerState(pageCount = { 2 }),
 ) : StateScreenModel<Anime?>(null) {
+
+    private val isCover: Boolean
+        get() = pagerState.currentPage != 1
 
     init {
         screenModelScope.launchIO {

@@ -1138,8 +1138,7 @@ class AnimeScreenModel(
         data object ChangeAnimeSkipIntro : Dialog
         data object SettingsSheet : Dialog
         data object TrackSheet : Dialog
-        data object FullCover : Dialog
-        data object BackgroundCover : Dialog
+        data object FullImages : Dialog
     }
 
     fun dismissDialog() {
@@ -1158,8 +1157,8 @@ class AnimeScreenModel(
         updateSuccessState { it.copy(dialog = Dialog.TrackSheet) }
     }
 
-    fun showCoverDialog() {
-        updateSuccessState { it.copy(dialog = Dialog.FullCover) }
+    fun showImagesDialog() {
+        updateSuccessState { it.copy(dialog = Dialog.FullImages) }
     }
 
     fun showMigrateDialog(duplicate: Anime) {

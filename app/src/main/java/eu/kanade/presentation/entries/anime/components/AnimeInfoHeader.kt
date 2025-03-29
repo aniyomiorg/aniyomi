@@ -74,7 +74,6 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.Extras
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -83,6 +82,7 @@ import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.data.coil.useBackground
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
@@ -116,13 +116,12 @@ fun AnimeInfoBox(
             Color.Transparent,
             MaterialTheme.colorScheme.background,
         )
-        val model = ImageRequest.Builder(LocalContext.current).apply {
-            extras[Extras.Key("background")] = "true"
-            data(anime)
-            crossfade(true)
-        }
         AsyncImage(
-            model = model.build(),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(anime)
+                .useBackground(true)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

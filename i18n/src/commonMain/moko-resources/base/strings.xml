@@ -90,6 +90,7 @@
     <string name="action_sort_category">Sort categories</string>
     <string name="sort_category_confirmation">Would you like to sort the categories alphabetically?</string>
     <string name="action_edit_cover">Edit cover</string>
+    <string name="action_edit_background">Edit background</string>
     <string name="action_view_chapters">View chapters</string>
     <string name="action_pause">Pause</string>
     <string name="action_previous_chapter">Previous chapter</string>
