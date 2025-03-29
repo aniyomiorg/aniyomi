@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.automirrored.outlined.LabelOff
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkAdd
@@ -176,6 +177,7 @@ fun AnimeEpisodeListItem(
                         seen = seen,
                         date = date,
                         watchProgress = watchProgress,
+                        fillermark = fillermark,
                         scanlator = scanlator,
                     )
 
@@ -352,14 +354,12 @@ private fun EpisodeInformation(
     seen: Boolean,
     date: String?,
     watchProgress: String?,
+    fillermark: Boolean,
     scanlator: String?,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         val subtitleStyle = MaterialTheme.typography.bodySmall
-            .merge(
-                color = LocalContentColor.current
-                    .copy(alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA),
-            )
+            .merge(color = LocalContentColor.current.copy(alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA))
         ProvideTextStyle(value = subtitleStyle) {
             if (date != null) {
                 Text(
@@ -367,7 +367,7 @@ private fun EpisodeInformation(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                if (watchProgress != null || scanlator != null) DotSeparatorText()
+                if (watchProgress != null || fillermark || scanlator != null) DotSeparatorText()
             }
             if (watchProgress != null) {
                 Text(
@@ -375,6 +375,20 @@ private fun EpisodeInformation(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
+                )
+                if (fillermark || scanlator != null) DotSeparatorText()
+            }
+            if (fillermark) {
+                Icon (
+                    imageVector = Icons.AutoMirrored.Filled.Label,
+                    contentDescription = stringResource(MR.strings.filler),
+                    tint = MaterialTheme.colorScheme.tertiary.copy(alpha = subtitleStyle.alpha),
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+                Text(
+                    text = stringResource(MR.strings.filler),
+                    maxLines = 1,
+                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = subtitleStyle.alpha),
                 )
                 if (scanlator != null) DotSeparatorText()
             }
