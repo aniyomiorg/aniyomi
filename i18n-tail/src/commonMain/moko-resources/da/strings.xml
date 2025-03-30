@@ -269,4 +269,46 @@
   <string name="active_account">Aktiv Konto</string>
   <string name="no_accounts_found">Ingen konti fundet</string>
   <string name="login_failed">Kunne ikke logge ind</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama komfortabelt gitter</string>
+  <string name="action_bulk_select">Masse valg tilstand</string>
+  <string name="action_move_up">Flyt Op</string>
+  <string name="action_move_down">Flyt Ned</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">For mange kilder i dit feed, kan ikke tilføje mere end 20</string>
+  <string name="action_sort_feed">Sortér feeds</string>
+  <string name="sort_feed_confirmation">Ønsker du at sortere feeds alfabetisk?</string>
+  <string name="saved_searches_feeds">Gemte Søgninger &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Gemte Søgninger (Hold for at tilføje til Feed)</string>
+  <string name="pref_hide_feed">Skjul Feed fane</string>
+  <string name="pref_feed_position">Feed fane position</string>
+  <string name="pref_feed_position_summery">Ønsker du at feedet fanen skal være den første fane i browse? Dette vil gøre det til standardfanen, når du åbner browse, anbefales ikke, hvis du er på data eller et afmålt netværk</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">Slet feed element?</string>
+  <string name="feed_tab_empty">Du har ikke nogen kilder i dit feed, navigere til øverste højre for at tilføje en</string>
+  <string name="feed_add">Tilføj %1$s til feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Gemte Søgninger</string>
+  <string name="save_search">Gem nuværende søgeforespørgsel?</string>
+  <string name="save_search_hint">Mit søgenavn</string>
+  <string name="save_search_failed_to_load">Kunne ikke indlæse gemte søgninger!</string>
+  <string name="save_search_failed_to_load_message">Der opstod en fejl under indlæsning af dine gemte søgninger.</string>
+  <string name="save_search_delete">Slet gemte søgeforespørgsel?</string>
+  <string name="save_search_delete_message">Er du sikker på, at du vil slette din gemte søgeforespørgsel: \'%1$s\'?</string>
+  <string name="save_search_invalid">Gemte søgefelt ugyldige, filtre er ændret</string>
+  <string name="save_search_invalid_name">Ugyldigt gemt søgenavn</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Ingen tilgængelige kildekategorier</string>
+  <string name="invalid_category_name">Ugyldigt kategorinavn</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Forslag</string>
+  <string name="pref_source_related_mangas_summary">Vis forslag til source-website under visning af posten</string>
+  <string name="related_mangas_website_suggestions">Websted Forslag</string>
+  <string name="related_mangas_more">Mere som disse...</string>
+  <string name="saved_searches_delete">Gemte Søgninger (Hold til at slette)</string>
+  <string name="pref_expand_related_animes">Udvid Forslag</string>
+  <string name="pref_expand_related_animes_summary">Hvis slået fra, vil forslag ikke automatisk indlæse &amp; Vis udvidet</string>
+  <string name="put_related_animes_in_overflow">Forslag i overløb</string>
+  <string name="put_related_animes_in_overflow_summary">Sæt knappen Forslag i overløb menuen i stedet for på indgangen siden</string>
+  <string name="pref_show_home_on_related_animes">Hjem fra forslag</string>
+  <string name="pref_show_home_on_related_animes_summary">Vis et ikon mens du browser forslag til at navigere direkte tilbage til hjemmet</string>
+  <string name="pref_source_related_animes">Forslag</string>
+  <string name="pref_source_related_animes_summary">Vis forslag til source-website under visning af posten</string>
+  <string name="pref_source_navigation">Erstat seneste knap</string>
+  <string name="pref_source_navigation_summery">Erstat nyeste knap med en brugerdefineret browse visning, der indeholder både nyeste og gennemse</string>
 </resources>
