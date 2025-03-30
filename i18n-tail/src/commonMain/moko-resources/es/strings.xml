@@ -269,4 +269,46 @@
   <string name="active_account">Cuenta Activa</string>
   <string name="no_accounts_found">No se encontraron cuentas</string>
   <string name="login_failed">No se ha podido iniciar sesión</string>
+  <string name="action_display_comfortable_grid_panorama">Panel panorámico adaptable</string>
+  <string name="action_bulk_select">Modo de selección múltiple</string>
+  <string name="action_move_up">Mover arriba</string>
+  <string name="action_move_down">Mover abajo</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Demasiadas fuentes en tu feed. No se pueden agregar más de 20</string>
+  <string name="action_sort_feed">Ordenar feeds</string>
+  <string name="sort_feed_confirmation">¿Deseas ordenar los feeds alfabéticamente?</string>
+  <string name="saved_searches_feeds">Búsquedas guardadas &amp; Leeds</string>
+  <string name="saved_searches_add_feed">Búsquedas guardadas (Mantén presionado para añadir al Feed)</string>
+  <string name="pref_hide_feed">Ocultar pestaña de Feed</string>
+  <string name="pref_feed_position">Posición de la pestaña Feed</string>
+  <string name="pref_feed_position_summery">¿Quieres que la pestaña Feed sea la primera en Navegar? Esto la convertirá en la pestaña predeterminada al abrir Navegar. No recomendado si usas datos móviles o una red con límite</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">¿Eliminar elemento del feed?</string>
+  <string name="feed_tab_empty">No tienes fuentes en tu feed. Ve a la esquina superior derecha para agregar una</string>
+  <string name="feed_add">¿Quieres añadir %1$s a tu feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Búsquedas guardadas</string>
+  <string name="save_search">¿Guardar la búsqueda actual?</string>
+  <string name="save_search_hint">Nombre de mi búsqueda</string>
+  <string name="save_search_failed_to_load">¡No se pudieron cargar las búsquedas guardadas!</string>
+  <string name="save_search_failed_to_load_message">Ocurrió un error al cargar tus búsquedas guardadas.</string>
+  <string name="save_search_delete">¿Eliminar esta búsqueda guardada?</string>
+  <string name="save_search_delete_message">¿Seguro que deseas eliminar tu búsqueda guardada: \'%1$s\'?</string>
+  <string name="save_search_invalid">Búsqueda guardada no válida: los filtros han cambiado</string>
+  <string name="save_search_invalid_name">Nombre de búsqueda guardada no válido</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">No hay categorías de fuente disponibles</string>
+  <string name="invalid_category_name">Nombre de categoría inválido</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Sugerencias</string>
+  <string name="pref_source_related_mangas_summary">Mostrar sugerencias del sitio de origen mientras se ve la entrada</string>
+  <string name="related_mangas_website_suggestions">Sugerencias del sitio web</string>
+  <string name="related_mangas_more">Más como estos...</string>
+  <string name="saved_searches_delete">Búsquedas guardadas (Mantén para eliminar)</string>
+  <string name="pref_expand_related_animes">Expandir sugerencias</string>
+  <string name="pref_expand_related_animes_summary">Si está desactivado, las sugerencias no cargarán automáticamente &amp; mostrar expandido</string>
+  <string name="put_related_animes_in_overflow">Sugerencias al desbordar</string>
+  <string name="put_related_animes_in_overflow_summary">Ponga el botón Sugerencias en el menú de desbordamiento en lugar de en la página de entrada</string>
+  <string name="pref_show_home_on_related_animes">Inicio desde sugerencias</string>
+  <string name="pref_show_home_on_related_animes_summary">Muestra un icono mientras se navega por las Sugerencias para volver directamente a Inicio</string>
+  <string name="pref_source_related_animes">Sugerencias</string>
+  <string name="pref_source_related_animes_summary">Mostrar sugerencias del sitio de origen mientras se ve la entrada</string>
+  <string name="pref_source_navigation">Reemplazar el último botón</string>
+  <string name="pref_source_navigation_summery">Reemplaza el último botón con una vista de navegación personalizada que incluye tanto la última como la última navegación</string>
 </resources>
