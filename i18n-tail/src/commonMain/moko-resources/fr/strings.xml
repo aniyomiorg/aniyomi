@@ -269,4 +269,46 @@
   <string name="active_account">Compte actif</string>
   <string name="no_accounts_found">Aucun compte trouvé</string>
   <string name="login_failed">Échec de la connexion</string>
+  <string name="action_display_comfortable_grid_panorama">Grille confortable Panorama</string>
+  <string name="action_bulk_select">Mode de sélection en bloc</string>
+  <string name="action_move_up">Déplacer vers le haut</string>
+  <string name="action_move_down">Déplacer vers le bas</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Trop de sources dans votre flux, impossible d\'ajouter plus de 20</string>
+  <string name="action_sort_feed">Trier les flux</string>
+  <string name="sort_feed_confirmation">Souhaitez-vous trier les flux par ordre alphabétique?</string>
+  <string name="saved_searches_feeds">Recherches enregistrées &amp; Flux</string>
+  <string name="saved_searches_add_feed">Recherches sauvegardées (Maintenir pour ajouter au flux)</string>
+  <string name="pref_hide_feed">Masquer l\'onglet Flux</string>
+  <string name="pref_feed_position">Position des onglets du flux</string>
+  <string name="pref_feed_position_summery">Voulez-vous que l\'onglet Flux soit le premier onglet de navigation ? Cela en fera l\'onglet par défaut lors de l\'ouverture du navigateur, non recommandé si vous êtes sur une donnée ou un réseau limité</string>
+  <string name="feed">Flux</string>
+  <string name="feed_delete">Supprimer l\'élément de flux ?</string>
+  <string name="feed_tab_empty">Vous n\'avez aucune source dans votre flux, naviguez en haut à droite pour en ajouter une</string>
+  <string name="feed_add">Ajouter %1$s au flux ?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Recherches enregistrées</string>
+  <string name="save_search">Enregistrer la requête de recherche en cours ?</string>
+  <string name="save_search_hint">Mon nom de recherche</string>
+  <string name="save_search_failed_to_load">Impossible de charger les recherches enregistrées !</string>
+  <string name="save_search_failed_to_load_message">Une erreur est survenue lors du chargement de vos recherches enregistrées.</string>
+  <string name="save_search_delete">Supprimer la requête de recherche enregistrée ?</string>
+  <string name="save_search_delete_message">Êtes-vous sûr de vouloir supprimer votre requête de recherche enregistrée: «%1$s»?</string>
+  <string name="save_search_invalid">Recherche enregistrée invalide, les filtres ont changé</string>
+  <string name="save_search_invalid_name">Nom de recherche non valide</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Aucune catégorie de source disponible</string>
+  <string name="invalid_category_name">Nom de catégorie invalide</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Suggestions</string>
+  <string name="pref_source_related_mangas_summary">Afficher les suggestions du site web source lors de la visualisation de l\'entrée</string>
+  <string name="related_mangas_website_suggestions">Suggestions de site web</string>
+  <string name="related_mangas_more">« Plus comme ça... »</string>
+  <string name="saved_searches_delete">Recherches sauvegardées (Maintenir pour supprimer)</string>
+  <string name="pref_expand_related_animes">Développer les suggestions</string>
+  <string name="pref_expand_related_animes_summary">Si désactivé, les suggestions ne chargeront pas automatiquement &amp; montrer étendu</string>
+  <string name="put_related_animes_in_overflow">Suggestions en débordement</string>
+  <string name="put_related_animes_in_overflow_summary">Mettre le bouton Suggestions dans le menu de débordement au lieu de sur la page d\'entrée</string>
+  <string name="pref_show_home_on_related_animes">Accueil des suggestions</string>
+  <string name="pref_show_home_on_related_animes_summary">Afficher une icône lors de la navigation dans les suggestions pour revenir directement à la page d\'accueil</string>
+  <string name="pref_source_related_animes">Suggestions</string>
+  <string name="pref_source_related_animes_summary">Afficher les suggestions du site web source lors de la visualisation de l\'entrée</string>
+  <string name="pref_source_navigation">Remplacer le dernier bouton</string>
+  <string name="pref_source_navigation_summery">Remplacer le bouton le plus récent par une vue de navigation personnalisée qui comprend à la fois la dernière et la dernière fois</string>
 </resources>
