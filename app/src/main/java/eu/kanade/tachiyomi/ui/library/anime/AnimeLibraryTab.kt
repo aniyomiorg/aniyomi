@@ -270,10 +270,6 @@ data object AnimeLibraryTab : Tab {
         when (val dialog = state.dialog) {
             is AnimeLibraryScreenModel.Dialog.SettingsSheet -> run {
                 val category = state.categories.getOrNull(screenModel.activeCategoryIndex)
-                if (category == null) {
-                    onDismissRequest()
-                    return@run
-                }
                 AnimeLibrarySettingsDialog(
                     onDismissRequest = onDismissRequest,
                     screenModel = settingsScreenModel,
