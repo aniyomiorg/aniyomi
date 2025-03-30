@@ -269,4 +269,46 @@
   <string name="active_account">Aktiivinen Tili</string>
   <string name="no_accounts_found">Tilejä ei löytynyt</string>
   <string name="login_failed">Kirjautuminen epäonnistui</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama mukava ruudukko</string>
+  <string name="action_bulk_select">Bulk valintatila</string>
+  <string name="action_move_up">Siirrä Ylös</string>
+  <string name="action_move_down">Siirrä Alas</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Liian monta lähdettä rehussa, ei voi lisätä enemmän kuin 20</string>
+  <string name="action_sort_feed">Lajittele syötteet</string>
+  <string name="sort_feed_confirmation">Haluatko lajitella syötteet aakkosellisesti?</string>
+  <string name="saved_searches_feeds">Tallennetut Haut &amp; Syötteet</string>
+  <string name="saved_searches_add_feed">Tallennetut haut (pidä lisätäksesi syötteeseen)</string>
+  <string name="pref_hide_feed">Piilota syötteen välilehti</string>
+  <string name="pref_feed_position">Syötteen välilehden sijainti</string>
+  <string name="pref_feed_position_summery">Haluatko että syöte välilehti on ensimmäinen välilehti selailussa? Tämä tekee siitä oletusvälilehden, kun avaat selailun, ei suositella, jos olet datassa tai mitatussa verkossa</string>
+  <string name="feed">Syöte</string>
+  <string name="feed_delete">Poista syötteen kohde?</string>
+  <string name="feed_tab_empty">Sinulla ei ole mitään lähteitä syötteessäsi, siirry yläoikealle lisätäksesi yhden lähteen</string>
+  <string name="feed_add">Lisää %1$s syötteeseen?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Tallennetut Haut</string>
+  <string name="save_search">Tallennetaanko nykyinen haku?</string>
+  <string name="save_search_hint">Minun hakuni nimi</string>
+  <string name="save_search_failed_to_load">Tallennetun haun lataaminen epäonnistui!</string>
+  <string name="save_search_failed_to_load_message">Tapahtui virhe ladattaessa tallennettuja hakuja.</string>
+  <string name="save_search_delete">Poistetaanko tallennettu haku?</string>
+  <string name="save_search_delete_message">Oletko varma, että haluat poistaa tallennetun hakukyselyn: \'%1$s\'?</string>
+  <string name="save_search_invalid">Tallennetut hakutulokset eivät kelpaa, suodattimet ovat muuttuneet</string>
+  <string name="save_search_invalid_name">Virheellinen tallennettu hakunimi</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Lähdekategorioita ei ole saatavilla</string>
+  <string name="invalid_category_name">Kategorian nimi ei kelpaa</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Ehdotukset</string>
+  <string name="pref_source_related_mangas_summary">Näytä lähdesivuston ehdotukset katseltaessa merkintää</string>
+  <string name="related_mangas_website_suggestions">Verkkosivujen Ehdotukset</string>
+  <string name="related_mangas_more">Enemmän näiden...</string>
+  <string name="saved_searches_delete">Tallennetut haut (poistettavaksi)</string>
+  <string name="pref_expand_related_animes">Laajenna Ehdotukset</string>
+  <string name="pref_expand_related_animes_summary">Jos pois päältä, Ehdotukset eivät lataa automaattisesti &amp; näytä laajennettu</string>
+  <string name="put_related_animes_in_overflow">Ehdotukset ylivuoto</string>
+  <string name="put_related_animes_in_overflow_summary">Laita ehdotuspainike ylivuotovalikkoon sen sijaan, että se olisi merkitty sivulle</string>
+  <string name="pref_show_home_on_related_animes">Koti ehdotuksista</string>
+  <string name="pref_show_home_on_related_animes_summary">Näytä kuvake selatessa ehdotuksia navigoidaksesi suoraan takaisin kotiin</string>
+  <string name="pref_source_related_animes">Ehdotukset</string>
+  <string name="pref_source_related_animes_summary">Näytä lähdesivuston ehdotukset katseltaessa merkintää</string>
+  <string name="pref_source_navigation">Korvaa uusin painike</string>
+  <string name="pref_source_navigation_summery">Korvaa uusin painike mukautetulla selausnäkymällä, joka sisältää sekä uusimman että selailun</string>
 </resources>
