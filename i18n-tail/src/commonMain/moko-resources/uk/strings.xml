@@ -271,4 +271,46 @@
   <string name="active_account">Активний обліковий запис</string>
   <string name="no_accounts_found">Рахунків не знайдено</string>
   <string name="login_failed">Не вдалося увійти</string>
+  <string name="action_display_comfortable_grid_panorama">Панорама</string>
+  <string name="action_bulk_select">Масовий режим вибору</string>
+  <string name="action_move_up">Підняти вгору</string>
+  <string name="action_move_down">Донизу</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Занадто багато джерел у вашій стрічці, не може додати більше 20</string>
+  <string name="action_sort_feed">Сортування каналів</string>
+  <string name="sort_feed_confirmation">Бажаєте сортувати подачі по алфавіту?</string>
+  <string name="saved_searches_feeds">Збережені пошукові запити &amp; Стрічки</string>
+  <string name="saved_searches_add_feed">Збережені пошуки (Утримуйте, щоб додати на канал)</string>
+  <string name="pref_hide_feed">Приховати стрічку новин</string>
+  <string name="pref_feed_position">Положення вкладки стрічки</string>
+  <string name="pref_feed_position_summery">Хочете щоб стрічка вкладки була першою вкладкою під час перегляду? Це зробить вкладку за замовчуванням при відкритті браузера, не рекомендується вмикати дані, або мати трафік</string>
+  <string name="feed">Стрічка подій</string>
+  <string name="feed_delete">Видалити елемент стрічки?</string>
+  <string name="feed_tab_empty">У вас немає ніяких джерел на вашій стрічці, перейдіть до правого верхнього правого, щоб додати один</string>
+  <string name="feed_add">Додати %1$s до каналу?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Збережені пошукові запити</string>
+  <string name="save_search">Зберегти поточний пошуковий запит?</string>
+  <string name="save_search_hint">Моє ім\'я пошуку</string>
+  <string name="save_search_failed_to_load">Не вдалося завантажити збережені пошуки!</string>
+  <string name="save_search_failed_to_load_message">При завантаженні збережених пошукових запитів сталася помилка.</string>
+  <string name="save_search_delete">Видалити збережений пошуковий запит?</string>
+  <string name="save_search_delete_message">Ви дійсно бажаєте видалити збережений пошуковий запит: \'%1$s\'?</string>
+  <string name="save_search_invalid">Неправильно збережені умови пошуку, фільтри змінено</string>
+  <string name="save_search_invalid_name">Неправильне ім\'я для пошуку</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Немає доступних категорій</string>
+  <string name="invalid_category_name">Неправильна назва категорії</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Пропозиції</string>
+  <string name="pref_source_related_mangas_summary">Показати пропозиції сайта при перегляді матеріалу</string>
+  <string name="related_mangas_website_suggestions">Пропозиції сайту</string>
+  <string name="related_mangas_more">Подобається це...</string>
+  <string name="saved_searches_delete">Збережені пошуки (утримуйте для видалення)</string>
+  <string name="pref_expand_related_animes">Розгорнути пропозиції</string>
+  <string name="pref_expand_related_animes_summary">Якщо вимкнено, пропозиції не будуть автоматично завантажувати &amp; показати розширене</string>
+  <string name="put_related_animes_in_overflow">Пропозиції в перевищенні</string>
+  <string name="put_related_animes_in_overflow_summary">Покласти кнопку Пропозиції у меню над потоком, а не на сторінці матеріалу</string>
+  <string name="pref_show_home_on_related_animes">Будинок із пропозицій</string>
+  <string name="pref_show_home_on_related_animes_summary">Показувати значок під час перегляду пропозицій прямо назад до головної сторінки</string>
+  <string name="pref_source_related_animes">Пропозиції</string>
+  <string name="pref_source_related_animes_summary">Показати пропозиції сайта при перегляді матеріалу</string>
+  <string name="pref_source_navigation">Замінити останню кнопку</string>
+  <string name="pref_source_navigation_summery">Замінити останню кнопку на користувальницький перегляд в тому числі й останній та перегляд</string>
 </resources>

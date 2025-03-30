@@ -271,4 +271,46 @@
   <string name="active_account">Aktywne konto</string>
   <string name="no_accounts_found">Nie znaleziono kont</string>
   <string name="login_failed">Logowanie nie powiodło się</string>
+  <string name="action_display_comfortable_grid_panorama">Siatka wygodna panorama</string>
+  <string name="action_bulk_select">Tryb masowego zaznaczenia</string>
+  <string name="action_move_up">Przesuń w górę</string>
+  <string name="action_move_down">Przesuń w dół</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Zbyt wiele źródeł w Twoim kanale, nie można dodać więcej niż 20</string>
+  <string name="action_sort_feed">Sortuj kanały</string>
+  <string name="sort_feed_confirmation">Czy chcesz posortować kanały alfabetycznie?</string>
+  <string name="saved_searches_feeds">Zapisane wyszukiwania &amp; Kanały</string>
+  <string name="saved_searches_add_feed">Zapisane wyszukiwanie (Przytrzymaj aby dodać do listy Wątków)</string>
+  <string name="pref_hide_feed">Ukryj kartę RSS</string>
+  <string name="pref_feed_position">Pozycja karty RSS</string>
+  <string name="pref_feed_position_summery">Czy chcesz aby karta kanału była pierwszą zakładką w przeglądarce? To sprawi, że domyślna karta podczas otwierania przeglądarki, nie jest zalecana, jeśli używasz danych lub sieci</string>
+  <string name="feed">Kanał</string>
+  <string name="feed_delete">Usunąć element kanału?</string>
+  <string name="feed_tab_empty">Nie masz żadnych źródeł w swoim kanale, przejdź do góry po prawej stronie, aby dodać jeden</string>
+  <string name="feed_add">Dodać %1$s do kanału?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Zapisane wyszukiwania</string>
+  <string name="save_search">Zapisać aktualne zapytanie wyszukiwania?</string>
+  <string name="save_search_hint">Moja nazwa wyszukiwania</string>
+  <string name="save_search_failed_to_load">Nie udało się załadować zapisanych wyszukiwań!</string>
+  <string name="save_search_failed_to_load_message">Wystąpił błąd podczas ładowania zapisanych wyszukiwań.</string>
+  <string name="save_search_delete">Usunąć zapisane zapytanie wyszukiwania?</string>
+  <string name="save_search_delete_message">Are you sure you wish to delete your saved search query: \'%1$s\'?</string>
+  <string name="save_search_invalid">Zapisano niepoprawne wyszukiwanie, zmieniono filtry</string>
+  <string name="save_search_invalid_name">Nieprawidłowa nazwa wyszukiwania</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Brak dostępnych kategorii źródłowych</string>
+  <string name="invalid_category_name">Nieprawidłowa nazwa kategorii</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Sugestie</string>
+  <string name="pref_source_related_mangas_summary">Pokaż sugestie źródłowe podczas przeglądania wpisu</string>
+  <string name="related_mangas_website_suggestions">Sugestie strony</string>
+  <string name="related_mangas_more">Więcej takich informacji...</string>
+  <string name="saved_searches_delete">Zapisane wyszukiwanie (przytrzymaj aby usunąć)</string>
+  <string name="pref_expand_related_animes">Rozwiń sugestie</string>
+  <string name="pref_expand_related_animes_summary">Jeśli wyłączone, sugestie nie będą automatycznie wczytywać &amp; pokaż rozszerzone</string>
+  <string name="put_related_animes_in_overflow">Sugestie dotyczące przepełnienia</string>
+  <string name="put_related_animes_in_overflow_summary">Umieść przycisk Sugestie w menu przeciążenia zamiast na stronie wpisu</string>
+  <string name="pref_show_home_on_related_animes">Strona główna z sugestii</string>
+  <string name="pref_show_home_on_related_animes_summary">Pokaż ikonę podczas przeglądania sugestii aby wrócić bezpośrednio do strony głównej</string>
+  <string name="pref_source_related_animes">Sugestie</string>
+  <string name="pref_source_related_animes_summary">Pokaż sugestie źródłowe podczas przeglądania wpisu</string>
+  <string name="pref_source_navigation">Zastąp ostatni przycisk</string>
+  <string name="pref_source_navigation_summery">Zastąp ostatni przycisk niestandardowym widokiem przeglądania, który zawiera zarówno najnowsze, jak i przeglądane</string>
 </resources>

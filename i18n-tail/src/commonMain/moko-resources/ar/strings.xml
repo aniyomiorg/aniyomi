@@ -273,4 +273,46 @@
   <string name="active_account">الحساب النشط</string>
   <string name="no_accounts_found">لم يتم العثور على حسابات</string>
   <string name="login_failed">فشل في تسجيل الدخول</string>
+  <string name="action_display_comfortable_grid_panorama">شبكة بانوراما المريحة</string>
+  <string name="action_bulk_select">وضع التحديد بالجملة</string>
+  <string name="action_move_up">تحريك للأعلى</string>
+  <string name="action_move_down">تحريك للأسفل</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">الكثير من المصادر في موجز الويب الخاص بك، لا يمكن إضافة أكثر من 20</string>
+  <string name="action_sort_feed">فرز الخلاصات</string>
+  <string name="sort_feed_confirmation">هل ترغب في فرز التغذية أبجدياً؟</string>
+  <string name="saved_searches_feeds">عمليات البحث المحفوظة &amp; موجز الويب</string>
+  <string name="saved_searches_add_feed">عمليات البحث المحفوظة (اضغط للإضافة إلى التغذية)</string>
+  <string name="pref_hide_feed">إخفاء علامة التبويب للموجز</string>
+  <string name="pref_feed_position">موضع تبويب التغذية</string>
+  <string name="pref_feed_position_summery">هل تريد أن تكون علامة تبويب الخلاصة أول علامة تبويب في المتصفح؟ هذا سيجعله علامة التبويب الافتراضية عند فتح المتصفح، غير مستحسن إذا كنت على بيانات أو شبكة مقياس</string>
+  <string name="feed">تغذية</string>
+  <string name="feed_delete">حذف عنصر الخلاصة؟</string>
+  <string name="feed_tab_empty">ليس لديك أي مصادر في تغذيتك، انتقل إلى أعلى اليمين لإضافة واحد</string>
+  <string name="feed_add">إضافة %1$s للتغذية؟</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">عمليات البحث المحفوظة</string>
+  <string name="save_search">حفظ استعلام البحث الحالي؟</string>
+  <string name="save_search_hint">اسم البحث الخاص بي</string>
+  <string name="save_search_failed_to_load">فشل في تحميل عمليات البحث المحفوظة!</string>
+  <string name="save_search_failed_to_load_message">حدث خطأ أثناء تحميل عمليات البحث المحفوظة.</string>
+  <string name="save_search_delete">حذف استعلام البحث المحفوظ؟</string>
+  <string name="save_search_delete_message">هل أنت متأكد من رغبتك في حذف استعلام البحث المحفوظ: \'%1$s\'؟</string>
+  <string name="save_search_invalid">البحث المحفوظ غير صالح، الفلاتر تغيرت</string>
+  <string name="save_search_invalid_name">اسم البحث المحفوظ غير صالح</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">لا توجد فئات مصادر متاحة</string>
+  <string name="invalid_category_name">اسم الفئة غير صالح</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">اقتراحات</string>
+  <string name="pref_source_related_mangas_summary">إظهار اقتراحات المصدر - الموقع أثناء عرض الإدخال</string>
+  <string name="related_mangas_website_suggestions">اقتراحات الموقع</string>
+  <string name="related_mangas_more">أكثر مثل هذه...</string>
+  <string name="saved_searches_delete">عمليات البحث المحفوظة (اضغط للحذف)</string>
+  <string name="pref_expand_related_animes">توسيع الاقتراحات</string>
+  <string name="pref_expand_related_animes_summary">إذا تم إيقاف تشغيل الاقتراحات، لن يتم تحميل &amp; تلقائيًا</string>
+  <string name="put_related_animes_in_overflow">اقتراحات في التجاوز</string>
+  <string name="put_related_animes_in_overflow_summary">ضع زر الاقتراحات في القائمة الزائدة بدلا من صفحة الإدخال</string>
+  <string name="pref_show_home_on_related_animes">الرئيسية من الاقتراحات</string>
+  <string name="pref_show_home_on_related_animes_summary">إظهار أيقونة أثناء تصفح الاقتراحات للتنقل مباشرة إلى الصفحة الرئيسية</string>
+  <string name="pref_source_related_animes">اقتراحات</string>
+  <string name="pref_source_related_animes_summary">إظهار اقتراحات المصدر - الموقع أثناء عرض الإدخال</string>
+  <string name="pref_source_navigation">استبدال الزر الأخير</string>
+  <string name="pref_source_navigation_summery">استبدل الزر الأحدث بعرض تصفح مخصص يتضمن الأحدث و التصفح</string>
 </resources>

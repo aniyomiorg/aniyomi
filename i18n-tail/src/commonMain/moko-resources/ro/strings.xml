@@ -270,4 +270,46 @@
   <string name="active_account">Cont activ</string>
   <string name="no_accounts_found">Nici un cont găsit</string>
   <string name="login_failed">Autentificare eșuată</string>
+  <string name="action_display_comfortable_grid_panorama">Rețea confortabilă a panoramei</string>
+  <string name="action_bulk_select">Mod selecţie în masă</string>
+  <string name="action_move_up">Mută în sus</string>
+  <string name="action_move_down">Mută jos</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Prea multe surse în fluxul tău, nu pot adăuga mai mult de 20</string>
+  <string name="action_sort_feed">Sortare fluxuri</string>
+  <string name="sort_feed_confirmation">Doriți să sortați feed-urile în mod alfabetic?</string>
+  <string name="saved_searches_feeds">Căutări salvate &amp; Fluxuri</string>
+  <string name="saved_searches_add_feed">Căutări salvate (veche pentru a adăuga la flux)</string>
+  <string name="pref_hide_feed">Ascunde fila Feed</string>
+  <string name="pref_feed_position">Poziția filei fluxului</string>
+  <string name="pref_feed_position_summery">Doriți ca fila fluxului să fie prima filă de navigare? Acest lucru îl va face pe fila implicită la deschiderea navigării, nu este recomandat dacă ești conectat la date sau la o rețea contorizată</string>
+  <string name="feed">Flux</string>
+  <string name="feed_delete">Ștergeți elementul de flux?</string>
+  <string name="feed_tab_empty">Nu ai nicio sursă în flux, navighează la dreapta sus pentru a adăuga una</string>
+  <string name="feed_add">Adaugă %1$s la feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Căutări salvate</string>
+  <string name="save_search">Salvați interogarea curentă?</string>
+  <string name="save_search_hint">Numele meu de căutare</string>
+  <string name="save_search_failed_to_load">Nu s-au putut încărca căutările salvate!</string>
+  <string name="save_search_failed_to_load_message">A apărut o eroare la încărcarea căutărilor salvate.</string>
+  <string name="save_search_delete">Ștergeți interogarea salvată?</string>
+  <string name="save_search_delete_message">Sunteţi sigur că doriţi să ştergeţi interogarea de căutare salvată: \'%1$s\'?</string>
+  <string name="save_search_invalid">Căutare salvată invalidă, filtrele s-au schimbat</string>
+  <string name="save_search_invalid_name">Nume de căutare salvat nevalid</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Nicio categorie de surse disponibilă</string>
+  <string name="invalid_category_name">Nume categorie nevalid</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Sugestii</string>
+  <string name="pref_source_related_mangas_summary">Arată sugestiile site-ului sursă în timpul vizualizării intrării</string>
+  <string name="related_mangas_website_suggestions">Sugestii website</string>
+  <string name="related_mangas_more">Mai asemănător cu acestea...</string>
+  <string name="saved_searches_delete">Căutări salvate (Ține să ștergeți)</string>
+  <string name="pref_expand_related_animes">Extinde sugestii</string>
+  <string name="pref_expand_related_animes_summary">Dacă este dezactivat, sugestiile nu vor încărca automat &amp; Arată extins</string>
+  <string name="put_related_animes_in_overflow">Sugestii privind excesul de flux</string>
+  <string name="put_related_animes_in_overflow_summary">Pune butonul Sugestii în meniul overflow în loc de pe pagina de intrare</string>
+  <string name="pref_show_home_on_related_animes">Acasă din sugestii</string>
+  <string name="pref_show_home_on_related_animes_summary">Arată o pictogramă în timp ce navigați sugestiile pentru a naviga direct înapoi la Acasă</string>
+  <string name="pref_source_related_animes">Sugestii</string>
+  <string name="pref_source_related_animes_summary">Arată sugestiile site-ului sursă în timpul vizualizării intrării</string>
+  <string name="pref_source_navigation">Înlocuiește cel mai recent buton</string>
+  <string name="pref_source_navigation_summery">Înlocuiește cel mai recent buton cu o vizualizare de navigare personalizată care include atât ultima cât și cea mai recentă</string>
 </resources>

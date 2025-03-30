@@ -269,4 +269,46 @@
   <string name="active_account">Actieve account</string>
   <string name="no_accounts_found">Geen accounts gevonden</string>
   <string name="login_failed">Inloggen mislukt</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama comfortabel raster</string>
+  <string name="action_bulk_select">Bulk selectiemodus</string>
+  <string name="action_move_up">Omhoog verplaatsen</string>
+  <string name="action_move_down">Omlaag verplaatsen</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Te veel bronnen in je feed, kan niet meer dan 20 toevoegen</string>
+  <string name="action_sort_feed">Sorteer feeds</string>
+  <string name="sort_feed_confirmation">Wilt u het voeder alfabetisch sorteren?</string>
+  <string name="saved_searches_feeds">Saved Searches &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Opgeslagen zoekopdrachten (houd vast om toe te voegen aan Feed)</string>
+  <string name="pref_hide_feed">Verberg feedtab</string>
+  <string name="pref_feed_position">Feed tab positie</string>
+  <string name="pref_feed_position_summery">Wil je dat het tabblad feed het eerste tabblad in browser is? Dit zal het tabblad standaard maken bij het openen van browsen, niet aanbevolen als je op data of een datalimiet netwerk bent</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">Verwijder feed item?</string>
+  <string name="feed_tab_empty">Je hebt geen bronnen in je feed, navigeer naar de rechterbovenhoek om er een toe te voegen</string>
+  <string name="feed_add">Voeg %1$s toe aan feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Opgeslagen zoekopdrachten</string>
+  <string name="save_search">Huidige zoekopdracht opslaan?</string>
+  <string name="save_search_hint">Mijn zoeknaam</string>
+  <string name="save_search_failed_to_load">Opgeslagen zoekopdrachten laden mislukt!</string>
+  <string name="save_search_failed_to_load_message">Er is een fout opgetreden tijdens het laden van uw opgeslagen zoekopdrachten.</string>
+  <string name="save_search_delete">Opgeslagen zoekopdracht verwijderen?</string>
+  <string name="save_search_delete_message">Weet u zeker dat u uw opgeslagen zoekopdracht wilt verwijderen: \'%1$s\'?</string>
+  <string name="save_search_invalid">Opgeslagen zoekopdracht ongeldig, filters zijn veranderd</string>
+  <string name="save_search_invalid_name">Ongeldige opgeslagen zoeknaam</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Geen bron categorieën beschikbaar</string>
+  <string name="invalid_category_name">Ongeldige categorienaam</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Suggesties</string>
+  <string name="pref_source_related_mangas_summary">Suggesties van bron-website weergeven tijdens het bekijken van invoer</string>
+  <string name="related_mangas_website_suggestions">Website Suggesties</string>
+  <string name="related_mangas_more">Meer van deze...</string>
+  <string name="saved_searches_delete">Opgeslagen zoekopdrachten (Houd om te verwijderen)</string>
+  <string name="pref_expand_related_animes">Suggesties uitbreiden</string>
+  <string name="pref_expand_related_animes_summary">Suggesties zullen niet automatisch laden &amp; weergeven als ze zijn uitgeschakeld</string>
+  <string name="put_related_animes_in_overflow">Suggesties in overflow</string>
+  <string name="put_related_animes_in_overflow_summary">Plaats de Suggestie knop in het overloop menu in plaats van op de item pagina</string>
+  <string name="pref_show_home_on_related_animes">Huis van Suggesties</string>
+  <string name="pref_show_home_on_related_animes_summary">Toon een pictogram tijdens het browsen van suggesties om direct terug te gaan naar Home</string>
+  <string name="pref_source_related_animes">Suggesties</string>
+  <string name="pref_source_related_animes_summary">Suggesties van bron-website weergeven tijdens het bekijken van invoer</string>
+  <string name="pref_source_navigation">Laatste knop vervangen</string>
+  <string name="pref_source_navigation_summery">Vervang de nieuwste knop door een aangepaste bladerweergave die zowel nieuwste als browse bevat</string>
 </resources>

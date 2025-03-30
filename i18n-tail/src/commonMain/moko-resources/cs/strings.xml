@@ -271,4 +271,46 @@
   <string name="active_account">Aktivní účet</string>
   <string name="no_accounts_found">Nebyly nalezeny žádné účty</string>
   <string name="login_failed">Přihlášení se nezdařilo</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama pohodlná mřížka</string>
+  <string name="action_bulk_select">Režim hromadného výběru</string>
+  <string name="action_move_up">Přesunout nahoru</string>
+  <string name="action_move_down">Posunout dolů</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Příliš mnoho zdrojů ve vašem feedu, nelze přidat více než 20</string>
+  <string name="action_sort_feed">Řadit kanály</string>
+  <string name="sort_feed_confirmation">Chcete seřadit kanály abecedně?</string>
+  <string name="saved_searches_feeds">Uložené vyhledávání &amp; kanály</string>
+  <string name="saved_searches_add_feed">Uložená hledání (přidržením přidejte do kanálu)</string>
+  <string name="pref_hide_feed">Skrýt záložku kanálu</string>
+  <string name="pref_feed_position">Pozice záložky kanálu</string>
+  <string name="pref_feed_position_summery">Přejete si, aby byla záložka kanálu první v prohlížeči? To učiní výchozí záložku při otevírání prohlížeče, nedoporučujeme pokud jste na datech nebo na měřené síti</string>
+  <string name="feed">Zdroj</string>
+  <string name="feed_delete">Smazat zdrojovou položku?</string>
+  <string name="feed_tab_empty">Ve svém kanálu nemáte žádné zdroje, přejděte do pravého horního rohu pro přidání</string>
+  <string name="feed_add">Přidat %1$s do feedu?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Uložená hledání</string>
+  <string name="save_search">Uložit aktuální vyhledávací dotaz?</string>
+  <string name="save_search_hint">Moje vyhledávací jméno</string>
+  <string name="save_search_failed_to_load">Nepodařilo se načíst uložená vyhledávání!</string>
+  <string name="save_search_failed_to_load_message">Při načítání uložených vyhledávání došlo k chybě.</string>
+  <string name="save_search_delete">Smazat uložený vyhledávací dotaz?</string>
+  <string name="save_search_delete_message">Jste si jisti, že chcete odstranit uložený vyhledávací dotaz: \'%1$s\'?</string>
+  <string name="save_search_invalid">Neplatné vyhledávání, změnily se filtry</string>
+  <string name="save_search_invalid_name">Neplatný název vyhledávání</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Žádné zdrojové kategorie nejsou k dispozici</string>
+  <string name="invalid_category_name">Neplatný název kategorie</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Návrhy</string>
+  <string name="pref_source_related_mangas_summary">Zobrazit návrhy zdrojových stránek při prohlížení záznamu</string>
+  <string name="related_mangas_website_suggestions">Návrhy webových stránek</string>
+  <string name="related_mangas_more">Líbí se mi to...</string>
+  <string name="saved_searches_delete">Uložená hledání (podržte pro smazání)</string>
+  <string name="pref_expand_related_animes">Rozšířit návrhy</string>
+  <string name="pref_expand_related_animes_summary">Pokud je vypnuto, návrhy se automaticky nenačtou &amp; zobrazit rozšířené</string>
+  <string name="put_related_animes_in_overflow">Návrhy v přetečení</string>
+  <string name="put_related_animes_in_overflow_summary">Vložte tlačítko Návrhy do menu přetečení místo na vstupní stránku</string>
+  <string name="pref_show_home_on_related_animes">Domovská stránka z návrhů</string>
+  <string name="pref_show_home_on_related_animes_summary">Zobrazit ikonu při prohlížení návrhů pro přímý přechod zpět na Domů</string>
+  <string name="pref_source_related_animes">Návrhy</string>
+  <string name="pref_source_related_animes_summary">Zobrazit návrhy zdrojových stránek při prohlížení záznamu</string>
+  <string name="pref_source_navigation">Nahradit poslední tlačítko</string>
+  <string name="pref_source_navigation_summery">Nahradit poslední tlačítko vlastním zobrazením, které zahrnuje nejnovější a prochází</string>
 </resources>

@@ -269,4 +269,46 @@
   <string name="active_account">Account Attivo</string>
   <string name="no_accounts_found">Nessun account trovato</string>
   <string name="login_failed">Accesso non riuscito</string>
+  <string name="action_display_comfortable_grid_panorama">Griglia confortevole Panorama</string>
+  <string name="action_bulk_select">Modalità selezione Bulk</string>
+  <string name="action_move_up">Sposta In Alto</string>
+  <string name="action_move_down">Sposta In Basso</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Troppe fonti nel tuo feed, non puoi aggiungere più di 20</string>
+  <string name="action_sort_feed">Ordina feed</string>
+  <string name="sort_feed_confirmation">Vuoi ordinare i feed in modo alfabetico?</string>
+  <string name="saved_searches_feeds">Ricerche Salvate &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Ricerche salvate (Si prega di aggiungere al Feed)</string>
+  <string name="pref_hide_feed">Nascondi scheda Feed</string>
+  <string name="pref_feed_position">Posizione scheda feed</string>
+  <string name="pref_feed_position_summery">Vuoi che la scheda feed sia la prima scheda in scorrimento? Questo renderà la scheda predefinita quando si apre la navigazione, non è consigliabile se si è su dati o una rete a misura</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">Eliminare il feed item?</string>
+  <string name="feed_tab_empty">Non hai nessuna fonte nel tuo feed, vai in alto a destra per aggiungerne una</string>
+  <string name="feed_add">Aggiungere %1$s al feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Ricerche Salvate</string>
+  <string name="save_search">Salvare la ricerca corrente?</string>
+  <string name="save_search_hint">Nome della mia ricerca</string>
+  <string name="save_search_failed_to_load">Impossibile caricare le ricerche salvate!</string>
+  <string name="save_search_failed_to_load_message">Si è verificato un errore durante il caricamento delle ricerche salvate.</string>
+  <string name="save_search_delete">Eliminare la query di ricerca salvata?</string>
+  <string name="save_search_delete_message">Are you sure you want to delete your saved search query: \'%1$s\'?</string>
+  <string name="save_search_invalid">Ricerca salvata non valida, i filtri sono stati modificati</string>
+  <string name="save_search_invalid_name">Nome di ricerca salvato non valido</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Nessuna categoria di origine disponibile</string>
+  <string name="invalid_category_name">Nome categoria non valido</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Suggerimenti</string>
+  <string name="pref_source_related_mangas_summary">Mostra i suggerimenti del sito web durante la visualizzazione della voce</string>
+  <string name="related_mangas_website_suggestions">Suggerimenti Sito Web</string>
+  <string name="related_mangas_more">Più come questi...</string>
+  <string name="saved_searches_delete">Ricerche salvate (Si prega di eliminare)</string>
+  <string name="pref_expand_related_animes">Espandi Suggerimenti</string>
+  <string name="pref_expand_related_animes_summary">Se disattivato, i suggerimenti non caricheranno automaticamente &amp; mostra espansa</string>
+  <string name="put_related_animes_in_overflow">Suggerimenti in eccesso</string>
+  <string name="put_related_animes_in_overflow_summary">Metti il pulsante Suggerimenti nel menu di overflow invece che nella pagina di inserimento</string>
+  <string name="pref_show_home_on_related_animes">Home da suggerimenti</string>
+  <string name="pref_show_home_on_related_animes_summary">Mostra un\'icona durante la navigazione dei suggerimenti per tornare direttamente alla Home</string>
+  <string name="pref_source_related_animes">Suggerimenti</string>
+  <string name="pref_source_related_animes_summary">Mostra i suggerimenti del sito web durante la visualizzazione della voce</string>
+  <string name="pref_source_navigation">Sostituisci l\'ultimo pulsante</string>
+  <string name="pref_source_navigation_summery">Sostituisci l\'ultimo pulsante con una vista di navigazione personalizzata che include sia l\'ultima che la navigazione</string>
 </resources>
