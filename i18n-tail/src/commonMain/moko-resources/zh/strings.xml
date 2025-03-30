@@ -268,4 +268,46 @@
   <string name="active_account">Active Account</string>
   <string name="no_accounts_found">No accounts found</string>
   <string name="login_failed">Failed to login</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama comfortable grid</string>
+  <string name="action_bulk_select">Bulk selection mode</string>
+  <string name="action_move_up">Move Up</string>
+  <string name="action_move_down">Move Down</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Too many sources in your feed, cannot add more than 20</string>
+  <string name="action_sort_feed">Sort feeds</string>
+  <string name="sort_feed_confirmation">Would you like to sort the feeds alphabetically?</string>
+  <string name="saved_searches_feeds">Saved Searches &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Saved Searches (Hold to add to Feed)</string>
+  <string name="pref_hide_feed">Hide Feed tab</string>
+  <string name="pref_feed_position">Feed tab position</string>
+  <string name="pref_feed_position_summery">Do you want the feed tab to be the first tab in browse? This will make it the default tab when opening browse, not recommended if you\'re on data or a metered network</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">Delete feed item?</string>
+  <string name="feed_tab_empty">You don\'t have any sources in your feed, navigate to the top right to add one</string>
+  <string name="feed_add">Add %1$s to feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Saved Searches</string>
+  <string name="save_search">Save current search query?</string>
+  <string name="save_search_hint">My search name</string>
+  <string name="save_search_failed_to_load">Failed to load saved searches!</string>
+  <string name="save_search_failed_to_load_message">An error occurred while loading your saved searches.</string>
+  <string name="save_search_delete">Delete saved search query?</string>
+  <string name="save_search_delete_message">Are you sure you wish to delete your saved search query: \'%1$s\'?</string>
+  <string name="save_search_invalid">Saved search invalid, filters have changed</string>
+  <string name="save_search_invalid_name">Invalid saved search name</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">No source categories available</string>
+  <string name="invalid_category_name">Invalid category name</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Suggestions</string>
+  <string name="pref_source_related_mangas_summary">Show source-website\'s Suggestions while viewing entry</string>
+  <string name="related_mangas_website_suggestions">Website Suggestions</string>
+  <string name="related_mangas_more">More like these...</string>
+  <string name="saved_searches_delete">Saved Searches (Hold to delete)</string>
+  <string name="pref_expand_related_animes">Expand Suggestions</string>
+  <string name="pref_expand_related_animes_summary">If turned off, Suggestions won\'t automatically load &amp; show expanded</string>
+  <string name="put_related_animes_in_overflow">Suggestions in overflow</string>
+  <string name="put_related_animes_in_overflow_summary">Put the Suggestions button in the overflow menu instead of on the entry page</string>
+  <string name="pref_show_home_on_related_animes">Home from Suggestions</string>
+  <string name="pref_show_home_on_related_animes_summary">Show an icon while browsing Suggestions to navigate directly back to Home</string>
+  <string name="pref_source_related_animes">Suggestions</string>
+  <string name="pref_source_related_animes_summary">Show source-website\'s Suggestions while viewing entry</string>
+  <string name="pref_source_navigation">Replace latest button</string>
+  <string name="pref_source_navigation_summery">Replace latest button with a custom browse view that includes both latest and browse</string>
 </resources>
