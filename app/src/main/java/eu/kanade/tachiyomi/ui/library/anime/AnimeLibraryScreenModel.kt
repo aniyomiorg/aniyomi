@@ -885,9 +885,15 @@ class AnimeLibraryScreenModel(
                     item.libraryAnime.anime.genre?.map { it to item } ?: listOf(defaultTag to item)
                 }.groupBy({ it.first }, { it.second }).toList()
 
-                val (bigGroups, defaultGroups) = groupedAnime.partition { (genre, groups) -> genre != defaultTag && groups.size > 3 }
+                val (bigGroups, defaultGroups) = groupedAnime.partition { (genre, groups) ->
+                    genre != defaultTag &&
+                        groups.size > 3
+                }
                 val groupedEntries = bigGroups.flatMap { it.second }
-                val defaultGroupEntries = defaultGroups.flatMap { it.second }.distinct().filterNot { it in groupedEntries }
+                val defaultGroupEntries = defaultGroups.flatMap { it.second }.distinct().filterNot {
+                    it in
+                        groupedEntries
+                }
 
                 (bigGroups + (defaultTag to defaultGroupEntries)).toMap().mapKeys { (genre, _) ->
                     Category(
