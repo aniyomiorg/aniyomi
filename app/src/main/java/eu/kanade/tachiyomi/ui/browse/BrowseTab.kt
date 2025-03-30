@@ -148,6 +148,7 @@ data object BrowseTab : Tab {
             // KMK -->
             feedScreenModel = feedScreenModel,
             // KMK <--
+            scrollable = true,
         )
         LaunchedEffect(Unit) {
             switchToTabNumberChannel.receiveAsFlow()
