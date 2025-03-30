@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.domain.ui.model.NavStyle
@@ -48,6 +49,7 @@ object SettingsAppearanceScreen : SearchableSettings {
             getDisplayGroup(uiPreferences = uiPreferences),
             // SY -->
             getNavbarGroup(uiPreferences = uiPreferences),
+            getForkGroup(uiPreferences = uiPreferences),
             // SY <--
         )
     }
@@ -187,6 +189,82 @@ object SettingsAppearanceScreen : SearchableSettings {
                         formattedNow,
                     ),
                 ),
+            ),
+        )
+    }
+
+    // SY -->
+    @Composable
+    fun getForkGroup(uiPreferences: UiPreferences): Preference.PreferenceGroup {
+//        val previewsRowCount by uiPreferences.previewsRowCount().collectAsState()
+        // KMK -->
+        val sourcePreferences = remember { Injekt.get<SourcePreferences>() }
+        val relatedMangasInOverflow by uiPreferences.expandRelatedAnimes().collectAsState()
+        // KMK <--
+
+        return Preference.PreferenceGroup(
+            stringResource(TLMR.strings.pref_category_fork),
+            preferenceItems = persistentListOf(
+                // KMK -->
+//                Preference.PreferenceItem.SwitchPreference(
+//                    pref = uiPreferences.usePanoramaCoverFlow(),
+//                    title = stringResource(KMR.strings.pref_panorama_cover_flow),
+//                    subtitle = stringResource(KMR.strings.pref_panorama_cover_flow_summary),
+//                ),
+                // KMK <--
+//                Preference.PreferenceItem.SwitchPreference(
+//                    pref = uiPreferences.expandFilters(),
+//                    title = stringResource(SYMR.strings.toggle_expand_search_filters),
+//                ),
+//                // KMK -->
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = uiPreferences.expandRelatedAnimes(),
+                    title = stringResource(TLMR.strings.pref_expand_related_animes),
+                    subtitle = stringResource(TLMR.strings.pref_expand_related_animes_summary),
+                    enabled = sourcePreferences.relatedAnimes().get(),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = uiPreferences.relatedAnimesInOverflow(),
+                    enabled = !relatedMangasInOverflow,
+                    title = stringResource(TLMR.strings.put_related_animes_in_overflow),
+                    subtitle = stringResource(TLMR.strings.put_related_animes_in_overflow_summary),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = uiPreferences.showHomeOnRelatedAnimes(),
+                    title = stringResource(TLMR.strings.pref_show_home_on_related_animes),
+                    subtitle = stringResource(TLMR.strings.pref_show_home_on_related_animes_summary),
+                    enabled = sourcePreferences.relatedAnimes().get(),
+                ),
+                // KMK <--
+//                Preference.PreferenceItem.SwitchPreference(
+//                    pref = uiPreferences.recommendsInOverflow(),
+//                    title = stringResource(SYMR.strings.put_recommends_in_overflow),
+//                    subtitle = stringResource(SYMR.strings.put_recommends_in_overflow_summary),
+//                ),
+//                Preference.PreferenceItem.SwitchPreference(
+//                    pref = uiPreferences.mergeInOverflow(),
+//                    title = stringResource(SYMR.strings.put_merge_in_overflow),
+//                    subtitle = stringResource(SYMR.strings.put_merge_in_overflow_summary),
+//                ),
+//                Preference.PreferenceItem.SliderPreference(
+//                    value = previewsRowCount,
+//                    title = stringResource(SYMR.strings.pref_previews_row_count),
+//                    subtitle = if (previewsRowCount > 0) {
+//                        pluralStringResource(
+//                            SYMR.plurals.row_count,
+//                            previewsRowCount,
+//                            previewsRowCount,
+//                        )
+//                    } else {
+//                        stringResource(MR.strings.disabled)
+//                    },
+//                    min = 0,
+//                    max = 10,
+//                    onValueChanged = {
+//                        uiPreferences.previewsRowCount().set(it)
+//                        true
+//                    },
+//                ),
             ),
         )
     }

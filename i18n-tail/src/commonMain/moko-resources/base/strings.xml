@@ -34,6 +34,8 @@
 
     <!-- Actions -->
     <string name="action_edit_info">Edit info</string>
+    <string name="action_display_comfortable_grid_panorama">Panorama comfortable grid</string>
+    <string name="action_bulk_select">Bulk selection mode</string>
 
     <!-- Connections section -->
     <string name="special_services">Special Services</string>
@@ -351,5 +353,15 @@
     <string name="related_mangas_more">More like these...</string>
     <string name="saved_searches_add_feed">Saved Searches (Hold to add to Feed)</string>
     <string name="saved_searches_delete">Saved Searches (Hold to delete)</string>
-
+    <string name="action_display_comfortable_grid_panorama">Panorama comfortable grid</string>
+    <string name="pref_expand_related_animes">Expand Suggestions</string>
+    <string name="pref_expand_related_animes_summary">If turned off, Suggestions won\'t automatically load &amp; show expanded</string>
+    <string name="put_related_animes_in_overflow">Suggestions in overflow</string>
+    <string name="put_related_animes_in_overflow_summary">Put the Suggestions button in the overflow menu instead of on the entry page</string>
+    <string name="pref_show_home_on_related_animes">Home from Suggestions</string>
+    <string name="pref_show_home_on_related_animes_summary">Show an icon while browsing Suggestions to navigate directly back to Home</string>
+    <string name="pref_source_related_animes">Suggestions</string>
+    <string name="pref_source_related_animes_summary">Show source-website's Suggestions while viewing entry</string>
+    <string name="pref_source_navigation">Replace latest button</string>
+    <string name="pref_source_navigation_summery">Replace latest button with a custom browse view that includes both latest and browse</string>
 </resources>

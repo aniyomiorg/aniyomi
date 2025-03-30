@@ -41,7 +41,7 @@ fun BrowseMangaSourceComfortableGrid(
 
         items(count = mangaList.itemCount) { index ->
             val manga by mangaList[index]?.collectAsState() ?: return@items
-            BrowseMangaSourceComfortableGridItem(
+            BrowseAnimeSourceComfortableGridItem(
                 manga = manga,
                 onClick = { onMangaClick(manga) },
                 onLongClick = { onMangaLongClick(manga) },
@@ -57,7 +57,7 @@ fun BrowseMangaSourceComfortableGrid(
 }
 
 @Composable
-private fun BrowseMangaSourceComfortableGridItem(
+fun BrowseAnimeSourceComfortableGridItem(
     manga: Manga,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,
@@ -71,6 +71,7 @@ private fun BrowseMangaSourceComfortableGridItem(
             url = manga.thumbnailUrl,
             lastModified = manga.coverLastModified,
         ),
+
         coverAlpha = if (manga.favorite) CommonEntryItemDefaults.BrowseFavoriteCoverAlpha else 1f,
         coverBadgeStart = {
             InLibraryBadge(enabled = manga.favorite)

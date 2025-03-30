@@ -133,5 +133,9 @@ class SourcePreferences(
         WSRV_NL,
         RESMUSH_IT,
     }
+
     // SY <--
+    // KMK -->
+    fun relatedAnimes() = preferenceStore.getBoolean("related_animes", true)
+    // KMK <--
 }

@@ -60,6 +60,8 @@ internal fun AnimeItem(
     isFavorite: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    // KMK -->
+    isSelected: Boolean = false,
 ) {
     Box(modifier = Modifier.width(96.dp)) {
         AnimeComfortableGridItem(
@@ -69,6 +71,8 @@ internal fun AnimeItem(
             coverBadgeStart = {
                 InLibraryBadge(enabled = isFavorite)
             },
+            // KMK -->
+            isSelected = isSelected,
             coverAlpha = if (isFavorite) CommonAnimeItemDefaults.BrowseFavoriteCoverAlpha else 1f,
             onClick = onClick,
             onLongClick = onLongClick,

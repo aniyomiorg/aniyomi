@@ -53,7 +53,38 @@ object SettingsBrowseScreen : SearchableSettings {
         // SY <--
 
         return listOf(
-
+            Preference.PreferenceGroup(
+                title = stringResource(MR.strings.label_sources),
+                preferenceItems = persistentListOf(
+                    // KMK -->
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = sourcePreferences.relatedAnimes(),
+                        title = stringResource(TLMR.strings.pref_source_related_animes),
+                        subtitle = stringResource(TLMR.strings.pref_source_related_animes_summary),
+                    ),
+                    // KMK <--
+//                    kotlin.run {
+//                        val count by sourcePreferences.sourcesTabCategories().collectAsState()
+//                        Preference.PreferenceItem.TextPreference(
+//                            title = stringResource(MR.strings.action_edit_categories),
+//                            subtitle = pluralStringResource(MR.plurals.num_categories, count.size, count.size),
+//                            onClick = {
+//                                navigator.push(SourceCategoryScreen())
+//                            },
+//                        )
+//                    },
+//                    Preference.PreferenceItem.SwitchPreference(
+//                        pref = sourcePreferences.sourcesTabCategoriesFilter(),
+//                        title = stringResource(SYMR.strings.pref_source_source_filtering),
+//                        subtitle = stringResource(SYMR.strings.pref_source_source_filtering_summery),
+//                    ),
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = uiPreferences.useNewSourceNavigation(),
+                        title = stringResource(TLMR.strings.pref_source_navigation),
+                        subtitle = stringResource(TLMR.strings.pref_source_navigation_summery),
+                    ),
+                ),
+            ),
             Preference.PreferenceGroup(
                 title = stringResource(TLMR.strings.feed),
                 preferenceItems = persistentListOf(

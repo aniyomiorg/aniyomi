@@ -2,15 +2,19 @@ package eu.kanade.tachiyomi.ui.entries.anime
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +40,7 @@ import eu.kanade.presentation.entries.anime.components.AnimeCoverDialog
 import eu.kanade.presentation.entries.components.DeleteItemsDialog
 import eu.kanade.presentation.entries.components.SetIntervalDialog
 import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsGesturesScreen.SkipIntroLengthDialog
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.formatEpisodeNumber
@@ -61,6 +66,7 @@ import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
@@ -106,6 +112,55 @@ class AnimeScreen(
         }
 
         val successState = state as AnimeScreenModel.State.Success
+        // KMK -->
+
+        val showingRelatedMangasScreen = rememberSaveable { mutableStateOf(false) }
+
+        BackHandler(showingRelatedMangasScreen.value) {
+            when {
+                showingRelatedMangasScreen.value -> showingRelatedMangasScreen.value = false
+            }
+        }
+
+        val content = @Composable {
+            Crossfade(
+                targetState = showingRelatedMangasScreen.value,
+                label = "manga_related_crossfade",
+            ) { showRelatedMangasScreen ->
+                when (showRelatedMangasScreen) {
+                    true -> RelatedAnimesScreen(
+                        screenModel = screenModel,
+                        successState = successState,
+                        navigateUp = { showingRelatedMangasScreen.value = false },
+                        navigator = navigator,
+                        scope = scope,
+                    )
+                    false -> MangaDetailContent(
+                        context = context,
+                        screenModel = screenModel,
+                        successState = successState,
+                        showRelatedMangasScreen = { showingRelatedMangasScreen.value = true },
+                        navigator = navigator,
+                        scope = scope,
+                    )
+                }
+            }
+        }
+        TachiyomiTheme {
+            content()
+        }
+    }
+
+    @Composable
+    fun MangaDetailContent(
+        context: Context,
+        screenModel: AnimeScreenModel,
+        successState: AnimeScreenModel.State.Success,
+        showRelatedMangasScreen: () -> Unit,
+        navigator: Navigator,
+        scope: CoroutineScope,
+    ) {
+        // KMK <--
         val isAnimeHttpSource = remember { successState.source is AnimeHttpSource }
 
         LaunchedEffect(successState.anime, screenModel.source) {
@@ -119,8 +174,9 @@ class AnimeScreen(
                 }
             }
         }
-
+        val haptic = LocalHapticFeedback.current
         AnimeScreen(
+
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
             nextUpdate = successState.anime.expectedNextUpdate,
@@ -208,6 +264,25 @@ class AnimeScreen(
             onEpisodeSelected = screenModel::toggleSelection,
             onAllEpisodeSelected = screenModel::toggleAllSelection,
             onInvertSelection = screenModel::invertSelection,
+            // KMK -->
+            getAnimeState = { screenModel.getManga(initialManga = it) },
+            onRelatedAnimesScreenClick = {
+                if (successState.isRelatedMangasFetched == null) {
+                    scope.launchIO { screenModel.fetchRelatedMangasFromSource(onDemand = true) }
+                }
+                showRelatedMangasScreen()
+            },
+            onRelatedAnimeClick = {
+                scope.launchIO {
+                    val manga = screenModel.networkToLocalAnime.getLocal(it)
+                    navigator.push(AnimeScreen(manga.id, true))
+                }
+            },
+            onRelatedAnimeLongClick = {
+                scope.launchIO {
+                    val manga = screenModel.networkToLocalAnime.getLocal(it)
+                }
+            },
         )
 
         val onDismissRequest = {

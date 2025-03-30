@@ -50,7 +50,14 @@ class UiPreferences(
     fun feedTabInFront() = preferenceStore.getBoolean("latest_tab_position", false)
     fun expandFilters() = preferenceStore.getBoolean("eh_expand_filters", false)
     fun useNewSourceNavigation() = preferenceStore.getBoolean("use_new_source_navigation", true)
+
     // SY <--
+    // KMK -->
+    fun expandRelatedAnimes() = preferenceStore.getBoolean("expand_related_animes", true)
+
+    fun relatedAnimesInOverflow() = preferenceStore.getBoolean("related_animes_in_overflow", false)
+
+    fun showHomeOnRelatedAnimes() = preferenceStore.getBoolean("show_home_on_related_animes", true)
 
     companion object {
         fun dateFormat(format: String): DateTimeFormatter = when (format) {
