@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AdaptiveSheet
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.core.common.preference.TriState
+import tachiyomi.domain.source.anime.model.EXHSavedSearch
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.CollapsibleBox
@@ -38,6 +44,17 @@ fun SourceFilterAnimeDialog(
     onReset: () -> Unit,
     onFilter: () -> Unit,
     onUpdate: (AnimeFilterList) -> Unit,
+    // SY -->
+    startExpanded: Boolean,
+    savedSearches: ImmutableList<EXHSavedSearch>,
+    onSave: () -> Unit,
+    onSavedSearch: (EXHSavedSearch) -> Unit,
+    onSavedSearchPress: (EXHSavedSearch) -> Unit,
+    // KMK -->
+    onSavedSearchPressDesc: String,
+    shouldShowSavingButton: Boolean = true,
+    // KMK <--
+    // SY <--
 ) {
     val updateFilters = { onUpdate(filters) }
 
@@ -59,6 +76,19 @@ fun SourceFilterAnimeDialog(
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
+                    // KMK -->
+                    if (shouldShowSavingButton) {
+                        // KMK <--
+                        // SY -->
+                        IconButton(onClick = onSave) {
+                            Icon(
+                                Icons.Default.Save,
+                                contentDescription = stringResource(MR.strings.action_save),
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
+                        // SY <--
+                    }
 
                     Button(onClick = {
                         onFilter()
@@ -69,16 +99,26 @@ fun SourceFilterAnimeDialog(
                 }
                 HorizontalDivider()
             }
+            item {
+                SavedSearchItem(
+                    savedSearches = savedSearches,
+                    onSavedSearch = onSavedSearch,
+                    onSavedSearchPress = onSavedSearchPress,
+                    // KMK -->
+                    onSavedSearchPressDesc = onSavedSearchPressDesc,
+                    // KMK <--
+                )
+            }
 
             items(filters) {
-                FilterItem(it, updateFilters)
+                FilterItem(it, updateFilters, startExpanded)
             }
         }
     }
 }
 
 @Composable
-private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
+private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit, startExpanded: Boolean) {
     when (filter) {
         // SY -->
         is AnimeFilter.AutoComplete -> {
@@ -134,15 +174,17 @@ private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
                 label = filter.name,
                 options = filter.values,
                 selectedIndex = filter.state,
-                onSelect = {
-                    filter.state = it
-                    onUpdate()
-                },
-            )
+            ) {
+                filter.state = it
+                onUpdate()
+            }
         }
         is AnimeFilter.Sort -> {
             CollapsibleBox(
                 heading = filter.name,
+                // SY -->
+                startExpanded = startExpanded,
+                // SY <--
             ) {
                 Column {
                     filter.values.mapIndexed { index, item ->
@@ -169,11 +211,14 @@ private fun FilterItem(filter: AnimeFilter<*>, onUpdate: () -> Unit) {
         is AnimeFilter.Group<*> -> {
             CollapsibleBox(
                 heading = filter.name,
+                // SY -->
+                startExpanded = startExpanded,
+                // SY <--
             ) {
                 Column {
                     filter.state
                         .filterIsInstance<AnimeFilter<*>>()
-                        .map { FilterItem(filter = it, onUpdate = onUpdate) }
+                        .map { FilterItem(filter = it, onUpdate = onUpdate, startExpanded) }
                 }
             }
         }

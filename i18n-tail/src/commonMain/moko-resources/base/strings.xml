@@ -324,5 +324,32 @@
     <string name="feed_delete">Delete feed item?</string>
     <string name="feed_tab_empty">You don\'t have any sources in your feed, navigate to the top right to add one</string>
     <string name="feed_add">Add %1$s to feed?</string>
+    <!-- Saved Searches -->
+    <string name="saved_searches">Saved Searches</string>
+    <string name="save_search">Save current search query?</string>
+    <string name="save_search_hint">My search name</string>
+    <string name="save_search_failed_to_load">Failed to load saved searches!</string>
+    <string name="save_search_failed_to_load_message">An error occurred while loading your saved searches.</string>
+    <string name="save_search_delete">Delete saved search query?</string>
+    <string name="save_search_delete_message">Are you sure you wish to delete your saved search query: \'%1$s\'?</string>
+    <string name="save_search_invalid">Saved search invalid, filters have changed</string>
+    <string name="save_search_invalid_name">Invalid saved search name</string>
+    <!-- Source Categories -->
+    <string name="no_source_categories">No source categories available</string>
+    <string name="invalid_category_name">Invalid category name</string>
+
+    <!-- Feed Tab -->
+    <string name="feed">Feed</string>
+    <string name="feed_delete">Delete feed item?</string>
+    <string name="feed_tab_empty">You don\'t have any sources in your feed, navigate to the top right to add one</string>
+    <string name="feed_add">Add %1$s to feed?</string>
+
+    <!-- Browse settings -->
+    <string name="pref_source_related_mangas">Suggestions</string>
+    <string name="pref_source_related_mangas_summary">Show source-website's Suggestions while viewing entry</string>
+    <string name="related_mangas_website_suggestions">Website Suggestions</string>
+    <string name="related_mangas_more">More like these...</string>
+    <string name="saved_searches_add_feed">Saved Searches (Hold to add to Feed)</string>
+    <string name="saved_searches_delete">Saved Searches (Hold to delete)</string>
 
 </resources>

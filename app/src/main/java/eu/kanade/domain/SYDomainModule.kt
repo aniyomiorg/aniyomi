@@ -1,6 +1,7 @@
 package eu.kanade.domain
 
 import android.app.Application
+import eu.kanade.domain.source.anime.interactor.GetExhSavedSearch
 import eu.kanade.domain.source.manga.interactor.ToggleExcludeFromMangaDataSaver
 import tachiyomi.data.entries.anime.CustomAnimeRepositoryImpl
 import tachiyomi.data.entries.manga.CustomMangaRepositoryImpl
@@ -15,6 +16,7 @@ import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addFactory
 import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
+import xyz.nulldev.ts.api.http.serializer.FilterSerializer
 
 class SYDomainModule : InjektModule {
 
@@ -28,5 +30,8 @@ class SYDomainModule : InjektModule {
         addSingletonFactory<CustomAnimeRepository> { CustomAnimeRepositoryImpl(get<Application>()) }
         addFactory { GetCustomAnimeInfo(get()) }
         addFactory { SetCustomAnimeInfo(get()) }
+
+        addFactory { FilterSerializer() }
+        addFactory { GetExhSavedSearch(get(), get(), get()) }
     }
 }

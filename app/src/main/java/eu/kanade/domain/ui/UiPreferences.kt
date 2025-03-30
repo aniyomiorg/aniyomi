@@ -48,6 +48,8 @@ class UiPreferences(
     fun bottomBarLabels() = preferenceStore.getBoolean("pref_show_bottom_bar_labels", true)
     fun hideFeedTab() = preferenceStore.getBoolean("hide_latest_tab", false)
     fun feedTabInFront() = preferenceStore.getBoolean("latest_tab_position", false)
+    fun expandFilters() = preferenceStore.getBoolean("eh_expand_filters", false)
+    fun useNewSourceNavigation() = preferenceStore.getBoolean("use_new_source_navigation", true)
     // SY <--
 
     companion object {
