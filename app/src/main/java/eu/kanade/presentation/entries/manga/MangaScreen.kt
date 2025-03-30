@@ -343,6 +343,7 @@ private fun MangaScreenSmallImpl(
                 onSelectAll = { onAllChapterSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = true,
+                onClickRelatedAnimes = null,
             )
         },
         bottomBar = {
@@ -593,6 +594,7 @@ fun MangaScreenLargeImpl(
                 onSelectAll = { onAllChapterSelected(true) },
                 onInvertSelection = { onInvertSelection() },
                 isManga = true,
+                onClickRelatedAnimes = null,
             )
         },
         bottomBar = {

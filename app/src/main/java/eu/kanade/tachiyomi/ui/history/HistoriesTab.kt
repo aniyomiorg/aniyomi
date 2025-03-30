@@ -20,6 +20,7 @@ import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.browse.feed.FeedScreenModel
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
 import eu.kanade.tachiyomi.ui.history.anime.animeHistoryTab
 import eu.kanade.tachiyomi.ui.history.anime.resumeLastEpisodeSeenEvent
@@ -72,7 +73,9 @@ data object HistoriesTab : Tab {
         // Hoisted for history tab's search bar
         val mangaHistoryScreenModel = rememberScreenModel { MangaHistoryScreenModel() }
         val mangaSearchQuery by mangaHistoryScreenModel.query.collectAsState()
-
+        // KMK -->
+        val feedScreenModel = rememberScreenModel { FeedScreenModel() }
+        // KMK <--
         val animeHistoryScreenModel = rememberScreenModel { AnimeHistoryScreenModel() }
         val animeSearchQuery by animeHistoryScreenModel.query.collectAsState()
 
@@ -86,6 +89,10 @@ data object HistoriesTab : Tab {
             onChangeMangaSearchQuery = mangaHistoryScreenModel::search,
             animeSearchQuery = animeSearchQuery,
             onChangeAnimeSearchQuery = animeHistoryScreenModel::search,
+            // KMK -->
+            feedScreenModel = feedScreenModel,
+            // KMK <--
+
         )
 
         LaunchedEffect(Unit) {

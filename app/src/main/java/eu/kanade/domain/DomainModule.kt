@@ -23,7 +23,9 @@ import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
+import eu.kanade.domain.source.anime.interactor.GetExhSavedSearch
 import eu.kanade.domain.source.anime.interactor.GetLanguagesWithAnimeSources
+import eu.kanade.domain.source.anime.interactor.InsertSavedSearch
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSourcePin
 import eu.kanade.domain.source.interactor.SetMigrateSorting
@@ -75,6 +77,8 @@ import tachiyomi.data.items.episode.EpisodeRepositoryImpl
 import tachiyomi.data.release.ReleaseServiceImpl
 import tachiyomi.data.source.anime.AnimeSourceRepositoryImpl
 import tachiyomi.data.source.anime.AnimeStubSourceRepositoryImpl
+import tachiyomi.data.source.anime.FeedSavedSearchRepositoryImpl
+import tachiyomi.data.source.anime.SavedSearchRepositoryImpl
 import tachiyomi.data.source.manga.MangaSourceRepositoryImpl
 import tachiyomi.data.source.manga.MangaStubSourceRepositoryImpl
 import tachiyomi.data.track.anime.AnimeTrackRepositoryImpl
@@ -163,10 +167,24 @@ import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import tachiyomi.domain.release.service.ReleaseService
+import tachiyomi.domain.source.anime.interactor.CountFeedSavedSearchBySourceId
+import tachiyomi.domain.source.anime.interactor.CountFeedSavedSearchGlobal
+import tachiyomi.domain.source.anime.interactor.DeleteFeedSavedSearchById
+import tachiyomi.domain.source.anime.interactor.DeleteSavedSearchById
 import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAnime
+import tachiyomi.domain.source.anime.interactor.GetFeedSavedSearchBySourceId
+import tachiyomi.domain.source.anime.interactor.GetFeedSavedSearchGlobal
 import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
+import tachiyomi.domain.source.anime.interactor.GetSavedSearchById
+import tachiyomi.domain.source.anime.interactor.GetSavedSearchBySourceId
+import tachiyomi.domain.source.anime.interactor.GetSavedSearchBySourceIdFeed
+import tachiyomi.domain.source.anime.interactor.GetSavedSearchGlobalFeed
+import tachiyomi.domain.source.anime.interactor.InsertFeedSavedSearch
+import tachiyomi.domain.source.anime.interactor.ReorderFeed
 import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
 import tachiyomi.domain.source.anime.repository.AnimeStubSourceRepository
+import tachiyomi.domain.source.anime.repository.FeedSavedSearchRepository
+import tachiyomi.domain.source.anime.repository.SavedSearchRepository
 import tachiyomi.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryManga
 import tachiyomi.domain.source.manga.interactor.GetRemoteManga
 import tachiyomi.domain.source.manga.repository.MangaSourceRepository
@@ -388,5 +406,25 @@ class DomainModule : InjektModule {
         addFactory { ToggleFavoriteCustomButton(get()) }
 
         addFactory { TrackSelect(get(), get()) }
+
+        addSingletonFactory<SavedSearchRepository> { SavedSearchRepositoryImpl(get()) }
+        addFactory { GetSavedSearchById(get()) }
+        addFactory { GetSavedSearchBySourceId(get()) }
+        addFactory { DeleteSavedSearchById(get()) }
+        addFactory { InsertSavedSearch(get()) }
+        addFactory { GetExhSavedSearch(get(), get(), get()) }
+
+        addSingletonFactory<FeedSavedSearchRepository> { FeedSavedSearchRepositoryImpl(get()) }
+        addFactory { InsertFeedSavedSearch(get()) }
+        addFactory { DeleteFeedSavedSearchById(get()) }
+        addFactory { GetFeedSavedSearchGlobal(get()) }
+        addFactory { GetFeedSavedSearchBySourceId(get()) }
+        addFactory { CountFeedSavedSearchGlobal(get()) }
+        addFactory { CountFeedSavedSearchBySourceId(get()) }
+        addFactory { GetSavedSearchGlobalFeed(get()) }
+        addFactory { GetSavedSearchBySourceIdFeed(get()) }
+        // KMK -->
+        addFactory { ReorderFeed(get()) }
+        // KMK <--
     }
 }

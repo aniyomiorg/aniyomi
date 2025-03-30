@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -17,6 +18,7 @@ import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.browse.feed.FeedScreenModel
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.updates.anime.animeUpdatesTab
@@ -64,6 +66,9 @@ data object UpdatesTab : Tab {
     override fun Content() {
         val context = LocalContext.current
         val fromMore = currentNavigationStyle() == NavStyle.MOVE_UPDATES_TO_MORE
+        // KMK -->
+        val feedScreenModel = rememberScreenModel { FeedScreenModel() }
+        // KMK <--
 
         TabbedScreen(
             titleRes = MR.strings.label_recent_updates,
@@ -71,6 +76,7 @@ data object UpdatesTab : Tab {
                 animeUpdatesTab(context, fromMore),
                 mangaUpdatesTab(context, fromMore),
             ),
+            feedScreenModel = feedScreenModel,
         )
 
         LaunchedEffect(Unit) {

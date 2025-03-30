@@ -8,11 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.core.preference.asState
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -23,6 +27,8 @@ import eu.kanade.tachiyomi.ui.browse.anime.extension.animeExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.migrateAnimeSourceTab
 import eu.kanade.tachiyomi.ui.browse.anime.source.animeSourcesTab
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
+import eu.kanade.tachiyomi.ui.browse.feed.FeedScreenModel
+import eu.kanade.tachiyomi.ui.browse.feed.feedTab
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsScreenModel
 import eu.kanade.tachiyomi.ui.browse.manga.extension.mangaExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.migrateMangaSourceTab
@@ -35,13 +41,16 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 data object BrowseTab : Tab {
+    private fun readResolve(): Any = BrowseTab
 
     override val options: TabOptions
         @Composable
         get() {
-            val isSelected = LocalTabNavigator.current.current is BrowseTab
+            val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_browse_enter)
             return TabOptions(
                 index = 3u,
@@ -68,6 +77,11 @@ data object BrowseTab : Tab {
     @Composable
     override fun Content() {
         val context = LocalContext.current
+        val scope = rememberCoroutineScope()
+        // SY -->
+        val hideFeedTab by remember { Injekt.get<UiPreferences>().hideFeedTab().asState(scope) }
+        val feedTabInFront by remember { Injekt.get<UiPreferences>().feedTabInFront().asState(scope) }
+        // SY <--
 
         // Hoisted for extensions tab's search bar
         val mangaExtensionsScreenModel = rememberScreenModel { MangaExtensionsScreenModel() }
@@ -76,14 +90,50 @@ data object BrowseTab : Tab {
         val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
         val animeExtensionsState by animeExtensionsScreenModel.state.collectAsState()
 
-        val tabs = persistentListOf(
-            animeSourcesTab(),
-            mangaSourcesTab(),
-            animeExtensionsTab(animeExtensionsScreenModel),
-            mangaExtensionsTab(mangaExtensionsScreenModel),
-            migrateAnimeSourceTab(),
-            migrateMangaSourceTab(),
-        )
+        // KMK -->
+        val feedScreenModel = rememberScreenModel { FeedScreenModel() }
+        // KMK <--
+
+        val tabs = when {
+            hideFeedTab ->
+                persistentListOf(
+                    animeSourcesTab(),
+                    mangaSourcesTab(),
+                    animeExtensionsTab(animeExtensionsScreenModel),
+                    mangaExtensionsTab(mangaExtensionsScreenModel),
+                    migrateAnimeSourceTab(),
+                    migrateMangaSourceTab(),
+                )
+            feedTabInFront ->
+                persistentListOf(
+                    feedTab(
+                        // KMK -->
+                        feedScreenModel,
+                        // KMK <--
+                    ),
+                    animeSourcesTab(),
+                    mangaSourcesTab(),
+                    animeExtensionsTab(animeExtensionsScreenModel),
+                    mangaExtensionsTab(mangaExtensionsScreenModel),
+                    migrateAnimeSourceTab(),
+                    migrateMangaSourceTab(),
+                )
+            else ->
+                persistentListOf(
+                    animeSourcesTab(),
+                    mangaSourcesTab(),
+                    feedTab(
+                        // KMK -->
+                        feedScreenModel,
+                        // KMK <--
+                    ),
+                    animeExtensionsTab(animeExtensionsScreenModel),
+                    mangaExtensionsTab(mangaExtensionsScreenModel),
+                    migrateAnimeSourceTab(),
+                    migrateMangaSourceTab(),
+                )
+            // SY <--
+        }
 
         val state = rememberPagerState { tabs.size }
 
@@ -95,7 +145,9 @@ data object BrowseTab : Tab {
             onChangeMangaSearchQuery = mangaExtensionsScreenModel::search,
             animeSearchQuery = animeExtensionsState.searchQuery,
             onChangeAnimeSearchQuery = animeExtensionsScreenModel::search,
-            scrollable = true,
+            // KMK -->
+            feedScreenModel = feedScreenModel,
+            // KMK <--
         )
         LaunchedEffect(Unit) {
             switchToTabNumberChannel.receiveAsFlow()

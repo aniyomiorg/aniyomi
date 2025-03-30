@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.outlined.PushPin
@@ -17,16 +19,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.anime.components.BaseAnimeSourceItem
+import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.Pin
 import tachiyomi.i18n.MR
+import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.components.material.padding
@@ -66,7 +73,7 @@ fun AnimeSourcesScreen(
                     },
                     key = {
                         when (it) {
-                            is AnimeSourceUiModel.Header -> it.hashCode()
+                            is AnimeSourceUiModel.Header -> "header-${it.hashCode()}"
                             is AnimeSourceUiModel.Item -> "source-${it.source.key()}"
                         }
                     },
@@ -74,13 +81,21 @@ fun AnimeSourcesScreen(
                     when (model) {
                         is AnimeSourceUiModel.Header -> {
                             AnimeSourceHeader(
-                                modifier = Modifier.animateItem(),
+                                modifier = Modifier.animateItemFastScroll(),
                                 language = model.language,
+                                // SY -->
+                                isCategory = model.isCategory,
+                                // SY <--
+
                             )
                         }
                         is AnimeSourceUiModel.Item -> AnimeSourceItem(
                             modifier = Modifier.animateItem(),
                             source = model.source,
+                            // SY -->
+                            showLatest = state.showLatest,
+                            showPin = state.showPin,
+                            // SY <--
                             onClickItem = onClickItem,
                             onLongClickItem = onLongClickItem,
                             onClickPin = onClickPin,
@@ -95,11 +110,20 @@ fun AnimeSourcesScreen(
 @Composable
 private fun AnimeSourceHeader(
     language: String,
+    // SY -->
+    isCategory: Boolean,
+    // SY <--
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Text(
-        text = LocaleHelper.getSourceDisplayName(language, context),
+        // SY -->
+        text = if (!isCategory) {
+            LocaleHelper.getSourceDisplayName(language, context)
+        } else {
+            language
+        },
+        // SY <--
         modifier = modifier
             .padding(
                 horizontal = MaterialTheme.padding.medium,
@@ -112,6 +136,10 @@ private fun AnimeSourceHeader(
 @Composable
 private fun AnimeSourceItem(
     source: AnimeSource,
+    // SY -->
+    showLatest: Boolean,
+    showPin: Boolean,
+    // SY <--
     onClickItem: (AnimeSource, Listing) -> Unit,
     onLongClickItem: (AnimeSource) -> Unit,
     onClickPin: (AnimeSource) -> Unit,
@@ -123,7 +151,7 @@ private fun AnimeSourceItem(
         onClickItem = { onClickItem(source, Listing.Popular) },
         onLongClickItem = { onLongClickItem(source) },
         action = {
-            if (source.supportsLatest) {
+            if (source.supportsLatest && showLatest) {
                 TextButton(onClick = { onClickItem(source, Listing.Latest) }) {
                     Text(
                         text = stringResource(MR.strings.latest),
@@ -133,10 +161,14 @@ private fun AnimeSourceItem(
                     )
                 }
             }
-            AnimeSourcePinButton(
-                isPinned = Pin.Pinned in source.pin,
-                onClick = { onClickPin(source) },
-            )
+            // SY -->
+            if (showPin) {
+                AnimeSourcePinButton(
+                    isPinned = Pin.Pinned in source.pin,
+                    onClick = { onClickPin(source) },
+                )
+            }
+            // SY <--
         },
     )
 }
@@ -203,5 +235,47 @@ fun AnimeSourceOptionsDialog(
 
 sealed interface AnimeSourceUiModel {
     data class Item(val source: AnimeSource) : AnimeSourceUiModel
-    data class Header(val language: String) : AnimeSourceUiModel
+    data class Header(val language: String, val isCategory: Boolean) : AnimeSourceUiModel
 }
+
+// SY -->
+@Composable
+fun SourceCategoriesDialog(
+    source: AnimeSource,
+    categories: ImmutableList<String>,
+    onClickCategories: (List<String>) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    val newCategories = remember(source) {
+        mutableStateListOf<String>().also { it += source.categories }
+    }
+    AlertDialog(
+        title = {
+            Text(text = source.visualName)
+        },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                categories.forEach { category ->
+                    LabeledCheckbox(
+                        label = category,
+                        checked = category in newCategories,
+                        onCheckedChange = {
+                            if (it) {
+                                newCategories += category
+                            } else {
+                                newCategories -= category
+                            }
+                        },
+                    )
+                }
+            }
+        },
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(onClick = { onClickCategories(newCategories.toList()) }) {
+                Text(text = stringResource(MR.strings.action_ok))
+            }
+        },
+    )
+}
+// SY <--

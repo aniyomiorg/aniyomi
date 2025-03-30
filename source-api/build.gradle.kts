@@ -17,6 +17,11 @@ kotlin {
                 // TAIL
                 api(projects.i18nTail)
                 // TAIL
+
+                // SY -->
+                api(kotlinx.reflect)
+                // SY <--
+
                 implementation(project.dependencies.platform(compose.bom))
                 implementation(compose.runtime)
             }
