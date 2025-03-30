@@ -268,4 +268,46 @@
   <string name="active_account">アクティブなアカウント</string>
   <string name="no_accounts_found">アカウントが見つかりません</string>
   <string name="login_failed">ログインに失敗しました</string>
+  <string name="action_display_comfortable_grid_panorama">パノラマ快適なグリッド</string>
+  <string name="action_bulk_select">一括選択モード</string>
+  <string name="action_move_up">上へ移動</string>
+  <string name="action_move_down">下に移動</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">フィードのソースが多すぎます。20個以上追加できません。</string>
+  <string name="action_sort_feed">フィードを並べ替える</string>
+  <string name="sort_feed_confirmation">フィードをアルファベット順に並べ替えますか？</string>
+  <string name="saved_searches_feeds">保存された検索 &amp; フィード</string>
+  <string name="saved_searches_add_feed">保存された検索（フィードに追加するには長押し）</string>
+  <string name="pref_hide_feed">フィードタブを隠す</string>
+  <string name="pref_feed_position">フィードタブの位置</string>
+  <string name="pref_feed_position_summery">フィードタブをブラウズの最初のタブにしますか？ これはブラウズを開くときにデフォルトのタブになります。データや従量課金ネットワークを使用している場合は推奨されません。</string>
+  <string name="feed">フィード</string>
+  <string name="feed_delete">フィードアイテムを削除しますか？</string>
+  <string name="feed_tab_empty">フィードにソースがありません。右上に移動して追加してください</string>
+  <string name="feed_add">フィードに %1$s を追加しますか？</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">保存された検索</string>
+  <string name="save_search">現在の検索クエリを保存しますか？</string>
+  <string name="save_search_hint">検索名</string>
+  <string name="save_search_failed_to_load">保存した検索の読み込みに失敗しました！</string>
+  <string name="save_search_failed_to_load_message">保存した検索の読み込み中にエラーが発生しました。</string>
+  <string name="save_search_delete">保存した検索クエリを削除しますか？</string>
+  <string name="save_search_delete_message">保存した検索クエリ「%1$s」を削除してもよろしいですか？</string>
+  <string name="save_search_invalid">保存された検索は無効です。フィルターが変更されました</string>
+  <string name="save_search_invalid_name">無効な保存された検索名</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">利用可能なソースカテゴリがありません</string>
+  <string name="invalid_category_name">不正なカテゴリ名</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">候補</string>
+  <string name="pref_source_related_mangas_summary">エントリを表示中にソースウェブサイトの提案を表示する</string>
+  <string name="related_mangas_website_suggestions">ウェブサイトの提案</string>
+  <string name="related_mangas_more">これらのような...</string>
+  <string name="saved_searches_delete">保存された検索（削除する場合は長押し）</string>
+  <string name="pref_expand_related_animes">提案を展開</string>
+  <string name="pref_expand_related_animes_summary">If turned off, Suggestions won\'t automatically load &amp; show expanded</string>
+  <string name="put_related_animes_in_overflow">オーバーフローの提案</string>
+  <string name="put_related_animes_in_overflow_summary">入力ページの代わりにオーバーフローメニューに提案ボタンを置く</string>
+  <string name="pref_show_home_on_related_animes">おすすめのホーム</string>
+  <string name="pref_show_home_on_related_animes_summary">おすすめを参照中にアイコンを表示してホームに直接移動する</string>
+  <string name="pref_source_related_animes">候補</string>
+  <string name="pref_source_related_animes_summary">エントリを表示中にソースウェブサイトの提案を表示する</string>
+  <string name="pref_source_navigation">最新ボタンを置き換え</string>
+  <string name="pref_source_navigation_summery">最新のボタンを、最新と閲覧の両方を含むカスタムブラウズビューに置き換えます。</string>
 </resources>
