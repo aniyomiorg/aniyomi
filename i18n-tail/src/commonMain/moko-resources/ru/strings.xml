@@ -271,4 +271,46 @@
   <string name="active_account">Активный аккаунт</string>
   <string name="no_accounts_found">Аккаунтов не найдено</string>
   <string name="login_failed">Не удалось войти</string>
+  <string name="action_display_comfortable_grid_panorama">Удобная сетка для панорамы</string>
+  <string name="action_bulk_select">Режим массового выбора</string>
+  <string name="action_move_up">Переместить вверх</string>
+  <string name="action_move_down">Вниз</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Слишком много источников в вашем канале, невозможно добавить более 20</string>
+  <string name="action_sort_feed">Сортировка каналов</string>
+  <string name="sort_feed_confirmation">Вы хотите сортировать каналы в алфавитном порядке?</string>
+  <string name="saved_searches_feeds">Сохраненные поиски &amp; ленты новостей</string>
+  <string name="saved_searches_add_feed">Сохраненные поиски (Удерживайте, чтобы добавить в Ленту)</string>
+  <string name="pref_hide_feed">Скрыть вкладку ленты</string>
+  <string name="pref_feed_position">Положение вкладки ленты</string>
+  <string name="pref_feed_position_summery">Вы хотите, чтобы вкладка корма была первой вкладкой в браузере? Это сделает вкладку по умолчанию при открытии просмотра, не рекомендуется, если вы используете данные или ограниченные сети</string>
+  <string name="feed">Лента</string>
+  <string name="feed_delete">Удалить ленту новости?</string>
+  <string name="feed_tab_empty">У вас нет ни одного источника в ленте. Перейдите в верхний правом углу, чтобы добавить</string>
+  <string name="feed_add">Добавить %1$s в ленту?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Сохраненные поиски</string>
+  <string name="save_search">Сохранить текущий поисковой запрос?</string>
+  <string name="save_search_hint">Имя для поиска</string>
+  <string name="save_search_failed_to_load">Не удалось загрузить сохраненные поиски!</string>
+  <string name="save_search_failed_to_load_message">Произошла ошибка при загрузке сохраненного поиска.</string>
+  <string name="save_search_delete">Удалить сохраненный поисковый запрос?</string>
+  <string name="save_search_delete_message">Вы уверены, что хотите удалить сохраненный поисковый запрос: \'%1$s\'?</string>
+  <string name="save_search_invalid">Сохраненный поиск недействителен, фильтры изменились</string>
+  <string name="save_search_invalid_name">Недопустимое имя для сохранения поиска</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Нет доступных категорий источников</string>
+  <string name="invalid_category_name">Неверное имя категории</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Предложения</string>
+  <string name="pref_source_related_mangas_summary">Показывать подсказки сайта при просмотре записи</string>
+  <string name="related_mangas_website_suggestions">Предложения сайта</string>
+  <string name="related_mangas_more">Больше похожих...</string>
+  <string name="saved_searches_delete">Сохраненные поиски (удерживаются для удаления)</string>
+  <string name="pref_expand_related_animes">Расширить предложения</string>
+  <string name="pref_expand_related_animes_summary">Если выключено, предложения не будут автоматически загружаться &amp; показывать в развернутом виде</string>
+  <string name="put_related_animes_in_overflow">Предложения в переполнении</string>
+  <string name="put_related_animes_in_overflow_summary">Вставить кнопку предложений в меню переполнения вместо страницы ввода</string>
+  <string name="pref_show_home_on_related_animes">Домой от предложений</string>
+  <string name="pref_show_home_on_related_animes_summary">Показывать значок во время просмотра предложений для перехода непосредственно на Домашний экран</string>
+  <string name="pref_source_related_animes">Предложения</string>
+  <string name="pref_source_related_animes_summary">Показывать подсказки сайта при просмотре записи</string>
+  <string name="pref_source_navigation">Заменить последнюю кнопку</string>
+  <string name="pref_source_navigation_summery">Заменить последнюю кнопку пользовательским просмотром, который включает как последний, так и просмотр</string>
 </resources>
