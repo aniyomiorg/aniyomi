@@ -269,4 +269,46 @@
   <string name="active_account">Aktiv konto</string>
   <string name="no_accounts_found">Ingen kontoer funnet</string>
   <string name="login_failed">Kunne ikke logge inn</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama komfortabelt rutenett</string>
+  <string name="action_bulk_select">Massevalg modus</string>
+  <string name="action_move_up">Flytt opp</string>
+  <string name="action_move_down">Flytt ned</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">For mange kilder i matingen din, kan ikke legge til mer enn 20</string>
+  <string name="action_sort_feed">Sorter feeder</string>
+  <string name="sort_feed_confirmation">Vil du sortere feeds alfabetiske?</string>
+  <string name="saved_searches_feeds">Lagrede søk &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Lagrede søk (Hold for å legge til i feed)</string>
+  <string name="pref_hide_feed">Skjul Feed fanen</string>
+  <string name="pref_feed_position">Posisjon for feed-fane</string>
+  <string name="pref_feed_position_summery">Vil du at fanen må være den første fanen i blanden? Dette gjør at standardfanen blir satt ved åpning av gjennom, ikke anbefalt dersom du er på data eller et målt nettverk</string>
+  <string name="feed">MATE</string>
+  <string name="feed_delete">Slette mating?</string>
+  <string name="feed_tab_empty">Du har ingen kilder i matingen din, navigerer til øverste høyre for å legge til en</string>
+  <string name="feed_add">Legge til %1$s for å mate?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Lagrede søk</string>
+  <string name="save_search">Lagre gjeldende søkopptak?</string>
+  <string name="save_search_hint">Mitt søkenavn</string>
+  <string name="save_search_failed_to_load">Kunne ikke laste inn lagrede søk!</string>
+  <string name="save_search_failed_to_load_message">Det oppstod en feil under lasting av dine lagrede søk.</string>
+  <string name="save_search_delete">Slett lagret søkespørring?</string>
+  <string name="save_search_delete_message">Er du sikker på at du vil slette ditt lagrede søkespørring: \'%1$s\'?</string>
+  <string name="save_search_invalid">Lagret søk ugyldig, filtrene har endret seg</string>
+  <string name="save_search_invalid_name">Ugyldig lagret søkenavn</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Ingen kildekategorier tilgjengelig</string>
+  <string name="invalid_category_name">Ugyldig kategorinavn</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Forslag</string>
+  <string name="pref_source_related_mangas_summary">Vis kildenettstedets forslag under visning</string>
+  <string name="related_mangas_website_suggestions">Nettside forslag</string>
+  <string name="related_mangas_more">Flere liker disse...</string>
+  <string name="saved_searches_delete">Lagrede søk (Hold for å slette)</string>
+  <string name="pref_expand_related_animes">Utvid forslag</string>
+  <string name="pref_expand_related_animes_summary">Hvis slått av, vil ikke forslagene automatisk laste &amp; vis utvidet</string>
+  <string name="put_related_animes_in_overflow">Forslag til overflyt</string>
+  <string name="put_related_animes_in_overflow_summary">Legg til forslagene i overflytningsmenyen i stedet for på innleggssiden</string>
+  <string name="pref_show_home_on_related_animes">Hjem fra forslag</string>
+  <string name="pref_show_home_on_related_animes_summary">Vis et ikon mens du surfer forslag for å navigere direkte tilbake til startsiden</string>
+  <string name="pref_source_related_animes">Forslag</string>
+  <string name="pref_source_related_animes_summary">Vis kildenettstedets forslag under visning</string>
+  <string name="pref_source_navigation">Erstatt siste knapp</string>
+  <string name="pref_source_navigation_summery">Bytt ut siste knapp med en tilpasset browse visning som inkluderer både siste og surfing</string>
 </resources>
