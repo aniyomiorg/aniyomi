@@ -269,4 +269,46 @@
   <string name="active_account">Aktivt konto</string>
   <string name="no_accounts_found">Inga konton hittades</string>
   <string name="login_failed">Kunde inte logga in</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama bekvämt rutnät</string>
+  <string name="action_bulk_select">Bulk markeringsläge</string>
+  <string name="action_move_up">Flytta upp</string>
+  <string name="action_move_down">Flytta ned</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">För många källor i ditt flöde, kan inte lägga till mer än 20</string>
+  <string name="action_sort_feed">Sortera flöden</string>
+  <string name="sort_feed_confirmation">Vill du sortera flödena alfabetiskt?</string>
+  <string name="saved_searches_feeds">Sparade sökningar &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Sparade sökningar (gamla att lägga till i Feed)</string>
+  <string name="pref_hide_feed">Dölj fliken Feed</string>
+  <string name="pref_feed_position">Flöde flikposition</string>
+  <string name="pref_feed_position_summery">Vill du att fliken feed ska vara den första fliken i webbläsare? Detta kommer att göra det till standardfliken när du öppnar webbläsaren, rekommenderas inte om du är på data eller ett utökat nätverk</string>
+  <string name="feed">Flöde</string>
+  <string name="feed_delete">Ta bort feed objekt?</string>
+  <string name="feed_tab_empty">Du har inga källor i ditt flöde, navigera längst upp till höger för att lägga till en</string>
+  <string name="feed_add">Lägg till %1$s i flödet?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Sparade sökningar</string>
+  <string name="save_search">Spara aktuell sökfråga?</string>
+  <string name="save_search_hint">Mitt söknamn</string>
+  <string name="save_search_failed_to_load">Det gick inte att ladda sparade sökningar!</string>
+  <string name="save_search_failed_to_load_message">Ett fel uppstod när du laddade dina sparade sökningar.</string>
+  <string name="save_search_delete">Ta bort sparad sökfråga?</string>
+  <string name="save_search_delete_message">Är du säker på att du vill ta bort din sparade sökfråga: \'%1$s\'?</string>
+  <string name="save_search_invalid">Sparad ogiltig sökning, filter har ändrats</string>
+  <string name="save_search_invalid_name">Ogiltigt sparat söknamn</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Inga källkategorier tillgängliga</string>
+  <string name="invalid_category_name">Ogiltigt kategorinamn</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Förslag</string>
+  <string name="pref_source_related_mangas_summary">Visa käll-webbplatsens förslag vid visning av post</string>
+  <string name="related_mangas_website_suggestions">Webbplatsens förslag</string>
+  <string name="related_mangas_more">Mer som dessa...</string>
+  <string name="saved_searches_delete">Sparade sökningar (gamla att radera)</string>
+  <string name="pref_expand_related_animes">Expandera förslag</string>
+  <string name="pref_expand_related_animes_summary">Om inaktiverad, kommer förslagen inte automatiskt att ladda &amp; visa utökad</string>
+  <string name="put_related_animes_in_overflow">Förslag på överflöd</string>
+  <string name="put_related_animes_in_overflow_summary">Sätt knappen Förslag i overflow menyn istället för på ingångssidan</string>
+  <string name="pref_show_home_on_related_animes">Hem från förslag</string>
+  <string name="pref_show_home_on_related_animes_summary">Visa en ikon medan du surfar Förslag för att navigera direkt tillbaka till hemmet</string>
+  <string name="pref_source_related_animes">Förslag</string>
+  <string name="pref_source_related_animes_summary">Visa käll-webbplatsens förslag vid visning av post</string>
+  <string name="pref_source_navigation">Ersätt senaste knappen</string>
+  <string name="pref_source_navigation_summery">Ersätt senaste knappen med en anpassad bläddringsvy som innehåller både senaste och bläddra</string>
 </resources>
