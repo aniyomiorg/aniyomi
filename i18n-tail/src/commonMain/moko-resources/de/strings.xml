@@ -269,4 +269,46 @@
   <string name="active_account">Aktives Konto</string>
   <string name="no_accounts_found">Keine Konten gefunden</string>
   <string name="login_failed">Login fehlgeschlagen</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama-bequemes Raster</string>
+  <string name="action_bulk_select">Massenauswahlmodus</string>
+  <string name="action_move_up">Nach oben</string>
+  <string name="action_move_down">Nach unten</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Zu viele Quellen in Ihrem Feed, kann nicht mehr als 20 hinzufügen</string>
+  <string name="action_sort_feed">Feeds sortieren</string>
+  <string name="sort_feed_confirmation">Möchten Sie die Feeds alphabetisch sortieren?</string>
+  <string name="saved_searches_feeds">Gespeicherte Suche &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Gespeicherte Suche (zum Feed hinzufügen)</string>
+  <string name="pref_hide_feed">Feed-Tab ausblenden</string>
+  <string name="pref_feed_position">Feed-Tab-Position</string>
+  <string name="pref_feed_position_summery">Soll der Feed-Tab der erste Tab im Browser sein? Dies macht es zum Standard-Tab beim Öffnen des Browsers, nicht empfohlen, wenn Sie auf Daten oder einem gemessenen Netzwerk sind</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">Feed-Element löschen?</string>
+  <string name="feed_tab_empty">Sie haben keine Quellen in Ihrem Feed, navigieren Sie nach oben rechts, um eine hinzuzufügen</string>
+  <string name="feed_add">%1$s zum Feed hinzufügen?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Gespeicherte Suche</string>
+  <string name="save_search">Aktuelle Suchanfrage speichern?</string>
+  <string name="save_search_hint">Mein Suchname</string>
+  <string name="save_search_failed_to_load">Fehler beim Laden der gespeicherten Suche!</string>
+  <string name="save_search_failed_to_load_message">Beim Laden Ihrer gespeicherten Suchen ist ein Fehler aufgetreten.</string>
+  <string name="save_search_delete">Gespeicherte Suchanfrage löschen?</string>
+  <string name="save_search_delete_message">Sind Sie sicher, dass Sie Ihre gespeicherte Suchanfrage löschen wollen: \'%1$s\'?</string>
+  <string name="save_search_invalid">Gespeicherte Suche ungültig, Filter wurden geändert</string>
+  <string name="save_search_invalid_name">Ungültiger gespeicherter Suchname</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Keine Quellkategorien verfügbar</string>
+  <string name="invalid_category_name">Ungültiger Kategoriename</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Vorschläge</string>
+  <string name="pref_source_related_mangas_summary">Vorschläge der Quell-Website während des Eintrags anzeigen</string>
+  <string name="related_mangas_website_suggestions">Website-Vorschläge</string>
+  <string name="related_mangas_more">Mehr davon...</string>
+  <string name="saved_searches_delete">Gespeicherte Suchanfragen (zum Löschen warten)</string>
+  <string name="pref_expand_related_animes">Vorschläge erweitern</string>
+  <string name="pref_expand_related_animes_summary">Wenn ausgeschaltet, werden Vorschläge nicht automatisch &amp; Show Expansion laden</string>
+  <string name="put_related_animes_in_overflow">Vorschläge im Überlauf</string>
+  <string name="put_related_animes_in_overflow_summary">Setzen Sie die Schaltfläche Vorschläge in das Überlaufmenü anstatt auf der Einstiegsseite</string>
+  <string name="pref_show_home_on_related_animes">Home von Vorschlägen</string>
+  <string name="pref_show_home_on_related_animes_summary">Symbol während des Durchsuchens von Vorschlägen anzeigen, um direkt zurück nach Hause zu navigieren</string>
+  <string name="pref_source_related_animes">Vorschläge</string>
+  <string name="pref_source_related_animes_summary">Vorschläge der Quell-Website während des Eintrags anzeigen</string>
+  <string name="pref_source_navigation">Neueste Schaltfläche ersetzen</string>
+  <string name="pref_source_navigation_summery">Ersetzen Sie die neueste Schaltfläche mit einer benutzerdefinierten Ansicht mit den neuesten und den neuesten Browsern</string>
 </resources>
