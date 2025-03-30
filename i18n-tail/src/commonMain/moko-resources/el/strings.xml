@@ -269,4 +269,46 @@
   <string name="active_account">Ενεργός Λογαριασμός</string>
   <string name="no_accounts_found">Δεν βρέθηκαν λογαριασμοί</string>
   <string name="login_failed">Αποτυχία σύνδεσης</string>
+  <string name="action_display_comfortable_grid_panorama">Πανόραμα άνετο πλέγμα</string>
+  <string name="action_bulk_select">Λειτουργία μαζικής επιλογής</string>
+  <string name="action_move_up">Μετακίνηση Πάνω</string>
+  <string name="action_move_down">Μετακίνηση Κάτω</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Πάρα πολλές πηγές στη ροή σας, δεν μπορούν να προσθέσουν περισσότερες από 20</string>
+  <string name="action_sort_feed">Ταξινόμηση ροών</string>
+  <string name="sort_feed_confirmation">Θα θέλατε να ταξινομήσετε τις ζωοτροφές αλφαβητικά?</string>
+  <string name="saved_searches_feeds">Saved Searches &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Αποθηκευμένες αναζητήσεις (Κρατήστε για προσθήκη στη Ροή)</string>
+  <string name="pref_hide_feed">Απόκρυψη καρτέλας ροής</string>
+  <string name="pref_feed_position">Θέση καρτέλας ροής</string>
+  <string name="pref_feed_position_summery">Θέλετε η καρτέλα ροής να είναι η πρώτη καρτέλα στην περιήγηση? Αυτό θα κάνει την προεπιλεγμένη καρτέλα όταν ανοίγετε την περιήγηση, δεν συνιστάται αν είστε σε δεδομένα ή σε ένα μετρημένο δίκτυο</string>
+  <string name="feed">Τροφοδοσία</string>
+  <string name="feed_delete">Διαγραφή στοιχείου ροής?</string>
+  <string name="feed_tab_empty">Δεν έχετε καμία πηγή στη ροή σας, μεταβείτε στην επάνω δεξιά γωνία για να προσθέσετε μία</string>
+  <string name="feed_add">Προσθήκη %1$s για τροφοδοσία?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Αποθήκευση Αναζητήσεων</string>
+  <string name="save_search">Αποθήκευση τρέχοντος ερωτήματος αναζήτησης?</string>
+  <string name="save_search_hint">Το όνομα αναζήτησης</string>
+  <string name="save_search_failed_to_load">Αποτυχία φόρτωσης αποθηκευμένων αναζητήσεων!</string>
+  <string name="save_search_failed_to_load_message">Παρουσιάστηκε σφάλμα κατά τη φόρτωση των αποθηκευμένων σας αναζητήσεων.</string>
+  <string name="save_search_delete">Διαγραφή του αποθηκευμένου ερωτήματος αναζήτησης?</string>
+  <string name="save_search_delete_message">Είστε βέβαιοι ότι θέλετε να διαγράψετε το αποθηκευμένο ερώτημά σας: \'%1$s\'?</string>
+  <string name="save_search_invalid">Μη έγκυρη αποθηκευμένη αναζήτηση, τα φίλτρα έχουν αλλάξει</string>
+  <string name="save_search_invalid_name">Μη έγκυρο όνομα αποθηκευμένης αναζήτησης</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Δεν υπάρχουν διαθέσιμες κατηγορίες πηγής</string>
+  <string name="invalid_category_name">Μη έγκυρο όνομα κατηγορίας</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Προτάσεις</string>
+  <string name="pref_source_related_mangas_summary">Εμφάνιση προτάσεων πηγαίου ιστοτόπου κατά την προβολή της καταχώρησης</string>
+  <string name="related_mangas_website_suggestions">Προτάσεις Ιστοσελίδας</string>
+  <string name="related_mangas_more">Περισσότερο σαν αυτά...</string>
+  <string name="saved_searches_delete">Αποθηκευμένες αναζητήσεις (Κρατήστε για διαγραφή)</string>
+  <string name="pref_expand_related_animes">Επέκταση Προτάσεων</string>
+  <string name="pref_expand_related_animes_summary">Αν απενεργοποιηθεί, οι προτάσεις δεν θα φορτώσουν αυτόματα το &amp; show επεκτάθηκε</string>
+  <string name="put_related_animes_in_overflow">Προτάσεις υπερχείλισης</string>
+  <string name="put_related_animes_in_overflow_summary">Βάλτε το κουμπί Προτάσεις στο μενού υπερχείλισης αντί στη σελίδα εισόδου</string>
+  <string name="pref_show_home_on_related_animes">Αρχική από Προτάσεις</string>
+  <string name="pref_show_home_on_related_animes_summary">Εμφάνιση εικονιδίου κατά την περιήγηση στις προτάσεις για πλοήγηση απευθείας πίσω στην Αρχική</string>
+  <string name="pref_source_related_animes">Προτάσεις</string>
+  <string name="pref_source_related_animes_summary">Εμφάνιση προτάσεων πηγαίου ιστοτόπου κατά την προβολή της καταχώρησης</string>
+  <string name="pref_source_navigation">Αντικατάσταση τελευταίου κουμπιού</string>
+  <string name="pref_source_navigation_summery">Αντικατάσταση του τελευταίου κουμπιού με μια προσαρμοσμένη προβολή περιήγησης που περιλαμβάνει και πιο πρόσφατη και περιήγηση</string>
 </resources>
