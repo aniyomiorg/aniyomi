@@ -46,8 +46,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
 
         return listOfNotNull(
             Preference.PreferenceItem.ListPreference(
-                pref = playerPreferences.progressPreference(),
-                title = stringResource(MR.strings.pref_progress_mark_as_seen),
+                preference = playerPreferences.progressPreference(),
                 entries = persistentMapOf(
                     1.00F to stringResource(MR.strings.pref_progress_100),
                     0.95F to stringResource(MR.strings.pref_progress_95),
@@ -57,17 +56,18 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                     0.75F to stringResource(MR.strings.pref_progress_75),
                     0.70F to stringResource(MR.strings.pref_progress_70),
                 ),
+                title = stringResource(MR.strings.pref_progress_mark_as_seen),
             ),
             Preference.PreferenceItem.SwitchPreference(
-                pref = playerPreferences.preserveWatchingPosition(),
+                preference = playerPreferences.preserveWatchingPosition(),
                 title = stringResource(MR.strings.pref_preserve_watching_position),
             ),
             Preference.PreferenceItem.ListPreference(
-                pref = playerPreferences.defaultPlayerOrientationType(),
-                title = stringResource(MR.strings.pref_category_player_orientation),
+                preference = playerPreferences.defaultPlayerOrientationType(),
                 entries = PlayerOrientation.entries.associateWith {
                     stringResource(it.titleRes)
                 }.toPersistentMap(),
+                title = stringResource(MR.strings.pref_category_player_orientation),
             ),
             getControlsGroup(playerPreferences = playerPreferences),
             getHosterGroup(playerPreferences = playerPreferences),
@@ -93,24 +93,24 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_category_controls),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = allowGestures,
+                    preference = allowGestures,
                     title = stringResource(MR.strings.pref_controls_allow_gestures_in_panels),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = showLoading,
+                    preference = showLoading,
                     title = stringResource(MR.strings.pref_controls_show_loading),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = showChapter,
+                    preference = showChapter,
                     title = stringResource(MR.strings.pref_controls_show_chapter_indicator),
                     subtitle = stringResource(MR.strings.pref_controls_show_chapter_indicator_info),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = rememberPlayerBrightness,
+                    preference = rememberPlayerBrightness,
                     title = stringResource(MR.strings.pref_remember_brightness),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = rememberPlayerVolume,
+                    preference = rememberPlayerVolume,
                     title = stringResource(MR.strings.pref_remember_volume),
                 ),
             ),
@@ -126,11 +126,11 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_hosters),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = showFailure,
+                    preference = showFailure,
                     title = stringResource(MR.strings.pref_hosters_show_failure),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = showEmpty,
+                    preference = showEmpty,
                     title = stringResource(MR.strings.pref_hosters_show_empty),
                 ),
             ),
@@ -154,39 +154,38 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_category_display),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = fullScreen,
+                    preference = fullScreen,
                     title = stringResource(MR.strings.pref_player_fullscreen),
                     enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = hideControls,
+                    preference = hideControls,
                     title = stringResource(MR.strings.pref_player_hide_controls),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = displayVol,
+                    preference = displayVol,
                     title = stringResource(MR.strings.pref_controls_display_volume_percentage),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = showSystemBar,
+                    preference = showSystemBar,
                     title = stringResource(MR.strings.pref_show_system_bar),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = reduceMotion,
+                    preference = reduceMotion,
                     title = stringResource(MR.strings.pref_reduce_motion),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = hideTime,
-                    title = stringResource(MR.strings.pref_player_time_to_disappear),
+                    preference = hideTime,
                     entries = listOf(500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000).associateWith {
                         stringResource(MR.strings.pref_player_time_to_disappear_summary, it)
                     }.toPersistentMap(),
+                    title = stringResource(MR.strings.pref_player_time_to_disappear),
                 ),
                 Preference.PreferenceItem.SliderPreference(
                     value = panelOpacity,
+                    valueRange = 0..100,
                     title = stringResource(MR.strings.pref_panel_opacity),
                     subtitle = numberFormat.format(panelOpacity / 100f),
-                    min = 0,
-                    max = 100,
                     onValueChanged = {
                         panelOpacityPref.set(it)
                         true
@@ -214,22 +213,21 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_category_intro_skip),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableSkipIntro,
+                    preference = enableSkipIntro,
                     title = stringResource(MR.strings.pref_enable_intro_skip),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableAutoAniSkip,
+                    preference = enableAutoAniSkip,
                     title = stringResource(MR.strings.pref_enable_auto_skip_ani_skip),
                     enabled = isIntroSkipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableNetflixAniSkip,
+                    preference = enableNetflixAniSkip,
                     title = stringResource(MR.strings.pref_enable_netflix_style_aniskip),
                     enabled = isIntroSkipEnabled,
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = waitingTimeAniSkip,
-                    title = stringResource(MR.strings.pref_waiting_time_aniskip),
+                    preference = waitingTimeAniSkip,
                     entries = persistentMapOf(
                         5 to stringResource(MR.strings.pref_waiting_time_aniskip_5),
                         6 to stringResource(MR.strings.pref_waiting_time_aniskip_6),
@@ -238,15 +236,16 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                         9 to stringResource(MR.strings.pref_waiting_time_aniskip_9),
                         10 to stringResource(MR.strings.pref_waiting_time_aniskip_10),
                     ),
+                    title = stringResource(MR.strings.pref_waiting_time_aniskip),
                     enabled = isIntroSkipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableAniSkip,
+                    preference = enableAniSkip,
                     title = stringResource(MR.strings.pref_enable_aniskip),
                     enabled = isIntroSkipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = disableAniSkipChapters,
+                    preference = disableAniSkipChapters,
                     title = stringResource(MR.strings.pref_disable_aniskip_chapter),
                     enabled = isIntroSkipEnabled && isAniSkipEnabled,
                 ),
@@ -271,21 +270,21 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_category_pip),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enablePip,
+                    preference = enablePip,
                     title = stringResource(MR.strings.pref_enable_pip),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = pipEpisodeToasts,
+                    preference = pipEpisodeToasts,
                     title = stringResource(MR.strings.pref_pip_episode_toasts),
                     enabled = isPipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = pipOnExit,
+                    preference = pipOnExit,
                     title = stringResource(MR.strings.pref_pip_on_exit),
                     enabled = isPipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = pipReplaceWithPrevious,
+                    preference = pipReplaceWithPrevious,
                     title = stringResource(MR.strings.pref_pip_replace_with_previous),
                     enabled = isPipEnabled,
                 ),
@@ -317,13 +316,13 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_category_external_player),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = alwaysUseExternalPlayer,
+                    preference = alwaysUseExternalPlayer,
                     title = stringResource(MR.strings.pref_always_use_external_player),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = externalPlayerPreference,
-                    title = stringResource(MR.strings.pref_external_player_preference),
+                    preference = externalPlayerPreference,
                     entries = (mapOf("" to "None") + packageNamesMap).toPersistentMap(),
+                    title = stringResource(MR.strings.pref_external_player_preference),
                 ),
             ),
         )

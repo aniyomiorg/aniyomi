@@ -25,6 +25,7 @@ data class BackupAnimeTracking(
     @ProtoNumber(10) var startedWatchingDate: Long = 0,
     // finishedReadingDate is called endReadTime in 1.x
     @ProtoNumber(11) var finishedWatchingDate: Long = 0,
+    @ProtoNumber(12) var private: Boolean = false,
     @ProtoNumber(100) var mediaId: Long = 0,
 ) {
 
@@ -48,27 +49,8 @@ data class BackupAnimeTracking(
             startDate = this@BackupAnimeTracking.startedWatchingDate,
             finishDate = this@BackupAnimeTracking.finishedWatchingDate,
             remoteUrl = this@BackupAnimeTracking.trackingUrl,
+            private = this@BackupAnimeTracking.private,
         )
-    }
-
-    companion object {
-        fun copyFrom(track: AnimeTrack): BackupAnimeTracking {
-            return BackupAnimeTracking(
-                syncId = track.trackerId.toInt(),
-                mediaId = track.remoteId,
-                // forced not null so its compatible with 1.x backup system
-                libraryId = track.libraryId!!,
-                title = track.title,
-                // convert to float for 1.x
-                lastEpisodeSeen = track.lastEpisodeSeen.toFloat(),
-                totalEpisodes = track.totalEpisodes.toInt(),
-                score = track.score.toFloat(),
-                status = track.status.toInt(),
-                startedWatchingDate = track.startDate,
-                finishedWatchingDate = track.finishDate,
-                trackingUrl = track.remoteUrl,
-            )
-        }
     }
 }
 
@@ -86,6 +68,7 @@ val backupAnimeTrackMapper = {
         remoteUrl: String,
         startDate: Long,
         finishDate: Long,
+        private: Boolean,
     ->
     BackupAnimeTracking(
         syncId = syncId.toInt(),
@@ -100,5 +83,6 @@ val backupAnimeTrackMapper = {
         startedWatchingDate = startDate,
         finishedWatchingDate = finishDate,
         trackingUrl = remoteUrl,
+        private = private,
     )
 }

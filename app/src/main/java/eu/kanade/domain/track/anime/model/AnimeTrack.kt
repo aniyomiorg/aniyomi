@@ -10,6 +10,7 @@ fun AnimeTrack.copyPersonalFrom(other: AnimeTrack): AnimeTrack {
         status = other.status,
         startDate = other.startDate,
         finishDate = other.finishDate,
+        private = other.private,
     )
 }
 
@@ -26,6 +27,7 @@ fun AnimeTrack.toDbTrack(): DbAnimeTrack = DbAnimeTrack.create(trackerId).also {
     it.tracking_url = remoteUrl
     it.started_watching_date = startDate
     it.finished_watching_date = finishDate
+    it.private = private
 }
 
 fun DbAnimeTrack.toDomainTrack(idRequired: Boolean = true): AnimeTrack? {
@@ -44,5 +46,6 @@ fun DbAnimeTrack.toDomainTrack(idRequired: Boolean = true): AnimeTrack? {
         remoteUrl = tracking_url,
         startDate = started_watching_date,
         finishDate = finished_watching_date,
+        private = private,
     )
 }

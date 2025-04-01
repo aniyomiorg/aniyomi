@@ -44,6 +44,7 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.DeviceUtil
+import eu.kanade.tachiyomi.util.system.GLUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
 import eu.kanade.tachiyomi.util.system.cancelNotification
@@ -60,6 +61,7 @@ import org.conscrypt.Conscrypt
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.PreferenceStore
+import tachiyomi.core.common.util.system.ImageUtil
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.widget.entries.anime.AnimeWidgetManager
@@ -105,6 +107,8 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
+        val scope = ProcessLifecycleOwner.get().lifecycleScope
+
         // Show notification to disable Incognito Mode when it's enabled
         basePreferences.incognitoMode().changes()
             .onEach { enabled ->
@@ -133,6 +137,14 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
                 }
             }
             .launchIn(ProcessLifecycleOwner.get().lifecycleScope)
+
+        basePreferences.hardwareBitmapThreshold().let { preference ->
+            if (!preference.isSet()) preference.set(GLUtil.DEVICE_TEXTURE_LIMIT)
+        }
+
+        basePreferences.hardwareBitmapThreshold().changes()
+            .onEach { ImageUtil.hardwareBitmapThreshold = it }
+            .launchIn(scope)
 
         setAppCompatDelegateThemeMode(Injekt.get<UiPreferences>().themeMode().get())
 
@@ -208,21 +220,18 @@ class App : Application(), DefaultLifecycleObserver, SingletonImageLoader.Factor
     }
 
     override fun getPackageName(): String {
-        // This causes freezes in Android 6/7 for some reason
         try {
             // Override the value passed as X-Requested-With in WebView requests
             val stackTrace = Looper.getMainLooper().thread.stackTrace
-            val chromiumElement = stackTrace.find {
-                it.className.equals(
-                    "org.chromium.base.BuildInfo",
-                    ignoreCase = true,
-                )
+            val isChromiumCall = stackTrace.any { trace ->
+                trace.className.equals("org.chromium.base.BuildInfo", ignoreCase = true) &&
+                    setOf("getAll", "getPackageName", "<init>").any { trace.methodName.equals(it, ignoreCase = true) }
             }
-            if (chromiumElement?.methodName.equals("getAll", ignoreCase = true)) {
-                return WebViewUtil.SPOOF_PACKAGE_NAME
-            }
+
+            if (isChromiumCall) return WebViewUtil.spoofedPackageName(applicationContext)
         } catch (_: Exception) {
         }
+
         return super.getPackageName()
     }
 

@@ -29,4 +29,6 @@ class MangaTrackImpl : MangaTrack {
     override var finished_reading_date: Long = 0
 
     override var tracking_url: String = ""
+
+    override var private: Boolean = false
 }

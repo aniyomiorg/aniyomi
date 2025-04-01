@@ -35,11 +35,11 @@ class DownloadPreferences(
     fun removeBookmarkedChapters() = preferenceStore.getBoolean("pref_remove_bookmarked", false)
 
     fun removeExcludeCategories() = preferenceStore.getStringSet(
-        "remove_exclude_categories",
+        REMOVE_EXCLUDE_MANGA_CATEGORIES_PREF_KEY,
         emptySet(),
     )
     fun removeExcludeAnimeCategories() = preferenceStore.getStringSet(
-        "remove_exclude_anime_categories",
+        REMOVE_EXCLUDE_ANIME_CATEGORIES_PREF_KEY,
         emptySet(),
     )
 
@@ -47,20 +47,20 @@ class DownloadPreferences(
     fun downloadNewEpisodes() = preferenceStore.getBoolean("download_new_episode", false)
 
     fun downloadNewChapterCategories() = preferenceStore.getStringSet(
-        "download_new_categories",
+        DOWNLOAD_NEW_MANGA_CATEGORIES_PREF_KEY,
         emptySet(),
     )
     fun downloadNewEpisodeCategories() = preferenceStore.getStringSet(
-        "download_new_anime_categories",
+        DOWNLOAD_NEW_ANIME_CATEGORIES_PREF_KEY,
         emptySet(),
     )
 
     fun downloadNewChapterCategoriesExclude() = preferenceStore.getStringSet(
-        "download_new_categories_exclude",
+        DOWNLOAD_NEW_MANGA_CATEGORIES_EXCLUDE_PREF_KEY,
         emptySet(),
     )
     fun downloadNewEpisodeCategoriesExclude() = preferenceStore.getStringSet(
-        "download_new_anime_categories_exclude",
+        DOWNLOAD_NEW_ANIME_CATEGORIES_EXCLUDE_PREF_KEY,
         emptySet(),
     )
 
@@ -69,4 +69,22 @@ class DownloadPreferences(
 
     fun downloadNewUnreadChaptersOnly() = preferenceStore.getBoolean("download_new_unread_chapters_only", false)
     fun downloadNewUnseenEpisodesOnly() = preferenceStore.getBoolean("download_new_unread_episodes_only", false)
+
+    companion object {
+        private const val REMOVE_EXCLUDE_MANGA_CATEGORIES_PREF_KEY = "remove_exclude_categories"
+        private const val REMOVE_EXCLUDE_ANIME_CATEGORIES_PREF_KEY = "remove_exclude_anime_categories"
+        private const val DOWNLOAD_NEW_MANGA_CATEGORIES_PREF_KEY = "download_new_categories"
+        private const val DOWNLOAD_NEW_ANIME_CATEGORIES_PREF_KEY = "download_new_anime_categories"
+        private const val DOWNLOAD_NEW_MANGA_CATEGORIES_EXCLUDE_PREF_KEY = "download_new_categories_exclude"
+        private const val DOWNLOAD_NEW_ANIME_CATEGORIES_EXCLUDE_PREF_KEY = "download_new_anime_categories_exclude"
+
+        val categoryPreferenceKeys = setOf(
+            REMOVE_EXCLUDE_MANGA_CATEGORIES_PREF_KEY,
+            REMOVE_EXCLUDE_ANIME_CATEGORIES_PREF_KEY,
+            DOWNLOAD_NEW_MANGA_CATEGORIES_PREF_KEY,
+            DOWNLOAD_NEW_ANIME_CATEGORIES_PREF_KEY,
+            DOWNLOAD_NEW_MANGA_CATEGORIES_EXCLUDE_PREF_KEY,
+            DOWNLOAD_NEW_ANIME_CATEGORIES_EXCLUDE_PREF_KEY,
+        )
+    }
 }

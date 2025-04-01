@@ -17,6 +17,7 @@ object MangaTrackMapper {
         remoteUrl: String,
         startDate: Long,
         finishDate: Long,
+        private: Boolean,
     ): MangaTrack = MangaTrack(
         id = id,
         mangaId = mangaId,
@@ -31,5 +32,6 @@ object MangaTrackMapper {
         remoteUrl = remoteUrl,
         startDate = startDate,
         finishDate = finishDate,
+        private = private,
     )
 }

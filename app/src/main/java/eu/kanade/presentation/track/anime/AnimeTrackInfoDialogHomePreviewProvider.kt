@@ -25,7 +25,9 @@ internal class AnimeTrackInfoDialogHomePreviewProvider :
         remoteUrl = "https://example.com",
         startDate = 0L,
         finishDate = 0L,
+        private = false,
     )
+    private val privateTrack = aTrack.copy(private = true)
     private val trackItemWithoutTrack = AnimeTrackItem(
         track = null,
         tracker = DummyTracker(
@@ -35,6 +37,13 @@ internal class AnimeTrackInfoDialogHomePreviewProvider :
     )
     private val trackItemWithTrack = AnimeTrackItem(
         track = aTrack,
+        tracker = DummyTracker(
+            id = 2L,
+            name = "Example Tracker 2",
+        ),
+    )
+    private val trackItemWithPrivateTrack = AnimeTrackItem(
+        track = privateTrack,
         tracker = DummyTracker(
             id = 2L,
             name = "Example Tracker 2",
@@ -57,6 +66,7 @@ internal class AnimeTrackInfoDialogHomePreviewProvider :
             onOpenInBrowser = {},
             onRemoved = {},
             onCopyLink = {},
+            onTogglePrivate = {},
         )
     }
 
@@ -73,6 +83,24 @@ internal class AnimeTrackInfoDialogHomePreviewProvider :
             onOpenInBrowser = {},
             onRemoved = {},
             onCopyLink = {},
+            onTogglePrivate = {},
+        )
+    }
+
+    private val trackerWithPrivateTracking = @Composable {
+        AnimeTrackInfoDialogHome(
+            trackItems = listOf(trackItemWithPrivateTrack),
+            dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM),
+            onStatusClick = {},
+            onEpisodeClick = {},
+            onScoreClick = {},
+            onStartDateEdit = {},
+            onEndDateEdit = {},
+            onNewSearch = {},
+            onOpenInBrowser = {},
+            onRemoved = {},
+            onCopyLink = {},
+            onTogglePrivate = {},
         )
     }
 
@@ -80,5 +108,6 @@ internal class AnimeTrackInfoDialogHomePreviewProvider :
         get() = sequenceOf(
             trackersWithAndWithoutTrack,
             noTrackers,
+            trackerWithPrivateTracking,
         )
 }

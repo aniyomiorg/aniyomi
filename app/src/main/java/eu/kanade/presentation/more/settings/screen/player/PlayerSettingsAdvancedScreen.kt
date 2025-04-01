@@ -36,9 +36,9 @@ object PlayerSettingsAdvancedScreen : SearchableSettings {
 
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
+                preference = enableScripts,
                 title = stringResource(MR.strings.pref_mpv_scripts),
                 subtitle = stringResource(MR.strings.pref_mpv_scripts_summary),
-                pref = enableScripts,
                 onValueChanged = {
                     // Ask for external storage permission
                     if (it) {
@@ -52,18 +52,18 @@ object PlayerSettingsAdvancedScreen : SearchableSettings {
                 },
             ),
             Preference.PreferenceItem.MPVConfPreference(
-                pref = mpvConf,
-                title = stringResource(MR.strings.pref_mpv_conf),
-                fileName = "mpv.conf",
+                preference = mpvConf,
                 scope = scope,
                 context = context,
+                fileName = "mpv.conf",
+                title = stringResource(MR.strings.pref_mpv_conf),
             ),
             Preference.PreferenceItem.MPVConfPreference(
-                pref = mpvInput,
-                title = stringResource(MR.strings.pref_mpv_input),
-                fileName = "input.conf",
+                preference = mpvInput,
                 scope = scope,
                 context = context,
+                fileName = "input.conf",
+                title = stringResource(MR.strings.pref_mpv_input),
             ),
         )
     }

@@ -18,7 +18,6 @@ import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
@@ -60,6 +59,8 @@ class Anilist(id: Long) :
     private val api by lazy { AnilistApi(client, interceptor) }
 
     override val supportsReadingDates: Boolean = true
+
+    override val supportsPrivateTracking: Boolean = true
 
     private val scorePreference = trackPreferences.anilistScoreType()
 
@@ -278,7 +279,7 @@ class Anilist(id: Long) :
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         val remoteTrack = api.findLibManga(track, getUsername().toInt())
         return if (remoteTrack != null) {
-            track.copyPersonalFrom(remoteTrack)
+            track.copyPersonalFrom(remoteTrack, copyRemotePrivate = false)
             track.library_id = remoteTrack.library_id
 
             if (track.status != COMPLETED) {
@@ -298,7 +299,7 @@ class Anilist(id: Long) :
     override suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean): AnimeTrack {
         val remoteTrack = api.findLibAnime(track, getUsername().toInt())
         return if (remoteTrack != null) {
-            track.copyPersonalFrom(remoteTrack)
+            track.copyPersonalFrom(remoteTrack, copyRemotePrivate = false)
             track.library_id = remoteTrack.library_id
 
             if (track.status != COMPLETED) {

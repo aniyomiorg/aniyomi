@@ -45,8 +45,8 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
     suspend fun addLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
             val query = """
-            |mutation AddManga(${'$'}mangaId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus) {
-                |SaveMediaListEntry (mediaId: ${'$'}mangaId, progress: ${'$'}progress, status: ${'$'}status) {
+            |mutation AddManga(${'$'}mangaId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus, ${'$'}private: Boolean) {
+                |SaveMediaListEntry (mediaId: ${'$'}mangaId, progress: ${'$'}progress, status: ${'$'}status, private: ${'$'}private) {
                 |   id
                 |   status
                 |}
@@ -59,6 +59,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("mangaId", track.remote_id)
                     put("progress", track.last_chapter_read.toInt())
                     put("status", track.toApiStatus())
+                    put("private", track.private)
                 }
             }
             with(json) {
@@ -81,11 +82,11 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         return withIOContext {
             val query = """
             |mutation UpdateManga(
-                |${'$'}listId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus,
+                |${'$'}listId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus, ${'$'}private: Boolean,
                 |${'$'}score: Int, ${'$'}startedAt: FuzzyDateInput, ${'$'}completedAt: FuzzyDateInput
             |) {
                 |SaveMediaListEntry(
-                    |id: ${'$'}listId, progress: ${'$'}progress, status: ${'$'}status,
+                    |id: ${'$'}listId, progress: ${'$'}progress, status: ${'$'}status, private: ${'$'}private,
                     |scoreRaw: ${'$'}score, startedAt: ${'$'}startedAt, completedAt: ${'$'}completedAt
                 |) {
                     |id
@@ -104,6 +105,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("score", track.score.toInt())
                     put("startedAt", createDate(track.started_reading_date))
                     put("completedAt", createDate(track.finished_reading_date))
+                    put("private", track.private)
                 }
             }
             authClient.newCall(POST(API_URL, body = payload.toString().toRequestBody(jsonMime)))
@@ -136,8 +138,8 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
     suspend fun addLibAnime(track: AnimeTrack): AnimeTrack {
         return withIOContext {
             val query = """
-            |mutation AddAnime(${'$'}animeId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus) {
-                |SaveMediaListEntry (mediaId: ${'$'}animeId, progress: ${'$'}progress, status: ${'$'}status) {
+            |mutation AddAnime(${'$'}animeId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus, ${'$'}private: Boolean) {
+                |SaveMediaListEntry (mediaId: ${'$'}animeId, progress: ${'$'}progress, status: ${'$'}status, private: ${'$'}private) {
                 |   id
                 |   status
                 |}
@@ -150,6 +152,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("animeId", track.remote_id)
                     put("progress", track.last_episode_seen.toInt())
                     put("status", track.toApiStatus())
+                    put("private", track.private)
                 }
             }
             with(json) {
@@ -172,11 +175,11 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         return withIOContext {
             val query = """
             |mutation UpdateAnime(
-                |${'$'}listId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus,
+                |${'$'}listId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus, ${'$'}private: Boolean,
                 |${'$'}score: Int, ${'$'}startedAt: FuzzyDateInput, ${'$'}completedAt: FuzzyDateInput
             |) {
                 |SaveMediaListEntry(
-                    |id: ${'$'}listId, progress: ${'$'}progress, status: ${'$'}status,
+                    |id: ${'$'}listId, progress: ${'$'}progress, status: ${'$'}status, private: ${'$'}private,
                     |scoreRaw: ${'$'}score, startedAt: ${'$'}startedAt, completedAt: ${'$'}completedAt
                 |) {
                     |id
@@ -195,6 +198,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("score", track.score.toInt())
                     put("startedAt", createDate(track.started_watching_date))
                     put("completedAt", createDate(track.finished_watching_date))
+                    put("private", track.private)
                 }
             }
             authClient.newCall(POST(API_URL, body = payload.toString().toRequestBody(jsonMime)))
@@ -231,6 +235,19 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 |Page (perPage: 50) {
                     |media(search: ${'$'}query, type: MANGA, format_not_in: [NOVEL]) {
                         |id
+                        |staff {
+                            |edges {
+                                |role
+                                |id
+                                |node {
+                                    |name {
+                                        |full
+                                        |userPreferred
+                                        |native
+                                    |}
+                                |}
+                            |}
+                        |}
                         |title {
                             |userPreferred
                         |}
@@ -280,6 +297,14 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 |Page (perPage: 50) {
                     |media(search: ${'$'}query, type: ANIME) {
                         |id
+                        |studios {
+                            |edges {
+                                |isMain
+                                |node {
+                                    |name
+                                |}
+                            |}
+                        |}
                         |title {
                             |userPreferred
                         |}
@@ -332,6 +357,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                         |status
                         |scoreRaw: score(format: POINT_100)
                         |progress
+                        |private
                         |startedAt {
                             |year
                             |month
@@ -358,6 +384,19 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                                 |year
                                 |month
                                 |day
+                            |}
+                            |staff {
+                                |edges {
+                                    |role
+                                    |id
+                                    |node {
+                                        |name {
+                                            |full
+                                            |userPreferred
+                                            |native
+                                        |}
+                                    |}
+                                |}
                             |}
                         |}
                     |}
@@ -399,6 +438,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                         |status
                         |scoreRaw: score(format: POINT_100)
                         |progress
+                        |private
                         |startedAt {
                             |year
                             |month
@@ -425,6 +465,14 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                                 |year
                                 |month
                                 |day
+                            |}
+                            |studios {
+                                |edges {
+                                    |isMain
+                                    |node {
+                                        |name
+                                    |}
+                                |}
                             |}
                         |}
                     |}

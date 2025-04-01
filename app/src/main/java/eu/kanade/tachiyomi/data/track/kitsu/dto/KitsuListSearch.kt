@@ -43,6 +43,7 @@ data class KitsuListSearchResult(
             }
             score = userDataAttrs.ratingTwenty?.let { it / 2.0 } ?: 0.0
             last_chapter_read = userDataAttrs.progress.toDouble()
+            private = userDataAttrs.private
         }
     }
 
@@ -76,6 +77,7 @@ data class KitsuListSearchResult(
             }
             score = userDataAttrs.ratingTwenty?.let { it / 2.0 } ?: 0.0
             last_episode_seen = userDataAttrs.progress.toDouble()
+            private = userDataAttrs.private
         }
     }
 }
@@ -93,6 +95,7 @@ data class KitsuListSearchItemDataAttributes(
     val finishedAt: String?,
     val ratingTwenty: Int?,
     val progress: Int,
+    val private: Boolean,
 )
 
 @Serializable

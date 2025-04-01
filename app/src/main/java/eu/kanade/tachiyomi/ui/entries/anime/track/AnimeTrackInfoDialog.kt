@@ -177,6 +177,7 @@ data class AnimeTrackInfoDialogHomeScreen(
                 )
             },
             onCopyLink = { context.copyTrackerLink(it) },
+            onTogglePrivate = screenModel::togglePrivate,
         )
     }
 
@@ -256,6 +257,12 @@ data class AnimeTrackInfoDialogHomeScreen(
                         )
                     }
                 }
+        }
+
+        fun togglePrivate(item: AnimeTrackItem) {
+            screenModelScope.launchNonCancellable {
+                (item.tracker as? AnimeTracker)?.setRemotePrivate(item.track!!.toDbTrack(), !item.track.private)
+            }
         }
 
         private fun List<AnimeTrack>.mapToTrackItem(): List<AnimeTrackItem> {
@@ -697,11 +704,14 @@ data class TrackServiceSearchScreen(
             queryResult = state.queryResult,
             selected = state.selected,
             onSelectedChange = screenModel::updateSelection,
-            onConfirmSelection = {
-                screenModel.registerTracking(state.selected!!)
+            onConfirmSelection = f@{ private: Boolean ->
+                val selected = state.selected ?: return@f
+                selected.private = private
+                screenModel.registerTracking(selected)
                 navigator.pop()
             },
             onDismissRequest = navigator::pop,
+            supportsPrivateTracking = screenModel.supportsPrivateTracking,
         )
     }
 
@@ -711,6 +721,8 @@ data class TrackServiceSearchScreen(
         initialQuery: String,
         private val tracker: Tracker,
     ) : StateScreenModel<Model.State>(State()) {
+
+        val supportsPrivateTracking = tracker.supportsPrivateTracking
 
         init {
             // Run search on first launch

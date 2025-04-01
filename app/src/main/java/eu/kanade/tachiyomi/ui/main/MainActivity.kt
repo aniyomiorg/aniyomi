@@ -59,6 +59,8 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.source.anime.interactor.GetAnimeIncognitoState
+import eu.kanade.domain.source.manga.interactor.GetMangaIncognitoState
 import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.DownloadedOnlyBannerBackgroundColor
 import eu.kanade.presentation.components.IncognitoModeBannerBackgroundColor
@@ -99,6 +101,7 @@ import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.util.system.isNavigationBarNeedsScrim
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
+import eu.kanade.tachiyomi.util.system.updaterEnabled
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -133,6 +136,9 @@ class MainActivity : BaseActivity() {
     private val downloadCache: MangaDownloadCache by injectLazy()
     private val chapterCache: ChapterCache by injectLazy()
 
+    private val getAnimeIncognitoState: GetAnimeIncognitoState by injectLazy()
+    private val getMangaIncognitoState: GetMangaIncognitoState by injectLazy()
+
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
 
@@ -161,7 +167,8 @@ class MainActivity : BaseActivity() {
         setComposeContent {
             val context = LocalContext.current
 
-            val incognito by preferences.incognitoMode().collectAsState()
+            var incognito by remember { mutableStateOf(getMangaIncognitoState.await(null)) }
+            var incognitoAnime by remember { mutableStateOf(getAnimeIncognitoState.await(null)) }
             val downloadOnly by preferences.downloadedOnly().collectAsState()
             val indexing by downloadCache.isInitializing.collectAsState()
             val indexingAnime by animeDownloadCache.isInitializing.collectAsState()
@@ -170,7 +177,7 @@ class MainActivity : BaseActivity() {
             val statusBarBackgroundColor = when {
                 indexing || indexingAnime -> IndexingBannerBackgroundColor
                 downloadOnly -> DownloadedOnlyBannerBackgroundColor
-                incognito -> IncognitoModeBannerBackgroundColor
+                incognito || incognitoAnime -> IncognitoModeBannerBackgroundColor
                 else -> MaterialTheme.colorScheme.surface
             }
             LaunchedEffect(isSystemInDarkTheme, statusBarBackgroundColor) {
@@ -202,13 +209,24 @@ class MainActivity : BaseActivity() {
                         preferences.incognitoMode().set(false)
                     }
                 }
+                LaunchedEffect(navigator.lastItem) {
+                    (navigator.lastItem as? BrowseMangaSourceScreen)?.sourceId
+                        .let(getMangaIncognitoState::subscribe)
+                        .collectLatest { incognito = it }
+                }
+
+                LaunchedEffect(navigator.lastItem) {
+                    (navigator.lastItem as? BrowseAnimeSourceScreen)?.sourceId
+                        .let(getAnimeIncognitoState::subscribe)
+                        .collectLatest { incognitoAnime = it }
+                }
 
                 val scaffoldInsets = WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
                 Scaffold(
                     topBar = {
                         AppStateBanners(
                             downloadedOnlyMode = downloadOnly,
-                            incognitoMode = incognito,
+                            incognitoMode = incognito || incognitoAnime,
                             indexing = indexing || indexingAnime,
                             modifier = Modifier.windowInsetsPadding(scaffoldInsets),
                         )
@@ -349,7 +367,7 @@ class MainActivity : BaseActivity() {
 
         // App updates
         LaunchedEffect(Unit) {
-            if (BuildConfig.INCLUDE_UPDATER) {
+            if (updaterEnabled) {
                 try {
                     val result = AppUpdateChecker().checkForUpdate(context)
                     if (result is GetApplicationRelease.Result.NewUpdate) {
@@ -357,7 +375,7 @@ class MainActivity : BaseActivity() {
                             versionName = result.release.version,
                             changelogInfo = result.release.info,
                             releaseLink = result.release.releaseLink,
-                            downloadLink = result.release.getDownloadLink(),
+                            downloadLink = result.release.downloadLink,
                         )
                         navigator.push(updateScreen)
                     }

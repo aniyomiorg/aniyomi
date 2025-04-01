@@ -29,4 +29,6 @@ class AnimeTrackImpl : AnimeTrack {
     override var finished_watching_date: Long = 0
 
     override var tracking_url: String = ""
+
+    override var private: Boolean = false
 }
