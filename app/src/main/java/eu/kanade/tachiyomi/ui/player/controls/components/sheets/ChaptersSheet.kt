@@ -42,6 +42,7 @@ fun ChaptersSheet(
     currentChapter: Segment,
     onClick: (Segment) -> Unit,
     onDismissRequest: () -> Unit,
+    dismissSheet: Boolean,
     modifier: Modifier = Modifier,
 ) {
     GenericTracksSheet(
@@ -55,6 +56,7 @@ fun ChaptersSheet(
             )
         },
         onDismissRequest = onDismissRequest,
+        dismissEvent = dismissSheet,
         modifier = modifier
             .padding(vertical = MaterialTheme.padding.medium),
     )
