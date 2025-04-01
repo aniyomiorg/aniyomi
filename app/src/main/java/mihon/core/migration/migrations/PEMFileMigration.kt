@@ -16,7 +16,8 @@ class PEMFileMigration : Migration {
         val context = migrationContext.get<Application>() ?: return false
 
         val configDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
-            storageManager.getMPVConfigDirectory()!!.filePath!!
+            storageManager.getMPVConfigDirectory()?.filePath
+                ?: context.applicationContext.filesDir.path
         } else {
             context.applicationContext.filesDir.path
         }
