@@ -790,7 +790,6 @@
     <string name="pref_track_on_add_library">افتح قائمة التتبع عند الإضافة إلى المكتبة</string>
     <string name="download_ahead_info_anime">يعمل فقط على الإدخالات في المكتبة وإذا كانت الحلقة الحالية بالإضافة إلى الحلقة التالية قد تم تنزيلها بالفعل</string>
     <string name="pref_player_smooth_seek">تمكين البحث الدقيق</string>
-    <string name="player_aniskip_mixedOp">تخطي المقدمة المختلطة</string>
     <string name="action_change_intro_length">تغيير طول المقدمة</string>
     <string name="video_fit_screen">ملائمة للشاشة</string>
     <string name="pref_mpv_conf">قم بتحرير ملف تكوين MPV لمزيد من إعدادات مشغل الوسائط</string>
@@ -801,7 +800,6 @@
     <string name="pref_clear_anime_database">تنظيف قاعدة بيانات الأنمي</string>
     <string name="disable_auto_play">التشغيل التلقائي متوقف</string>
     <string name="episode_downloading_progress">تحميل (%d%%)</string>
-    <string name="player_aniskip_ed">تخطي النهاية</string>
     <string name="action_play">تشغيل</string>
     <string name="action_screen_fit">وضع \"ملاءمة الشاشة\"</string>
     <string name="pref_category_external_downloader">برنامج التحميل الخارجي</string>
@@ -835,13 +833,11 @@
     <string name="pref_bottom_nav_no_manga">انقل \"المانغا\" إلى علامة التبويب \"المزيد\"</string>
     <string name="action_sort_episode_fetch_date">تاريخ جلب الحلقة</string>
     <string name="label_anime_updates">أنمي</string>
-    <string name="player_aniskip_recap">تخطي الملخص</string>
     <string name="action_sort_unseen_count">عدد الغير المشاهد</string>
     <string name="display_mode_episode">الحلقة %1$s</string>
     <string name="action_display_local_badge_anime">الأنمي المحلي</string>
     <string name="want_to_watch">تريد المشاهدة</string>
     <string name="label_anime_history">أنمي</string>
-    <string name="player_aniskip_op">تخطي الافتتاحية</string>
     <string name="pref_skip_length">إضغط مرتين لتخطي المقدمة</string>
     <string name="label_manga">مانغا</string>
     <string name="label_watched_episodes">شاهد</string>

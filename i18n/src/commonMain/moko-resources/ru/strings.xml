@@ -817,7 +817,6 @@
     <string name="pref_category_player_orientation">Ориентация</string>
     <string name="pref_intro_length">Перемотка опенинга</string>
     <string name="action_change_intro_length">Изменить длину опенинга</string>
-    <string name="player_aniskip_op">Пропустить опенинг</string>
     <string name="recent_anime_time">Эп. %1$s - %2$s</string>
     <string name="no_next_episode">Следующий эпизод не найден!</string>
     <string name="video_fit_screen">По размеру экрана</string>
@@ -888,7 +887,6 @@
     <string name="video_crop_screen">Обрезано по ширине экрана</string>
     <string name="pref_debanding_gpu">ГП</string>
     <string name="pref_waiting_time_aniskip">Время ожидания кнопки</string>
-    <string name="player_aniskip_mixedOp">Пропустить смешанный опенинг</string>
     <string name="pref_category_pip">Картинка в картинке</string>
     <string name="pref_enable_aniskip">Включить AniSkip</string>
     <string name="action_filter_unseen">Не просмотрено</string>
@@ -987,7 +985,6 @@
     <string name="want_to_read">Хочу прочитать</string>
     <string name="episode_progress">Прогресс: %1$s/%2$s</string>
     <string name="label_anime_history">Аниме</string>
-    <string name="player_aniskip_ed">Пропустить эндинг</string>
     <string name="pref_waiting_time_aniskip_9">9 секунд</string>
     <string name="data_saver_summary">Сжимать изображения перед скачиванием или загрузкой в читалке</string>
     <string name="data_saver_downloader">Использовать сохранение данных в загрузчике</string>
@@ -998,7 +995,6 @@
     <string name="action_remove_bookmark_episode">Удалить эпизод из закладок</string>
     <string name="action_edit_anime_categories">Редактировать категории аниме</string>
     <string name="action_show_anime">Показать аниме</string>
-    <string name="player_aniskip_recap">Пропустить рекап</string>
     <string name="player_aniskip_dontskip">Не пропускать</string>
     <string name="player_hwdec_mode">Режим аппаратного декодирования</string>
     <string name="notification_episodes_single_and_more">Эпизод %1$s и ещё %2$d</string>

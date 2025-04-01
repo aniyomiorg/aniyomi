@@ -1033,14 +1033,12 @@
     <string name="pref_waiting_time_aniskip_5">5 giây</string>
     <string name="snack_add_to_anime_library">Thêm anime vào thư viện?</string>
     <string name="dialog_with_checkbox_reset_anime">Đặt lại mọi tập cho anime này</string>
-    <string name="player_aniskip_ed">Bỏ qua Ending</string>
     <string name="data_saver_image_format_summary_off">Kích thước tệp Jpeg nhỏ hơn đáng kể so với Webp (có nghĩa là lưu được nhiều dữ liệu hơn), nhưng nó cũng khiến hình ảnh mất chất lượng nhiều hơn.
 \nHiện đang nén thành Webp</string>
     <string name="data_saver_exclude">Loại trừ khỏi trình tiết kiệm dữ liệu</string>
     <string name="data_saver">Trình tiết kiệm dữ liệu</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="data_saver_server_summary">Điền url máy chủ Bandwidth Hero Proxy tại đây</string>
-    <string name="player_aniskip_op">Bỏ qua Opening</string>
     <string name="pref_enable_auto_skip_ani_skip">Bật tự động skip</string>
     <string name="player_aniskip_dontskip_toast">Skip sau %d giây</string>
     <string name="label_anime_extensions">Anime Extensions</string>
@@ -1076,8 +1074,6 @@
     <string name="label_manga_extensions">Manga Extensions</string>
     <string name="label_migration_manga">Di chuyển Manga</string>
     <string name="copied_video_link_to_clipboard">Đã sao chép liên kết chất lượng video vào bảng nhớ tạm</string>
-    <string name="player_aniskip_mixedOp">Bỏ qua MixedOp</string>
-    <string name="player_aniskip_recap">Bỏ qua Recap</string>
     <string name="pref_gpu_next_title">Bật gpu-next</string>
     <string name="label_upcoming">Sắp tới</string>
     <string name="action_add_anyway">Vẫn thêm</string>

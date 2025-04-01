@@ -899,8 +899,6 @@
     <string name="enable_auto_play">A reprodução automática está ativada</string>
     <string name="disable_auto_play">A reprodução automática está desativada</string>
     <string name="video_fit_screen">Ajustar a tela</string>
-    <string name="player_aniskip_op">Pular Abertura</string>
-    <string name="player_aniskip_ed">Pular Final</string>
     <string name="pref_category_player_aniskip_info">Configurações do AniSkip</string>
     <string name="pref_enable_aniskip">Habilitar o AniSkip</string>
     <string name="pref_waiting_time_aniskip_5">5 segundos</string>
@@ -967,11 +965,9 @@
     <string name="video_stretch_screen">Esticado para a tela</string>
     <string name="pref_track_on_add_library">Abra o menu de rastreadores ao adicionar à biblioteca</string>
     <string name="download_unseen">Não visto</string>
-    <string name="player_aniskip_recap">Pular recapitulação</string>
     <string name="episode_settings_updated">Configurações de episódio padrão atualizadas</string>
     <string name="video_crop_screen">Cortado para a tela</string>
     <string name="action_change_intro_length">Alterar a duração da abertura</string>
-    <string name="player_aniskip_mixedOp">Pular MixedOp</string>
     <string name="pref_enable_auto_skip_ani_skip">Ativar pulo automático</string>
     <string name="pref_waiting_time_aniskip">Tempo limite do botão</string>
     <string name="player_aniskip_skip">%s pulou</string>

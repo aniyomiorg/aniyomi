@@ -917,9 +917,6 @@
     <string name="video_crop_screen">Retall a la pantalla</string>
     <string name="video_stretch_screen">Omplir la pantalla</string>
     <string name="action_change_intro_length">Canviar la duració de la introducció</string>
-    <string name="player_aniskip_op">Saltar opening</string>
-    <string name="player_aniskip_recap">Saltar resum</string>
-    <string name="player_aniskip_mixedOp">Saltar introducció mixta</string>
     <string name="pref_enable_aniskip">Activar AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Activa salt automàtic</string>
     <string name="pref_waiting_time_aniskip">Botó del temps d\'espera</string>
@@ -977,7 +974,6 @@
     <string name="pref_category_player_aniskip_info">AniSkip requereix que l\'anime sigui rastrejat amb MAL o Anilist perquè funcioni</string>
     <string name="notification_episodes_single_and_more">Episodi %1$s i %2$d més</string>
     <string name="label_manga_extensions">Extensions del manga</string>
-    <string name="player_aniskip_ed">Saltar ending</string>
     <string name="local_manga_source">Manga en font local</string>
     <string name="pref_hide_in_anime_library_items">Amaga les entrades dels animes que ja siguin a la biblioteca</string>
     <string name="pref_hide_in_manga_library_items">Amaga les entrades dels mangas que ja siguin a la biblioteca</string>

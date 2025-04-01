@@ -923,10 +923,6 @@
     <string name="rotation_sensor_landscape">Snímek na šířku</string>
     <string name="episode_progress">Postup: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Postup: %1$s</string>
-    <string name="player_aniskip_op">Přeskočit úvod</string>
-    <string name="player_aniskip_ed">Přeskočit konec</string>
-    <string name="player_aniskip_mixedOp">Přeskočit smíšené úvodníky</string>
-    <string name="player_aniskip_recap">Přeskočit rekapitulaci</string>
     <string name="pref_category_player_aniskip_info">Nastavení AniSkip</string>
     <string name="pref_enable_aniskip">Zapnout AniSkip</string>
     <string name="pref_waiting_time_aniskip">Časový limit tlačítka</string>

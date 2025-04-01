@@ -1126,8 +1126,4 @@
     <string name="video_crop_screen">திரைக்கு வெட்டப்பட்டது</string>
     <string name="video_stretch_screen">திரைக்கு நீட்டப்பட்டது</string>
     <string name="action_change_intro_length">அறிமுக நீளத்தை மாற்றவும்</string>
-    <string name="player_aniskip_op">திறப்பதைத் தவிர்க்கவும்</string>
-    <string name="player_aniskip_ed">முடிவைத் தவிர்க்கவும்</string>
-    <string name="player_aniskip_mixedOp">கலவையைத் தவிர்க்கவும்</string>
-    <string name="player_aniskip_recap">மறுபரிசீலனை செய்யுங்கள்</string>
 </resources>

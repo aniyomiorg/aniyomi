@@ -970,7 +970,6 @@
     <string name="download_notifier_download_paused_episodes">Преузимање епизоде је паузирано</string>
     <string name="label_history">Манга</string>
     <string name="action_change_intro_length">Промени дужину увода</string>
-    <string name="player_aniskip_op">Прескочи увод</string>
     <string name="pref_invalidate_download_cache_summary">Присили апликацију да поново провери преузета поглавља и епизоде</string>
     <string name="notification_episodes_single">Епизода %1$s</string>
     <string name="player_aniskip_dontskip_toast">Прескочи %s у %d секунди</string>
@@ -1005,9 +1004,6 @@
     <string name="label_updates">Манга</string>
     <string name="pref_enable_aniskip">Омогући AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Омогући аутоматско прескакање</string>
-    <string name="player_aniskip_ed">Прескочи завршетак</string>
-    <string name="player_aniskip_mixedOp">Прескочи мешовити увод</string>
-    <string name="player_aniskip_recap">Прескочи резиме</string>
     <string name="pref_mpv_input">Уреди MPV уносни фајл за конфигурацију мапирања тастатуре</string>
     <string name="pref_category_external_player">Екстерни плејер</string>
     <string name="pref_player_audio_channels_auto_safe">Ауто-безбедно</string>

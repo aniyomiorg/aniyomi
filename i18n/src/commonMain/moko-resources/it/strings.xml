@@ -820,10 +820,7 @@
     <string name="enable_volume_brightness_gestures">Attiva regolazione Volume e Retroilluminazione attraverso i gesti</string>
     <string name="enable_horizontal_seek_gesture">Attiva il gesto di scorrimento orizzontale</string>
     <string name="information_no_recent_anime">Nulla è stato guardato di recente</string>
-    <string name="player_aniskip_op">Salta l\'Opening</string>
-    <string name="player_aniskip_mixedOp">Salta MixedOp</string>
     <string name="action_change_intro_length">Cambia la lunghezza dell\'intro</string>
-    <string name="player_aniskip_ed">Salta l\'Ending</string>
     <string name="label_anime_extensions">Estensioni Anime</string>
     <string name="pref_remember_brightness">Salva e utilizza l\'ultimo livello di retroilluminazione impostato</string>
     <string name="pref_remember_volume">Salva e utilizza l\'ultimo livello di volume impostato</string>
@@ -852,7 +849,6 @@
     <string name="action_sort_last_anime_update">Ultimo aggiornamento anime</string>
     <string name="action_mark_as_seen">Segna come visto</string>
     <string name="pref_intro_length">Salta lunghezza dell\'intro</string>
-    <string name="player_aniskip_recap">Salta il Recap</string>
     <string name="action_play_externally">Riproduci esternamente</string>
     <string name="pref_category_external_player">Player esterno</string>
     <string name="pref_bottom_nav_no_manga">Sposta Manga nella scheda Altro</string>

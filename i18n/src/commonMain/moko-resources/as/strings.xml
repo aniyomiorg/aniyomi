@@ -995,10 +995,6 @@
     <string name="video_crop_screen">স্ক্ৰিনত ক্ৰমিত</string>
     <string name="video_stretch_screen">স্ক্ৰিনলৈ সৰ্পিত</string>
     <string name="action_change_intro_length">ইন্ট্ৰো লম্বাই সলনি কৰক</string>
-    <string name="player_aniskip_op">খোলাৰ অংশ এৰাই দিয়া</string>
-    <string name="player_aniskip_ed">শেষৰ অংশ এৰাই দিয়া</string>
-    <string name="player_aniskip_mixedOp">মিশ্ৰিত অংশ এৰাই দিয়া</string>
-    <string name="player_aniskip_recap">পুনৰাৱৃত্তি এৰাই দিয়া</string>
     <string name="pref_category_player_aniskip_info">AniSkipৰ কাৰ্য্য কৰাৰ বাবে এনিমে\'ৰ MAL অথবা Anilistৰ লগত পঞ্জীয়ন কৰা প্ৰয়োজন</string>
     <string name="pref_enable_aniskip">AniSkip সক্ৰিয় কৰক</string>
     <string name="pref_enable_auto_skip_ani_skip">অট\'স্কিপ সক্ৰিয় কৰক</string>
