@@ -1052,11 +1052,7 @@
     <string name="pref_start_screen">Başlangıç Ekranı</string>
     <string name="pref_gpu_next_title">gpu-next\'i etkinleştir</string>
     <string name="pref_gpu_next_subtitle">Yeni bir video işleme arka ucu</string>
-    <string name="safe_download">Anime için güvenli indirme modu</string>
     <string name="pref_bottom_nav_no_browse">Göz At sekmesini Daha Fazla bölümüne taşı</string>
-    <string name="download_threads_number">Mantıksal çekirdek sayısı</string>
-    <string name="download_threads_number_summary">İndirme için kullanılacak mantıksal çekirdek sayısı. Çok yüksek olması IP adresinizin engellenmesine neden olabilir. Kaynak sunucularda ağır yükü önlemek için genellikle 4 iyi bir sayıdır.</string>
-    <string name="safe_download_summary">Tek mantıksal çekirdekli ve aralıksız indirme modunu etkinleştir</string>
     <string name="pref_player_audio_channels">Ses kanalları</string>
     <string name="pref_player_audio_channels_stereo">Stereo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Ters stereo</string>

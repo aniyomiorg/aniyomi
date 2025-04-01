@@ -1054,10 +1054,6 @@
     <string name="resmush">resmush.it</string>
     <string name="label_manga_extension_repos">Репозиторијуми манга екстензија</string>
     <string name="label_anime_extension_repos">Репозиторијуми аниме екстензија</string>
-    <string name="safe_download">Безбедан режим преузимања за аниме</string>
-    <string name="safe_download_summary">Омогући режим преузимања са једним нитима и без опсега</string>
-    <string name="download_threads_number">Број нити</string>
-    <string name="download_threads_number_summary">Број нити које ће се користити за преузимање, може блокирати ваш IP ако је превисок, обично је 4 добар број да се избегне велико оптерећење на серверима извора.</string>
     <string name="onboarding_storage_action_create_folder">Креирај подразумевану Aniyomi фасциклу</string>
     <string name="download_notifier_download_finish">Преузимање завршено</string>
     <string name="local_anime_source">Локални извор анимеа</string>

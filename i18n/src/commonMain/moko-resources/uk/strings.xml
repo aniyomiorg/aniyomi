@@ -1043,7 +1043,6 @@
     <string name="pref_player_internal_summary">Прогрес, контроль, орієнтація</string>
     <string name="pref_center_double_tap">Двічі торкніться (у центрі)</string>
     <string name="pref_auto_update_manga_on_mark_read">Оновлення прогресу, якщо позначено як прочитане/переглянуте</string>
-    <string name="safe_download_summary">Увімкнути режим завантаження одного потоку та без діапазону</string>
     <string name="pref_right_double_tap">Двічі торкніться (праворуч)</string>
     <string name="pref_player_subtitle_lang_info">Мови субтитрів, які вибираються за замовчуванням у відео з декількома субтитрами. Дво- або трибуквені коди мов працюють. Кілька значень можна розділити комою.</string>
     <string name="onboarding_storage_action_create_folder">Створіть папку Aniyomi за замовчуванням</string>
@@ -1098,7 +1097,6 @@
     <string name="file_picker_uri_permission_unsupported">Не вдалося отримати постійний доступ до папки. Програма може поводитися несподівано.</string>
     <string name="pref_bottom_nav_no_browse">Перемістіть Огляд на вкладку Більше</string>
     <string name="pref_download_new_unseen_episodes_only">Пропустіть завантаження дублікатів переглянутих епізодів</string>
-    <string name="safe_download">Безпечний режим завантаження аніме</string>
     <string name="label_all">всі</string>
     <string name="pref_player_gestures_summary">Пошук, подвійне торкання, керування медіа</string>
     <string name="pref_player_gestures">Жести</string>
@@ -1112,7 +1110,6 @@
     <string name="action_replace_repo_message">Репозиторій %1$s має той самий відбиток ключа підпису, що й %2$s.\nЯкщо це очікується, %2$s буде замінено, інакше зв’яжіться зі своїм супроводжувачем сховища.</string>
     <string name="manga_interval_expected_update_null">Ця манга або завершена, або немає передбачуваної дати випуску.</string>
     <string name="upcoming_calendar_next">Наступний місяць</string>
-    <string name="download_threads_number">Кількість ниток</string>
     <string name="download_speed_limit_hint">Встановіть значення 0, щоб вимкнути обмеження швидкості.</string>
     <string name="download_speed_limit">Обмеження швидкості завантаження</string>
     <string name="action_bar_up_description">Перейти вгору</string>
@@ -1148,7 +1145,6 @@
     <string name="pref_category_double_tap">Двічі торкніться</string>
     <string name="pref_player_subtitle_summary">Бажані мови, білий список, чорний список</string>
     <string name="pref_player_internal">Внутрішній програвач</string>
-    <string name="download_threads_number_summary">Кількість потоків для завантаження може призвести до блокування вашої IP-адреси, якщо вона завелика; зазвичай 4 є хорошим числом, щоб уникнути великого навантаження на вихідні сервери.</string>
     <string name="pref_controls_show_loading">Показати коло завантаження</string>
     <string name="pref_controls_swap_vol_brightness">Поміняти повзунок гучності та яскравості</string>
     <string name="pref_show_system_bar">Показати рядок стану системи з елементами керування</string>
