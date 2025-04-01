@@ -314,6 +314,8 @@ class PlayerActivity : BaseActivity() {
         player.isExiting = true
         if (isFinishing) {
             MPVLib.command(arrayOf("stop"))
+        } else {
+            viewModel.pause()
         }
 
         super.onPause()
@@ -599,6 +601,12 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        if (!player.isExiting) {
+            super.onResume()
+            return
+        }
+
+        player.isExiting = false
         super.onResume()
 
         viewModel.currentVolume.update {
