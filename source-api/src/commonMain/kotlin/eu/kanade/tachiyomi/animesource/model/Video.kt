@@ -23,7 +23,7 @@ data class TimeStamp(
     val start: Double,
     val end: Double,
     val name: String,
-    val type: ChapterType,
+    val type: ChapterType = ChapterType.Other,
 )
 
 open class Video(
@@ -111,6 +111,32 @@ open class Video(
         set(value) {
             field = value
         }
+
+    fun copy(
+        videoUrl: String = this.videoUrl,
+        videoTitle: String = this.videoTitle,
+        resolution: Int? = this.resolution,
+        bitrate: Int? = this.bitrate,
+        headers: Headers? = this.headers,
+        preferred: Boolean = this.preferred,
+        subtitleTracks: List<Track> = this.subtitleTracks,
+        audioTracks: List<Track> = this.audioTracks,
+        timestamps: List<TimeStamp> = this.timestamps,
+        internalData: String = this.internalData,
+    ): Video {
+        return Video(
+            videoUrl = videoUrl,
+            videoTitle = videoTitle,
+            resolution = resolution,
+            bitrate = bitrate,
+            headers = headers,
+            preferred = preferred,
+            subtitleTracks = subtitleTracks,
+            audioTracks = audioTracks,
+            timestamps = timestamps,
+            internalData = internalData,
+        )
+    }
 
     fun copy(
         videoUrl: String = this.videoUrl,

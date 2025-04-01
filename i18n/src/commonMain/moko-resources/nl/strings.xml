@@ -776,10 +776,6 @@
     <string name="unseen">Onbekeken</string>
     <string name="label_anime_extension_repos">Bronnen voor Anime extensies</string>
     <string name="onboarding_storage_action_create_folder">Maak standaard Aniyomi-map</string>
-    <string name="safe_download">Veilige downloadmodus voor anime</string>
-    <string name="safe_download_summary">Activeer single thread en no range downloadmodus</string>
-    <string name="download_threads_number">Aantal threads</string>
-    <string name="download_threads_number_summary">Aantal threads dat wordt gebruikt voor het downloaden. Een te hoog aantal kan leiden tot een blokkade van je IP-adres. 4 is meestal een goed aantal om zware belasting van de bronservers te voorkomen.</string>
     <string name="download_speed_limit">Beperk downloadsnelheid</string>
     <string name="onboarding_action_skip">Overslaan</string>
     <string name="onboarding_storage_info">Selecteer een map waar %1$s downloads van hoofdstukken, back-ups meer kan opslaan.

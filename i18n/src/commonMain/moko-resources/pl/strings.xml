@@ -783,7 +783,6 @@
     <string name="action_edit_anime_categories">Edytuj kategorie anime</string>
     <string name="action_sort_unseen_count">Liczba nie obejrzanych</string>
     <string name="action_filter_unseen">Nie obejrzane</string>
-    <string name="player_aniskip_recap">Pomiń podsumowanie</string>
     <string name="player_aniskip_dontskip_toast">Pomiń za %d sekund</string>
     <string name="also_set_episode_settings_for_library">zastosuj również do wszystkie anime w mojej bibliotece</string>
     <string name="video_fit_screen">Dopasuj do ekranu</string>
@@ -815,7 +814,6 @@
     <string name="snack_add_to_anime_library">Dodaj anime do biblioteki?</string>
     <string name="pref_remove_exclude_categories_anime">Wyłączone kategorie anime</string>
     <string name="recent_anime_time">Odc. %1$s - %2$s</string>
-    <string name="player_aniskip_ed">Pomiń zakończenie</string>
     <string name="downloaded_episodes">Pobrane odcinki</string>
     <string name="pref_waiting_time_aniskip">Limit czasu przycisku</string>
     <string name="action_start_download_internally">Użyj wewnętrznego programu do pobierania</string>
@@ -866,7 +864,6 @@
     <string name="pref_episode_swipe">Przesunięcie odcinka</string>
     <string name="notification_episodes_single_and_more">Odcinek %1$s i jeszcze %2$d</string>
     <string name="resmush">resmush.it</string>
-    <string name="player_aniskip_op">Pomiń intro</string>
     <string name="bandwidth_hero">Bandwidth Hero (Wymaga serwera Proxy Bandwidth Hero)</string>
     <string name="no_next_episode">Następny odcinek nie znaleziony!</string>
     <string name="download_notifier_download_paused_episodes">Pobieranie odcinka zostało wstrzymane</string>
@@ -902,7 +899,6 @@
     <string name="pref_episode_swipe_end">Akcja przesunięcia w prawo</string>
     <string name="label_anime_extensions">Rozszerzenia anime</string>
     <string name="pref_clear_anime_database">Wyczyść bazę danych Anime</string>
-    <string name="player_aniskip_mixedOp">Pomiń MixedOp</string>
     <string name="show_episode_number">Numer odcinka</string>
     <string name="episode_not_found">Odcinek nie znaleziony</string>
     <string name="notification_episodes_single">Odcinek %1$s</string>

@@ -502,4 +502,6 @@
     <string name="information_webview_required">ತಚಿಯೋಮಿಗೆ ವೆಬ್‌ವೀಕ್ಷಣೆ ಅಗತ್ಯವಿದೆ</string>
     <string name="download_notifier_download_paused_chapters">ಡೌನ್‌ಲೋಡ್ ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
     <string name="channel_new_chapters_episodes">ಅಧ್ಯಾಯ ನವೀಕರಣಗಳು</string>
+    <string name="not_selected">ಆಯ್ಕೆ ಮಾಡಿಲ್ಲ</string>
+    <string name="delete_downloaded">ಡೌನ್‌ಲೋಡ್ ಅಳಿಸಿ</string>
 </resources>
