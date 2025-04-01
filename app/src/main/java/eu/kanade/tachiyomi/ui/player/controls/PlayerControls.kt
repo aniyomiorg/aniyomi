@@ -453,7 +453,7 @@ fun PlayerControls(
                     )
                 }
                 // Bottom right controls
-                val aniskipButton by viewModel.aniskipButton.collectAsState()
+                val skipIntroButton by viewModel.skipIntroText.collectAsState()
                 val customButtonTitle by viewModel.primaryButtonTitle.collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
@@ -478,8 +478,8 @@ fun PlayerControls(
                     BottomRightPlayerControls(
                         customButton = customButton,
                         customButtonTitle = customButtonTitle,
-                        aniskipButton = aniskipButton,
-                        onPressAniSkipButton = viewModel::aniskipPressed,
+                        skipIntroButton = skipIntroButton,
+                        onPressSkipIntroButton = viewModel::onSkipIntro,
                         isPipAvailable = activity.isPipSupportedAndEnabled,
                         onPipClick = {
                             if (!viewModel.isLoadingEpisode.value) {

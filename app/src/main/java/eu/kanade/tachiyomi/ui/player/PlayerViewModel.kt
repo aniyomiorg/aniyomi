@@ -48,8 +48,10 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.settings.screen.player.custombutton.CustomButtonFetchState
 import eu.kanade.presentation.more.settings.screen.player.custombutton.getButtons
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.ChapterType
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SerializableHoster.Companion.toHosterList
+import eu.kanade.tachiyomi.animesource.model.TimeStamp
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
@@ -69,11 +71,10 @@ import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.utils.AniSkipApi
+import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
+import eu.kanade.tachiyomi.ui.player.utils.TrackSelect
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
-import eu.kanade.tachiyomi.util.AniSkipApi
-import eu.kanade.tachiyomi.util.SkipType
-import eu.kanade.tachiyomi.util.Stamp
-import eu.kanade.tachiyomi.util.TrackSelect
 import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.episode.filterDownloadedEpisodes
 import eu.kanade.tachiyomi.util.lang.byteSize
@@ -225,6 +226,8 @@ class PlayerViewModel @JvmOverloads constructor(
     val chapters = _chapters.asStateFlow()
     private val _currentChapter = MutableStateFlow<IndexedSegment?>(null)
     val currentChapter = _currentChapter.asStateFlow()
+    private val _skipIntroText = MutableStateFlow<String?>(null)
+    val skipIntroText = _skipIntroText.asStateFlow()
 
     private val _pos = MutableStateFlow(0f)
     val pos = _pos.asStateFlow()
@@ -282,9 +285,6 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _remainingTime = MutableStateFlow(0)
     val remainingTime = _remainingTime.asStateFlow()
 
-    private val _aniskipButton = MutableStateFlow<String?>(null)
-    val aniskipButton = _aniskipButton.asStateFlow()
-
     val cachePath: String = activity.cacheDir.path
 
     private val _customButtons = MutableStateFlow<CustomButtonFetchState>(CustomButtonFetchState.Loading)
@@ -295,10 +295,6 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private val _primaryButton = MutableStateFlow<CustomButton?>(null)
     val primaryButton = _primaryButton.asStateFlow()
-
-    private fun updateAniskipButton(value: String?) {
-        _aniskipButton.update { _ -> value }
-    }
 
     init {
         viewModelScope.launchIO {
@@ -952,12 +948,12 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun changeEpisode(previous: Boolean, autoPlay: Boolean = false) {
         if (previous && !hasPreviousEpisode.value) {
-            activity.toast(activity.stringResource(MR.strings.no_prev_episode))
+            activity.showToast(activity.stringResource(MR.strings.no_prev_episode))
             return
         }
 
         if (!previous && !hasNextEpisode.value) {
-            activity.toast(activity.stringResource(MR.strings.no_next_episode))
+            activity.showToast(activity.stringResource(MR.strings.no_next_episode))
             return
         }
 
@@ -1845,7 +1841,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * Returns the response of the AniSkipApi for this episode.
      * just works if tracking is enabled.
      */
-    suspend fun aniSkipResponse(playerDuration: Int?): List<Stamp>? {
+    suspend fun aniSkipResponse(playerDuration: Int?): List<TimeStamp>? {
         val animeId = currentAnime.value?.id ?: return null
         val trackerManager = Injekt.get<TrackerManager>()
         var malId: Long?
@@ -1870,101 +1866,104 @@ class PlayerViewModel @JvmOverloads constructor(
         return null
     }
 
-    val aniSkipEnable = gesturePreferences.aniSkipEnabled().get()
-    private val netflixStyle = gesturePreferences.enableNetflixStyleAniSkip().get()
+    val introSkipEnabled = playerPreferences.enableSkipIntro().get()
+    private val autoSkip = playerPreferences.autoSkipIntro().get()
+    private val netflixStyle = playerPreferences.enableNetflixStyleIntroSkip().get()
 
-    var aniSkipInterval: List<Stamp>? = null
-    private val defaultWaitingTime = gesturePreferences.waitingTimeAniSkip().get()
-    var waitingAniSkip = defaultWaitingTime
+    private val defaultWaitingTime = playerPreferences.waitingTimeIntroSkip().get()
+    var waitingSkipIntro = defaultWaitingTime
 
-    private var skipType: SkipType? = null
-
-    fun aniSkipStuff(position: Long) {
-        if (!aniSkipEnable) return
-        // if it doesn't find any interval it will show the +85 button
-        if (aniSkipInterval == null) return
-
-        val autoSkipAniSkip = gesturePreferences.autoSkipAniSkip().get()
-
-        skipType =
-            aniSkipInterval
-                ?.firstOrNull {
-                    it.interval.startTime <= position &&
-                        it.interval.endTime > position
-                }?.skipType
-        skipType?.let { skipType ->
-            if (netflixStyle) {
-                // show a toast with the seconds before the skip
-                if (waitingAniSkip == defaultWaitingTime) {
-                    activity.toast(
-                        "AniSkip: ${activity.stringResource(
-                            MR.strings.player_aniskip_dontskip_toast,
-                            skipType.getString(),
-                            waitingAniSkip,
-                        )}",
-                    )
-                }
-                showAniskipButton(aniSkipInterval!!, skipType, waitingAniSkip)
-                waitingAniSkip--
-            } else if (autoSkipAniSkip) {
-                seekToWithText(
-                    seekValue = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
-                    text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString()),
-                )
-            } else {
-                showAniskipButton(skipType)
+    fun setChapter(position: Float) {
+        getCurrentChapter(position)?.let { (chapterIndex, chapter) ->
+            if (currentChapter.value != chapter) {
+                _currentChapter.update { _ -> chapter }
             }
-        } ?: run {
-            updateAniskipButton(null)
-            waitingAniSkip = defaultWaitingTime
+
+            if (!introSkipEnabled) {
+                return
+            }
+
+            if (chapter.chapterType == ChapterType.Other) {
+                _skipIntroText.update { _ -> null }
+                waitingSkipIntro = defaultWaitingTime
+            } else {
+                val nextChapterPos = chapters.value.getOrNull(chapterIndex + 1)?.start ?: pos.value
+
+                if (netflixStyle) {
+                    // show a toast with the seconds before the skip
+                    if (waitingSkipIntro == defaultWaitingTime) {
+                        activity.showToast(
+                            "Skip Intro: ${activity.stringResource(
+                                MR.strings.player_aniskip_dontskip_toast,
+                                chapter.name,
+                                waitingSkipIntro,
+                            )}",
+                        )
+                    }
+                    showSkipIntroButton(chapter, nextChapterPos, waitingSkipIntro)
+                    waitingSkipIntro--
+                } else if (autoSkip) {
+                    rightSeekToWithText(
+                        seekDuration = nextChapterPos.toInt(),
+                        text = activity.stringResource(MR.strings.player_intro_skipped, chapter.name),
+                    )
+                } else {
+                    updateSkipIntroButton(chapter.chapterType)
+                }
+            }
         }
     }
 
-    private fun showAniskipButton(skipType: SkipType) {
-        val skipButtonString = when (skipType) {
-            SkipType.ED -> MR.strings.player_aniskip_ed
-            SkipType.OP -> MR.strings.player_aniskip_op
-            SkipType.RECAP -> MR.strings.player_aniskip_recap
-            SkipType.MIXED_OP -> MR.strings.player_aniskip_mixedOp
-        }
+    private fun updateSkipIntroButton(chapterType: ChapterType) {
+        val skipButtonString = chapterType.getStringRes()
 
-        updateAniskipButton(activity.stringResource(skipButtonString))
+        _skipIntroText.update { _ ->
+            skipButtonString?.let {
+                activity.stringResource(
+                    MR.strings.player_skip_action,
+                    activity.stringResource(skipButtonString),
+                )
+            }
+        }
     }
 
-    private fun showAniskipButton(aniSkipResponse: List<Stamp>, skipType: SkipType, waitingTime: Int) {
-        val skipTime = when (skipType) {
-            SkipType.ED -> aniSkipResponse.first { it.skipType == SkipType.ED }.interval
-            SkipType.OP -> aniSkipResponse.first { it.skipType == SkipType.OP }.interval
-            SkipType.RECAP -> aniSkipResponse.first { it.skipType == SkipType.RECAP }.interval
-            SkipType.MIXED_OP -> aniSkipResponse.first { it.skipType == SkipType.MIXED_OP }.interval
-        }
+    private fun showSkipIntroButton(chapter: IndexedSegment, nextChapterPos: Float, waitingTime: Int) {
         if (waitingTime > -1) {
             if (waitingTime > 0) {
-                updateAniskipButton(activity.stringResource(MR.strings.player_aniskip_dontskip))
+                _skipIntroText.update { _ -> activity.stringResource(MR.strings.player_aniskip_dontskip) }
             } else {
-                seekToWithText(
-                    seekValue = skipTime.endTime.toInt(),
-                    text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString()),
+                rightSeekToWithText(
+                    seekDuration = nextChapterPos.toInt(),
+                    text = activity.stringResource(MR.strings.player_aniskip_skip, chapter.name),
                 )
             }
         } else {
             // when waitingTime is -1, it means that the user cancelled the skip
-            showAniskipButton(skipType)
+            updateSkipIntroButton(chapter.chapterType)
         }
     }
 
-    fun aniskipPressed() {
-        if (skipType != null) {
+    fun onSkipIntro() {
+        getCurrentChapter()?.let { (chapterIndex, chapter) ->
             // this stops the counter
-            if (waitingAniSkip > 0 && netflixStyle) {
-                waitingAniSkip = -1
+            if (waitingSkipIntro > 0 && netflixStyle) {
+                waitingSkipIntro = -1
                 return
             }
-            seekToWithText(
-                seekValue = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
-                text = activity.stringResource(MR.strings.player_aniskip_skip, skipType!!.getString()),
+
+            val nextChapterPos = chapters.value.getOrNull(chapterIndex + 1)?.start ?: pos.value
+
+            rightSeekToWithText(
+                seekDuration = nextChapterPos.toInt(),
+                text = activity.stringResource(MR.strings.player_aniskip_skip, chapter.name),
             )
         }
+    }
+
+    private fun getCurrentChapter(position: Float? = null): IndexedValue<IndexedSegment>? {
+        return chapters.value.withIndex()
+            .filter { it.value.start <= (position ?: pos.value) }
+            .maxByOrNull { it.value.start }
     }
 
     fun setPrimaryCustomButtonTitle(button: CustomButton) {
