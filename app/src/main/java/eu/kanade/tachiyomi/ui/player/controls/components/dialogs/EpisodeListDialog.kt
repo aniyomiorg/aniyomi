@@ -50,7 +50,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun EpisodeListDialog(
-    displayMode: Long,
+    displayMode: Long?,
     currentEpisodeIndex: Int,
     episodeList: List<Episode>,
     dateRelativeTime: Boolean,

@@ -1117,6 +1117,12 @@ class PlayerViewModel @JvmOverloads constructor(
         _hasPreviousEpisode.update { _ -> value }
     }
 
+    fun showEpisodeListDialog() {
+        if (currentAnime.value != null) {
+            showDialog(Dialogs.EpisodeList)
+        }
+    }
+
     /**
      * Called when the activity is saved and not changing configurations. It updates the database
      * to persist the current progress of the active episode.
