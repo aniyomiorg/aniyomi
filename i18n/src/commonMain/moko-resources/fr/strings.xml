@@ -882,8 +882,6 @@
     <string name="video_crop_screen">Recadrer à l\'écran</string>
     <string name="video_stretch_screen">Étirer à l\'écran</string>
     <string name="action_change_intro_length">Modifier la durée de l\'intro</string>
-    <string name="player_aniskip_op">Sauter l\'ouverture</string>
-    <string name="player_aniskip_ed">Sauter la fin</string>
     <string name="settings">Paramètres</string>
     <string name="pref_invalidate_download_cache_summary">Forcer l\'application à revérifier les chapitres et épisodes télécharger</string>
     <string name="pref_waiting_time_aniskip_9">9 secondes</string>
@@ -901,7 +899,6 @@
     <string name="pref_enable_netflix_style_aniskip">Activer le mode Netflix</string>
     <string name="notification_episodes_single">Épisode %1$s</string>
     <string name="notification_episodes_single_and_more">Épisode %1$s et %2$d autres</string>
-    <string name="player_aniskip_recap">Passer le récap</string>
     <string name="notification_episodes_multiple">Épisodes %1$s</string>
     <string name="episode_settings">Paramètres des épisodes</string>
     <string name="download_notifier_download_paused_episodes">Téléchargement d\'épisodes en pause</string>
@@ -935,7 +932,6 @@
     <string name="pref_player_fullscreen">Ignorer les entailles en plein écran</string>
     <string name="pref_remember_volume">Appliquer le dernier volume utilisé</string>
     <string name="pref_track_on_add_library">Ouvrir le menu de pistes lors d’un ajout à la bibliothèque</string>
-    <string name="player_aniskip_mixedOp">Ignorer MixedOp</string>
     <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées dans la recherche globale</string>
     <string name="player_hwdec_mode">Définir le mode de décodage matériel par défaut</string>
     <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>

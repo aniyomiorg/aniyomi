@@ -808,8 +808,6 @@
     <string name="enable_auto_play">A reprodução automática está ativada</string>
     <string name="disable_auto_play">A reprodução automática está desativada</string>
     <string name="video_fit_screen">Ajustar ao ecrã</string>
-    <string name="player_aniskip_op">Saltar Abertura</string>
-    <string name="player_aniskip_ed">Saltar Final</string>
     <string name="pref_category_player_aniskip_info">Configurações do AniSkip</string>
     <string name="pref_enable_aniskip">Ativar o AniSkip</string>
     <string name="pref_waiting_time_aniskip_5">5 segundos</string>
@@ -891,8 +889,6 @@
     <string name="episode_settings_updated">Configurações de episódio padrão atualizadas</string>
     <string name="pref_invalidate_download_cache_summary">Forçar a app a verificar novamente os capítulos e episódios descarregados</string>
     <string name="video_crop_screen">Cortado ao ecrã</string>
-    <string name="player_aniskip_recap">Saltar recapitulação</string>
-    <string name="player_aniskip_mixedOp">Saltar MixedOp</string>
     <string name="pref_enable_auto_skip_ani_skip">Ativar salto automático</string>
     <string name="pref_hide_in_manga_library_items">Ocultar entradas de manga já na biblioteca</string>
     <string name="pref_hide_in_anime_library_items">Ocultar entradas de anime já na biblioteca</string>

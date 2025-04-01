@@ -853,13 +853,9 @@
     <string name="label_anime_updates">Anime</string>
     <string name="enable_auto_play">Naka-on ang auto-play</string>
     <string name="video_stretch_screen">Naka-stretch sa screen</string>
-    <string name="player_aniskip_recap">Laktawan ang Recap</string>
     <string name="pref_enable_aniskip">Paganahin ang AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Paganahin ang auto skip</string>
-    <string name="player_aniskip_op">Laktawan ang Pagbubukas</string>
     <string name="action_change_intro_length">Baguhin ang haba ng intro</string>
-    <string name="player_aniskip_ed">Laktawan ang Pagtatapos</string>
-    <string name="player_aniskip_mixedOp">Laktawan ang MixedOp</string>
     <string name="pref_waiting_time_aniskip">Timeout ng button</string>
     <string name="pref_waiting_time_aniskip_5">5 segundo</string>
     <string name="pref_waiting_time_aniskip_6">6 na segundo</string>

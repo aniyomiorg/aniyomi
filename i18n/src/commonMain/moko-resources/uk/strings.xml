@@ -866,11 +866,8 @@
     <string name="video_crop_screen">Обрізано по ширині екрана</string>
     <string name="video_stretch_screen">Розтягнуто на екрані</string>
     <string name="video_fit_screen">За розміром екрана</string>
-    <string name="player_aniskip_ed">Пропустити Ендінґ</string>
-    <string name="player_aniskip_recap">Пропустити підсумок</string>
     <string name="pref_enable_aniskip">Ввімкнути AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Ввімкнути авто пропуск</string>
-    <string name="player_aniskip_op">Пропустити Опенінґ</string>
     <string name="pref_waiting_time_aniskip_5">5 секунд</string>
     <string name="pref_waiting_time_aniskip">Час очікування кнопки</string>
     <string name="pref_waiting_time_aniskip_6">6 секунд</string>
@@ -899,7 +896,6 @@
     <string name="settings">Налаштування</string>
     <string name="no_episodes_error">Епізодів не знайдено</string>
     <string name="no_next_episode">Наступний епізод не знайдено!</string>
-    <string name="player_aniskip_mixedOp">Пропустити змішаний ОП</string>
     <string name="anime_from_library">Аніме з бібліотеки</string>
     <string name="action_play_internally">Дивитися в застосунку</string>
     <string name="pref_clear_anime_database">Очистити базу даних аніме</string>

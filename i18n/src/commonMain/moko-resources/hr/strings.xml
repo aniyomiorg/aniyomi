@@ -793,8 +793,6 @@
     <string name="action_sort_unseen_count">Broj nepogledanih</string>
     <string name="episode_progress_no_total">Napredak: %1$s</string>
     <string name="video_list_empty_error">Nije pronađen nijedan video</string>
-    <string name="player_aniskip_op">Preskoči uvodnu špicu</string>
-    <string name="player_aniskip_recap">Preskoči sažetak</string>
     <string name="copied_video_link_to_clipboard">Poveznica kvalitete videa je kopirana u međuspremnik</string>
     <string name="data_saver_ignore_jpeg">Zanemari Jpeg slike</string>
     <string name="data_saver_image_format_summary_off">Veličina Jpeg datoteke je znatno manja od Webp formata (što znači da se sprema više podataka), ali zbog toga slike gube i na kvaliteti.
@@ -940,8 +938,6 @@
     <string name="disable_auto_play">Automatska reprodukcija je deaktivirana</string>
     <string name="video_crop_screen">Odrezano na veličinu ekrana</string>
     <string name="action_change_intro_length">Promijeni duljinu uvoda</string>
-    <string name="player_aniskip_ed">Preskoči završnu špicu</string>
-    <string name="player_aniskip_mixedOp">Preskoči miješani uvod</string>
     <string name="pref_enable_aniskip">Aktiviraj AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Aktiviraj automatsko preskakanje</string>
     <string name="pref_waiting_time_aniskip">Gumb za istek vremena</string>

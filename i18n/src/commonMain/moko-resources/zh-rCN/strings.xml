@@ -959,11 +959,9 @@
     <string name="pref_remember_volume">保持并切换到最近使用的音量</string>
     <string name="label_migration_anime">动画迁移</string>
     <string name="pref_start_screen">启动界面</string>
-    <string name="player_aniskip_ed">跳过片尾</string>
     <string name="label_migration_manga">漫画迁移</string>
     <string name="pref_category_pip">小窗模式</string>
     <string name="pref_enable_pip">开启小窗模式</string>
-    <string name="player_aniskip_op">跳过开头</string>
     <string name="label_anime_extension_repos">动画插件仓库</string>
     <string name="pref_episode_swipe_end">向右滑动操作</string>
     <string name="pref_episode_swipe_start">向左滑动操作</string>
@@ -974,7 +972,6 @@
     <string name="download_speed_limit">限速下载</string>
     <string name="pref_default_home_tab_library">将启动界面设置到漫画栏</string>
     <string name="recent_anime_time">第 %1$s 集- %2$s</string>
-    <string name="player_aniskip_recap">跳过前情提要</string>
     <string name="episode_settings">剧集设置</string>
     <string name="action_change_intro_length">更改跳过开头时间</string>
     <string name="action_sort_airing_time">播放时间</string>
@@ -1054,7 +1051,6 @@
     <string name="pref_mpv_input">为键盘映射配置编辑 MPV 输入文档</string>
     <string name="pref_gpu_next_title">开启 GPU-Next</string>
     <string name="pref_gpu_next_subtitle">一种新的视频渲染后端方式</string>
-    <string name="player_aniskip_mixedOp">跳过含混合故事情节的片头</string>
     <string name="pref_preserve_reading_position">记住已读章节的上次阅读位置</string>
     <string name="pref_bottom_nav_no_browse">将浏览移至更多选项</string>
     <string name="pref_player_audio_channels">音频声道</string>

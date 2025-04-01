@@ -933,10 +933,6 @@
     <string name="video_crop_screen">Auf Bildschirm zuschneiden</string>
     <string name="video_stretch_screen">Auf den Bildschirm strecken</string>
     <string name="action_change_intro_length">Intro-Länge ändern</string>
-    <string name="player_aniskip_op">Intro überspringen</string>
-    <string name="player_aniskip_ed">Outro überspringen</string>
-    <string name="player_aniskip_mixedOp">Gemischtes Intro überspringen</string>
-    <string name="player_aniskip_recap">Zusammenfassung überspringen</string>
     <string name="pref_category_player_aniskip_info">AniSkip-Einstellungen</string>
     <string name="pref_enable_aniskip">AniSkip aktivieren</string>
     <string name="pref_enable_auto_skip_ani_skip">Automatisches Überspringen aktivieren</string>

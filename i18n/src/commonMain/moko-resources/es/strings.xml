@@ -936,10 +936,6 @@
     <string name="video_crop_screen">Recortado a la pantalla</string>
     <string name="video_stretch_screen">Extender a la pantalla</string>
     <string name="action_change_intro_length">Cambiar la duración de la introducción</string>
-    <string name="player_aniskip_op">Omitir introducción</string>
-    <string name="player_aniskip_ed">Omitir el final</string>
-    <string name="player_aniskip_mixedOp">Saltar introducción mixta</string>
-    <string name="player_aniskip_recap">Saltar resumen</string>
     <string name="pref_category_player_aniskip_info">Ajustes de AniSkip</string>
     <string name="pref_enable_aniskip">Activar AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Activar el salto automático</string>
