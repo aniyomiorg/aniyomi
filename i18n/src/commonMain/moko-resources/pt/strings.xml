@@ -970,10 +970,6 @@
     <string name="label_anime_extension_repos">Repositórios de extensão de anime</string>
     <string name="label_manga_extension_repos">Repositórios de extensão de mangá</string>
     <string name="onboarding_storage_action_create_folder">Criar a pasta padrão para Aniyomi</string>
-    <string name="safe_download">Modo de download seguro para anime</string>
-    <string name="safe_download_summary">Habilitar o modo de download único e sem intervalo</string>
-    <string name="download_threads_number">Contagem de fios</string>
-    <string name="download_threads_number_summary">O número de fios a serem usados para download pode bloquear seu IP se for muito alto, geralmente 4 é um bom número para evitar carga pesada nos servidores de origem.</string>
     <string name="pref_gpu_next_title">Ativar renderização prévia</string>
     <string name="data_saver_image_format">Comprimir para Jpeg</string>
     <string name="bandwidth_hero">Bandwidth Hero (requer um servidor Bandwidth Hero Proxy)</string>

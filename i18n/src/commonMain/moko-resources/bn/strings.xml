@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">নাম</string>
-    <string name="categories">বিভাগসমূহ</string>
-    <string name="manga">পুস্তক সংগ্রহ</string>
-    <string name="chapters">অধ্যায়সমূহ</string>
-    <string name="track">ট্র্যাকিং</string>
+    <string name="categories">শ্রেণীবিভাজন</string>
+    <string name="manga">মাঙ্গা</string>
+    <string name="chapters">অধ্যায়</string>
+    <string name="track">অনুসন্ধানকরণ</string>
     <string name="history">ইতিহাস</string>
     <string name="label_settings">সেটিংস</string>
     <string name="label_download_queue">ডাউনলোড সারি</string>
     <string name="label_library">লাইব্রেরি</string>
     <string name="label_recent_manga">ইতিহাস</string>
-    <string name="label_recent_updates">হালনাগাদসমূহ</string>
+    <string name="label_recent_updates">আপডেটস</string>
     <string name="label_backup">ব্যাকআপ এবং পুনরুদ্ধার</string>
     <string name="action_settings">সেটিংস</string>
     <string name="action_filter">বিশোধন</string>
@@ -222,7 +222,7 @@
     <string name="download_notifier_download_paused">ডাউনলোড বিরতি</string>
     <string name="channel_common">সাধারণ</string>
     <string name="label_migration">স্থানান্তর করুন</string>
-    <string name="label_extensions">এক্সটেনশন গুলো</string>
+    <string name="label_extensions">এক্সটেনশন</string>
     <string name="label_extension_info">এক্সটেনশনের বিবরন</string>
     <string name="ext_update">হালনাগাদ</string>
     <string name="ext_install">ইন্সটল</string>
@@ -285,7 +285,7 @@
     <string name="action_sort_date_added">তারিখে যোগকৃত</string>
     <string name="action_sort_latest_chapter">সর্বশেষ অধ্যায়</string>
     <string name="action_menu">তালিকা</string>
-    <string name="label_sources">উৎস সমূহ</string>
+    <string name="label_sources">উৎস</string>
     <string name="label_more">আরও</string>
     <string name="pref_category_display">প্রদর্শন</string>
     <string name="parental_controls_info">এটি অ্যাপের মধ্যে প্রাপ্তবয়স্কদের (18+) বিষয়বস্তু সারফেস করা থেকে অনানুষ্ঠানিক বা সম্ভাব্য ভুলভাবে পতাকাঙ্কিত এক্সটেনশানগুলিকে বাধা দেয় না।</string>
@@ -504,7 +504,7 @@
     <string name="update_check_eol">এই অ্যান্ড্রয়েড সংস্করণটি আর সমর্থিত নয়</string>
     <string name="confirm_lock_change">পরিবর্তন নিশ্চিত করতে প্রমাণীকরণ করুন</string>
     <string name="action_sort_chapter_fetch_date">প্রাপ্তির তারিখ</string>
-    <string name="label_default">সাধারণ</string>
+    <string name="label_default">ডিফল্ট</string>
     <string name="pref_remove_exclude_categories">বর্জিত বিভাগ গুলি</string>
     <string name="ext_app_info">অ্যাপের তথ্য</string>
     <string name="ext_update_all">শব উপদাতে কর</string>
@@ -583,10 +583,10 @@
     <string name="delete_downloaded">ডাউনলোড করা ফাইল ডিলেট করুন</string>
     <string name="action_menu_overflow_description">আর অপশন</string>
     <string name="selected">সিলেক্টেড</string>
-    <string name="not_selected">নট সিলেক্টেড</string>
+    <string name="not_selected">নির্বাচন করা নেই</string>
     <string name="scanlator">স্ক্যানলেটর</string>
-    <string name="action_bar_up_description">নেভিগেট আপ</string>
-    <string name="label_data_storage">ডাটা অন স্টোরেজ</string>
+    <string name="action_bar_up_description">উপরে যান</string>
+    <string name="label_data_storage">ডাটা ও স্টোরেজ</string>
     <string name="action_filter_interval_custom">কাস্টমাইজড আনার ব্যবধান</string>
     <string name="onboarding_storage_action_select">ফোল্ডার নির্বাচন করুন</string>
     <string name="pref_onboarding_guide">অনবর্ডিং গাইড</string>
@@ -678,4 +678,6 @@
     <string name="action_global_manga_search">গ্লোবাল মাঙ্গা অনুসন্ধান</string>
     <string name="action_global_anime_search">গ্লোবাল অ্যানিমে অনুসন্ধান</string>
     <string name="action_remove_bookmark_episode">আনবুকমার্ক পর্ব</string>
+    <string name="confirm_exit">ব্যাক এ আবার চাপ দিন বেরোবার জন্য</string>
+    <string name="label_upcoming">আসছে</string>
 </resources>
