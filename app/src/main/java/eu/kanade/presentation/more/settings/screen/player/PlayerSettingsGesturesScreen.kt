@@ -90,14 +90,6 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
             )
         }
 
-        // Aniskip
-        val enableAniSkip = gesturePreferences.aniSkipEnabled()
-        val enableAutoAniSkip = gesturePreferences.autoSkipAniSkip()
-        val enableNetflixAniSkip = gesturePreferences.enableNetflixStyleAniSkip()
-        val waitingTimeAniSkip = gesturePreferences.waitingTimeAniSkip()
-
-        val isAniSkipEnabled by enableAniSkip.collectAsState()
-
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_player_seeking),
             preferenceItems = persistentListOf(
@@ -130,36 +122,6 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
                     preference = playerSmoothSeek,
                     title = stringResource(MR.strings.pref_player_smooth_seek),
                     subtitle = stringResource(MR.strings.pref_player_smooth_seek_summary),
-                ),
-                Preference.PreferenceItem.InfoPreference(
-                    title = stringResource(MR.strings.pref_category_player_aniskip_info),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    preference = enableAniSkip,
-                    title = stringResource(MR.strings.pref_enable_aniskip),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    preference = enableAutoAniSkip,
-                    title = stringResource(MR.strings.pref_enable_auto_skip_ani_skip),
-                    enabled = isAniSkipEnabled,
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    preference = enableNetflixAniSkip,
-                    title = stringResource(MR.strings.pref_enable_netflix_style_aniskip),
-                    enabled = isAniSkipEnabled,
-                ),
-                Preference.PreferenceItem.ListPreference(
-                    preference = waitingTimeAniSkip,
-                    entries = persistentMapOf(
-                        5 to stringResource(MR.strings.pref_waiting_time_aniskip_5),
-                        6 to stringResource(MR.strings.pref_waiting_time_aniskip_6),
-                        7 to stringResource(MR.strings.pref_waiting_time_aniskip_7),
-                        8 to stringResource(MR.strings.pref_waiting_time_aniskip_8),
-                        9 to stringResource(MR.strings.pref_waiting_time_aniskip_9),
-                        10 to stringResource(MR.strings.pref_waiting_time_aniskip_10),
-                    ),
-                    title = stringResource(MR.strings.pref_waiting_time_aniskip),
-                    enabled = isAniSkipEnabled,
                 ),
             ),
         )

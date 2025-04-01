@@ -413,7 +413,7 @@ fun PlayerControls(
                     TopLeftPlayerControls(
                         animeTitle = animeTitle,
                         mediaTitle = mediaTitle,
-                        onTitleClick = { viewModel.showDialog(Dialogs.EpisodeList) },
+                        onTitleClick = { viewModel.showEpisodeListDialog() },
                         onBackClick = onBackPress,
                     )
                 }
@@ -453,7 +453,7 @@ fun PlayerControls(
                     )
                 }
                 // Bottom right controls
-                val aniskipButton by viewModel.aniskipButton.collectAsState()
+                val skipIntroButton by viewModel.skipIntroText.collectAsState()
                 val customButtonTitle by viewModel.primaryButtonTitle.collectAsState()
                 AnimatedVisibility(
                     controlsShown && !areControlsLocked,
@@ -478,8 +478,8 @@ fun PlayerControls(
                     BottomRightPlayerControls(
                         customButton = customButton,
                         customButtonTitle = customButtonTitle,
-                        aniskipButton = aniskipButton,
-                        onPressAniSkipButton = viewModel::aniskipPressed,
+                        skipIntroButton = skipIntroButton,
+                        onPressSkipIntroButton = viewModel::onSkipIntro,
                         isPipAvailable = activity.isPipSupportedAndEnabled,
                         onPipClick = {
                             if (!viewModel.isLoadingEpisode.value) {
@@ -575,6 +575,7 @@ fun PlayerControls(
             chapters = chapters.map { it.toSegment() }.toImmutableList(),
             onSeekToChapter = {
                 viewModel.selectChapter(it)
+                viewModel.dismissSheet()
                 viewModel.unpause()
             },
             decoder = decoder,
@@ -613,8 +614,7 @@ fun PlayerControls(
 
         PlayerDialogs(
             dialogShown = dialog,
-
-            episodeDisplayMode = anime!!.displayMode,
+            episodeDisplayMode = anime?.displayMode,
             episodeList = playlist,
             currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
             dateRelativeTime = viewModel.relativeTime,

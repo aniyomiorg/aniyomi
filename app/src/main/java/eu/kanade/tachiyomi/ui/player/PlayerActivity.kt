@@ -47,7 +47,6 @@ import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.core.net.toUri
@@ -61,6 +60,7 @@ import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
 import com.hippo.unifile.UniFile
 import eu.kanade.presentation.theme.TachiyomiTheme
+import eu.kanade.tachiyomi.animesource.model.ChapterType
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SerializableHoster.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -71,12 +71,12 @@ import eu.kanade.tachiyomi.databinding.PlayerLayoutBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.controls.PlayerControls
-import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.util.Stamp
+import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils
+import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
@@ -104,7 +104,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -315,6 +314,8 @@ class PlayerActivity : BaseActivity() {
         player.isExiting = true
         if (isFinishing) {
             MPVLib.command(arrayOf("stop"))
+        } else {
+            viewModel.pause()
         }
 
         super.onPause()
@@ -516,25 +517,30 @@ class PlayerActivity : BaseActivity() {
             val primaryButtonId = viewModel.primaryButton.value?.id ?: 0L
 
             val customButtonsContent = buildString {
-                appendLine("local lua_modules = mp.find_config_file('scripts')")
-                appendLine("if lua_modules then")
                 append(
-                    "package.path = package.path .. ';' .. lua_modules .. '/?.lua;' .. lua_modules .. '/?/init.lua;' .. '",
+                    """
+                        local lua_modules = mp.find_config_file('scripts')
+                        if lua_modules then
+                            package.path = package.path .. ';' .. lua_modules .. '/?.lua;' .. lua_modules .. '/?/init.lua;' .. '${scriptsDir()!!.filePath}' .. '/?.lua'
+                        end
+                        local aniyomi = require 'aniyomi'
+                    """.trimIndent(),
                 )
-                append(scriptsDir()!!.filePath)
-                appendLine("' .. '/?.lua'")
-                appendLine("end")
-                appendLine("local aniyomi = require 'aniyomi'")
+
                 buttons.forEach { button ->
-                    appendLine(button.getButtonOnStartup(primaryButtonId))
-                    appendLine("function button${button.id}()")
-                    appendLine(button.getButtonContent(primaryButtonId))
-                    appendLine("end")
-                    appendLine("mp.register_script_message('call_button_${button.id}', button${button.id})")
-                    appendLine("function button${button.id}long()")
-                    appendLine(button.getButtonLongPressContent(primaryButtonId))
-                    appendLine("end")
-                    appendLine("mp.register_script_message('call_button_${button.id}_long', button${button.id}long)")
+                    append(
+                        """
+                            ${button.getButtonOnStartup(primaryButtonId)}
+                            function button${button.id}()
+                                ${button.getButtonContent(primaryButtonId)}
+                            end
+                            mp.register_script_message('call_button_${button.id}', button${button.id})
+                            function button${button.id}long()
+                                ${button.getButtonLongPressContent(primaryButtonId)}
+                            end
+                            mp.register_script_message('call_button_${button.id}_long', button${button.id}long)
+                        """.trimIndent(),
+                    )
                 }
             }
 
@@ -600,6 +606,12 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        if (!player.isExiting) {
+            super.onResume()
+            return
+        }
+
+        player.isExiting = false
         super.onResume()
 
         viewModel.currentVolume.update {
@@ -618,6 +630,10 @@ class PlayerActivity : BaseActivity() {
         super.onConfigurationChanged(newConfig)
     }
 
+    fun showToast(message: String) {
+        runOnUiThread { toast(message) }
+    }
+
     // A bunch of observers
 
     internal fun onObserverEvent(property: String, value: Long) {
@@ -625,12 +641,12 @@ class PlayerActivity : BaseActivity() {
         when (property) {
             "time-pos" -> {
                 viewModel.updatePlayBackPos(value.toFloat())
-                viewModel.aniSkipStuff(value)
+                viewModel.setChapter(value.toFloat())
             }
             "demuxer-cache-time" -> viewModel.updateReadAhead(value = value)
             "volume" -> viewModel.setMPVVolume(value.toInt())
             "volume-max" -> viewModel.volumeBoostCap = value.toInt() - 100
-            "chapter" -> viewModel.updateChapter(value)
+            // "chapter" -> viewModel.updateChapter(value)
             "duration" -> viewModel.duration.update { value.toFloat() }
             "user-data/current-anime/intro-length" -> viewModel.setAnimeSkipIntroLength(value)
         }
@@ -657,6 +673,10 @@ class PlayerActivity : BaseActivity() {
                 } else if (!value && player.paused == false) {
                     viewModel.unpause()
                     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                }
+
+                runCatching {
+                    setPictureInPictureParams(createPipParams())
                 }
             }
 
@@ -965,8 +985,6 @@ class PlayerActivity : BaseActivity() {
         viewModel.isLoading.update { _ -> true }
         viewModel.resetHosterState()
 
-        aniskipStamps = emptyList()
-
         lifecycleScope.launch {
             viewModel.updateIsLoadingEpisode(true)
             viewModel.updateIsLoadingHosters(true)
@@ -1142,16 +1160,26 @@ class PlayerActivity : BaseActivity() {
         if (player.isExiting) return
         setMpvMediaTitle()
         setupPlayerOrientation()
+        setupChapters()
         setupTracks()
 
         // aniSkip stuff
-        viewModel.waitingAniSkip = gesturePreferences.waitingTimeAniSkip().get()
+        viewModel.waitingSkipIntro = playerPreferences.waitingTimeIntroSkip().get()
         runBlocking {
-            if (viewModel.aniSkipEnable) {
-                viewModel.aniSkipInterval = viewModel.aniSkipResponse(player.duration)
-                viewModel.aniSkipInterval?.let {
-                    aniskipStamps = it
-                    updateChapters(it, player.duration)
+            if (
+                viewModel.introSkipEnabled &&
+                playerPreferences.aniSkipEnabled().get() &&
+                !(playerPreferences.disableAniSkipOnChapters().get() && viewModel.chapters.value.isNotEmpty())
+            ) {
+                viewModel.aniSkipResponse(player.duration)?.let {
+                    viewModel.updateChapters(
+                        ChapterUtils.mergeChapters(
+                            currentChapters = viewModel.chapters.value,
+                            stamps = it,
+                            duration = player.duration,
+                        ),
+                    )
+                    viewModel.setChapter(viewModel.pos.value)
                 }
             }
         }
@@ -1181,6 +1209,31 @@ class PlayerActivity : BaseActivity() {
         viewModel.isLoadingTracks.update { _ -> false }
     }
 
+    private fun setupChapters() {
+        if (player.isExiting) return
+
+        val timestamps = viewModel.currentVideo.value?.timestamps?.takeIf { it.isNotEmpty() }
+            ?.map { timestamp ->
+                if (timestamp.name.isEmpty() && timestamp.type != ChapterType.Other) {
+                    timestamp.copy(
+                        name = timestamp.type.getStringRes()?.let(::stringResource) ?: "",
+                    )
+                } else {
+                    timestamp
+                }
+            }
+            ?: return
+
+        viewModel.updateChapters(
+            ChapterUtils.mergeChapters(
+                currentChapters = viewModel.chapters.value,
+                stamps = timestamps,
+                duration = player.duration,
+            ),
+        )
+        viewModel.setChapter(viewModel.pos.value)
+    }
+
     private fun setMpvMediaTitle() {
         if (player.isExiting) return
         val anime = viewModel.currentAnime.value ?: return
@@ -1207,75 +1260,5 @@ class PlayerActivity : BaseActivity() {
         if (eofReached && playerPreferences.autoplayEnabled().get()) {
             viewModel.changeEpisode(previous = false, autoPlay = true)
         }
-    }
-
-    private var aniskipStamps: List<Stamp> = emptyList()
-    private fun updateChapters(stamps: List<Stamp>? = null, duration: Int? = null) {
-        val aniskipStamps = stamps ?: aniskipStamps
-        val sortedAniskipStamps = aniskipStamps.sortedBy { it.interval.startTime }
-        val aniskipChapters = sortedAniskipStamps.mapIndexed { i, it ->
-            val startTime = if (i == 0 && it.interval.startTime < 1.0) {
-                0.0
-            } else {
-                it.interval.startTime
-            }
-            val startChapter = IndexedSegment(
-                index = -2, // Index -2 is used to indicate that this is an AniSkip chapter
-                name = it.skipType.getString(),
-                start = startTime.toFloat(),
-                color = Color(0xFFD8BBDF),
-            )
-            val nextStart = sortedAniskipStamps.getOrNull(i + 1)?.interval?.startTime
-            val isNotLastChapter = abs(it.interval.endTime - (duration?.toDouble() ?: -2.0)) > 1.0
-            val isNotAdjacent = nextStart == null || (abs(it.interval.endTime - nextStart) > 1.0)
-            if (isNotLastChapter && isNotAdjacent) {
-                val endChapter = IndexedSegment(
-                    index = -1,
-                    name = "",
-                    start = it.interval.endTime.toFloat(),
-                )
-                return@mapIndexed listOf(startChapter, endChapter)
-            } else {
-                listOf(startChapter)
-            }
-        }.flatten()
-        val playerChapters = viewModel.chapters.value.filter { playerChapter ->
-            aniskipChapters.none { aniskipChapter ->
-                abs(aniskipChapter.start - playerChapter.start) < 1.0 && aniskipChapter.index == -2
-            }
-        }.map {
-            IndexedSegment(it.name, it.start, it.color)
-        }.sortedBy { it.start }.mapIndexed { i, it ->
-            if (i == 0 && it.start < 1.0) {
-                IndexedSegment(
-                    it.name,
-                    0.0f,
-                    index = it.index,
-                )
-            } else {
-                it
-            }
-        }
-        val filteredAniskipChapters = aniskipChapters.filter { aniskipChapter ->
-            playerChapters.none { playerChapter ->
-                abs(aniskipChapter.start - playerChapter.start) < 1.0 && aniskipChapter.index != -2
-            }
-        }
-        val startChapter = if ((playerChapters + filteredAniskipChapters).isNotEmpty() &&
-            playerChapters.none { it.start == 0.0f } &&
-            filteredAniskipChapters.none { it.start == 0.0f }
-        ) {
-            listOf(
-                IndexedSegment(
-                    index = -1,
-                    name = "",
-                    start = 0.0f,
-                ),
-            )
-        } else {
-            emptyList()
-        }
-        val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.start }
-        viewModel.updateChapters(combinedChapters)
     }
 }
