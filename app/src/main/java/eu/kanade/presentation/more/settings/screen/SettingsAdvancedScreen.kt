@@ -41,6 +41,7 @@ import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaMetadataUpdateJob
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
+import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.PREF_DOH_360
 import eu.kanade.tachiyomi.network.PREF_DOH_ADGUARD
 import eu.kanade.tachiyomi.network.PREF_DOH_ALIDNS
@@ -54,10 +55,11 @@ import eu.kanade.tachiyomi.network.PREF_DOH_NJALLA
 import eu.kanade.tachiyomi.network.PREF_DOH_QUAD101
 import eu.kanade.tachiyomi.network.PREF_DOH_QUAD9
 import eu.kanade.tachiyomi.network.PREF_DOH_SHECAN
+import eu.kanade.tachiyomi.network.awaitSuccess
+import eu.kanade.tachiyomi.network.interceptor.FlareSolverrInterceptor
+import eu.kanade.tachiyomi.network.parseAs
 import eu.kanade.tachiyomi.ui.more.OnboardingScreen
 import eu.kanade.tachiyomi.util.CrashLogUtil
-import eu.kanade.tachiyomi.util.system.isDevFlavor
-import eu.kanade.tachiyomi.util.system.isPreviewBuildType
 import eu.kanade.tachiyomi.util.system.isShizukuInstalled
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
@@ -66,20 +68,30 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import logcat.LogPriority
+import mihon.core.migration.Migrator.scope
 import okhttp3.Headers
-import tachiyomi.core.common.i18n.stringResource
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.manga.interactor.ResetMangaViewerFlags
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import java.io.File
+import tachiyomi.core.common.preference.Preference as BasePreference
 
 object SettingsAdvancedScreen : SearchableSettings {
 
@@ -224,6 +236,12 @@ object SettingsAdvancedScreen : SearchableSettings {
         val userAgentPref = networkPreferences.defaultUserAgent()
         val userAgent by userAgentPref.collectAsState()
 
+        // TLMR -->
+        val flareSolverrUrlPref = networkPreferences.flareSolverrUrl()
+        val enableFlareSolverrPref = networkPreferences.enableFlareSolverr()
+        val enableFlareSolverr by enableFlareSolverrPref.collectAsState()
+        // <-- TLMR
+
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.label_network),
             preferenceItems = persistentListOf(
@@ -301,6 +319,29 @@ object SettingsAdvancedScreen : SearchableSettings {
                         context.toast(MR.strings.requires_app_restart)
                     },
                 ),
+                // TLMR -->
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableFlareSolverrPref,
+                    title = stringResource(TLMR.strings.pref_enable_flare_solverr),
+                    subtitle = stringResource(TLMR.strings.pref_enable_flare_solverr_summary),
+                ),
+                Preference.PreferenceItem.EditTextPreference(
+                    pref = flareSolverrUrlPref,
+                    title = stringResource(TLMR.strings.pref_flare_solverr_url),
+                    enabled = enableFlareSolverr,
+                    subtitle = stringResource(TLMR.strings.pref_flare_solverr_url_summary),
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(TLMR.strings.pref_test_flare_solverr_and_update_user_agent),
+                    enabled = enableFlareSolverr,
+                    subtitle = stringResource(TLMR.strings.pref_test_flare_solverr_and_update_user_agent_summary),
+                    onClick = {
+                        scope.launch {
+                            testFlareSolverrAndUpdateUserAgent(flareSolverrUrlPref, userAgentPref, context)
+                        }
+                    },
+                ),
+                // <-- TLMR
             ),
         )
     }
@@ -416,14 +457,6 @@ object SettingsAdvancedScreen : SearchableSettings {
                     pref = extensionInstallerPref,
                     title = stringResource(MR.strings.ext_installer_pref),
                     entries = extensionInstallerPref.entries
-                        .filter {
-                            // TODO: allow private option in stable versions once URL handling is more fleshed out
-                            if (isPreviewBuildType || isDevFlavor) {
-                                true
-                            } else {
-                                it != BasePreferences.ExtensionInstaller.PRIVATE
-                            }
-                        }
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
                     onValueChanged = {
@@ -526,5 +559,57 @@ object SettingsAdvancedScreen : SearchableSettings {
             ),
         )
     }
+
     // SY <--
+    // TLMR -->
+    private suspend fun testFlareSolverrAndUpdateUserAgent(
+        flareSolverrUrlPref: BasePreference<String>,
+        userAgentPref: BasePreference<String>,
+        context: android.content.Context,
+    ) {
+        val json: Json by injectLazy()
+        val jsonMediaType = "application/json".toMediaType()
+        val client = OkHttpClient.Builder().build()
+
+        try {
+            withContext(Dispatchers.IO) {
+                val flareSolverUrl = flareSolverrUrlPref.get().trim()
+                val flareSolverResponse = with(json) {
+                    client.newCall(
+                        POST(
+                            url = flareSolverUrl,
+                            body =
+                            Json.encodeToString(
+                                FlareSolverrInterceptor.CFClearance.FlareSolverRequest(
+                                    "request.get",
+                                    "https://www.google.com/",
+                                    returnOnlyCookies = true,
+                                    maxTimeout = 60000,
+                                ),
+                            ).toRequestBody(jsonMediaType),
+                        ),
+                    ).awaitSuccess().parseAs<FlareSolverrInterceptor.CFClearance.FlareSolverResponse>()
+                }
+
+                if (flareSolverResponse.solution.status in 200..299) {
+                    // Set the user agent to the one provided by FlareSolverr
+                    userAgentPref.set(flareSolverResponse.solution.userAgent)
+
+                    withContext(Dispatchers.Main) {
+                        context.toast(TLMR.strings.flare_solver_user_agent_update_success)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        context.toast(TLMR.strings.flare_solver_update_user_agent_failed)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, tag = "FlareSolverr") { "Failed to resolve with FlareSolverr: ${e.message}" }
+            withContext(Dispatchers.Main) {
+                context.toast(TLMR.strings.flare_solver_error)
+            }
+        }
+    }
+    // <-- TLMR
 }

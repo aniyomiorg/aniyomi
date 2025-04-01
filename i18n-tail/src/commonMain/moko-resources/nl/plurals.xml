@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Opnieuw proberen van %1$d mislukte pagina…</item>
+    <item quantity="other">Opnieuw proberen %1$d mislukte pagina\'s…</item>
+  </plurals>
+</resources>

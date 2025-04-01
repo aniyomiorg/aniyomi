@@ -2,15 +2,19 @@ package eu.kanade.tachiyomi.ui.entries.anime
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -36,13 +40,17 @@ import eu.kanade.presentation.entries.anime.components.AnimeCoverDialog
 import eu.kanade.presentation.entries.components.DeleteItemsDialog
 import eu.kanade.presentation.entries.components.SetIntervalDialog
 import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsGesturesScreen.SkipIntroLengthDialog
+import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.source.anime.isLocalOrStub
+import eu.kanade.tachiyomi.source.anime.isSourceForTorrents
+import eu.kanade.tachiyomi.torrentServer.TorrentServerUtils
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialogScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
@@ -58,6 +66,7 @@ import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
@@ -80,6 +89,7 @@ class AnimeScreen(
     override fun onProvideAssistUrl() = assistUrl
 
     @Composable
+    @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
     override fun Content() {
         if (!ifAnimeSourcesLoaded()) {
             LoadingScreen()
@@ -102,6 +112,55 @@ class AnimeScreen(
         }
 
         val successState = state as AnimeScreenModel.State.Success
+        // KMK -->
+
+        val showingRelatedMangasScreen = rememberSaveable { mutableStateOf(false) }
+
+        BackHandler(showingRelatedMangasScreen.value) {
+            when {
+                showingRelatedMangasScreen.value -> showingRelatedMangasScreen.value = false
+            }
+        }
+
+        val content = @Composable {
+            Crossfade(
+                targetState = showingRelatedMangasScreen.value,
+                label = "manga_related_crossfade",
+            ) { showRelatedMangasScreen ->
+                when (showRelatedMangasScreen) {
+                    true -> RelatedAnimesScreen(
+                        screenModel = screenModel,
+                        successState = successState,
+                        navigateUp = { showingRelatedMangasScreen.value = false },
+                        navigator = navigator,
+                        scope = scope,
+                    )
+                    false -> MangaDetailContent(
+                        context = context,
+                        screenModel = screenModel,
+                        successState = successState,
+                        showRelatedMangasScreen = { showingRelatedMangasScreen.value = true },
+                        navigator = navigator,
+                        scope = scope,
+                    )
+                }
+            }
+        }
+        TachiyomiTheme {
+            content()
+        }
+    }
+
+    @Composable
+    fun MangaDetailContent(
+        context: Context,
+        screenModel: AnimeScreenModel,
+        successState: AnimeScreenModel.State.Success,
+        showRelatedMangasScreen: () -> Unit,
+        navigator: Navigator,
+        scope: CoroutineScope,
+    ) {
+        // KMK <--
         val isAnimeHttpSource = remember { successState.source is AnimeHttpSource }
 
         LaunchedEffect(successState.anime, screenModel.source) {
@@ -115,8 +174,9 @@ class AnimeScreen(
                 }
             }
         }
-
+        val haptic = LocalHapticFeedback.current
         AnimeScreen(
+
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
             nextUpdate = successState.anime.expectedNextUpdate,
@@ -125,9 +185,17 @@ class AnimeScreen(
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
             showNextEpisodeAirTime = screenModel.showNextEpisodeAirTime,
             alwaysUseExternalPlayer = screenModel.alwaysUseExternalPlayer,
+            // AM (FILE_SIZE) -->
+            showFileSize = screenModel.showFileSize,
+            // <-- AM (FILE_SIZE)
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {
+                    if (successState.source.isSourceForTorrents()) {
+                        TorrentServerService.start()
+                        TorrentServerService.wait(10)
+                        TorrentServerUtils.setTrackersList()
+                    }
                     val extPlayer = screenModel.alwaysUseExternalPlayer != alt
                     openEpisode(context, episode, extPlayer)
                 }
@@ -178,6 +246,9 @@ class AnimeScreen(
             }.takeIf { isAnimeHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.anime.favorite },
+            // SY -->
+            onEditInfoClicked = screenModel::showEditAnimeInfoDialog,
+            // SY <--
             onEditFetchIntervalClicked = screenModel::showSetAnimeFetchIntervalDialog.takeIf {
                 successState.anime.favorite
             },
@@ -193,6 +264,25 @@ class AnimeScreen(
             onEpisodeSelected = screenModel::toggleSelection,
             onAllEpisodeSelected = screenModel::toggleAllSelection,
             onInvertSelection = screenModel::invertSelection,
+            // KMK -->
+            getAnimeState = { screenModel.getManga(initialManga = it) },
+            onRelatedAnimesScreenClick = {
+                if (successState.isRelatedMangasFetched == null) {
+                    scope.launchIO { screenModel.fetchRelatedMangasFromSource(onDemand = true) }
+                }
+                showRelatedMangasScreen()
+            },
+            onRelatedAnimeClick = {
+                scope.launchIO {
+                    val manga = screenModel.networkToLocalAnime.getLocal(it)
+                    navigator.push(AnimeScreen(manga.id, true))
+                }
+            },
+            onRelatedAnimeLongClick = {
+                scope.launchIO {
+                    val manga = screenModel.networkToLocalAnime.getLocal(it)
+                }
+            },
         )
 
         val onDismissRequest = {
@@ -295,6 +385,15 @@ class AnimeScreen(
                     LoadingScreen(Modifier.systemBarsPadding())
                 }
             }
+            // SY -->
+            is AnimeScreenModel.Dialog.EditAnimeInfo -> {
+                EditAnimeDialog(
+                    anime = dialog.anime,
+                    onDismissRequest = screenModel::dismissDialog,
+                    onPositiveClick = screenModel::updateAnimeInfo,
+                )
+            }
+            // SY <--
             is AnimeScreenModel.Dialog.SetAnimeFetchInterval -> {
                 SetIntervalDialog(
                     interval = dialog.anime.fetchInterval,

@@ -20,6 +20,9 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
+import eu.kanade.tachiyomi.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.torrentServer.TorrentServerUtils
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.util.storage.DiskUtil
@@ -466,7 +469,11 @@ class AnimeDownloader(
         for (tries in 1..3) {
             if (downloadScope.isActive) {
                 file = try {
-                    ffmpegDownload(download, tmpDir, filename)
+                    if (isTor(download.video!!)) {
+                        torrentDownload(download, tmpDir, filename)
+                    } else {
+                        ffmpegDownload(download, tmpDir, filename)
+                    }
                 } catch (e: Exception) {
                     notifier.onError(
                         e.message + ", retrying..",
@@ -487,6 +494,33 @@ class AnimeDownloader(
         } else {
             throw Exception("Download has been stopped")
         }
+    }
+
+    private fun isTor(video: Video): Boolean {
+        return (video.videoUrl?.startsWith("magnet") == true || video.videoUrl?.endsWith(".torrent") == true)
+    }
+
+    private fun torrentDownload(
+        download: AnimeDownload,
+        tmpDir: UniFile,
+        filename: String,
+    ): UniFile {
+        val video = download.video!!
+        TorrentServerService.start()
+        TorrentServerService.wait(10)
+        val currentTorrent = TorrentServerApi.addTorrent(video.videoUrl!!, video.quality, "", "", false)
+        var index = 0
+        if (video.videoUrl!!.contains("index=")) {
+            index = try {
+                video.videoUrl?.substringAfter("index=")
+                    ?.substringBefore("&")?.toInt() ?: 0
+            } catch (_: Exception) {
+                0
+            }
+        }
+        val torrentUrl = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+        video.videoUrl = torrentUrl
+        return ffmpegDownload(download, tmpDir, filename)
     }
 
     // ffmpeg is always on safe mode

@@ -22,6 +22,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo.Companion.KEIYOUSHI_SIGNATURE
+import mihon.domain.extensionrepo.manga.interactor.GetMangaExtensionRepo
+import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.core.common.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.io.File
@@ -45,6 +48,11 @@ internal object MangaExtensionLoader {
 
     private val preferences: SourcePreferences by injectLazy()
     private val trustExtension: TrustMangaExtension by injectLazy()
+
+    // KMK -->
+    private val getExtensionRepo: GetMangaExtensionRepo by injectLazy()
+
+    // KMK <--
     private val loadNsfwSource by lazy {
         preferences.showNsfwSource().get()
     }
@@ -175,8 +183,19 @@ internal object MangaExtensionLoader {
 
         // Load each extension concurrently and wait for completion
         return runBlocking {
+            // KMK -->
+            val extRepos = getExtensionRepo.getAll()
+            // KMK <--
             val deferred = extPkgs.map {
-                async { loadMangaExtension(context, it) }
+                async {
+                    loadMangaExtension(
+                        context,
+                        it,
+                        // KMK -->
+                        extRepos,
+                        // KMK <--
+                    )
+                }
             }
             deferred.awaitAll()
         }
@@ -243,7 +262,16 @@ internal object MangaExtensionLoader {
      * @param context The application context.
      * @param extensionInfo The extension to load.
      */
-    private suspend fun loadMangaExtension(context: Context, extensionInfo: MangaExtensionInfo): MangaLoadResult {
+    private suspend fun loadMangaExtension(
+        context: Context,
+        extensionInfo: MangaExtensionInfo,
+        // KMK -->
+        extRepos: List<ExtensionRepo>? = null,
+        // KMK <--
+    ): MangaLoadResult {
+        // KMK -->
+        val repos = extRepos ?: getExtensionRepo.getAll()
+        // KMK <--
         val pkgManager = context.packageManager
         val pkgInfo = extensionInfo.packageInfo
         val appInfo = pkgInfo.applicationInfo!!
@@ -282,6 +310,14 @@ internal object MangaExtensionLoader {
                 versionCode,
                 libVersion,
                 signatures.last(),
+                // KMK -->
+                repoName = when {
+                    isKeiyoushiSigned(signatures) -> "Keiyoushi"
+                    else -> repos.firstOrNull { repo ->
+                        signatures.all { it == repo.signingKeyFingerprint }
+                    }?.name
+                },
+                // KMK <--
             )
             logcat(LogPriority.WARN) { "Extension $pkgName isn't trusted" }
             return MangaLoadResult.Untrusted(extension)
@@ -364,8 +400,21 @@ internal object MangaExtensionLoader {
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
             icon = appInfo.loadIcon(pkgManager),
             isShared = extensionInfo.isShared,
+            // KMK -->
+            signatureHash = signatures.last(),
+            repoName = when {
+                isKeiyoushiSigned(signatures) -> "Keiyoushi"
+                else -> repos.firstOrNull { repo ->
+                    signatures.all { it == repo.signingKeyFingerprint }
+                }?.name
+            },
+            // KMK <--
         )
         return MangaLoadResult.Success(extension)
+    }
+
+    private fun isKeiyoushiSigned(signatures: List<String>): Boolean {
+        return signatures.all { it == KEIYOUSHI_SIGNATURE }
     }
 
     /**

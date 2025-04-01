@@ -2,8 +2,16 @@ package eu.kanade.tachiyomi.animesource
 
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
+import eu.kanade.tachiyomi.animesource.model.FilterList
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import logcat.LogPriority
 import rx.Observable
 import tachiyomi.core.common.util.lang.awaitSingle
+import tachiyomi.core.common.util.system.logcat
 
 interface AnimeCatalogueSource : AnimeSource {
 
@@ -77,4 +85,154 @@ interface AnimeCatalogueSource : AnimeSource {
         ReplaceWith("getLatestUpdates"),
     )
     fun fetchLatestUpdates(page: Int): Observable<AnimesPage>
+    // KMK -->
+    /**
+     * Whether parsing related animes in anime page or extension provide custom related animes request.
+     * @default false
+     * @since komikku/extensions-lib 1.6
+     */
+    val supportsRelatedAnimes: Boolean get() = false
+    val supportsRelatedMangas: Boolean get() = supportsRelatedAnimes
+
+    /**
+     * Extensions doesn't want to use App's [getRelatedAnimeListBySearch].
+     * @default false
+     * @since komikku/extensions-lib 1.6
+     */
+    val disableRelatedAnimesBySearch: Boolean get() = false
+    val disableRelatedMangasBySearch: Boolean get() = disableRelatedAnimesBySearch
+
+    /**
+     * Disable showing any related animes.
+     * @default false
+     * @since komikku/extensions-lib 1.6
+     */
+    val disableRelatedAnimes: Boolean get() = false
+    val disableRelatedMangas: Boolean get() = disableRelatedAnimes
+
+    /**
+     * Get all the available related animes for a anime.
+     * Normally it's not needed to override this method.
+     *
+     * @since komikku/extensions-lib 1.6
+     * @param anime the current anime to get related animes.
+     * @return a list of <keyword, related animes>
+     * @throws UnsupportedOperationException if a source doesn't support related animes.
+     */
+    override suspend fun getRelatedAnimeList(
+        anime: SAnime,
+        exceptionHandler: (Throwable) -> Unit,
+        pushResults: suspend (relatedAnime: Pair<String, List<SAnime>>, completed: Boolean) -> Unit,
+    ) {
+        val handler = CoroutineExceptionHandler { _, e -> exceptionHandler(e) }
+        if (!disableRelatedAnimes) {
+            supervisorScope {
+                if (supportsRelatedAnimes) launch(handler) { getRelatedAnimeListByExtension(anime, pushResults) }
+                if (!disableRelatedAnimesBySearch) launch(handler) { getRelatedAnimeListBySearch(anime, pushResults) }
+            }
+        }
+    }
+    override suspend fun getRelatedMangaList(
+        manga: SAnime,
+        exceptionHandler: (Throwable) -> Unit,
+        pushResults: suspend (relatedManga: Pair<String, List<SAnime>>, completed: Boolean) -> Unit,
+    ) = getRelatedAnimeList(manga, exceptionHandler, pushResults)
+
+    /**
+     * Get related animes provided by extension
+     *
+     * @return a list of <keyword, related animes>
+     * @since komikku/extensions-lib 1.6
+     */
+    suspend fun getRelatedAnimeListByExtension(
+        anime: SAnime,
+        pushResults: suspend (relatedAnime: Pair<String, List<SAnime>>, completed: Boolean) -> Unit,
+    ) {
+        runCatching { fetchRelatedAnimeList(anime) }
+            .onSuccess { if (it.isNotEmpty()) pushResults(Pair("", it), false) }
+            .onFailure { e ->
+                logcat(LogPriority.ERROR, e) { "## getRelatedAnimeListByExtension: $e" }
+            }
+    }
+    suspend fun getRelatedMangaListByExtension(
+        manga: SAnime,
+        pushResults: suspend (relatedManga: Pair<String, List<SAnime>>, completed: Boolean) -> Unit,
+    ) = getRelatedAnimeListByExtension(manga, pushResults)
+
+    /**
+     * Fetch related animes for a anime from source/site.
+     *
+     * @since komikku/extensions-lib 1.6
+     * @param anime the current anime to get related animes.
+     * @return the related animes for the current anime.
+     * @throws UnsupportedOperationException if a source doesn't support related animes.
+     */
+    suspend fun fetchRelatedAnimeList(anime: SAnime): List<SAnime> = throw UnsupportedOperationException("Unsupported!")
+    suspend fun fetchRelatedMangaList(manga: SAnime): List<SAnime> = fetchRelatedMangaList(manga)
+
+    /**
+     * Slit & strip anime's title into separate searchable keywords.
+     * Used for searching related animes.
+     *
+     * @since komikku/extensions-lib 1.6
+     * @return List of keywords.
+     */
+    fun String.stripKeywordForRelatedAnimes(): List<String> {
+        val regexWhitespace = Regex("\\s+")
+        val regexSpecialCharacters =
+            Regex("([!~#$%^&*+_|/\\\\,?:;'“”‘’\"<>(){}\\[\\]。・～：—！？、―«»《》〘〙【】「」｜]|\\s-|-\\s|\\s\\.|\\.\\s)")
+        val regexNumberOnly = Regex("^\\d+$")
+
+        return replace(regexSpecialCharacters, " ")
+            .split(regexWhitespace)
+            .map {
+                // remove number only
+                it.replace(regexNumberOnly, "")
+                    .lowercase()
+            }
+            // exclude single character
+            .filter { it.length > 1 }
+    }
+    fun String.stripKeywordForRelatedMangas() = stripKeywordForRelatedAnimes()
+
+    /**
+     * Get related animes by searching for each keywords from anime's title.
+     *
+     * @return a list of <keyword, related animes>
+     * @since komikku/extensions-lib 1.6
+     */
+    suspend fun getRelatedAnimeListBySearch(
+        anime: SAnime,
+        pushResults: suspend (relatedAnime: Pair<String, List<SAnime>>, completed: Boolean) -> Unit,
+    ) {
+        val words = HashSet<String>()
+        words.add(anime.title)
+        if (anime.title.lowercase() != anime.title.lowercase()) words.add(anime.title)
+        anime.title.stripKeywordForRelatedAnimes()
+            .filterNot { word -> words.any { it.lowercase() == word } }
+            .onEach { words.add(it) }
+        anime.title.stripKeywordForRelatedAnimes()
+            .filterNot { word -> words.any { it.lowercase() == word } }
+            .onEach { words.add(it) }
+        if (words.isEmpty()) return
+
+        coroutineScope {
+            words.map { keyword ->
+                launch {
+                    runCatching {
+                        getSearchAnime(1, keyword, FilterList()).animes
+                    }
+                        .onSuccess { if (it.isNotEmpty()) pushResults(Pair(keyword, it), false) }
+                        .onFailure { e ->
+                            logcat(LogPriority.ERROR, e) { "## getRelatedAnimeListBySearch: $e" }
+                        }
+                }
+            }
+        }
+    }
+    suspend fun getRelatedMangaListBySearch(
+        manga: SAnime,
+        pushResults: suspend (relatedManga: Pair<String, List<SAnime>>, completed: Boolean) -> Unit,
+    ) = getRelatedAnimeListBySearch(manga, pushResults)
+    // KMK <--
 }

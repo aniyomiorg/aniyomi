@@ -1,0 +1,39 @@
+CREATE TABLE saved_search(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    source INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    query TEXT,
+    filters_json TEXT
+);
+
+selectBySource:
+SELECT * FROM saved_search WHERE source = :sourceId;
+
+deleteBySource:
+DELETE FROM saved_search WHERE source = :sourceId;
+
+selectAll:
+SELECT * FROM saved_search;
+
+selectById:
+SELECT * FROM saved_search WHERE _id = :id;
+
+selectByIds:
+SELECT * FROM saved_search WHERE _id IN :ids;
+
+selectNamesAndSources:
+SELECT source, name
+FROM saved_search;
+
+insert:
+INSERT INTO saved_search (source, name, query, filters_json)
+VALUES (:source, :name, :query, :filtersJson);
+
+deleteById:
+DELETE FROM saved_search WHERE _id = :id;
+
+deleteAll:
+DELETE FROM saved_search;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

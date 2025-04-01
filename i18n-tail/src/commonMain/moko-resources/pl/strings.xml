@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Status śledzenia</string>
+  <string name="tag">Tagi</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Nieśledzone</string>
+  <string name="group" comment="group More Info Menu">Grupa</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Dynamiczne aktualizacje kategorii Anime</string>
+  <string name="manga_library_group_updates">Aktualizacje dynamicznych kategorii biblioteki Manga</string>
+  <string name="library_group_updates_global">Zawsze uruchamiaj globalne aktualizacje</string>
+  <string name="library_group_updates_all_but_ungrouped">Uruchom globalne aktualizacje tylko dla niegrupowanych, aktualizacje kategorii dla innych</string>
+  <string name="library_group_updates_all">Uruchom aktualizacje kategorii przez cały czas</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Resetuj tagi</string>
+  <string name="add_tag">Dodaj tag</string>
+  <string name="title_hint">Tytuł: %1$s</string>
+  <string name="description_hint">Opis: %1$s</string>
+  <string name="author_hint">Autor: %1$s</string>
+  <string name="artist_hint">Artysta: %1$s</string>
+  <string name="custom_entry_info">Własne informacje o wpisach</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Ustawienia wyglądu</string>
+  <string name="pref_enable_cast">Włącz lub wyłącz Cast</string>
+  <string name="action_cast">Wyślij do Cast</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Pokaż rozmiar pliku pobranego odcinka</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Ustawienia forka</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Edytuj informacje</string>
+  <string name="special_services" comment="special_services Connections section">Usługi specjalne</string>
+  <string name="pref_category_connections">Połączenia</string>
+  <string name="pref_connections_summary">Discord, jeszcze więcej.</string>
+  <string name="connections_info">Specjalne usługi, które są unikalne dla Animetail i ulepszają sposób korzystania z aplikacji</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Ta usługa Discorda działa poprzez rejestrowanie tokenów. Używaj na własne ryzyko. Twój token jest przechowywany lokalnie, a Animetail nigdzie indziej nie udostępnia</string>
+  <string name="pref_discord_rpc">Wzbogacona obecność Discorda</string>
+  <string name="show_chapters_titles_title">Pokaż tytuły odcinków/rozdziałów</string>
+  <string name="show_chapters_titles_subtitle">Pokaż tytuł odcinka/rozdziału, który czytasz</string>
+  <string name="pref_enable_discord_rpc">Włącz Discord Rich Presence</string>
+  <string name="pref_discord_status">Status Discorda</string>
+  <string name="pref_discord_dnd">⛔ Nie przeszkadzać</string>
+  <string name="pref_discord_idle">🌙 Bezczynny</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Tryb Discord Incognito</string>
+  <string name="pref_discord_incognito_summary">Zastąpione, gdy włączony jest tryb incognito</string>
+  <string name="pref_discord_incognito_categories_details">Wpisy w dołączonych kategoriach nie będą wyświetlane w Discordzie</string>
+  <string name="browsing" comment="browsing Discord section">Przeglądanie</string>
+  <string name="scrolling">Przewijanie przez</string>
+  <string name="messing">Komunikacja z</string>
+  <string name="video">Wideo</string>
+  <string name="comic">Komiczny</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player musi być zainstalowany</string>
+  <string name="pref_category_torrentserver">Ustawienia serwera TorrentServer</string>
+  <string name="pref_torrentserver_port">Port TorrentServer</string>
+  <string name="torrentserver_is_running">Serwer torrent jest uruchomiony</string>
+  <string name="pref_torrent_trackers">Torrent Trackers</string>
+  <string name="pref_reset_torrent_trackers_string">Resetuj domyślny ciąg tropicieli torrent</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Wstępne ładowanie strony</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Zachowaj pozycję czytania przy odczytywanych wpisach</string>
+  <string name="reader_bottom_buttons">Dół czytnika</string>
+  <string name="reader_bottom_buttons_summary">Dostosuj jakie przyciski pojawiają się na dole czytnika</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Ustaw pierwszą stronę jako okładkę</string>
+  <string name="action_set_second_page_cover">Ustaw drugą stronę jako okładkę</string>
+  <string name="action_save_first_page">Zapisz pierwszą stronę</string>
+  <string name="action_save_second_page">Zapisz drugą stronę</string>
+  <string name="action_share_first_page">Udostępnij pierwszą stronę</string>
+  <string name="action_share_second_page">Udostępnij drugą stronę</string>
+  <string name="action_save_combined_page">Zapisz połączoną stronę</string>
+  <string name="action_share_combined_page">Udostępnij połączoną stronę</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, strony %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Układ strony</string>
+  <string name="shift_double_pages">Przenieś jedną stronę</string>
+  <string name="double_pages">Podwójne strony</string>
+  <string name="single_page">Pojedyncza strona</string>
+  <string name="automatic_orientation">Automatycznie (w oparciu o orientację)</string>
+  <string name="automatic_can_still_switch">Używając automatycznego układu strony, nadal możesz przełączać się między układami podczas czytania bez nadpisywania tego ustawienia</string>
+  <string name="invert_double_pages">Odwróć podwójne strony </string>
+  <string name="center_margin" comment="center_margin Center margin">Wyśrodkuj margines</string>
+  <string name="center_margin_none">Brak</string>
+  <string name="center_margin_double_page">Dodaj do podwójnej strony</string>
+  <string name="center_margin_wide_page">Dodaj do szerokiej strony</string>
+  <string name="center_margin_double_and_wide_page">Dodaj do obu</string>
+  <string name="pref_center_margin">Wyśrodkuj typ marginesu</string>
+  <string name="pref_center_margin_summary">Włóż spacer, aby pomieścić przestrzeń na składanych urządzeniach.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Niestandardowy wybór kolorów</string>
+  <string name="custom_color_description">Wybierz kolor niestandardowego motywu</string>
+  <string name="theme_custom">Niestandardowy motyw</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Kopia zapasowa</string>
+  <string name="label_sync">Synchronizacja</string>
+  <string name="label_triggers">Wyzwalacze</string>
+  <string name="pref_backup_and_sync_summary">Ręcznie &amp; automatyczne kopie zapasowe i synchronizacja</string>
+  <string name="update_30min">Co 30 minut</string>
+  <string name="update_1hour">Co godzinę</string>
+  <string name="update_3hour">Co 3 godziny</string>
+  <string name="sync_error">Synchronizacja biblioteki nie powiodła się</string>
+  <string name="sync_complete">Synchronizacja biblioteki zakończona</string>
+  <string name="sync_in_progress">Synchronizacja jest już w toku</string>
+  <string name="pref_sync_host">Host</string>
+  <string name="pref_sync_host_summ">Wprowadź adres hosta do synchronizacji biblioteki</string>
+  <string name="pref_sync_api_key">Klucz API</string>
+  <string name="pref_sync_api_key_summ">Wprowadź klucz API, aby zsynchronizować swoją bibliotekę</string>
+  <string name="pref_sync_now_group_title">Akcje synchronizacji</string>
+  <string name="pref_sync_now">Synchronizuj teraz</string>
+  <string name="pref_sync_confirmation_title">Potwierdzenie synchronizacji</string>
+  <string name="pref_sync_now_subtitle">Zainicjuj natychmiastową synchronizację danych</string>
+  <string name="pref_sync_confirmation_message">Synchronizacja zastąpi Twoją lokalną bibliotekę zdalną biblioteką. Czy na pewno chcesz kontynuować?</string>
+  <string name="pref_sync_service">Usługa</string>
+  <string name="pref_sync_service_summ">Wybierz usługę do synchronizacji z biblioteką</string>
+  <string name="pref_sync_service_category">Synchronizacja</string>
+  <string name="pref_sync_automatic_category">Automatyczna synchronizacja</string>
+  <string name="pref_sync_interval">Częstotliwość synchronizacji</string>
+  <string name="pref_choose_what_to_sync">Wybierz co zsynchronizować</string>
+  <string name="success_reset_sync_timestamp">Ostatnia synchronizacja zresetowana znacznik czasu</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Wykonano w %1$s</string>
+  <string name="last_synchronization">Ostatnia synchronizacja: %1$s</string>
+  <string name="google_drive">Dysk Google</string>
+  <string name="pref_google_drive_sign_in">Zaloguj się</string>
+  <string name="google_drive_sign_in_success">Zalogowano pomyślnie</string>
+  <string name="google_drive_sign_in_failed">Logowanie nie powiodło się</string>
+  <string name="authentication">Uwierzytelnianie</string>
+  <string name="pref_google_drive_purge_sync_data">Wyczyść dane synchronizacji z Dysku Google</string>
+  <string name="google_drive_sync_data_purged">Synchronizacja danych usunięta z Dysku Google</string>
+  <string name="google_drive_sync_data_not_found">Nie znaleziono danych synchronizacji na Dysku Google</string>
+  <string name="google_drive_sync_data_purge_error">Błąd czyszczenia danych synchronizacji z Dysku Google, spróbuj zalogować się ponownie.</string>
+  <string name="google_drive_login_success">Zalogowano do Dysku Google</string>
+  <string name="google_drive_login_failed">Nie udało się zalogować do Dysku Google: %s</string>
+  <string name="google_drive_not_signed_in">Nie zalogowano się na Dysku Google</string>
+  <string name="error_uploading_sync_data">Błąd podczas przesyłania danych synchronizacji na Dysku Google</string>
+  <string name="error_deleting_google_drive_lock_file">Błąd podczas usuwania pliku Blokady Dysku Google</string>
+  <string name="error_before_sync_gdrive">Błąd przed synchronizacją: %s</string>
+  <string name="pref_purge_confirmation_title">Potwierdzenie wyczyszczenia</string>
+  <string name="pref_purge_confirmation_message">Przenoszenie danych synchronizacji spowoduje usunięcie wszystkich danych synchronizacji z Dysku Google. Czy na pewno chcesz kontynuować?</string>
+  <string name="pref_sync_options">Utwórz wyzwalacze synchronizacji</string>
+  <string name="pref_sync_options_summ">Może być użyty do ustawiania wyzwalaczy synchronizacji</string>
+  <string name="sync_on_chapter_read">Synchronizuj przy przeczytaniu rozdziału</string>
+  <string name="sync_on_chapter_open">Synchronizuj przy otwarciu rozdziału</string>
+  <string name="sync_on_episode_seen">Synchronizuj na widoku odcinka</string>
+  <string name="sync_on_episode_open">Synchronizuj na otwartym odcinku</string>
+  <string name="sync_on_app_start">Synchronizacja przy starcie aplikacji</string>
+  <string name="sync_on_app_resume">Synchronizacja przy Wznawianiu aplikacji</string>
+  <string name="sync_library">Synchronizuj bibliotekę</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Odśwież stronę rozszerzenia, aby zaktualizować listę.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Pasek nawigacyjny</string>
+  <string name="pref_hide_updates_button">Pokaż aktualizacje w nav</string>
+  <string name="pref_hide_history_button">Pokaż historię w nav</string>
+  <string name="pref_show_bottom_bar_labels">Zawsze pokazuj etykiety nawigacyjne</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Wybierz tracker</string>
+  <string name="entry_not_tracked">Wpis nie jest śledzony.</string>
+  <string name="fill_from_tracker">Wypełnij z trackera</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr działa. Agent użytkownika zaktualizowany. Uruchom ponownie aplikację</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr nie działa. Agent użytkownika nie zaktualizowany. Sprawdź swoje ustawienia</string>
+  <string name="flare_solver_error">Błąd podczas kontaktu z FlareSolverr</string>
+  <string name="flare_solver_error_webview">Błąd rozwiązywania z WebView</string>
+  <string name="pref_enable_flare_solverr">Włącz FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Użyj FlareSolverr, aby ominąć ochronę przeciwbota chmur</string>
+  <string name="pref_flare_solverr_url">Adres URL FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">Adres URL instancji FlareSolverr do użycia na przykład http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Testuj FlareSolverr i zaktualizuj agenta użytkownika</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Przetestuj FlareSolverr aby zaktualizować agenta użytkownika. Wymagane tylko raz; następnie przełącz w razie potrzeby.</string>
+  <string-array name="title_cast_quality">
+    <item>Wybierz Jakość/Dostawcę</item>
+    <item>Wybierz jakość</item>
+  </string-array>
+  <string name="cast_not_connected">Nie połączono</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Film dodany do kolejki</item>
+    <item>Film dodany do kolejki</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Błąd ładowania wideo z Cast</item>
+    <item>Błąd ładowania wideo</item>
+  </string-array>
+  <string name="server_local_notification_casting">Serwer lokalny jest uruchomiony. Dotknij, aby go zatrzymać.</string>
+  <string name="server_local_notification_channel_description">Lokalny kanał powiadomień serwera</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Automatyczne przewijanie</string>
+  <string name="eh_retry_all">Ponów wszystkie</string>
+  <string name="eh_boost_page">Strona podbicia</string>
+  <string name="eh_autoscroll_help">Pomoc autoprzewijania</string>
+  <string name="eh_autoscroll_help_message">Automatycznie przewiń do następnej strony w określonym przedziale. Interwał jest określony w sekundach.</string>
+  <string name="eh_autoscroll_freq_invalid">Nieprawidłowa częstotliwość</string>
+  <string name="eh_retry_all_help">Ponów całą pomoc</string>
+  <string name="eh_retry_all_help_message">Dodaj ponownie wszystkie nieudane strony do kolejki pobierania.</string>
+  <string name="eh_boost_page_help">Pomoc na stronie</string>
+  <string name="eh_boost_page_help_message">Zwykle pobierający może pobrać tylko określoną liczbę stron w tym samym czasie. Oznacza to, że możesz czekać na stronę do pobrania, ale pobierający nie rozpocznie pobierania strony, dopóki nie będzie miał darmowego slotu. Naciśnięcie \"Przyspieszona strona\" zmusi pobieracz do rozpoczęcia pobierania bieżącej strony, niezależnie od tego, czy jest dostępne miejsce czy nie.</string>
+  <string name="eh_boost_page_invalid">Ta strona nie może być wzmocniona (nieprawidłowa strona)!</string>
+  <string name="eh_boost_page_errored">Nie udało się załadować strony, wciśnij przycisk ponów próbę!</string>
+  <string name="eh_boost_page_downloading">Ta strona jest już pobierana!</string>
+  <string name="eh_boost_page_downloaded">Ta strona została już pobrana!</string>
+  <string name="eh_boost_boosted">Wzmocniono bieżącą stronę!</string>
+  <string name="eh_boost_invalid_loader">Ta strona nie może być wzmocniona (nieprawidłowy ładunek stron)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Ponawianie %1$d nieudana strona…</item>
+    <item quantity="few">Ponawianie %1$d nieudanych stron…</item>
+    <item quantity="many">Ponawianie %1$d nieudanych stron…</item>
+    <item quantity="other">Ponawianie %1$d nieudanych stron…</item>
+  </plurals>
+  <string name="pref_category_castserver">Serwer Cast</string>
+  <string name="pref_cast_server_port">Port serwera</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Dostosowanie Discorda</string>
+  <string name="pref_discord_custom_message">Wiadomość niestandardowa</string>
+  <string name="pref_discord_custom_message_summary">Niestandardowa wiadomość, która będzie wyświetlana na Discordzie</string>
+  <string name="pref_discord_show_progress">Pokaż postęp</string>
+  <string name="pref_discord_show_progress_summary">Wyświetl bieżący postęp odcinka/rozdziału</string>
+  <string name="pref_discord_show_timestamp">Pokaż czas</string>
+  <string name="pref_discord_show_timestamp_summary">Wyświetlaj upłynął/pozostały czas</string>
+  <string name="pref_discord_show_buttons">Pokaż przyciski</string>
+  <string name="pref_discord_show_buttons_summary">Wyświetlaj przyciski, aby pobrać aplikację lub dołączyć do serwera Discorda</string>
+  <string name="pref_discord_show_download_button">Pokaż przycisk Pobierz</string>
+  <string name="pref_discord_show_download_button_summary">Wyświetla przycisk do pobrania aplikacji</string>
+  <string name="pref_discord_show_discord_button">Pokaż przycisk Discorda</string>
+  <string name="pref_discord_show_discord_button_summary">Wyświetla przycisk dołączenia do serwera Discorda</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Kolejka odtwarzania</string>
+  <string name="action_clear_queue">Wyczyść kolejkę</string>
+  <string name="cast_remove_from_queue">Usuń z kolejki</string>
+  <string name="move_to_top">Przenieś na górę</string>
+  <string name="move_to_position">Przenieś do pozycji</string>
+  <string name="position">Położenie</string>
+  <string name="select_position">Wybierz pozycję</string>
+  <string name="remove_from_queue_confirmation">Usunąć z kolejki?</string>
+  <string name="clear_queue_confirmation">Wyczyść kolejkę</string>
+  <string name="clear_queue_confirmation_message">Czy na pewno chcesz wyczyścić całą kolejkę?</string>
+  <string name="queue">Kolejka</string>
+  <string name="move_to_bottom">Przenieś na dół</string>
+  <string name="action_end_session">Zakończ sesję Obsady</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dostępne urządzenia</string>
+  <string name="cast_media_info">Informacje o mediach</string>
+  <string name="cast_previous_video">Poprzedni film</string>
+  <string name="cast_next_video">Następne wideo</string>
+  <string name="cast_play">Odtwórz</string>
+  <string name="cast_pause">Wstrzymaj</string>
+  <string name="cast_rewind_30s">Przewiń 30s</string>
+  <string name="cast_forward_30s">Do przodu 30s</string>
+  <string name="cast_volume">Objętość</string>
+  <string name="cast_end_session">Zakończ sesję Obsady</string>
+  <string name="empty_queue">Kolejka jest pusta</string>
+  <string name="cast_end_session_message">Czy na pewno chcesz zakończyć bieżącą sesję transmisji?</string>
+  <string name="cast_end_session_confirm">Zakończ sesję</string>
+  <string name="cast_end_session_cancel">Anuluj</string>
+  <string name="playback_speed">Prędkość odtwarzania</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Ustawienia napisów</item>
+    <item>Ustawienia napisów</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Kolor tekstu</string>
+  <string name="cast_subtitle_background">Kontekst</string>
+  <string name="cast_subtitle_shadow">Cień</string>
+  <string name="cast_subtitle_apply">Zastosuj</string>
+  <string name="cast_subtitle_reset">Przywróć domyślne</string>
+  <string name="cast_subtitle_shadow_None">Brak</string>
+  <string name="cast_subtitle_shadow_Light">Światło</string>
+  <string name="cast_subtitle_shadow_Medium">Średni</string>
+  <string name="cast_subtitle_shadow_Strong">Silny</string>
+  <string name="cast_subtitle_preview">Podgląd tekstu &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">Wybierz napisy/ścieżkę audio</string>
+  <string name="cast_volume_down">Głośność w dół</string>
+  <string name="cast_volume_up">Głośność w górę</string>
+  <string name="cast_subtitles">Napisy</string>
+  <string name="cast_audio_tracks">Ścieżki audio</string>
+  <string name="cast_no_subtitles">Brak napisów</string>
+  <string name="cast_close">Zamknij</string>
+  <string name="cast_subtitle_font_family">Rodzina czcionek</string>
+  <string name="cast_subtitle_border_style">Styl obramowania</string>
+  <string name="cast_subtitle_border_none">Brak</string>
+  <string name="cast_subtitle_border_outline">Kontury</string>
+  <string name="cast_subtitle_border_drop_shadow">Upuść cień</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Miękki cień</string>
+  <string name="cast_subtitle_border_raised">Podniesiony</string>
+  <string name="cast_subtitle_border_depressed">Depresowany</string>
+  <string name="cast_connection_error">Błąd połączenia</string>
+  <string name="discord_accounts">Konta Discorda</string>
+  <string name="active_account">Aktywne konto</string>
+  <string name="no_accounts_found">Nie znaleziono kont</string>
+  <string name="login_failed">Logowanie nie powiodło się</string>
+  <string name="action_display_comfortable_grid_panorama">Siatka wygodna panorama</string>
+  <string name="action_bulk_select">Tryb masowego zaznaczenia</string>
+  <string name="action_move_up">Przesuń w górę</string>
+  <string name="action_move_down">Przesuń w dół</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Zbyt wiele źródeł w Twoim kanale, nie można dodać więcej niż 20</string>
+  <string name="action_sort_feed">Sortuj kanały</string>
+  <string name="sort_feed_confirmation">Czy chcesz posortować kanały alfabetycznie?</string>
+  <string name="saved_searches_feeds">Zapisane wyszukiwania &amp; Kanały</string>
+  <string name="saved_searches_add_feed">Zapisane wyszukiwanie (Przytrzymaj aby dodać do listy Wątków)</string>
+  <string name="pref_hide_feed">Ukryj kartę RSS</string>
+  <string name="pref_feed_position">Pozycja karty RSS</string>
+  <string name="pref_feed_position_summery">Czy chcesz aby karta kanału była pierwszą zakładką w przeglądarce? To sprawi, że domyślna karta podczas otwierania przeglądarki, nie jest zalecana, jeśli używasz danych lub sieci</string>
+  <string name="feed">Kanał</string>
+  <string name="feed_delete">Usunąć element kanału?</string>
+  <string name="feed_tab_empty">Nie masz żadnych źródeł w swoim kanale, przejdź do góry po prawej stronie, aby dodać jeden</string>
+  <string name="feed_add">Dodać %1$s do kanału?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Zapisane wyszukiwania</string>
+  <string name="save_search">Zapisać aktualne zapytanie wyszukiwania?</string>
+  <string name="save_search_hint">Moja nazwa wyszukiwania</string>
+  <string name="save_search_failed_to_load">Nie udało się załadować zapisanych wyszukiwań!</string>
+  <string name="save_search_failed_to_load_message">Wystąpił błąd podczas ładowania zapisanych wyszukiwań.</string>
+  <string name="save_search_delete">Usunąć zapisane zapytanie wyszukiwania?</string>
+  <string name="save_search_delete_message">Are you sure you wish to delete your saved search query: \'%1$s\'?</string>
+  <string name="save_search_invalid">Zapisano niepoprawne wyszukiwanie, zmieniono filtry</string>
+  <string name="save_search_invalid_name">Nieprawidłowa nazwa wyszukiwania</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Brak dostępnych kategorii źródłowych</string>
+  <string name="invalid_category_name">Nieprawidłowa nazwa kategorii</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Sugestie</string>
+  <string name="pref_source_related_mangas_summary">Pokaż sugestie źródłowe podczas przeglądania wpisu</string>
+  <string name="related_mangas_website_suggestions">Sugestie strony</string>
+  <string name="related_mangas_more">Więcej takich informacji...</string>
+  <string name="saved_searches_delete">Zapisane wyszukiwanie (przytrzymaj aby usunąć)</string>
+  <string name="pref_expand_related_animes">Rozwiń sugestie</string>
+  <string name="pref_expand_related_animes_summary">Jeśli wyłączone, sugestie nie będą automatycznie wczytywać &amp; pokaż rozszerzone</string>
+  <string name="put_related_animes_in_overflow">Sugestie dotyczące przepełnienia</string>
+  <string name="put_related_animes_in_overflow_summary">Umieść przycisk Sugestie w menu przeciążenia zamiast na stronie wpisu</string>
+  <string name="pref_show_home_on_related_animes">Strona główna z sugestii</string>
+  <string name="pref_show_home_on_related_animes_summary">Pokaż ikonę podczas przeglądania sugestii aby wrócić bezpośrednio do strony głównej</string>
+  <string name="pref_source_related_animes">Sugestie</string>
+  <string name="pref_source_related_animes_summary">Pokaż sugestie źródłowe podczas przeglądania wpisu</string>
+  <string name="pref_source_navigation">Zastąp ostatni przycisk</string>
+  <string name="pref_source_navigation_summery">Zastąp ostatni przycisk niestandardowym widokiem przeglądania, który zawiera zarówno najnowsze, jak i przeglądane</string>
+</resources>

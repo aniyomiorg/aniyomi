@@ -41,6 +41,14 @@ class SourcePreferences(
 
     fun mangaExtensionRepos() = preferenceStore.getStringSet("extension_repos", emptySet())
 
+    // KMK -->
+    fun hideInLibraryFeedItems() = preferenceStore.getBoolean("feed_hide_in_library_items", false)
+    fun lastUsedSource() = preferenceStore.getLong(
+        Preference.appStateKey("last_anime_catalogue_source"),
+        -1,
+    )
+    // KMK <--
+
     fun trustedExtensions() = preferenceStore.getStringSet(
         Preference.appStateKey("trusted_extensions"),
         emptySet(),
@@ -81,6 +89,13 @@ class SourcePreferences(
         false,
     )
 
+    // KMK -->
+    fun disabledRepos() = preferenceStore.getStringSet("disabled_repos", emptySet())
+    fun disabledSources() = preferenceStore.getStringSet("hidden_anime_catalogues", emptySet())
+
+    fun pinnedSources() = preferenceStore.getStringSet("pinned_anime_catalogues", emptySet())
+    // KMK <--
+
     // SY -->
 
     // fun enableSourceBlacklist() = preferenceStore.getBoolean("eh_enable_source_blacklist", true)
@@ -118,5 +133,9 @@ class SourcePreferences(
         WSRV_NL,
         RESMUSH_IT,
     }
+
     // SY <--
+    // KMK -->
+    fun relatedAnimes() = preferenceStore.getBoolean("related_animes", true)
+    // KMK <--
 }

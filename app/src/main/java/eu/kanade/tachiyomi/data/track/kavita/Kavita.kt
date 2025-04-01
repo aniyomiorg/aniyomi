@@ -8,6 +8,8 @@ import eu.kanade.tachiyomi.data.track.BaseTracker
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.sourcePreferences
@@ -18,6 +20,7 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.i18n.MR
 import uy.kohesive.injekt.injectLazy
 import java.security.MessageDigest
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 class Kavita(id: Long) : BaseTracker(id, "Kavita"), EnhancedMangaTracker, MangaTracker {
@@ -88,6 +91,12 @@ class Kavita(id: Long) : BaseTracker(id, "Kavita"), EnhancedMangaTracker, MangaT
 
     override suspend fun login(username: String, password: String) {
         saveCredentials("user", "pass")
+    }
+    override suspend fun getMangaMetadata(track: DomainTrack): TrackMangaMetadata {
+        throw NotImplementedError("Not implemented.")
+    }
+    override suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata {
+        throw NotImplementedError("Not implemented.")
     }
 
     // [Tracker].isLogged works by checking that credentials are saved.

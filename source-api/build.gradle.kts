@@ -2,6 +2,7 @@ plugins {
     id("mihon.library")
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("com.github.ben-manes.versions")
 }
 
 kotlin {
@@ -13,6 +14,13 @@ kotlin {
                 api(libs.injekt)
                 api(libs.rxjava)
                 api(libs.jsoup)
+                // TAIL
+                api(projects.i18nTail)
+                // TAIL
+
+                // SY -->
+                api(kotlinx.reflect)
+                // SY <--
 
                 implementation(project.dependencies.platform(compose.bom))
                 implementation(compose.runtime)

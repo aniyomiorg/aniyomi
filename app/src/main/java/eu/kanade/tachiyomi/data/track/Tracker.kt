@@ -3,9 +3,13 @@ package eu.kanade.tachiyomi.data.track
 import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import okhttp3.OkHttpClient
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 interface Tracker {
 
@@ -48,4 +52,7 @@ interface Tracker {
 
     val mangaService: MangaTracker
         get() = this as MangaTracker
+
+    suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata?
+    suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata?
 }

@@ -15,6 +15,8 @@ import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.anilist.dto.ALOAuth
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -361,6 +363,13 @@ class Anilist(id: Long) :
 
     fun saveOAuth(alOAuth: ALOAuth?) {
         trackPreferences.trackToken(this).set(json.encodeToString(alOAuth))
+    }
+
+    override suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata? {
+        return api.getMangaMetadata(track)
+    }
+    override suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
+        return api.getAnimeMetadata(track)
     }
 
     fun loadOAuth(): ALOAuth? {

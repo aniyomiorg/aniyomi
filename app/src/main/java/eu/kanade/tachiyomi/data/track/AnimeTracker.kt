@@ -6,6 +6,7 @@ import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.ImmutableList
 import logcat.LogPriority
@@ -100,6 +101,10 @@ interface AnimeTracker {
     suspend fun setRemoteFinishDate(track: AnimeTrack, epochMillis: Long) {
         track.finished_watching_date = epochMillis
         updateRemote(track)
+    }
+
+    suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
+        throw NotImplementedError("Not implemented.")
     }
 
     private suspend fun updateRemote(track: AnimeTrack): Unit = withIOContext {

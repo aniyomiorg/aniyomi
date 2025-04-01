@@ -11,6 +11,8 @@ import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMOAuth
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.encodeToString
@@ -133,6 +135,13 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
 
     override suspend fun searchAnime(query: String): List<AnimeTrackSearch> {
         return api.searchAnime(query)
+    }
+
+    override suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata? {
+        return api.getMangaMetadata(track)
+    }
+    override suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
+        throw NotImplementedError("Not implemented.")
     }
 
     override suspend fun refresh(track: MangaTrack): MangaTrack {

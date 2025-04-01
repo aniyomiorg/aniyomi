@@ -1,16 +1,17 @@
 package eu.kanade.tachiyomi.ui.browse.anime.source
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSourcePin
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.browse.anime.AnimeSourceUiModel
-import eu.kanade.tachiyomi.util.system.LAST_USED_KEY
-import eu.kanade.tachiyomi.util.system.PINNED_KEY
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -31,13 +32,16 @@ import java.util.TreeMap
 class AnimeSourcesScreenModel(
     private val preferences: BasePreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
+    private val uiPreferences: UiPreferences = Injekt.get(),
     private val getEnabledAnimeSources: GetEnabledAnimeSources = Injekt.get(),
     private val toggleSource: ToggleAnimeSource = Injekt.get(),
     private val toggleSourcePin: ToggleAnimeSourcePin = Injekt.get(),
+    val smartSearchConfig: SourcesScreen.SmartSearchConfig?,
 ) : StateScreenModel<AnimeSourcesScreenModel.State>(State()) {
 
     private val _events = Channel<Event>(Int.MAX_VALUE)
     val events = _events.receiveAsFlow()
+    val useNewSourceNavigation by uiPreferences.useNewSourceNavigation().asState(screenModelScope)
 
     init {
         screenModelScope.launchIO {
@@ -77,7 +81,10 @@ class AnimeSourcesScreenModel(
                 items = byLang
                     .flatMap {
                         listOf(
-                            AnimeSourceUiModel.Header(it.key),
+                            AnimeSourceUiModel.Header(
+                                it.key.removePrefix(CATEGORY_KEY_PREFIX),
+                                it.value.firstOrNull()?.category != null,
+                            ),
                             *it.value.map { source ->
                                 AnimeSourceUiModel.Item(source)
                             }.toTypedArray(),
@@ -115,7 +122,26 @@ class AnimeSourcesScreenModel(
         val dialog: Dialog? = null,
         val isLoading: Boolean = true,
         val items: ImmutableList<AnimeSourceUiModel> = persistentListOf(),
+        // SY -->
+        val categories: ImmutableList<String> = persistentListOf(),
+        val showPin: Boolean = true,
+        val showLatest: Boolean = false,
+        val dataSaverEnabled: Boolean = false,
+        // SY <--
+        // KMK -->
+        val searchQuery: String? = null,
+        val nsfwOnly: Boolean = false,
+        // KMK <--
     ) {
         val isEmpty = items.isEmpty()
+    }
+
+    companion object {
+        const val PINNED_KEY = "pinned"
+        const val LAST_USED_KEY = "last_used"
+
+        // SY -->
+        const val CATEGORY_KEY_PREFIX = "category-"
+        // SY <--
     }
 }

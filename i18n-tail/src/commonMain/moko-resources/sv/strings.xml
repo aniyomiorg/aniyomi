@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Spårnings status</string>
+  <string name="tag">Taggar</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Inte spårad</string>
+  <string name="group" comment="group More Info Menu">Grupp</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Library dynamiska kategoriuppdateringar</string>
+  <string name="manga_library_group_updates">Manga Library dynamiska kategoriuppdateringar</string>
+  <string name="library_group_updates_global">Starta alltid globala uppdateringar</string>
+  <string name="library_group_updates_all_but_ungrouped">Starta globala uppdateringar endast för ogrupperade, kategoriuppdateringar för andra</string>
+  <string name="library_group_updates_all">Starta kategoriuppdateringar hela tiden</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Återställ taggar</string>
+  <string name="add_tag">Lägg till tagg</string>
+  <string name="title_hint">Titel: %1$s</string>
+  <string name="description_hint">Beskrivning: %1$s</string>
+  <string name="author_hint">Författare: %1$s</string>
+  <string name="artist_hint">Konstnär: %1$s</string>
+  <string name="custom_entry_info">Anpassad post info</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Casta inställningar</string>
+  <string name="pref_enable_cast">Aktivera eller inaktivera Cast</string>
+  <string name="action_cast">Skicka till Cast</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Visa hämtade avsnittets filstorlek</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Inställningar</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Redigera information</string>
+  <string name="special_services" comment="special_services Connections section">Särskilda tjänster</string>
+  <string name="pref_category_connections">Anslutningar</string>
+  <string name="pref_connections_summary">Discord, mer att komma..</string>
+  <string name="connections_info">Specialtjänster som är unika för Animetail och förbättra hur du använder appen</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Denna Discord-tjänst fungerar genom tokenloggning. Använd på egen risk. Din token lagras lokalt och Animetail delar den inte någon annanstans</string>
+  <string name="pref_discord_rpc">Discord Rich Presence</string>
+  <string name="show_chapters_titles_title">Visa avsnitt/kapitel titlar</string>
+  <string name="show_chapters_titles_subtitle">Visa titeln på avsnittet du läser</string>
+  <string name="pref_enable_discord_rpc">Aktivera Discord Rich Presence</string>
+  <string name="pref_discord_status">Discords status</string>
+  <string name="pref_discord_dnd">⛔ Stör ej</string>
+  <string name="pref_discord_idle">🌙 Idle</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Discord inkognitoläge</string>
+  <string name="pref_discord_incognito_summary">Åsidosätt när inkognitoläge är aktiverat</string>
+  <string name="pref_discord_incognito_categories_details">Poster i inkluderade kategorier kommer inte att visas i Discord</string>
+  <string name="browsing" comment="browsing Discord section">Surfning</string>
+  <string name="scrolling">Rullar igenom</string>
+  <string name="messing">Ringer runt med</string>
+  <string name="video">Video</string>
+  <string name="comic">Serie</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player måste installeras</string>
+  <string name="pref_category_torrentserver">Inställningar för TorrentServer</string>
+  <string name="pref_torrentserver_port">TorrentServer Port</string>
+  <string name="torrentserver_is_running">Torrent Server körs</string>
+  <string name="pref_torrent_trackers">Torrent Trackers</string>
+  <string name="pref_reset_torrent_trackers_string">Återställ standard torrent trackers sträng</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Summa för sidförladdning</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Bevara läsposition vid läsposter</string>
+  <string name="reader_bottom_buttons">Nedre knappar för läsare</string>
+  <string name="reader_bottom_buttons_summary">Anpassa vilka knappar som visas längst ner på läsaren</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Ange första sidan som omslag</string>
+  <string name="action_set_second_page_cover">Ange andra sidan som omslag</string>
+  <string name="action_save_first_page">Spara första sidan</string>
+  <string name="action_save_second_page">Spara andra sidan</string>
+  <string name="action_share_first_page">Dela första sidan</string>
+  <string name="action_share_second_page">Dela andra sidan</string>
+  <string name="action_save_combined_page">Spara kombinerad sida</string>
+  <string name="action_share_combined_page">Dela kombinerad sida</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, sidor %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Sidans layout</string>
+  <string name="shift_double_pages">Skifta en sida över</string>
+  <string name="double_pages">Dubbla sidor</string>
+  <string name="single_page">Enda sidan</string>
+  <string name="automatic_orientation">Automatisk (baserat på orientering)</string>
+  <string name="automatic_can_still_switch">När du använder automatisk sidlayout, kan du fortfarande växla mellan layouter när du läser utan att åsidosätta denna inställning</string>
+  <string name="invert_double_pages">Invertera dubbla sidor </string>
+  <string name="center_margin" comment="center_margin Center margin">Centrera marginal</string>
+  <string name="center_margin_none">Ingen</string>
+  <string name="center_margin_double_page">Lägg till dubbel sida</string>
+  <string name="center_margin_wide_page">Lägg till i bred sida</string>
+  <string name="center_margin_double_and_wide_page">Lägg till i båda</string>
+  <string name="pref_center_margin">Mitten marginaltyp</string>
+  <string name="pref_center_margin_summary">Infoga distans för att rymma deadspace på vikbara enheter.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Anpassad färgväljare</string>
+  <string name="custom_color_description">Välj en färg för det anpassade temat</string>
+  <string name="theme_custom">Anpassat tema</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Säkerhetskopiera</string>
+  <string name="label_sync">Synk</string>
+  <string name="label_triggers">Utlösare</string>
+  <string name="pref_backup_and_sync_summary">Manuell &amp; automatiska säkerhetskopieringar och synkronisering</string>
+  <string name="update_30min">Var 30:e minut</string>
+  <string name="update_1hour">Varje timme</string>
+  <string name="update_3hour">Var 3:e timme</string>
+  <string name="sync_error">Synkronisering av bibliotek misslyckades</string>
+  <string name="sync_complete">Synkronisering av bibliotek slutförd</string>
+  <string name="sync_in_progress">Synkronisering pågår redan</string>
+  <string name="pref_sync_host">Värd</string>
+  <string name="pref_sync_host_summ">Ange värdadressen för att synkronisera ditt bibliotek</string>
+  <string name="pref_sync_api_key">API nyckel</string>
+  <string name="pref_sync_api_key_summ">Ange API-nyckel för att synkronisera ditt bibliotek</string>
+  <string name="pref_sync_now_group_title">Synkronisera åtgärder</string>
+  <string name="pref_sync_now">Synkronisera nu</string>
+  <string name="pref_sync_confirmation_title">Synkronisera bekräftelse</string>
+  <string name="pref_sync_now_subtitle">Initiera omedelbar synkronisering av dina data</string>
+  <string name="pref_sync_confirmation_message">Synkronisering kommer att skriva över ditt lokala bibliotek med fjärrbiblioteket. Är du säker på att du vill fortsätta?</string>
+  <string name="pref_sync_service">Tjänst</string>
+  <string name="pref_sync_service_summ">Välj tjänsten för att synkronisera ditt bibliotek med</string>
+  <string name="pref_sync_service_category">Synk</string>
+  <string name="pref_sync_automatic_category">Automatisk synkronisering</string>
+  <string name="pref_sync_interval">Synkronisering frekvens</string>
+  <string name="pref_choose_what_to_sync">Välj vad du ska synkronisera</string>
+  <string name="success_reset_sync_timestamp">Senast synkroniserade tidsstämpel återställd</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Klar i %1$s</string>
+  <string name="last_synchronization">Senaste synkronisering: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Logga in</string>
+  <string name="google_drive_sign_in_success">Inloggad framgångsrikt</string>
+  <string name="google_drive_sign_in_failed">Inloggning misslyckades</string>
+  <string name="authentication">Autentisering</string>
+  <string name="pref_google_drive_purge_sync_data">Rensa synkroniseringsdata från Google Drive</string>
+  <string name="google_drive_sync_data_purged">Synkroniseringsdata rensas från Google Drive</string>
+  <string name="google_drive_sync_data_not_found">Inga synkroniseringsdata hittades i Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">Fel vid rensning av synkroniseringsdata från Google Drive, försök att logga in igen.</string>
+  <string name="google_drive_login_success">Inloggad på Google Drive</string>
+  <string name="google_drive_login_failed">Det gick inte att logga in på Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">Inte inloggad på Google Drive</string>
+  <string name="error_uploading_sync_data">Fel vid uppladdning av synkroniseringsdata till Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Fel vid borttagning av Google Drive Lock fil</string>
+  <string name="error_before_sync_gdrive">Fel före synkronisering: %s</string>
+  <string name="pref_purge_confirmation_title">Rensa bekräftelse</string>
+  <string name="pref_purge_confirmation_message">Rensning av synkroniseringsdata raderar alla dina synkroniseringsdata från Google Drive. Är du säker på att du vill fortsätta?</string>
+  <string name="pref_sync_options">Skapa synkroniseringsutlösare</string>
+  <string name="pref_sync_options_summ">Kan användas för att ställa in synkroniseringsutlösare</string>
+  <string name="sync_on_chapter_read">Synkronisera på kapitel Läs</string>
+  <string name="sync_on_chapter_open">Synkronisera på kapitel Öppet</string>
+  <string name="sync_on_episode_seen">Synkronisera vid episod Sett</string>
+  <string name="sync_on_episode_open">Synkronisering vid episod öppen</string>
+  <string name="sync_on_app_start">Synkronisering vid appstart</string>
+  <string name="sync_on_app_resume">Synkronisering vid Appens Återupptagande</string>
+  <string name="sync_library">Synkronisera bibliotek</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Uppdatera tilläggssidan för att uppdatera listan.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Navbar</string>
+  <string name="pref_hide_updates_button">Visa uppdateringar i navigatorn</string>
+  <string name="pref_hide_history_button">Visa historik i navigatorn</string>
+  <string name="pref_show_bottom_bar_labels">Visa alltid navigeringsetiketter</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Välj en spårare</string>
+  <string name="entry_not_tracked">Inlägget spåras inte.</string>
+  <string name="fill_from_tracker">Fyll från tracker</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr fungerar. Användaragent uppdaterad. Starta om appen</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr fungerar inte. Användaragenten har inte uppdaterats. Vänligen kontrollera dina inställningar</string>
+  <string name="flare_solver_error">Fel vid kontakt med FlareSolverr</string>
+  <string name="flare_solver_error_webview">Fel vid lösning med WebView</string>
+  <string name="pref_enable_flare_solverr">Aktivera FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Använd FlareSolverr för att kringgå Cloudflare\'s anti-bot skydd</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">URL till FlareSolverr instansen att använda till exempel http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Testa FlareSolverr och uppdatera användaragenten</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testa FlareSolverr för att uppdatera användaragenten. Krävs endast en gång, växla sedan vid behov.</string>
+  <string-array name="title_cast_quality">
+    <item>Välj gjutkvalitet/leverantör</item>
+    <item>Välj kvalitet</item>
+  </string-array>
+  <string name="cast_not_connected">Cast ej ansluten</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video tillagd i kö</item>
+    <item>Video tillagd i kö</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Fel vid laddning av video från Cast</item>
+    <item>Fel vid inläsning av video</item>
+  </string-array>
+  <string name="server_local_notification_casting">Den lokala servern körs. Tryck för att stoppa den.</string>
+  <string name="server_local_notification_channel_description">Kanal för lokal server avisering</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Skrolla automatiskt</string>
+  <string name="eh_retry_all">Försök igen alla</string>
+  <string name="eh_boost_page">Öka sidan</string>
+  <string name="eh_autoscroll_help">Autoscroll hjälp</string>
+  <string name="eh_autoscroll_help_message">Rulla automatiskt till nästa sida i det angivna intervallet. Intervall anges i sekunder.</string>
+  <string name="eh_autoscroll_freq_invalid">Ogiltig frekvens</string>
+  <string name="eh_retry_all_help">Försök igen all hjälp</string>
+  <string name="eh_retry_all_help_message">Lägg till alla misslyckade sidor till nedladdningskön.</string>
+  <string name="eh_boost_page_help">Öka sidans hjälp</string>
+  <string name="eh_boost_page_help_message">Normalt kan nerladdaren bara ladda ner en viss mängd sidor samtidigt. Detta innebär att du kan vänta på en sida för att ladda ner, men nedladdaren kommer inte att börja ladda ner sidan förrän den har en gratis nedladdning slot. Genom att trycka på \"Boost page\" kommer nedladdningsanvändaren att börja ladda ner den aktuella sidan, oavsett om det finns en ledig plats eller inte.</string>
+  <string name="eh_boost_page_invalid">Denna sida kan inte boostas (ogiltig sida)!</string>
+  <string name="eh_boost_page_errored">Sidan kunde inte laddas, tryck på knappen igen istället!</string>
+  <string name="eh_boost_page_downloading">Den här sidan laddas redan ner!</string>
+  <string name="eh_boost_page_downloaded">Denna sida har redan hämtats!</string>
+  <string name="eh_boost_boosted">Förstärkt aktuell sida!</string>
+  <string name="eh_boost_invalid_loader">Denna sida kan inte boostas (ogiltig sidladdare)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Försök igen med %1$d misslyckades sida…</item>
+    <item quantity="other">Försök igen med %1$d misslyckade sidor…</item>
+  </plurals>
+  <string name="pref_category_castserver">Casta server</string>
+  <string name="pref_cast_server_port">Gjuten serverport</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discords anpassning</string>
+  <string name="pref_discord_custom_message">Anpassat meddelande</string>
+  <string name="pref_discord_custom_message_summary">Anpassat meddelande som kommer att visas på Discord</string>
+  <string name="pref_discord_show_progress">Visa framsteg</string>
+  <string name="pref_discord_show_progress_summary">Visa pågående avsnitt/kapitel framsteg</string>
+  <string name="pref_discord_show_timestamp">Visa tid</string>
+  <string name="pref_discord_show_timestamp_summary">Visa förfluten / återstående tid</string>
+  <string name="pref_discord_show_buttons">Visa knappar</string>
+  <string name="pref_discord_show_buttons_summary">Visa knappar för att ladda ner appen eller gå med i Discord-servern</string>
+  <string name="pref_discord_show_download_button">Visa nedladdningsknapp</string>
+  <string name="pref_discord_show_download_button_summary">Visar en knapp för att ladda ner appen</string>
+  <string name="pref_discord_show_discord_button">Visa Discord-knapp</string>
+  <string name="pref_discord_show_discord_button_summary">Visar en knapp för att ansluta till Discord-servern</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Uppspelningskö</string>
+  <string name="action_clear_queue">Rensa kö</string>
+  <string name="cast_remove_from_queue">Ta bort från kön</string>
+  <string name="move_to_top">Flytta längst upp</string>
+  <string name="move_to_position">Flytta till position</string>
+  <string name="position">Befattning</string>
+  <string name="select_position">Välj position</string>
+  <string name="remove_from_queue_confirmation">Ta bort från kön?</string>
+  <string name="clear_queue_confirmation">Rensa kö</string>
+  <string name="clear_queue_confirmation_message">Är du säker på att du vill rensa hela kön?</string>
+  <string name="queue">Kö</string>
+  <string name="move_to_bottom">Flytta längst ned</string>
+  <string name="action_end_session">Avsluta Cast-sessionen</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Tillgängliga enheter</string>
+  <string name="cast_media_info">Media Information</string>
+  <string name="cast_previous_video">Föregående video</string>
+  <string name="cast_next_video">Nästa video</string>
+  <string name="cast_play">Spela</string>
+  <string name="cast_pause">Pausa</string>
+  <string name="cast_rewind_30s">Spola tillbaka 30s</string>
+  <string name="cast_forward_30s">Vidarebefordra 30s</string>
+  <string name="cast_volume">Volym</string>
+  <string name="cast_end_session">Avsluta Cast-sessionen</string>
+  <string name="empty_queue">Kön är tom</string>
+  <string name="cast_end_session_message">Är du säker på att du vill avsluta den aktuella sändningssessionen?</string>
+  <string name="cast_end_session_confirm">Avsluta sessionen</string>
+  <string name="cast_end_session_cancel">Avbryt</string>
+  <string name="playback_speed">Uppspelningshastighet</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Inställningar för undertext</item>
+    <item>Inställningar för undertext</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Text Färg</string>
+  <string name="cast_subtitle_background">Bakgrund</string>
+  <string name="cast_subtitle_shadow">Skugga</string>
+  <string name="cast_subtitle_apply">Tillämpa</string>
+  <string name="cast_subtitle_reset">Återställ till standard</string>
+  <string name="cast_subtitle_shadow_None">Ingen</string>
+  <string name="cast_subtitle_shadow_Light">Ljus</string>
+  <string name="cast_subtitle_shadow_Medium">Medel</string>
+  <string name="cast_subtitle_shadow_Strong">Stark</string>
+  <string name="cast_subtitle_preview">Förhandsgranska text &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">Välj undertext/ljudspår</string>
+  <string name="cast_volume_down">Volym ned</string>
+  <string name="cast_volume_up">Volym upp</string>
+  <string name="cast_subtitles">Undertexter</string>
+  <string name="cast_audio_tracks">Ljudspår</string>
+  <string name="cast_no_subtitles">Inga undertexter</string>
+  <string name="cast_close">Stäng</string>
+  <string name="cast_subtitle_font_family">Teckensnittsfamilj</string>
+  <string name="cast_subtitle_border_style">Kantens stil</string>
+  <string name="cast_subtitle_border_none">Ingen</string>
+  <string name="cast_subtitle_border_outline">Kontur</string>
+  <string name="cast_subtitle_border_drop_shadow">Släpp skugga</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Mjuk droppe skugga</string>
+  <string name="cast_subtitle_border_raised">Upphöjd</string>
+  <string name="cast_subtitle_border_depressed">Deponerad</string>
+  <string name="cast_connection_error">Anslutningsfel</string>
+  <string name="discord_accounts">Discord-konton</string>
+  <string name="active_account">Aktivt konto</string>
+  <string name="no_accounts_found">Inga konton hittades</string>
+  <string name="login_failed">Kunde inte logga in</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama bekvämt rutnät</string>
+  <string name="action_bulk_select">Bulk markeringsläge</string>
+  <string name="action_move_up">Flytta upp</string>
+  <string name="action_move_down">Flytta ned</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">För många källor i ditt flöde, kan inte lägga till mer än 20</string>
+  <string name="action_sort_feed">Sortera flöden</string>
+  <string name="sort_feed_confirmation">Vill du sortera flödena alfabetiskt?</string>
+  <string name="saved_searches_feeds">Sparade sökningar &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Sparade sökningar (gamla att lägga till i Feed)</string>
+  <string name="pref_hide_feed">Dölj fliken Feed</string>
+  <string name="pref_feed_position">Flöde flikposition</string>
+  <string name="pref_feed_position_summery">Vill du att fliken feed ska vara den första fliken i webbläsare? Detta kommer att göra det till standardfliken när du öppnar webbläsaren, rekommenderas inte om du är på data eller ett utökat nätverk</string>
+  <string name="feed">Flöde</string>
+  <string name="feed_delete">Ta bort feed objekt?</string>
+  <string name="feed_tab_empty">Du har inga källor i ditt flöde, navigera längst upp till höger för att lägga till en</string>
+  <string name="feed_add">Lägg till %1$s i flödet?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Sparade sökningar</string>
+  <string name="save_search">Spara aktuell sökfråga?</string>
+  <string name="save_search_hint">Mitt söknamn</string>
+  <string name="save_search_failed_to_load">Det gick inte att ladda sparade sökningar!</string>
+  <string name="save_search_failed_to_load_message">Ett fel uppstod när du laddade dina sparade sökningar.</string>
+  <string name="save_search_delete">Ta bort sparad sökfråga?</string>
+  <string name="save_search_delete_message">Är du säker på att du vill ta bort din sparade sökfråga: \'%1$s\'?</string>
+  <string name="save_search_invalid">Sparad ogiltig sökning, filter har ändrats</string>
+  <string name="save_search_invalid_name">Ogiltigt sparat söknamn</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Inga källkategorier tillgängliga</string>
+  <string name="invalid_category_name">Ogiltigt kategorinamn</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Förslag</string>
+  <string name="pref_source_related_mangas_summary">Visa käll-webbplatsens förslag vid visning av post</string>
+  <string name="related_mangas_website_suggestions">Webbplatsens förslag</string>
+  <string name="related_mangas_more">Mer som dessa...</string>
+  <string name="saved_searches_delete">Sparade sökningar (gamla att radera)</string>
+  <string name="pref_expand_related_animes">Expandera förslag</string>
+  <string name="pref_expand_related_animes_summary">Om inaktiverad, kommer förslagen inte automatiskt att ladda &amp; visa utökad</string>
+  <string name="put_related_animes_in_overflow">Förslag på överflöd</string>
+  <string name="put_related_animes_in_overflow_summary">Sätt knappen Förslag i overflow menyn istället för på ingångssidan</string>
+  <string name="pref_show_home_on_related_animes">Hem från förslag</string>
+  <string name="pref_show_home_on_related_animes_summary">Visa en ikon medan du surfar Förslag för att navigera direkt tillbaka till hemmet</string>
+  <string name="pref_source_related_animes">Förslag</string>
+  <string name="pref_source_related_animes_summary">Visa käll-webbplatsens förslag vid visning av post</string>
+  <string name="pref_source_navigation">Ersätt senaste knappen</string>
+  <string name="pref_source_navigation_summery">Ersätt senaste knappen med en anpassad bläddringsvy som innehåller både senaste och bläddra</string>
+</resources>

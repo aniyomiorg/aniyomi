@@ -449,6 +449,13 @@ sealed interface AppBar {
         val enabled: Boolean = true,
     ) : AppBarAction
 
+    // KMK -->
+    data class ActionCompose(
+        val title: String,
+        val content: @Composable () -> Unit,
+    ) : AppBarAction
+    // KMK <--
+
     data class OverflowAction(
         val title: String,
         val onClick: () -> Unit,

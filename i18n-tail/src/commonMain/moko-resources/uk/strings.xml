@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Статус відстеження</string>
+  <string name="tag">Мітки</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Без відстеження</string>
+  <string name="group" comment="group More Info Menu">Група</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Аніме оновлення динамічної бібліотеки</string>
+  <string name="manga_library_group_updates">Оновлення динамічної категорії бібліотеки Манга</string>
+  <string name="library_group_updates_global">Завжди запускати глобальні оновлення</string>
+  <string name="library_group_updates_all_but_ungrouped">Запустити глобальні оновлення тільки для негрупих, оновлень категорій для інших</string>
+  <string name="library_group_updates_all">Завантажувати оновлення категорії весь час</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Скинути мітки</string>
+  <string name="add_tag">Добавити теґ</string>
+  <string name="title_hint">Title: %1$s</string>
+  <string name="description_hint">Description: %1$s</string>
+  <string name="author_hint">Автор: %1$s</string>
+  <string name="artist_hint">Artist: %1$s</string>
+  <string name="custom_entry_info">Додаткова інформація</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Налаштування трансляції</string>
+  <string name="pref_enable_cast">Увімкнути або вимкнути Cast</string>
+  <string name="action_cast">Відправити в Cast</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Показати завантажену серію розмір файлу</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Налаштування Форка</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Редагувати інформацію</string>
+  <string name="special_services" comment="special_services Connections section">Спеціальні послуги</string>
+  <string name="pref_category_connections">З\'єднання</string>
+  <string name="pref_connections_summary">Discord, ще більше...</string>
+  <string name="connections_info">Спеціальні послуги, які унікальні для Animetail та підвищують спосіб використання додатку</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Цей сервіс Discord працює з використанням протоколу жетонів. Використовуйте на ваш власний ризик. Ваш токен зберігається в місцевому та аніметрі не поширює його більше ніде</string>
+  <string name="pref_discord_rpc">Rich Presence Discord</string>
+  <string name="show_chapters_titles_title">Показати заголовки епізодів/Розділів</string>
+  <string name="show_chapters_titles_subtitle">Показувати назву епізоду/розділу, який ви читаєте</string>
+  <string name="pref_enable_discord_rpc">Увімкнути Rich Presence в Discord</string>
+  <string name="pref_discord_status">Статус Discord</string>
+  <string name="pref_discord_dnd">⛔ Не турбувати</string>
+  <string name="pref_discord_idle">🌙 Очікування</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Режим інкогніто Discord</string>
+  <string name="pref_discord_incognito_summary">Перезаписувати, коли ввімкнено режим інкогніто</string>
+  <string name="pref_discord_incognito_categories_details">Категорії у базі даних не будуть відображатися в Discord</string>
+  <string name="browsing" comment="browsing Discord section">Перегляд</string>
+  <string name="scrolling">Прокрутка</string>
+  <string name="messing">Обмін інформацією з</string>
+  <string name="video">Відео</string>
+  <string name="comic">Комікс</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Для роботи Amnis Player потрібно встановити</string>
+  <string name="pref_category_torrentserver">Налаштування сервера TorrentServer</string>
+  <string name="pref_torrentserver_port">Порт TorrentServer</string>
+  <string name="torrentserver_is_running">Torrent Server працює</string>
+  <string name="pref_torrent_trackers">Відслідковування торенту</string>
+  <string name="pref_reset_torrent_trackers_string">Скинути рядок торрент трекерів за замовчуванням</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Попередня сума завантаження сторінки</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Зберегти позицію зчитування під час читання</string>
+  <string name="reader_bottom_buttons">Читач Кнопки внизу</string>
+  <string name="reader_bottom_buttons_summary">Налаштуйте, які кнопки з’являються внизу читача</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Встановити першу сторінку як обкладинку</string>
+  <string name="action_set_second_page_cover">Вказати другу сторінку як обкладинку</string>
+  <string name="action_save_first_page">Зберегти першу сторінку</string>
+  <string name="action_save_second_page">Зберегти другу сторінку</string>
+  <string name="action_share_first_page">Поділитися першою сторінкою</string>
+  <string name="action_share_second_page">Поділитися другою сторінкою</string>
+  <string name="action_save_combined_page">Зберегти комбіновану сторінку</string>
+  <string name="action_share_combined_page">Поділитися комбінованою сторінкою</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, сторінки %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Сторінка</string>
+  <string name="shift_double_pages">Пересунути на одну сторінку більше</string>
+  <string name="double_pages">Подвійні сторінки</string>
+  <string name="single_page">Одна сторінка</string>
+  <string name="automatic_orientation">Автоматично (в залежності від орієнтації)</string>
+  <string name="automatic_can_still_switch">Під час використання автоматичного макету сторінки ви можете переключитися між макетами під час читання без зміни цього налаштування</string>
+  <string name="invert_double_pages">Інвертувати подвійні сторінки </string>
+  <string name="center_margin" comment="center_margin Center margin">Центральне поле</string>
+  <string name="center_margin_none">Без ефекту</string>
+  <string name="center_margin_double_page">Додати на подвійну сторінку</string>
+  <string name="center_margin_wide_page">Додати на всю сторінку</string>
+  <string name="center_margin_double_and_wide_page">Додати до обох</string>
+  <string name="pref_center_margin">Тип центру</string>
+  <string name="pref_center_margin_summary">Вставте пробіл для розміщення у згорнутому вигляді кінцевого простору на пристроях.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Палітра кольорів</string>
+  <string name="custom_color_description">Вибрати колір для власної теми</string>
+  <string name="theme_custom">Задана тема</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Резервне копіювання</string>
+  <string name="label_sync">Синхр</string>
+  <string name="label_triggers">Тріггери</string>
+  <string name="pref_backup_and_sync_summary">Ручне &amp; автоматичне резервне копіювання і синхронізації</string>
+  <string name="update_30min">Кожні 30 хвилин</string>
+  <string name="update_1hour">Кожну годину</string>
+  <string name="update_3hour">Кожні 3 години</string>
+  <string name="sync_error">Не вдалося синхронізувати бібліотеку</string>
+  <string name="sync_complete">Синхронізація бібліотеки завершено</string>
+  <string name="sync_in_progress">Синхронізація наразі триває</string>
+  <string name="pref_sync_host">Хост</string>
+  <string name="pref_sync_host_summ">Введіть адресу хоста для синхронізації вашої бібліотеки</string>
+  <string name="pref_sync_api_key">API ключ</string>
+  <string name="pref_sync_api_key_summ">Введіть ключ API для синхронізації вашої бібліотеки</string>
+  <string name="pref_sync_now_group_title">Синхронізація дій</string>
+  <string name="pref_sync_now">Синхронізувати зараз</string>
+  <string name="pref_sync_confirmation_title">Підтвердження синхронізації</string>
+  <string name="pref_sync_now_subtitle">Початкова негайна синхронізація ваших даних</string>
+  <string name="pref_sync_confirmation_message">Синхронізація перезапише вашу локальну бібліотеку з віддаленою бібліотекою. Справді продовжити?</string>
+  <string name="pref_sync_service">Послуга</string>
+  <string name="pref_sync_service_summ">Виберіть сервіс для синхронізації бібліотеки з</string>
+  <string name="pref_sync_service_category">Синхр</string>
+  <string name="pref_sync_automatic_category">Автоматична синхронізація</string>
+  <string name="pref_sync_interval">Частота синхронізації</string>
+  <string name="pref_choose_what_to_sync">Виберіть, що потрібно синхронізувати</string>
+  <string name="success_reset_sync_timestamp">Час останньої синхронізації скинуто</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Готово в %1$s</string>
+  <string name="last_synchronization">Last Synchronization: %1$s</string>
+  <string name="google_drive">Диск Google</string>
+  <string name="pref_google_drive_sign_in">Увійти</string>
+  <string name="google_drive_sign_in_success">Ви успішно увійшли</string>
+  <string name="google_drive_sign_in_failed">Помилка під час входу</string>
+  <string name="authentication">Автентифікація</string>
+  <string name="pref_google_drive_purge_sync_data">Очистити дані синхронізації з диску Google</string>
+  <string name="google_drive_sync_data_purged">Синхронізацію даних очищено з Google Drive</string>
+  <string name="google_drive_sync_data_not_found">В Google Диску не знайдено даних синхронізації</string>
+  <string name="google_drive_sync_data_purge_error">Помилка очищення даних синхронізації з Google Drive, спробуйте ввійти знову.</string>
+  <string name="google_drive_login_success">Увійти до Диска Google</string>
+  <string name="google_drive_login_failed">Не вдалося увійти в Google Driv: %s</string>
+  <string name="google_drive_not_signed_in">Не ввійшли до Google Drive</string>
+  <string name="error_uploading_sync_data">Помилка завантаження даних синхронізації на Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Помилка видалення файлу блокування Google Drive</string>
+  <string name="error_before_sync_gdrive">Error before sync: %s</string>
+  <string name="pref_purge_confirmation_title">Підтвердження видалення</string>
+  <string name="pref_purge_confirmation_message">Вилучення даних синхронізації видалить всі ваші дані синхронізації з Google Drive. Ви впевнені, що хочете продовжити?</string>
+  <string name="pref_sync_options">Створити тригери синхронізації</string>
+  <string name="pref_sync_options_summ">Може бути використаний для встановлення тригерів синхронізації</string>
+  <string name="sync_on_chapter_read">Синхронізація прочитаних</string>
+  <string name="sync_on_chapter_open">Синхронізувати на Open Главі</string>
+  <string name="sync_on_episode_seen">Синхронізація через пробутий епізод</string>
+  <string name="sync_on_episode_open">Синхронізація при відкритті Епізод</string>
+  <string name="sync_on_app_start">Синхронізація при запуску додатку</string>
+  <string name="sync_on_app_resume">Синхронізувати в резюме програми</string>
+  <string name="sync_library">Синхронізація бібліотеки</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Оновити сторінку розширення для оновлення списку.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Навігаційна панель</string>
+  <string name="pref_hide_updates_button">Показувати оновлення в наv</string>
+  <string name="pref_hide_history_button">Показати історію в наv</string>
+  <string name="pref_show_bottom_bar_labels">Завжди відображати напроти міток</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Вибрати трекер</string>
+  <string name="entry_not_tracked">Запис не відстежується.</string>
+  <string name="fill_from_tracker">Заповнити з трекера</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr працює. User Agent оновлено. Будь ласка, перезапустіть програму</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr не працює. Користувацький агент не оновився. Будь ласка, перевірте ваші налаштування</string>
+  <string name="flare_solver_error">Помилка під час звернення FlareSolverr</string>
+  <string name="flare_solver_error_webview">Помилка вирішення проблеми з WebView</string>
+  <string name="pref_enable_flare_solverr">Увімкнути FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Використовуйте FlareSolverr для обходу захисту Cloudflare-бота</string>
+  <string name="pref_flare_solverr_url">URL-адреса FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL-адреса екземпляра FlareSolverr, наприклад, http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Тест FlareSolverr та оновлення користувацького агента</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Тест FlareSolverr для оновлення користувацького агента. Потрібно лише один раз; потім ввімкнути як необхідно.</string>
+  <string-array name="title_cast_quality">
+    <item>Вибрати кількість запису і провайдера</item>
+    <item>Вибрати якість</item>
+  </string-array>
+  <string name="cast_not_connected">Трансляція не підключена</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Відео додано в чергу</item>
+    <item>Відео додано в чергу</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Помилка при завантаженні відео з Cast</item>
+    <item>Помилка при завантаженні відео</item>
+  </string-array>
+  <string name="server_local_notification_casting">Локальний сервер працює. Торкніться, щоб зупинити його.</string>
+  <string name="server_local_notification_channel_description">Канал сповіщень локального сервера</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Автопрокрутка</string>
+  <string name="eh_retry_all">Повторити все</string>
+  <string name="eh_boost_page">Підвищити сторінку</string>
+  <string name="eh_autoscroll_help">Автопрокрутка допомога</string>
+  <string name="eh_autoscroll_help_message">Автоматичне прокручування до наступної сторінки за вказаний проміжок. Інтервал задається в секундах.</string>
+  <string name="eh_autoscroll_freq_invalid">Частота недійсна</string>
+  <string name="eh_retry_all_help">Спробувати ще раз допомогти</string>
+  <string name="eh_retry_all_help_message">Повторне додавання всіх невдалих сторінок до черги завантаження.</string>
+  <string name="eh_boost_page_help">Пришвидшити довідку</string>
+  <string name="eh_boost_page_help_message">Зазвичай завантажувач може завантажити тільки певну кількість сторінок одночасно. Це означає, що ви можете чекати, щоб завантажити сторінку, але завантажувач не почне завантажувати сторінку, поки вона не стане безкоштовним слотом для завантаження. Натиснення кнопки \"Прискорити\" змусить завантажувач почати завантаження поточної сторінки, незалежно від того, чи є там доступний слот.</string>
+  <string name="eh_boost_page_invalid">Ця сторінка не може бути передмухнута (невірна сторінка)!</string>
+  <string name="eh_boost_page_errored">Не вдалося завантажити сторінку, замість неї натисніть кнопку повторити спробу!</string>
+  <string name="eh_boost_page_downloading">Ця сторінка вже завантажується!</string>
+  <string name="eh_boost_page_downloaded">Ця сторінка вже завантажена!</string>
+  <string name="eh_boost_boosted">Передмухнув(-ла) поточну сторінку!</string>
+  <string name="eh_boost_invalid_loader">Неможливо передмухнути цю сторінку (невірний завантажувач сторінки)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Retrying %1$d failed page…</item>
+    <item quantity="few">Retrying %1$d failed pages…</item>
+    <item quantity="many">Retrying %1$d failed pages…</item>
+    <item quantity="other">Retrying %1$d failed pages…</item>
+  </plurals>
+  <string name="pref_category_castserver">Сервер Трансляції</string>
+  <string name="pref_cast_server_port">Порт сервера Cast</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Налаштування Discord</string>
+  <string name="pref_discord_custom_message">Повідомлення при вимкненому сайті</string>
+  <string name="pref_discord_custom_message_summary">Користувацькі повідомлення, які будуть відображатися в Discord</string>
+  <string name="pref_discord_show_progress">Показувати поступ</string>
+  <string name="pref_discord_show_progress_summary">Відображати поточний стан епізодів/розділу</string>
+  <string name="pref_discord_show_timestamp">Відображати час</string>
+  <string name="pref_discord_show_timestamp_summary">Відображення elapsed/Залишилося часу</string>
+  <string name="pref_discord_show_buttons">Показати кнопки</string>
+  <string name="pref_discord_show_buttons_summary">Показувати кнопки для завантаження програми або приєднання до сервера Discord</string>
+  <string name="pref_discord_show_download_button">Показувати кнопку завантаження</string>
+  <string name="pref_discord_show_download_button_summary">Відображає кнопку для завантаження програми</string>
+  <string name="pref_discord_show_discord_button">Показувати кнопку Discord</string>
+  <string name="pref_discord_show_discord_button_summary">Відображає кнопку для приєднання до серверу Discord</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Черга відтворення</string>
+  <string name="action_clear_queue">Очистити чергу</string>
+  <string name="cast_remove_from_queue">Видалити з черги</string>
+  <string name="move_to_top">Нагору</string>
+  <string name="move_to_position">Перемістити на позицію</string>
+  <string name="position">Позиція</string>
+  <string name="select_position">Виберіть позицію</string>
+  <string name="remove_from_queue_confirmation">Видалити з черги?</string>
+  <string name="clear_queue_confirmation">Очистити чергу</string>
+  <string name="clear_queue_confirmation_message">Ви впевнені, що хочете очистити всю чергу?</string>
+  <string name="queue">Черга</string>
+  <string name="move_to_bottom">Донизу</string>
+  <string name="action_end_session">Кінцева сесія</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Доступні пристрої</string>
+  <string name="cast_media_info">Інформація про медіа</string>
+  <string name="cast_previous_video">Попереднє відео</string>
+  <string name="cast_next_video">Наступне відео</string>
+  <string name="cast_play">Відтворити</string>
+  <string name="cast_pause">Пауза</string>
+  <string name="cast_rewind_30s">Перемотати 30-ті роки</string>
+  <string name="cast_forward_30s">Переслати 30-ті</string>
+  <string name="cast_volume">Об\'єм</string>
+  <string name="cast_end_session">Кінцева сесія</string>
+  <string name="empty_queue">Черга порожня</string>
+  <string name="cast_end_session_message">Ви дійсно бажаєте завершити поточний сеанс?</string>
+  <string name="cast_end_session_confirm">Завершити сеанс</string>
+  <string name="cast_end_session_cancel">Скасувати</string>
+  <string name="playback_speed">Швидкість відтворення</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Параметри субтитрів</item>
+    <item>Параметри субтитрів</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Колір тексту</string>
+  <string name="cast_subtitle_background">Фон</string>
+  <string name="cast_subtitle_shadow">Тінь</string>
+  <string name="cast_subtitle_apply">Прийняти</string>
+  <string name="cast_subtitle_reset">Відновити за замовчуванням</string>
+  <string name="cast_subtitle_shadow_None">Без ефекту</string>
+  <string name="cast_subtitle_shadow_Light">Світла</string>
+  <string name="cast_subtitle_shadow_Medium">Медіум</string>
+  <string name="cast_subtitle_shadow_Strong">Сильний</string>
+  <string name="cast_subtitle_preview">Попередній перегляд тексту &lt;unk&gt;</string>
+  <string name="cast_tracks">Виберіть Subtitle/звукову доріжку</string>
+  <string name="cast_volume_down">Зменшити гучність</string>
+  <string name="cast_volume_up">Збільшити гучність</string>
+  <string name="cast_subtitles">Субтитри</string>
+  <string name="cast_audio_tracks">Аудіотреки</string>
+  <string name="cast_no_subtitles">Без субтитрів</string>
+  <string name="cast_close">Закрити</string>
+  <string name="cast_subtitle_font_family">Шрифт</string>
+  <string name="cast_subtitle_border_style">Стиль рамки</string>
+  <string name="cast_subtitle_border_none">Без ефекту</string>
+  <string name="cast_subtitle_border_outline">Контур</string>
+  <string name="cast_subtitle_border_drop_shadow">Тінь</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">М\'які рідини</string>
+  <string name="cast_subtitle_border_raised">Піднятий</string>
+  <string name="cast_subtitle_border_depressed">Скорочений</string>
+  <string name="cast_connection_error">Помилка підключення</string>
+  <string name="discord_accounts">Облікові записи Discord</string>
+  <string name="active_account">Активний обліковий запис</string>
+  <string name="no_accounts_found">Рахунків не знайдено</string>
+  <string name="login_failed">Не вдалося увійти</string>
+  <string name="action_display_comfortable_grid_panorama">Панорама</string>
+  <string name="action_bulk_select">Масовий режим вибору</string>
+  <string name="action_move_up">Підняти вгору</string>
+  <string name="action_move_down">Донизу</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Занадто багато джерел у вашій стрічці, не може додати більше 20</string>
+  <string name="action_sort_feed">Сортування каналів</string>
+  <string name="sort_feed_confirmation">Бажаєте сортувати подачі по алфавіту?</string>
+  <string name="saved_searches_feeds">Збережені пошукові запити &amp; Стрічки</string>
+  <string name="saved_searches_add_feed">Збережені пошуки (Утримуйте, щоб додати на канал)</string>
+  <string name="pref_hide_feed">Приховати стрічку новин</string>
+  <string name="pref_feed_position">Положення вкладки стрічки</string>
+  <string name="pref_feed_position_summery">Хочете щоб стрічка вкладки була першою вкладкою під час перегляду? Це зробить вкладку за замовчуванням при відкритті браузера, не рекомендується вмикати дані, або мати трафік</string>
+  <string name="feed">Стрічка подій</string>
+  <string name="feed_delete">Видалити елемент стрічки?</string>
+  <string name="feed_tab_empty">У вас немає ніяких джерел на вашій стрічці, перейдіть до правого верхнього правого, щоб додати один</string>
+  <string name="feed_add">Додати %1$s до каналу?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Збережені пошукові запити</string>
+  <string name="save_search">Зберегти поточний пошуковий запит?</string>
+  <string name="save_search_hint">Моє ім\'я пошуку</string>
+  <string name="save_search_failed_to_load">Не вдалося завантажити збережені пошуки!</string>
+  <string name="save_search_failed_to_load_message">При завантаженні збережених пошукових запитів сталася помилка.</string>
+  <string name="save_search_delete">Видалити збережений пошуковий запит?</string>
+  <string name="save_search_delete_message">Ви дійсно бажаєте видалити збережений пошуковий запит: \'%1$s\'?</string>
+  <string name="save_search_invalid">Неправильно збережені умови пошуку, фільтри змінено</string>
+  <string name="save_search_invalid_name">Неправильне ім\'я для пошуку</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Немає доступних категорій</string>
+  <string name="invalid_category_name">Неправильна назва категорії</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Пропозиції</string>
+  <string name="pref_source_related_mangas_summary">Показати пропозиції сайта при перегляді матеріалу</string>
+  <string name="related_mangas_website_suggestions">Пропозиції сайту</string>
+  <string name="related_mangas_more">Подобається це...</string>
+  <string name="saved_searches_delete">Збережені пошуки (утримуйте для видалення)</string>
+  <string name="pref_expand_related_animes">Розгорнути пропозиції</string>
+  <string name="pref_expand_related_animes_summary">Якщо вимкнено, пропозиції не будуть автоматично завантажувати &amp; показати розширене</string>
+  <string name="put_related_animes_in_overflow">Пропозиції в перевищенні</string>
+  <string name="put_related_animes_in_overflow_summary">Покласти кнопку Пропозиції у меню над потоком, а не на сторінці матеріалу</string>
+  <string name="pref_show_home_on_related_animes">Будинок із пропозицій</string>
+  <string name="pref_show_home_on_related_animes_summary">Показувати значок під час перегляду пропозицій прямо назад до головної сторінки</string>
+  <string name="pref_source_related_animes">Пропозиції</string>
+  <string name="pref_source_related_animes_summary">Показати пропозиції сайта при перегляді матеріалу</string>
+  <string name="pref_source_navigation">Замінити останню кнопку</string>
+  <string name="pref_source_navigation_summery">Замінити останню кнопку на користувальницький перегляд в тому числі й останній та перегляд</string>
+</resources>

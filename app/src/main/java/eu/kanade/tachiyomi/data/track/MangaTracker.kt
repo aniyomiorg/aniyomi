@@ -6,6 +6,7 @@ import eu.kanade.domain.track.manga.interactor.AddMangaTracks
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.ImmutableList
 import logcat.LogPriority
@@ -101,6 +102,10 @@ interface MangaTracker {
     suspend fun setRemoteFinishDate(track: MangaTrack, epochMillis: Long) {
         track.finished_reading_date = epochMillis
         updateRemote(track)
+    }
+
+    suspend fun getMangaMetadata(track: DomainTrack): TrackMangaMetadata? {
+        throw NotImplementedError("Not implemented.")
     }
 
     private suspend fun updateRemote(track: MangaTrack): Unit = withIOContext {

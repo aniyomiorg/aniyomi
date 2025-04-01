@@ -7,15 +7,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.core.preference.asState
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.browse.feed.FeedScreenModel
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
 import eu.kanade.tachiyomi.ui.history.anime.animeHistoryTab
 import eu.kanade.tachiyomi.ui.history.anime.resumeLastEpisodeSeenEvent
@@ -25,6 +30,8 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 data object HistoriesTab : Tab {
 
@@ -49,6 +56,16 @@ data object HistoriesTab : Tab {
         resumeLastEpisodeSeenEvent.send(Unit)
     }
 
+    // SY -->
+    @Composable
+    override fun isEnabled(): Boolean {
+        val scope = rememberCoroutineScope()
+        return remember {
+            Injekt.get<UiPreferences>().showNavHistory().asState(scope)
+        }.value
+    }
+    // SY <--
+
     @Composable
     override fun Content() {
         val context = LocalContext.current
@@ -56,7 +73,9 @@ data object HistoriesTab : Tab {
         // Hoisted for history tab's search bar
         val mangaHistoryScreenModel = rememberScreenModel { MangaHistoryScreenModel() }
         val mangaSearchQuery by mangaHistoryScreenModel.query.collectAsState()
-
+        // KMK -->
+        val feedScreenModel = rememberScreenModel { FeedScreenModel() }
+        // KMK <--
         val animeHistoryScreenModel = rememberScreenModel { AnimeHistoryScreenModel() }
         val animeSearchQuery by animeHistoryScreenModel.query.collectAsState()
 
@@ -70,6 +89,10 @@ data object HistoriesTab : Tab {
             onChangeMangaSearchQuery = mangaHistoryScreenModel::search,
             animeSearchQuery = animeSearchQuery,
             onChangeAnimeSearchQuery = animeHistoryScreenModel::search,
+            // KMK -->
+            feedScreenModel = feedScreenModel,
+            // KMK <--
+
         )
 
         LaunchedEffect(Unit) {

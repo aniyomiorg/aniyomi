@@ -785,8 +785,8 @@
     <string name="also_set_chapter_settings_for_library">Applica anche a tutti i manga nella mia libreria</string>
     <string name="dialog_with_checkbox_reset">Reimposta tutti i capitoli di questo manga</string>
     <string name="download_insufficient_space">Impossibile scaricare i capitoli a causa dello spazio di archiviazione insufficiente</string>
-    <string name="download_queue_size_warning">Attenzione: grossi download possono rallentare le fonti e/o bloccare Aniyomi. Tocca per saperne di più.</string>
-    <string name="information_webview_required">È necessaria l\'app WebView per Aniyomi</string>
+    <string name="download_queue_size_warning">Attenzione: grossi download possono rallentare le fonti e/o bloccare Animetail. Tocca per saperne di più.</string>
+    <string name="information_webview_required">È necessaria l\'app WebView per Animetail</string>
     <string name="channel_new_chapters_episodes">Aggiornamenti capitoli/episodi</string>
     <string name="pref_library_manga_columns">Manga per riga</string>
     <string name="pref_library_anime_columns">Anime per riga</string>
@@ -879,7 +879,7 @@
     <string name="action_remove_bookmark_episode">Rimuovi segnalibro</string>
     <string name="action_show_anime">Mostra anime</string>
     <string name="action_display_local_badge_anime">Anime locali</string>
-    <string name="unofficial_extension_message_aniyomi">Questa estensione non proviene dalla lista di estensioni ufficiali Aniyomi.</string>
+    <string name="unofficial_extension_message_aniyomi">Questa estensione non proviene dalla lista di estensioni ufficiali Animetail.</string>
     <string name="rotation_reverse_landscape">Orizzontale inverso</string>
     <string name="action_mark_as_unseen">Segna come non visto</string>
     <string name="action_mark_previous_as_seen">Segna i precedenti come visti</string>
@@ -949,7 +949,7 @@
     <string name="pref_default_home_tab_library">Imposta la schermata iniziale su Manga</string>
     <string name="pref_search_pinned_manga_sources_only">Cerca globalmente solo nelle fonti manga appuntate</string>
     <string name="pref_category_player_seeking">Scorrimento</string>
-    <string name="unofficial_anime_extension_message">Questa estensione non è dall\'elenco ufficiale delle estensioni Aniyomi.</string>
+    <string name="unofficial_anime_extension_message">Questa estensione non è dall\'elenco ufficiale delle estensioni Animetail.</string>
     <string name="pref_enable_pip">Abilita l\'uso della modalità PiP</string>
     <string name="pref_category_pip">Picture in Picture (PiP)</string>
     <string name="pref_debanding_cpu">CPU</string>
@@ -992,7 +992,7 @@
     <string name="data_saver_color_bw">Converte in bianco e nero</string>
     <string name="label_all">Tutti</string>
     <string name="label_storage">Memoria</string>
-    <string name="unlock_app_title">Sblocca Aniyomi</string>
+    <string name="unlock_app_title">Sblocca Animetail</string>
     <string name="pref_pip_replace_with_previous">Sostituisce l\'opzione Salta 10 secondi con Episodio precedente</string>
     <string name="pref_mpv_input">Modifica mappa dei tasti del file di input MPV</string>
     <string name="pref_anime_storage_usage">Utilizzo memoria Anime</string>
@@ -1004,7 +1004,11 @@
     <string name="label_manga_extension_repos">Repo delle estensioni manga</string>
     <string name="label_anime_extension_repos">Repo delle estensioni anime</string>
     <string name="pref_reset_mpv_conf">Reimposta configurazione MPV</string>
-    <string name="onboarding_storage_action_create_folder">Crea una cartella default per Aniyomi</string>
+    <string name="onboarding_storage_action_create_folder">Crea una cartella default per Animetail</string>
+    <string name="multi_thread_download_threads_number">Numero dei Thread</string>
+    <string name="multi_thread_download">Scaricamento multi-threaded per anime</string>
+    <string name="multi_thread_download_summary">Abilita lo scaricamento degli anime usando i multi-threads</string>
+    <string name="multi_thread_download_threads_number_summary">Il numero dei threads usati per il download può portare al blocco del tuo IP se il numero è troppo alto , di solito 4 è un buon numero per evitare di sovraccaricare i server delle fonti.</string>
     <string name="pref_download_slots">Numero di download massimo</string>
     <string name="local_source_badge">Locale</string>
     <string name="information_empty_repos">Non hai impostato alcuna repo.</string>

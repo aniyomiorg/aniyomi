@@ -12,6 +12,8 @@ import eu.kanade.tachiyomi.data.track.DeletableMangaTracker
 import eu.kanade.tachiyomi.data.track.MangaTracker
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALOAuth
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -265,6 +267,13 @@ class MyAnimeList(id: Long) :
         super.logout()
         trackPreferences.trackToken(this).delete()
         interceptor.setAuth(null)
+    }
+
+    override suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata? {
+        return api.getMangaMetadata(track)
+    }
+    override suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
+        return api.getAnimeMetadata(track)
     }
 
     fun getIfAuthExpired(): Boolean {

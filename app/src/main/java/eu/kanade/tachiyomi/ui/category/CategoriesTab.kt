@@ -13,6 +13,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.browse.feed.FeedScreenModel
 import eu.kanade.tachiyomi.ui.category.anime.AnimeCategoryEvent
 import eu.kanade.tachiyomi.ui.category.anime.AnimeCategoryScreenModel
 import eu.kanade.tachiyomi.ui.category.anime.animeCategoryTab
@@ -55,6 +56,9 @@ data object CategoriesTab : Tab {
 
         val animeCategoryScreenModel = rememberScreenModel { AnimeCategoryScreenModel() }
         val mangaCategoryScreenModel = rememberScreenModel { MangaCategoryScreenModel() }
+        // KMK -->
+        val feedScreenModel = rememberScreenModel { FeedScreenModel() }
+        // KMK <--
 
         val tabs = persistentListOf(
             animeCategoryTab(),
@@ -67,6 +71,9 @@ data object CategoriesTab : Tab {
             titleRes = MR.strings.general_categories,
             tabs = tabs,
             state = state,
+            // KMK -->
+            feedScreenModel = feedScreenModel,
+            // KMK <--
         )
         LaunchedEffect(Unit) {
             switchToMangaCategoryTabChannel.receiveAsFlow()

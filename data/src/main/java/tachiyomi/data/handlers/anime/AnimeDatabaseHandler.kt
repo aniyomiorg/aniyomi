@@ -25,6 +25,13 @@ interface AnimeDatabaseHandler {
         block: suspend AnimeDatabase.() -> ExecutableQuery<T>,
     ): T
 
+    // SY -->
+    suspend fun <T : Any> awaitListExecutable(
+        inTransaction: Boolean = false,
+        block: suspend AnimeDatabase.() -> ExecutableQuery<T>,
+    ): List<T>
+    // SY <--
+
     suspend fun <T : Any> awaitOneOrNull(
         inTransaction: Boolean = false,
         block: suspend AnimeDatabase.() -> Query<T>,

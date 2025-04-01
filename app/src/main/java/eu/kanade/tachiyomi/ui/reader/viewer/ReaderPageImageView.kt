@@ -124,22 +124,8 @@ open class ReaderPageImageView @JvmOverloads constructor(
         ) {
             handler?.postDelayed(500) {
                 val point = when (config!!.zoomStartPosition) {
-                    ZoomStartPosition.LEFT -> if (forward) {
-                        PointF(0F, 0F)
-                    } else {
-                        PointF(
-                            sWidth.toFloat(),
-                            0F,
-                        )
-                    }
-                    ZoomStartPosition.RIGHT -> if (forward) {
-                        PointF(sWidth.toFloat(), 0F)
-                    } else {
-                        PointF(
-                            0F,
-                            0F,
-                        )
-                    }
+                    ZoomStartPosition.LEFT -> if (forward) PointF(0F, 0F) else PointF(sWidth.toFloat(), 0F)
+                    ZoomStartPosition.RIGHT -> if (forward) PointF(sWidth.toFloat(), 0F) else PointF(0F, 0F)
                     ZoomStartPosition.CENTER -> center
                 }
 

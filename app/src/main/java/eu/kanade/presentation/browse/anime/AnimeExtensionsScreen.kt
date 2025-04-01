@@ -367,6 +367,10 @@ private fun AnimeExtensionItemContent(
                     )
                 }
 
+                // KMK -->
+                Text(text = extension.repoName?.let { "@$it" } ?: "(?)")
+                // KMK <--
+
                 val warning = when {
                     extension is AnimeExtension.Untrusted -> MR.strings.ext_untrusted
                     extension is AnimeExtension.Installed && extension.isObsolete -> MR.strings.ext_obsolete
