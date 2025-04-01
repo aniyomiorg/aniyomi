@@ -213,22 +213,21 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_category_intro_skip),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableSkipIntro,
+                    preference = enableSkipIntro,
                     title = stringResource(MR.strings.pref_enable_intro_skip),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableAutoAniSkip,
+                    preference = enableAutoAniSkip,
                     title = stringResource(MR.strings.pref_enable_auto_skip_ani_skip),
                     enabled = isIntroSkipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableNetflixAniSkip,
+                    preference = enableNetflixAniSkip,
                     title = stringResource(MR.strings.pref_enable_netflix_style_aniskip),
                     enabled = isIntroSkipEnabled,
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = waitingTimeAniSkip,
-                    title = stringResource(MR.strings.pref_waiting_time_aniskip),
+                    preference = waitingTimeAniSkip,
                     entries = persistentMapOf(
                         5 to stringResource(MR.strings.pref_waiting_time_aniskip_5),
                         6 to stringResource(MR.strings.pref_waiting_time_aniskip_6),
@@ -237,15 +236,16 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                         9 to stringResource(MR.strings.pref_waiting_time_aniskip_9),
                         10 to stringResource(MR.strings.pref_waiting_time_aniskip_10),
                     ),
+                    title = stringResource(MR.strings.pref_waiting_time_aniskip),
                     enabled = isIntroSkipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableAniSkip,
+                    preference = enableAniSkip,
                     title = stringResource(MR.strings.pref_enable_aniskip),
                     enabled = isIntroSkipEnabled,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = disableAniSkipChapters,
+                    preference = disableAniSkipChapters,
                     title = stringResource(MR.strings.pref_disable_aniskip_chapter),
                     enabled = isIntroSkipEnabled && isAniSkipEnabled,
                 ),
