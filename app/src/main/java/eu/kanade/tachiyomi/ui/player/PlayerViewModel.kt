@@ -23,11 +23,13 @@
 package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.media.AudioManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Immutable
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
@@ -46,8 +48,10 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.settings.screen.player.custombutton.CustomButtonFetchState
 import eu.kanade.presentation.more.settings.screen.player.custombutton.getButtons
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.ChapterType
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SerializableHoster.Companion.toHosterList
+import eu.kanade.tachiyomi.animesource.model.TimeStamp
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
@@ -67,11 +71,10 @@ import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.loader.HosterLoader
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.utils.AniSkipApi
+import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
+import eu.kanade.tachiyomi.ui.player.utils.TrackSelect
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
-import eu.kanade.tachiyomi.util.AniSkipApi
-import eu.kanade.tachiyomi.util.SkipType
-import eu.kanade.tachiyomi.util.Stamp
-import eu.kanade.tachiyomi.util.TrackSelect
 import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.episode.filterDownloadedEpisodes
 import eu.kanade.tachiyomi.util.lang.byteSize
@@ -224,6 +227,8 @@ class PlayerViewModel @JvmOverloads constructor(
     val chapters = _chapters.asStateFlow()
     private val _currentChapter = MutableStateFlow<IndexedSegment?>(null)
     val currentChapter = _currentChapter.asStateFlow()
+    private val _skipIntroText = MutableStateFlow<String?>(null)
+    val skipIntroText = _skipIntroText.asStateFlow()
 
     private val _pos = MutableStateFlow(0f)
     val pos = _pos.asStateFlow()
@@ -283,9 +288,6 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _remainingTime = MutableStateFlow(0)
     val remainingTime = _remainingTime.asStateFlow()
 
-    private val _aniskipButton = MutableStateFlow<String?>(null)
-    val aniskipButton = _aniskipButton.asStateFlow()
-
     val cachePath: String = activity.cacheDir.path
 
     private val _customButtons = MutableStateFlow<CustomButtonFetchState>(CustomButtonFetchState.Loading)
@@ -296,10 +298,6 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private val _primaryButton = MutableStateFlow<CustomButton?>(null)
     val primaryButton = _primaryButton.asStateFlow()
-
-    private fun updateAniskipButton(value: String?) {
-        _aniskipButton.update { _ -> value }
-    }
 
     init {
         viewModelScope.launchIO {
@@ -624,7 +622,7 @@ class PlayerViewModel @JvmOverloads constructor(
         _areControlsLocked.update { false }
     }
 
-    private fun dismissSheet() {
+    fun dismissSheet() {
         _dismissSheet.update { _ -> true }
     }
 
@@ -846,31 +844,39 @@ class PlayerViewModel @JvmOverloads constructor(
                     "pauseunpause" -> pauseUnpause()
                 }
             }
-            "seek_with_text" -> {
+            "seek_to_with_text" -> {
                 val (seekValue, text) = data.split("|", limit = 2)
-                if (seekValue.toFloat() < pos.value) {
-                    leftSeekToWithText(seekValue.toInt(), text)
-                } else {
-                    rightSeekToWithText(seekValue.toInt(), text)
-                }
+                seekToWithText(seekValue.toInt(), text)
             }
+            "seek_by_with_text" -> {
+                val (seekValue, text) = data.split("|", limit = 2)
+                seekByWithText(seekValue.toInt(), text)
+            }
+            "seek_by" -> seekByWithText(data.toInt(), null)
+            "seek_to" -> seekToWithText(data.toInt(), null)
             "toggle_button" -> {
-                when (data) {
-                    "h" -> _primaryButton.update { null }
-                    "s" -> {
-                        if (_primaryButton.value == null) {
-                            _primaryButton.update {
-                                _customButtons.value.getButtons().firstOrNull { it.isFavorite }
-                            }
+                fun showButton() {
+                    if (_primaryButton.value == null) {
+                        _primaryButton.update {
+                            customButtons.value.getButtons().firstOrNull { it.isFavorite }
                         }
                     }
                 }
+
+                when (data) {
+                    "show" -> showButton()
+                    "hide" -> _primaryButton.update { null }
+                    "toggle" -> if (_primaryButton.value == null) showButton() else _primaryButton.update { null }
+                }
             }
-            "seek_by" -> {
-                val (dir, seekValue) = data.split("|")
-                when (dir) {
-                    "l" -> leftSeekBy(seekValue.toInt())
-                    "r" -> rightSeekBy(seekValue.toInt())
+
+            "software_keyboard" -> when (data) {
+                "show" -> forceShowSoftwareKeyboard()
+                "hide" -> forceHideSoftwareKeyboard()
+                "toggle" -> if (inputMethodManager.isActive) {
+                    forceHideSoftwareKeyboard()
+                } else {
+                    forceShowSoftwareKeyboard()
                 }
             }
         }
@@ -880,7 +886,34 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private operator fun <T> List<T>.component6(): T = get(5)
 
+    private val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun forceShowSoftwareKeyboard() {
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+    }
+
+    private fun forceHideSoftwareKeyboard() {
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+    }
+
     private val doubleTapToSeekDuration = gesturePreferences.skipLengthPreference().get()
+    private val preciseSeek = gesturePreferences.playerSmoothSeek().get()
+    private val showSeekBar = gesturePreferences.showSeekBar().get()
+
+    private fun seekToWithText(seekValue: Int, text: String?) {
+        _isSeekingForwards.value = seekValue > 0
+        _doubleTapSeekAmount.value = seekValue - pos.value.toInt()
+        _seekText.update { _ -> text }
+        seekTo(seekValue, preciseSeek)
+        if (showSeekBar) showSeekBar()
+    }
+
+    private fun seekByWithText(value: Int, text: String?) {
+        _doubleTapSeekAmount.update { if (value < 0 && it < 0 || pos.value + value > duration.value) 0 else it + value }
+        _seekText.update { text }
+        _isSeekingForwards.value = value > 0
+        seekBy(value, preciseSeek)
+        if (showSeekBar) showSeekBar()
+    }
 
     fun updateSeekAmount(amount: Int) {
         _doubleTapSeekAmount.update { _ -> amount }
@@ -890,46 +923,22 @@ class PlayerViewModel @JvmOverloads constructor(
         _seekText.update { _ -> value }
     }
 
-    fun leftSeekBy(value: Int) {
+    fun leftSeek() {
         if (pos.value > 0) {
-            _doubleTapSeekAmount.value -= value
+            _doubleTapSeekAmount.value -= doubleTapToSeekDuration
         }
         _isSeekingForwards.value = false
-        seekBy(-value, gesturePreferences.playerSmoothSeek().get())
-        if (gesturePreferences.showSeekBar().get()) showSeekBar()
-    }
-
-    fun rightSeekBy(value: Int) {
-        if (pos.value < duration.value) {
-            _doubleTapSeekAmount.value += value
-        }
-        _isSeekingForwards.value = true
-        seekBy(value, gesturePreferences.playerSmoothSeek().get())
-        if (gesturePreferences.showSeekBar().get()) showSeekBar()
-    }
-
-    fun leftSeek() {
-        leftSeekBy(doubleTapToSeekDuration)
+        seekBy(-doubleTapToSeekDuration, preciseSeek)
+        if (showSeekBar) showSeekBar()
     }
 
     fun rightSeek() {
-        rightSeekBy(doubleTapToSeekDuration)
-    }
-
-    private fun leftSeekToWithText(seekValue: Int, text: String?) {
-        _isSeekingForwards.value = false
-        _doubleTapSeekAmount.value = -1
-        _seekText.update { _ -> text }
-        seekTo(seekValue)
-        if (gesturePreferences.showSeekBar().get()) showSeekBar()
-    }
-
-    private fun rightSeekToWithText(seekDuration: Int, text: String?) {
+        if (pos.value < duration.value) {
+            _doubleTapSeekAmount.value += doubleTapToSeekDuration
+        }
         _isSeekingForwards.value = true
-        _doubleTapSeekAmount.value = 1
-        _seekText.update { _ -> text }
-        seekTo(seekDuration)
-        if (gesturePreferences.showSeekBar().get()) showSeekBar()
+        seekBy(doubleTapToSeekDuration, preciseSeek)
+        if (showSeekBar) showSeekBar()
     }
 
     fun resetHosterState() {
@@ -942,12 +951,12 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun changeEpisode(previous: Boolean, autoPlay: Boolean = false) {
         if (previous && !hasPreviousEpisode.value) {
-            activity.toast(activity.stringResource(MR.strings.no_prev_episode))
+            activity.showToast(activity.stringResource(MR.strings.no_prev_episode))
             return
         }
 
         if (!previous && !hasNextEpisode.value) {
-            activity.toast(activity.stringResource(MR.strings.no_next_episode))
+            activity.showToast(activity.stringResource(MR.strings.no_next_episode))
             return
         }
 
@@ -1125,6 +1134,12 @@ class PlayerViewModel @JvmOverloads constructor(
         _hasPreviousEpisode.update { _ -> value }
     }
 
+    fun showEpisodeListDialog() {
+        if (currentAnime.value != null) {
+            showDialog(Dialogs.EpisodeList)
+        }
+    }
+
     /**
      * Called when the activity is saved and not changing configurations. It updates the database
      * to persist the current progress of the active episode.
@@ -1196,7 +1211,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
                 // Write to mpv table
                 MPVLib.setPropertyString("user-data/current-anime/anime-title", anime.title)
-                MPVLib.setPropertyInt("user-data/current-anime/intro-length", anime.skipIntroLength)
+                MPVLib.setPropertyInt("user-data/current-anime/intro-length", getAnimeSkipIntroLength())
                 MPVLib.setPropertyString(
                     "user-data/current-anime/category",
                     getAnimeCategories.await(anime.id).joinToString {
@@ -1819,10 +1834,10 @@ class PlayerViewModel @JvmOverloads constructor(
      * Updates the skipIntroLength for the open anime.
      */
     fun setAnimeSkipIntroLength(skipIntroLength: Long) {
-        // Skip unnecessary database operation
-        if (skipIntroLength == getAnimeSkipIntroLength().toLong()) return
         val anime = currentAnime.value ?: return
         if (!anime.favorite) return
+        // Skip unnecessary database operation
+        if (skipIntroLength == getAnimeSkipIntroLength().toLong()) return
         viewModelScope.launchIO {
             setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength)
             _currentAnime.update { _ -> getAnime.await(anime.id) }
@@ -1849,7 +1864,7 @@ class PlayerViewModel @JvmOverloads constructor(
      * Returns the response of the AniSkipApi for this episode.
      * just works if tracking is enabled.
      */
-    suspend fun aniSkipResponse(playerDuration: Int?): List<Stamp>? {
+    suspend fun aniSkipResponse(playerDuration: Int?): List<TimeStamp>? {
         val animeId = currentAnime.value?.id ?: return null
         val trackerManager = Injekt.get<TrackerManager>()
         var malId: Long?
@@ -1874,101 +1889,104 @@ class PlayerViewModel @JvmOverloads constructor(
         return null
     }
 
-    val aniSkipEnable = gesturePreferences.aniSkipEnabled().get()
-    private val netflixStyle = gesturePreferences.enableNetflixStyleAniSkip().get()
+    val introSkipEnabled = playerPreferences.enableSkipIntro().get()
+    private val autoSkip = playerPreferences.autoSkipIntro().get()
+    private val netflixStyle = playerPreferences.enableNetflixStyleIntroSkip().get()
 
-    var aniSkipInterval: List<Stamp>? = null
-    private val defaultWaitingTime = gesturePreferences.waitingTimeAniSkip().get()
-    var waitingAniSkip = defaultWaitingTime
+    private val defaultWaitingTime = playerPreferences.waitingTimeIntroSkip().get()
+    var waitingSkipIntro = defaultWaitingTime
 
-    private var skipType: SkipType? = null
-
-    fun aniSkipStuff(position: Long) {
-        if (!aniSkipEnable) return
-        // if it doesn't find any interval it will show the +85 button
-        if (aniSkipInterval == null) return
-
-        val autoSkipAniSkip = gesturePreferences.autoSkipAniSkip().get()
-
-        skipType =
-            aniSkipInterval
-                ?.firstOrNull {
-                    it.interval.startTime <= position &&
-                        it.interval.endTime > position
-                }?.skipType
-        skipType?.let { skipType ->
-            if (netflixStyle) {
-                // show a toast with the seconds before the skip
-                if (waitingAniSkip == defaultWaitingTime) {
-                    activity.toast(
-                        "AniSkip: ${activity.stringResource(
-                            MR.strings.player_aniskip_dontskip_toast,
-                            skipType.getString(),
-                            waitingAniSkip,
-                        )}",
-                    )
-                }
-                showAniskipButton(aniSkipInterval!!, skipType, waitingAniSkip)
-                waitingAniSkip--
-            } else if (autoSkipAniSkip) {
-                rightSeekToWithText(
-                    seekDuration = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
-                    text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString()),
-                )
-            } else {
-                showAniskipButton(skipType)
+    fun setChapter(position: Float) {
+        getCurrentChapter(position)?.let { (chapterIndex, chapter) ->
+            if (currentChapter.value != chapter) {
+                _currentChapter.update { _ -> chapter }
             }
-        } ?: run {
-            updateAniskipButton(null)
-            waitingAniSkip = defaultWaitingTime
+
+            if (!introSkipEnabled) {
+                return
+            }
+
+            if (chapter.chapterType == ChapterType.Other) {
+                _skipIntroText.update { _ -> null }
+                waitingSkipIntro = defaultWaitingTime
+            } else {
+                val nextChapterPos = chapters.value.getOrNull(chapterIndex + 1)?.start ?: pos.value
+
+                if (netflixStyle) {
+                    // show a toast with the seconds before the skip
+                    if (waitingSkipIntro == defaultWaitingTime) {
+                        activity.showToast(
+                            "Skip Intro: ${activity.stringResource(
+                                MR.strings.player_aniskip_dontskip_toast,
+                                chapter.name,
+                                waitingSkipIntro,
+                            )}",
+                        )
+                    }
+                    showSkipIntroButton(chapter, nextChapterPos, waitingSkipIntro)
+                    waitingSkipIntro--
+                } else if (autoSkip) {
+                    seekToWithText(
+                        seekValue = nextChapterPos.toInt(),
+                        text = activity.stringResource(MR.strings.player_intro_skipped, chapter.name),
+                    )
+                } else {
+                    updateSkipIntroButton(chapter.chapterType)
+                }
+            }
         }
     }
 
-    private fun showAniskipButton(skipType: SkipType) {
-        val skipButtonString = when (skipType) {
-            SkipType.ED -> MR.strings.player_aniskip_ed
-            SkipType.OP -> MR.strings.player_aniskip_op
-            SkipType.RECAP -> MR.strings.player_aniskip_recap
-            SkipType.MIXED_OP -> MR.strings.player_aniskip_mixedOp
-        }
+    private fun updateSkipIntroButton(chapterType: ChapterType) {
+        val skipButtonString = chapterType.getStringRes()
 
-        updateAniskipButton(activity.stringResource(skipButtonString))
+        _skipIntroText.update { _ ->
+            skipButtonString?.let {
+                activity.stringResource(
+                    MR.strings.player_skip_action,
+                    activity.stringResource(skipButtonString),
+                )
+            }
+        }
     }
 
-    private fun showAniskipButton(aniSkipResponse: List<Stamp>, skipType: SkipType, waitingTime: Int) {
-        val skipTime = when (skipType) {
-            SkipType.ED -> aniSkipResponse.first { it.skipType == SkipType.ED }.interval
-            SkipType.OP -> aniSkipResponse.first { it.skipType == SkipType.OP }.interval
-            SkipType.RECAP -> aniSkipResponse.first { it.skipType == SkipType.RECAP }.interval
-            SkipType.MIXED_OP -> aniSkipResponse.first { it.skipType == SkipType.MIXED_OP }.interval
-        }
+    private fun showSkipIntroButton(chapter: IndexedSegment, nextChapterPos: Float, waitingTime: Int) {
         if (waitingTime > -1) {
             if (waitingTime > 0) {
-                updateAniskipButton(activity.stringResource(MR.strings.player_aniskip_dontskip))
+                _skipIntroText.update { _ -> activity.stringResource(MR.strings.player_aniskip_dontskip) }
             } else {
-                rightSeekToWithText(
-                    seekDuration = skipTime.endTime.toInt(),
-                    text = activity.stringResource(MR.strings.player_aniskip_skip, skipType.getString()),
+                seekToWithText(
+                    seekValue = nextChapterPos.toInt(),
+                    text = activity.stringResource(MR.strings.player_aniskip_skip, chapter.name),
                 )
             }
         } else {
             // when waitingTime is -1, it means that the user cancelled the skip
-            showAniskipButton(skipType)
+            updateSkipIntroButton(chapter.chapterType)
         }
     }
 
-    fun aniskipPressed() {
-        if (skipType != null) {
+    fun onSkipIntro() {
+        getCurrentChapter()?.let { (chapterIndex, chapter) ->
             // this stops the counter
-            if (waitingAniSkip > 0 && netflixStyle) {
-                waitingAniSkip = -1
+            if (waitingSkipIntro > 0 && netflixStyle) {
+                waitingSkipIntro = -1
                 return
             }
-            rightSeekToWithText(
-                seekDuration = aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime.toInt(),
-                text = activity.stringResource(MR.strings.player_aniskip_skip, skipType!!.getString()),
+
+            val nextChapterPos = chapters.value.getOrNull(chapterIndex + 1)?.start ?: pos.value
+
+            seekToWithText(
+                seekValue = nextChapterPos.toInt(),
+                text = activity.stringResource(MR.strings.player_aniskip_skip, chapter.name),
             )
         }
+    }
+
+    private fun getCurrentChapter(position: Float? = null): IndexedValue<IndexedSegment>? {
+        return chapters.value.withIndex()
+            .filter { it.value.start <= (position ?: pos.value) }
+            .maxByOrNull { it.value.start }
     }
 
     fun setPrimaryCustomButtonTitle(button: CustomButton) {

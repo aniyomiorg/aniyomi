@@ -85,6 +85,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             getControlsGroup(playerPreferences = playerPreferences),
             getHosterGroup(playerPreferences = playerPreferences),
             getDisplayGroup(playerPreferences = playerPreferences),
+            getIntroSkipGroup(playerPreferences = playerPreferences),
             if (deviceSupportsPip) getPipGroup(playerPreferences = playerPreferences) else null,
             getExternalPlayerGroup(
                 playerPreferences = playerPreferences,
@@ -205,6 +206,68 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                         panelOpacityPref.set(it)
                         true
                     },
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getIntroSkipGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val enableSkipIntro = playerPreferences.enableSkipIntro()
+        val isIntroSkipEnabled by enableSkipIntro.collectAsState()
+
+        val enableAutoAniSkip = playerPreferences.autoSkipIntro()
+        val enableNetflixAniSkip = playerPreferences.enableNetflixStyleIntroSkip()
+        val waitingTimeAniSkip = playerPreferences.waitingTimeIntroSkip()
+
+        // AniSkip
+        val enableAniSkip = playerPreferences.aniSkipEnabled()
+        val disableAniSkipChapters = playerPreferences.disableAniSkipOnChapters()
+        val isAniSkipEnabled by enableAniSkip.collectAsState()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(MR.strings.pref_category_intro_skip),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableSkipIntro,
+                    title = stringResource(MR.strings.pref_enable_intro_skip),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableAutoAniSkip,
+                    title = stringResource(MR.strings.pref_enable_auto_skip_ani_skip),
+                    enabled = isIntroSkipEnabled,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableNetflixAniSkip,
+                    title = stringResource(MR.strings.pref_enable_netflix_style_aniskip),
+                    enabled = isIntroSkipEnabled,
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = waitingTimeAniSkip,
+                    title = stringResource(MR.strings.pref_waiting_time_aniskip),
+                    entries = persistentMapOf(
+                        5 to stringResource(MR.strings.pref_waiting_time_aniskip_5),
+                        6 to stringResource(MR.strings.pref_waiting_time_aniskip_6),
+                        7 to stringResource(MR.strings.pref_waiting_time_aniskip_7),
+                        8 to stringResource(MR.strings.pref_waiting_time_aniskip_8),
+                        9 to stringResource(MR.strings.pref_waiting_time_aniskip_9),
+                        10 to stringResource(MR.strings.pref_waiting_time_aniskip_10),
+                    ),
+                    enabled = isIntroSkipEnabled,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableAniSkip,
+                    title = stringResource(MR.strings.pref_enable_aniskip),
+                    enabled = isIntroSkipEnabled,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = disableAniSkipChapters,
+                    title = stringResource(MR.strings.pref_disable_aniskip_chapter),
+                    enabled = isIntroSkipEnabled && isAniSkipEnabled,
+                ),
+                Preference.PreferenceItem.InfoPreference(
+                    title = stringResource(MR.strings.pref_category_player_aniskip_info),
+                    enabled = isIntroSkipEnabled,
                 ),
             ),
         )

@@ -825,8 +825,6 @@
     <string name="download_unseen">לא נצפה</string>
     <string name="pref_invalidate_download_cache_summary">הכריח את האפליקציה לבדוק מחדש את הפרקים והפרקים שהורדת</string>
     <string name="video_crop_screen">חתוך לגודל המסך</string>
-    <string name="player_aniskip_op">דלג על הפתיחה</string>
-    <string name="player_aniskip_recap">דלג על סיכום</string>
     <string name="not_interesting">לא מעניין</string>
     <string name="repeating_anime">צופה מחדש</string>
     <string name="pref_enable_aniskip">הפעל את AniSkip</string>
@@ -854,9 +852,7 @@
     <string name="enable_auto_play">נגינה אוטומטית מופעלת</string>
     <string name="disable_auto_play">נגינה אוטומטית כבויה</string>
     <string name="video_stretch_screen">מתיחה לגודל המסך</string>
-    <string name="player_aniskip_mixedOp">דלג על פתיחה משולבת (MixedOp)</string>
     <string name="action_change_intro_length">שינוי אורך המבוא</string>
-    <string name="player_aniskip_ed">דלג על סיום</string>
     <string name="pref_enable_auto_skip_ani_skip">אפשר דילוג אוטומטי</string>
     <string name="pref_waiting_time_aniskip">טיימאאוט</string>
     <string name="pref_waiting_time_aniskip_5">5 שניות</string>

@@ -12,7 +12,7 @@ fun PlayerDialogs(
     dialogShown: Dialogs,
 
     // Episode list
-    episodeDisplayMode: Long,
+    episodeDisplayMode: Long?,
     currentEpisodeIndex: Int,
     episodeList: List<Episode>,
     dateRelativeTime: Boolean,

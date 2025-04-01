@@ -226,6 +226,21 @@
     <string name="pref_player_time_to_disappear_summary">%1$s ms</string>
     <string name="pref_panel_opacity">Panel opacity</string>
 
+    <string name="pref_category_intro_skip">Intro skip</string>
+    <string name="pref_enable_intro_skip">Enable intro skip</string>
+    <string name="pref_enable_auto_skip_ani_skip">Enable auto skip</string>
+    <string name="pref_enable_netflix_style_aniskip">Enable Netflix style</string>
+    <string name="pref_waiting_time_aniskip">Button timeout</string>
+    <string name="pref_waiting_time_aniskip_5">5 seconds</string>
+    <string name="pref_waiting_time_aniskip_6">6 seconds</string>
+    <string name="pref_waiting_time_aniskip_7">7 seconds</string>
+    <string name="pref_waiting_time_aniskip_8">8 seconds</string>
+    <string name="pref_waiting_time_aniskip_9">9 seconds</string>
+    <string name="pref_waiting_time_aniskip_10">10 seconds</string>
+    <string name="pref_category_player_aniskip_info">AniSkip requires the anime to be tracked with MAL or Anilist to work</string>
+    <string name="pref_enable_aniskip">Enable AniSkip</string>
+    <string name="pref_disable_aniskip_chapter">Disable AniSkip if video already contains chapters</string>
+
     <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
     <string name="pref_enable_pip">Enable the use of PiP mode</string>
     <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
@@ -258,17 +273,6 @@
     <string name="pref_skip_disable">Disable</string>
     <string name="pref_player_smooth_seek">Enable precise seeking</string>
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
-    <string name="pref_category_player_aniskip_info">AniSkip requires the anime to be tracked with MAL or Anilist to work</string>
-    <string name="pref_enable_aniskip">Enable AniSkip</string>
-    <string name="pref_enable_auto_skip_ani_skip">Enable auto skip</string>
-    <string name="pref_enable_netflix_style_aniskip">Enable Netflix style</string>
-    <string name="pref_waiting_time_aniskip">Button timeout</string>
-    <string name="pref_waiting_time_aniskip_5">5 seconds</string>
-    <string name="pref_waiting_time_aniskip_6">6 seconds</string>
-    <string name="pref_waiting_time_aniskip_7">7 seconds</string>
-    <string name="pref_waiting_time_aniskip_8">8 seconds</string>
-    <string name="pref_waiting_time_aniskip_9">9 seconds</string>
-    <string name="pref_waiting_time_aniskip_10">10 seconds</string>
 
     <string name="pref_category_double_tap">Double tap</string>
     <string name="pref_left_double_tap">Double tap (left)</string>
@@ -355,11 +359,14 @@
 
     <!-- Player -->
 
-    <!-- Player - aniskip -->
-    <string name="player_aniskip_op">Skip Opening</string>
-    <string name="player_aniskip_ed">Skip Ending</string>
-    <string name="player_aniskip_mixedOp">Skip MixedOp</string>
-    <string name="player_aniskip_recap">Skip Recap</string>
+    <!-- Player - skip intro button -->
+    <string name="player_skip_action">Skip %1$s</string>
+    <string name="player_intro_skipped">%1$s skipped</string>
+    <string name="player_chapter_type_opening">Opening</string>
+    <string name="player_chapter_type_ending">Ending</string>
+    <string name="player_chapter_type_recap">Recap</string>
+    <string name="player_chapter_type_mixedop">Mixed opening</string>
+
 
     <!-- Player - Bottom left -->
     <string name="player_speed" translatable="false">%.2fx</string>
