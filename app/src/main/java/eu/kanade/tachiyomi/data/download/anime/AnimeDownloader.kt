@@ -47,6 +47,7 @@ import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.storage.extension
 import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
@@ -650,7 +651,7 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
      */
-    private fun downloadVideoExternal(
+    private suspend fun downloadVideoExternal(
         video: Video,
         source: AnimeHttpSource,
         tmpDir: UniFile,
@@ -658,7 +659,9 @@ class AnimeDownloader(
     ): UniFile {
         try {
             val file = tmpDir.createFile("${filename}_tmp.mkv")!!
-            context.copyToClipboard("Episode download location", tmpDir.filePath!!.substringBeforeLast("_tmp"))
+            withUIContext {
+                context.copyToClipboard("Episode download location", tmpDir.filePath!!.substringBeforeLast("_tmp"))
+            }
 
             // TODO: support other file formats!!
             // start download with intent
