@@ -1253,4 +1253,13 @@
     <string name="no_hosters">La lista hoster è vuota</string>
     <string name="pref_hosters_show_empty">Visualizza hoster vuoti</string>
     <string name="pref_hosters">Hoster</string>
+    <string name="pref_disable_aniskip_chapter">Disabilita AniSkip se il video contiene già capitoli</string>
+    <string name="player_intro_skipped">%1$s saltato</string>
+    <string name="player_chapter_type_opening">Sigla iniziale</string>
+    <string name="player_chapter_type_ending">Sigla finale</string>
+    <string name="player_chapter_type_mixedop">Sigla iniziale mista</string>
+    <string name="player_skip_action">Salta %1$s</string>
+    <string name="pref_enable_intro_skip">Abilita salto introduzione</string>
+    <string name="pref_category_intro_skip">Salta introduzione</string>
+    <string name="player_chapter_type_recap">Riassunto</string>
 </resources>
