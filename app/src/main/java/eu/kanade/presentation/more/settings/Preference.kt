@@ -231,8 +231,8 @@ sealed class Preference {
 
         data class InfoPreference(
             override val title: String,
+            override val enabled: Boolean = true,
         ) : PreferenceItem<String>() {
-            override val enabled: Boolean = true
             override val subtitle: String? = null
             override val icon: ImageVector? = null
             override val onValueChanged: suspend (newValue: String) -> Boolean = { true }

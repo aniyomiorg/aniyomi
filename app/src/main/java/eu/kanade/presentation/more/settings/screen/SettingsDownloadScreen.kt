@@ -74,23 +74,10 @@ object SettingsDownloadScreen : SearchableSettings {
                 },
             )
         }
-        val safeDownload by downloadPreferences.safeDownload().collectAsState()
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 pref = downloadPreferences.downloadOnlyOverWifi(),
                 title = stringResource(MR.strings.connected_to_wifi),
-            ),
-            Preference.PreferenceItem.SwitchPreference(
-                pref = downloadPreferences.safeDownload(),
-                title = stringResource(MR.strings.safe_download),
-                subtitle = stringResource(MR.strings.safe_download_summary),
-            ),
-            Preference.PreferenceItem.ListPreference(
-                pref = downloadPreferences.numberOfThreads(),
-                title = stringResource(MR.strings.download_threads_number),
-                subtitle = stringResource(MR.strings.download_threads_number_summary),
-                entries = (1..64).associateWith { it.toString() }.toImmutableMap(),
-                enabled = !safeDownload,
             ),
             Preference.PreferenceItem.TextPreference(
                 title = stringResource(MR.strings.download_speed_limit),

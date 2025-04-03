@@ -808,8 +808,6 @@
     <string name="enable_auto_play">A reprodução automática está ativada</string>
     <string name="disable_auto_play">A reprodução automática está desativada</string>
     <string name="video_fit_screen">Ajustar ao ecrã</string>
-    <string name="player_aniskip_op">Saltar Abertura</string>
-    <string name="player_aniskip_ed">Saltar Final</string>
     <string name="pref_category_player_aniskip_info">Configurações do AniSkip</string>
     <string name="pref_enable_aniskip">Ativar o AniSkip</string>
     <string name="pref_waiting_time_aniskip_5">5 segundos</string>
@@ -891,8 +889,6 @@
     <string name="episode_settings_updated">Configurações de episódio padrão atualizadas</string>
     <string name="pref_invalidate_download_cache_summary">Forçar a app a verificar novamente os capítulos e episódios descarregados</string>
     <string name="video_crop_screen">Cortado ao ecrã</string>
-    <string name="player_aniskip_recap">Saltar recapitulação</string>
-    <string name="player_aniskip_mixedOp">Saltar MixedOp</string>
     <string name="pref_enable_auto_skip_ani_skip">Ativar salto automático</string>
     <string name="pref_hide_in_manga_library_items">Ocultar entradas de manga já na biblioteca</string>
     <string name="pref_hide_in_anime_library_items">Ocultar entradas de anime já na biblioteca</string>
@@ -970,10 +966,6 @@
     <string name="label_anime_extension_repos">Repositórios de extensão de anime</string>
     <string name="label_manga_extension_repos">Repositórios de extensão de mangá</string>
     <string name="onboarding_storage_action_create_folder">Criar a pasta padrão para Aniyomi</string>
-    <string name="safe_download">Modo de download seguro para anime</string>
-    <string name="safe_download_summary">Habilitar o modo de download único e sem intervalo</string>
-    <string name="download_threads_number">Contagem de fios</string>
-    <string name="download_threads_number_summary">O número de fios a serem usados para download pode bloquear seu IP se for muito alto, geralmente 4 é um bom número para evitar carga pesada nos servidores de origem.</string>
     <string name="pref_gpu_next_title">Ativar renderização prévia</string>
     <string name="data_saver_image_format">Comprimir para Jpeg</string>
     <string name="bandwidth_hero">Bandwidth Hero (requer um servidor Bandwidth Hero Proxy)</string>

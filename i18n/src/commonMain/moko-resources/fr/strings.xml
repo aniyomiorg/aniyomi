@@ -187,7 +187,7 @@
     <string name="snack_categories_deleted">Catégories supprimées</string>
     <string name="action_undo">Annuler</string>
     <string name="categories">Catégories</string>
-    <string name="manga">Entrées de la bibliothèque</string>
+    <string name="manga">Manga</string>
     <string name="history">Historique</string>
     <string name="app_not_available">Application indisponible</string>
     <string name="update_weekly">Chaque semaine</string>
@@ -882,8 +882,6 @@
     <string name="video_crop_screen">Recadrer à l\'écran</string>
     <string name="video_stretch_screen">Étirer à l\'écran</string>
     <string name="action_change_intro_length">Modifier la durée de l\'intro</string>
-    <string name="player_aniskip_op">Sauter l\'ouverture</string>
-    <string name="player_aniskip_ed">Sauter la fin</string>
     <string name="settings">Paramètres</string>
     <string name="pref_invalidate_download_cache_summary">Forcer l\'application à revérifier les chapitres et épisodes télécharger</string>
     <string name="pref_waiting_time_aniskip_9">9 secondes</string>
@@ -901,7 +899,6 @@
     <string name="pref_enable_netflix_style_aniskip">Activer le mode Netflix</string>
     <string name="notification_episodes_single">Épisode %1$s</string>
     <string name="notification_episodes_single_and_more">Épisode %1$s et %2$d autres</string>
-    <string name="player_aniskip_recap">Passer le récap</string>
     <string name="notification_episodes_multiple">Épisodes %1$s</string>
     <string name="episode_settings">Paramètres des épisodes</string>
     <string name="download_notifier_download_paused_episodes">Téléchargement d\'épisodes en pause</string>
@@ -935,7 +932,6 @@
     <string name="pref_player_fullscreen">Ignorer les entailles en plein écran</string>
     <string name="pref_remember_volume">Appliquer le dernier volume utilisé</string>
     <string name="pref_track_on_add_library">Ouvrir le menu de pistes lors d’un ajout à la bibliothèque</string>
-    <string name="player_aniskip_mixedOp">Ignorer MixedOp</string>
     <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées dans la recherche globale</string>
     <string name="player_hwdec_mode">Définir le mode de décodage matériel par défaut</string>
     <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>
@@ -1050,8 +1046,6 @@
     <string name="upcoming_calendar_prev">Le Mois Précédent</string>
     <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
     <string name="pref_player_audio_channels_auto">Auto</string>
-    <string name="safe_download">Mode de téléchargement sécurisé pour les anime</string>
-    <string name="safe_download_summary">Activer le mode de téléchargement à thread unique et sans plage</string>
     <string name="bandwidth_hero">Bandwidth Hero (nécessite un serveur proxy Bandwidth Hero)</string>
     <string name="bandwidth_data_saver_server">Bandwidth Hero avec bande passante</string>
     <string name="pref_player_audio_channels_stereo">Stéréo</string>
@@ -1066,11 +1060,9 @@
     <string name="action_replace_repo_title">La clé de signature d\'empreinte digitale existe déjà</string>
     <string name="anime_interval_expected_update_null">Cet anime est soit fini, ou il n\'ya pas de date de sortie prédit.</string>
     <string name="file_picker_uri_permission_unsupported">Échec de l\'acquisition de l\'accès au dossier persistant. L\'application peut se comporter de manière inattendue.</string>
-    <string name="download_threads_number_summary">Le nombre de threads à utiliser pour le téléchargement pourrait bloquer votre IP s\'il est trop élevé. Généralement, 4 est un bon nombre pour éviter une charge importante sur les serveurs sources.</string>
     <string name="pref_player_audio_channels_auto_safe">Auto-safe</string>
     <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="pref_player_audio_channels">Chaines audio</string>
-    <string name="download_threads_number">nombre de fils</string>
     <string name="onboarding_storage_action_create_folder">Créer le dossier par défaut d\'Aniyomi</string>
     <string name="download_slots_info">Ne sera téléchargé simultanément qu\'à partir de sources auto-hébergées ou non mesurées</string>
     <string name="label_anime_extension_repos">Repos d\'extensions d\'anime</string>
@@ -1080,7 +1072,7 @@
     <string name="resmush">resmush.it</string>
     <string name="wsrv">wsrv.nl</string>
     <string name="label_manga_extension_repos">Repos d\'extensions de manga</string>
-    <string name="label_upcoming">A venir</string>
+    <string name="label_upcoming">À venir</string>
     <string name="action_migrate_duplicate">Migrer l\'entrée existante</string>
     <string name="action_replace_repo_message">Le répertoire %1$s à la meme clé de signature d\'empreinte digitale que %2$s.
 \nSi cela est prévu, %2$s sera remplacé, sinon contacter votre mainteneur de repo.</string>

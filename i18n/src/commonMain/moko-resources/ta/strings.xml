@@ -35,7 +35,6 @@
     <string name="local_manga_source">உள்ளக மங்கா சான்று</string>
     <string name="theme_mocha">மோச்சா</string>
     <string name="data_saver_image_quality">பட தகுதி</string>
-    <string name="safe_download">அனிமேசிற்கான பாதுகாப்பான பதிவிறக்க முறை</string>
     <string name="download_speed_limit_hint">வேக வரம்பை முடக்க 0 ஆக அமைக்கவும்.</string>
     <string name="pref_category_player_aniskip_info">அனிச்கிப் அனிமேசை மால் அல்லது அனிலிச்ட்டுடன் கண்காணிக்க வேண்டும்</string>
     <string name="pref_enable_aniskip">அனிச்கிப்பை இயக்கவும்</string>
@@ -93,9 +92,6 @@
     <string name="label_manga_extension_repos">மங்கா நீட்டிப்பு களஞ்சியங்கள்</string>
     <string name="label_anime_extension_repos">அனிம் நீட்டிப்பு களஞ்சியங்கள்</string>
     <string name="onboarding_storage_action_create_folder">இயல்புநிலை அனியோமி கோப்புறையை உருவாக்கவும்</string>
-    <string name="safe_download_summary">ஒற்றை நூல் மற்றும் வரம்பு பதிவிறக்கும் பயன்முறையை இயக்கவும்</string>
-    <string name="download_threads_number">நூல் எண்ணிக்கை</string>
-    <string name="download_threads_number_summary">பதிவிறக்குவதற்கு பயன்படுத்த வேண்டிய நூல்களின் எண்ணிக்கை, உங்கள் ஐபி மிக அதிகமாக இருந்தால் தடுக்கப்படலாம், வழக்கமாக 4 மூல சேவையகங்களில் அதிக சுமைகளைத் தவிர்க்க நல்ல எண்.</string>
     <string name="download_speed_limit">வேக வரம்பைப் பதிவிறக்கவும்</string>
     <string name="on">ஆன்</string>
     <string name="off">அணை</string>
@@ -1130,8 +1126,4 @@
     <string name="video_crop_screen">திரைக்கு வெட்டப்பட்டது</string>
     <string name="video_stretch_screen">திரைக்கு நீட்டப்பட்டது</string>
     <string name="action_change_intro_length">அறிமுக நீளத்தை மாற்றவும்</string>
-    <string name="player_aniskip_op">திறப்பதைத் தவிர்க்கவும்</string>
-    <string name="player_aniskip_ed">முடிவைத் தவிர்க்கவும்</string>
-    <string name="player_aniskip_mixedOp">கலவையைத் தவிர்க்கவும்</string>
-    <string name="player_aniskip_recap">மறுபரிசீலனை செய்யுங்கள்</string>
 </resources>

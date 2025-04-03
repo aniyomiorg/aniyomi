@@ -28,6 +28,11 @@ class PlayerPreferences(
     fun rememberPlayerVolume() = preferenceStore.getBoolean("pref_remember_volume", false)
     fun playerVolumeValue() = preferenceStore.getFloat("player_volume_value", -1.0F)
 
+    // Hoster
+
+    fun showFailedHosters() = preferenceStore.getBoolean("pref_show_failed_hosters", false)
+    fun showEmptyHosters() = preferenceStore.getBoolean("pref_show_empty_hosters", false)
+
     // Display
 
     fun playerFullscreen() = preferenceStore.getBoolean("player_fullscreen", true)
@@ -37,6 +42,18 @@ class PlayerPreferences(
     fun reduceMotion() = preferenceStore.getBoolean("pref_reduce_motion", false)
     fun playerTimeToDisappear() = preferenceStore.getInt("pref_player_time_to_disappear", 4000)
     fun panelOpacity() = preferenceStore.getInt("pref_panel_opacity", 60)
+
+    // Skip intro button
+
+    fun enableSkipIntro() = preferenceStore.getBoolean("pref_enable_skip_intro", true)
+    fun autoSkipIntro() = preferenceStore.getBoolean("pref_enable_auto_skip_ani_skip", false)
+    fun enableNetflixStyleIntroSkip() = preferenceStore.getBoolean(
+        "pref_enable_netflixStyle_aniskip",
+        false,
+    )
+    fun waitingTimeIntroSkip() = preferenceStore.getInt("pref_waiting_time_aniskip", 5)
+    fun aniSkipEnabled() = preferenceStore.getBoolean("pref_enable_ani_skip", false)
+    fun disableAniSkipOnChapters() = preferenceStore.getBoolean("pref_disabled_ani_skip_chapters", true)
 
     // PiP
 

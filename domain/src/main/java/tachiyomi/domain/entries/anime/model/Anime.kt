@@ -153,9 +153,9 @@ data class Anime(
         const val EPISODE_DISPLAY_MASK = 0x00100000L
 
         const val ANIME_INTRO_MASK = 0x0000000000000FFL
-        const val ANIME_INTRO_DISABLE_MASK = 0x100000000000000L
         const val ANIME_AIRING_EPISODE_MASK = 0x000000000FFFF00L
         const val ANIME_AIRING_TIME_MASK = 0x0FFFFFFFF000000L
+        const val ANIME_INTRO_DISABLE_MASK = 0x100000000000000L
 
         fun create() = Anime(
             id = -1L,
