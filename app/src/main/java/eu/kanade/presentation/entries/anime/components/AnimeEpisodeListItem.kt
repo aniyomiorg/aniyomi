@@ -379,11 +379,11 @@ private fun EpisodeInformation(
                 if (fillermark || scanlator != null) DotSeparatorText()
             }
             if (fillermark) {
-                Icon (
+                Icon(
                     imageVector = Icons.AutoMirrored.Filled.Label,
                     contentDescription = stringResource(MR.strings.filler),
                     tint = MaterialTheme.colorScheme.tertiary.copy(alpha = subtitleStyle.alpha),
-                    modifier = Modifier.padding(end = 4.dp)
+                    modifier = Modifier.padding(end = 4.dp),
                 )
                 Text(
                     text = stringResource(MR.strings.filler),

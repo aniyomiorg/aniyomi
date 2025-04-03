@@ -1488,7 +1488,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
         viewModelScope.launchNonCancellable {
             val result = try {
-                when(artType){
+                when (artType) {
                     ArtType.Cover -> anime.editCover(Injekt.get(), imageStream())
                     ArtType.Background -> anime.editBackground(Injekt.get(), imageStream())
                     ArtType.Thumbnail -> episode.editThumbnail(anime, Injekt.get(), imageStream())

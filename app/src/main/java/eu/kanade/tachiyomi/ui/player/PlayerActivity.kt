@@ -1093,7 +1093,7 @@ class PlayerActivity : BaseActivity() {
         toast(
             when (result) {
                 SetAsArt.Success ->
-                    when(artType){
+                    when (artType) {
                         ArtType.Cover -> MR.strings.cover_updated
                         ArtType.Background -> MR.strings.background_updated
                         ArtType.Thumbnail -> MR.strings.thumbnail_updated
