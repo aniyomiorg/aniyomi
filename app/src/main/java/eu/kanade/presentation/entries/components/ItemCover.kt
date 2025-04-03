@@ -18,6 +18,7 @@ import eu.kanade.tachiyomi.R
 enum class ItemCover(val ratio: Float) {
     Square(1f / 1f),
     Book(2f / 3f),
+    Thumb(16f / 9f),
     ;
 
     @Composable

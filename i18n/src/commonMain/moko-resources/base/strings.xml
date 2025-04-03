@@ -16,6 +16,7 @@
     <string name="delete_downloaded">Delete downloaded</string>
     <string name="history">History</string>
     <string name="scanlator">Scanlator</string>
+    <string name="filler">Filler</string>
     <string name="label_more">More</string>
     <string name="label_settings">Settings</string>
     <string name="label_download_queue">Download queue</string>
@@ -43,6 +44,7 @@
     <string name="action_filter">Filter</string>
     <string name="action_set_interval">Set interval</string>
     <string name="action_filter_bookmarked">Bookmarked</string>
+    <string name="action_filter_fillermarked">Fillermarked</string>
     <string name="action_filter_tracked">Tracked</string>
     <string name="action_filter_unread">Unread</string>
     <string name="action_filter_started">Started</string>
@@ -89,6 +91,7 @@
     <string name="action_sort_category">Sort categories</string>
     <string name="sort_category_confirmation">Would you like to sort the categories alphabetically?</string>
     <string name="action_edit_cover">Edit cover</string>
+    <string name="action_edit_background">Edit background</string>
     <string name="action_view_chapters">View chapters</string>
     <string name="action_pause">Pause</string>
     <string name="action_previous_chapter">Previous chapter</string>
@@ -960,10 +963,14 @@
     <string name="manga_download">Download</string>
     <string name="download_unread">Unread</string>
     <string name="custom_cover">Custom cover</string>
+    <string name="custom_background">Custom background</string>
     <string name="manga_cover">Cover</string>
     <string name="cover_saved">Cover saved</string>
     <string name="error_saving_cover">Error saving cover</string>
     <string name="error_sharing_cover">Error sharing cover</string>
+    <string name="background_saved">Background saved</string>
+    <string name="error_saving_background">Error saving background</string>
+    <string name="error_sharing_background">Error sharing background</string>
     <string name="confirm_delete_chapters">Are you sure you want to delete the selected chapters?</string>
     <string name="chapter_settings">Chapter settings</string>
     <string name="confirm_set_chapter_settings">Are you sure you want to save these settings as default?</string>
@@ -1017,6 +1024,10 @@
     <string name="custom_filter">Custom filter</string>
     <string name="set_as_cover">Set as cover</string>
     <string name="cover_updated">Cover updated</string>
+    <string name="set_as_background">Set as background</string>
+    <string name="set_as_thumbnail">Set as thumbnail</string>
+    <string name="background_updated">Background updated</string>
+    <string name="thumbnail_updated">Thumbnail updated</string>
     <string name="share_page_info">%1$s: %2$s, page %3$d</string>
     <string name="chapter_progress">Page: %1$d</string>
     <string name="no_next_chapter">Next chapter not found</string>
@@ -1087,6 +1098,7 @@
     <string name="notification_update_error">%1$d update(s) failed</string>
     <string name="learn_more">Tap to learn more</string>
     <string name="notification_cover_update_failed">Failed to update cover</string>
+    <string name="notification_background_update_failed">Failed to update background</string>
     <string name="notification_first_add_to_library">Please add the entry to your library before doing this</string>
     <string name="library_errors_help">For help on how to fix library update errors, see %1$s</string>
     <string name="skipped_reason_completed">Skipped because series is complete</string>
@@ -1194,6 +1206,8 @@
     <string name="action_download_unseen">Download unseen episodes</string>
     <string name="action_bookmark_episode">Bookmark episode</string>
     <string name="action_remove_bookmark_episode">Unbookmark episode</string>
+    <string name="action_fillermark_episode">Fillermark episode</string>
+    <string name="action_remove_fillermark_episode">Unfillermark episode</string>
     <string name="action_edit_anime_categories">Edit anime categories</string>
     <string name="action_edit_manga_categories">Edit manga categories</string>
     <string name="action_view_episodes">View episodes</string>
@@ -1229,6 +1243,7 @@
     <string name="pref_remove_after_marked_as_read">After manually marked as read/watched</string>
     <string name="pref_remove_after_read">After reading/watching automatically delete</string>
     <string name="pref_remove_bookmarked_chapters">Allow deleting bookmarked chapters/episodes</string>
+    <string name="pref_download_fillermarked_items">Allow downloading of fillermarked episodes</string>
     <string name="pref_remove_exclude_categories_manga">Excluded manga categories</string>
     <string name="pref_remove_exclude_categories_anime">Excluded anime categories</string>
     <string name="pref_category_external_downloader">External downloader</string>
@@ -1271,6 +1286,8 @@
     <string name="download_error">Error</string>
     <string name="download_paused">Paused</string>
     <string name="show_episode_number">Episode number</string>
+    <string name="show_episode_previews">Episode thumbnails</string>
+    <string name="show_episode_summaries">Episode summaries</string>
     <string name="sort_by_episode_number">By episode number</string>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
@@ -1289,8 +1306,8 @@
     <string name="dialog_with_checkbox_reset_anime">Reset all episodes for this anime</string>
     <string name="dialog_with_checkbox_reset">Reset all chapters for this manga</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
-    <string name="episode_progress">Progress: %1$s/%2$s</string>
-    <string name="episode_progress_no_total">Progress: %1$s</string>
+    <string name="episode_progress">%1$s/%2$s</string>
+    <string name="episode_progress_no_total">%1$s</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
     <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>

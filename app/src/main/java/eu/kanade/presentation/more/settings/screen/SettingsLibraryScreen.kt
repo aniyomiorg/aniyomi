@@ -346,6 +346,8 @@ object SettingsLibraryScreen : SearchableSettings {
                             stringResource(MR.strings.disabled),
                         LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to
                             stringResource(MR.strings.action_bookmark_episode),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleFillermark to
+                            stringResource(MR.strings.action_fillermark_episode),
                         LibraryPreferences.EpisodeSwipeAction.ToggleSeen to
                             stringResource(MR.strings.action_mark_as_seen),
                         LibraryPreferences.EpisodeSwipeAction.Download to
@@ -360,6 +362,8 @@ object SettingsLibraryScreen : SearchableSettings {
                             stringResource(MR.strings.disabled),
                         LibraryPreferences.EpisodeSwipeAction.ToggleBookmark to
                             stringResource(MR.strings.action_bookmark_episode),
+                        LibraryPreferences.EpisodeSwipeAction.ToggleFillermark to
+                            stringResource(MR.strings.action_fillermark_episode),
                         LibraryPreferences.EpisodeSwipeAction.ToggleSeen to
                             stringResource(MR.strings.action_mark_as_seen),
                         LibraryPreferences.EpisodeSwipeAction.Download to

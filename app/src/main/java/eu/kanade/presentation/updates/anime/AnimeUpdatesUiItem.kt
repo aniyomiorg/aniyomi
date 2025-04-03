@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material3.Icon
@@ -213,6 +214,18 @@ private fun AnimeUpdatesUiItem(
                                 maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
                             ),
                         tint = MaterialTheme.colorScheme.primary,
+                    )
+                    Spacer(modifier = Modifier.width(2.dp))
+                }
+                if (update.fillermark) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Label,
+                        contentDescription = stringResource(MR.strings.action_filter_fillermarked),
+                        modifier = Modifier
+                            .sizeIn(
+                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
+                            ),
+                        tint = MaterialTheme.colorScheme.tertiary,
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                 }
