@@ -1251,4 +1251,13 @@
     <string name="player_hoster_failed">Videolar yüklenemedi</string>
     <string name="pref_hosters_show_empty">Boş sunucuları göster</string>
     <string name="player_hoster_tap_to_load">Videoları yüklemek için dokunun</string>
+    <string name="pref_enable_intro_skip">Girişin atlanmasını etkinleştir</string>
+    <string name="player_chapter_type_recap">Özet</string>
+    <string name="player_chapter_type_mixedop">Karışık açılış</string>
+    <string name="pref_disable_aniskip_chapter">Eğer videonun bölümleri varsa AniSkip\'i devre dışı bırak</string>
+    <string name="pref_category_intro_skip">Giriş atlama</string>
+    <string name="player_skip_action">%1$s kısmını atla</string>
+    <string name="player_intro_skipped">%1$s atlandı</string>
+    <string name="player_chapter_type_opening">Açılış</string>
+    <string name="player_chapter_type_ending">Kapanış</string>
 </resources>
