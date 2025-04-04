@@ -12,6 +12,7 @@ import com.arthenica.ffmpegkit.Level
 import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.ReturnCode
 import com.arthenica.ffmpegkit.SessionState
+import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Track
@@ -531,17 +532,18 @@ class AnimeDownloader(
                     logcat(LogPriority.ERROR) { it }
                 }
             }
-            if (duration != 0L && log.message.startsWith("frame=")) {
-                val outTime = log.message
-                    .substringAfter("time=", "")
-                    .substringBefore(" ", "")
-                    .let { parseTimeStringToSeconds(it) }
-                if (outTime != null && outTime > 0L) download.progress = (100 * outTime / duration).toInt()
+        }
+
+        val statCallback = StatisticsCallback { s ->
+            val outTime = (s.time / 1000.0).toLong()
+
+            if (duration != 0L && outTime > 0) {
+                download.progress = (100 * outTime / duration).toInt()
             }
         }
 
-        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, {})
-        val inputDuration = getDuration(ffprobeCommand(video.videoUrl!!, headerOptions)) ?: 0F
+        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, statCallback)
+        val inputDuration = getDuration(ffprobeCommand(video.videoUrl, headerOptions)) ?: 0F
 
         duration = inputDuration.toLong()
 
