@@ -12,6 +12,7 @@ import com.arthenica.ffmpegkit.Level
 import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.ReturnCode
 import com.arthenica.ffmpegkit.SessionState
+import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Track
@@ -519,29 +520,25 @@ class AnimeDownloader(
         }
 
         var duration = 0L
-        var nextLineIsDuration = false
 
         val logCallback = LogCallback { log ->
-            if (nextLineIsDuration) {
-                parseDuration(log.message)?.let { duration = it }
-                nextLineIsDuration = false
-            }
             if (log.level <= Level.AV_LOG_WARNING) {
                 log.message?.let {
                     logcat(LogPriority.ERROR) { it }
                 }
             }
-            if (duration != 0L && log.message.startsWith("frame=")) {
-                val outTime = log.message
-                    .substringAfter("time=", "")
-                    .substringBefore(" ", "")
-                    .let { parseTimeStringToSeconds(it) }
-                if (outTime != null && outTime > 0L) download.progress = (100 * outTime / duration).toInt()
+        }
+
+        val statCallback = StatisticsCallback { s ->
+            val outTime = (s.time / 1000.0).toLong()
+
+            if (duration != 0L && outTime > 0) {
+                download.progress = (100 * outTime / duration).toInt()
             }
         }
 
-        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, {})
-        val inputDuration = getDuration(ffprobeCommand(video.videoUrl!!, headerOptions)) ?: 0F
+        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, statCallback)
+        val inputDuration = getDuration(ffprobeCommand(video.videoUrl, headerOptions)) ?: 0F
 
         duration = inputDuration.toLong()
 
@@ -561,27 +558,6 @@ class AnimeDownloader(
                 logcat(LogPriority.ERROR) { trace }
             }
             throw Exception("Error in ffmpeg!")
-        }
-    }
-
-    private fun parseTimeStringToSeconds(timeString: String): Long? {
-        val parts = timeString.split(":")
-        if (parts.size != 3) {
-            // Invalid format
-            return null
-        }
-
-        return try {
-            val hours = parts[0].toInt()
-            val minutes = parts[1].toInt()
-            val secondsAndMilliseconds = parts[2].split(".")
-            val seconds = secondsAndMilliseconds[0].toInt()
-            val milliseconds = secondsAndMilliseconds[1].toInt()
-
-            (hours * 3600 + minutes * 60 + seconds + milliseconds / 100.0).toLong()
-        } catch (_: NumberFormatException) {
-            // Invalid number format
-            null
         }
     }
 
@@ -623,23 +599,6 @@ class AnimeDownloader(
         val session = FFprobeSession.create(ffprobeCommand)
         FFmpegKitConfig.ffprobeExecute(session)
         return session.allLogsAsString.trim().toFloatOrNull()
-    }
-
-    /**
-     * Returns the parsed duration in milliseconds
-     *
-     * @param durationString the string formatted in HOURS:MINUTES:SECONDS.HUNDREDTHS
-     */
-    private fun parseDuration(durationString: String): Long? {
-        val splitString = durationString.split(":")
-        if (splitString.lastIndex != 2) return null
-        val hours = splitString[0].toLong()
-        val minutes = splitString[1].toLong()
-        val secondsString = splitString[2].split(".")
-        if (secondsString.lastIndex != 1) return null
-        val fullSeconds = secondsString[0].toLong()
-        val hundredths = secondsString[1].toLong()
-        return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
     }
 
     /**
