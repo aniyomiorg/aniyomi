@@ -164,6 +164,7 @@ class PlayerActivity : BaseActivity() {
         private const val MPV_FONTS_DIR = "fonts"
         private const val MPV_SCRIPTS_DIR = "scripts"
         private const val MPV_SCRIPTS_OPTS_DIR = "script-opts"
+        private const val MPV_SHADERS_DIR = "shaders"
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -413,7 +414,7 @@ class PlayerActivity : BaseActivity() {
         val mpvInputFile = mpvDir.createFile("input.conf")!!
         advancedPlayerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
-        copyScripts(mpvDir)
+        copyUserFiles(mpvDir)
         copyAssets(mpvDir)
         copyFontsDirectory(mpvDir)
 
@@ -429,15 +430,18 @@ class PlayerActivity : BaseActivity() {
         MPVLib.addObserver(playerObserver)
     }
 
-    private fun copyScripts(mpvDir: UniFile) {
+    private fun copyUserFiles(mpvDir: UniFile) {
         // First, delete all present scripts
         val scriptsDir = { mpvDir.createDirectory(MPV_SCRIPTS_DIR) }
         val scriptOptsDir = { mpvDir.createDirectory(MPV_SCRIPTS_OPTS_DIR) }
+        val shadersDir = { mpvDir.createDirectory(MPV_SHADERS_DIR) }
+
         scriptsDir()?.delete()
         scriptOptsDir()?.delete()
+        shadersDir()?.delete()
 
-        // Then, copy the scripts from the Aniyomi directory
-        if (advancedPlayerPreferences.mpvScripts().get()) {
+        // Then, copy the user files from the Aniyomi directory
+        if (advancedPlayerPreferences.mpvUserFiles().get()) {
             storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
                 val outFile = scriptsDir()?.createFile(file.name)
                 outFile?.let {
@@ -446,6 +450,12 @@ class PlayerActivity : BaseActivity() {
             }
             storageManager.getScriptOptsDirectory()?.listFiles()?.forEach { file ->
                 val outFile = scriptOptsDir()?.createFile(file.name)
+                outFile?.let {
+                    file.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
+            storageManager.getShadersDirectory()?.listFiles()?.forEach { file ->
+                val outFile = shadersDir()?.createFile(file.name)
                 outFile?.let {
                     file.openInputStream().copyTo(it.openOutputStream())
                 }
