@@ -346,9 +346,9 @@
 
     <!-- Player settings - Advanced -->
     <string name="pref_player_advanced">Advanced</string>
-    <string name="pref_player_advanced_summary">Scripts, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Enable MPV scripts</string>
-    <string name="pref_mpv_scripts_summary">Needs external storage permission.</string>
+    <string name="pref_player_advanced_summary">User files, mpv.conf, input.conf</string>
+    <string name="pref_mpv_user_files">Use user MPV files</string>
+    <string name="pref_mpv_user_files_summary">Use files in mpv-config directory</string>
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
     <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
     <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
