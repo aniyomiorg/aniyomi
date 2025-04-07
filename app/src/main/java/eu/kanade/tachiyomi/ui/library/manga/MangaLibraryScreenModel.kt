@@ -308,9 +308,13 @@ class MangaLibraryScreenModel(
 
         fun MangaLibrarySort.comparator(): Comparator<MangaLibraryItem> = Comparator { i1, i2 ->
             // SY -->
-            val sort = groupSort ?: keys.find { it.id == i1.libraryManga.category }!!.sort
+            // Use groupSort when provided, otherwise use the sort from the category
+            val currentSort = when {
+                groupSort != null -> groupSort
+                else -> keys.find { it.id == i1.libraryManga.category }?.sort ?: MangaLibrarySort.default
+            }
             // SY <--
-            when (this.type) {
+            when (currentSort.type) {
                 MangaLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
                 }
@@ -323,8 +327,8 @@ class MangaLibraryScreenModel(
                 MangaLibrarySort.Type.UnreadCount -> when {
                     // Ensure unread content comes first
                     i1.libraryManga.unreadCount == i2.libraryManga.unreadCount -> 0
-                    i1.libraryManga.unreadCount == 0L -> if (this.isAscending) 1 else -1
-                    i2.libraryManga.unreadCount == 0L -> if (this.isAscending) -1 else 1
+                    i1.libraryManga.unreadCount == 0L -> if (currentSort.isAscending) 1 else -1
+                    i2.libraryManga.unreadCount == 0L -> if (currentSort.isAscending) -1 else 1
                     else -> i1.libraryManga.unreadCount.compareTo(i2.libraryManga.unreadCount)
                 }
                 MangaLibrarySort.Type.TotalChapters -> {
@@ -355,8 +359,10 @@ class MangaLibraryScreenModel(
                 return@mapValues value.shuffled(Random(libraryPreferences.randomMangaSortSeed().get()))
             }
 
-            val comparator = key.sort.comparator()
-                .let { if (key.sort.isAscending) it else it.reversed() }
+            // Use groupSort if we're in a grouped mode, otherwise use the category's sort
+            val sortMode = groupSort ?: key.sort
+            val comparator = sortMode.comparator()
+                .let { if (sortMode.isAscending) it else it.reversed() }
                 .thenComparator(sortAlphabetically)
 
             value.sortedWith(comparator)

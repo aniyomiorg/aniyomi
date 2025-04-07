@@ -310,9 +310,13 @@ class AnimeLibraryScreenModel(
 
         fun AnimeLibrarySort.comparator(): Comparator<AnimeLibraryItem> = Comparator { i1, i2 ->
             // SY -->
-            val sort = groupSort ?: keys.find { it.id == i1.libraryAnime.category }!!.sort
+            // Use groupSort when provided, otherwise use the sort from the category
+            val currentSort = when {
+                groupSort != null -> groupSort
+                else -> keys.find { it.id == i1.libraryAnime.category }?.sort ?: AnimeLibrarySort.default
+            }
             // SY <--
-            when (this.type) {
+            when (currentSort.type) {
                 AnimeLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
                 }
@@ -325,8 +329,8 @@ class AnimeLibraryScreenModel(
                 AnimeLibrarySort.Type.UnseenCount -> when {
                     // Ensure unseen content comes first
                     i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> 0
-                    i1.libraryAnime.unseenCount == 0L -> if (this.isAscending) 1 else -1
-                    i2.libraryAnime.unseenCount == 0L -> if (this.isAscending) -1 else 1
+                    i1.libraryAnime.unseenCount == 0L -> if (currentSort.isAscending) 1 else -1
+                    i2.libraryAnime.unseenCount == 0L -> if (currentSort.isAscending) -1 else 1
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
                 AnimeLibrarySort.Type.TotalEpisodes -> {
@@ -347,8 +351,8 @@ class AnimeLibraryScreenModel(
                     item1Score.compareTo(item2Score)
                 }
                 AnimeLibrarySort.Type.AiringTime -> when {
-                    i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (this.isAscending) 1 else -1
-                    i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (this.isAscending) -1 else 1
+                    i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (currentSort.isAscending) 1 else -1
+                    i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (currentSort.isAscending) -1 else 1
                     i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount ->
                         i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(
                             i2.libraryAnime.anime.nextEpisodeAiringAt,
@@ -366,8 +370,10 @@ class AnimeLibraryScreenModel(
                 return@mapValues value.shuffled(Random(libraryPreferences.randomAnimeSortSeed().get()))
             }
 
-            val comparator = key.sort.comparator()
-                .let { if (key.sort.isAscending) it else it.reversed() }
+            // Use groupSort if we're in a grouped mode, otherwise use the category's sort
+            val sortMode = groupSort ?: key.sort
+            val comparator = sortMode.comparator()
+                .let { if (sortMode.isAscending) it else it.reversed() }
                 .thenComparator(sortAlphabetically)
 
             value.sortedWith(comparator)
