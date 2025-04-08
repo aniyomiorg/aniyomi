@@ -961,7 +961,7 @@
     <string name="want_to_watch">İzlemek isteniyor</string>
     <string name="episode_settings_updated">Varsayılan bölüm ayarları güncellendi</string>
     <string name="pref_invalidate_download_cache_summary">İndirilen bölümleri yeniden kontrol etmeye zorla</string>
-    <string name="pref_category_player_aniskip_info">AniSkip\'in çalışması için animenin MAL veya AniList ile izleniyor olması gerkir</string>
+    <string name="pref_category_player_aniskip_info">AniSkip\'in çalışması için animenin MAL veya AniList ile izleniyor olması gerekir</string>
     <string name="copied_video_link_to_clipboard">Video kalitesi bağlantısı panoya kopyalandı</string>
     <string name="choose_video_quality">Video kalitesini seçin:</string>
     <string name="pref_hide_in_manga_library_items">Zaten kitaplıkta bulunan manga girdilerini gizle</string>
