@@ -1249,4 +1249,14 @@
     <string name="player_sheets_filters_contrast">Contraste</string>
     <string name="action_sort_random">Aleatório</string>
     <string name="action_copy_link">Copiar ligação</string>
+    <string name="pref_category_intro_skip">Pular Introdução</string>
+    <string name="pref_enable_intro_skip">Habilitar pular introdução</string>
+    <string name="pref_disable_aniskip_chapter">Desabilite o AniSkip se o vídeo já contiver capítulos</string>
+    <string name="player_intro_skipped">%1$s pulado</string>
+    <string name="player_chapter_type_recap">Recapitular</string>
+    <string name="no_hosters">A lista de hosters está vazia</string>
+    <string name="select_hoster_from_empty_list">Hoster selecionado de uma lista vazia</string>
+    <string name="pref_hosters">Hospedadores</string>
+    <string name="pref_hosters_show_failure">Exibir hosters com falha</string>
+    <string name="pref_hosters_show_empty">Exibir hosters vazios</string>
 </resources>
