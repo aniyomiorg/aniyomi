@@ -1266,4 +1266,5 @@
     <string name="pref_audio_pitch_correction_title">Habilitar la corrección del tono de audio</string>
     <string name="pref_audio_pitch_correction_summary">Evita que el audio se vuelva agudo a velocidades más rápidas y grave a velocidades más lentas</string>
     <string name="pref_library_rows">Tamaño de la lista</string>
+    <string name="player_sheets_filters_hue">Matiz</string>
 </resources>
