@@ -36,6 +36,8 @@ open class Video(
     val subtitleTracks: List<Track> = emptyList(),
     val audioTracks: List<Track> = emptyList(),
     val timestamps: List<TimeStamp> = emptyList(),
+    val mpvArgs: List<Pair<String, String>> = emptyList(),
+    val ffmpegArgs: List<Pair<String, String>> = emptyList(),
     val internalData: String = "",
     val initialized: Boolean = false,
     // TODO(1.6): Remove after ext lib bump
@@ -80,6 +82,8 @@ open class Video(
         subtitleTracks: List<Track> = emptyList(),
         audioTracks: List<Track> = emptyList(),
         timestamps: List<TimeStamp> = emptyList(),
+        mpvArgs: List<Pair<String, String>> = emptyList(),
+        ffmpegArgs: List<Pair<String, String>> = emptyList(),
         internalData: String = "",
     ) : this(
         videoUrl = videoUrl,
@@ -91,6 +95,8 @@ open class Video(
         subtitleTracks = subtitleTracks,
         audioTracks = audioTracks,
         timestamps = timestamps,
+        mpvArgs = mpvArgs,
+        ffmpegArgs = ffmpegArgs,
         internalData = internalData,
         videoPageUrl = "",
     )
@@ -122,6 +128,8 @@ open class Video(
         subtitleTracks: List<Track> = this.subtitleTracks,
         audioTracks: List<Track> = this.audioTracks,
         timestamps: List<TimeStamp> = this.timestamps,
+        mpvArgs: List<Pair<String, String>> = this.mpvArgs,
+        ffmpegArgs: List<Pair<String, String>> = this.ffmpegArgs,
         internalData: String = this.internalData,
     ): Video {
         return Video(
@@ -134,6 +142,8 @@ open class Video(
             subtitleTracks = subtitleTracks,
             audioTracks = audioTracks,
             timestamps = timestamps,
+            mpvArgs = mpvArgs,
+            ffmpegArgs = ffmpegArgs,
             internalData = internalData,
         )
     }
@@ -148,6 +158,8 @@ open class Video(
         subtitleTracks: List<Track> = this.subtitleTracks,
         audioTracks: List<Track> = this.audioTracks,
         timestamps: List<TimeStamp> = this.timestamps,
+        mpvArgs: List<Pair<String, String>> = this.mpvArgs,
+        ffmpegArgs: List<Pair<String, String>> = this.ffmpegArgs,
         internalData: String = this.internalData,
         initialized: Boolean = this.initialized,
         videoPageUrl: String = this.videoPageUrl,
@@ -162,6 +174,8 @@ open class Video(
             subtitleTracks = subtitleTracks,
             audioTracks = audioTracks,
             timestamps = timestamps,
+            mpvArgs = mpvArgs,
+            ffmpegArgs = ffmpegArgs,
             internalData = internalData,
             initialized = initialized,
             videoPageUrl = videoPageUrl,
@@ -173,6 +187,10 @@ open class Video(
         LOAD_VIDEO,
         READY,
         ERROR,
+    }
+
+    companion object {
+        const val MPV_ARGS_TAG = "ANIYOMI_MPV_ARGS"
     }
 }
 
@@ -187,6 +205,8 @@ data class SerializableVideo(
     val subtitleTracks: List<Track> = emptyList(),
     val audioTracks: List<Track> = emptyList(),
     val timestamps: List<TimeStamp> = emptyList(),
+    val mpvArgs: List<Pair<String, String>> = emptyList(),
+    val ffmpegArgs: List<Pair<String, String>> = emptyList(),
     val internalData: String = "",
     val initialized: Boolean = false,
     // TODO(1.6): Remove after ext lib bump
@@ -207,6 +227,8 @@ data class SerializableVideo(
                         vid.subtitleTracks,
                         vid.audioTracks,
                         vid.timestamps,
+                        vid.mpvArgs,
+                        vid.ffmpegArgs,
                         vid.internalData,
                         vid.initialized,
                         vid.videoPageUrl,
@@ -229,6 +251,8 @@ data class SerializableVideo(
                         sVid.subtitleTracks,
                         sVid.audioTracks,
                         sVid.timestamps,
+                        sVid.mpvArgs,
+                        sVid.ffmpegArgs,
                         sVid.internalData,
                         sVid.initialized,
                         sVid.videoPageUrl,

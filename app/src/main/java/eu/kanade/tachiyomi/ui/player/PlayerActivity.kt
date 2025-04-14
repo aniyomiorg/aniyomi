@@ -87,6 +87,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
@@ -1063,6 +1064,10 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
+        video.mpvArgs.forEach { (option, value) ->
+            MPVLib.setOptionString(option, value)
+        }
+
         MPVLib.command(arrayOf("loadfile", parseVideoUrl(video.videoUrl)))
     }
 
@@ -1158,6 +1163,7 @@ class PlayerActivity : BaseActivity() {
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     private fun fileLoaded() {
         if (player.isExiting) return
+        setMpvOptions()
         setMpvMediaTitle()
         setupPlayerOrientation()
         setupChapters()
@@ -1182,6 +1188,25 @@ class PlayerActivity : BaseActivity() {
                     viewModel.setChapter(viewModel.pos.value)
                 }
             }
+        }
+    }
+
+    private fun setMpvOptions() {
+        try {
+            val metadata = Json.decodeFromString<Map<String, String>>(
+                MPVLib.getPropertyString("metadata")
+            )
+
+            val opts = metadata[Video.MPV_ARGS_TAG]
+                ?.split(";")
+                ?.map { it.split("=", limit = 2) }
+                ?: return
+
+            opts.forEach { (option, value) ->
+                MPVLib.setPropertyString(option, value)
+            }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Failed to read video metadata" }
         }
     }
 
