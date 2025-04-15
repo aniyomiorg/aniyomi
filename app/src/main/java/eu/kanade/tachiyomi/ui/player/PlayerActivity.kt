@@ -1194,7 +1194,7 @@ class PlayerActivity : BaseActivity() {
     private fun setMpvOptions() {
         try {
             val metadata = Json.decodeFromString<Map<String, String>>(
-                MPVLib.getPropertyString("metadata")
+                MPVLib.getPropertyString("metadata"),
             )
 
             val opts = metadata[Video.MPV_ARGS_TAG]
