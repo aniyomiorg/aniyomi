@@ -1064,11 +1064,19 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
-        video.mpvArgs.forEach { (option, value) ->
-            MPVLib.setOptionString(option, value)
+        val videoOptions = video.mpvArgs.joinToString(",") { (option, value) ->
+            "$option=\"$value\""
         }
 
-        MPVLib.command(arrayOf("loadfile", parseVideoUrl(video.videoUrl)))
+        MPVLib.command(
+            arrayOf(
+                "loadfile",
+                parseVideoUrl(video.videoUrl),
+                "replace",
+                "0",
+                videoOptions
+            )
+        )
     }
 
     /**
