@@ -826,7 +826,7 @@
     <string name="restoring_backup">Restoring backup</string>
     <string name="restoring_backup_error">Restoring backup failed</string>
     <string name="restoring_backup_canceled">Canceled restore</string>
-    <string name="backup_info">You should keep copies of backups in other places as well.</string>
+    <string name="backup_info">You should keep copies of backups in other places as well. Backups may contain sensitive data including any stored passwords; be careful if sharing.</string>
     <string name="last_auto_backup_info">Last automatically backed up: %s</string>
     <string name="label_data">Data</string>
     <string name="pref_storage_usage">Storage usage</string>
