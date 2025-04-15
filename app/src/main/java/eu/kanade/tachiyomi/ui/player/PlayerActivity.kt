@@ -1200,6 +1200,14 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setMpvOptions() {
+        if (player.isExiting) return
+        val video = viewModel.currentVideo.value ?: return
+
+        // Only check for `MPV_ARGS_TAG` on downloaded videos
+        if (listOf("file", "content", "data").none { video.videoUrl.startsWith(it) }) {
+            return
+        }
+
         try {
             val metadata = Json.decodeFromString<Map<String, String>>(
                 MPVLib.getPropertyString("metadata"),
