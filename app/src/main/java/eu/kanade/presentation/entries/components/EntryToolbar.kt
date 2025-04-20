@@ -113,6 +113,14 @@ fun EntryToolbar(
                             onClick = onClickFilter,
                         ),
                     )
+                    if (changeAnimeSkipIntro != null) {
+                        add(
+                            AppBar.OverflowAction(
+                                title = stringResource(MR.strings.action_change_intro_length),
+                                onClick = changeAnimeSkipIntro,
+                            ),
+                        )
+                    }
                     add(
                         AppBar.OverflowAction(
                             title = stringResource(MR.strings.action_webview_refresh),
@@ -141,6 +149,14 @@ fun EntryToolbar(
                             AppBar.OverflowAction(
                                 title = stringResource(MR.strings.action_share),
                                 onClick = onClickShare,
+                            ),
+                        )
+                    }
+                    if (onClickSettings != null) {
+                        add(
+                            AppBar.OverflowAction(
+                                title = stringResource(MR.strings.settings),
+                                onClick = onClickSettings,
                             ),
                         )
                     }
