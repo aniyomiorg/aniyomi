@@ -469,7 +469,7 @@
     <!-- Sheets - Quality list -->
     <string name="player_hoster_tap_to_load">Tap to load videos</string>
     <string name="player_hoster_failed">Failed to load videos</string>
-    <string name="player_sheets_quality_title">Quality</string>
+    <string name="player_sheets_qualities_title">Qualities</string>
 
     <!-- Sheets - Decoders -->
     <string name="player_sheets_decoder_formatted">%s (%s)</string>

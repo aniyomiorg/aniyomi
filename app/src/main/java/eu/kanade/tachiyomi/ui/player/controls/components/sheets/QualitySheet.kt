@@ -93,7 +93,7 @@ fun QualitySheet(
     ) {
         Column {
             Text(
-                text = stringResource(MR.strings.player_sheets_quality_title),
+                text = stringResource(MR.strings.player_sheets_qualities_title),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(
                     top = MaterialTheme.padding.medium,
