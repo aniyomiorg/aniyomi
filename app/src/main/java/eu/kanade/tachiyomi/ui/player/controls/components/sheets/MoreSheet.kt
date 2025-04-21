@@ -96,8 +96,8 @@ fun MoreSheet(
     val statisticsPage by advancedPreferences.playerStatisticsPage().collectAsState()
 
     PlayerSheet(
-        onDismissRequest,
-        modifier,
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier
