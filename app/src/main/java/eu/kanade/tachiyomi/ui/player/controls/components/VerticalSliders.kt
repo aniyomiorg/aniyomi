@@ -50,12 +50,12 @@ import tachiyomi.presentation.core.components.material.padding
 import java.text.NumberFormat
 import kotlin.math.roundToInt
 
-fun percentage(value: Float, range: ClosedFloatingPointRange<Float>): Float {
+private fun percentage(value: Float, range: ClosedFloatingPointRange<Float>): Float {
     return ((value - range.start) / (range.endInclusive - range.start)).coerceIn(0f, 1f)
 }
 
-fun percentage(value: Int, range: ClosedRange<Int>): Float {
-    return ((value - range.start - 0f) / (range.endInclusive - range.start)).coerceIn(0f, 1f)
+private fun percentage(value: Int, range: ClosedRange<Int>): Float {
+    return ((value - range.start).toFloat() / (range.endInclusive - range.start)).coerceIn(0f, 1f)
 }
 
 @Composable
@@ -67,34 +67,11 @@ fun VerticalSlider(
     overflowRange: ClosedFloatingPointRange<Float>? = null,
 ) {
     require(range.contains(value)) { "Value must be within the provided range" }
-    Box(
-        modifier = modifier
-            .height(120.dp)
-            .aspectRatio(0.2f)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.BottomCenter,
-    ) {
-        val targetHeight by animateFloatAsState(percentage(value, range), label = "vsliderheight")
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(targetHeight)
-                .background(MaterialTheme.colorScheme.tertiary),
-        )
-        if (overflowRange != null && overflowValue != null) {
-            val overflowHeight by animateFloatAsState(
-                percentage(overflowValue, overflowRange),
-                label = "vslideroverflowheight",
-            )
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(overflowHeight)
-                    .background(MaterialTheme.colorScheme.errorContainer),
-            )
-        }
-    }
+    VerticalSliderInternal(
+        percentage = percentage(value, range),
+        overflowPercentage = overflowValue?.let { ov -> overflowRange?.let { or -> percentage(ov, or) } },
+        modifier = modifier,
+    )
 }
 
 @Composable
@@ -106,6 +83,19 @@ fun VerticalSlider(
     overflowRange: ClosedRange<Int>? = null,
 ) {
     require(range.contains(value)) { "Value must be within the provided range" }
+    VerticalSliderInternal(
+        percentage = percentage(value, range),
+        overflowPercentage = overflowValue?.let { ov -> overflowRange?.let { or -> percentage(ov, or) } },
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun VerticalSliderInternal(
+    percentage: Float,
+    modifier: Modifier = Modifier,
+    overflowPercentage: Float? = null,
+) {
     Box(
         modifier = modifier
             .height(120.dp)
@@ -114,16 +104,16 @@ fun VerticalSlider(
             .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.BottomCenter,
     ) {
-        val targetHeight by animateFloatAsState(percentage(value, range), label = "vsliderheight")
+        val targetHeight by animateFloatAsState(percentage, label = "vsliderheight")
         Box(
             Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(targetHeight)
                 .background(MaterialTheme.colorScheme.tertiary),
         )
-        if (overflowRange != null && overflowValue != null) {
+        if (overflowPercentage != null) {
             val overflowHeight by animateFloatAsState(
-                percentage(overflowValue, overflowRange),
+                targetValue = overflowPercentage,
                 label = "vslideroverflowheight",
             )
             Box(
