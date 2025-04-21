@@ -99,31 +99,36 @@ private fun VerticalSliderInternal(
     overflowPercentage: Float? = null,
 ) {
     Box(
-        modifier = modifier
-            .height(120.dp)
-            .aspectRatio(0.2f)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.background),
+        modifier = modifier.height(120.dp).aspectRatio(0.45f),
         contentAlignment = Alignment.BottomCenter,
     ) {
-        val targetHeight by animateFloatAsState(percentage, label = "vsliderheight")
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(targetHeight)
-                .background(MaterialTheme.colorScheme.tertiary),
-        )
-        if (overflowPercentage != null) {
-            val overflowHeight by animateFloatAsState(
-                targetValue = overflowPercentage,
-                label = "vslideroverflowheight",
-            )
+            modifier = modifier
+                .fillMaxWidth(fraction = 0.5f)
+                .fillMaxHeight()
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.BottomCenter,
+        ) {
+            val targetHeight by animateFloatAsState(percentage, label = "vsliderheight")
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(overflowHeight)
-                    .background(MaterialTheme.colorScheme.errorContainer),
+                    .fillMaxHeight(targetHeight)
+                    .background(MaterialTheme.colorScheme.tertiary),
             )
+            if (overflowPercentage != null) {
+                val overflowHeight by animateFloatAsState(
+                    targetValue = overflowPercentage,
+                    label = "vslideroverflowheight",
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(overflowHeight)
+                        .background(MaterialTheme.colorScheme.errorContainer),
+                )
+            }
         }
     }
 }
