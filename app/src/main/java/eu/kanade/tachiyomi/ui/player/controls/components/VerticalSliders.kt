@@ -45,7 +45,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import tachiyomi.presentation.core.components.material.padding
 import java.text.NumberFormat
 import kotlin.math.roundToInt
@@ -106,7 +108,7 @@ private fun VerticalSliderInternal(
     ) {
         val targetHeight by animateFloatAsState(percentage, label = "vsliderheight")
         Box(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(targetHeight)
                 .background(MaterialTheme.colorScheme.tertiary),
@@ -117,7 +119,7 @@ private fun VerticalSliderInternal(
                 label = "vslideroverflowheight",
             )
             Box(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(overflowHeight)
                     .background(MaterialTheme.colorScheme.errorContainer),
@@ -136,11 +138,12 @@ fun BrightnessSlider(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
     ) {
         Text(
-            (brightness * 100).toInt().toString(),
+            text = (brightness * 100).toInt().toString(),
             style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
         )
         VerticalSlider(
             value = brightness.coerceIn(0f, 1f),
@@ -149,14 +152,14 @@ fun BrightnessSlider(
             overflowValue = (-brightness).coerceIn(0f..0.75f),
         )
         Icon(
-            when (percentage(brightness, positiveRange)) {
+            imageVector = when (percentage(brightness, positiveRange)) {
                 in -1f..0f -> Icons.Default.ModeNight
                 in 0f..0.3f -> Icons.Default.BrightnessLow
                 in 0.3f..0.6f -> Icons.Default.BrightnessMedium
                 in 0.6f..1f -> Icons.Default.BrightnessHigh
                 else -> Icons.Default.BrightnessMedium
             },
-            null,
+            contentDescription = null,
         )
     }
 }
@@ -174,28 +177,29 @@ fun VolumeSlider(
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
     ) {
         val boostVolume = mpvVolume - 100
         Text(
-            getVolumeSliderText(volume, mpvVolume, boostVolume, percentage, displayAsPercentage),
-            style = MaterialTheme.typography.bodySmall,
+            text = getVolumeSliderText(volume, mpvVolume, boostVolume, percentage, displayAsPercentage),
+            style = MaterialTheme.typography.bodySmall.copy(lineHeight = 12.sp),
+            textAlign = TextAlign.Center,
         )
         VerticalSlider(
-            if (displayAsPercentage) percentage else volume,
-            if (displayAsPercentage) 0..100 else range,
+            value = if (displayAsPercentage) percentage else volume,
+            range = if (displayAsPercentage) 0..100 else range,
             overflowValue = boostVolume,
             overflowRange = boostRange,
         )
         Icon(
-            when (percentage) {
+            imageVector = when (percentage) {
                 0 -> Icons.AutoMirrored.Default.VolumeOff
                 in 0..30 -> Icons.AutoMirrored.Default.VolumeMute
                 in 30..60 -> Icons.AutoMirrored.Default.VolumeDown
                 in 60..100 -> Icons.AutoMirrored.Default.VolumeUp
                 else -> Icons.AutoMirrored.Default.VolumeOff
             },
-            null,
+            contentDescription = null,
         )
     }
 }
