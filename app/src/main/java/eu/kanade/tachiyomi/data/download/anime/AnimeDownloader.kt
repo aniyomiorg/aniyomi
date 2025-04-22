@@ -563,7 +563,13 @@ class AnimeDownloader(
 
     private fun getFFmpegOptions(video: Video, headerOptions: String, ffmpegFilename: String): Array<String> {
         fun formatInputs(tracks: List<Track>) = tracks.joinToString(" ", postfix = " ") {
-            "$headerOptions -i \"${it.url}\""
+            buildList {
+                if (it.url.startsWith("http")) {
+                    add(headerOptions)
+                }
+                add("-i")
+                add("\"${it.url}\"")
+            }.joinToString(" ")
         }
 
         fun formatMaps(tracks: List<Track>, type: String, offset: Int = 0) = tracks.indices.joinToString(" ") {
@@ -582,8 +588,16 @@ class AnimeDownloader(
         val audioMaps = formatMaps(video.audioTracks, "a", video.subtitleTracks.size)
         val audioMetadata = formatMetadata(video.audioTracks, "a")
 
+        val videoInput = buildList {
+            if (video.videoUrl.startsWith("http")) {
+                add(headerOptions)
+            }
+            add("-i")
+            add("\"${video.videoUrl}\"")
+        }.joinToString(" ")
+
         val command = listOf(
-            headerOptions, "-i \"${video.videoUrl}\"", subtitleInputs, audioInputs,
+            videoInput, subtitleInputs, audioInputs,
             "-map 0:v", audioMaps, "-map 0:a?", subtitleMaps, "-map 0:s? -map 0:t?",
             "-f matroska -c:a copy -c:v copy -c:s copy",
             subtitleMetadata, audioMetadata,
