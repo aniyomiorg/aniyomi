@@ -113,9 +113,9 @@ class CodeEditScreenModel(
 
         val content = (mutableState.value as? CodeEditScreenState.Success)
             ?.content?.annotatedString?.text ?: kotlin.run {
-                context.toast(MR.strings.editor_save_error)
-                return
-            }
+            context.toast(MR.strings.editor_save_error)
+            return
+        }
 
         try {
             file.openOutputStream()
