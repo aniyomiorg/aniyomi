@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Audiotrack
 import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.Gesture
 import androidx.compose.material.icons.outlined.Memory
 import androidx.compose.material.icons.outlined.PlayCircleOutline
@@ -39,6 +40,7 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.more.settings.screen.SettingsSearchScreen
 import eu.kanade.presentation.more.settings.screen.player.custombutton.PlayerSettingsCustomButtonScreen
+import eu.kanade.presentation.more.settings.screen.player.editor.PlayerSettingsEditorScreen
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.util.LocalBackPress
 import eu.kanade.presentation.util.Screen
@@ -206,6 +208,12 @@ object PlayerSettingsMainScreen : Screen() {
             subtitleRes = MR.strings.pref_player_custom_button_summary,
             icon = Icons.Outlined.Terminal,
             screen = PlayerSettingsCustomButtonScreen,
+        ),
+        Item(
+            titleRes = MR.strings.pref_player_editor,
+            subtitleRes = MR.strings.pref_player_editor_summary,
+            icon = Icons.Outlined.EditNote,
+            screen = PlayerSettingsEditorScreen,
         ),
         Item(
             titleRes = MR.strings.pref_player_advanced,

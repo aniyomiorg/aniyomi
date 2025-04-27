@@ -1,4 +1,4 @@
-package eu.kanade.presentation.more.settings.screen.player.custombutton.components
+package eu.kanade.presentation.components
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
@@ -13,15 +13,15 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.shouldExpandFAB
 
 @Composable
-fun CustomButtonFloatingActionButton(
+fun FloatingActionAddButton(
     lazyListState: LazyListState,
-    onCreate: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ExtendedFloatingActionButton(
         text = { Text(text = stringResource(MR.strings.action_add)) },
         icon = { Icon(imageVector = Icons.Outlined.Add, contentDescription = null) },
-        onClick = onCreate,
+        onClick = onClick,
         expanded = lazyListState.shouldExpandFAB(),
         modifier = modifier,
     )

@@ -344,6 +344,28 @@
     <string name="pref_player_custom_button_startup">On startup</string>
     <string name="pref_player_custom_button_id">(ID: %d)</string>
 
+    <!-- Player settings - Script editor -->
+    <string name="pref_player_editor">Script editor</string>
+    <string name="pref_player_editor_summary">Edit and create new scripts and script options</string>
+    <string name="pref_player_editor_script">Scripts</string>
+    <string name="pref_player_editor_script_opts">Script options</string>
+    <string name="pref_player_no_items">Directory contains no items. Tap the plus button to add a new file.</string>
+    <string name="editor_unsaved_progress">You have unsaved changes. Do you still wish to go back?</string>
+    <string name="editor_save_error">Unable to save file</string>
+    <string name="editor_save_success">File saved</string>
+    <string name="editor_action_rename">Rename file</string>
+    <string name="editor_action_delete">Delete file</string>
+    <string name="editor_file_already_exists">File already exists</string>
+    <string name="editor_invalid_filename">Invalid filename</string>
+    <string name="editor_create_file">Create file</string>
+    <string name="editor_edit_file">Edit filename</string>
+    <string name="editor_filename">Filename</string>
+    <string name="editor_create_error">Unable to create file</string>
+    <string name="editor_rename_error">Unable to rename file</string>
+    <string name="editor_delete_error">Unable to delete file</string>
+    <string name="editor_delete_file">Delete file</string>
+    <string name="editor_delete_file_confirmation">Do you wish to delete the file \"%s\"?</string>
+
     <!-- Player settings - Advanced -->
     <string name="pref_player_advanced">Advanced</string>
     <string name="pref_player_advanced_summary">Scripts, mpv.conf, input.conf</string>

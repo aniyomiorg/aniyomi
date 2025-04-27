@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.components.FloatingActionAddButton
 import eu.kanade.presentation.more.settings.screen.player.custombutton.CustomButtonScreenState
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.i18n.MR
@@ -55,9 +56,9 @@ fun CustomButtonScreen(
             )
         },
         floatingActionButton = {
-            CustomButtonFloatingActionButton(
+            FloatingActionAddButton(
                 lazyListState = lazyListState,
-                onCreate = onClickCreate,
+                onClick = onClickCreate,
             )
         },
     ) { paddingValues ->
