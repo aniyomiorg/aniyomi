@@ -34,7 +34,10 @@ fun FileCreateDialog(
         mutableStateOf(
             TextFieldValue(
                 text = initialTextValue,
-                selection = TextRange(0, initialTextValue.indexOfLast { it == '.' }),
+                selection = TextRange(
+                    0,
+                    initialTextValue.indexOfLast { it == '.' }.takeUnless { it == -1 } ?: initialTextValue.length,
+                ),
             ),
         )
     }
