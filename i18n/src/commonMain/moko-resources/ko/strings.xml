@@ -1060,4 +1060,21 @@
     <string name="pref_mpv_scripts">MPV 스크립트 활성화</string>
     <string name="pref_mpv_scripts_summary">외부 저장소 권한이 필요합니다.</string>
     <string name="pref_player_audio_channels_auto_safe">Auto-safe</string>
+    <string name="relative_time_now">지금</string>
+    <string name="label_player_settings">플레이어 설정</string>
+    <string name="action_search_player_settings">플레이어 설정 검색</string>
+    <string name="pref_player_internal">내장 플레이어</string>
+    <string name="pref_player_internal_summary">진행도, 컨트롤, 방향</string>
+    <string name="action_sort_random">랜덤</string>
+    <string name="action_copy_link">링크 복사</string>
+    <string name="action_add_anyway">어쨌든 추가</string>
+    <string name="action_migrate_duplicate">기존 엔트리를 옮기기</string>
+    <string name="rotation_video">비디오</string>
+    <string name="pref_category_controls">컨트롤</string>
+    <string name="pref_controls_allow_gestures_in_panels">화면에서 제스처 허용</string>
+    <string name="pref_controls_show_loading">로딩 사이클 표시</string>
+    <string name="pref_controls_display_volume_percentage">볼륨을 백분율로 표시</string>
+    <string name="pref_controls_show_chapter_indicator">현재 챕터 표시</string>
+    <string name="pref_controls_show_chapter_indicator_info">동영상에 챕터가 있는 경우에만 표시됩니다</string>
+    <string name="label_upcoming">발매 예정</string>
 </resources>
