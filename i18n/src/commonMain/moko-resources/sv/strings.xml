@@ -799,4 +799,5 @@
     <string name="rotation_video">Video</string>
     <string name="pref_category_controls">Kontroller</string>
     <string name="pref_controls_display_volume_percentage">Visa volym som procent</string>
+    <string name="action_sort_airing_time">Sändningstid</string>
 </resources>
