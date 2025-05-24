@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.data.track.myanimelist
 
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALOAuth
+import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -12,6 +13,8 @@ import java.io.IOException
 class MyAnimeListInterceptor(private val myanimelist: MyAnimeList) : Interceptor {
 
     private val json: Json by injectLazy()
+
+    private val networkPreferences: NetworkPreferences by injectLazy()
 
     private var oauth: MALOAuth? = myanimelist.loadOAuth()
     private val tokenExpired get() = myanimelist.getIfAuthExpired()
@@ -30,10 +33,13 @@ class MyAnimeListInterceptor(private val myanimelist: MyAnimeList) : Interceptor
             throw IOException("MAL: User is not authenticated")
         }
 
+        val userAgent = networkPreferences.defaultUserAgent().get()
+
         // Add the authorization header to the original request
         val authRequest = originalRequest.newBuilder()
             .addHeader("Authorization", "Bearer ${oauth!!.accessToken}")
-            .header("User-Agent", "Aniyomi v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
+            // .header("User-Agent", "Aniyomi v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
+            .header("User-Agent", userAgent)
             .build()
 
         return chain.proceed(authRequest)
