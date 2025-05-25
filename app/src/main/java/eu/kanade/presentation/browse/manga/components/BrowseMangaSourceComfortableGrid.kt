@@ -41,7 +41,7 @@ fun BrowseMangaSourceComfortableGrid(
 
         items(count = mangaList.itemCount) { index ->
             val manga by mangaList[index]?.collectAsState() ?: return@items
-            BrowseAnimeSourceComfortableGridItem(
+            BrowseMangaSourceComfortableGridItem(
                 manga = manga,
                 onClick = { onMangaClick(manga) },
                 onLongClick = { onMangaLongClick(manga) },
@@ -57,7 +57,7 @@ fun BrowseMangaSourceComfortableGrid(
 }
 
 @Composable
-fun BrowseAnimeSourceComfortableGridItem(
+private fun BrowseMangaSourceComfortableGridItem(
     manga: Manga,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,
