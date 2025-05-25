@@ -666,7 +666,6 @@ class PlayerActivity : BaseActivity() {
         player.isExiting = false
         super.onResume()
 
-
         viewModel.currentVolume.update {
             audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).also {
                 if (it < viewModel.maxVolume) viewModel.changeMPVVolumeTo(100)
