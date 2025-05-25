@@ -339,6 +339,8 @@ class PlayerActivity : BaseActivity() {
         castManager.maintainCastSessionBackground()
         viewModel.saveCurrentEpisodeWatchingProgress()
 
+        updateDiscordRPC(exitingPlayer = false)
+
         if (isInPictureInPictureMode) {
             super.onPause()
             return
@@ -351,7 +353,6 @@ class PlayerActivity : BaseActivity() {
             viewModel.pause()
         }
 
-        updateDiscordRPC(exitingPlayer = false)
         super.onPause()
     }
 
@@ -650,25 +651,27 @@ class PlayerActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        castManager.apply {
+            reconnect()
+            registerSessionListener()
+        }
+
+        updateDiscordRPC(exitingPlayer = false)
+
         if (!player.isExiting) {
             super.onResume()
             return
         }
 
         player.isExiting = false
-        // Reconectar Cast si estaba activo
-        castManager.apply {
-            reconnect()
-            registerSessionListener()
-        }
         super.onResume()
+
 
         viewModel.currentVolume.update {
             audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).also {
                 if (it < viewModel.maxVolume) viewModel.changeMPVVolumeTo(100)
             }
         }
-        updateDiscordRPC(exitingPlayer = false)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
