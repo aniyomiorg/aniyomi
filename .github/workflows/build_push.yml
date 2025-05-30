@@ -68,7 +68,7 @@ jobs:
 
 
       - uses: dorny/paths-filter@v2
-        id: filter
+        id: gofiles-filter
         with:
           filters: |
             gofiles:
@@ -76,25 +76,25 @@ jobs:
 
 
       - name: Set up Go
-        if: steps.filter.outputs.gofiles == 'true'
+        if: steps.gofiles-filter.outputs.gofiles == 'true'
         uses: actions/setup-go@v2
         with:
           go-version: '1.24'
 
       - name: Install Android SDK
-        if: steps.filter.outputs.gofiles == 'true'
+        if: steps.gofiles-filter.outputs.gofiles == 'true'
         uses: android-actions/setup-android@v2
         with:
           sdk-version: '30'
 
       - name: Install Android NDK
-        if: steps.filter.outputs.gofiles == 'true'
+        if: steps.gofiles-filter.outputs.gofiles == 'true'
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r25b
 
       - name: Commit build library
-        if: steps.filter.outputs.gofiles == 'true'
+        if: steps.gofiles-filter.outputs.gofiles == 'true'
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -103,7 +103,7 @@ jobs:
           git commit -m "Add compiled torrserver library"
 
       - name: Push changes
-        if: steps.filter.outputs.gofiles == 'true'
+        if: steps.gofiles-filter.outputs.gofiles == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
