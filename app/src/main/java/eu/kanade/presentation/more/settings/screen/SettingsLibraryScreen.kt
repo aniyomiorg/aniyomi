@@ -37,6 +37,10 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_U
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_OUTSIDE_RELEASE_PERIOD
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_CHAPTER_READ_EXISTING
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_CHAPTER_READ_NEW
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_EPISODE_SEEN_EXISTING
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_EPISODE_SEEN_NEW
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
@@ -66,8 +70,8 @@ object SettingsLibraryScreen : SearchableSettings {
                 libraryPreferences,
             ),
             getGlobalUpdateGroup(allCategories, allAnimeCategories, libraryPreferences),
-            getEpisodeSwipeActionsGroup(libraryPreferences),
-            getChapterSwipeActionsGroup(libraryPreferences),
+            getAnimeBehaviorGroup(libraryPreferences),
+            getBehaviorGroup(libraryPreferences),
         )
     }
 
@@ -106,9 +110,9 @@ object SettingsLibraryScreen : SearchableSettings {
                     onClick = { navigator.push(CategoriesTab) },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.defaultAnimeCategory(),
-                    title = stringResource(MR.strings.default_anime_category),
+                    preference = libraryPreferences.defaultAnimeCategory(),
                     entries = animeIds.zip(animeLabels).toMap().toImmutableMap(),
+                    title = stringResource(MR.strings.default_anime_category),
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.action_edit_manga_categories),
@@ -123,12 +127,12 @@ object SettingsLibraryScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.defaultMangaCategory(),
-                    title = stringResource(MR.strings.default_manga_category),
+                    preference = libraryPreferences.defaultMangaCategory(),
                     entries = mangaIds.zip(mangaLabels).toMap().toImmutableMap(),
+                    title = stringResource(MR.strings.default_manga_category),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.categorizedDisplaySettings(),
+                    preference = libraryPreferences.categorizedDisplaySettings(),
                     title = stringResource(MR.strings.categorized_display_settings),
                     onValueChanged = {
                         if (!it) {
@@ -140,7 +144,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.hideHiddenCategoriesSettings(),
+                    preference = libraryPreferences.hideHiddenCategoriesSettings(),
                     title = stringResource(MR.strings.pref_category_hide_hidden),
                 ),
             ),
@@ -216,8 +220,7 @@ object SettingsLibraryScreen : SearchableSettings {
             title = stringResource(MR.strings.pref_category_library_update),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = autoUpdateIntervalPref,
-                    title = stringResource(MR.strings.pref_library_update_interval),
+                    preference = autoUpdateIntervalPref,
                     entries = persistentMapOf(
                         0 to stringResource(MR.strings.update_never),
                         12 to stringResource(MR.strings.update_12hour),
@@ -226,6 +229,7 @@ object SettingsLibraryScreen : SearchableSettings {
                         72 to stringResource(MR.strings.update_72hour),
                         168 to stringResource(MR.strings.update_weekly),
                     ),
+                    title = stringResource(MR.strings.pref_library_update_interval),
                     onValueChanged = {
                         MangaLibraryUpdateJob.setupTask(context, it)
                         AnimeLibraryUpdateJob.setupTask(context, it)
@@ -233,15 +237,15 @@ object SettingsLibraryScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = libraryPreferences.autoUpdateDeviceRestrictions(),
-                    enabled = autoUpdateInterval > 0,
-                    title = stringResource(MR.strings.pref_library_update_restriction),
-                    subtitle = stringResource(MR.strings.restrictions),
+                    preference = libraryPreferences.autoUpdateDeviceRestrictions(),
                     entries = persistentMapOf(
                         DEVICE_ONLY_ON_WIFI to stringResource(MR.strings.connected_to_wifi),
                         DEVICE_NETWORK_NOT_METERED to stringResource(MR.strings.network_not_metered),
                         DEVICE_CHARGING to stringResource(MR.strings.charging),
                     ),
+                    title = stringResource(MR.strings.pref_library_update_restriction),
+                    subtitle = stringResource(MR.strings.restrictions),
+                    enabled = autoUpdateInterval > 0,
                     onValueChanged = {
                         // Post to event looper to allow the preference to be updated.
                         ContextCompat.getMainExecutor(context).execute {
@@ -270,22 +274,22 @@ object SettingsLibraryScreen : SearchableSettings {
                     onClick = { showMangaCategoriesDialog = true },
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.autoUpdateMetadata(),
+                    preference = libraryPreferences.autoUpdateMetadata(),
                     title = stringResource(MR.strings.pref_library_update_refresh_metadata),
                     subtitle = stringResource(MR.strings.pref_library_update_refresh_metadata_summary),
                 ),
                 Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = libraryPreferences.autoUpdateItemRestrictions(),
-                    title = stringResource(MR.strings.pref_library_update_smart_update),
+                    preference = libraryPreferences.autoUpdateItemRestrictions(),
                     entries = persistentMapOf(
                         ENTRY_HAS_UNVIEWED to stringResource(MR.strings.pref_update_only_completely_read),
                         ENTRY_NON_VIEWED to stringResource(MR.strings.pref_update_only_started),
                         ENTRY_NON_COMPLETED to stringResource(MR.strings.pref_update_only_non_completed),
                         ENTRY_OUTSIDE_RELEASE_PERIOD to stringResource(MR.strings.pref_update_only_in_release_period),
                     ),
+                    title = stringResource(MR.strings.pref_library_update_smart_update),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.newShowUpdatesCount(),
+                    preference = libraryPreferences.newShowUpdatesCount(),
                     title = stringResource(MR.strings.pref_library_update_show_tab_badge),
                 ),
             ),
@@ -293,15 +297,14 @@ object SettingsLibraryScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getChapterSwipeActionsGroup(
+    private fun getBehaviorGroup(
         libraryPreferences: LibraryPreferences,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_chapter_swipe),
+            title = stringResource(MR.strings.pref_behavior),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeChapterStartAction(),
-                    title = stringResource(MR.strings.pref_chapter_swipe_start),
+                    preference = libraryPreferences.swipeChapterStartAction(),
                     entries = persistentMapOf(
                         LibraryPreferences.ChapterSwipeAction.Disabled to
                             stringResource(MR.strings.disabled),
@@ -312,10 +315,10 @@ object SettingsLibraryScreen : SearchableSettings {
                         LibraryPreferences.ChapterSwipeAction.Download to
                             stringResource(MR.strings.action_download),
                     ),
+                    title = stringResource(MR.strings.pref_chapter_swipe_start),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeChapterEndAction(),
-                    title = stringResource(MR.strings.pref_chapter_swipe_end),
+                    preference = libraryPreferences.swipeChapterEndAction(),
                     entries = persistentMapOf(
                         LibraryPreferences.ChapterSwipeAction.Disabled to
                             stringResource(MR.strings.disabled),
@@ -326,21 +329,31 @@ object SettingsLibraryScreen : SearchableSettings {
                         LibraryPreferences.ChapterSwipeAction.Download to
                             stringResource(MR.strings.action_download),
                     ),
+                    title = stringResource(MR.strings.pref_chapter_swipe_end),
+                ),
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    preference = libraryPreferences.markDuplicateReadChapterAsRead(),
+                    entries = persistentMapOf(
+                        MARK_DUPLICATE_CHAPTER_READ_EXISTING to
+                            stringResource(MR.strings.pref_mark_duplicate_read_chapter_read_existing),
+                        MARK_DUPLICATE_CHAPTER_READ_NEW to
+                            stringResource(MR.strings.pref_mark_duplicate_read_chapter_read_new),
+                    ),
+                    title = stringResource(MR.strings.pref_mark_duplicate_read_chapter_read),
                 ),
             ),
         )
     }
 
     @Composable
-    private fun getEpisodeSwipeActionsGroup(
+    private fun getAnimeBehaviorGroup(
         libraryPreferences: LibraryPreferences,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_episode_swipe),
+            title = stringResource(MR.strings.pref_behavior_episode),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeEpisodeStartAction(),
-                    title = stringResource(MR.strings.pref_episode_swipe_start),
+                    preference = libraryPreferences.swipeEpisodeStartAction(),
                     entries = persistentMapOf(
                         LibraryPreferences.EpisodeSwipeAction.Disabled to
                             stringResource(MR.strings.disabled),
@@ -351,10 +364,10 @@ object SettingsLibraryScreen : SearchableSettings {
                         LibraryPreferences.EpisodeSwipeAction.Download to
                             stringResource(MR.strings.action_download),
                     ),
+                    title = stringResource(MR.strings.pref_episode_swipe_start),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.swipeEpisodeEndAction(),
-                    title = stringResource(MR.strings.pref_episode_swipe_end),
+                    preference = libraryPreferences.swipeEpisodeEndAction(),
                     entries = persistentMapOf(
                         LibraryPreferences.EpisodeSwipeAction.Disabled to
                             stringResource(MR.strings.disabled),
@@ -365,6 +378,17 @@ object SettingsLibraryScreen : SearchableSettings {
                         LibraryPreferences.EpisodeSwipeAction.Download to
                             stringResource(MR.strings.action_download),
                     ),
+                    title = stringResource(MR.strings.pref_episode_swipe_end),
+                ),
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    preference = libraryPreferences.markDuplicateSeenEpisodeAsSeen(),
+                    entries = persistentMapOf(
+                        MARK_DUPLICATE_EPISODE_SEEN_EXISTING to
+                            stringResource(MR.strings.pref_mark_duplicate_seen_episode_seen_existing),
+                        MARK_DUPLICATE_EPISODE_SEEN_NEW to
+                            stringResource(MR.strings.pref_mark_duplicate_seen_episode_seen_new),
+                    ),
+                    title = stringResource(MR.strings.pref_mark_duplicate_seen_episode_seen),
                 ),
             ),
         )

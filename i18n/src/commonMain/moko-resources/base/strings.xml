@@ -33,6 +33,7 @@
     <string name="label_help">Help</string>
     <string name="label_default">Default</string>
     <string name="label_warning">Warning</string>
+    <string name="label_auto">Auto</string>
     <string name="label_started">Started</string>
     <string name="label_local">Local</string>
     <string name="label_downloaded">Downloaded</string>
@@ -86,8 +87,6 @@
     <string name="action_move_category">Set categories</string>
     <string name="delete_category_confirmation">Do you wish to delete the category \"%s\"?</string>
     <string name="delete_category">Delete category</string>
-    <string name="action_sort_category">Sort categories</string>
-    <string name="sort_category_confirmation">Would you like to sort the categories alphabetically?</string>
     <string name="action_edit_cover">Edit cover</string>
     <string name="action_view_chapters">View chapters</string>
     <string name="action_pause">Pause</string>
@@ -111,6 +110,8 @@
     <string name="action_display_list">List</string>
     <string name="action_display_cover_only_grid">Cover-only grid</string>
     <string name="action_display_download_badge">Downloaded chapters</string>
+    <string name="action_display_unread_badge">Unread chapters</string>
+    <string name="action_display_unseen_badge">Unseen episodes</string>
     <string name="action_display_local_badge">Local source</string>
     <string name="action_display_language_badge">Language</string>
     <string name="action_display_show_tabs">Show category tabs</string>
@@ -529,6 +530,7 @@
     <string name="theme_greenapple">Green Apple</string>
     <string name="theme_lavender">Lavender</string>
     <string name="theme_midnightdusk">Midnight Dusk</string>
+    <string name="theme_monochrome">Monochrome</string>
     <string name="theme_nord">Nord</string>
     <string name="theme_strawberrydaiquiri">Strawberry Daiquiri</string>
     <string name="theme_tako">Tako</string>
@@ -559,8 +561,7 @@
     <string name="parental_controls_info">This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app.</string>
     <string name="relative_time_today">Today</string>
     <string name="pref_category_display">Display</string>
-    <string name="pref_library_columns">Grid size</string>
-    <string name="pref_library_columns_per_row">%d per row</string>
+    <string name="pref_library_columns">Items per row</string>
     <string name="pref_library_rows">List size</string>
     <string name="portrait">Portrait</string>
     <string name="landscape">Landscape</string>
@@ -591,9 +592,12 @@
     <string name="none">None</string>
     <string name="include">Include: %s</string>
     <string name="exclude">Exclude: %s</string>
-    <string name="pref_chapter_swipe">Chapter swipe</string>
-    <string name="pref_chapter_swipe_end">Swipe to right action</string>
-    <string name="pref_chapter_swipe_start">Swipe to left action</string>
+    <string name="pref_behavior">Chapter behavior</string>
+    <string name="pref_chapter_swipe_end">Chapter on swipe to right</string>
+    <string name="pref_chapter_swipe_start">Chapter on swipe to left</string>
+    <string name="pref_mark_duplicate_read_chapter_read">Mark duplicate read chapter as read</string>
+    <string name="pref_mark_duplicate_read_chapter_read_existing">After reading a chapter</string>
+    <string name="pref_mark_duplicate_read_chapter_read_new">After fetching new chapter</string>
     <string name="multi_lang">Multi</string>
     <string name="ext_updates_pending">Updates pending</string>
     <string name="ext_update">Update</string>
@@ -670,6 +674,11 @@
     <string name="pref_show_page_number">Show page number</string>
     <string name="pref_show_reading_mode">Show reading mode</string>
     <string name="pref_show_reading_mode_summary">Briefly show current mode when reader is opened</string>
+    <string name="pref_hardware_bitmap_threshold">Custom hardware bitmap threshold</string>
+    <string name="pref_hardware_bitmap_threshold_default">Default (%d)</string>
+    <string name="pref_hardware_bitmap_threshold_summary">If reader loads a blank image incrementally reduce the threshold.\nSelected: %s</string>
+    <string name="pref_always_decode_long_strip_with_ssiv_2">Use legacy decoder for long strip reader</string>
+    <string name="pref_always_decode_long_strip_with_ssiv_summary">Affects performance. Only enable if reducing bitmap threshold doesn\'t fix blank image issues</string>
     <string name="pref_display_profile">Custom display profile</string>
     <string name="pref_crop_borders">Crop borders</string>
     <string name="pref_custom_brightness">Custom brightness</string>
@@ -746,10 +755,10 @@
     <string name="rotation_landscape">Landscape</string>
     <string name="rotation_force_portrait">Locked portrait</string>
     <string name="rotation_force_landscape">Locked landscape</string>
-    <string name="color_filter_r_value">R</string>
-    <string name="color_filter_g_value">G</string>
-    <string name="color_filter_b_value">B</string>
-    <string name="color_filter_a_value">A</string>
+    <string name="color_filter_r_value">Red</string>
+    <string name="color_filter_g_value">Green</string>
+    <string name="color_filter_b_value">Blue</string>
+    <string name="color_filter_a_value">Alpha</string>
     <string name="pref_always_show_chapter_transition">Always show chapter transition</string>
     <string name="pref_category_reading_mode">Reading mode</string>
     <string name="pref_category_reading">Reading</string>
@@ -786,7 +795,6 @@
     <string name="enhanced_services">Enhanced trackers</string>
     <string name="enhanced_services_not_installed">Available but source not installed: %s</string>
     <string name="enhanced_tracking_info">Provides enhanced features for specific sources. Entries are automatically tracked when added to your library.</string>
-    <string name="action_track">Track</string>
     <string name="track_activity_name">Tracker login</string>
     <string name="pref_hide_in_library_items">Hide entries already in library</string>
     <string name="pref_storage_location">Storage location</string>
@@ -807,7 +815,7 @@
     <string name="backup_restore_missing_trackers">Trackers not logged into:</string>
     <string name="backup_restore_content_full">You may need to install any missing extensions and log in to tracking services afterwards to use them.</string>
     <string name="restore_completed">Restore completed</string>
-    <string name="restore_duration">%02d min, %02d sec</string>
+    <string name="restore_duration">%1$02d min, %2$02d sec</string>
     <string name="backup_in_progress">Backup is already in progress</string>
     <string name="backup_choice">What do you want to backup?</string>
     <string name="app_settings">App settings</string>
@@ -921,11 +929,14 @@
     <string name="ongoing">Ongoing</string>
     <string name="unknown">Unknown</string>
     <string name="unknown_author">Unknown author</string>
+    <string name="author">Author</string>
+    <string name="artist">Artist</string>
     <string name="unknown_status">Unknown status</string>
     <string name="licensed">Licensed</string>
     <string name="publishing_finished">Publishing finished</string>
     <string name="cancelled">Cancelled</string>
     <string name="on_hiatus">On hiatus</string>
+    <string name="type">Type</string>
     <string name="add_to_library">Add to library</string>
     <string name="in_library">In library</string>
     <string name="remove_from_library">Remove from library</string>
@@ -979,6 +990,7 @@
 
     <string name="manga_tracking_tab">Tracking</string>
     <string name="add_tracking">Add tracking</string>
+    <string name="action_track">Track</string>
     <string name="unread">Unread</string>
     <string name="reading">Reading</string>
     <string name="completed">Completed</string>
@@ -998,6 +1010,9 @@
     <string name="track_status">Status</string>
     <string name="track_started_reading_date">Start date</string>
     <string name="track_finished_reading_date">Finish date</string>
+    <string name="tracked_privately">Tracked privately</string>
+    <string name="action_toggle_private_on">Track privately</string>
+    <string name="action_toggle_private_off">Track publicly</string>
     <string name="track_type">Type</string>
     <string name="myanimelist_relogin">Please login to MAL again</string>
     <string name="source_unsupported">Source is not supported</string>
@@ -1107,7 +1122,6 @@
     <string name="update_check_notification_download_complete">Tap to install update</string>
     <string name="update_check_notification_download_error">Download error</string>
     <string name="update_check_notification_update_available">New version available!</string>
-    <string name="update_check_fdroid_migration_info">A new version is available from the official releases. Tap to learn how to migrate from unofficial F-Droid releases.</string>
     <string name="information_no_downloads">No downloads</string>
     <string name="information_no_recent">No recent updates</string>
     <string name="information_no_recent_manga">Nothing read recently</string>
@@ -1248,12 +1262,16 @@
     <string name="pref_manga_storage_usage">Manga Storage usage</string>
     <string name="used_cache_both">Used by anime: %1$s, used by manga: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Clear episode/chapter cache on app launch</string>
+    <string name="export">Export</string>
+    <string name="library_list">Library List</string>
+    <string name="library_exported">Library Exported</string>
     <string name="pref_clear_manga_database">Clear Manga database</string>
     <string name="pref_clear_anime_database">Clear Anime database</string>
     <string name="pref_clear_manga_database_summary">Delete history for manga that are not saved in your library</string>
     <string name="pref_clear_anime_database_summary">Delete history for anime that are not saved in your library</string>
     <string name="clear_database_confirmation">Are you sure? Completed episodes and chapters and progress of non-library entries will be lost</string>
     <string name="pref_incognito_mode_summary">Pauses your history</string>
+    <string name="pref_incognito_mode_extension_summary">Pause reading history for extension</string>
     <string name="manga_from_library">Manga from library</string>
     <string name="anime_from_library">Anime from library</string>
     <string name="downloaded_episodes">Downloaded episodes</string>
@@ -1324,9 +1342,12 @@
     <string name="extension_settings">Extension settings</string>
     <string name="theme_cottoncandy">Cotton Candy</string>
     <string name="theme_mocha">Mocha</string>
-    <string name="pref_episode_swipe">Episode swipe</string>
-    <string name="pref_episode_swipe_end">Swipe to right action</string>
-    <string name="pref_episode_swipe_start">Swipe to left action</string>
+    <string name="pref_behavior_episode">Episode behavior</string>
+    <string name="pref_episode_swipe_end">Episode on swipe to right</string>
+    <string name="pref_episode_swipe_start">Episode on swipe to right</string>
+    <string name="pref_mark_duplicate_seen_episode_seen">Mark duplicate seen episode as seen</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_existing">After watching an episode</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_new">After fetching new episode</string>
     <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
     <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
     <string name="data_saver_exclude">Exclude from data saver</string>

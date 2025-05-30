@@ -30,7 +30,13 @@ class AnimeTrackSearch : AnimeTrack {
 
     override var finished_watching_date: Long = 0
 
+    override var private: Boolean = false
+
     override lateinit var tracking_url: String
+
+    var authors: List<String> = emptyList()
+
+    var artists: List<String> = emptyList()
 
     var cover_url: String = ""
 

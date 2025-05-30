@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.data.download.anime
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import androidx.core.net.toUri
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFprobeSession
@@ -678,7 +678,7 @@ class AnimeDownloader(
                                 "idm.internet.download.manager.Downloader",
                             )
                             action = Intent.ACTION_VIEW
-                            data = Uri.parse(video.videoUrl)
+                            data = video.videoUrl.toUri()
 
                             putExtra("extra_filename", "$filename.mkv")
                         }
@@ -699,7 +699,7 @@ class AnimeDownloader(
                             action = Intent.ACTION_VIEW
                             putExtra(
                                 "com.dv.get.ACTION_LIST_ADD",
-                                "${Uri.parse(video.videoUrl)}<info>$filename.mkv",
+                                "${video.videoUrl.toUri()}<info>$filename.mkv",
                             )
                             putExtra(
                                 "com.dv.get.ACTION_LIST_PATH",
@@ -725,7 +725,7 @@ class AnimeDownloader(
             } else {
                 intent = Intent(Intent.ACTION_VIEW).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    setDataAndType(Uri.parse(video.videoUrl), "video/*")
+                    setDataAndType(video.videoUrl.toUri(), "video/*")
                     putExtra("extra_filename", filename)
                 }
             }

@@ -42,6 +42,7 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
+import eu.kanade.domain.source.anime.interactor.GetAnimeIncognitoState
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
@@ -55,7 +56,9 @@ import eu.kanade.tachiyomi.animesource.model.TimeStamp
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
+import eu.kanade.tachiyomi.data.database.models.anime.isRecognizedNumber
 import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
+import eu.kanade.tachiyomi.data.database.models.manga.isRecognizedNumber
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.saver.Image
@@ -119,6 +122,7 @@ import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.service.getEpisodeSort
+import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.i18n.MR
@@ -161,6 +165,8 @@ class PlayerViewModel @JvmOverloads constructor(
     private val basePreferences: BasePreferences = Injekt.get(),
     private val getCustomButtons: GetCustomButtons = Injekt.get(),
     private val trackSelect: TrackSelect = Injekt.get(),
+    private val getIncognitoState: GetAnimeIncognitoState = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
 
@@ -1023,7 +1029,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    private val incognitoMode = basePreferences.incognitoMode().get()
+    private val incognitoMode: Boolean by lazy { getIncognitoState.await(currentAnime.value?.source) }
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileWatching().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
@@ -1537,9 +1543,9 @@ class PlayerViewModel @JvmOverloads constructor(
         val progress = playerPreferences.progressPreference().get()
         val shouldTrack = !incognitoMode || hasTrackers
         if (seconds >= totalSeconds * progress && shouldTrack) {
-            currentEp.seen = true
-            updateTrackEpisodeSeen(currentEp)
-            deleteEpisodeIfNeeded(currentEp)
+            viewModelScope.launchNonCancellable {
+                updateEpisodeProgressOnComplete(currentEp)
+            }
         }
 
         saveWatchingProgress(currentEp)
@@ -1548,6 +1554,30 @@ class PlayerViewModel @JvmOverloads constructor(
         if (inDownloadRange) {
             downloadNextEpisodes()
         }
+    }
+
+    private suspend fun updateEpisodeProgressOnComplete(currentEp: Episode) {
+        currentEp.seen = true
+        updateTrackEpisodeSeen(currentEp)
+        deleteEpisodeIfNeeded(currentEp)
+
+        val markDuplicateAsSeen = libraryPreferences.markDuplicateSeenEpisodeAsSeen().get()
+            .contains(LibraryPreferences.MARK_DUPLICATE_EPISODE_SEEN_EXISTING)
+        if (!markDuplicateAsSeen) return
+
+        val duplicateUnseenEpisodes = currentPlaylist.value
+            .mapNotNull { episode ->
+                if (
+                    !episode.seen &&
+                    episode.isRecognizedNumber &&
+                    episode.episode_number == currentEp.episode_number
+                ) {
+                    EpisodeUpdate(id = episode.id!!, seen = true)
+                } else {
+                    null
+                }
+            }
+        updateEpisode.awaitAll(duplicateUnseenEpisodes)
     }
 
     private fun downloadNextEpisodes() {

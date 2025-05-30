@@ -284,7 +284,7 @@ internal class MigrateAnimeDialogScreenModel(
         }
 
         if (replace) {
-            updateAnime.await(AnimeUpdate(oldAnime.id, favorite = false, dateAdded = 0))
+            updateAnime.awaitUpdateFavorite(oldAnime.id, favorite = false)
         }
 
         // Update custom cover (recheck if custom cover exists)
