@@ -46,6 +46,5 @@ val migrations: List<Migration>
         TrustExtensionRepositoryMigration(),
         VideoPlayerPreferenceMigration(),
         VideoOrientationMigration(),
-        PEMFileMigration(),
         CategoryPreferencesCleanupMigration(),
     )
