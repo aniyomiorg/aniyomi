@@ -382,7 +382,6 @@ private fun AnimeScreenSmallImpl(
     val expandRelatedAnimes by uiPreferences.expandRelatedAnimes().collectAsState()
     val showRelatedAnimesInOverflow by uiPreferences.relatedAnimesInOverflow().collectAsState()
 
-
     Scaffold(
         topBar = {
             val selectedEpisodeCount: Int = remember(episodes) {

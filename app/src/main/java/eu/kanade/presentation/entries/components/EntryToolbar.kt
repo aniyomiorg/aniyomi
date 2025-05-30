@@ -148,16 +148,16 @@ fun EntryToolbar(
                             onClick = onClickFilter,
                         ),
                     )
-                                // SY -->
-                                if (onClickEditInfo != null) {
-                                    add(
-                                        AppBar.OverflowAction(
-                                            title = stringResource(TLMR.strings.action_edit_info),
-                                            onClick = onClickEditInfo,
-                                        ),
-                                    )
-                                }
-                                // SY <--
+                    // SY -->
+                    if (onClickEditInfo != null) {
+                        add(
+                            AppBar.OverflowAction(
+                                title = stringResource(TLMR.strings.action_edit_info),
+                                onClick = onClickEditInfo,
+                            ),
+                        )
+                    }
+                    // SY <--
                     if (changeAnimeSkipIntro != null) {
                         add(
                             AppBar.OverflowAction(
@@ -197,16 +197,16 @@ fun EntryToolbar(
                             ),
                         )
                     }
-                                // KMK -->
-                                if (onClickRelatedAnimes != null) {
-                                    add(
-                                        AppBar.OverflowAction(
-                                            title = stringResource(TLMR.strings.pref_source_related_mangas),
-                                            onClick = onClickRelatedAnimes,
-                                        ),
-                                    )
-                                }
-                                // KMK <--
+                    // KMK -->
+                    if (onClickRelatedAnimes != null) {
+                        add(
+                            AppBar.OverflowAction(
+                                title = stringResource(TLMR.strings.pref_source_related_mangas),
+                                onClick = onClickRelatedAnimes,
+                            ),
+                        )
+                    }
+                    // KMK <--
                     if (onClickSettings != null) {
                         add(
                             AppBar.OverflowAction(

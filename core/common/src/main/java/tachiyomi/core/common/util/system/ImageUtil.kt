@@ -382,7 +382,6 @@ object ImageUtil {
         return maxOf(width, height) <= hardwareBitmapThreshold
     }
 
-
     /**
      * Algorithm for determining what background to accompany a comic/manga page
      */

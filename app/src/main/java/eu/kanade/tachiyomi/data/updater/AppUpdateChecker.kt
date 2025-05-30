@@ -40,7 +40,6 @@ class AppUpdateChecker {
     }
 }
 
-
 val GITHUB_REPO: String by lazy {
     if (isPreviewBuildType) {
         "Animetailapp/animetail-preview"
