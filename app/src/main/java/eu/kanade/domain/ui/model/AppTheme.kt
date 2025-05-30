@@ -2,10 +2,12 @@ package eu.kanade.domain.ui.model
 
 import dev.icerock.moko.resources.StringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 
 enum class AppTheme(val titleRes: StringResource?) {
     DEFAULT(MR.strings.label_default),
     MONET(MR.strings.theme_monet),
+    CUSTOM(TLMR.strings.theme_custom),
     CLOUDFLARE(MR.strings.theme_cloudflare),
     COTTONCANDY(MR.strings.theme_cottoncandy),
     DOOM(MR.strings.theme_doom),

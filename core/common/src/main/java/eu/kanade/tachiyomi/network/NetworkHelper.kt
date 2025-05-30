@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.network
 
 import android.content.Context
 import eu.kanade.tachiyomi.network.interceptor.CloudflareInterceptor
+import eu.kanade.tachiyomi.network.interceptor.FlareSolverrInterceptor
 import eu.kanade.tachiyomi.network.interceptor.IgnoreGzipInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UncaughtExceptionInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UserAgentInterceptor
@@ -35,6 +36,9 @@ class NetworkHelper(
             .addInterceptor(UserAgentInterceptor(::defaultUserAgentProvider))
             .addNetworkInterceptor(IgnoreGzipInterceptor())
             .addNetworkInterceptor(BrotliInterceptor)
+            // TLMR -->
+            .addInterceptor(FlareSolverrInterceptor(preferences))
+        // <-- TLMR
 
         if (preferences.verboseLogging().get()) {
             val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
@@ -42,6 +46,12 @@ class NetworkHelper(
             }
             builder.addNetworkInterceptor(httpLoggingInterceptor)
         }
+
+        builder.addInterceptor(
+            // TLMR -->
+            CloudflareInterceptor(context, cookieJar, preferences, ::defaultUserAgentProvider),
+            // <-- TLMR
+        )
 
         when (preferences.dohProvider().get()) {
             PREF_DOH_CLOUDFLARE -> builder.dohCloudflare()

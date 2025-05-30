@@ -7,18 +7,12 @@ import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import uy.kohesive.injekt.injectLazy
 
-class AppUpdateChecker {
-
+class AppUpdateChecker(private val context: Context) {
     private val getApplicationRelease: GetApplicationRelease by injectLazy()
 
-    suspend fun checkForUpdate(context: Context, forceCheck: Boolean = false): GetApplicationRelease.Result {
-        // Disabling app update checks for older Android versions that we're going to drop support for
-        // if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-        //    return GetApplicationRelease.Result.OsTooOld
-        // }
-
-        return withIOContext {
-            val result = getApplicationRelease.await(
+    suspend fun checkForUpdates(forceCheck: Boolean = false): GetApplicationRelease.Result {
+        return withContext(Dispatchers.IO) {
+            getApplicationRelease.await(
                 GetApplicationRelease.Arguments(
                     isPreviewBuildType,
                     BuildConfig.COMMIT_COUNT.toInt(),
@@ -34,17 +28,15 @@ class AppUpdateChecker {
                 )
                 else -> {}
             }
-
-            result
         }
     }
 }
 
 val GITHUB_REPO: String by lazy {
     if (isPreviewBuildType) {
-        "aniyomiorg/aniyomi-preview"
+        "Animetailapp/animetail-preview"
     } else {
-        "aniyomiorg/aniyomi"
+        "Animetailapp/Animetail"
     }
 }
 

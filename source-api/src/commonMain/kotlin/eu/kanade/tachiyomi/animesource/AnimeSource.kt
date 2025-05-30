@@ -6,6 +6,7 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.util.awaitSingle
 import rx.Observable
+import eu.kanade.tachiyomi.animesource.model.SAnime as SManga
 
 /**
  * A basic interface for creating a source. It could be an online source, a local source, etc.
@@ -101,4 +102,24 @@ interface AnimeSource {
     )
     fun fetchVideoList(episode: SEpisode): Observable<List<Video>> =
         throw IllegalStateException("Not used")
+
+    // KMK -->
+    /**
+     * Get all the available related animes for a anime.
+     *
+     * @since komikku/extensions-lib 1.6
+     * @param anime the current anime to get related animes.
+     * @return a list of <keyword, related animes>
+     */
+    suspend fun getRelatedAnimeList(
+        anime: SAnime,
+        exceptionHandler: (Throwable) -> Unit,
+        pushResults: suspend (relatedAnime: Pair<String, List<SAnime>>, completed: Boolean) -> Unit,
+    ): Unit = throw UnsupportedOperationException()
+    suspend fun getRelatedMangaList(
+        manga: SManga,
+        exceptionHandler: (Throwable) -> Unit,
+        pushResults: suspend (relatedManga: Pair<String, List<SManga>>, completed: Boolean) -> Unit,
+    ) = getRelatedAnimeList(manga, exceptionHandler, pushResults)
+    // KMK <--
 }

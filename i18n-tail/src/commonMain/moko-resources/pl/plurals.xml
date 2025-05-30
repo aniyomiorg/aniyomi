@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Ponawianie %1$d nieudana strona…</item>
+    <item quantity="few">Ponawianie %1$d nieudanych stron…</item>
+    <item quantity="many">Ponawianie %1$d nieudanych stron…</item>
+    <item quantity="other">Ponawianie %1$d nieudanych stron…</item>
+  </plurals>
+</resources>

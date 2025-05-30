@@ -7,6 +7,10 @@ sealed interface LibraryDisplayMode {
     data object List : LibraryDisplayMode
     data object CoverOnlyGrid : LibraryDisplayMode
 
+    // KMK -->
+    data object ComfortableGridPanorama : LibraryDisplayMode
+    // KMK <--
+
     object Serializer {
         fun deserialize(serialized: String): LibraryDisplayMode {
             return Companion.deserialize(serialized)
@@ -35,6 +39,9 @@ sealed interface LibraryDisplayMode {
     fun serialize(): String {
         return when (this) {
             ComfortableGrid -> "COMFORTABLE_GRID"
+            // KMK -->
+            ComfortableGridPanorama -> "COMFORTABLE_GRID_PANORAMA"
+            // KMK <--
             CompactGrid -> "COMPACT_GRID"
             CoverOnlyGrid -> "COVER_ONLY_GRID"
             List -> "LIST"

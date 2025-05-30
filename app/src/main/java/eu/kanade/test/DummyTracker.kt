@@ -48,4 +48,26 @@ data class DummyTracker(
     override fun getPassword(): String = "passw0rd"
 
     override fun saveCredentials(username: String, password: String) = Unit
+    override suspend fun getMangaMetadata(
+        track: tachiyomi.domain.track.manga.model.MangaTrack,
+    ): eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata =
+        eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata(
+            0,
+            "test",
+            "test",
+            "test",
+            "test",
+            "test",
+        )
+    override suspend fun getAnimeMetadata(
+        track: tachiyomi.domain.track.anime.model.AnimeTrack,
+    ): eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata =
+        eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata(
+            0,
+            "test",
+            "test",
+            "test",
+            "test",
+            "test",
+        )
 }

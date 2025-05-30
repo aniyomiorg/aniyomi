@@ -9,6 +9,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.network.AndroidCookieJar
+import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.util.system.isOutdated
 import eu.kanade.tachiyomi.util.system.toast
 import okhttp3.Cookie
@@ -18,39 +19,45 @@ import okhttp3.Request
 import okhttp3.Response
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 
 class CloudflareInterceptor(
     private val context: Context,
     private val cookieManager: AndroidCookieJar,
+    private val preferences: NetworkPreferences,
     defaultUserAgentProvider: () -> String,
 ) : WebViewInterceptor(context, defaultUserAgentProvider) {
 
     private val executor = ContextCompat.getMainExecutor(context)
 
     override fun shouldIntercept(response: Response): Boolean {
+        // TLMR -->
+        if (preferences.enableFlareSolverr().get()) {
+            return false
+        }
         // Check if Cloudflare anti-bot is on
         return response.code in ERROR_CODES && response.header("Server") in SERVER_CHECK
     }
+    // <-- TLMR
 
     override fun intercept(chain: Interceptor.Chain, request: Request, response: Response): Response {
-        try {
-            response.close()
-            cookieManager.remove(request.url, COOKIE_NAMES, 0)
-            val oldCookie = cookieManager.get(request.url)
-                .firstOrNull { it.name == "cf_clearance" }
-            resolveWithWebView(request, oldCookie)
+        response.close()
+        cookieManager.remove(request.url, COOKIE_NAMES, 0)
 
-            return chain.proceed(request)
-        }
-        // Because OkHttp's enqueue only handles IOExceptions, wrap the exception so that
-        // we don't crash the entire app
-        catch (e: CloudflareBypassException) {
+        val oldCookie = cookieManager.get(request.url)
+            .firstOrNull { it.name == "cf_clearance" }
+
+        try {
+            resolveWithWebView(request, oldCookie)
+        } catch (e: CloudflareBypassException) {
             throw IOException(context.stringResource(MR.strings.information_cloudflare_bypass_failure), e)
         } catch (e: Exception) {
             throw IOException(e)
         }
+
+        return chain.proceed(request)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -125,14 +132,17 @@ class CloudflareInterceptor(
             if (isWebViewOutdated) {
                 context.toast(MR.strings.information_webview_outdated, Toast.LENGTH_LONG)
             }
-
-            throw CloudflareBypassException()
+            // TLMR -->
+            throw CloudflareBypassException(context.stringResource(TLMR.strings.flare_solver_error_webview))
+            // <-- TLMR
         }
     }
 }
 
-private val ERROR_CODES = listOf(403, 503)
-private val SERVER_CHECK = arrayOf("cloudflare-nginx", "cloudflare")
+val ERROR_CODES = listOf(403, 503)
+val SERVER_CHECK = arrayOf("cloudflare-nginx", "cloudflare")
 private val COOKIE_NAMES = listOf("cf_clearance")
 
-private class CloudflareBypassException : Exception()
+// TLMR -->
+class CloudflareBypassException(message: String, cause: Throwable? = null) : Exception(message, cause)
+// <-- TLMR

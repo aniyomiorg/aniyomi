@@ -4,9 +4,14 @@ import android.content.Context
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import aniyomi.util.nullIfEmpty
+import aniyomi.util.trimOrNull
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.addOrRemove
@@ -14,9 +19,11 @@ import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.downloadedFilter
+import eu.kanade.domain.entries.anime.model.toDomainAnime
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
@@ -26,14 +33,22 @@ import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.util.formattedMessage
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.HttpException
+import eu.kanade.tachiyomi.source.anime.isSourceForTorrents
+import eu.kanade.tachiyomi.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.ui.entries.anime.RelatedAnime.Companion.isLoading
+import eu.kanade.tachiyomi.ui.entries.anime.RelatedAnime.Companion.removeDuplicates
+import eu.kanade.tachiyomi.ui.entries.anime.RelatedAnime.Companion.sorted
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
+import eu.kanade.tachiyomi.ui.home.HomeScreen.uiPreferences
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.AniChartApi
@@ -67,10 +82,15 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
+import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
+import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
+import tachiyomi.domain.entries.anime.interactor.SetCustomAnimeInfo
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.AnimeUpdate
+import tachiyomi.domain.entries.anime.model.CustomAnimeInfo
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
@@ -81,9 +101,12 @@ import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.items.episode.service.calculateEpisodeGap
 import tachiyomi.domain.items.episode.service.getEpisodeSort
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.storage.service.StoragePreferences
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.i18n.MR
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -91,6 +114,7 @@ import java.util.Calendar
 import kotlin.collections.filter
 import kotlin.collections.forEach
 import kotlin.math.floor
+import androidx.compose.runtime.State as RuntimeState
 
 class AnimeScreenModel(
     private val context: Context,
@@ -107,6 +131,15 @@ class AnimeScreenModel(
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
+    // SY -->
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
+    private val setCustomAnimeInfo: SetCustomAnimeInfo = Injekt.get(),
+    val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
+    private val getAnime: GetAnime = Injekt.get(),
+    // SY <--
+    // KMK -->
+    private val sourcePreferences: SourcePreferences = Injekt.get(),
+    // KMK <--
     private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val setAnimeEpisodeFlags: SetAnimeEpisodeFlags = Injekt.get(),
     private val setAnimeDefaultEpisodeFlags: SetAnimeDefaultEpisodeFlags = Injekt.get(),
@@ -122,6 +155,9 @@ class AnimeScreenModel(
     private val filterEpisodesForDownload: FilterEpisodesForDownload = Injekt.get(),
     internal val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
+    // AM (FILE_SIZE) -->
+    private val storagePreferences: StoragePreferences = Injekt.get(),
+    // <-- AM (FILE_SIZE)
 ) : StateScreenModel<AnimeScreenModel.State>(State.Loading) {
 
     private val successState: State.Success?
@@ -157,6 +193,10 @@ class AnimeScreenModel(
 
     internal val autoOpenTrack: Boolean
         get() = successState?.trackingAvailable == true && trackPreferences.trackOnAddingToLibrary().get()
+
+    // AM (FILE_SIZE) -->
+    val showFileSize = storagePreferences.showEpisodeFileSize().get()
+    // <-- AM (FILE_SIZE)
 
     /**
      * Helper function to update the UI state only if it's currently in success state
@@ -202,11 +242,20 @@ class AnimeScreenModel(
             val needRefreshInfo = !anime.initialized
             val needRefreshEpisode = episodes.isEmpty()
 
+            val animeSource = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+            // --> (Torrent)
+            if (animeSource.isSourceForTorrents()) {
+                TorrentServerService.start()
+                TorrentServerService.wait(10)
+                TorrentServerUtils.setTrackersList()
+            }
+            // <-- (Torrent)
+
             // Show what we have earlier
             mutableState.update {
                 State.Success(
                     anime = anime,
-                    source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source),
+                    source = animeSource,
                     isFromSource = isFromSource,
                     episodes = episodes,
                     isRefreshingData = needRefreshInfo || needRefreshEpisode,
@@ -223,6 +272,9 @@ class AnimeScreenModel(
                     async { if (needRefreshEpisode) fetchEpisodesFromSource() },
                 )
                 fetchFromSourceTasks.awaitAll()
+                // KMK -->
+                launch { fetchRelatedMangasFromSource() }
+                // KMK <--
             }
 
             // Initial loading finished
@@ -265,6 +317,91 @@ class AnimeScreenModel(
             }
         }
     }
+
+    // SY -->
+    @Suppress("LongParameterList")
+    fun updateAnimeInfo(
+        title: String?,
+        author: String?,
+        artist: String?,
+        description: String?,
+        tags: List<String>?,
+        status: Long?,
+    ) {
+        val state = successState ?: return
+        var anime = state.anime
+        if (state.anime.isLocal()) {
+            val newTitle = if (title.isNullOrBlank()) anime.url else title.trim()
+            val newAuthor = author?.trimOrNull()
+            val newArtist = artist?.trimOrNull()
+            val newDesc = description?.trimOrNull()
+            anime = anime.copy(
+                ogTitle = newTitle,
+                ogAuthor = author?.trimOrNull(),
+                ogArtist = artist?.trimOrNull(),
+                ogDescription = description?.trimOrNull(),
+                ogGenre = tags?.nullIfEmpty(),
+                ogStatus = status ?: 0,
+                lastUpdate = anime.lastUpdate + 1,
+            )
+            (sourceManager.get(LocalAnimeSource.ID) as LocalAnimeSource).updateAnimeInfo(
+                anime.toSAnime(),
+            )
+            screenModelScope.launchNonCancellable {
+                updateAnime.await(
+                    AnimeUpdate(
+                        anime.id,
+                        title = newTitle,
+                        author = newAuthor,
+                        artist = newArtist,
+                        description = newDesc,
+                        genre = tags,
+                        status = status,
+                    ),
+                )
+            }
+        } else {
+            val genre = if (!tags.isNullOrEmpty() && tags != state.anime.ogGenre) {
+                tags
+            } else {
+                null
+            }
+            setCustomAnimeInfo.set(
+                CustomAnimeInfo(
+                    state.anime.id,
+                    title?.trimOrNull(),
+                    author?.trimOrNull(),
+                    artist?.trimOrNull(),
+                    description?.trimOrNull(),
+                    genre,
+                    status.takeUnless { it == state.anime.ogStatus },
+                ),
+            )
+            anime = anime.copy(lastUpdate = anime.lastUpdate + 1)
+        }
+
+        updateSuccessState { successState ->
+            successState.copy(anime = anime)
+        }
+    }
+
+    // KMK -->
+    @Composable
+    fun getManga(initialManga: Anime): RuntimeState<Anime> {
+        return produceState(initialValue = initialManga) {
+            getAnime.subscribe(initialManga.url, initialManga.source)
+                .flowWithLifecycle(lifecycle)
+                .collectLatest { manga ->
+                    value = manga
+                        // KMK -->
+                        ?: initialManga
+                    // KMK <--
+                }
+        }
+    }
+    // KMK <--
+
+    // SY <--
 
     fun toggleFavorite() {
         toggleFavorite(
@@ -571,6 +708,71 @@ class AnimeScreenModel(
             }
             val newAnime = animeRepository.getAnimeById(animeId)
             updateSuccessState { it.copy(anime = newAnime, isRefreshingData = false) }
+        }
+    }
+
+    // KMK -->
+    /**
+     * Set the fetching related mangas status.
+     * @param state
+     * - false: started & fetching
+     * - true: finished
+     */
+    private fun setRelatedMangasFetchedStatus(state: Boolean) {
+        updateSuccessState { it.copy(isRelatedMangasFetched = state) }
+    }
+
+    /**
+     * Requests an list of related mangas from the source.
+     */
+    internal suspend fun fetchRelatedMangasFromSource(onDemand: Boolean = false, onFinish: (() -> Unit)? = null) {
+        val expandRelatedMangas = uiPreferences.expandRelatedAnimes().get()
+        if (!onDemand && !expandRelatedMangas) return
+
+        // start fetching related mangas
+        setRelatedMangasFetchedStatus(false)
+
+        fun exceptionHandler(e: Throwable) {
+            logcat(LogPriority.ERROR, e)
+            val message = with(context) { e.formattedMessage }
+
+            screenModelScope.launch {
+                snackbarHostState.showSnackbar(message = message)
+            }
+        }
+        val state = successState ?: return
+        val relatedMangasEnabled = sourcePreferences.relatedAnimes().get()
+
+        try {
+            if (state.source !is StubAnimeSource && relatedMangasEnabled) {
+                state.source.getRelatedAnimeList(state.anime.toSAnime(), { e -> exceptionHandler(e) }) { pair, _ ->
+                    /* Push found related mangas into collection */
+                    val relatedAnime = RelatedAnime.Success.fromPair(pair) { mangaList ->
+                        mangaList.map {
+                            // KMK -->
+                            it.toDomainAnime(state.source.id)
+                            // KMK <--
+                        }
+                    }
+
+                    updateSuccessState { successState ->
+                        val relatedMangaCollection =
+                            successState.relatedAnimeCollection
+                                ?.toMutableStateList()
+                                ?.apply { add(relatedAnime) }
+                                ?: listOf(relatedAnime)
+                        successState.copy(relatedAnimeCollection = relatedMangaCollection)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            exceptionHandler(e)
+        } finally {
+            if (onFinish != null) {
+                onFinish()
+            } else {
+                setRelatedMangasFetchedStatus(true)
+            }
         }
     }
 
@@ -1103,6 +1305,11 @@ class AnimeScreenModel(
         data class Migrate(val newAnime: Anime, val oldAnime: Anime) : Dialog
         data class SetAnimeFetchInterval(val anime: Anime) : Dialog
         data class ShowQualities(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog
+
+        // SY -->
+        data class EditAnimeInfo(val anime: Anime) : Dialog
+        // SY <--
+
         data object ChangeAnimeSkipIntro : Dialog
         data object SettingsSheet : Dialog
         data object TrackSheet : Dialog
@@ -1128,6 +1335,19 @@ class AnimeScreenModel(
     fun showCoverDialog() {
         updateSuccessState { it.copy(dialog = Dialog.FullCover) }
     }
+
+    // SY -->
+    fun showEditAnimeInfoDialog() {
+        mutableState.update { state ->
+            when (state) {
+                State.Loading -> state
+                is State.Success -> {
+                    state.copy(dialog = Dialog.EditAnimeInfo(state.anime))
+                }
+            }
+        }
+    }
+    // SY <--
 
     fun showMigrateDialog(duplicate: Anime) {
         val anime = successState?.anime ?: return
@@ -1162,7 +1382,33 @@ class AnimeScreenModel(
                 anime.nextEpisodeToAir,
                 anime.nextEpisodeAiringAt,
             ),
+            // KMK -->
+            /**
+             * status of fetching related mangas
+             * - null: not started
+             * - false: started & fetching
+             * - true: finished
+             */
+            val isRelatedMangasFetched: Boolean? = null,
+            /**
+             * a list of <keyword, related mangas>
+             */
+            val relatedAnimeCollection: List<RelatedAnime>? = null,
+            // KMK <--
         ) : State {
+
+            // KMK -->
+            /**
+             * a value of null will be treated as still loading, so if all searching were failed and won't update
+             * 'relatedAnimeCollection` then we should return empty list
+             */
+            val relatedAnimesSorted = relatedAnimeCollection
+                ?.sorted(anime)
+                ?.removeDuplicates(anime)
+                ?.filter { it.isVisible() }
+                ?.isLoading(isRelatedMangasFetched)
+                ?: if (isRelatedMangasFetched == true) emptyList() else null
+            // KMK <--
 
             val processedEpisodes by lazy {
                 episodes.applyFilters(anime).toList()
@@ -1243,9 +1489,80 @@ sealed class EpisodeList {
         val episode: Episode,
         val downloadState: AnimeDownload.State,
         val downloadProgress: Int,
+        // AM (FILE_SIZE) -->
+        var fileSize: Long? = null,
+        // <-- AM (FILE_SIZE)
         val selected: Boolean = false,
     ) : EpisodeList() {
         val id = episode.id
         val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
     }
 }
+
+// KMK -->
+sealed interface RelatedAnime {
+    data object Loading : RelatedAnime
+
+    data class Success(
+        val keyword: String,
+        val mangaList: List<Anime>,
+    ) : RelatedAnime {
+        val isEmpty: Boolean
+            get() = mangaList.isEmpty()
+
+        companion object {
+            suspend fun fromPair(
+                pair: Pair<String, List<SAnime>>,
+                toManga: suspend (mangaList: List<SAnime>) -> List<Anime>,
+            ) = Success(pair.first, toManga(pair.second))
+        }
+    }
+
+    fun isVisible(): Boolean {
+        return this is Loading || (this is Success && !this.isEmpty)
+    }
+
+    companion object {
+        internal fun List<RelatedAnime>.sorted(manga: Anime): List<RelatedAnime> {
+            val success = filterIsInstance<Success>()
+            val loading = filterIsInstance<Loading>()
+            val title = manga.title.lowercase()
+            val ogTitle = manga.ogTitle.lowercase()
+            return success.filter { it.keyword.isEmpty() } +
+                success.filter { it.keyword.lowercase() == title } +
+                success.filter { it.keyword.lowercase() == ogTitle && ogTitle != title } +
+                success.filter { it.keyword.isNotEmpty() && it.keyword.lowercase() !in listOf(title, ogTitle) }
+                    .sortedByDescending { it.keyword.length }
+                    .sortedBy { it.mangaList.size } +
+                loading
+        }
+
+        internal fun List<RelatedAnime>.removeDuplicates(manga: Anime): List<RelatedAnime> {
+            val mangaHashes = HashSet<Int>().apply { add(manga.url.hashCode()) }
+
+            return map { relatedManga ->
+                if (relatedManga is Success) {
+                    val stripedList = relatedManga.mangaList.mapNotNull {
+                        if (!mangaHashes.contains(it.url.hashCode())) {
+                            mangaHashes.add(it.url.hashCode())
+                            it
+                        } else {
+                            null
+                        }
+                    }
+                    Success(
+                        relatedManga.keyword,
+                        stripedList,
+                    )
+                } else {
+                    relatedManga
+                }
+            }
+        }
+
+        internal fun List<RelatedAnime>.isLoading(isRelatedMangaFetched: Boolean?): List<RelatedAnime> {
+            return if (isRelatedMangaFetched == false) this + listOf(Loading) else this
+        }
+    }
+}
+// KMK <--

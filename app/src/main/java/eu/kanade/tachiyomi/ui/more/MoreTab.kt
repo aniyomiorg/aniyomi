@@ -4,6 +4,7 @@ import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -18,13 +19,17 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.core.preference.asState
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
+import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.setting.PlayerSettingsScreen
 import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.stats.StatsTab
@@ -71,6 +76,10 @@ data object MoreTab : Tab {
             onDownloadedOnlyChange = { screenModel.downloadedOnly = it },
             incognitoMode = screenModel.incognitoMode,
             onIncognitoModeChange = { screenModel.incognitoMode = it },
+            // SY -->
+            showNavUpdates = screenModel.showNavUpdates,
+            showNavHistory = screenModel.showNavHistory,
+            // SY <--
             navStyle = navStyle,
             onClickAlt = { navigator.push(navStyle.moreTab) },
             onClickDownloadQueue = { navigator.push(DownloadsTab) },
@@ -82,6 +91,14 @@ data object MoreTab : Tab {
             onClickSettings = { navigator.push(SettingsScreen()) },
             onClickAbout = { navigator.push(SettingsScreen(SettingsScreen.Destination.About)) },
         )
+
+        LaunchedEffect(Unit) {
+            (context as? MainActivity)?.ready = true
+            // AM (DISCORD) -->
+            DiscordRPCService.setAnimeScreen(context, DiscordScreen.MORE)
+            DiscordRPCService.setMangaScreen(context, DiscordScreen.MORE)
+            // <-- AM (DISCORD)
+        }
     }
 }
 
@@ -89,10 +106,18 @@ private class MoreScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val animeDownloadManager: AnimeDownloadManager = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
+    // SY -->
+    uiPreferences: UiPreferences = Injekt.get(),
+    // SY <--
 ) : ScreenModel {
 
     var downloadedOnly by preferences.downloadedOnly().asState(screenModelScope)
     var incognitoMode by preferences.incognitoMode().asState(screenModelScope)
+
+    // SY -->
+    val showNavUpdates by uiPreferences.showNavUpdates().asState(screenModelScope)
+    val showNavHistory by uiPreferences.showNavHistory().asState(screenModelScope)
+    // SY <--
 
     private var _downloadQueueState: MutableStateFlow<DownloadQueueState> = MutableStateFlow(
         DownloadQueueState.Stopped,

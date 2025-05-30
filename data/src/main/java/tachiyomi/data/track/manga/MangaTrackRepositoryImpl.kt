@@ -2,6 +2,7 @@ package tachiyomi.data.track.manga
 
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.data.track.manga.MangaTrackMapper.mapTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
 import tachiyomi.domain.track.manga.repository.MangaTrackRepository
 
@@ -12,6 +13,20 @@ class MangaTrackRepositoryImpl(
     override suspend fun getTrackByMangaId(id: Long): MangaTrack? {
         return handler.awaitOneOrNull { manga_syncQueries.getTrackById(id, MangaTrackMapper::mapTrack) }
     }
+
+    // SY -->
+    override suspend fun getMangaTracks(): List<MangaTrack> {
+        return handler.awaitList {
+            manga_syncQueries.getTracks(::mapTrack)
+        }
+    }
+
+    override suspend fun getTracksByMangaIds(mangaIds: List<Long>): List<MangaTrack> {
+        return handler.awaitList {
+            manga_syncQueries.getTracksByMangaIds(mangaIds, ::mapTrack)
+        }
+    }
+    // SY <--
 
     override suspend fun getTracksByMangaId(mangaId: Long): List<MangaTrack> {
         return handler.awaitList {

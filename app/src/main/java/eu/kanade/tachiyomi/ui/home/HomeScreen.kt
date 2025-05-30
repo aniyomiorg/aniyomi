@@ -1,15 +1,19 @@
 package eu.kanade.tachiyomi.ui.home
 
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -22,18 +26,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastForEach
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.util.Screen
@@ -46,6 +55,8 @@ import eu.kanade.tachiyomi.ui.history.HistoriesTab
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.more.MoreTab
+import eu.kanade.tachiyomi.ui.player.CastManager
+import eu.kanade.tachiyomi.ui.player.cast.CastMiniController
 import eu.kanade.tachiyomi.ui.updates.UpdatesTab
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -54,6 +65,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import soup.compose.material.motion.animation.materialFadeThroughIn
 import soup.compose.material.motion.animation.materialFadeThroughOut
+import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.NavigationBar
@@ -74,7 +86,7 @@ object HomeScreen : Screen() {
     private const val TAB_FADE_DURATION = 200
     private const val TAB_NAVIGATOR_KEY = "HomeTabs"
 
-    private val uiPreferences: UiPreferences by injectLazy()
+    val uiPreferences: UiPreferences by injectLazy()
     private val defaultTab = uiPreferences.startScreen().get().tab
     private val moreTab = uiPreferences.navStyle().get().moreTab
 
@@ -82,6 +94,22 @@ object HomeScreen : Screen() {
     override fun Content() {
         val navStyle by uiPreferences.navStyle().collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+        // SY -->
+        val scope = rememberCoroutineScope()
+        val alwaysShowLabel by remember {
+            Injekt.get<UiPreferences>().bottomBarLabels().asState(scope)
+        }
+        // SY <--
+        val context = LocalContext.current
+        val activity = context as? ComponentActivity
+        val preferences = Injekt.get<PreferenceStore>()
+        val castManager = remember { CastManager(activity!!, preferences) }
+
+        LaunchedEffect(Unit) {
+            castManager.startDeviceDiscovery()
+            castManager.reconnect()
+        }
+
         TabNavigator(
             tab = defaultTab,
             key = TAB_NAVIGATOR_KEY,
@@ -92,25 +120,47 @@ object HomeScreen : Screen() {
                     startBar = {
                         if (isTabletUi()) {
                             NavigationRail {
-                                navStyle.tabs.fastForEach {
-                                    NavigationRailItem(it)
-                                }
+                                navStyle.tabs
+                                    .fastFilter { it.isEnabled() }
+                                    .fastForEach {
+                                        NavigationRailItem(it, alwaysShowLabel)
+                                    }
                             }
                         }
                     },
                     bottomBar = {
                         if (!isTabletUi()) {
-                            val bottomNavVisible by produceState(initialValue = true) {
-                                showBottomNavEvent.receiveAsFlow().collectLatest { value = it }
-                            }
-                            AnimatedVisibility(
-                                visible = bottomNavVisible && tabNavigator.current != navStyle.moreTab,
-                                enter = expandVertically(),
-                                exit = shrinkVertically(),
-                            ) {
-                                NavigationBar {
-                                    navStyle.tabs.fastForEach {
-                                        NavigationBarItem(it)
+                            Column {
+                                val isConnected =
+                                    castManager.castState.collectAsState().value == CastManager.CastState.CONNECTED
+                                AnimatedVisibility(
+                                    visible = isConnected,
+                                    enter = expandVertically(),
+                                    exit = shrinkVertically(),
+                                ) {
+                                    CastMiniController(
+                                        castManager = castManager,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                                    )
+                                }
+
+                                val bottomNavVisible by produceState(initialValue = true) {
+                                    showBottomNavEvent.receiveAsFlow().collectLatest { value = it }
+                                }
+
+                                AnimatedVisibility(
+                                    visible = bottomNavVisible && tabNavigator.current != navStyle.moreTab,
+                                    enter = expandVertically(),
+                                    exit = shrinkVertically(),
+                                ) {
+                                    NavigationBar {
+                                        navStyle.tabs
+                                            .fastFilter { it.isEnabled() }
+                                            .fastForEach {
+                                                NavigationBarItem(it, alwaysShowLabel)
+                                            }
                                     }
                                 }
                             }
@@ -202,7 +252,12 @@ object HomeScreen : Screen() {
     }
 
     @Composable
-    private fun RowScope.NavigationBarItem(tab: eu.kanade.presentation.util.Tab) {
+    private fun RowScope.NavigationBarItem(
+        tab: eu.kanade.presentation.util.Tab,
+        // SY -->
+        alwaysShowLabel: Boolean,
+        // SY <--
+    ) {
         val tabNavigator = LocalTabNavigator.current
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
@@ -225,12 +280,17 @@ object HomeScreen : Screen() {
                     overflow = TextOverflow.Ellipsis,
                 )
             },
-            alwaysShowLabel = true,
+            alwaysShowLabel = alwaysShowLabel,
         )
     }
 
     @Composable
-    fun NavigationRailItem(tab: eu.kanade.presentation.util.Tab) {
+    fun NavigationRailItem(
+        tab: eu.kanade.presentation.util.Tab,
+        // SY -->
+        alwaysShowLabel: Boolean,
+        // SY <--
+    ) {
         val tabNavigator = LocalTabNavigator.current
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
@@ -253,7 +313,7 @@ object HomeScreen : Screen() {
                     overflow = TextOverflow.Ellipsis,
                 )
             },
-            alwaysShowLabel = true,
+            alwaysShowLabel = alwaysShowLabel,
         )
     }
 

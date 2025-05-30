@@ -48,6 +48,15 @@ class AndroidAnimeDatabaseHandler(
         return dispatch(inTransaction) { block(db).executeAsOne() }
     }
 
+    // SY -->
+    override suspend fun <T : Any> awaitListExecutable(
+        inTransaction: Boolean,
+        block: suspend AnimeDatabase.() -> ExecutableQuery<T>,
+    ): List<T> {
+        return dispatch(inTransaction) { block(db).executeAsList() }
+    }
+    // SY <--
+
     override suspend fun <T : Any> awaitOneOrNull(
         inTransaction: Boolean,
         block: suspend AnimeDatabase.() -> Query<T>,

@@ -17,13 +17,21 @@ class NetworkToLocalAnime(
             !localAnime.favorite -> {
                 // if the anime isn't a favorite, set its display title from source
                 // if it later becomes a favorite, updated title will go to db
-                localAnime.copy(title = anime.title)
+                localAnime.copy(ogTitle = anime.title)
             }
             else -> {
                 localAnime
             }
         }
     }
+
+    // KMK -->
+    suspend fun getLocal(anime: Anime): Anime = if (anime.id <= 0) {
+        await(anime)
+    } else {
+        anime
+    }
+    // KMK <--
 
     private suspend fun getAnime(url: String, sourceId: Long): Anime? {
         return animeRepository.getAnimeByUrlAndSourceId(url, sourceId)

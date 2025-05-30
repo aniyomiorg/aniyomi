@@ -14,6 +14,11 @@ sealed class MangaExtension {
     abstract val lang: String?
     abstract val isNsfw: Boolean
 
+    // KMK -->
+    abstract val signatureHash: String
+    abstract val repoName: String?
+    // KMK <--
+
     data class Installed(
         override val name: String,
         override val pkgName: String,
@@ -22,6 +27,11 @@ sealed class MangaExtension {
         override val libVersion: Double,
         override val lang: String,
         override val isNsfw: Boolean,
+        // KMK -->
+        override val signatureHash: String,
+        /** Guessing repo name from built-in signatures preset */
+        override val repoName: String? = null,
+        // KMK <--
         val pkgFactory: String?,
         val sources: List<MangaSource>,
         val icon: Drawable?,
@@ -39,6 +49,10 @@ sealed class MangaExtension {
         override val libVersion: Double,
         override val lang: String,
         override val isNsfw: Boolean,
+        // KMK -->
+        override val signatureHash: String,
+        override val repoName: String,
+        // KMK <--
         val sources: List<MangaSource>,
         val apkName: String,
         val iconUrl: String,
@@ -67,7 +81,12 @@ sealed class MangaExtension {
         override val versionName: String,
         override val versionCode: Long,
         override val libVersion: Double,
-        val signatureHash: String,
+
+        /* KMK --> */
+        override val signatureHash: String,
+        // KMK -->
+        override val repoName: String? = null,
+        // KMK <--
         override val lang: String? = null,
         override val isNsfw: Boolean = false,
     ) : MangaExtension()

@@ -61,6 +61,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.anime.interactor.GetAnimeIncognitoState
 import eu.kanade.domain.source.manga.interactor.GetMangaIncognitoState
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.DownloadedOnlyBannerBackgroundColor
 import eu.kanade.presentation.components.IncognitoModeBannerBackgroundColor
@@ -75,6 +76,8 @@ import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.core.common.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
@@ -143,6 +146,10 @@ class MainActivity : BaseActivity() {
     var ready = false
 
     private var navigator: Navigator? = null
+
+    // AM (CONNECTIONS) -->
+    private val connectionsPreferences: ConnectionsPreferences by injectLazy()
+    // <-- AM (CONNECTIONS)
 
     init {
         registerSecureActivity(this)
@@ -276,6 +283,27 @@ class MainActivity : BaseActivity() {
                             }
                         }
                         .launchIn(this)
+
+                    // AM (DISCORD) -->
+                    connectionsPreferences.enableDiscordRPC().changes()
+                        .drop(1)
+                        .onEach {
+                            if (it) {
+                                DiscordRPCService.start(this@MainActivity.applicationContext)
+                            } else {
+                                DiscordRPCService.stop(this@MainActivity.applicationContext, 0L)
+                            }
+                        }.launchIn(this)
+
+                    connectionsPreferences.discordRPCStatus().changes()
+                        .drop(1)
+                        .onEach {
+                            DiscordRPCService.stop(this@MainActivity.applicationContext, 0L)
+                            DiscordRPCService.start(this@MainActivity.applicationContext)
+                            DiscordRPCService.setAnimeScreen(this@MainActivity, DiscordScreen.MORE)
+                            DiscordRPCService.setMangaScreen(this@MainActivity, DiscordScreen.MORE)
+                        }.launchIn(this)
+                    // <-- AM (DISCORD)
                 }
 
                 HandleOnNewIntent(context = context, navigator = navigator)
@@ -333,7 +361,7 @@ class MainActivity : BaseActivity() {
                     }
                 }
 
-                ExternalIntents.externalIntents.onActivityResult(result.data)
+                ExternalIntents.externalIntents.onActivityResult(this@MainActivity, result.data)
             }
         }
     }
@@ -369,7 +397,7 @@ class MainActivity : BaseActivity() {
         LaunchedEffect(Unit) {
             if (updaterEnabled) {
                 try {
-                    val result = AppUpdateChecker().checkForUpdate(context)
+                    val result = AppUpdateChecker(context).checkForUpdates()
                     if (result is GetApplicationRelease.Result.NewUpdate) {
                         val updateScreen = NewUpdateScreen(
                             versionName = result.release.version,
@@ -540,7 +568,7 @@ class MainActivity : BaseActivity() {
                     navigator.push(RestoreBackupScreen(intent.data.toString()))
                 }
                 // Deep link to add anime extension repo
-                else if (intent.scheme == "aniyomi" && intent.data?.host == "add-repo") {
+                else if (intent.scheme == "animetail" && intent.data?.host == "add-repo") {
                     intent.data?.getQueryParameter("url")?.let { repoUrl ->
                         navigator.popUntilRoot()
                         navigator.push(AnimeExtensionReposScreen(repoUrl))

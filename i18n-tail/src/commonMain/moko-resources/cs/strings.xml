@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Stav sledování</string>
+  <string name="tag">Štítky</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Nesledováno</string>
+  <string name="group" comment="group More Info Menu">Skupina</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Aktualizace dynamických kategorií Anime knihovny</string>
+  <string name="manga_library_group_updates">Aktualizace dynamických kategorií v Manga knihovně</string>
+  <string name="library_group_updates_global">Vždy spouštět globální aktualizace</string>
+  <string name="library_group_updates_all_but_ungrouped">Spustit globální aktualizace pouze pro neseskupené, aktualizace kategorií pro ostatní</string>
+  <string name="library_group_updates_all">Spustit aktualizace kategorií po celou dobu</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Resetovat štítky</string>
+  <string name="add_tag">Přidat značku</string>
+  <string name="title_hint">Název: %1$s</string>
+  <string name="description_hint">Popis: %1$s</string>
+  <string name="author_hint">Autor: %1$s</string>
+  <string name="artist_hint">Umělec: %1$s</string>
+  <string name="custom_entry_info">Vlastní informace o záznamu</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Nastavení vysílání</string>
+  <string name="pref_enable_cast">Povolit nebo zakázat vysílání</string>
+  <string name="action_cast">Poslat do Cast</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Zobrazit velikost souboru s epizodou</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Nastavení rozštěpení</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Upravit informace</string>
+  <string name="special_services" comment="special_services Connections section">Speciální služby</string>
+  <string name="pref_category_connections">Kontakty</string>
+  <string name="pref_connections_summary">Discord, více k nám.</string>
+  <string name="connections_info">Speciální služby, které jsou unikátní pro animetail a vylepšují způsob, jakým používáte aplikaci</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Tato Discord služba funguje pomocí logování tokenů. Použijte na vlastní riziko. Tvůj token je uložen lokálně a Animetail ji nesdílejí nikde jinde</string>
+  <string name="pref_discord_rpc">Discord Rich Presence</string>
+  <string name="show_chapters_titles_title">Zobrazit názvy epizod/kapitol</string>
+  <string name="show_chapters_titles_subtitle">Zobrazit název epizody/kapitoly, kterou čtete</string>
+  <string name="pref_enable_discord_rpc">Povolit Discord Rich Presence</string>
+  <string name="pref_discord_status">Stav Discordu</string>
+  <string name="pref_discord_dnd">⛔ Režim Nerušit</string>
+  <string name="pref_discord_idle">🌙 Nečinný</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Discord anonymní režim</string>
+  <string name="pref_discord_incognito_summary">Přepsáno při povoleném anonymním režimu</string>
+  <string name="pref_discord_incognito_categories_details">Položky v zahrnutých kategoriích nebudou zobrazeny v Discordu</string>
+  <string name="browsing" comment="browsing Discord section">Procházení</string>
+  <string name="scrolling">Posunutí přes</string>
+  <string name="messing">Poslání s</string>
+  <string name="video">Video</string>
+  <string name="comic">Komikál</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player musí být nainstalován</string>
+  <string name="pref_category_torrentserver">Předvolby Torrentserveru</string>
+  <string name="pref_torrentserver_port">Port Torrentserveru</string>
+  <string name="torrentserver_is_running">Torrent Server je spuštěn</string>
+  <string name="pref_torrent_trackers">Torrent Trackery</string>
+  <string name="pref_reset_torrent_trackers_string">Obnovit výchozí řetězec torrent trackerů</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Počet přednačtení stránky</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Zachovat pozici čtení u čtení záznamů</string>
+  <string name="reader_bottom_buttons">Spodní tlačítka pro čtení</string>
+  <string name="reader_bottom_buttons_summary">Přizpůsobte si, jaká tlačítka se zobrazí v dolní části čtenáře</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Nastavit první stránku jako obal</string>
+  <string name="action_set_second_page_cover">Nastavit druhou stránku jako obal</string>
+  <string name="action_save_first_page">Uložit první stránku</string>
+  <string name="action_save_second_page">Uložit druhou stránku</string>
+  <string name="action_share_first_page">Sdílet první stránku</string>
+  <string name="action_share_second_page">Sdílet druhou stránku</string>
+  <string name="action_save_combined_page">Uložit společnou stránku</string>
+  <string name="action_share_combined_page">Sdílet společnou stránku</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, stránky %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Rozložení stránky</string>
+  <string name="shift_double_pages">Přesunout na jednu stránku</string>
+  <string name="double_pages">Dvojité stránky</string>
+  <string name="single_page">Jedna stránka</string>
+  <string name="automatic_orientation">Automatický (na základě orientace)</string>
+  <string name="automatic_can_still_switch">Při použití automatického rozvržení stránky můžete stále přepínat mezi rozloženími při čtení bez přepsání tohoto nastavení</string>
+  <string name="invert_double_pages">Invertovat dvojité stránky </string>
+  <string name="center_margin" comment="center_margin Center margin">Okraj uprostřed</string>
+  <string name="center_margin_none">Nic</string>
+  <string name="center_margin_double_page">Přidat na dvojitou stránku</string>
+  <string name="center_margin_wide_page">Přidat na širokou stránku</string>
+  <string name="center_margin_double_and_wide_page">Přidat do obou</string>
+  <string name="pref_center_margin">Typ marže uprostřed</string>
+  <string name="pref_center_margin_summary">Vložte mezeru pro uložení mrtvého prostoru na skládacích zařízeních.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Výběr vlastní barvy</string>
+  <string name="custom_color_description">Vyberte barvu pro vlastní šablonu</string>
+  <string name="theme_custom">Vlastní šablona</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Záloha</string>
+  <string name="label_sync">Synchronizovat</string>
+  <string name="label_triggers">Spouštěče</string>
+  <string name="pref_backup_and_sync_summary">Manuální &amp; automatické zálohování a synchronizace</string>
+  <string name="update_30min">Každých 30 minut</string>
+  <string name="update_1hour">Každou hodinu</string>
+  <string name="update_3hour">Každé 3 hodiny</string>
+  <string name="sync_error">Synchronizace knihovny se nezdařila</string>
+  <string name="sync_complete">Synchronizace knihovny dokončena</string>
+  <string name="sync_in_progress">Synchronizace již probíhá</string>
+  <string name="pref_sync_host">Hostitel</string>
+  <string name="pref_sync_host_summ">Zadejte adresu hostitele pro synchronizaci vaší knihovny</string>
+  <string name="pref_sync_api_key">Klíč API</string>
+  <string name="pref_sync_api_key_summ">Zadejte API klíč pro synchronizaci knihovny</string>
+  <string name="pref_sync_now_group_title">Synchronizovat akce</string>
+  <string name="pref_sync_now">Synchronizovat nyní</string>
+  <string name="pref_sync_confirmation_title">Potvrzení synchronizace</string>
+  <string name="pref_sync_now_subtitle">Spusťte okamžitou synchronizaci dat</string>
+  <string name="pref_sync_confirmation_message">Synchronizace přepíše místní knihovnu vzdálenou knihovnou. Opravdu chcete pokračovat?</string>
+  <string name="pref_sync_service">Servis</string>
+  <string name="pref_sync_service_summ">Vyberte službu pro synchronizaci knihovny s</string>
+  <string name="pref_sync_service_category">Synchronizovat</string>
+  <string name="pref_sync_automatic_category">Automatická synchronizace</string>
+  <string name="pref_sync_interval">Frekvence synchronizace</string>
+  <string name="pref_choose_what_to_sync">Vyberte co synchronizovat</string>
+  <string name="success_reset_sync_timestamp">Obnovení časového razítka poslední synchronizace</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Dokončeno v %1$s</string>
+  <string name="last_synchronization">Poslední synchronizace: %1$s</string>
+  <string name="google_drive">Disk Google</string>
+  <string name="pref_google_drive_sign_in">Přihlásit se</string>
+  <string name="google_drive_sign_in_success">Úspěšně přihlášen</string>
+  <string name="google_drive_sign_in_failed">Přihlášení se nezdařilo</string>
+  <string name="authentication">Ověření</string>
+  <string name="pref_google_drive_purge_sync_data">Vymazat synchronizaci z Google Drive</string>
+  <string name="google_drive_sync_data_purged">Synchronizovat vymazaná data z Google Drive</string>
+  <string name="google_drive_sync_data_not_found">V Google Drive nebyla nalezena žádná synchronizace</string>
+  <string name="google_drive_sync_data_purge_error">Chyba při mazání synchronizace z Google Drive, zkuste se znovu přihlásit.</string>
+  <string name="google_drive_login_success">Přihlášen do Google Drive</string>
+  <string name="google_drive_login_failed">Nepodařilo se přihlásit do Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">Nepřihlášen do Google Drive</string>
+  <string name="error_uploading_sync_data">Chyba při nahrávání synchronizačních dat na Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Chyba při mazání souboru Google Drive Lock</string>
+  <string name="error_before_sync_gdrive">Chyba před synchronizací: %s</string>
+  <string name="pref_purge_confirmation_title">Potvrzení odstranění</string>
+  <string name="pref_purge_confirmation_message">Vymazání dat synchronizace smaže všechna data synchronizace z Google Drive. Jste si jisti, že chcete pokračovat?</string>
+  <string name="pref_sync_options">Vytvořit spouštěče synchronizace</string>
+  <string name="pref_sync_options_summ">Lze použít k nastavení spouštěčů synchronizace</string>
+  <string name="sync_on_chapter_read">Synchronizovat při čtení kapitoly</string>
+  <string name="sync_on_chapter_open">Synchronizovat při otevření kapitoly</string>
+  <string name="sync_on_episode_seen">Synchronizovat při epizodě</string>
+  <string name="sync_on_episode_open">Synchronizovat při otevření epizody</string>
+  <string name="sync_on_app_start">Synchronizovat při spuštění aplikace</string>
+  <string name="sync_on_app_resume">Synchronizovat při pokračování aplikace</string>
+  <string name="sync_library">Synchronizovat knihovnu</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Aktualizovat rozšířenou stránku pro aktualizaci seznamu.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Navigační panel</string>
+  <string name="pref_hide_updates_button">Zobrazit aktualizace v nav</string>
+  <string name="pref_hide_history_button">Zobrazit historii v nav</string>
+  <string name="pref_show_bottom_bar_labels">Vždy zobrazovat nav popisky</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Vyberte tracker</string>
+  <string name="entry_not_tracked">Vstup není sledován.</string>
+  <string name="fill_from_tracker">Vyplnit ze sledovače</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr funguje. Uživatelský agent aktualizován. Restartujte aplikaci</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr nefunguje. Uživatelský agent není aktualizován. Zkontrolujte prosím vaše nastavení</string>
+  <string name="flare_solver_error">Chyba při kontaktování FlareSolverru</string>
+  <string name="flare_solver_error_webview">Chyba při řešení s WebView</string>
+  <string name="pref_enable_flare_solverr">Povolit FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Použij FlareSolverr k obejití ochrany proti boku Cloudflareu</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">Adresa URL instance FlareSolverr pro použití například http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Otestuj FlareSolverr a aktualizuj uživatelské agenta</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Otestujte FlareSolverr pro aktualizaci uživatelského agenta. Vyžadováno pouze jednou; poté přepněte podle potřeby.</string>
+  <string-array name="title_cast_quality">
+    <item>Vybrat kvalifikaci/poskytovatele obsazení</item>
+    <item>Vybrat kvalitu</item>
+  </string-array>
+  <string name="cast_not_connected">Vysílání není připojeno</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video přidáno do fronty</item>
+    <item>Video přidáno do fronty</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Chyba při načítání videa z vysílání</item>
+    <item>Chyba při načítání videa</item>
+  </string-array>
+  <string name="server_local_notification_casting">Místní server je spuštěn. Klepnutím ho zastavíte.</string>
+  <string name="server_local_notification_channel_description">Indikační kanál místního serveru</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Automatický posun</string>
+  <string name="eh_retry_all">Opakovat vše</string>
+  <string name="eh_boost_page">Stránka pro podporu</string>
+  <string name="eh_autoscroll_help">Nápověda k automatickému rolování</string>
+  <string name="eh_autoscroll_help_message">Automaticky přejít na další stránku v zadaném intervalu. Interval je zadán v sekundách.</string>
+  <string name="eh_autoscroll_freq_invalid">Neplatná frekvence</string>
+  <string name="eh_retry_all_help">Opakovat všechny nápovědy</string>
+  <string name="eh_retry_all_help_message">Znovu přidat všechny neúspěšné stránky do fronty stahování.</string>
+  <string name="eh_boost_page_help">Nápověda na podporu stránky</string>
+  <string name="eh_boost_page_help_message">Za normálních okolností může stahovatel stahovat pouze určité množství stránek současně. To znamená, že můžete čekat na stažení stránky, ale stahovatel nezačne stahovat stránku, dokud nebude mít volné místo ke stažení. Stisknutím \'Zesílit stránku\' bude stahování nuceno začít stahovat aktuální stránku, bez ohledu na to, zda existuje nebo není dostupný slot.</string>
+  <string name="eh_boost_page_invalid">Tuto stránku nelze zvýšit (neplatná stránka)!</string>
+  <string name="eh_boost_page_errored">Stránka se nepodařilo načíst, stiskněte tlačítko opakovat!</string>
+  <string name="eh_boost_page_downloading">Tato stránka se již stahuje!</string>
+  <string name="eh_boost_page_downloaded">Tato stránka již byla stažena!</string>
+  <string name="eh_boost_boosted">Zesílená aktuální stránka!</string>
+  <string name="eh_boost_invalid_loader">Tato stránka nemůže být boostnuta (neplatný vyhledávač stránky)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Opakování %1$d selhalo strana…</item>
+    <item quantity="few">Retrying %1$d failed pages…</item>
+    <item quantity="many">Retrying %1$d failed pages…</item>
+    <item quantity="other">Retrying %1$d failed pages…</item>
+  </plurals>
+  <string name="pref_category_castserver">Vysílající server</string>
+  <string name="pref_cast_server_port">Port serveru odeslání</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Přizpůsobení Discordu</string>
+  <string name="pref_discord_custom_message">Vlastní zpráva</string>
+  <string name="pref_discord_custom_message_summary">Vlastní zpráva, která bude zobrazena na Discordu</string>
+  <string name="pref_discord_show_progress">Zobrazit průběh</string>
+  <string name="pref_discord_show_progress_summary">Zobrazit aktuální epizodu/kapitolu</string>
+  <string name="pref_discord_show_timestamp">Zobrazit čas</string>
+  <string name="pref_discord_show_timestamp_summary">Zobrazení uplynulého/zbývajícího času</string>
+  <string name="pref_discord_show_buttons">Zobrazit tlačítka</string>
+  <string name="pref_discord_show_buttons_summary">Zobrazit tlačítka ke stažení aplikace nebo se připojit k Discord serveru</string>
+  <string name="pref_discord_show_download_button">Zobrazit tlačítko Stahování</string>
+  <string name="pref_discord_show_download_button_summary">Zobrazí tlačítko ke stažení aplikace</string>
+  <string name="pref_discord_show_discord_button">Zobrazit Discord tlačítko</string>
+  <string name="pref_discord_show_discord_button_summary">Zobrazí tlačítko pro připojení k Discord serveru</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Fronta přehrávání</string>
+  <string name="action_clear_queue">Vymazat frontu</string>
+  <string name="cast_remove_from_queue">Odebrat z fronty</string>
+  <string name="move_to_top">Přesunout nahoru</string>
+  <string name="move_to_position">Přesunout na pozici</string>
+  <string name="position">Pozice</string>
+  <string name="select_position">Vybrat pozici</string>
+  <string name="remove_from_queue_confirmation">Odstranit z fronty?</string>
+  <string name="clear_queue_confirmation">Vymazat frontu</string>
+  <string name="clear_queue_confirmation_message">Jste si jisti, že chcete vymazat celou frontu?</string>
+  <string name="queue">Fronta</string>
+  <string name="move_to_bottom">Přesunout dolů</string>
+  <string name="action_end_session">Ukončit relaci</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dostupná zařízení</string>
+  <string name="cast_media_info">Informace o médiích</string>
+  <string name="cast_previous_video">Předchozí video</string>
+  <string name="cast_next_video">Další video</string>
+  <string name="cast_play">Hrát</string>
+  <string name="cast_pause">Pozastavit</string>
+  <string name="cast_rewind_30s">Převrátit 30 s</string>
+  <string name="cast_forward_30s">Přeposlat 30 s</string>
+  <string name="cast_volume">Objem</string>
+  <string name="cast_end_session">Ukončit relaci</string>
+  <string name="empty_queue">Fronta je prázdná</string>
+  <string name="cast_end_session_message">Jste si jisti, že chcete ukončit aktuální relaci?</string>
+  <string name="cast_end_session_confirm">Ukončit relaci</string>
+  <string name="cast_end_session_cancel">Zrušit</string>
+  <string name="playback_speed">Rychlost přehrávání</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Nastavení titulků</item>
+    <item>Nastavení titulků</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Barva textu</string>
+  <string name="cast_subtitle_background">Pozadí</string>
+  <string name="cast_subtitle_shadow">Stín</string>
+  <string name="cast_subtitle_apply">Použít</string>
+  <string name="cast_subtitle_reset">Obnovit výchozí</string>
+  <string name="cast_subtitle_shadow_None">Nic</string>
+  <string name="cast_subtitle_shadow_Light">Světlý</string>
+  <string name="cast_subtitle_shadow_Medium">Střední</string>
+  <string name="cast_subtitle_shadow_Strong">Silný</string>
+  <string name="cast_subtitle_preview">Náhled textu &lt;unk&gt; &lt;unk&gt;</string>
+  <string name="cast_tracks">Vybrat stopu titulků/zvuku</string>
+  <string name="cast_volume_down">Hlasitost dolů</string>
+  <string name="cast_volume_up">Hlasitost nahoru</string>
+  <string name="cast_subtitles">Titulky</string>
+  <string name="cast_audio_tracks">Zvukové stopy</string>
+  <string name="cast_no_subtitles">Žádné titulky</string>
+  <string name="cast_close">Zavřít</string>
+  <string name="cast_subtitle_font_family">Rodina písma</string>
+  <string name="cast_subtitle_border_style">Styl rámečku</string>
+  <string name="cast_subtitle_border_none">Nic</string>
+  <string name="cast_subtitle_border_outline">Obrys</string>
+  <string name="cast_subtitle_border_drop_shadow">Zahodit stín</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Měkký shadow</string>
+  <string name="cast_subtitle_border_raised">Aktivováno</string>
+  <string name="cast_subtitle_border_depressed">Deprimováno</string>
+  <string name="cast_connection_error">Chyba připojení</string>
+  <string name="discord_accounts">Discord účty</string>
+  <string name="active_account">Aktivní účet</string>
+  <string name="no_accounts_found">Nebyly nalezeny žádné účty</string>
+  <string name="login_failed">Přihlášení se nezdařilo</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama pohodlná mřížka</string>
+  <string name="action_bulk_select">Režim hromadného výběru</string>
+  <string name="action_move_up">Přesunout nahoru</string>
+  <string name="action_move_down">Posunout dolů</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Příliš mnoho zdrojů ve vašem feedu, nelze přidat více než 20</string>
+  <string name="action_sort_feed">Řadit kanály</string>
+  <string name="sort_feed_confirmation">Chcete seřadit kanály abecedně?</string>
+  <string name="saved_searches_feeds">Uložené vyhledávání &amp; kanály</string>
+  <string name="saved_searches_add_feed">Uložená hledání (přidržením přidejte do kanálu)</string>
+  <string name="pref_hide_feed">Skrýt záložku kanálu</string>
+  <string name="pref_feed_position">Pozice záložky kanálu</string>
+  <string name="pref_feed_position_summery">Přejete si, aby byla záložka kanálu první v prohlížeči? To učiní výchozí záložku při otevírání prohlížeče, nedoporučujeme pokud jste na datech nebo na měřené síti</string>
+  <string name="feed">Zdroj</string>
+  <string name="feed_delete">Smazat zdrojovou položku?</string>
+  <string name="feed_tab_empty">Ve svém kanálu nemáte žádné zdroje, přejděte do pravého horního rohu pro přidání</string>
+  <string name="feed_add">Přidat %1$s do feedu?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Uložená hledání</string>
+  <string name="save_search">Uložit aktuální vyhledávací dotaz?</string>
+  <string name="save_search_hint">Moje vyhledávací jméno</string>
+  <string name="save_search_failed_to_load">Nepodařilo se načíst uložená vyhledávání!</string>
+  <string name="save_search_failed_to_load_message">Při načítání uložených vyhledávání došlo k chybě.</string>
+  <string name="save_search_delete">Smazat uložený vyhledávací dotaz?</string>
+  <string name="save_search_delete_message">Jste si jisti, že chcete odstranit uložený vyhledávací dotaz: \'%1$s\'?</string>
+  <string name="save_search_invalid">Neplatné vyhledávání, změnily se filtry</string>
+  <string name="save_search_invalid_name">Neplatný název vyhledávání</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Žádné zdrojové kategorie nejsou k dispozici</string>
+  <string name="invalid_category_name">Neplatný název kategorie</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Návrhy</string>
+  <string name="pref_source_related_mangas_summary">Zobrazit návrhy zdrojových stránek při prohlížení záznamu</string>
+  <string name="related_mangas_website_suggestions">Návrhy webových stránek</string>
+  <string name="related_mangas_more">Líbí se mi to...</string>
+  <string name="saved_searches_delete">Uložená hledání (podržte pro smazání)</string>
+  <string name="pref_expand_related_animes">Rozšířit návrhy</string>
+  <string name="pref_expand_related_animes_summary">Pokud je vypnuto, návrhy se automaticky nenačtou &amp; zobrazit rozšířené</string>
+  <string name="put_related_animes_in_overflow">Návrhy v přetečení</string>
+  <string name="put_related_animes_in_overflow_summary">Vložte tlačítko Návrhy do menu přetečení místo na vstupní stránku</string>
+  <string name="pref_show_home_on_related_animes">Domovská stránka z návrhů</string>
+  <string name="pref_show_home_on_related_animes_summary">Zobrazit ikonu při prohlížení návrhů pro přímý přechod zpět na Domů</string>
+  <string name="pref_source_related_animes">Návrhy</string>
+  <string name="pref_source_related_animes_summary">Zobrazit návrhy zdrojových stránek při prohlížení záznamu</string>
+  <string name="pref_source_navigation">Nahradit poslední tlačítko</string>
+  <string name="pref_source_navigation_summery">Nahradit poslední tlačítko vlastním zobrazením, které zahrnuje nejnovější a prochází</string>
+</resources>

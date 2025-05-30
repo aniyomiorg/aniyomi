@@ -58,10 +58,11 @@ fun BrowseAnimeSourceCompactGrid(
 }
 
 @Composable
-private fun BrowseAnimeSourceCompactGridItem(
+fun BrowseAnimeSourceCompactGridItem(
     anime: Anime,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,
+    isSelected: Boolean = false,
 ) {
     EntryCompactGridItem(
         title = anime.title,
@@ -72,6 +73,8 @@ private fun BrowseAnimeSourceCompactGridItem(
             url = anime.thumbnailUrl,
             lastModified = anime.coverLastModified,
         ),
+        // KMK -->
+        isSelected = isSelected,
         coverAlpha = if (anime.favorite) CommonEntryItemDefaults.BrowseFavoriteCoverAlpha else 1f,
         coverBadgeStart = {
             InLibraryBadge(enabled = anime.favorite)

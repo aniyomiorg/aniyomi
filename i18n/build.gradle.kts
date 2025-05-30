@@ -6,6 +6,7 @@ plugins {
     id("mihon.library")
     kotlin("multiplatform")
     alias(libs.plugins.moko)
+    id("com.github.ben-manes.versions")
 }
 
 kotlin {

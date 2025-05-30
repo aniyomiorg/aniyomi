@@ -23,4 +23,29 @@ data class MALManga(
 @Serializable
 data class MALMangaCovers(
     val large: String = "",
+    val medium: String,
+)
+
+@Serializable
+data class MALMangaMetadata(
+    val id: Long,
+    val title: String,
+    val synopsis: String?,
+    @SerialName("main_picture")
+    val covers: MALMangaCovers,
+    val authors: List<MALAuthor>,
+)
+
+@Serializable
+data class MALAuthor(
+    val node: MALAuthorNode,
+    val role: String,
+)
+
+@Serializable
+data class MALAuthorNode(
+    @SerialName("first_name")
+    val firstName: String,
+    @SerialName("last_name")
+    val lastName: String,
 )

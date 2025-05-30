@@ -23,6 +23,8 @@ import eu.kanade.presentation.history.anime.AnimeHistoryScreen
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialogScreenModel
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.DiscordScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -56,7 +58,12 @@ fun Screen.animeHistoryTab(
         val playerPreferences: PlayerPreferences by injectLazy()
         val extPlayer = playerPreferences.alwaysUseExternalPlayer().get()
         if (episode != null) {
-            MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
+            MainActivity.startPlayerActivity(
+                context,
+                episode.animeId,
+                episode.id,
+                extPlayer,
+            )
         } else {
             snackbarHostState.showSnackbar(context.stringResource(MR.strings.no_next_episode))
         }
@@ -152,6 +159,9 @@ fun Screen.animeHistoryTab(
             }
 
             LaunchedEffect(Unit) {
+                // AM (DISCORD) -->
+                DiscordRPCService.setAnimeScreen(context, DiscordScreen.HISTORY)
+                // <-- AM (DISCORD)
                 screenModel.events.collectLatest { e ->
                     when (e) {
                         AnimeHistoryScreenModel.Event.InternalError ->

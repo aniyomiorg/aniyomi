@@ -1,0 +1,85 @@
+import kotlin.Boolean;
+
+CREATE TABLE feed_saved_search (
+    _id INTEGER NOT NULL PRIMARY KEY,
+    source INTEGER NOT NULL,
+    saved_search INTEGER,
+    global INTEGER AS Boolean NOT NULL,
+    feed_order INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY(saved_search) REFERENCES saved_search (_id)
+    ON DELETE CASCADE
+);
+
+CREATE INDEX feed_saved_search_saved_search_index ON feed_saved_search(saved_search);
+
+-- KMK -->
+selectAll:
+SELECT * FROM feed_saved_search ORDER BY feed_order;
+-- KMK <--
+
+selectAllGlobal:
+SELECT * FROM feed_saved_search WHERE global = 1 ORDER BY feed_order;
+
+countGlobal:
+SELECT count(*) FROM feed_saved_search WHERE global = 1;
+
+selectBySource:
+SELECT * FROM feed_saved_search WHERE source = :sourceId AND global = 0 ORDER BY feed_order;
+
+insert:
+INSERT INTO feed_saved_search (source, saved_search, global, feed_order)
+ VALUES (:sourceId, :savedSearch, :global, (SELECT COALESCE(MAX(feed_order), 0) + 1 FROM feed_saved_search));
+
+deleteById:
+DELETE FROM feed_saved_search WHERE _id = :id;
+
+deleteAll:
+DELETE FROM feed_saved_search;
+
+selectGlobalFeedSavedSearch:
+SELECT saved_search.*
+FROM (
+    SELECT saved_search FROM feed_saved_search WHERE global = 1 ORDER BY feed_order
+) AS A
+JOIN saved_search
+ON saved_search._id = A.saved_search;
+
+selectSourceFeedSavedSearch:
+SELECT saved_search.*
+FROM (
+    SELECT saved_search FROM feed_saved_search WHERE global = 0 AND source = :sourceId ORDER BY feed_order
+) AS A
+JOIN saved_search
+ON saved_search._id = A.saved_search;
+
+countSourceFeedSavedSearch:
+SELECT count(*)
+FROM (
+    SELECT saved_search FROM feed_saved_search WHERE global = 0 AND source = :sourceId ORDER BY feed_order
+) AS A
+JOIN saved_search
+ON saved_search._id = A.saved_search;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();
+
+-- KMK -->
+selectAllGlobalNonSavedSearch:
+SELECT * FROM feed_saved_search WHERE global = 1 AND saved_search IS NULL ORDER BY feed_order;
+
+selectAllFeedHasSavedSearch:
+SELECT * FROM feed_saved_search WHERE saved_search IS NOT NULL ORDER BY feed_order;
+
+selectAllFeedWithSavedSearch:
+SELECT coalesce(f.source, s.source) source, f.global, f.saved_search, s.name, s.query, s.filters_json
+ FROM feed_saved_search AS f LEFT JOIN saved_search AS s
+ ON f.saved_search = s._id ORDER BY f.feed_order;
+
+update:
+UPDATE feed_saved_search
+SET source = coalesce(:source, source),
+    saved_search = coalesce(:saved_search, saved_search),
+    global = coalesce(:global, global),
+    feed_order = coalesce(:feed_order, feed_order)
+WHERE _id = :id;
+-- KMK <--

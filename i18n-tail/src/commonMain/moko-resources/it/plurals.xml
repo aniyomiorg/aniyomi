@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Riprovare %1$d pagina non riuscita…</item>
+    <item quantity="other">Riprovare le pagine di %1$d fallite…</item>
+  </plurals>
+</resources>

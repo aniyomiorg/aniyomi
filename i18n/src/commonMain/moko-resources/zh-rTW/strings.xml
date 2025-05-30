@@ -524,7 +524,7 @@
     <string name="pref_verbose_logging_summary">傾印詳細記錄至系統日誌 (將降低應用程式效能)</string>
     <string name="connected_to_wifi">僅透過 Wi-Fi</string>
     <string name="update_72hour">每 3 天</string>
-    <string name="download_queue_size_warning">警告：大量批次下載可能壅塞來源，甚至使其封鎖 Aniyomi。輕觸以瞭解詳情。</string>
+    <string name="download_queue_size_warning">警告：大量批次下載可能壅塞來源，甚至使其封鎖 Animetail。輕觸以瞭解詳情。</string>
     <string name="ext_update_all">全部更新</string>
     <string name="channel_app_updates">應用程式更新</string>
     <string name="pref_auto_clear_chapter_cache">啟動應用程式時清除章節快取</string>
@@ -759,7 +759,7 @@
     <string name="error_repo_exists">已有該儲存庫！</string>
     <string name="pref_library_update_smart_update">智慧更新</string>
     <string name="invalid_repo_name">無效的儲存庫網址</string>
-    <string name="action_add_repo_message">將額外的擴充套件儲存庫新增至 Aniyomi。此處應填入一個結尾為「index.min.json」的網址。</string>
+    <string name="action_add_repo_message">將額外的擴充套件儲存庫新增至 Animetail。此處應填入一個結尾為「index.min.json」的網址。</string>
     <string name="delete_repo_confirmation">確定要刪除「%s」儲存庫嗎？</string>
     <string name="action_delete_repo">刪除儲存庫</string>
     <string name="action_add_repo">新增儲存庫</string>
@@ -796,8 +796,8 @@
     <string name="also_set_chapter_settings_for_library">同時套用至其餘在媒體櫃中的作品</string>
     <string name="dialog_with_checkbox_reset">重設此作品所有章節</string>
     <string name="download_insufficient_space">由於儲存空間不足，無法下載章節</string>
-    <string name="download_queue_size_warning">警告：大量批次下載可能壅塞來源並 (或) 使其封鎖 Aniyomi。輕觸以瞭解詳情。</string>
-    <string name="information_webview_required">WebView 為 Aniyomi 的必要元件</string>
+    <string name="download_queue_size_warning">警告：大量批次下載可能壅塞來源並 (或) 使其封鎖 Animetail。輕觸以瞭解詳情。</string>
+    <string name="information_webview_required">WebView 為 Animetail 的必要元件</string>
     <string name="download_notifier_download_paused_chapters">下載已暫停</string>
     <string name="channel_new_chapters_episodes">章節/劇集更新</string>
     <string name="label_manga_library">漫畫</string>
@@ -883,7 +883,7 @@
     <string name="action_edit_anime_categories">編輯動漫類別</string>
     <string name="pref_bottom_nav_no_updates">將更新移至“更多”選項</string>
     <string name="pref_bottom_nav_no_manga">將漫畫移至“更多”選項</string>
-    <string name="unlock_app_title">解鎖 Aniyomi</string>
+    <string name="unlock_app_title">解鎖 Animetail</string>
     <string name="pref_library_manga_columns">每行漫畫數量</string>
     <string name="label_watched_episodes">看過</string>
     <string name="pref_library_anime_columns">每行動漫數量</string>
@@ -1044,7 +1044,7 @@
     <string name="bandwidth_data_saver_server">Bandwidth Hero 代理伺服器</string>
     <string name="unseen">未看</string>
     <string name="label_anime_extension_repos">動漫擴充庫</string>
-    <string name="onboarding_storage_action_create_folder">建立預設的 Aniyomi 資料夾</string>
+    <string name="onboarding_storage_action_create_folder">建立預設的 Animetail 資料夾</string>
     <string name="download_speed_limit">下載速度限制</string>
     <string name="download_speed_limit_hint">設定為 0 以停用速度限制。</string>
     <string name="data_saver_downloader">在下載器中使用資料保護程序</string>

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Κατάσταση παρακολούθησης</string>
+  <string name="tag">Ετικέτες</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Δεν παρακολουθείται</string>
+  <string name="group" comment="group More Info Menu">Ομάδα</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Ενημέρωση δυναμικής κατηγορίας βιβλιοθήκης Anime</string>
+  <string name="manga_library_group_updates">Δυναμικές ενημερώσεις κατηγορίας Manga Library</string>
+  <string name="library_group_updates_global">Εκκίνηση καθολικών ενημερώσεων πάντα</string>
+  <string name="library_group_updates_all_but_ungrouped">Εκκίνηση καθολικών ενημερώσεων μόνο για μη ομαδοποιημένες, ενημερώσεις κατηγορίας για άλλους</string>
+  <string name="library_group_updates_all">Εκκίνηση ενημερώσεων κατηγορίας όλη την ώρα</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Επαναφορά Ετικετών</string>
+  <string name="add_tag">Προσθήκη Ετικέτας</string>
+  <string name="title_hint">Τίτλος: %1$s</string>
+  <string name="description_hint">Περιγραφή: %1$s</string>
+  <string name="author_hint">Συγγραφέας: %1$s</string>
+  <string name="artist_hint">Καλλιτέχνης: %1$s</string>
+  <string name="custom_entry_info">Πληροφορίες προσαρμοσμένης καταχώρησης</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Ρυθμίσεις Cast</string>
+  <string name="pref_enable_cast">Ενεργοποίηση ή απενεργοποίηση Cast</string>
+  <string name="action_cast">Αποστολή στο Cast</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Εμφάνιση του ληφθέντος μεγέθους αρχείου επεισοδίου</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Ρυθμίσεις Fork</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Επεξεργασία πληροφοριών</string>
+  <string name="special_services" comment="special_services Connections section">Ειδικές Υπηρεσίες</string>
+  <string name="pref_category_connections">Συνδέσεις</string>
+  <string name="pref_connections_summary">Discord, περισσότερα για να έρθει..</string>
+  <string name="connections_info">Ειδικές Υπηρεσίες που είναι μοναδικές για την Animetail και ενισχύουν τον τρόπο με τον οποίο χρησιμοποιείτε την εφαρμογή</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Αυτή η υπηρεσία του Discord λειτουργεί μέσω καταγραφής συμβόλων. Χρησιμοποιήστε το με δική σας ευθύνη. Το διακριτικό αποθηκεύεται τοπικά και το Animetail δεν το μοιράζεται πουθενά αλλού</string>
+  <string name="pref_discord_rpc">Discord Πλούσια Παρουσία</string>
+  <string name="show_chapters_titles_title">Εμφάνιση Τίτλων Επεισόδια/Κεφάλαια</string>
+  <string name="show_chapters_titles_subtitle">Εμφάνιση του τίτλου του επεισοδίου/κεφαλαίου που διαβάζετε</string>
+  <string name="pref_enable_discord_rpc">Ενεργοποίηση Discord Rich Presence</string>
+  <string name="pref_discord_status">Κατάσταση Discord</string>
+  <string name="pref_discord_dnd">⛔ Μην Ενοχλείτε</string>
+  <string name="pref_discord_idle">🌙 Αδρανής</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Ανώνυμη περιήγηση σε Discord</string>
+  <string name="pref_discord_incognito_summary">Αντικαταστάθηκε όταν είναι ενεργοποιημένη η λειτουργία ανώνυμης περιήγησης</string>
+  <string name="pref_discord_incognito_categories_details">Οι καταχωρήσεις στις κατηγορίες που περιλαμβάνονται δεν θα εμφανίζονται στο Discord</string>
+  <string name="browsing" comment="browsing Discord section">Περιήγηση</string>
+  <string name="scrolling">Κύλιση μέσα</string>
+  <string name="messing">Ανταλλαγή μηνυμάτων με</string>
+  <string name="video">Βίντεο</string>
+  <string name="comic">Κόμικς</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Ο παίκτης Amnis πρέπει να εγκατασταθεί</string>
+  <string name="pref_category_torrentserver">Προτιμήσεις TorrentServer</string>
+  <string name="pref_torrentserver_port">Θύρα TorrentServer</string>
+  <string name="torrentserver_is_running">Ο διακομιστής Torrent εκτελείται</string>
+  <string name="pref_torrent_trackers">Ανιχνευτές Torrent</string>
+  <string name="pref_reset_torrent_trackers_string">Επαναφορά προεπιλεγμένης συμβολοσειράς torrent trackers</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Ποσό προφόρτωσης σελίδας</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Διατήρηση της θέσης ανάγνωσης στις καταχωρήσεις ανάγνωσης</string>
+  <string name="reader_bottom_buttons">Κουμπιά Κάτω Ανάγνωσης</string>
+  <string name="reader_bottom_buttons_summary">Προσαρμόστε ποια κουμπιά εμφανίζονται στο κάτω μέρος του αναγνώστη</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Ορισμός πρώτης σελίδας ως εξώφυλλο</string>
+  <string name="action_set_second_page_cover">Ορισμός δεύτερης σελίδας ως εξώφυλλο</string>
+  <string name="action_save_first_page">Αποθήκευση πρώτης σελίδας</string>
+  <string name="action_save_second_page">Αποθήκευση δεύτερης σελίδας</string>
+  <string name="action_share_first_page">Κοινή χρήση της πρώτης σελίδας</string>
+  <string name="action_share_second_page">Κοινή χρήση δεύτερης σελίδας</string>
+  <string name="action_save_combined_page">Αποθήκευση συνδυασμένης σελίδας</string>
+  <string name="action_share_combined_page">Κοινοποίηση συνδυασμένης σελίδας</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, σελίδες %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Διάταξη σελίδας</string>
+  <string name="shift_double_pages">Μετακίνηση μιας σελίδας πάνω</string>
+  <string name="double_pages">Διπλές σελίδες</string>
+  <string name="single_page">Μονή σελίδα</string>
+  <string name="automatic_orientation">Αυτόματο (βασισμένο στον προσανατολισμό)</string>
+  <string name="automatic_can_still_switch">Κατά τη χρήση αυτόματης διάταξης σελίδας, μπορείτε να κάνετε εναλλαγή μεταξύ διατάξεων κατά την ανάγνωση χωρίς να παρακάμψετε αυτή τη ρύθμιση</string>
+  <string name="invert_double_pages">Αντιστροφή διπλών σελίδων </string>
+  <string name="center_margin" comment="center_margin Center margin">Κεντρικό Περιθώριο</string>
+  <string name="center_margin_none">Κανένα</string>
+  <string name="center_margin_double_page">Προσθήκη σε διπλή σελίδα</string>
+  <string name="center_margin_wide_page">Προσθήκη σε ευρεία σελίδα</string>
+  <string name="center_margin_double_and_wide_page">Προσθήκη και στα δύο</string>
+  <string name="pref_center_margin">Τύπος περιθωρίου κέντρου</string>
+  <string name="pref_center_margin_summary">Τοποθετήστε κενό για να φιλοξενήσει νεκρό χώρο σε αναδιπλούμενες συσκευές.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Προσαρμοσμένος Επιλογέας Χρώματος</string>
+  <string name="custom_color_description">Επιλέξτε ένα χρώμα για το προσαρμοσμένο θέμα</string>
+  <string name="theme_custom">Προσαρμοσμένο Θέμα</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Αντίγραφα Ασφαλείας</string>
+  <string name="label_sync">Συγχρονισμός</string>
+  <string name="label_triggers">Εναύσματα</string>
+  <string name="pref_backup_and_sync_summary">Χειροκίνητη &amp; αυτόματη δημιουργία αντιγράφων ασφαλείας και συγχρονισμός</string>
+  <string name="update_30min">Κάθε 30 λεπτά</string>
+  <string name="update_1hour">Κάθε ώρα</string>
+  <string name="update_3hour">Κάθε 3 ώρες</string>
+  <string name="sync_error">Ο συγχρονισμός βιβλιοθήκης απέτυχε</string>
+  <string name="sync_complete">Ο συγχρονισμός βιβλιοθήκης ολοκληρώθηκε</string>
+  <string name="sync_in_progress">Ο συγχρονισμός είναι ήδη σε εξέλιξη</string>
+  <string name="pref_sync_host">Διακομιστής</string>
+  <string name="pref_sync_host_summ">Εισάγετε τη διεύθυνση κεντρικού υπολογιστή για το συγχρονισμό της βιβλιοθήκης σας</string>
+  <string name="pref_sync_api_key">API κλειδί</string>
+  <string name="pref_sync_api_key_summ">Εισάγετε το κλειδί API για το συγχρονισμό της βιβλιοθήκης σας</string>
+  <string name="pref_sync_now_group_title">Ενέργειες Συγχρονισμού</string>
+  <string name="pref_sync_now">Συγχρονισμός τώρα</string>
+  <string name="pref_sync_confirmation_title">Επιβεβαίωση συγχρονισμού</string>
+  <string name="pref_sync_now_subtitle">Ξεκινήστε τον άμεσο συγχρονισμό των δεδομένων σας</string>
+  <string name="pref_sync_confirmation_message">Ο συγχρονισμός θα αντικαταστήσει την τοπική βιβλιοθήκη σας με την απομακρυσμένη βιβλιοθήκη. Είστε βέβαιοι ότι θέλετε να συνεχίσετε?</string>
+  <string name="pref_sync_service">Υπηρεσία</string>
+  <string name="pref_sync_service_summ">Επιλέξτε την υπηρεσία για συγχρονισμό της βιβλιοθήκης σας με</string>
+  <string name="pref_sync_service_category">Συγχρονισμός</string>
+  <string name="pref_sync_automatic_category">Αυτόματος Συγχρονισμός</string>
+  <string name="pref_sync_interval">Συχνότητα συγχρονισμού</string>
+  <string name="pref_choose_what_to_sync">Επιλέξτε τι να συγχρονίσετε</string>
+  <string name="success_reset_sync_timestamp">Τελευταίος συγχρονισμός χρονοσήμανσης</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Ολοκληρώθηκε στο %1$s</string>
+  <string name="last_synchronization">Τελευταίος Συγχρονισμός: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Σύνδεση</string>
+  <string name="google_drive_sign_in_success">Σύνδεση με επιτυχία</string>
+  <string name="google_drive_sign_in_failed">Η σύνδεση απέτυχε</string>
+  <string name="authentication">Ταυτοποίηση</string>
+  <string name="pref_google_drive_purge_sync_data">Εκκαθάριση δεδομένων συγχρονισμού από το Google Drive</string>
+  <string name="google_drive_sync_data_purged">Συγχρονισμός δεδομένων που εκκαθαρίζονται από το Google Drive</string>
+  <string name="google_drive_sync_data_not_found">Δεν βρέθηκαν δεδομένα συγχρονισμού στο Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">Σφάλμα καθαρισμού δεδομένων συγχρονισμού από το Google Drive, Προσπαθήστε να συνδεθείτε ξανά.</string>
+  <string name="google_drive_login_success">Συνδεδεμένος στο Google Drive</string>
+  <string name="google_drive_login_failed">Αποτυχία σύνδεσης στο Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">Δεν έχετε συνδεθεί στο Google Drive</string>
+  <string name="error_uploading_sync_data">Σφάλμα κατά το ανέβασμα δεδομένων συγχρονισμού στο Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Σφάλμα Διαγραφής Αρχείου Κλειδώματος Google Drive</string>
+  <string name="error_before_sync_gdrive">Σφάλμα πριν τον συγχρονισμό: %s</string>
+  <string name="pref_purge_confirmation_title">Επιβεβαίωση εκκαθάρισης</string>
+  <string name="pref_purge_confirmation_message">Purging συγχρονισμού δεδομένων θα διαγράψει όλα τα δεδομένα συγχρονισμού σας από το Google Drive. Είστε σίγουροι ότι θέλετε να συνεχίσετε?</string>
+  <string name="pref_sync_options">Δημιουργία εναυσμάτων συγχρονισμού</string>
+  <string name="pref_sync_options_summ">Μπορεί να χρησιμοποιηθεί για τον ορισμό εναυσμάτων συγχρονισμού</string>
+  <string name="sync_on_chapter_read">Συγχρονισμός σε Διάβασμα Κεφαλαίου</string>
+  <string name="sync_on_chapter_open">Συγχρονισμός κατά το άνοιγμα κεφαλαίου</string>
+  <string name="sync_on_episode_seen">Συγχρονισμός στο επεισόδιο</string>
+  <string name="sync_on_episode_open">Συγχρονισμός στο Ανοικτό Επεισόδιο</string>
+  <string name="sync_on_app_start">Συγχρονισμός κατά την εκκίνηση της εφαρμογής</string>
+  <string name="sync_on_app_resume">Συγχρονισμός στη συνέχιση εφαρμογής</string>
+  <string name="sync_library">Συγχρονισμός βιβλιοθήκης</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Ανανέωση επέκτασης σελίδας για ενημέρωση λίστας.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Γραμμή Πλοήγησης</string>
+  <string name="pref_hide_updates_button">Εμφάνιση ενημερώσεων στο nav</string>
+  <string name="pref_hide_history_button">Εμφάνιση ιστορικού στο nav</string>
+  <string name="pref_show_bottom_bar_labels">Να εμφανίζονται πάντα οι ετικέτες</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Επιλέξτε έναν ανιχνευτή</string>
+  <string name="entry_not_tracked">Η καταχώρηση δεν παρακολουθείται.</string>
+  <string name="fill_from_tracker">Συμπλήρωση από ιχνηλάτη</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">Το FlareSolverr λειτουργεί. Ο χρήστης πράκτορας ενημερώθηκε. Παρακαλώ επανεκκινήστε την εφαρμογή</string>
+  <string name="flare_solver_update_user_agent_failed">Το FlareSolverr δεν λειτουργεί. Ο πράκτορας χρήστη δεν ενημερώθηκε. Παρακαλώ ελέγξτε τις ρυθμίσεις σας</string>
+  <string name="flare_solver_error">Σφάλμα επικοινωνίας με το FlareSolverr</string>
+  <string name="flare_solver_error_webview">Σφάλμα στην επίλυση με WebView</string>
+  <string name="pref_enable_flare_solverr">Ενεργοποίηση FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Χρησιμοποιήστε το FlareSolverr για να παρακάμψετε την προστασία αντι-bot του Cloudflare</string>
+  <string name="pref_flare_solverr_url">Σύνδεσμος FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL για την παρουσία FlareSolverr για χρήση π.χ. http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Δοκιμή FlareSolverr και ενημέρωση πράκτορα χρήστη</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Δοκιμάστε το FlareSolverr για να ενημερώσετε τον πράκτορα του χρήστη. Απαιτείται μόνο μία φορά, στη συνέχεια, εναλλάσσετε όπως απαιτείται.</string>
+  <string-array name="title_cast_quality">
+    <item>Επιλογή Ποιότητας/Παροχής Cast</item>
+    <item>Επιλογή Ποιότητας</item>
+  </string-array>
+  <string name="cast_not_connected">Η μετάδοση δεν συνδέθηκε</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Το βίντεο προστέθηκε στην ουρά</item>
+    <item>Το βίντεο προστέθηκε στην ουρά</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Σφάλμα κατά τη φόρτωση βίντεο από το Cast</item>
+    <item>Σφάλμα φόρτωσης βίντεο</item>
+  </string-array>
+  <string name="server_local_notification_casting">Ο τοπικός διακομιστής εκτελείται. Πατήστε για να τον σταματήσετε.</string>
+  <string name="server_local_notification_channel_description">Κανάλι ειδοποίησης τοπικού διακομιστή</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Αυτόματο Μηχάνημα</string>
+  <string name="eh_retry_all">Επανάληψη όλων</string>
+  <string name="eh_boost_page">Ενίσχυση σελίδας</string>
+  <string name="eh_autoscroll_help">Βοήθεια Autoscroll</string>
+  <string name="eh_autoscroll_help_message">Αυτόματη μετάβαση στην επόμενη σελίδα στο καθορισμένο διάστημα. Το διάστημα καθορίζεται σε δευτερόλεπτα.</string>
+  <string name="eh_autoscroll_freq_invalid">Μη έγκυρη συχνότητα</string>
+  <string name="eh_retry_all_help">Επανάληψη όλης της βοήθειας</string>
+  <string name="eh_retry_all_help_message">Επανπροσθήκη όλων των αποτυχημένων σελίδων στην ουρά λήψης.</string>
+  <string name="eh_boost_page_help">Ενίσχυση της σελίδας βοήθεια</string>
+  <string name="eh_boost_page_help_message">Κανονικά ο downloader μπορεί να κατεβάσει μόνο ένα συγκεκριμένο ποσό σελίδων ταυτόχρονα. Αυτό σημαίνει ότι μπορείτε να είστε σε αναμονή για μια σελίδα για να κατεβάσετε, αλλά ο downloader δεν θα ξεκινήσει τη λήψη της σελίδας μέχρι να έχει μια δωρεάν υποδοχή λήψης. Πατώντας το \'Boost page\' ο downloader θα αναγκάσει τον downloader να ξεκινήσει τη λήψη της τρέχουσας σελίδας, ανεξάρτητα από το αν υπάρχει ή όχι διαθέσιμη υποδοχή.</string>
+  <string name="eh_boost_page_invalid">Αυτή η σελίδα δεν μπορεί να ενισχυθεί (μη έγκυρη σελίδα)!</string>
+  <string name="eh_boost_page_errored">Η σελίδα απέτυχε να φορτωθεί, πατήστε το κουμπί επανάληψης!</string>
+  <string name="eh_boost_page_downloading">Αυτή η σελίδα γίνεται ήδη λήψη!</string>
+  <string name="eh_boost_page_downloaded">Αυτή η σελίδα έχει ήδη ληφθεί!</string>
+  <string name="eh_boost_boosted">Ενισχυμένη τρέχουσα σελίδα!</string>
+  <string name="eh_boost_invalid_loader">Αυτή η σελίδα δεν μπορεί να ενισχυθεί (μη έγκυρος φορτωτής σελίδας)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Επανάληψη %1$d απέτυχε η σελίδα…</item>
+    <item quantity="other">Επανάληψη %1$d απέτυχε σελίδες…</item>
+  </plurals>
+  <string name="pref_category_castserver">Μετάδοση Διακομιστή</string>
+  <string name="pref_cast_server_port">Θύρα Διακομιστή Cast</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Προσαρμογή Discord</string>
+  <string name="pref_discord_custom_message">Προσαρμοσμένο Μήνυμα</string>
+  <string name="pref_discord_custom_message_summary">Προσαρμοσμένο μήνυμα που θα εμφανίζεται στο Discord</string>
+  <string name="pref_discord_show_progress">Εμφάνιση Προόδου</string>
+  <string name="pref_discord_show_progress_summary">Εμφάνιση προόδου τρέχοντος επεισοδίου/κεφαλαίου</string>
+  <string name="pref_discord_show_timestamp">Εμφάνιση Ώρας</string>
+  <string name="pref_discord_show_timestamp_summary">Εμφάνιση παρήλθε/υπόλοιπος χρόνος</string>
+  <string name="pref_discord_show_buttons">Εμφάνιση Κουμπιών</string>
+  <string name="pref_discord_show_buttons_summary">Εμφάνιση κουμπιών για λήψη της εφαρμογής ή σύνδεση με τον διακομιστή Discord</string>
+  <string name="pref_discord_show_download_button">Εμφάνιση Κουμπιού Λήψης</string>
+  <string name="pref_discord_show_download_button_summary">Εμφανίζει ένα κουμπί για λήψη της εφαρμογής</string>
+  <string name="pref_discord_show_discord_button">Εμφάνιση Κουμπιού Discord</string>
+  <string name="pref_discord_show_discord_button_summary">Εμφανίζει ένα κουμπί για να συνδεθεί με τον διακομιστή του Discord</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Ουρά Αναπαραγωγής</string>
+  <string name="action_clear_queue">Εκκαθάριση Ουράς</string>
+  <string name="cast_remove_from_queue">Αφαίρεση από την ουρά</string>
+  <string name="move_to_top">Μετακίνηση στην κορυφή</string>
+  <string name="move_to_position">Μετακίνηση στη θέση</string>
+  <string name="position">Θέση</string>
+  <string name="select_position">Επιλογή Θέσης</string>
+  <string name="remove_from_queue_confirmation">Αφαίρεση από την ουρά?</string>
+  <string name="clear_queue_confirmation">Εκκαθάριση Ουράς</string>
+  <string name="clear_queue_confirmation_message">Είστε βέβαιοι ότι θέλετε να καθαρίσετε ολόκληρη την ουρά?</string>
+  <string name="queue">Ουρά</string>
+  <string name="move_to_bottom">Μετακίνηση στο κάτω μέρος</string>
+  <string name="action_end_session">Τέλος Συνεδρίας Cast</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Διαθέσιμες Συσκευές</string>
+  <string name="cast_media_info">Πληροφορίες Πολυμέσων</string>
+  <string name="cast_previous_video">Προηγούμενο Βίντεο</string>
+  <string name="cast_next_video">Επόμενο Βίντεο</string>
+  <string name="cast_play">Αναπαραγωγή</string>
+  <string name="cast_pause">Παύση</string>
+  <string name="cast_rewind_30s">Επαναφορά 30S</string>
+  <string name="cast_forward_30s">Εμπρός 30δ</string>
+  <string name="cast_volume">Όγκος</string>
+  <string name="cast_end_session">Τέλος Συνεδρίας Cast</string>
+  <string name="empty_queue">Ουρά είναι κενή</string>
+  <string name="cast_end_session_message">Είστε βέβαιοι ότι θέλετε να τερματίσετε την τρέχουσα συνεδρία cast?</string>
+  <string name="cast_end_session_confirm">Τέλος Συνεδρίας</string>
+  <string name="cast_end_session_cancel">Ακύρωση</string>
+  <string name="playback_speed">Ταχύτητα Αναπαραγωγής</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Ρυθμίσεις Υποτίτλων</item>
+    <item>Ρυθμίσεις Υποτίτλων</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Χρώμα Κειμένου</string>
+  <string name="cast_subtitle_background">Φόντο</string>
+  <string name="cast_subtitle_shadow">Σκιά</string>
+  <string name="cast_subtitle_apply">Εφαρμογή</string>
+  <string name="cast_subtitle_reset">Επαναφορά προεπιλογών</string>
+  <string name="cast_subtitle_shadow_None">Κανένα</string>
+  <string name="cast_subtitle_shadow_Light">Φωτεινό</string>
+  <string name="cast_subtitle_shadow_Medium">Μεσαίο</string>
+  <string name="cast_subtitle_shadow_Strong">Ισχυρός</string>
+  <string name="cast_subtitle_preview">Προεπισκόπηση Κειμένου...</string>
+  <string name="cast_tracks">Επιλογή Υπότιτλου/Κομματιού Ήχου</string>
+  <string name="cast_volume_down">Μείωση Έντασης</string>
+  <string name="cast_volume_up">Αύξηση Έντασης</string>
+  <string name="cast_subtitles">Υπότιτλοι</string>
+  <string name="cast_audio_tracks">Κομμάτια Ήχου</string>
+  <string name="cast_no_subtitles">Χωρίς Υπότιτλους</string>
+  <string name="cast_close">Κλείσιμο</string>
+  <string name="cast_subtitle_font_family">Οικογένεια Γραμματοσειρών</string>
+  <string name="cast_subtitle_border_style">Στυλ Περιγράμματος</string>
+  <string name="cast_subtitle_border_none">Κανένα</string>
+  <string name="cast_subtitle_border_outline">Περίγραμμα</string>
+  <string name="cast_subtitle_border_drop_shadow">Πτώση Σκιάς</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Σκιά Γρήγορης Πτώσης</string>
+  <string name="cast_subtitle_border_raised">Αυξήθηκε</string>
+  <string name="cast_subtitle_border_depressed">Καταπιεσμένο</string>
+  <string name="cast_connection_error">Σφάλμα Σύνδεσης</string>
+  <string name="discord_accounts">Λογαριασμοί Discord</string>
+  <string name="active_account">Ενεργός Λογαριασμός</string>
+  <string name="no_accounts_found">Δεν βρέθηκαν λογαριασμοί</string>
+  <string name="login_failed">Αποτυχία σύνδεσης</string>
+  <string name="action_display_comfortable_grid_panorama">Πανόραμα άνετο πλέγμα</string>
+  <string name="action_bulk_select">Λειτουργία μαζικής επιλογής</string>
+  <string name="action_move_up">Μετακίνηση Πάνω</string>
+  <string name="action_move_down">Μετακίνηση Κάτω</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Πάρα πολλές πηγές στη ροή σας, δεν μπορούν να προσθέσουν περισσότερες από 20</string>
+  <string name="action_sort_feed">Ταξινόμηση ροών</string>
+  <string name="sort_feed_confirmation">Θα θέλατε να ταξινομήσετε τις ζωοτροφές αλφαβητικά?</string>
+  <string name="saved_searches_feeds">Saved Searches &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Αποθηκευμένες αναζητήσεις (Κρατήστε για προσθήκη στη Ροή)</string>
+  <string name="pref_hide_feed">Απόκρυψη καρτέλας ροής</string>
+  <string name="pref_feed_position">Θέση καρτέλας ροής</string>
+  <string name="pref_feed_position_summery">Θέλετε η καρτέλα ροής να είναι η πρώτη καρτέλα στην περιήγηση? Αυτό θα κάνει την προεπιλεγμένη καρτέλα όταν ανοίγετε την περιήγηση, δεν συνιστάται αν είστε σε δεδομένα ή σε ένα μετρημένο δίκτυο</string>
+  <string name="feed">Τροφοδοσία</string>
+  <string name="feed_delete">Διαγραφή στοιχείου ροής?</string>
+  <string name="feed_tab_empty">Δεν έχετε καμία πηγή στη ροή σας, μεταβείτε στην επάνω δεξιά γωνία για να προσθέσετε μία</string>
+  <string name="feed_add">Προσθήκη %1$s για τροφοδοσία?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Αποθήκευση Αναζητήσεων</string>
+  <string name="save_search">Αποθήκευση τρέχοντος ερωτήματος αναζήτησης?</string>
+  <string name="save_search_hint">Το όνομα αναζήτησης</string>
+  <string name="save_search_failed_to_load">Αποτυχία φόρτωσης αποθηκευμένων αναζητήσεων!</string>
+  <string name="save_search_failed_to_load_message">Παρουσιάστηκε σφάλμα κατά τη φόρτωση των αποθηκευμένων σας αναζητήσεων.</string>
+  <string name="save_search_delete">Διαγραφή του αποθηκευμένου ερωτήματος αναζήτησης?</string>
+  <string name="save_search_delete_message">Είστε βέβαιοι ότι θέλετε να διαγράψετε το αποθηκευμένο ερώτημά σας: \'%1$s\'?</string>
+  <string name="save_search_invalid">Μη έγκυρη αποθηκευμένη αναζήτηση, τα φίλτρα έχουν αλλάξει</string>
+  <string name="save_search_invalid_name">Μη έγκυρο όνομα αποθηκευμένης αναζήτησης</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Δεν υπάρχουν διαθέσιμες κατηγορίες πηγής</string>
+  <string name="invalid_category_name">Μη έγκυρο όνομα κατηγορίας</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Προτάσεις</string>
+  <string name="pref_source_related_mangas_summary">Εμφάνιση προτάσεων πηγαίου ιστοτόπου κατά την προβολή της καταχώρησης</string>
+  <string name="related_mangas_website_suggestions">Προτάσεις Ιστοσελίδας</string>
+  <string name="related_mangas_more">Περισσότερο σαν αυτά...</string>
+  <string name="saved_searches_delete">Αποθηκευμένες αναζητήσεις (Κρατήστε για διαγραφή)</string>
+  <string name="pref_expand_related_animes">Επέκταση Προτάσεων</string>
+  <string name="pref_expand_related_animes_summary">Αν απενεργοποιηθεί, οι προτάσεις δεν θα φορτώσουν αυτόματα το &amp; show επεκτάθηκε</string>
+  <string name="put_related_animes_in_overflow">Προτάσεις υπερχείλισης</string>
+  <string name="put_related_animes_in_overflow_summary">Βάλτε το κουμπί Προτάσεις στο μενού υπερχείλισης αντί στη σελίδα εισόδου</string>
+  <string name="pref_show_home_on_related_animes">Αρχική από Προτάσεις</string>
+  <string name="pref_show_home_on_related_animes_summary">Εμφάνιση εικονιδίου κατά την περιήγηση στις προτάσεις για πλοήγηση απευθείας πίσω στην Αρχική</string>
+  <string name="pref_source_related_animes">Προτάσεις</string>
+  <string name="pref_source_related_animes_summary">Εμφάνιση προτάσεων πηγαίου ιστοτόπου κατά την προβολή της καταχώρησης</string>
+  <string name="pref_source_navigation">Αντικατάσταση τελευταίου κουμπιού</string>
+  <string name="pref_source_navigation_summery">Αντικατάσταση του τελευταίου κουμπιού με μια προσαρμοσμένη προβολή περιήγησης που περιλαμβάνει και πιο πρόσφατη και περιήγηση</string>
+</resources>

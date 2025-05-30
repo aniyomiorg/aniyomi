@@ -15,7 +15,10 @@ import eu.kanade.presentation.browse.anime.AnimeSourceOptionsDialog
 import eu.kanade.presentation.browse.anime.AnimeSourcesScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.tachiyomi.ui.browse.anime.source.SourcesScreen.SmartSearchConfig
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
+import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel
+import eu.kanade.tachiyomi.ui.browse.anime.source.feed.SourceFeedScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
@@ -24,9 +27,11 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
-fun Screen.animeSourcesTab(): TabContent {
+fun Screen.animeSourcesTab(
+    smartSearchConfig: SmartSearchConfig? = null,
+): TabContent {
     val navigator = LocalNavigator.currentOrThrow
-    val screenModel = rememberScreenModel { AnimeSourcesScreenModel() }
+    val screenModel = rememberScreenModel { AnimeSourcesScreenModel(smartSearchConfig = smartSearchConfig) }
     val state by screenModel.state.collectAsState()
 
     return TabContent(
@@ -48,7 +53,14 @@ fun Screen.animeSourcesTab(): TabContent {
                 state = state,
                 contentPadding = contentPadding,
                 onClickItem = { source, listing ->
-                    navigator.push(BrowseAnimeSourceScreen(source.id, listing.query))
+                    // SY -->
+                    val screen = when {
+                        listing == BrowseAnimeSourceScreenModel.Listing.Popular &&
+                            screenModel.useNewSourceNavigation -> SourceFeedScreen(source.id)
+                        else -> BrowseAnimeSourceScreen(source.id, listing.query)
+                    }
+                    navigator.push(screen)
+                    // SY <--
                 },
                 onClickPin = screenModel::togglePin,
                 onLongClickItem = screenModel::showSourceDialog,

@@ -1,5 +1,5 @@
 name: 🐞 Issue report
-description: Report an issue in Aniyomi
+description: Report an issue in Animetail
 labels: [Bug]
 body:
   - type: textarea
@@ -47,10 +47,10 @@ body:
         You can upload the crash log file as an attachment, or paste the crash logs in plain text if needed.
 
   - type: input
-    id: aniyomi-version
+    id: animetail-version
     attributes:
-      label: Aniyomi version
-      description: You can find your Aniyomi version in **More → About**.
+      label: Animetail version
+      description: You can find your Animetail version in **More → About**.
       placeholder: |
         Example: "0.16.4.3"
     validations:
@@ -97,7 +97,7 @@ body:
           required: true
         - label: I have gone through the [FAQ](https://aniyomi.org/docs/faq/general) and [troubleshooting guide](https://aniyomi.org/docs/guides/troubleshooting/).
           required: true
-        - label: I have updated the app to version **[0.16.4.3](https://github.com/aniyomiorg/aniyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.16.4.3](https://github.com/dark25/animetail2/releases/latest)**.
           required: true
         - label: I have filled out all of the requested information in this form, including specific version numbers.
           required: true

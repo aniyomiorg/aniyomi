@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="zero">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+    <item quantity="one">إعادة محاولة %1$d فشل الصفحة…</item>
+    <item quantity="two">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+    <item quantity="few">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+    <item quantity="many">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+    <item quantity="other">إعادة محاولة %1$d الصفحات الفاشلة…</item>
+  </plurals>
+</resources>
