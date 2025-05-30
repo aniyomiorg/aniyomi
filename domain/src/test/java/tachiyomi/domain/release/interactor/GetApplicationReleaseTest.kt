@@ -49,7 +49,7 @@ class GetApplicationReleaseTest {
                 isPreview = true,
                 commitCount = 1000,
                 versionName = "",
-                repoUrl = "test",
+                repository = "test",
             ),
         )
 
@@ -77,7 +77,7 @@ class GetApplicationReleaseTest {
                 isPreview = false,
                 commitCount = 0,
                 versionName = "v1.0.0",
-                repoUrl = "test",
+                repository = "test",
             ),
         )
 
@@ -105,7 +105,7 @@ class GetApplicationReleaseTest {
                 isPreview = false,
                 commitCount = 0,
                 versionName = "v2.0.0",
-                repoUrl = "test",
+                repository = "test",
             ),
         )
 
@@ -131,7 +131,7 @@ class GetApplicationReleaseTest {
                 isPreview = false,
                 commitCount = 0,
                 versionName = "v2.0.0",
-                repoUrl = "test",
+                repository = "test",
             ),
         )
 

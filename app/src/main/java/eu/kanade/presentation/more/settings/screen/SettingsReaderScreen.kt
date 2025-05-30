@@ -71,7 +71,7 @@ object SettingsReaderScreen : SearchableSettings {
             ),
             SY <-- */
             Preference.PreferenceItem.SwitchPreference(
-                pref = readerPref.flashOnPageChange(),
+                preference = readerPref.flashOnPageChange(),
                 title = stringResource(MR.strings.pref_flash_page),
                 subtitle = stringResource(MR.strings.pref_flash_page_summ),
             ),
@@ -224,8 +224,7 @@ object SettingsReaderScreen : SearchableSettings {
                 Preference.PreferenceItem.SliderPreference(
                     value = preloadSize,
                     title = stringResource(TLMR.strings.pref_page_preload_amount),
-                    min = ReaderPreferences.PRELOAD_SIZE_MIN,
-                    max = ReaderPreferences.PRELOAD_SIZE_MAX,
+                    valueRange = ReaderPreferences.PRELOAD_SIZE_MIN..ReaderPreferences.PRELOAD_SIZE_MAX,
                     onValueChanged = {
                         preloadSizePref.set(it)
                         true
@@ -481,14 +480,14 @@ object SettingsReaderScreen : SearchableSettings {
             title = stringResource(TLMR.strings.pref_category_fork),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.MultiSelectListPreference(
-                    pref = readerPreferences.readerBottomButtons(),
+                    preference = readerPreferences.readerBottomButtons(),
                     title = stringResource(TLMR.strings.reader_bottom_buttons),
                     subtitle = stringResource(TLMR.strings.reader_bottom_buttons_summary),
                     entries = ReaderBottomButton.entries
                         .associate { it.value to stringResource(it.stringRes) }.toPersistentMap(),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = readerPreferences.pageLayout(),
+                    preference = readerPreferences.pageLayout(),
                     title = stringResource(TLMR.strings.page_layout),
                     subtitle = stringResource(TLMR.strings.automatic_can_still_switch),
                     entries = ReaderPreferences.PageLayouts
@@ -496,12 +495,12 @@ object SettingsReaderScreen : SearchableSettings {
                         .toMap().toPersistentMap(),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = readerPreferences.invertDoublePages(),
+                    preference = readerPreferences.invertDoublePages(),
                     title = stringResource(TLMR.strings.invert_double_pages),
                     enabled = pageLayout != PagerConfig.PageLayout.SINGLE_PAGE,
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = readerPreferences.centerMarginType(),
+                    preference = readerPreferences.centerMarginType(),
                     title = stringResource(TLMR.strings.center_margin),
                     subtitle = stringResource(TLMR.strings.pref_center_margin_summary),
                     entries = ReaderPreferences.CenterMarginTypes

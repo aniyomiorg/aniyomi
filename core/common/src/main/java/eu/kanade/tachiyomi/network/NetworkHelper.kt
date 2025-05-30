@@ -49,7 +49,7 @@ class NetworkHelper(
 
         builder.addInterceptor(
             // TLMR -->
-            CloudflareInterceptor(context, cookieJar, preferences, ::defaultUserAgentProvider),
+            CloudflareInterceptor(context, cookieJar, preferences) { defaultUserAgentProvider() },
             // <-- TLMR
         )
 
@@ -75,7 +75,7 @@ class NetworkHelper(
 
     val client = clientBuilder
         .addInterceptor(
-            CloudflareInterceptor(context, cookieJar, ::defaultUserAgentProvider),
+            CloudflareInterceptor(context, cookieJar, preferences) { defaultUserAgentProvider() },
         )
         .build()
 

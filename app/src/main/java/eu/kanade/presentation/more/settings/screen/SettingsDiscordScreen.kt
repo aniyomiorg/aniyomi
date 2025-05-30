@@ -157,17 +157,17 @@ object SettingsDiscordScreen : SearchableSettings {
                 title = stringResource(R.string.connections_discord),
                 preferenceItems = persistentListOf(
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = enableDRPCPref,
+                        preference = enableDRPCPref,
                         title = stringResource(R.string.pref_enable_discord_rpc),
                     ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = useChapterTitlesPref,
+                        preference = useChapterTitlesPref,
                         enabled = enableDRPC,
                         title = stringResource(id = R.string.show_chapters_titles_title),
                         subtitle = stringResource(id = R.string.show_chapters_titles_subtitle),
                     ),
                     Preference.PreferenceItem.ListPreference(
-                        pref = discordRPCStatus,
+                        preference = discordRPCStatus,
                         title = stringResource(R.string.pref_discord_status),
                         entries = persistentMapOf(
                             -1 to stringResource(R.string.pref_discord_dnd),
@@ -192,28 +192,28 @@ object SettingsDiscordScreen : SearchableSettings {
                         onClick = { showCustomMessageDialog = true },
                     ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = showProgressPref,
+                        preference = showProgressPref,
                         title = stringResource(R.string.pref_discord_show_progress),
                         subtitle = stringResource(R.string.pref_discord_show_progress_summary),
                     ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = showTimestampPref,
+                        preference = showTimestampPref,
                         title = stringResource(R.string.pref_discord_show_timestamp),
                         subtitle = stringResource(R.string.pref_discord_show_timestamp_summary),
                     ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = showButtonsPref,
+                        preference = showButtonsPref,
                         title = stringResource(R.string.pref_discord_show_buttons),
                         subtitle = stringResource(R.string.pref_discord_show_buttons_summary),
                     ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = showDownloadButtonPref,
+                        preference = showDownloadButtonPref,
                         title = stringResource(R.string.pref_discord_show_download_button),
                         subtitle = stringResource(R.string.pref_discord_show_download_button_summary),
                         enabled = showButtons,
                     ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = showDiscordButtonPref,
+                        preference = showDiscordButtonPref,
                         title = stringResource(R.string.pref_discord_show_discord_button),
                         subtitle = stringResource(R.string.pref_discord_show_discord_button_summary),
                         enabled = showButtons,
@@ -266,7 +266,7 @@ object SettingsDiscordScreen : SearchableSettings {
             title = stringResource(R.string.general_categories),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = discordRPCIncognitoPref,
+                    preference = discordRPCIncognitoPref,
                     title = stringResource(R.string.pref_discord_incognito),
                     subtitle = stringResource(R.string.pref_discord_incognito_summary),
                 ),

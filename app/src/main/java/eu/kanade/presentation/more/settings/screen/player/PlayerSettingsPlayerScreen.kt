@@ -315,7 +315,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(TLMR.strings.pref_category_cast),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableCast,
+                    preference = enableCast,
                     title = stringResource(TLMR.strings.pref_enable_cast),
                 ),
             ),
@@ -372,7 +372,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(TLMR.strings.pref_category_torrentserver),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.EditTextPreference(
-                    pref = torrentServerPreferences.port(),
+                    preference = torrentServerPreferences.port(),
                     title = stringResource(TLMR.strings.pref_torrentserver_port),
                     onValueChanged = {
                         try {
@@ -385,7 +385,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.MultiLineEditTextPreference(
-                    pref = torrentServerPreferences.trackers(),
+                    preference = torrentServerPreferences.trackers(),
                     title = context.stringResource(TLMR.strings.pref_torrent_trackers),
                     subtitle = trackersPref.asState(scope).value
                         .lines().take(2)
@@ -418,7 +418,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             title = stringResource(TLMR.strings.pref_category_castserver),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.EditTextPreference(
-                    pref = localHttpServerHolder.port(),
+                    preference = localHttpServerHolder.port(),
                     title = stringResource(TLMR.strings.pref_cast_server_port),
                     onValueChanged = {
                         try {

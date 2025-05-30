@@ -218,19 +218,19 @@ object SettingsAppearanceScreen : SearchableSettings {
 //                ),
 //                // KMK -->
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.expandRelatedAnimes(),
+                    preference = uiPreferences.expandRelatedAnimes(),
                     title = stringResource(TLMR.strings.pref_expand_related_animes),
                     subtitle = stringResource(TLMR.strings.pref_expand_related_animes_summary),
                     enabled = sourcePreferences.relatedAnimes().get(),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.relatedAnimesInOverflow(),
+                    preference = uiPreferences.relatedAnimesInOverflow(),
                     enabled = !relatedMangasInOverflow,
                     title = stringResource(TLMR.strings.put_related_animes_in_overflow),
                     subtitle = stringResource(TLMR.strings.put_related_animes_in_overflow_summary),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.showHomeOnRelatedAnimes(),
+                    preference = uiPreferences.showHomeOnRelatedAnimes(),
                     title = stringResource(TLMR.strings.pref_show_home_on_related_animes),
                     subtitle = stringResource(TLMR.strings.pref_show_home_on_related_animes_summary),
                     enabled = sourcePreferences.relatedAnimes().get(),
@@ -275,15 +275,15 @@ object SettingsAppearanceScreen : SearchableSettings {
             stringResource(TLMR.strings.pref_category_navbar),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.showNavUpdates(),
+                    preference = uiPreferences.showNavUpdates(),
                     title = stringResource(TLMR.strings.pref_hide_updates_button),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.showNavHistory(),
+                    preference = uiPreferences.showNavHistory(),
                     title = stringResource(TLMR.strings.pref_hide_history_button),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.bottomBarLabels(),
+                    preference = uiPreferences.bottomBarLabels(),
                     title = stringResource(TLMR.strings.pref_show_bottom_bar_labels),
                 ),
             ),

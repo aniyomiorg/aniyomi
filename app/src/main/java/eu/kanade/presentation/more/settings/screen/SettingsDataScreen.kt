@@ -20,7 +20,6 @@ import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
@@ -30,11 +29,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -60,11 +57,11 @@ import eu.kanade.presentation.util.relativeTimeSpanString
 import eu.kanade.tachiyomi.data.backup.create.BackupCreateJob
 import eu.kanade.tachiyomi.data.backup.restore.BackupRestoreJob
 import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.export.ExportEntry
 import eu.kanade.tachiyomi.data.export.ExportEntry.Companion.toExportEntry
 import eu.kanade.tachiyomi.data.export.LibraryExporter
 import eu.kanade.tachiyomi.data.export.LibraryExporter.ExportOptions
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.data.sync.SyncManager
 import eu.kanade.tachiyomi.data.sync.service.GoogleDriveService
@@ -75,7 +72,6 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
@@ -91,7 +87,6 @@ import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.storage.service.StoragePreferences
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -341,7 +336,7 @@ object SettingsDataScreen : SearchableSettings {
 
                 // AM (FILE_SIZE) -->
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = storagePreferences.showEpisodeFileSize(),
+                    preference = storagePreferences.showEpisodeFileSize(),
                     title = stringResource(TLMR.strings.pref_show_downloaded_episode_file_size),
                 ),
                 // <-- AM (FILE_SIZE)
@@ -541,7 +536,7 @@ object SettingsDataScreen : SearchableSettings {
                 title = stringResource(TLMR.strings.pref_sync_service_category),
                 preferenceItems = persistentListOf(
                     Preference.PreferenceItem.ListPreference(
-                        pref = syncPreferences.syncService(),
+                        preference = syncPreferences.syncService(),
                         title = stringResource(TLMR.strings.pref_sync_service),
                         entries = persistentMapOf(
                             SyncManager.SyncService.NONE.value to stringResource(MR.strings.off),
@@ -673,7 +668,7 @@ object SettingsDataScreen : SearchableSettings {
             Preference.PreferenceItem.EditTextPreference(
                 title = stringResource(TLMR.strings.pref_sync_host),
                 subtitle = stringResource(TLMR.strings.pref_sync_host_summ),
-                pref = syncPreferences.clientHost(),
+                preference = syncPreferences.clientHost(),
                 onValueChanged = { newValue ->
                     scope.launch {
                         // Trim spaces at the beginning and end, then remove trailing slash if present
@@ -687,7 +682,7 @@ object SettingsDataScreen : SearchableSettings {
             Preference.PreferenceItem.EditTextPreference(
                 title = stringResource(TLMR.strings.pref_sync_api_key),
                 subtitle = stringResource(TLMR.strings.pref_sync_api_key_summ),
-                pref = syncPreferences.clientAPIKey(),
+                preference = syncPreferences.clientAPIKey(),
             ),
         )
     }
@@ -731,7 +726,7 @@ object SettingsDataScreen : SearchableSettings {
             title = stringResource(TLMR.strings.pref_sync_automatic_category),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = syncIntervalPref,
+                    preference = syncIntervalPref,
                     title = stringResource(TLMR.strings.pref_sync_interval),
                     entries = persistentMapOf(
                         0 to stringResource(MR.strings.off),

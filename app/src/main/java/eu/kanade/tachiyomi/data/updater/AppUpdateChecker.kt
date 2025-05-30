@@ -7,12 +7,18 @@ import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import uy.kohesive.injekt.injectLazy
 
-class AppUpdateChecker(private val context: Context) {
+class AppUpdateChecker {
+
     private val getApplicationRelease: GetApplicationRelease by injectLazy()
 
-    suspend fun checkForUpdates(forceCheck: Boolean = false): GetApplicationRelease.Result {
-        return withContext(Dispatchers.IO) {
-            getApplicationRelease.await(
+    suspend fun checkForUpdate(context: Context, forceCheck: Boolean = false): GetApplicationRelease.Result {
+        // Disabling app update checks for older Android versions that we're going to drop support for
+        // if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+        //    return GetApplicationRelease.Result.OsTooOld
+        // }
+
+        return withIOContext {
+            val result = getApplicationRelease.await(
                 GetApplicationRelease.Arguments(
                     isPreviewBuildType,
                     BuildConfig.COMMIT_COUNT.toInt(),
@@ -28,9 +34,12 @@ class AppUpdateChecker(private val context: Context) {
                 )
                 else -> {}
             }
+
+            result
         }
     }
 }
+
 
 val GITHUB_REPO: String by lazy {
     if (isPreviewBuildType) {

@@ -278,7 +278,7 @@ object SettingsLibraryScreen : SearchableSettings {
                 ),
                 // SY -->
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.groupAnimeLibraryUpdateType(),
+                    preference = libraryPreferences.groupAnimeLibraryUpdateType(),
                     title = stringResource(TLMR.strings.anime_library_group_updates),
                     entries = persistentMapOf(
                         AnimeGroupLibraryMode.GLOBAL to stringResource(
@@ -293,7 +293,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.groupMangaLibraryUpdateType(),
+                    preference = libraryPreferences.groupMangaLibraryUpdateType(),
                     title = stringResource(TLMR.strings.manga_library_group_updates),
                     entries = persistentMapOf(
                         MangaGroupLibraryMode.GLOBAL to stringResource(

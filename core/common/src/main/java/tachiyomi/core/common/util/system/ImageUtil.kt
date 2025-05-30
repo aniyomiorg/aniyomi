@@ -382,22 +382,6 @@ object ImageUtil {
         return maxOf(width, height) <= hardwareBitmapThreshold
     }
 
-    fun canUseHardwareBitmap(bitmap: Bitmap): Boolean {
-        return canUseHardwareBitmap(bitmap.width, bitmap.height)
-    }
-
-    fun canUseHardwareBitmap(imageSource: BufferedSource): Boolean {
-        return with(extractImageOptions(imageSource)) {
-            canUseHardwareBitmap(outWidth, outHeight)
-        }
-    }
-
-    var hardwareBitmapThreshold: Int = GLUtil.SAFE_TEXTURE_LIMIT
-
-    private fun canUseHardwareBitmap(width: Int, height: Int): Boolean {
-        if (HARDWARE_BITMAP_UNSUPPORTED) return false
-        return maxOf(width, height) <= hardwareBitmapThreshold
-    }
 
     /**
      * Algorithm for determining what background to accompany a comic/manga page

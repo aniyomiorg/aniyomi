@@ -73,7 +73,6 @@ import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import logcat.LogPriority
 import mihon.core.migration.Migrator.scope
@@ -324,12 +323,12 @@ object SettingsAdvancedScreen : SearchableSettings {
                 ),
                 // TLMR -->
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = enableFlareSolverrPref,
+                    preference = enableFlareSolverrPref,
                     title = stringResource(TLMR.strings.pref_enable_flare_solverr),
                     subtitle = stringResource(TLMR.strings.pref_enable_flare_solverr_summary),
                 ),
                 Preference.PreferenceItem.EditTextPreference(
-                    pref = flareSolverrUrlPref,
+                    preference = flareSolverrUrlPref,
                     title = stringResource(TLMR.strings.pref_flare_solverr_url),
                     enabled = enableFlareSolverr,
                     subtitle = stringResource(TLMR.strings.pref_flare_solverr_url_summary),

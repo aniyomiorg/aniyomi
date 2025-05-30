@@ -1,8 +1,6 @@
 package eu.kanade.presentation.entries.components
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.FlipToBack
@@ -37,7 +35,6 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 @Composable
-@Suppress("LongMethod", "CyclomaticComplexMethod")
 fun EntryToolbar(
     title: String,
     hasFilters: Boolean,
@@ -67,6 +64,12 @@ fun EntryToolbar(
     isManga: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val navigator = LocalNavigator.current
+    fun onHomeClicked() = navigator?.popUntil { screen ->
+        screen is SourceFeedScreen || screen is BrowseAnimeSourceScreen
+    }
+    val isHomeEnabled = Injekt.get<UiPreferences>().showHomeOnRelatedAnimes().get()
+
     val isActionMode = actionModeCounter > 0
     AppBar(
         titleContent = {
@@ -75,72 +78,38 @@ fun EntryToolbar(
             } else {
                 AppBarTitle(title, modifier = Modifier.alpha(titleAlphaProvider()))
             }
-    // KMK -->
-    val navigator = LocalNavigator.current
-    fun onHomeClicked() = navigator?.popUntil { screen ->
-        screen is SourceFeedScreen || screen is BrowseAnimeSourceScreen
-    }
-    val isHomeEnabled = Injekt.get<UiPreferences>().showHomeOnRelatedAnimes().get()
-    // KMK <--
         },
         modifier = modifier,
-    ) {
-        val isActionMode = actionModeCounter > 0
-        TopAppBar(
-            title = {
-                Text(
-                    text = if (isActionMode) actionModeCounter.toString() else title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = LocalContentColor.current.copy(alpha = if (isActionMode) 1f else titleAlphaProvider()),
-                )
-            },
-            navigationIcon = {
-                Row {
-                    IconButton(onClick = onBackClicked) {
-                        UpIcon(navigationIcon = Icons.Outlined.Close.takeIf { isActionMode })
+        backgroundColor = MaterialTheme.colorScheme
+            .surfaceColorAtElevation(3.dp)
+            .copy(alpha = if (isActionMode) 1f else backgroundAlphaProvider()),
+        navigateUp = {
+            if (isActionMode) {
+                onCancelActionMode()
+            } else {
+                navigateUp()
+
+                if (isHomeEnabled && navigator != null) {
+                    if (navigator.size >= 2 &&
+                        navigator.items[navigator.size - 2] is AnimeScreen ||
+                        navigator.size >= 5
+                    ) {
+                        onHomeClicked()
                     }
-                    // KMK -->
-                    if (isHomeEnabled && navigator != null) {
-                        if (navigator.size >= 2 &&
-                            navigator.items[navigator.size - 2] is AnimeScreen ||
-                            navigator.size >= 5
-                        ) {
-                            IconButton(onClick = { onHomeClicked() }) {
-                                UpIcon(navigationIcon = Icons.Filled.Home)
-                            }
-                        }
-                    }
-                    // KMK <--
                 }
-            },
-            actions = {
-                if (isActionMode) {
-                    AppBarActions(
-                        persistentListOf(
-                            AppBar.Action(
-                                title = stringResource(MR.strings.action_select_all),
-                                icon = Icons.Outlined.SelectAll,
-                                onClick = onSelectAll,
-                            ),
-                            AppBar.Action(
-                                title = stringResource(MR.strings.action_select_inverse),
-                                icon = Icons.Outlined.FlipToBack,
-                                onClick = onInvertSelection,
-                            ),
-                        ),
-                    )
-                } else {
-                    var downloadExpanded by remember { mutableStateOf(false) }
-                    if (onClickDownload != null) {
-                        val onDismissRequest = { downloadExpanded = false }
-                        EntryDownloadDropdownMenu(
-                            expanded = downloadExpanded,
-                            onDismissRequest = onDismissRequest,
-                            onDownloadClicked = onClickDownload,
-                            isManga = isManga,
-                        )
-                    }
+            }
+        },
+        actions = {
+            var downloadExpanded by remember { mutableStateOf(false) }
+            if (onClickDownload != null) {
+                val onDismissRequest = { downloadExpanded = false }
+                EntryDownloadDropdownMenu(
+                    expanded = downloadExpanded,
+                    onDismissRequest = onDismissRequest,
+                    onDownloadClicked = onClickDownload,
+                    isManga = isManga,
+                )
+            }
 
             val filterTint = if (hasFilters) MaterialTheme.colorScheme.active else LocalContentColor.current
             AppBarActions(

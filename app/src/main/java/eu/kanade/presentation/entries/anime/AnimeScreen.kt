@@ -376,12 +376,13 @@ private fun AnimeScreenSmallImpl(
         } else {
             navigateUp()
         }
-    }
+    })
+
     val relatedAnimesEnabled by Injekt.get<SourcePreferences>().relatedAnimes().collectAsState()
     val expandRelatedAnimes by uiPreferences.expandRelatedAnimes().collectAsState()
     val showRelatedAnimesInOverflow by uiPreferences.relatedAnimesInOverflow().collectAsState()
 
-    BackHandler(onBack = internalOnBackPressed)
+
     Scaffold(
         topBar = {
             val selectedEpisodeCount: Int = remember(episodes) {
@@ -746,12 +747,10 @@ fun AnimeScreenLargeImpl(
         } else {
             navigateUp()
         }
-    }
+    })
     val relatedAnimesEnabled by Injekt.get<SourcePreferences>().relatedAnimes().collectAsState()
     val expandRelatedAnimes by uiPreferences.expandRelatedAnimes().collectAsState()
     val showRelatedAnimesInOverflow by uiPreferences.relatedAnimesInOverflow().collectAsState()
-
-    BackHandler(onBack = internalOnBackPressed)
 
     Scaffold(
         topBar = {
