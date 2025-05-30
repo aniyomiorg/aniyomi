@@ -5,9 +5,18 @@
   "semanticCommits": "disabled",
   "packageRules": [
     {
-      "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"],
-      "pinDigests": true,
+      "matchManagers": ["gradle"],
+      "matchPackagePatterns": ["*"],
+      "excludePackagePatterns": [
+        "^androidx.constraintlayout:constraintlayout-compose",
+        "^androidx.media:media",
+        "^com.github.aniyomiorg:aniyomi-mpv-lib",
+        "^com.github.jmir1:ffmpeg-kit",
+        "^com.arthenica:smart-exception-java",
+        "^io.github.2307vivek:seeker",
+        "^io.github.yubyf:truetypeparser-light",
+      ],
+      "enabled": false,
     },
   ],
 }
