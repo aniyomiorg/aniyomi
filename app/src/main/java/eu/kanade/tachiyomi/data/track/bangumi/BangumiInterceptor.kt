@@ -35,7 +35,7 @@ class BangumiInterceptor(private val bangumi: Bangumi) : Interceptor {
         return originalRequest.newBuilder()
             .header(
                 "User-Agent",
-                "Dark25/Animetail/v${BuildConfig.VERSION_NAME} (Android) (https://github.com/aniyomiorg/aniyomi)",
+                "Animetailapp/Animetail/v${BuildConfig.VERSION_NAME} (Android) (https://github.com/Animetailapp/Animetail)",
             )
             .apply {
                 addHeader("Authorization", "Bearer ${currAuth.accessToken}")

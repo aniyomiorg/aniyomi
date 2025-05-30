@@ -21,7 +21,7 @@ class JellyfinInterceptor : Interceptor {
 
         // Add the User-Agent header to the original request.
         val uaRequest = originalRequest.newBuilder()
-            .header("User-Agent", "Aniyomi v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
+            .header("User-Agent", "Animetail v${BuildConfig.VERSION_NAME} (${BuildConfig.APPLICATION_ID})")
             .build()
 
         // Check api keys
