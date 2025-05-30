@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.components.FloatingActionAddButton
 import eu.kanade.presentation.more.settings.screen.player.custombutton.CustomButtonScreenState
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
@@ -60,9 +61,9 @@ fun CustomButtonScreen(
             )
         },
         floatingActionButton = {
-            CustomButtonFloatingActionButton(
+            FloatingActionAddButton(
                 lazyListState = lazyListState,
-                onCreate = onClickCreate,
+                onClick = onClickCreate,
             )
         },
     ) { paddingValues ->
