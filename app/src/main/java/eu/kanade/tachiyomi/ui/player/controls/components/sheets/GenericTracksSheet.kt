@@ -95,11 +95,11 @@ fun AddTrackRow(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                Icons.Default.Add,
-                null,
+                imageVector = Icons.Default.Add,
+                contentDescription = null,
                 modifier = Modifier.size(32.dp),
             )
-            Text(title)
+            Text(text = title)
         }
         actions()
     }
@@ -125,5 +125,35 @@ fun getTrackTitle(track: VideoTrack): String {
         }
 
         else -> stringResource(MR.strings.player_sheets_track_title_wo_lang, track.id, track.name)
+    }
+}
+
+@Composable
+fun TrackSheetTitle(
+    title: String,
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    Row(
+        modifier = modifier.fillMaxWidth()
+            .padding(
+                start = MaterialTheme.padding.medium,
+                end = MaterialTheme.padding.medium,
+                top = MaterialTheme.padding.small,
+                bottom = MaterialTheme.padding.extraSmall,
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
+        ) {
+            actions()
+        }
     }
 }

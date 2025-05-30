@@ -400,6 +400,8 @@
     <string name="player_sheets_track_title_w_lang" translatable="false">#%d: %s (%s)</string>
     <string name="player_sheets_track_title_wo_lang" translatable="false">#%d: %s</string>
     <string name="player_sheets_track_lang_wo_title" translatable="false">#%d: %s</string>
+    <string name="player_sheets_track_delay">Delay</string>
+    <string name="player_sheets_track_palette">Palette</string>
 
     <!-- Sheets - Audio delay -->
     <string name="player_sheets_audio_delay_title">Audio delay</string>
@@ -468,6 +470,7 @@
     <!-- Sheets - Quality list -->
     <string name="player_hoster_tap_to_load">Tap to load videos</string>
     <string name="player_hoster_failed">Failed to load videos</string>
+    <string name="player_sheets_qualities_title">Qualities</string>
 
     <!-- Sheets - Decoders -->
     <string name="player_sheets_decoder_formatted">%s (%s)</string>
@@ -501,6 +504,9 @@
 
     <!-- Sheets - screenshot -->
     <string name="screenshot_show_subs">Include Subtitles</string>
+
+    <!-- Sheets - Chapters -->
+    <string name="player_sheets_chapters_title">Chapters</string>
 
     <!-- Subsections -->
     <string name="pref_category_general">General</string>
