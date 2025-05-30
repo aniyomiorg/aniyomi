@@ -188,7 +188,7 @@ class AnimeScreen(
             // AM (FILE_SIZE) -->
             showFileSize = screenModel.showFileSize,
             // <-- AM (FILE_SIZE)
-            onBackClicked = navigator::pop,
+            navigateUp = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {
                     if (successState.source.isSourceForTorrents()) {

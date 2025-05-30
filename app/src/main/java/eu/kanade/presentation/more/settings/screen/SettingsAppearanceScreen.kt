@@ -107,7 +107,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                 },
                 *customPreferenceItem.toTypedArray(),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = amoledPref,
+                    preference = amoledPref,
                     title = stringResource(MR.strings.pref_dark_theme_pure_black),
                     enabled = themeMode != ThemeMode.LIGHT,
                     onValueChanged = {
@@ -141,47 +141,47 @@ object SettingsAppearanceScreen : SearchableSettings {
                     onClick = { navigator.push(AppLanguageScreen()) },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = uiPreferences.tabletUiMode(),
-                    title = stringResource(MR.strings.pref_tablet_ui_mode),
+                    preference = uiPreferences.tabletUiMode(),
                     entries = TabletUiMode.entries
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
+                    title = stringResource(MR.strings.pref_tablet_ui_mode),
                     onValueChanged = {
                         context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = uiPreferences.startScreen(),
-                    title = stringResource(MR.strings.pref_start_screen),
+                    preference = uiPreferences.startScreen(),
                     entries = StartScreen.entries
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
+                    title = stringResource(MR.strings.pref_start_screen),
                     onValueChanged = {
                         context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = uiPreferences.navStyle(),
-                    title = "Navigation Style",
+                    preference = uiPreferences.navStyle(),
                     entries = NavStyle.entries
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
+                    title = "Navigation Style",
                     onValueChanged = { true },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = uiPreferences.dateFormat(),
-                    title = stringResource(MR.strings.pref_date_format),
+                    preference = uiPreferences.dateFormat(),
                     entries = DateFormats
                         .associateWith {
                             val formattedDate = UiPreferences.dateFormat(it).format(now)
                             "${it.ifEmpty { stringResource(MR.strings.label_default) }} ($formattedDate)"
                         }
                         .toImmutableMap(),
+                    title = stringResource(MR.strings.pref_date_format),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.relativeTime(),
+                    preference = uiPreferences.relativeTime(),
                     title = stringResource(MR.strings.pref_relative_format),
                     subtitle = stringResource(
                         MR.strings.pref_relative_format_summary,
@@ -218,19 +218,19 @@ object SettingsAppearanceScreen : SearchableSettings {
 //                ),
 //                // KMK -->
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.expandRelatedAnimes(),
+                    preference = uiPreferences.expandRelatedAnimes(),
                     title = stringResource(TLMR.strings.pref_expand_related_animes),
                     subtitle = stringResource(TLMR.strings.pref_expand_related_animes_summary),
                     enabled = sourcePreferences.relatedAnimes().get(),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.relatedAnimesInOverflow(),
+                    preference = uiPreferences.relatedAnimesInOverflow(),
                     enabled = !relatedMangasInOverflow,
                     title = stringResource(TLMR.strings.put_related_animes_in_overflow),
                     subtitle = stringResource(TLMR.strings.put_related_animes_in_overflow_summary),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.showHomeOnRelatedAnimes(),
+                    preference = uiPreferences.showHomeOnRelatedAnimes(),
                     title = stringResource(TLMR.strings.pref_show_home_on_related_animes),
                     subtitle = stringResource(TLMR.strings.pref_show_home_on_related_animes_summary),
                     enabled = sourcePreferences.relatedAnimes().get(),
@@ -275,15 +275,15 @@ object SettingsAppearanceScreen : SearchableSettings {
             stringResource(TLMR.strings.pref_category_navbar),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.showNavUpdates(),
+                    preference = uiPreferences.showNavUpdates(),
                     title = stringResource(TLMR.strings.pref_hide_updates_button),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.showNavHistory(),
+                    preference = uiPreferences.showNavHistory(),
                     title = stringResource(TLMR.strings.pref_hide_history_button),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.bottomBarLabels(),
+                    preference = uiPreferences.bottomBarLabels(),
                     title = stringResource(TLMR.strings.pref_show_bottom_bar_labels),
                 ),
             ),

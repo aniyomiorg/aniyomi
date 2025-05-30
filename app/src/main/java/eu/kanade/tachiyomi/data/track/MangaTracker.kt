@@ -104,6 +104,11 @@ interface MangaTracker {
         updateRemote(track)
     }
 
+    suspend fun setRemotePrivate(track: MangaTrack, private: Boolean) {
+        track.private = private
+        updateRemote(track)
+    }
+
     suspend fun getMangaMetadata(track: DomainTrack): TrackMangaMetadata? {
         throw NotImplementedError("Not implemented.")
     }

@@ -231,7 +231,13 @@ fun PlayerControls(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     },
-                ) { BrightnessSlider(brightness, 0f..1f, 0f..0.75f) }
+                ) {
+                    BrightnessSlider(
+                        brightness = brightness,
+                        positiveRange = 0f..1f,
+                        negativeRange = 0f..0.75f,
+                    )
+                }
 
                 AnimatedVisibility(
                     isVolumeSliderShown,
@@ -270,7 +276,7 @@ fun PlayerControls(
                     val boostCap by audioPreferences.volumeBoostCap().collectAsState()
                     val displayVolumeAsPercentage by playerPreferences.displayVolPer().collectAsState()
                     VolumeSlider(
-                        volume,
+                        volume = volume,
                         mpvVolume = mpvVolume,
                         range = 0..viewModel.maxVolume,
                         boostRange = if (boostCap > 0) 0..audioPreferences.volumeBoostCap().get() else null,

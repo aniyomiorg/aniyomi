@@ -25,6 +25,7 @@ import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
+import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.model.AutoTrackState
 import eu.kanade.domain.track.service.TrackPreferences
@@ -110,6 +111,8 @@ import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Calendar
+import kotlin.collections.filter
+import kotlin.collections.forEach
 import kotlin.math.floor
 import androidx.compose.runtime.State as RuntimeState
 
@@ -932,6 +935,7 @@ class AnimeScreenModel(
      */
     fun markEpisodesSeen(episodes: List<Episode>, seen: Boolean) {
         toggleAllSelection(false)
+        if (episodes.isEmpty()) return
         screenModelScope.launchIO {
             setSeenStatus.await(
                 seen = seen,
@@ -941,6 +945,8 @@ class AnimeScreenModel(
             if (!seen || successState?.hasLoggedInTrackers == false || autoTrackState == AutoTrackState.NEVER) {
                 return@launchIO
             }
+
+            refreshTrackers()
 
             val tracks = getTracks.await(animeId)
             val maxEpisodeNumber = episodes.maxOf { it.episodeNumber }
@@ -969,6 +975,27 @@ class AnimeScreenModel(
                 trackEpisode.await(context, animeId, maxEpisodeNumber)
             }
         }
+    }
+
+    private suspend fun refreshTrackers(
+        refreshTracks: RefreshAnimeTracks = Injekt.get(),
+    ) {
+        refreshTracks.await(animeId)
+            .filter { it.first != null }
+            .forEach { (track, e) ->
+                logcat(LogPriority.ERROR, e) {
+                    "Failed to refresh track data animeId=$animeId for service ${track!!.id}"
+                }
+                withUIContext {
+                    context.toast(
+                        context.stringResource(
+                            MR.strings.track_error,
+                            track!!.name,
+                            e.message ?: "",
+                        ),
+                    )
+                }
+            }
     }
 
     /**

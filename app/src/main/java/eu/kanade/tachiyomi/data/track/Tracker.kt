@@ -22,6 +22,8 @@ interface Tracker {
     // Application and remote support for reading dates
     val supportsReadingDates: Boolean
 
+    val supportsPrivateTracking: Boolean
+
     @DrawableRes
     fun getLogo(): Int
 

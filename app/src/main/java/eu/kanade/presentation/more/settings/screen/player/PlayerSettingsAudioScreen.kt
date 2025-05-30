@@ -33,28 +33,27 @@ object PlayerSettingsAudioScreen : SearchableSettings {
 
         return listOf(
             Preference.PreferenceItem.EditTextInfoPreference(
-                pref = prefLangs,
-                title = stringResource(MR.strings.pref_player_audio_lang),
+                preference = prefLangs,
                 dialogSubtitle = stringResource(MR.strings.pref_player_audio_lang_info),
+                title = stringResource(MR.strings.pref_player_audio_lang),
             ),
             Preference.PreferenceItem.SwitchPreference(
-                pref = pitchCorrection,
+                preference = pitchCorrection,
                 title = stringResource(MR.strings.pref_player_audio_pitch_correction),
                 subtitle = stringResource(MR.strings.pref_player_audio_pitch_correction_summary),
             ),
             Preference.PreferenceItem.ListPreference(
-                pref = audioChannels,
-                title = stringResource(MR.strings.pref_player_audio_channels),
+                preference = audioChannels,
                 entries = AudioChannels.entries.associateWith {
                     stringResource(it.titleRes)
                 }.toImmutableMap(),
+                title = stringResource(MR.strings.pref_player_audio_channels),
             ),
             Preference.PreferenceItem.SliderPreference(
                 value = boostCap,
+                valueRange = 0..200,
                 title = stringResource(MR.strings.pref_player_audio_boost_cap),
                 subtitle = boostCap.toString(),
-                min = 0,
-                max = 200,
                 onValueChanged = {
                     boostCapPref.set(it)
                     true

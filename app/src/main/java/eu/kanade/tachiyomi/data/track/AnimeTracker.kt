@@ -103,6 +103,11 @@ interface AnimeTracker {
         updateRemote(track)
     }
 
+    suspend fun setRemotePrivate(track: AnimeTrack, private: Boolean) {
+        track.private = private
+        updateRemote(track)
+    }
+
     suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
         throw NotImplementedError("Not implemented.")
     }

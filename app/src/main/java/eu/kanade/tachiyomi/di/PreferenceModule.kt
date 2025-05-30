@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.LocalHttpServerHolder
-import eu.kanade.tachiyomi.util.system.isDevFlavor
+import eu.kanade.tachiyomi.util.system.isDebugBuildType
 import tachiyomi.core.common.preference.AndroidPreferenceStore
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.storage.AndroidStorageFolderProvider
@@ -40,7 +40,7 @@ class PreferenceModule(val app: Application) : InjektModule {
         addSingletonFactory {
             NetworkPreferences(
                 preferenceStore = get(),
-                verboseLogging = isDevFlavor,
+                verboseLogging = isDebugBuildType,
             )
         }
         addSingletonFactory {

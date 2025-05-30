@@ -2,12 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
   "labels": ["Dependencies"],
-  "semanticCommits": "disabled",
-  "packageRules": [
-    {
-      "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"],
-      "pinDigests": true,
-    }
-  ]
+  "includePaths": [".github/workflows/*", "gradle/versions.toml"],
+  "semanticCommits": "disabled"
 }

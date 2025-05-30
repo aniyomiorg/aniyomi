@@ -27,19 +27,19 @@ object PlayerSettingsSubtitleScreen : SearchableSettings {
 
         return listOf(
             Preference.PreferenceItem.EditTextInfoPreference(
-                pref = langPref,
-                title = stringResource(MR.strings.pref_player_subtitle_lang),
+                preference = langPref,
                 dialogSubtitle = stringResource(MR.strings.pref_player_subtitle_lang_info),
+                title = stringResource(MR.strings.pref_player_subtitle_lang),
             ),
             Preference.PreferenceItem.EditTextInfoPreference(
-                pref = whitelist,
-                title = stringResource(MR.strings.pref_player_subtitle_whitelist),
+                preference = whitelist,
                 dialogSubtitle = stringResource(MR.strings.pref_player_subtitle_whitelist_info),
+                title = stringResource(MR.strings.pref_player_subtitle_whitelist),
             ),
             Preference.PreferenceItem.EditTextInfoPreference(
-                pref = blacklist,
-                title = stringResource(MR.strings.pref_player_subtitle_blacklist),
+                preference = blacklist,
                 dialogSubtitle = stringResource(MR.strings.pref_player_subtitle_blacklist_info),
+                title = stringResource(MR.strings.pref_player_subtitle_blacklist),
             ),
         )
     }

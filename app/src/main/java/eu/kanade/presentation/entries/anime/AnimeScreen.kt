@@ -125,7 +125,7 @@ fun AnimeScreen(
     // AM (FILE_SIZE) -->
     showFileSize: Boolean,
     // <-- AM (FILE_SIZE)
-    onBackClicked: () -> Unit,
+    navigateUp: () -> Unit,
     onEpisodeClicked: (episode: Episode, alt: Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
@@ -200,7 +200,7 @@ fun AnimeScreen(
             // AM (FILE_SIZE) -->
             showFileSize = showFileSize,
             // <-- AM (FILE_SIZE)
-            onBackClicked = onBackClicked,
+            navigateUp = navigateUp,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
             onAddToLibraryClicked = onAddToLibraryClicked,
@@ -251,7 +251,7 @@ fun AnimeScreen(
             // AM (FILE_SIZE) -->
             showFileSize = showFileSize,
             // <-- AM (FILE_SIZE)
-            onBackClicked = onBackClicked,
+            navigateUp = navigateUp,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
             onAddToLibraryClicked = onAddToLibraryClicked,
@@ -307,7 +307,7 @@ private fun AnimeScreenSmallImpl(
     // AM (FILE_SIZE) -->
     showFileSize: Boolean,
     // <-- AM (FILE_SIZE)
-    onBackClicked: () -> Unit,
+    navigateUp: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
@@ -370,18 +370,18 @@ private fun AnimeScreenSmallImpl(
         }
     }
 
-    val internalOnBackPressed = {
+    BackHandler(onBack = {
         if (isAnySelected) {
             onAllEpisodeSelected(false)
         } else {
-            onBackClicked()
+            navigateUp()
         }
-    }
+    })
+
     val relatedAnimesEnabled by Injekt.get<SourcePreferences>().relatedAnimes().collectAsState()
     val expandRelatedAnimes by uiPreferences.expandRelatedAnimes().collectAsState()
     val showRelatedAnimesInOverflow by uiPreferences.relatedAnimesInOverflow().collectAsState()
 
-    BackHandler(onBack = internalOnBackPressed)
     Scaffold(
         topBar = {
             val selectedEpisodeCount: Int = remember(episodes) {
@@ -393,20 +393,18 @@ private fun AnimeScreenSmallImpl(
             val isFirstItemScrolled by remember {
                 derivedStateOf { episodeListState.firstVisibleItemScrollOffset > 0 }
             }
-            val animatedTitleAlpha by animateFloatAsState(
+            val titleAlpha by animateFloatAsState(
                 if (!isFirstItemVisible) 1f else 0f,
                 label = "Top Bar Title",
             )
-            val animatedBgAlpha by animateFloatAsState(
+            val backgroundAlpha by animateFloatAsState(
                 if (!isFirstItemVisible || isFirstItemScrolled) 1f else 0f,
                 label = "Top Bar Background",
             )
             EntryToolbar(
                 title = state.anime.title,
-                titleAlphaProvider = { animatedTitleAlpha },
-                backgroundAlphaProvider = { animatedBgAlpha },
                 hasFilters = state.anime.episodesFiltered(),
-                onBackClicked = internalOnBackPressed,
+                navigateUp = navigateUp,
                 onClickFilter = onFilterClicked,
                 onClickShare = onShareClicked,
                 onClickDownload = onDownloadActionClicked,
@@ -425,8 +423,11 @@ private fun AnimeScreenSmallImpl(
                 onClickSettings = onSettingsClicked,
                 changeAnimeSkipIntro = changeAnimeSkipIntro,
                 actionModeCounter = selectedEpisodeCount,
+                onCancelActionMode = { onAllEpisodeSelected(false) },
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
+                titleAlphaProvider = { titleAlpha },
+                backgroundAlphaProvider = { backgroundAlpha },
                 isManga = false,
             )
         },
@@ -671,7 +672,7 @@ fun AnimeScreenLargeImpl(
     // AM (FILE_SIZE) -->
     showFileSize: Boolean,
     // <-- AM (FILE_SIZE)
-    onBackClicked: () -> Unit,
+    navigateUp: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
@@ -739,18 +740,16 @@ fun AnimeScreenLargeImpl(
 
     val episodeListState = rememberLazyListState()
 
-    val internalOnBackPressed = {
+    BackHandler(onBack = {
         if (isAnySelected) {
             onAllEpisodeSelected(false)
         } else {
-            onBackClicked()
+            navigateUp()
         }
-    }
+    })
     val relatedAnimesEnabled by Injekt.get<SourcePreferences>().relatedAnimes().collectAsState()
     val expandRelatedAnimes by uiPreferences.expandRelatedAnimes().collectAsState()
     val showRelatedAnimesInOverflow by uiPreferences.relatedAnimesInOverflow().collectAsState()
-
-    BackHandler(onBack = internalOnBackPressed)
 
     Scaffold(
         topBar = {
@@ -760,16 +759,15 @@ fun AnimeScreenLargeImpl(
             EntryToolbar(
                 modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                 title = state.anime.title,
-                titleAlphaProvider = { if (isAnySelected) 1f else 0f },
-                backgroundAlphaProvider = { 1f },
                 hasFilters = state.anime.episodesFiltered(),
-                onBackClicked = internalOnBackPressed,
+                navigateUp = navigateUp,
                 onClickFilter = onFilterButtonClicked,
                 onClickShare = onShareClicked,
                 onClickDownload = onDownloadActionClicked,
                 onClickEditCategory = onEditCategoryClicked,
                 onClickRefresh = onRefresh,
                 onClickMigrate = onMigrateClicked,
+                onCancelActionMode = { onAllEpisodeSelected(false) },
                 // SY -->
                 onClickEditInfo = onEditInfoClicked.takeIf { state.anime.favorite },
                 // SY <--
@@ -784,6 +782,8 @@ fun AnimeScreenLargeImpl(
                 actionModeCounter = selectedChapterCount,
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
+                titleAlphaProvider = { 1f },
+                backgroundAlphaProvider = { 1f },
                 isManga = false,
             )
         },
