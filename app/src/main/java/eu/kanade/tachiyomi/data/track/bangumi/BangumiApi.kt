@@ -278,14 +278,10 @@ class BangumiApi(
                             description = it.summary,
                             authors = it.infobox
                                 .filter { it.key == "作者" }
-                                .filterIsInstance<Infobox.SingleValue>()
-                                .map { it.value }
-                                .joinToString(", "),
+                                .filterIsInstance<Infobox.SingleValue>().joinToString(", ") { it.value },
                             artists = it.infobox
                                 .filter { it.key == "插图" }
-                                .filterIsInstance<Infobox.SingleValue>()
-                                .map { it.value }
-                                .joinToString(", "),
+                                .filterIsInstance<Infobox.SingleValue>().joinToString(", ") { it.value },
                         )
                     }
             }

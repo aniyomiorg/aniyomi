@@ -10,17 +10,6 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-@Serializable
-data class BGMSubject(
-    val images: BGMSearchItemCovers?,
-    val summary: String,
-    val name: String,
-    @SerialName("name_cn")
-    val nameCn: String,
-    val infobox: List<Infobox>,
-    val id: Long,
-)
-
 // infobox deserializer and related classes courtesy of
 // https://github.com/Snd-R/komf/blob/4c260a3dcd326a5e1d74ac9662eec8124ab7e461/komf-core/src/commonMain/kotlin/snd/komf/providers/bangumi/model/BangumiSubject.kt#L53-L89
 object InfoBoxSerializer : JsonContentPolymorphicSerializer<Infobox>(Infobox::class) {

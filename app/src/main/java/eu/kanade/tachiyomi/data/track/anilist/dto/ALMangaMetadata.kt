@@ -22,19 +22,3 @@ data class ALMangaMetadataMedia(
     val description: String?,
     val staff: ALStaff,
 )
-
-@Serializable
-data class ALStaff(
-    val edges: List<ALStaffEdge>,
-)
-
-@Serializable
-data class ALStaffEdge(
-    val role: String,
-    val node: ALStaffNode,
-)
-
-@Serializable
-data class ALStaffNode(
-    val name: ALItemTitle,
-)

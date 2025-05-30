@@ -568,8 +568,11 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     |}
                     |description
                     |studios {
-                        |nodes {
-                            |name
+                        |edges {
+                           |isMain
+                           |node {
+                             |name
+                           |}
                         |}
                     |}
                     |staff {
@@ -601,7 +604,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 )
                     .awaitSuccess()
                     .parseAs<ALAnimeMetadata>()
-                    .let {
+                    .let { it ->
                         val media = it.data.media
                         TrackAnimeMetadata(
                             remoteId = media.id,
@@ -610,13 +613,13 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                             description = media.description?.htmlDecode()?.ifEmpty { null },
                             authors = media.staff.edges
                                 .filter { it.role == "Original Creator" }
-                                .map { it.node.name.userPreferred }
-                                .joinToString(", ")
+                                .joinToString(", ") { it.node.name.userPreferred }
                                 .ifEmpty { null },
-                            artists = media.studios.nodes
-                                .map { it.name }
-                                .joinToString(", ")
-                                .ifEmpty { null },
+                            artists = media.studios.edges
+                                .filter { it.isMain }
+                                .takeIf { it.isNotEmpty() }
+                                ?.joinToString(", ") { it.node.name }
+                                ?: media.studios.edges.joinToString(", ") { it.node.name },
                         )
                     }
             }
@@ -665,7 +668,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 )
                     .awaitSuccess()
                     .parseAs<ALMangaMetadata>()
-                    .let {
+                    .let { it ->
                         val media = it.data.media
                         TrackMangaMetadata(
                             remoteId = media.id,
@@ -674,13 +677,11 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                             description = media.description?.htmlDecode()?.ifEmpty { null },
                             authors = media.staff.edges
                                 .filter { it.role == "Story" || it.role == "Story & Art" }
-                                .map { it.node.name.userPreferred }
-                                .joinToString(", ")
+                                .joinToString(", ") { it.node.name.userPreferred.toString() }
                                 .ifEmpty { null },
                             artists = media.staff.edges
                                 .filter { it.role == "Art" || it.role == "Story & Art" }
-                                .map { it.node.name.userPreferred }
-                                .joinToString(", ")
+                                .joinToString(", ") { it.node.name.userPreferred.toString() }
                                 .ifEmpty { null },
                         )
                     }
