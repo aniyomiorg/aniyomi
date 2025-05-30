@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+
 plugins {
     id("mihon.library")
     kotlin("multiplatform")
@@ -37,6 +39,11 @@ kotlin {
             }
         }
     }
+
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 }
 
 android {
@@ -44,16 +51,5 @@ android {
 
     defaultConfig {
         consumerProguardFile("consumer-proguard.pro")
-    }
-}
-
-tasks {
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        compilerOptions.freeCompilerArgs.addAll(
-            listOf(
-                "-Xexpect-actual-classes",
-                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
-            ),
-        )
     }
 }

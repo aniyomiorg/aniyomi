@@ -4,16 +4,16 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastDistinctBy
+import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.fastMapNotNull
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.core.preference.asState
-import eu.kanade.core.util.fastDistinctBy
-import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
-import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.core.util.fastPartition
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
@@ -372,6 +372,7 @@ class MangaLibraryScreenModel(
     private fun getLibraryItemPreferencesFlow(): Flow<ItemPreferences> {
         return combine(
             libraryPreferences.downloadBadge().changes(),
+            libraryPreferences.unreadBadge().changes(),
             libraryPreferences.localBadge().changes(),
             libraryPreferences.languageBadge().changes(),
             libraryPreferences.autoUpdateItemRestrictions().changes(),
@@ -386,16 +387,17 @@ class MangaLibraryScreenModel(
         ) {
             ItemPreferences(
                 downloadBadge = it[0] as Boolean,
-                localBadge = it[1] as Boolean,
-                languageBadge = it[2] as Boolean,
-                skipOutsideReleasePeriod = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in (it[3] as Set<*>),
-                globalFilterDownloaded = it[4] as Boolean,
-                filterDownloaded = it[5] as TriState,
-                filterUnread = it[6] as TriState,
-                filterStarted = it[7] as TriState,
-                filterBookmarked = it[8] as TriState,
-                filterCompleted = it[9] as TriState,
-                filterIntervalCustom = it[10] as TriState,
+                unreadBadge = it[1] as Boolean,
+                localBadge = it[2] as Boolean,
+                languageBadge = it[3] as Boolean,
+                skipOutsideReleasePeriod = LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in (it[4] as Set<*>),
+                globalFilterDownloaded = it[5] as Boolean,
+                filterDownloaded = it[6] as TriState,
+                filterUnread = it[7] as TriState,
+                filterStarted = it[8] as TriState,
+                filterBookmarked = it[9] as TriState,
+                filterCompleted = it[10] as TriState,
+                filterIntervalCustom = it[11] as TriState,
             )
         }
     }
@@ -419,7 +421,7 @@ class MangaLibraryScreenModel(
                         } else {
                             0
                         },
-                        unreadCount = libraryManga.unreadCount,
+                        unreadCount = if (prefs.unreadBadge) libraryManga.unreadCount else 0,
                         isLocal = if (prefs.localBadge) libraryManga.manga.isLocal() else false,
                         sourceLanguage = if (prefs.languageBadge) {
                             sourceManager.getOrStub(libraryManga.manga.source).lang
@@ -931,6 +933,7 @@ class MangaLibraryScreenModel(
     @Immutable
     private data class ItemPreferences(
         val downloadBadge: Boolean,
+        val unreadBadge: Boolean,
         val localBadge: Boolean,
         val languageBadge: Boolean,
         val skipOutsideReleasePeriod: Boolean,

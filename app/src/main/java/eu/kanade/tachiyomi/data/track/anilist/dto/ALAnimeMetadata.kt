@@ -25,16 +25,6 @@ data class ALAnimeMetadataMedia(
 )
 
 @Serializable
-data class ALStudios(
-    val nodes: List<ALStudioNode>,
-)
-
-@Serializable
-data class ALStudioNode(
-    val name: String,
-)
-
-@Serializable
 data class ALAnimeStaff(
     val edges: List<ALAnimeStaffEdge>,
 )

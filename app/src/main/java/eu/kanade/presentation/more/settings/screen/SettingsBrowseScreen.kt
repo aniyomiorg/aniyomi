@@ -58,7 +58,7 @@ object SettingsBrowseScreen : SearchableSettings {
                 preferenceItems = persistentListOf(
                     // KMK -->
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.relatedAnimes(),
+                        preference = sourcePreferences.relatedAnimes(),
                         title = stringResource(TLMR.strings.pref_source_related_animes),
                         subtitle = stringResource(TLMR.strings.pref_source_related_animes_summary),
                     ),
@@ -79,7 +79,7 @@ object SettingsBrowseScreen : SearchableSettings {
 //                        subtitle = stringResource(SYMR.strings.pref_source_source_filtering_summery),
 //                    ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = uiPreferences.useNewSourceNavigation(),
+                        preference = uiPreferences.useNewSourceNavigation(),
                         title = stringResource(TLMR.strings.pref_source_navigation),
                         subtitle = stringResource(TLMR.strings.pref_source_navigation_summery),
                     ),
@@ -89,18 +89,18 @@ object SettingsBrowseScreen : SearchableSettings {
                 title = stringResource(TLMR.strings.feed),
                 preferenceItems = persistentListOf(
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = uiPreferences.hideFeedTab(),
+                        preference = uiPreferences.hideFeedTab(),
                         title = stringResource(TLMR.strings.pref_hide_feed),
                     ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = uiPreferences.feedTabInFront(),
+                        preference = uiPreferences.feedTabInFront(),
                         title = stringResource(TLMR.strings.pref_feed_position),
                         subtitle = stringResource(TLMR.strings.pref_feed_position_summery),
                         enabled = hideFeedTab.not(),
                     ),
                     // KMK -->
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.hideInLibraryFeedItems(),
+                        preference = sourcePreferences.hideInLibraryFeedItems(),
                         title = stringResource(MR.strings.pref_hide_in_library_items),
                     ),
                     // KMK <--
@@ -112,11 +112,11 @@ object SettingsBrowseScreen : SearchableSettings {
                 title = stringResource(MR.strings.label_sources),
                 preferenceItems = persistentListOf(
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.hideInAnimeLibraryItems(),
+                        preference = sourcePreferences.hideInAnimeLibraryItems(),
                         title = stringResource(MR.strings.pref_hide_in_anime_library_items),
                     ),
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.hideInMangaLibraryItems(),
+                        preference = sourcePreferences.hideInMangaLibraryItems(),
                         title = stringResource(MR.strings.pref_hide_in_manga_library_items),
                     ),
                     Preference.PreferenceItem.TextPreference(
@@ -147,7 +147,7 @@ object SettingsBrowseScreen : SearchableSettings {
                 title = stringResource(MR.strings.pref_category_nsfw_content),
                 preferenceItems = persistentListOf(
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.showNsfwSource(),
+                        preference = sourcePreferences.showNsfwSource(),
                         title = stringResource(MR.strings.pref_show_nsfw_source),
                         subtitle = stringResource(MR.strings.requires_app_restart),
                         onValueChanged = {

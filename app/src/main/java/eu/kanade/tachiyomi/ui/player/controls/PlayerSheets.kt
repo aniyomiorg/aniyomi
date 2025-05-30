@@ -129,7 +129,7 @@ fun PlayerSheets(
                 onSelect = onSelectAudio,
                 onAddAudioTrack = { audioPicker.launch(arrayOf("*/*")) },
                 onOpenDelayPanel = { onOpenPanel(Panels.AudioDelay) },
-                onDismissRequest,
+                onDismissRequest = onDismissRequest,
             )
         }
 
@@ -150,7 +150,7 @@ fun PlayerSheets(
         Sheets.Chapters -> {
             if (chapter == null) return
             ChaptersSheet(
-                chapters,
+                chapters = chapters,
                 currentChapter = chapter,
                 onClick = { onSeekToChapter(chapters.indexOf(it)) },
                 onDismissRequest = onDismissRequest,

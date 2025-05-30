@@ -1,3 +1,4 @@
+
 package tachiyomi.domain.release.interactor
 
 import tachiyomi.core.common.preference.Preference
@@ -28,29 +29,50 @@ class GetApplicationRelease(
             return Result.NoNewUpdate
         }
 
-        val release = service.latest(arguments.repoUrl)
+        val release = service.latest(arguments) ?: return Result.NoNewUpdate
+
         lastChecked.set(now.toEpochMilli())
 
-        return if (isNewVersion(arguments, release.version)) {
-            Result.NewUpdate(release)
-        } else {
-            Result.NoNewUpdate
+        // Check if latest version is different from current version
+        val isNewVersion = isNewVersion(
+            arguments.isPreview,
+            arguments.commitCount,
+            arguments.versionName,
+            release.version,
+        )
+        return when {
+            isNewVersion -> Result.NewUpdate(release)
+            else -> Result.NoNewUpdate
         }
     }
 
-    private fun isNewVersion(arguments: Arguments, versionTag: String): Boolean {
+    private fun isNewVersion(
+        isPreview: Boolean,
+        commitCount: Int,
+        versionName: String,
+        versionTag: String,
+    ): Boolean {
+        // Removes prefixes like "r" or "v"
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
-
-        if (arguments.isPreview) {
-            // For preview builds, compare commit counts
-            return newVersion.toInt() > arguments.commitCount
+        return if (isPreview) {
+            // Preview builds: based on releases in "tachiyomiorg/tachiyomi-preview" repo
+            // tagged as something like "r1234"
+            newVersion.toInt() > commitCount
         } else {
-            // For release builds, compare semantic versioning
-            val oldVersion = arguments.versionName.replace("[^\\d.]".toRegex(), "")
-            val newSemVer = newVersion.split(".").map(String::toInt)
-            val oldSemVer = oldVersion.split(".").map(String::toInt)
+            // Release builds: based on releases in "tachiyomiorg/tachiyomi" repo
+            // tagged as something like "v0.1.2"
+            val oldVersion = versionName.replace("[^\\d.]".toRegex(), "")
 
-            return newSemVer.zip(oldSemVer).any { (new, old) -> new > old }
+            val newSemVer = newVersion.split(".").map { it.toInt() }
+            val oldSemVer = oldVersion.split(".").map { it.toInt() }
+
+            oldSemVer.mapIndexed { index, i ->
+                if (newSemVer[index] > i) {
+                    return true
+                }
+            }
+
+            false
         }
     }
 
@@ -58,7 +80,7 @@ class GetApplicationRelease(
         val isPreview: Boolean,
         val commitCount: Int,
         val versionName: String,
-        val repoUrl: String,
+        val repository: String,
         val forceCheck: Boolean = false,
     )
 

@@ -16,9 +16,9 @@ import java.time.Instant
 
 class GetApplicationReleaseTest {
 
-    lateinit var getApplicationRelease: GetApplicationRelease
-    lateinit var releaseService: ReleaseService
-    lateinit var preference: Preference<Long>
+    private lateinit var getApplicationRelease: GetApplicationRelease
+    private lateinit var releaseService: ReleaseService
+    private lateinit var preference: Preference<Long>
 
     @BeforeEach
     fun beforeEach() {
@@ -39,7 +39,7 @@ class GetApplicationReleaseTest {
             "r2000",
             "info",
             "http://example.com/release_link",
-            listOf("http://example.com/assets"),
+            "http://example.com/release_link.apk",
         )
 
         coEvery { releaseService.latest(any()) } returns release
@@ -49,7 +49,7 @@ class GetApplicationReleaseTest {
                 isPreview = true,
                 commitCount = 1000,
                 versionName = "",
-                repoUrl = "test",
+                repository = "test",
             ),
         )
 
@@ -67,7 +67,7 @@ class GetApplicationReleaseTest {
             "v2.0.0",
             "info",
             "http://example.com/release_link",
-            listOf("http://example.com/assets"),
+            "http://example.com/release_link.apk",
         )
 
         coEvery { releaseService.latest(any()) } returns release
@@ -77,7 +77,7 @@ class GetApplicationReleaseTest {
                 isPreview = false,
                 commitCount = 0,
                 versionName = "v1.0.0",
-                repoUrl = "test",
+                repository = "test",
             ),
         )
 
@@ -95,7 +95,7 @@ class GetApplicationReleaseTest {
             "v1.0.0",
             "info",
             "http://example.com/release_link",
-            listOf("http://example.com/assets"),
+            "http://example.com/release_link.apk",
         )
 
         coEvery { releaseService.latest(any()) } returns release
@@ -105,7 +105,7 @@ class GetApplicationReleaseTest {
                 isPreview = false,
                 commitCount = 0,
                 versionName = "v2.0.0",
-                repoUrl = "test",
+                repository = "test",
             ),
         )
 
@@ -121,7 +121,7 @@ class GetApplicationReleaseTest {
             "v1.0.0",
             "info",
             "http://example.com/release_link",
-            listOf("http://example.com/assets"),
+            "http://example.com/release_link.apk",
         )
 
         coEvery { releaseService.latest(any()) } returns release
@@ -131,7 +131,7 @@ class GetApplicationReleaseTest {
                 isPreview = false,
                 commitCount = 0,
                 versionName = "v2.0.0",
-                repoUrl = "test",
+                repository = "test",
             ),
         )
 
