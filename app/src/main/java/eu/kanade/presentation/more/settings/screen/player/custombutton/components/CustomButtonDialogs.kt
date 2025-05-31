@@ -133,7 +133,14 @@ fun CustomButtonButtonDialog(
 
                 OutlinedTextField(
                     value = content,
-                    onValueChange = { content = it.copy(luaHighlight.toAnnotatedString(it.text)) },
+                    onValueChange = { newValue ->
+                        content = newValue
+                        // Debounce to avoid recomputing syntax highlight on every changes.
+                        LaunchedEffect(newValue.text) {
+                            delay(300) // Debounce for 300ms
+                            content = newValue.copy(luaHighlight.toAnnotatedString(newValue.text))
+                        }
+                    },
                     label = {
                         Text(text = stringResource(MR.strings.pref_player_custom_button_content))
                     },
