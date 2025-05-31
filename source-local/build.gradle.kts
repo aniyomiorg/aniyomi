@@ -51,6 +51,6 @@ android {
 
     dependencies {
         // FFmpeg-kit
-        implementation(libs.ffmpeg.kit)
+        implementation(aniyomilibs.ffmpeg.kit)
     }
 }

@@ -53,7 +53,7 @@ dependencies {
     implementation(libs.bundles.js.engine)
 
     // FFmpeg-kit
-    implementation(libs.ffmpeg.kit)
+    implementation(aniyomilibs.ffmpeg.kit)
 
     // SY -->
     implementation(libs.zip4j)
