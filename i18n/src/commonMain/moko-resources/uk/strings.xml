@@ -436,7 +436,7 @@
     <string name="nav_zone_right">Праворуч</string>
     <string name="nav_zone_left">Ліворуч</string>
     <string name="nav_zone_next">Наступний</string>
-    <string name="nav_zone_prev">Попередній</string>
+    <string name="nav_zone_prev">Перед</string>
     <string name="pref_show_navigation_mode_summary">Короткочасно відобразити, коли читача відкрито</string>
     <string name="pref_show_navigation_mode">Показати зони дотику</string>
     <string name="pref_dns_over_https">DNS поверх HTTPS (DoH)</string>
@@ -1043,16 +1043,16 @@
     <string name="pref_player_subtitle_lang_info">Мови субтитрів, які вибираються за замовчуванням у відео з декількома субтитрами. Дво- або трибуквені коди мов працюють. Кілька значень можна розділити комою.</string>
     <string name="onboarding_storage_action_create_folder">Створіть папку Aniyomi за замовчуванням</string>
     <string name="anime_interval_expected_update">Очікується, що нові епізоди вийдуть приблизно через %1$s, перевіряються кожні %2$s.</string>
-    <string name="pref_player_subtitle">субтитри</string>
+    <string name="pref_player_subtitle">Субтитри</string>
     <string name="label_player_settings">Налаштування плеєра</string>
     <string name="action_search_player_settings">Пошук налаштувань плеєра</string>
     <string name="single_action_none">Жодного</string>
-    <string name="single_action_seek">шукати</string>
+    <string name="single_action_seek">Шукати</string>
     <string name="single_action_playpause">Відтворення/Пауза</string>
     <string name="single_action_switch">Змінити епізод</string>
-    <string name="single_action_custom">Кастом</string>
+    <string name="single_action_custom">Спеціальні</string>
     <string name="pref_category_media_controls">Елементи керування медіа</string>
-    <string name="pref_media_previous">попередній</string>
+    <string name="pref_media_previous">Попередній</string>
     <string name="pref_media_playpause">Відтворення/Пауза</string>
     <string name="pref_media_next">Далі</string>
     <string name="pref_media_info">Якщо для елемента керування медіа встановлено значення Custom, його можна прив’язати через input.conf. Ключові коди: 0x10004 для попереднього, 0x10005 для відтворення/паузи та 0x10006 для наступного.</string>
@@ -1080,7 +1080,7 @@
     <string name="pref_flash_duration_summary">%1$s мс</string>
     <string name="pref_flash_page_interval">Спалах кожні</string>
     <string name="pref_flash_with">Flash с</string>
-    <string name="pref_flash_style_black">чорний</string>
+    <string name="pref_flash_style_black">Чорний</string>
     <string name="invalid_backup_file_json">Резервне копіювання JSON не підтримується</string>
     <string name="invalid_backup_file_unknown">Файл резервної копії пошкоджено</string>
     <string name="extensionRepo_settings">Репозиторії розширення</string>
@@ -1093,7 +1093,7 @@
     <string name="file_picker_uri_permission_unsupported">Не вдалося отримати постійний доступ до папки. Програма може поводитися несподівано.</string>
     <string name="pref_bottom_nav_no_browse">Перемістіть Огляд на вкладку Більше</string>
     <string name="pref_download_new_unseen_episodes_only">Пропустіть завантаження дублікатів переглянутих епізодів</string>
-    <string name="label_all">всі</string>
+    <string name="label_all">Всі</string>
     <string name="pref_player_gestures_summary">Пошук, подвійне торкання, керування медіа</string>
     <string name="pref_player_gestures">Жести</string>
     <string name="pref_double_tap_info">Якщо для жесту торкання встановлено значення Custom, його можна прив’язати через input.conf. Коди клавіш: 0x10001 для лівої, 0x10002 для центральної та 0x10003 для правої.</string>
@@ -1111,7 +1111,7 @@
     <string name="action_bar_up_description">Перейти вгору</string>
     <string name="pref_player_audio_pitch_correction">Увімкнути корекцію висоти звуку</string>
     <string name="pref_left_double_tap">Двічі торкніться (ліворуч)</string>
-    <string name="manga_interval_expected_update_soon">скоро</string>
+    <string name="manga_interval_expected_update_soon">Скоро</string>
     <string name="manga_interval_custom_amount">Спеціальна частота оновлення:</string>
     <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="pref_mpv_scripts">Увімкнути сценарії MPV</string>
@@ -1126,7 +1126,7 @@
     <string name="action_copy_link">Копіювати посилання</string>
     <string name="action_add_anyway">Все одно додайте</string>
     <string name="action_migrate_duplicate">Перенести наявний запис</string>
-    <string name="ext_remove">видалити</string>
+    <string name="ext_remove">Вилучити</string>
     <string name="ext_confirm_remove">Видалити розширення?</string>
     <string name="pref_download_new_unread_chapters_only">Пропустити завантаження дублікатів прочитаних розділів</string>
     <string name="pref_pip_replace_with_previous">Замінює параметр «Пропустити 10 секунд» на «Попередній епізод»</string>
@@ -1153,7 +1153,7 @@
     <string name="player_sheets_sub_delay_subtitle_type_secondary">Вторинний</string>
     <string name="player_sheets_sub_delay_subtitle_type_primary_and_secondary">Обидва</string>
     <string name="player_sheets_sub_delay_subtitle_text_seen">Текст побачено</string>
-    <string name="player_sheets_subtitles_color_text">текст</string>
+    <string name="player_sheets_subtitles_color_text">Текст</string>
     <string name="player_sheets_subtitles_color_border">Кордон</string>
     <string name="player_sheets_sub_color_green">Зелений</string>
     <string name="player_sheets_sub_color_blue">Синій</string>
@@ -1167,12 +1167,12 @@
     <string name="player_sheets_subtitles_border_style_opaque_box">Непрозора коробка</string>
     <string name="player_sheets_sub_misc_title">Різне</string>
     <string name="player_sheets_sub_override_ass">Заміна субтитрів ASS/SSA</string>
-    <string name="player_sheets_sub_scale">масштаб</string>
+    <string name="player_sheets_sub_scale">Масштаб</string>
     <string name="player_sheets_sub_position">Позиція</string>
     <string name="player_sheets_filters_title">Фільтри</string>
     <string name="player_sheets_filters_brightness">Яскравість</string>
     <string name="player_sheets_filters_contrast">Контраст</string>
-    <string name="player_sheets_filters_Saturation">насиченість</string>
+    <string name="player_sheets_filters_Saturation">Насиченість</string>
     <string name="player_sheets_filters_hue">Відтінок</string>
     <string name="player_sheets_filters_warning">Деякі фільтри можуть не працювати з поточним відеодрайвером</string>
     <string name="player_sheets_add_ext_audio">Додати зовнішні звукові доріжки</string>
@@ -1199,8 +1199,8 @@
     <string name="player_sheets_sub_delay_audio_sound_heard">Чути звук</string>
     <string name="player_sheets_subtitles_border_style_background_box">Фон коробки</string>
     <string name="numeric_chooser_value_too_big">Завелике значення</string>
-    <string name="player_sheets_sub_delay_speed">швидкість</string>
-    <string name="rotation_video">відео</string>
+    <string name="player_sheets_sub_delay_speed">Швидкість</string>
+    <string name="rotation_video">Відео</string>
     <string name="player_generic_unit_ms">мс</string>
     <string name="player_sheets_delay_set_as_default">Встановити за умовчанням</string>
     <string name="pref_category_controls">Елементи керування</string>
@@ -1215,7 +1215,7 @@
     <string name="player_sheets_filters_gamma">Гамма</string>
     <string name="player_sheets_sub_delay_subtitle_voice_heard">Чути голос</string>
     <string name="player_sheets_sub_delay_sound_sound_spotted">Звук помічений</string>
-    <string name="player_sheets_more_title">більше</string>
+    <string name="player_sheets_more_title">Більше</string>
     <string name="player_sheets_sub_color_red">Червоний</string>
     <string name="player_sheets_subtitles_settings_title">Налаштування субтитрів</string>
     <string name="pref_audio_channels">Аудіо канали</string>
@@ -1251,4 +1251,13 @@
     <string name="player_hoster_failed">Не вдалося завантажити відео</string>
     <string name="player_hoster_tap_to_load">Торкніться, щоб завантажити відео</string>
     <string name="select_hoster_from_empty_list">Хостер обрано з порожнього списку</string>
+    <string name="pref_category_intro_skip">Пропустити вступ</string>
+    <string name="pref_disable_aniskip_chapter">Вимкніть AniSkip, якщо відео вже містить розділи</string>
+    <string name="player_chapter_type_ending">Закінчення</string>
+    <string name="player_chapter_type_mixedop">Змішане відкриття</string>
+    <string name="player_chapter_type_opening">Відкриття</string>
+    <string name="player_chapter_type_recap">Підведення підсумків</string>
+    <string name="player_intro_skipped">%1$s пропущено</string>
+    <string name="pref_enable_intro_skip">Увімкнути пропуск вступу</string>
+    <string name="player_skip_action">Пропустити %1$s</string>
 </resources>

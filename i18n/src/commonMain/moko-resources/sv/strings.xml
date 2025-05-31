@@ -793,4 +793,11 @@
     <string name="action_migrate_duplicate">Migrera befintlig post</string>
     <string name="action_sort_random">Slumpmässig</string>
     <string name="action_copy_link">Kopiera länk</string>
+    <string name="pref_category_player_orientation">Orientering</string>
+    <string name="action_search_player_settings">Sök Spelar Inställningar</string>
+    <string name="pref_player_internal">Intern Spelare</string>
+    <string name="rotation_video">Video</string>
+    <string name="pref_category_controls">Kontroller</string>
+    <string name="pref_controls_display_volume_percentage">Visa volym som procent</string>
+    <string name="action_sort_airing_time">Sändningstid</string>
 </resources>
