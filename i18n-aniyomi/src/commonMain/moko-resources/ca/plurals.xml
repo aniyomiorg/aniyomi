@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Següent episodi pendent de visualització</item>
+        <item quantity="other">Següents episodis %d pendents de visualització</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">%1$s episodi</item>
+        <item quantity="other">%1$s episodis</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one">Per 1 títol</item>
+        <item quantity="other">Per %d títols</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">1 nou episodi</item>
+        <item quantity="other">%1$d nous episodis</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d segon</item>
+        <item quantity="other">%d segons</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Episodis %1$s i 1 més</item>
+        <item quantity="other">Episodis %1$s i %2$d més</item>
+    </plurals>
+</resources>

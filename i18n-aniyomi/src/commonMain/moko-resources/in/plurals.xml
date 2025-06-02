@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="other">Berikut %d episode yang belum dilihat</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="other">%1$s episode</item>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="other">%d Episode selanjutnya</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="other">Untuk judul %d</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="other">episode baru %1$d</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%d detik</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="other">Episode %1$s dan %2$d lainnya</item>
+    </plurals>
+</resources>

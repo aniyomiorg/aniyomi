@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Наступна не переглянута серія</item>
+        <item quantity="few">Наступні %d не переглянуті епізоди</item>
+        <item quantity="many">Наступні %d не переглянутих епізодів</item>
+        <item quantity="other">Наступні %d не переглянутих епізодів</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">%1$s епізод</item>
+        <item quantity="few">%1$s епізоди</item>
+        <item quantity="many">%1$s епізодів</item>
+        <item quantity="other">%1$s епізодів</item>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Наступний епізод</item>
+        <item quantity="few">Наступні %d епізоди</item>
+        <item quantity="many">Наступні %d епізодів</item>
+        <item quantity="other">Наступні %d епізодів</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one">Для 1 тайтлу</item>
+        <item quantity="few">Для %d тайтлів</item>
+        <item quantity="many">Для %d тайтлів</item>
+        <item quantity="other">Для %d тайтлів</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">1 новий епізод</item>
+        <item quantity="few">%1$d нові епізоди</item>
+        <item quantity="many">%1$d нових епізодів</item>
+        <item quantity="other">%1$d нових епізодів</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунди</item>
+        <item quantity="many">%d секунд</item>
+        <item quantity="other">%d секунд</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Епізоди %1$s та ще 1</item>
+        <item quantity="few">Епізоди %1$s та інші %2$d</item>
+        <item quantity="many">Епізоди %1$s та інші %2$d</item>
+        <item quantity="other">Епізоди %1$s та інші %2$d</item>
+    </plurals>
+</resources>
