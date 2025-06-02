@@ -16,7 +16,6 @@ import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.more.MoreTab
 import eu.kanade.tachiyomi.ui.updates.UpdatesTab
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 
 enum class NavStyle(

@@ -49,7 +49,6 @@ import eu.kanade.presentation.player.components.SwitchPreference
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import `is`.xyz.mpv.MPVLib
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource

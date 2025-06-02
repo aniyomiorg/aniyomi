@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import `is`.xyz.mpv.MPVLib
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource

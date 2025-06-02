@@ -30,7 +30,6 @@ import eu.kanade.presentation.more.settings.screen.player.editor.EditorListItem
 import eu.kanade.presentation.more.settings.screen.player.editor.EditorListType
 import eu.kanade.presentation.more.settings.screen.player.editor.EditorScreenState
 import kotlinx.collections.immutable.toPersistentList
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource

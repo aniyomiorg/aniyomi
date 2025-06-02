@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.player.settings
 import dev.icerock.moko.resources.StringResource
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 
 class AudioPreferences(

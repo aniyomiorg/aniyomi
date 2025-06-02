@@ -18,7 +18,6 @@ import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.domain.storage.service.SCRIPTS_PATH
 import tachiyomi.domain.storage.service.SCRIPT_OPTS_PATH
 import tachiyomi.domain.storage.service.StorageManager
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

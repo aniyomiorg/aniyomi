@@ -5,7 +5,6 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.animesource.model.ChapterType
 import eu.kanade.tachiyomi.animesource.model.TimeStamp
 import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import kotlin.math.abs
 

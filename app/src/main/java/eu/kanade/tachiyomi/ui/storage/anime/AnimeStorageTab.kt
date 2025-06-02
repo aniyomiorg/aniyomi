@@ -9,7 +9,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.more.storage.StorageScreenContent
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 
 @Composable

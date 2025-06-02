@@ -28,7 +28,6 @@ import tachiyomi.core.metadata.tachiyomi.AnimeDetails
 import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.source.local.filter.anime.AnimeOrderBy
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager

@@ -12,7 +12,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.TabContent
-import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 
 @Composable
