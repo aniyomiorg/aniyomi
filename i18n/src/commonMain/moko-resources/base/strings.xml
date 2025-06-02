@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" translatable="false">Mihon</string>
+
     <!-- Generic strings -->
     <string name="on">On</string>
     <string name="off">Off</string>
@@ -7,15 +9,18 @@
     <string name="not_selected">Not selected</string>
     <string name="action_menu_overflow_description">More options</string>
     <string name="action_bar_up_description">Navigate up</string>
-    <string name="app_name" translatable="false">Aniyomi</string>
+
+    <!-- Models -->
     <string name="name">Name</string>
     <string name="categories">Categories</string>
-    <string name="manga">Manga</string>
+    <string name="manga">Library entries</string>
     <string name="chapters">Chapters</string>
     <string name="track">Tracking</string>
     <string name="delete_downloaded">Delete downloaded</string>
     <string name="history">History</string>
     <string name="scanlator">Scanlator</string>
+
+    <!-- Screen titles -->
     <string name="label_more">More</string>
     <string name="label_settings">Settings</string>
     <string name="label_download_queue">Download queue</string>
@@ -26,19 +31,24 @@
     <string name="label_sources">Sources</string>
     <string name="label_backup">Backup and restore</string>
     <string name="label_data_storage">Data and storage</string>
-    <string name="label_migration">Migrate</string>
     <string name="label_stats">Statistics</string>
+    <string name="label_migration">Migrate</string>
     <string name="label_extensions">Extensions</string>
     <string name="label_extension_info">Extension info</string>
     <string name="label_help">Help</string>
     <string name="label_default">Default</string>
     <string name="label_warning">Warning</string>
     <string name="label_auto">Auto</string>
+
+    <!-- Shared labels -->
     <string name="label_started">Started</string>
     <string name="label_local">Local</string>
     <string name="label_downloaded">Downloaded</string>
+
+    <string name="unlock_app_title">Unlock %s</string>
     <string name="confirm_lock_change">Authenticate to confirm change</string>
-    <string name="confirm_exit">Press back again to exit</string>
+
+    <!-- Actions -->
     <string name="action_settings">Settings</string>
     <string name="action_menu">Menu</string>
     <string name="action_filter">Filter</string>
@@ -46,13 +56,14 @@
     <string name="action_filter_bookmarked">Bookmarked</string>
     <string name="action_filter_tracked">Tracked</string>
     <string name="action_filter_unread">Unread</string>
-    <string name="action_filter_started">Started</string>
     <string name="action_filter_interval_custom">Customized update frequency</string>
+    <!-- reserved for #4048 -->
     <string name="action_filter_empty">Remove filter</string>
     <string name="action_sort_alpha">Alphabetically</string>
     <string name="action_sort_count">Total entries</string>
     <string name="action_sort_total">Total chapters</string>
     <string name="action_sort_last_read">Last read</string>
+    <string name="action_sort_last_manga_update">Last update check</string>
     <string name="action_sort_unread_count">Unread count</string>
     <string name="action_sort_next_updated">Next expected update</string>
     <string name="action_sort_latest_chapter">Latest chapter</string>
@@ -60,7 +71,6 @@
     <string name="action_sort_date_added">Date added</string>
     <string name="action_sort_tracker_score">Tracker score</string>
     <string name="action_sort_random">Random</string>
-    <string name="action_sort_airing_time">Airing time</string>
     <string name="action_search">Search</string>
     <string name="action_search_hint">Search…</string>
     <string name="action_search_settings">Search settings</string>
@@ -98,8 +108,10 @@
     <string name="action_start">Start</string>
     <string name="action_resume">Resume</string>
     <string name="action_open_in_browser">Open in browser</string>
+    <string name="action_show_manga">Show entry</string>
     <string name="action_copy_to_clipboard">Copy to clipboard</string>
     <string name="action_copy_link">Copy link</string>
+    <!-- Do not translate "WebView" -->
     <string name="action_open_in_web_view">Open in WebView</string>
     <string name="action_web_view" translatable="false">WebView</string>
     <string name="action_migrate">Migrate</string>
@@ -111,11 +123,11 @@
     <string name="action_display_cover_only_grid">Cover-only grid</string>
     <string name="action_display_download_badge">Downloaded chapters</string>
     <string name="action_display_unread_badge">Unread chapters</string>
-    <string name="action_display_unseen_badge">Unseen episodes</string>
     <string name="action_display_local_badge">Local source</string>
     <string name="action_display_language_badge">Language</string>
     <string name="action_display_show_tabs">Show category tabs</string>
     <string name="action_display_show_number_of_items">Show number of items</string>
+    <string name="action_display_show_continue_reading_button">Continue reading button</string>
     <string name="action_disable">Disable</string>
     <string name="action_pin">Pin</string>
     <string name="action_unpin">Unpin</string>
@@ -125,7 +137,6 @@
     <string name="action_cancel_all">Cancel all</string>
     <string name="cancel_all_for_series">Cancel all for this series</string>
     <string name="action_sort">Sort</string>
-    <string name="action_reorganize_by">Reorder</string>
     <string name="action_order_by_upload_date">By upload date</string>
     <string name="action_order_by_chapter_number">By chapter number</string>
     <string name="action_newest">Newest</string>
@@ -141,6 +152,7 @@
     <string name="action_save">Save</string>
     <string name="action_reset">Reset</string>
     <string name="action_revert_to_default">Revert to default</string>
+    <!-- missing undo feature after Compose rewrite #7454 -->
     <string name="action_undo">Undo</string>
     <string name="action_close">Close</string>
     <string name="action_open_log">Open log</string>
@@ -153,10 +165,14 @@
     <string name="action_not_now">Not now</string>
     <string name="action_add_anyway">Add anyway</string>
     <string name="action_migrate_duplicate">Migrate existing entry</string>
+
+    <!-- Operations -->
     <string name="loading">Loading…</string>
     <string name="internal_error">InternalError: Check crash logs for further information</string>
+
+    <!-- Shortcuts-->
     <string name="app_not_available">App not available</string>
-    <string name="relative_time_now">Now</string>
+
     <!-- Onboarding -->
     <string name="pref_onboarding_guide">Onboarding guide</string>
     <string name="onboarding_heading">Welcome!</string>
@@ -175,362 +191,16 @@
     <string name="onboarding_permission_notifications_description">Get notified for library updates and more.</string>
     <string name="onboarding_permission_ignore_battery_opts">Background battery usage</string>
     <string name="onboarding_permission_ignore_battery_opts_description">Avoid interruptions to long-running library updates, downloads, and backup restores.</string>
+    <string name="onboarding_permission_crashlytics">Send crash logs</string>
+    <string name="onboarding_permission_crashlytics_description">Send anonymized crash logs to the developers.</string>
+    <string name="onboarding_permission_analytics">Allow analytics</string>
+    <string name="onboarding_permission_analytics_description">Send anonymized usage data to improve app features.</string>
     <string name="onboarding_permission_action_grant">Grant</string>
     <string name="onboarding_guides_new_user">New to %s? We recommend checking out the getting started guide.</string>
     <string name="onboarding_guides_returning_user">Reinstalling %s?</string>
+
     <!-- Preferences -->
-
-    <!-- Player settings -->
-    <string name="label_player_settings">Player settings</string>
-    <string name="action_search_player_settings">Search player settings</string>
-
-    <!-- Player settings - internal player -->
-    <string name="pref_player_internal">Internal player</string>
-    <string name="pref_player_internal_summary">Progress, controls, orientation</string>
-    <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
-    <string name="pref_progress_70" translatable="false">70%</string>
-    <string name="pref_progress_75" translatable="false">75%</string>
-    <string name="pref_progress_80" translatable="false">80%</string>
-    <string name="pref_progress_85" translatable="false">85%</string>
-    <string name="pref_progress_90" translatable="false">90%</string>
-    <string name="pref_progress_95" translatable="false">95%</string>
-    <string name="pref_progress_100" translatable="false">100%</string>
-    <string name="pref_preserve_watching_position">Preserve watch position on seen episodes</string>
-    <string name="pref_category_player_orientation">Orientation</string>
-    <string name="rotation_video">Video</string>
-    <string name="rotation_reverse_landscape">Reverse landscape</string>
-    <string name="rotation_sensor_portrait">Sensor portrait</string>
-    <string name="rotation_sensor_landscape">Sensor landscape</string>
-
-    <string name="pref_category_controls">Controls</string>
-    <string name="pref_controls_allow_gestures_in_panels">Allow gesture in panels</string>
-    <string name="pref_controls_show_loading">Show loading circle</string>
-    <string name="pref_controls_show_chapter_indicator">Show current chapter indicator</string>
-    <string name="pref_controls_show_chapter_indicator_info">Only appears if the video has chapters</string>
-    <string name="pref_controls_display_volume_percentage">Display volume as percentage</string>
-    <string name="pref_remember_brightness">Remember and switch to the last used brightness</string>
-    <string name="pref_remember_volume">Remember and switch to the last used volume</string>
-
-    <string name="pref_hosters">Hosters</string>
-    <string name="pref_hosters_show_failure">Display failed hosters</string>
-    <string name="pref_hosters_show_empty">Display empty hosters</string>
-
-    <string name="pref_player_fullscreen">Show content in display cutout</string>
-    <string name="pref_player_hide_controls">Hide player controls when opening the player</string>
-    <string name="pref_show_system_bar">Show system status bar with controls</string>
-    <string name="pref_reduce_motion">Reduce player animation</string>
-    <string name="pref_player_time_to_disappear">Hide player controls time</string>
-    <string name="pref_player_time_to_disappear_summary">%1$s ms</string>
-    <string name="pref_panel_opacity">Panel opacity</string>
-
-    <string name="pref_category_intro_skip">Intro skip</string>
-    <string name="pref_enable_intro_skip">Enable intro skip</string>
-    <string name="pref_enable_auto_skip_ani_skip">Enable auto skip</string>
-    <string name="pref_enable_netflix_style_aniskip">Enable Netflix style</string>
-    <string name="pref_waiting_time_aniskip">Button timeout</string>
-    <string name="pref_waiting_time_aniskip_5">5 seconds</string>
-    <string name="pref_waiting_time_aniskip_6">6 seconds</string>
-    <string name="pref_waiting_time_aniskip_7">7 seconds</string>
-    <string name="pref_waiting_time_aniskip_8">8 seconds</string>
-    <string name="pref_waiting_time_aniskip_9">9 seconds</string>
-    <string name="pref_waiting_time_aniskip_10">10 seconds</string>
-    <string name="pref_category_player_aniskip_info">AniSkip requires the anime to be tracked with MAL or Anilist to work</string>
-    <string name="pref_enable_aniskip">Enable AniSkip</string>
-    <string name="pref_disable_aniskip_chapter">Disable AniSkip if video already contains chapters</string>
-
-    <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
-    <string name="pref_enable_pip">Enable the use of PiP mode</string>
-    <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
-    <string name="pref_pip_on_exit">Automatically switch to PiP mode on exiting the player</string>
-    <string name="pref_pip_replace_with_previous">Replaces the "Skip 10 seconds" option with "Previous episode"</string>
-
-    <string name="pref_category_external_player">External player</string>
-    <string name="pref_always_use_external_player">Always use external player</string>
-    <string name="pref_external_player_preference">External player preference</string>
-
-    <!-- Player Settings - Gestures -->
-    <string name="pref_player_gestures">Gestures</string>
-    <string name="pref_player_gestures_summary">Seeking, double tap, media controls</string>
-
-    <string name="pref_category_player_sliders">Sliders</string>
-    <string name="enable_volume_brightness_gestures">Enable Volume and Brightness Gestures</string>
-    <string name="pref_controls_swap_vol_brightness">Swap volume and brightness slider</string>
-
-    <string name="pref_category_player_seeking">Seeking</string>
-    <string name="enable_horizontal_seek_gesture">Enable Horizontal Seek Gesture</string>
-    <string name="pref_show_seekbar">Show seekbar when seeking</string>
-    <string name="pref_default_intro_length">Default skip intro length</string>
-    <string name="pref_intro_length">Skip intro length</string>
-    <string name="pref_skip_length">Double tap to skip length</string>
-    <string name="pref_skip_30" translatable="false">30s</string>
-    <string name="pref_skip_20" translatable="false">20s</string>
-    <string name="pref_skip_10" translatable="false">10s</string>
-    <string name="pref_skip_5" translatable="false">5s</string>
-    <string name="pref_skip_3" translatable="false">3s</string>
-    <string name="pref_skip_disable">Disable</string>
-    <string name="pref_player_smooth_seek">Enable precise seeking</string>
-    <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
-
-    <string name="pref_category_double_tap">Double tap</string>
-    <string name="pref_left_double_tap">Double tap (left)</string>
-    <string name="pref_center_double_tap">Double tap (center)</string>
-    <string name="pref_right_double_tap">Double tap (right)</string>
-    <string name="pref_double_tap_info">When a tap gesture is set to "Custom", it can be bound through input.conf. The key codes are 0x10001 for left, 0x10002 for center, and 0x10003 for right.</string>
-    <string name="single_action_none">None</string>
-    <string name="single_action_seek">Seek</string>
-    <string name="single_action_playpause">Play/Pause</string>
-    <string name="single_action_switch">Change episode</string>
-    <string name="single_action_custom">Custom</string>
-
-    <string name="pref_category_media_controls">Media controls</string>
-    <string name="pref_media_previous">Previous</string>
-    <string name="pref_media_playpause">Play/Pause</string>
-    <string name="pref_media_next">Next</string>
-    <string name="pref_media_info">When a media control is set to "Custom", it can be bound through input.conf. The key codes are 0x10004 for previous, 0x10005 for play/pause, and 0x10006 for next.</string>
-
-    <!-- Player Settings - Decoder -->
-    <string name="pref_player_decoder">Decoder</string>
-    <string name="pref_player_decoder_summary">Hardware decoding, pixel format, debanding</string>
-    <string name="pref_try_hw">Try hardware decoding</string>
-    <string name="pref_gpu_next_title">Enable gpu-next</string>
-    <string name="pref_gpu_next_subtitle">A new video rendering backend</string>
-    <string name="pref_debanding_title">Debanding</string>
-    <string name="pref_debanding_none">None</string>
-    <string name="pref_debanding_cpu">CPU</string>
-    <string name="pref_debanding_gpu">GPU</string>
-    <string name="pref_debanding_yuv420p">YUV420P</string>
-    <string name="pref_use_yuv420p_title">Use YUV420P pixel format</string>
-    <string name="pref_use_yuv420p_subtitle">May fix black screens on some video codecs, can also improve performance at the cost of quality</string>
-
-    <!-- Player settings - Subtitles -->
-    <string name="pref_player_subtitle">Subtitles</string>
-    <string name="pref_player_subtitle_summary">Preferred languages, whitelist, blacklist</string>
-    <string name="pref_player_subtitle_lang">Preferred languages</string>
-    <string name="pref_player_subtitle_lang_info">Subtitle language(s) to be selected by default on a video with multiple subtitles, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
-    <string name="pref_player_subtitle_whitelist">Whitelist</string>
-    <string name="pref_player_subtitle_whitelist_info">Whitelist for subtitles. If a whitelist is defined, the first subtitle that contains a whitelisted word will be used. Multiple values can be delimited by a comma.</string>
-    <string name="pref_player_subtitle_blacklist">Blacklist</string>
-    <string name="pref_player_subtitle_blacklist_info">Blacklist for subtitles. If a blacklist is defined, all subtitles that contains a blacklisted word will be filtered out. Multiple values can be delimited by a comma.</string>
-
-    <!-- Player settings - Audio -->
-    <string name="pref_player_audio">Audio</string>
-    <string name="pref_player_audio_summary">Preferred languages, pitch correction, audio channels</string>
-    <string name="pref_player_audio_lang">Preferred languages</string>
-    <string name="pref_player_audio_lang_info">Audio language(s) to be selected by default on a video with multiple audio streams, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
-    <string name="pref_player_audio_pitch_correction">Enable audio pitch correction</string>
-    <string name="pref_player_audio_pitch_correction_summary">Prevents the audio from becoming high-pitched at faster speeds and low-pitched at slower speeds</string>
-    <string name="pref_player_audio_channels">Audio channels</string>
-    <string name="pref_player_audio_channels_auto_safe">Auto-safe</string>
-    <string name="pref_player_audio_channels_auto">Auto</string>
-    <string name="pref_player_audio_channels_mono">Mono</string>
-    <string name="pref_player_audio_channels_stereo">Stereo</string>
-    <string name="pref_player_audio_channels_reverse_stereo">Reverse stereo</string>
-    <string name="pref_player_audio_boost_cap">Volume boost cap</string>
-
-    <!-- Player settings - Custom Buttons -->
-    <string name="pref_player_custom_button">Custom buttons</string>
-    <string name="pref_player_custom_button_summary">Execute lua code with custom buttons</string>
-    <string name="pref_player_custom_button_header">Edit custom buttons</string>
-    <string name="pref_player_custom_button_guide">Custom buttons guide</string>
-    <string name="pref_player_custom_button_empty">You have no custom buttons. Tap the plus button to create a custom button.</string>
-    <string name="pref_player_custom_button_add">Add button</string>
-    <string name="pref_player_custom_button_edit">Edit button</string>
-    <string name="pref_player_custom_button_title">Title</string>
-    <string name="pref_player_custom_button_error_exists">Button already exists!</string>
-    <string name="pref_player_custom_button_content">Lua code</string>
-    <string name="pref_player_custom_button_content_long">Lua code (on long press)</string>
-    <string name="pref_player_custom_button_optional">(optional)</string>
-    <string name="pref_player_custom_button_delete">Delete button</string>
-    <string name="pref_player_custom_button_delete_confirm">Do you wish to delete the button "%s"?</string>
-    <string name="pref_player_custom_button_startup">On startup</string>
-    <string name="pref_player_custom_button_id">(ID: %d)</string>
-
-    <!-- Player settings - Script editor -->
-    <string name="pref_player_editor">Script editor</string>
-    <string name="pref_player_editor_summary">Edit and create new scripts and script options</string>
-    <string name="pref_player_editor_script">Scripts</string>
-    <string name="pref_player_editor_script_opts">Script options</string>
-    <string name="pref_player_no_items">Directory contains no items. Tap the plus button to add a new file.</string>
-    <string name="editor_unsaved_progress">You have unsaved changes. Do you still wish to go back?</string>
-    <string name="editor_save_error">Unable to save file</string>
-    <string name="editor_save_success">File saved</string>
-    <string name="editor_action_rename">Rename file</string>
-    <string name="editor_action_delete">Delete file</string>
-    <string name="editor_file_already_exists">File already exists</string>
-    <string name="editor_invalid_filename">Invalid filename</string>
-    <string name="editor_create_file">Create file</string>
-    <string name="editor_edit_file">Edit filename</string>
-    <string name="editor_filename">Filename</string>
-    <string name="editor_create_error">Unable to create file</string>
-    <string name="editor_rename_error">Unable to rename file</string>
-    <string name="editor_delete_error">Unable to delete file</string>
-    <string name="editor_delete_file">Delete file</string>
-    <string name="editor_delete_file_confirmation">Do you wish to delete the file \"%s\"?</string>
-
-    <!-- Player settings - Advanced -->
-    <string name="pref_player_advanced">Advanced</string>
-    <string name="pref_player_advanced_summary">Scripts, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Enable MPV scripts</string>
-    <string name="pref_mpv_scripts_summary">Needs external storage permission.</string>
-    <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
-    <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
-    <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
-
-    <!-- Player -->
-
-    <!-- Player - skip intro button -->
-    <string name="player_skip_action">Skip %1$s</string>
-    <string name="player_intro_skipped">%1$s skipped</string>
-    <string name="player_chapter_type_opening">Opening</string>
-    <string name="player_chapter_type_ending">Ending</string>
-    <string name="player_chapter_type_recap">Recap</string>
-    <string name="player_chapter_type_mixedop">Mixed opening</string>
-
-
-    <!-- Player - Bottom left -->
-    <string name="player_speed" translatable="false">%.2fx</string>
-
-    <!-- Player - Bottom right -->
-    <string name="video_fit_screen">Fit to screen</string>
-    <string name="video_crop_screen">Cropped to screen</string>
-    <string name="video_stretch_screen">Stretched to screen</string>
-
-    <!-- Other -->
-    <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
-    <string name="toast_sleep_timer_ended">Sleep timer ended</string>
-    <string name="player_generic_unit_ms">ms</string>
-    <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
-    <string name="numeric_chooser_value_too_big">Value too big</string>
-    <string name="numeric_chooser_value_too_small">Value too small</string>
-    <string name="enable_auto_play">Auto-play is on</string>
-    <string name="disable_auto_play">Auto-play is off</string>
-    <string name="player_aniskip_dontskip">Don\'t skip</string>
-    <string name="player_aniskip_dontskip_toast">Skipping %s in %d seconds</string>
-    <string name="player_aniskip_skip">%s skipped</string>
-
-    <!-- Errors -->
-    <string name="no_next_episode">Next Episode not found!</string>
-    <string name="no_prev_episode">Previous Episode not found!</string>
-    <string name="no_available_videos">No available videos</string>
-    <string name="no_hosters">Hoster list is empty</string>
-    <string name="no_episode_loaded">No episode loaded</string>
-    <string name="select_hoster_from_empty_list">Hoster selected from empty list</string>
-
-    <!-- Sheets -->
-
-    <string name="player_sheets_delay_set_as_default">Set as default</string>
-    <string name="player_sheets_track_title_w_lang" translatable="false">#%d: %s (%s)</string>
-    <string name="player_sheets_track_title_wo_lang" translatable="false">#%d: %s</string>
-    <string name="player_sheets_track_lang_wo_title" translatable="false">#%d: %s</string>
-    <string name="player_sheets_track_delay">Delay</string>
-    <string name="player_sheets_track_palette">Palette</string>
-
-    <!-- Sheets - Audio delay -->
-    <string name="player_sheets_audio_delay_title">Audio delay</string>
-    <string name="player_sheets_audio_delay_audio_sound_heard">Sound heard</string>
-    <string name="player_sheets_audio_delay_sound_sound_spotted">Sound spotted</string>
-
-    <!-- Sheets - Sub delay -->
-    <string name="player_sheets_sub_delay_title">Subtitle delay</string>
-    <string name="player_sheets_sub_delay_speed">Speed</string>
-    <string name="player_sheets_sub_delay_delay">Delay</string>
-    <string name="player_sheets_sub_delay_subtitle_type_primary">Primary</string>
-    <string name="player_sheets_sub_delay_subtitle_type_secondary">Secondary</string>
-    <string name="player_sheets_sub_delay_subtitle_type_primary_and_secondary">Both</string>
-    <string name="player_sheets_sub_delay_subtitle_voice_heard">Voice heard</string>
-    <string name="player_sheets_sub_delay_subtitle_text_seen">Text seen</string>
-    <string name="player_sheets_sub_delay_audio_sound_heard">Sound heard</string>
-    <string name="player_sheets_sub_delay_sound_sound_spotted">Sound spotted</string>
-
-    <!-- Sheets - Subtitle colors -->
-    <string name="player_sheets_sub_colors_title">Colors</string>
-    <string name="player_sheets_subtitles_color_text">Text</string>
-    <string name="player_sheets_subtitles_color_border">Border</string>
-    <string name="player_sheets_subtitles_color_background">Background</string>
-    <string name="player_sheets_sub_color_red">Red</string>
-    <string name="player_sheets_sub_color_green">Green</string>
-    <string name="player_sheets_sub_color_blue">Blue</string>
-    <string name="player_sheets_sub_color_alpha">Alpha</string>
-
-    <!-- Sheets - Subtitle settings -->
-    <string name="player_sheets_subtitles_settings_title">Subtitles settings</string>
-
-    <!-- Sheets - Subtitle Typography settings -->
-    <string name="player_sheets_sub_typography_title">Typography</string>
-    <string name="player_sheets_sub_typography_font">Font</string>
-    <string name="player_sheets_sub_typography_font_size">Font size</string>
-    <string name="player_sheets_sub_typography_border_style">Border style</string>
-    <string name="player_sheets_sub_typography_border_size">Border size</string>
-    <string name="player_sheets_subtitles_shadow_offset">Shadow offset</string>
-    <string name="player_sheets_subtitles_border_style_outline_and_shadow">Outline and shadow</string>
-    <string name="player_sheets_subtitles_border_style_opaque_box">Opaque box</string>
-    <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
-
-    <!-- Sheets - Miscellaneous -->
-    <string name="player_sheets_sub_misc_title">Miscellaneous</string>
-    <string name="player_sheets_sub_override_ass">Override ASS/SSA subtitles</string>
-    <string name="player_sheets_sub_scale">Scale</string>
-    <string name="player_sheets_sub_position">Position</string>
-
-    <!-- Sheets - Subtitles -->
-    <string name="player_sheets_subtitles_border_style_outline_and_shadow">Outline and shadow</string>
-    <string name="player_sheets_subtitles_border_style_opaque_box">Opaque box</string>
-    <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
-
-    <!-- Sheets - Video filters -->
-    <string name="player_sheets_filters_title">Filters</string>
-    <string name="player_sheets_filters_brightness">Brightness</string>
-    <string name="player_sheets_filters_contrast">Contrast</string>
-    <string name="player_sheets_filters_gamma">Gamma</string>
-    <string name="player_sheets_filters_Saturation">Saturation</string>
-    <string name="player_sheets_filters_hue">Hue</string>
-    <string name="player_sheets_filters_warning">Some filters may not work on your current video driver</string>
-
-    <!-- Sheets - Audio tracks -->
-    <string name="player_sheets_add_ext_audio">Add external audio tracks</string>
-
-    <!-- Sheets - Quality list -->
-    <string name="player_hoster_tap_to_load">Tap to load videos</string>
-    <string name="player_hoster_failed">Failed to load videos</string>
-    <string name="player_sheets_qualities_title">Qualities</string>
-
-    <!-- Sheets - Decoders -->
-    <string name="player_sheets_decoder_formatted">%s (%s)</string>
-
-    <!-- Sheets - More Sheet -->
-    <string name="player_sheets_more_title">More</string>
-    <string name="player_hwdec_mode">Hardware decoding mode</string>
-    <string name="pref_audio_channels">Audio channels</string>
-    <string name="player_sheets_stats_page_title">Default statistics page</string>
-    <string name="player_sheets_tracks_off">Off</string>
-    <string name="player_sheets_stats_page_chip">Page %d</string>
-    <string name="player_sheets_custom_buttons_title">Custom buttons</string>
-    <string name="player_seek_n_seconds">%d seconds</string>
-    <string name="player_speed" translatable="false">%.2fx</string>
-    <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
-    <string name="timer_title">Sleep Timer</string>
-    <string name="timer_remaining">%s remaining</string>
-    <string name="timer_picker_enter_timer">Enter duration</string>
-    <string name="timer_picker_pick_time">Pick duration</string>
-    <string name="timer_cancel_timer">Cancel current timer</string>
-
-    <!-- Sheets - Playback Speed -->
-    <string name="player_sheets_speed_slider_label">Speed</string>
-    <string name="player_sheets_speed_make_default">Make default speed</string>
-    <string name="pref_audio_pitch_correction_title">Enable audio pitch correction</string>
-    <string name="pref_audio_pitch_correction_summary">Prevents the audio from becoming high-pitched at faster speeds and low-pitched at slower speeds</string>
-
-    <!-- Sheets - Subtitle tracks -->
-    <string name="player_sheets_add_ext_sub">Add external subtitles</string>
-    <string name="player_sheets_subtitles_footer_secondary_sid_no_styles">Secondary subtitles will have no ASS/SSA Styling.</string>
-
-    <!-- Sheets - screenshot -->
-    <string name="screenshot_show_subs">Include Subtitles</string>
-
-    <!-- Sheets - Chapters -->
-    <string name="player_sheets_chapters_title">Chapters</string>
-
-    <!-- Subsections -->
+      <!-- Subsections -->
     <string name="pref_category_general">General</string>
     <string name="pref_category_appearance">Appearance</string>
     <string name="pref_category_library">Library</string>
@@ -539,9 +209,9 @@
     <string name="pref_category_tracking">Tracking</string>
     <string name="pref_category_advanced">Advanced</string>
     <string name="pref_category_about">About</string>
-    <string name="pref_general_summary">App language, notifications</string>
+
     <string name="pref_appearance_summary">Theme, date &amp; time format</string>
-    <string name="pref_library_summary">Categories, global update, chapter/episode swipe</string>
+    <string name="pref_library_summary">Categories, global update, chapter swipe</string>
     <string name="pref_reader_summary">Reading mode, display, navigation</string>
     <string name="pref_downloads_summary">Automatic download, download ahead</string>
     <string name="pref_tracking_summary">One-way progress sync, enhanced sync</string>
@@ -549,6 +219,8 @@
     <string name="pref_backup_summary">Manual &amp; automatic backups, storage space</string>
     <string name="pref_security_summary">App lock, secure screen</string>
     <string name="pref_advanced_summary">Dump crash logs, battery optimizations</string>
+
+      <!-- General section -->
     <string name="pref_category_theme">Theme</string>
     <string name="pref_app_theme">App theme</string>
     <string name="theme_system">System</string>
@@ -565,18 +237,20 @@
     <string name="theme_tealturquoise">Teal &amp; Turquoise</string>
     <string name="theme_yinyang">Yin &amp; Yang</string>
     <string name="theme_yotsuba">Yotsuba</string>
-    <string name="theme_cloudflare">Cloudflare</string>
-    <string name="theme_sapphire">Sapphire</string>
-    <string name="theme_doom">Doom</string>
-    <string name="theme_matrix">Matrix</string>
     <string name="theme_tidalwave">Tidal Wave</string>
     <string name="pref_dark_theme_pure_black">Pure black dark mode</string>
     <string name="pref_relative_format">Relative timestamps</string>
+    <!-- "Today" instead of "2023-12-31" -->
     <string name="pref_relative_format_summary">\"%1$s\" instead of \"%2$s\"</string>
     <string name="pref_date_format">Date format</string>
+
     <string name="pref_manage_notifications">Manage notifications</string>
     <string name="pref_app_language">App language</string>
+
     <string name="pref_category_security">Security and privacy</string>
+    <string name="pref_security">Security</string>
+    <string name="pref_firebase">Analytics and Crash logs</string>
+
     <string name="lock_with_biometrics">Require unlock</string>
     <string name="lock_when_idle">Lock when idle</string>
     <string name="lock_always">Always</string>
@@ -584,15 +258,20 @@
     <string name="hide_notification_content">Hide notification content</string>
     <string name="secure_screen">Secure screen</string>
     <string name="secure_screen_summary">Secure screen hides app contents when switching apps and block screenshots</string>
+    <string name="firebase_summary">Sending crash logs and analytics will allow us to identify and fix issues, improve performance, and make future updates more relevant to your needs</string>
+
     <string name="pref_category_nsfw_content">NSFW (18+) sources</string>
     <string name="pref_show_nsfw_source">Show in sources and extensions lists</string>
     <string name="parental_controls_info">This does not prevent unofficial or potentially incorrectly flagged extensions from surfacing NSFW (18+) content within the app.</string>
+
     <string name="relative_time_today">Today</string>
+
+      <!-- Library section -->
     <string name="pref_category_display">Display</string>
     <string name="pref_library_columns">Items per row</string>
-    <string name="pref_library_rows">List size</string>
     <string name="portrait">Portrait</string>
     <string name="landscape">Landscape</string>
+
     <string name="pref_category_library_update">Global update</string>
     <string name="pref_library_update_interval">Automatic updates</string>
     <string name="update_never">Off</string>
@@ -607,25 +286,36 @@
     <string name="network_not_metered">Only on unmetered network</string>
     <string name="charging">When charging</string>
     <string name="restrictions">Restrictions: %s</string>
+
     <string name="pref_library_update_smart_update">Smart update</string>
+    <string name="pref_update_only_completely_read">Skip entries with unread chapter(s)</string>
     <string name="pref_update_only_non_completed">Skip entries with \"Completed\" status</string>
     <string name="pref_update_only_started">Skip unstarted entries</string>
     <string name="pref_update_only_in_release_period">Predict next release time</string>
+    <string name="pref_library_update_show_tab_badge">Show unread count on Updates icon</string>
+
     <string name="pref_library_update_refresh_metadata">Automatically refresh metadata</string>
     <string name="pref_library_update_refresh_metadata_summary">Check for new cover and details when updating library</string>
+
     <string name="default_category">Default category</string>
     <string name="default_category_summary">Always ask</string>
     <string name="categorized_display_settings">Per-category settings for sort</string>
+    <string name="pref_library_update_categories_details">Entries in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="all">All</string>
     <string name="none">None</string>
     <string name="include">Include: %s</string>
     <string name="exclude">Exclude: %s</string>
-    <string name="pref_behavior">Chapter behavior</string>
+
+    <string name="pref_behavior">Behavior</string>
+    <!-- This should be to the left for RTL locales -->
     <string name="pref_chapter_swipe_end">Chapter on swipe to right</string>
+    <!-- This should be to the right for RTL locales -->
     <string name="pref_chapter_swipe_start">Chapter on swipe to left</string>
     <string name="pref_mark_duplicate_read_chapter_read">Mark duplicate read chapter as read</string>
     <string name="pref_mark_duplicate_read_chapter_read_existing">After reading a chapter</string>
     <string name="pref_mark_duplicate_read_chapter_read_new">After fetching new chapter</string>
+
+      <!-- Extension section -->
     <string name="multi_lang">Multi</string>
     <string name="ext_updates_pending">Updates pending</string>
     <string name="ext_update">Update</string>
@@ -658,16 +348,17 @@
     <string name="ext_installer_legacy">Legacy</string>
     <string name="ext_installer_packageinstaller" translatable="false">PackageInstaller</string>
     <string name="ext_installer_shizuku" translatable="false">Shizuku</string>
-    <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
     <string name="ext_installer_private" translatable="false">Private</string>
+    <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
     <string name="ext_revoke_trust">Revoke trusted unknown extensions</string>
+
     <!-- Extension repos -->
     <string name="label_extension_repos">Extension repos</string>
     <string name="information_empty_repos">You have no repos set.</string>
     <string name="action_add_repo">Add repo</string>
     <string name="label_add_repo_input">Repo URL</string>
-    <string name="action_add_repo_message">Add additional repos to Aniyomi. This should be a URL that ends with \"index.min.json\".</string>
+    <string name="action_add_repo_message">Add additional repos to Mihon. This should be a URL that ends with \"index.min.json\".</string>
     <string name="error_repo_exists">This repo already exists!</string>
     <string name="action_delete_repo">Delete repo</string>
     <string name="invalid_repo_name">Invalid repo URL</string>
@@ -677,7 +368,8 @@
     <string name="action_replace_repo">Replace</string>
     <string name="action_replace_repo_title">Signing Key Fingerprint Already Exists</string>
     <string name="action_replace_repo_message">Repository %1$s has the same Signing Key Fingerprint as %2$s.\nIf this is expected, %2$s will be replaced, otherwise contact your repo maintainer.</string>
-    <!-- Reader section -->
+
+      <!-- Reader section -->
     <string name="pref_fullscreen">Fullscreen</string>
     <string name="pref_show_navigation_mode">Show tap zones overlay</string>
     <string name="pref_show_navigation_mode_summary">Briefly show when reader is opened</string>
@@ -723,7 +415,6 @@
     <string name="pref_skip_read_chapters">Skip chapters marked read</string>
     <string name="pref_skip_filtered_chapters">Skip filtered chapters</string>
     <string name="pref_skip_dupe_chapters">Skip duplicate chapters</string>
-    <string name="pref_preserve_reading_position">Preserve reading position on read chapters</string>
     <string name="pref_reader_navigation">Navigation</string>
     <string name="pref_read_with_volume_keys">Volume keys</string>
     <string name="pref_read_with_volume_keys_inverted">Invert volume keys</string>
@@ -733,9 +424,9 @@
     <string name="tapping_inverted_vertical">Vertical</string>
     <string name="tapping_inverted_both">Both</string>
     <string name="pref_reader_actions">Actions</string>
+    <string name="pref_read_with_long_tap">Show actions on long tap</string>
     <string name="pref_create_folder_per_manga">Save pages into separate folders</string>
     <string name="pref_create_folder_per_manga_summary">Creates folders according to entries\' title</string>
-    <string name="pref_read_with_long_tap">Show on actions long tap</string>
     <string name="pref_reader_theme">Background color</string>
     <string name="white_background">White</string>
     <string name="gray_background">Gray</string>
@@ -797,6 +488,12 @@
     <string name="pref_low">Low</string>
     <string name="pref_lowest">Lowest</string>
     <string name="pref_webtoon_disable_zoom_out">Disable zoom out</string>
+
+      <!-- Downloads section -->
+    <string name="pref_category_delete_chapters">Delete chapters</string>
+    <string name="pref_remove_after_marked_as_read">After manually marked as read</string>
+    <string name="pref_remove_after_read">After reading automatically delete</string>
+    <string name="pref_remove_bookmarked_chapters">Allow deleting bookmarked chapters</string>
     <string name="pref_remove_exclude_categories">Excluded categories</string>
     <string name="no_location_set">No storage location set</string>
     <string name="invalid_location">Invalid location: %s</string>
@@ -812,19 +509,26 @@
     <string name="pref_download_new_categories_details">Entries in excluded categories will not be downloaded even if they are also in included categories.</string>
     <string name="download_ahead">Download ahead</string>
     <string name="auto_download_while_reading">Auto download while reading</string>
-    <string name="download_ahead_info">Only works if the current chapter/episode + the next one are already downloaded.</string>
+    <string name="download_ahead_info">Only works if the current chapter + the next one are already downloaded.</string>
     <string name="save_chapter_as_cbz">Save as CBZ archive</string>
     <string name="split_tall_images">Split tall images</string>
     <string name="split_tall_images_summary">Improves reader performance</string>
-    <string name="pref_download_slots">Maximum downloads</string>
+
+    <!-- Tracking section -->
     <string name="tracking_guide">Tracking guide</string>
+    <string name="pref_auto_update_manga_sync">Update progress after reading</string>
+    <string name="pref_auto_update_manga_on_mark_read">Update progress when marked as read</string>
     <string name="services">Trackers</string>
     <string name="tracking_info">One-way sync to update the chapter progress in external tracker services. Set up tracking for individual entries from their tracking button.</string>
     <string name="enhanced_services">Enhanced trackers</string>
     <string name="enhanced_services_not_installed">Available but source not installed: %s</string>
     <string name="enhanced_tracking_info">Provides enhanced features for specific sources. Entries are automatically tracked when added to your library.</string>
     <string name="track_activity_name">Tracker login</string>
+
+      <!-- Browse section -->
     <string name="pref_hide_in_library_items">Hide entries already in library</string>
+
+      <!-- Data and storage section -->
     <string name="pref_storage_location">Storage location</string>
     <string name="pref_storage_location_info">Used for automatic backups, chapter downloads, and local source.</string>
     <string name="pref_create_backup">Create backup</string>
@@ -849,9 +553,8 @@
     <string name="app_settings">App settings</string>
     <string name="source_settings">Source settings</string>
     <string name="extensionRepo_settings">Extension repos</string>
-    <string name="custom_button_settings">Custom buttons</string>
     <string name="private_settings">Include sensitive settings (e.g., tracker login tokens)</string>
-    <string name="non_library_settings">All read/watched entries</string>
+    <string name="non_library_settings">All read entries</string>
     <string name="creating_backup">Creating backup</string>
     <string name="creating_backup_error">Backup failed</string>
     <string name="missing_storage_permission">Storage permissions not granted</string>
@@ -867,11 +570,20 @@
     <string name="label_data">Data</string>
     <string name="pref_storage_usage">Storage usage</string>
     <string name="available_disk_space_info">Available: %1$s / Total: %2$s</string>
+    <string name="pref_clear_chapter_cache">Clear chapter cache</string>
     <string name="used_cache">Used: %1$s</string>
     <string name="cache_deleted">Cache cleared, %1$d files deleted</string>
     <string name="cache_delete_error">Error occurred while clearing</string>
+    <string name="pref_auto_clear_chapter_cache">Clear chapter cache on app launch</string>
+    <string name="export">Export</string>
+    <string name="library_list">Library List</string>
+    <string name="library_exported">Library Exported</string>
+
+    <!-- Sync section -->
     <string name="syncing_library">Syncing library</string>
     <string name="library_sync_complete">Library sync complete</string>
+
+      <!-- Advanced section -->
     <string name="label_network">Networking</string>
     <string name="pref_clear_cookies">Clear cookies</string>
     <string name="pref_dns_over_https">DNS over HTTPS (DoH)</string>
@@ -882,10 +594,12 @@
     <string name="requires_app_restart">Requires app restart to take effect</string>
     <string name="cookies_cleared">Cookies cleared</string>
     <string name="pref_invalidate_download_cache">Reindex downloads</string>
+    <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters</string>
     <string name="download_cache_invalidated">Downloads index invalidated</string>
     <string name="pref_clear_database">Clear database</string>
     <string name="pref_clear_database_summary">Delete history for entries that are not saved in your library</string>
     <string name="clear_database_source_item_count">%1$d non-library entries in database</string>
+    <string name="clear_database_confirmation">Are you sure? Read chapters and progress of non-library entries will be lost</string>
     <string name="clear_database_completed">Entries deleted</string>
     <string name="database_clean">Nothing to clear</string>
     <string name="pref_clear_webview_data">Clear WebView data</string>
@@ -907,6 +621,8 @@
     <string name="pref_verbose_logging">Verbose logging</string>
     <string name="pref_verbose_logging_summary">Print verbose logs to system log (reduces app performance)</string>
     <string name="pref_debug_info">Debug info</string>
+
+      <!-- About section -->
     <string name="website">Website</string>
     <string name="version">Version</string>
     <string name="whats_new">What\'s new</string>
@@ -915,11 +631,23 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="updated_version">Updated to v%1$s</string>
+
+    <!-- ACRA -->
+    <string name="pref_enable_acra">Send crash reports</string>
+    <string name="pref_acra_summary">Helps fix any bugs. No sensitive data will be sent</string>
+
+
+    <!-- More -->
     <string name="fdroid_warning">F-Droid builds are not officially supported.\nTap to learn more.</string>
     <string name="label_downloaded_only">Downloaded only</string>
     <string name="pref_incognito_mode">Incognito mode</string>
+    <string name="pref_incognito_mode_summary">Pauses reading history</string>
+    <string name="pref_incognito_mode_extension_summary">Pause reading history for extension</string>
     <string name="notification_incognito_text">Disable incognito mode</string>
     <string name="downloaded_only_summary">Filters all entries in your library</string>
+
+
+    <!-- Login dialog -->
     <string name="login_title">Log in to %1$s</string>
     <string name="username">Username</string>
     <string name="email">Email address</string>
@@ -930,12 +658,18 @@
     <string name="logout">Log out</string>
     <string name="logout_success">You are now logged out</string>
     <string name="unknown_error">Unknown error</string>
+
+    <!-- Library -->
     <string name="updating_category">Updating category</string>
-    <string name="local_source_badge">Local</string>
+    <string name="manga_from_library">From library</string>
     <string name="downloaded_chapters">Downloaded chapters</string>
     <string name="intervals_header">Intervals</string>
+    <!-- For badges/buttons on library covers. -->
     <string name="overlay_header">Overlay</string>
     <string name="tabs_header">Tabs</string>
+
+    <!-- Browse source -->
+    <!-- missing prompt after Compose rewrite #7901 -->
     <string name="no_more_results">No more results</string>
     <string name="no_results_found">No results found</string>
     <string name="local_source">Local source</string>
@@ -954,19 +688,22 @@
     <string name="local_invalid_format">Invalid chapter format</string>
     <string name="local_filter_order_by">Order by</string>
     <string name="date">Date</string>
+
+    <!-- Manga info -->
     <string name="ongoing">Ongoing</string>
     <string name="unknown">Unknown</string>
     <string name="unknown_author">Unknown author</string>
     <string name="author">Author</string>
     <string name="artist">Artist</string>
+    <!-- reserved for #6163 -->
     <string name="unknown_status">Unknown status</string>
     <string name="licensed">Licensed</string>
     <string name="publishing_finished">Publishing finished</string>
     <string name="cancelled">Cancelled</string>
     <string name="on_hiatus">On hiatus</string>
-    <string name="type">Type</string>
     <string name="add_to_library">Add to library</string>
     <string name="in_library">In library</string>
+    <!-- missing confirm menu after Compose rewrite #7901 -->
     <string name="remove_from_library">Remove from library</string>
     <string name="unknown_title">Unknown title</string>
     <string name="confirm_add_duplicate_manga">You have an entry in your library with the same name.\n\nDo you still wish to continue?</string>
@@ -979,18 +716,21 @@
     <string name="copied_to_clipboard">Copied to clipboard:\n%1$s</string>
     <string name="clipboard_copy_error">Failed to copy to clipboard</string>
     <string name="source_not_installed">Source not installed: %1$s</string>
+    <string name="snack_add_to_library">Add to library?</string>
     <string name="description_placeholder">No description</string>
+
+    <!-- Manga chapters -->
     <string name="display_mode_chapter">Chapter %1$s</string>
     <string name="manga_display_interval_title">Estimate every</string>
     <string name="manga_display_modified_interval_title">Set to update every</string>
-    <!-- "… around 2 days" -->
+    <!-- "... around 2 days" -->
     <string name="manga_interval_expected_update">New chapters predicted to be released in around %1$s, checking around every %2$s.</string>
-    <string name="anime_interval_expected_update">New episodes predicted to be released in around %1$s, checking around every %2$s.</string>
     <string name="manga_interval_expected_update_null">This manga is either completed, or there is no predicted release date.</string>
-    <string name="anime_interval_expected_update_null">This anime is either completed, or there is no predicted release date.</string>
     <string name="manga_interval_expected_update_soon">Soon</string>
     <string name="manga_interval_custom_amount">Custom update frequency:</string>
     <string name="chapter_downloading_progress">Downloading (%1$d/%2$d)</string>
+    <string name="chapter_error">Error</string>
+    <string name="chapter_paused">Paused</string>
     <string name="show_title">Source title</string>
     <string name="show_chapter_number">Chapter number</string>
     <string name="sort_by_source">By source</string>
@@ -1006,16 +746,16 @@
     <string name="confirm_delete_chapters">Are you sure you want to delete the selected chapters?</string>
     <string name="chapter_settings">Chapter settings</string>
     <string name="confirm_set_chapter_settings">Are you sure you want to save these settings as default?</string>
+    <string name="also_set_chapter_settings_for_library">Also apply to all entries in my library</string>
     <string name="set_chapter_settings_as_default">Set as default</string>
     <string name="no_chapters_error">No chapters found</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="exclude_scanlators">Exclude scanlators</string>
     <string name="no_scanlators_found">No scanlators found</string>
     <string name="confirm_tracker_update">Update trackers to chapter %d?</string>
-    <string name="confirm_tracker_update_anime">Update trackers to episode %d?</string>
-    <string name="trackers_updated_summary_manga">Trackers updated to chapter %d</string>
-    <string name="trackers_updated_summary_anime">Trackers updated to episode %d</string>
+    <string name="trackers_updated_summary">Trackers updated to chapter %d</string>
 
+    <!-- Tracking Screen -->
     <string name="manga_tracking_tab">Tracking</string>
     <string name="add_tracking">Add tracking</string>
     <string name="action_track">Track</string>
@@ -1052,11 +792,21 @@
     <string name="track_delete_title">Remove %s tracking?</string>
     <string name="track_delete_text">This will remove the tracking locally.</string>
     <string name="track_delete_remote_text">Also remove from %s</string>
+
+    <!-- Category activity -->
     <string name="error_category_exists">A category with this name already exists!</string>
+    <!-- missing undo feature after Compose rewrite #7454 -->
     <string name="snack_categories_deleted">Categories deleted</string>
+
+    <!-- Dialog option with checkbox view -->
     <string name="dialog_with_checkbox_remove_description">This will remove the read date of this chapter. Are you sure?</string>
+    <string name="dialog_with_checkbox_reset">Reset all chapters for this entry</string>
+
+    <!-- Image notifier -->
     <string name="picture_saved">Picture saved</string>
     <string name="error_saving_picture">Error saving picture</string>
+
+    <!-- Reader activity -->
     <string name="custom_filter">Custom filter</string>
     <string name="set_as_cover">Set as cover</string>
     <string name="cover_updated">Cover updated</string>
@@ -1077,6 +827,8 @@
     <string name="transition_pages_error">Failed to load pages: %1$s</string>
     <string name="page_list_empty_error">No pages found</string>
     <string name="loader_not_implemented_error">Source not found</string>
+
+    <!-- Updates -->
     <string name="updating_library">Updating library</string>
     <string name="update_already_running">An update is already running</string>
     <string name="cant_open_last_read_chapter">Unable to open last read chapter</string>
@@ -1084,26 +836,40 @@
     <string name="updates_last_update_info_just_now">Just now</string>
     <string name="relative_time_span_never">Never</string>
     <string name="action_view_upcoming">View Upcoming Updates</string>
+
     <!-- Upcoming -->
     <string name="upcoming_guide">Upcoming Guide</string>
     <string name="upcoming_calendar_next">Next Month</string>
     <string name="upcoming_calendar_prev">Previous Month</string>
+
+    <!-- History -->
     <string name="recent_manga_time">Ch. %1$s - %2$s</string>
     <string name="pref_clear_history">Clear history</string>
     <string name="clear_history_completed">History deleted</string>
     <string name="clear_history_confirmation">Are you sure? All history will be lost.</string>
+
+    <!-- Source Screen -->
     <string name="source_empty_screen">No source found</string>
+
+    <!-- Source Filter Screen -->
     <string name="source_filter_empty_screen">No installed source found</string>
+
+    <!-- Source migration screen -->
     <string name="migration_help_guide">Source migration guide</string>
     <string name="migration_dialog_what_to_include">Select data to include</string>
     <string name="migration_selection_prompt">Select a source to migrate from</string>
     <string name="migrate">Migrate</string>
+    <!-- Make a copy (noun) when migrating. Don't use for copying to clipboard. -->
     <string name="copy">Copy</string>
     <string name="empty_screen">Well, this is awkward</string>
     <string name="not_installed">Not installed</string>
+
+    <!-- Crash screen -->
     <string name="crash_screen_title">Whoops!</string>
     <string name="crash_screen_description">%s ran into an unexpected error. We suggest you share the crash logs in our support channel on Discord.</string>
     <string name="crash_screen_restart_application">Restart the application</string>
+
+    <!-- Stats screen -->
     <string name="label_overview_section">Overview</string>
     <string name="label_completed_titles">Completed entries</string>
     <string name="label_read_duration">Read duration</string>
@@ -1120,7 +886,13 @@
     <string name="hour_short">%dh</string>
     <string name="minute_short">%dm</string>
     <string name="seconds_short">%ds</string>
+
+    <!-- Downloads activity and service -->
     <string name="download_queue_error">Couldn\'t download chapters. You can try again in the downloads section</string>
+    <string name="download_insufficient_space">Couldn\'t download chapters due to low storage space</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Mihon. Tap to learn more.</string>
+
+    <!-- Library update service notifications -->
     <string name="notification_updating_progress">Updating library… (%s)</string>
     <string name="notification_size_warning">Large updates harm sources and may lead to slower updates and also increased battery usage. Tap to learn more.</string>
     <string name="notification_new_chapters">New chapters found</string>
@@ -1137,19 +909,28 @@
     <string name="skipped_reason_not_started">Skipped because no chapters are read</string>
     <string name="skipped_reason_not_always_update">Skipped because series does not require updates</string>
     <string name="skipped_reason_not_in_release_period">Skipped because no release was expected today</string>
+
+    <!-- File Picker Titles -->
     <string name="file_select_cover">Select cover image</string>
     <string name="file_select_backup">Select backup file</string>
     <string name="file_picker_error">No file picker app found</string>
     <string name="file_picker_uri_permission_unsupported">Failed to acquire persistent folder access. The app may behave unexpectedly.</string>
     <string name="file_null_uri_error">No file selected</string>
+
+    <!--UpdateCheck-->
     <string name="update_check_confirm">Download</string>
     <string name="update_check_open">Open on GitHub</string>
+    <!-- reserved for future use -->
     <string name="update_check_eol">This Android version is no longer supported</string>
     <string name="update_check_no_new_updates">No new updates available</string>
+
+    <!--UpdateCheck Notifications-->
     <string name="update_check_notification_download_in_progress">Downloading…</string>
     <string name="update_check_notification_download_complete">Tap to install update</string>
     <string name="update_check_notification_download_error">Download error</string>
     <string name="update_check_notification_update_available">New version available!</string>
+
+    <!-- Information Text -->
     <string name="information_no_downloads">No downloads</string>
     <string name="information_no_recent">No recent updates</string>
     <string name="information_no_recent_manga">Nothing read recently</string>
@@ -1162,18 +943,24 @@
     <string name="information_cloudflare_bypass_failure">Failed to bypass Cloudflare</string>
     <string name="information_cloudflare_help">Tap here for help with Cloudflare</string>
     <string name="information_required_plain">*required</string>
+    <!-- Do not translate "WebView" -->
+    <string name="information_webview_required">WebView is required for the app to function</string>
+    <!-- Do not translate "WebView" -->
     <string name="information_webview_outdated">Please update the WebView app for better compatibility</string>
     <string name="chapter_settings_updated">Updated default chapter settings</string>
+
+    <!-- Download Notification -->
     <string name="download_notifier_downloader_title">Downloader</string>
     <string name="download_notifier_title_error">Error</string>
     <string name="download_notifier_unknown_error">Could not download chapter due to unexpected error</string>
     <string name="download_notifier_text_only_wifi">No Wi-Fi connection available</string>
     <string name="download_notifier_no_network">No network connection available</string>
     <string name="download_notifier_download_paused">Downloads paused</string>
-    <string name="download_notifier_download_finish">Download completed</string>
     <string name="download_notifier_split_page_not_found">Page %d not found while splitting</string>
     <string name="download_notifier_split_page_path_not_found">Couldn\'t find file path of page %d</string>
     <string name="download_notifier_cache_renewal">Checking downloads</string>
+
+    <!-- Notification channels -->
     <string name="channel_common">Common</string>
     <string name="channel_progress">Progress</string>
     <string name="channel_complete">Complete</string>
@@ -1181,226 +968,19 @@
     <string name="channel_new_chapters">Chapter updates</string>
     <string name="channel_app_updates">App updates</string>
     <string name="channel_ext_updates">Extension updates</string>
+
+    <!-- S Pen actions -->
     <string name="spen_previous_page">Previous page</string>
     <string name="spen_next_page">Next page</string>
+
+    <!-- App widget -->
     <string name="appwidget_updates_description">See your recently updated library entries</string>
     <string name="appwidget_unavailable_locked">Widget not available when app lock is enabled</string>
     <string name="remove_manga">You are about to remove \"%s\" from your library</string>
+
+    <!-- Common exceptions -->
+    <!-- Do not translate "WebView" -->
     <string name="exception_http">HTTP %d, check website in WebView</string>
     <string name="exception_offline">No Internet connection</string>
     <string name="exception_unknown_host">Couldn\'t reach %s</string>
-    <string name="action_hide">Hide</string>
-    <string name="label_all">All</string>
-    <string name="label_category">Category</string>
-    <string name="manga_categories">Manga Categories</string>
-    <string name="general_categories">Categories</string>
-    <string name="anime_categories">Anime Categories</string>
-    <string name="entries">Library entries</string>
-    <string name="chapters_episodes">Chapters and episodes</string>
-    <string name="episodes">Episodes</string>
-    <string name="backup_settings_warning">Warning: Backing up settings will store your track passwords as well, do not share this backup file!</string>
-    <string name="label_manga_library">Manga</string>
-    <string name="label_anime_library">Anime</string>
-    <string name="label_anime">Anime</string>
-    <string name="label_manga">Manga</string>
-    <string name="label_recent_anime_updates">Anime Updates</string>
-    <string name="label_manga_sources">Manga Sources</string>
-    <string name="label_anime_sources">Anime Sources</string>
-    <string name="label_watched_duration">Watched duration</string>
-    <string name="label_watched_episodes">Watched</string>
-    <string name="pref_start_screen">Start Screen</string>
-    <string name="pref_library_manga_columns">Manga items per row</string>
-    <string name="pref_library_anime_columns">Anime items per row</string>
-    <string name="pref_bottom_nav_no_history">Move History to the More tab</string>
-    <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
-    <string name="pref_bottom_nav_no_manga">Move Manga to the More tab</string>
-    <string name="pref_bottom_nav_no_browse">Move Browse to the More tab</string>
-    <string name="unlock_app_title">Unlock Aniyomi</string>
-    <string name="action_filter_unseen">Unseen</string>
-    <string name="action_global_manga_search">Global Manga Search</string>
-    <string name="action_global_anime_search">Global Anime Search</string>
-    <string name="action_sort_total_episodes">Total episodes</string>
-    <string name="action_sort_last_seen">Last seen</string>
-    <string name="action_sort_last_checked">Last checked</string>
-    <string name="action_sort_latest_episode">Latest episode</string>
-    <string name="action_sort_last_manga_update">Last manga update</string>
-    <string name="action_sort_last_anime_update">Last anime update</string>
-    <string name="action_sort_unseen_count">Unseen count</string>
-    <string name="action_sort_episode_fetch_date">Episode fetch date</string>
-    <string name="action_mark_as_seen">Mark as watched</string>
-    <string name="action_mark_as_unseen">Mark as unwatched</string>
-    <string name="action_mark_previous_as_seen">Mark previous as seen</string>
-    <string name="action_play_internally">Play internally</string>
-    <string name="action_play_externally">Play externally</string>
-    <string name="action_download_unread">Download unread chapters</string>
-    <string name="action_download_unseen">Download unseen episodes</string>
-    <string name="action_bookmark_episode">Bookmark episode</string>
-    <string name="action_remove_bookmark_episode">Unbookmark episode</string>
-    <string name="action_edit_anime_categories">Edit anime categories</string>
-    <string name="action_edit_manga_categories">Edit manga categories</string>
-    <string name="action_view_episodes">View episodes</string>
-    <string name="action_previous_episode">Previous episode</string>
-    <string name="action_play">Play</string>
-    <string name="action_next_episode">Next episode</string>
-    <string name="action_screen_fit">Screen fit mode</string>
-    <string name="action_show_manga">Show manga</string>
-    <string name="action_show_anime">Show anime</string>
-    <string name="action_display_download_badge_anime">Downloaded episodes</string>
-    <string name="action_display_local_badge_manga">Local manga</string>
-    <string name="action_display_local_badge_anime">Local anime</string>
-    <string name="pref_search_pinned_manga_sources_only">Only search pinned manga sources in global search</string>
-    <string name="pref_search_pinned_anime_sources_only">Only search pinned anime sources in global search</string>
-    <string name="pref_hide_in_manga_library_items">Hide manga entries already in library</string>
-    <string name="pref_hide_in_anime_library_items">Hide anime entries already in library</string>
-    <string name="action_display_show_continue_reading_button">Continue watching/reading button</string>
-    <string name="action_order_by_episode_number">By episode number</string>
-    <string name="action_start_download_externally">Use external downloader</string>
-    <string name="action_start_download_internally">Use internal downloader</string>
-    <string name="pref_bottom_nav_style">Bottom navigation style</string>
-    <string name="pref_default_home_tab_library">Set start screen to Manga Tab</string>
-    <string name="pref_update_only_completely_read">Skip entries with unseen episode(s)/unread chapter(s)</string>
-    <string name="pref_library_update_show_tab_badge">Show unseen/unread count on Updates icon</string>
-    <string name="default_manga_category">Default manga category</string>
-    <string name="default_anime_category">Default anime category</string>
-    <string name="pref_manga_library_update_categories_details">Manga in excluded categories will not be updated even if they are also in included categories.</string>
-    <string name="pref_anime_library_update_categories_details">Anime in excluded categories will not be updated even if they are also in included categories.</string>
-    <string name="unofficial_extension_message_aniyomi">This extension is not from the official list.</string>
-    <string name="unofficial_anime_extension_message">This extension is not from the official list.</string>
-    <string name="episode_download_progress">%1$d%%</string>
-    <string name="pref_category_delete_chapters">Delete chapters/episodes</string>
-    <string name="pref_remove_after_marked_as_read">After manually marked as read/watched</string>
-    <string name="pref_remove_after_read">After reading/watching automatically delete</string>
-    <string name="pref_remove_bookmarked_chapters">Allow deleting bookmarked chapters/episodes</string>
-    <string name="pref_remove_exclude_categories_manga">Excluded manga categories</string>
-    <string name="pref_remove_exclude_categories_anime">Excluded anime categories</string>
-    <string name="pref_category_external_downloader">External downloader</string>
-    <string name="pref_use_external_downloader">Always use external downloader for anime</string>
-    <string name="pref_external_downloader_selection">Downloader app preference</string>
-    <string name="pref_download_new_episodes">Download new episodes</string>
-    <string name="pref_download_new_unseen_episodes_only">Skip downloading duplicate seen episodes</string>
-    <string name="auto_download_while_watching">Auto download while watching</string>
-    <string name="download_ahead_info_anime">Only works on entries in library and if the current episode plus the next one are already downloaded</string>
-    <string name="pref_auto_update_manga_sync">Update progress after reading/watching</string>
-    <string name="pref_auto_update_manga_on_mark_read">Update progress when marked as read/watched</string>
-    <string name="pref_track_on_add_library">Open track menu on adding to library</string>
-    <string name="pref_show_next_episode_airing_time">Show next episode\'s airing time </string>
-    <string name="pref_backup_flags_summary">What information to include in the backup file</string>
-    <string name="pref_clear_chapter_cache">Clear chapter and episode cache</string>
-    <string name="pref_anime_storage_usage">Anime Storage usage</string>
-    <string name="pref_manga_storage_usage">Manga Storage usage</string>
-    <string name="used_cache_both">Used by anime: %1$s, used by manga: %2$s</string>
-    <string name="pref_auto_clear_chapter_cache">Clear episode/chapter cache on app launch</string>
-    <string name="export">Export</string>
-    <string name="library_list">Library List</string>
-    <string name="library_exported">Library Exported</string>
-    <string name="pref_clear_manga_database">Clear Manga database</string>
-    <string name="pref_clear_anime_database">Clear Anime database</string>
-    <string name="pref_clear_manga_database_summary">Delete history for manga that are not saved in your library</string>
-    <string name="pref_clear_anime_database_summary">Delete history for anime that are not saved in your library</string>
-    <string name="clear_database_confirmation">Are you sure? Completed episodes and chapters and progress of non-library entries will be lost</string>
-    <string name="pref_incognito_mode_summary">Pauses your history</string>
-    <string name="pref_incognito_mode_extension_summary">Pause reading history for extension</string>
-    <string name="manga_from_library">Manga from library</string>
-    <string name="anime_from_library">Anime from library</string>
-    <string name="downloaded_episodes">Downloaded episodes</string>
-    <string name="local_manga_source">Local manga source</string>
-    <string name="local_anime_source">Local anime source</string>
-    <string name="episode_not_found">Episode not found</string>
-    <string name="local_invalid_episode_format">Invalid episode format</string>
-    <string name="unknown_studio">Unknown studio</string>
-    <string name="delete_confirmation">Are you sure you wish to delete \"%s\"?</string>
-    <string name="delete_downloads_for_anime">Delete downloaded episodes?</string>
-    <string name="snack_add_to_manga_library">Add manga to library?</string>
-    <string name="snack_add_to_anime_library">Add anime to library?</string>
-    <string name="display_mode_episode">Episode %1$s</string>
-    <string name="episode_downloading_progress">Downloading (%d%%)</string>
-    <string name="download_error">Error</string>
-    <string name="download_paused">Paused</string>
-    <string name="show_episode_number">Episode number</string>
-    <string name="sort_by_episode_number">By episode number</string>
-    <string name="download_unseen">Unseen</string>
-    <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
-    <string name="also_set_chapter_settings_for_library">Also apply to all manga in my library</string>
-    <string name="also_set_episode_settings_for_library">Also apply to all anime in my library</string>
-    <string name="no_episodes_error">No episodes found</string>
-    <string name="watching">Watching</string>
-    <string name="currently_reading">Currently reading</string>
-    <string name="currently_watching">Currently watching</string>
-    <string name="plan_to_watch">Plan to watch</string>
-    <string name="not_interesting">Not interesting</string>
-    <string name="want_to_read">Want to read</string>
-    <string name="want_to_watch">Want to watch</string>
-    <string name="repeating_anime">Rewatching</string>
-    <string name="dialog_with_checkbox_remove_description_anime">This will remove the watch date of this episode. Are you sure?</string>
-    <string name="dialog_with_checkbox_reset_anime">Reset all episodes for this anime</string>
-    <string name="dialog_with_checkbox_reset">Reset all chapters for this manga</string>
-    <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
-    <string name="episode_progress">Progress: %1$s/%2$s</string>
-    <string name="episode_progress_no_total">Progress: %1$s</string>
-    <string name="recent_anime_time">Ep. %1$s - %2$s</string>
-    <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
-    <string name="video_list_empty_error">No video found</string>
-    <string name="notification_new_episodes">New episodes found</string>
-    <string name="information_no_recent_anime">Nothing watched recently</string>
-    <string name="information_webview_required">WebView is required for the app to function</string>
-    <string name="episode_settings_updated">Updated default episode settings</string>
-    <string name="download_notifier_download_paused_chapters">Chapter download paused</string>
-    <string name="download_notifier_download_paused_episodes">Episode download paused</string>
-    <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
-    <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
-    <string name="label_storage">Storage</string>
-    <string name="label_history">Manga</string>
-    <string name="label_anime_history">Anime</string>
-    <string name="label_updates">Manga</string>
-    <string name="label_anime_updates">Anime</string>
-    <string name="action_change_intro_length">Change intro length</string>
-    <string name="notification_episodes_single">Episode %1$s</string>
-    <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
-    <string name="notification_episodes_multiple">Episodes %1$s</string>
-    <string name="episode_settings">Episode settings</string>
-    <string name="pref_backup_flags">Backup options</string>
-    <string name="label_manga_extensions">Manga Extensions</string>
-    <string name="label_anime_extensions">Anime Extensions</string>
-    <string name="label_migration_manga">Migrate Manga</string>
-    <string name="label_migration_anime">Migrate Anime</string>
-    <string name="settings">Settings</string>
-    <string name="copied_video_link_to_clipboard">Copied video quality link to clipboard</string>
-    <string name="choose_video_quality">Choose video quality:</string>
-    <string name="extension_settings">Extension settings</string>
-    <string name="theme_cottoncandy">Cotton Candy</string>
-    <string name="theme_mocha">Mocha</string>
-    <string name="pref_behavior_episode">Episode behavior</string>
-    <string name="pref_episode_swipe_end">Episode on swipe to right</string>
-    <string name="pref_episode_swipe_start">Episode on swipe to right</string>
-    <string name="pref_mark_duplicate_seen_episode_seen">Mark duplicate seen episode as seen</string>
-    <string name="pref_mark_duplicate_seen_episode_seen_existing">After watching an episode</string>
-    <string name="pref_mark_duplicate_seen_episode_seen_new">After fetching new episode</string>
-    <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
-    <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
-    <string name="data_saver_exclude">Exclude from data saver</string>
-    <string name="data_saver_stop_exclude">Stop excluding from data saver</string>
-    <string name="data_saver">Data Saver</string>
-    <string name="data_saver_summary">Compress images before downloading or loading in reader</string>
-    <string name="data_saver_downloader">Use data saver in the downloader</string>
-    <string name="data_saver_ignore_jpeg">Ignore Jpeg Images</string>
-    <string name="data_saver_ignore_gif">Ignore Gif Animations</string>
-    <string name="data_saver_image_quality">Image Quality</string>
-    <string name="data_saver_image_quality_summary">Higher values mean that a higher percentage of the image quality is saved, but it also means the file size is larger, 80 percent is a good median between file size and image quality</string>
-    <string name="data_saver_image_format">Compress to Jpeg</string>
-    <string name="data_saver_image_format_summary_on">The Jpeg file size is considerably smaller then Webp is(meaning more data is saved), but it makes the images lose more quality as well.\nCurrently compresses to Jpeg</string>
-    <string name="data_saver_image_format_summary_off">The Jpeg file size is considerably smaller then Webp is(meaning more data is saved), but it makes the images lose more quality as well.\nCurrently compresses to Webp</string>
-    <string name="data_saver_color_bw">Convert to Black And White</string>
-    <string name="bandwidth_hero">Bandwidth Hero (requires a Bandwidth Hero Proxy server)</string>
-    <string name="wsrv">wsrv.nl</string>
-    <string name="resmush">resmush.it</string>
-    <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
-    <string name="data_saver_server_summary">Put Bandwidth Hero Proxy server url here</string>
-    <string name="download_slots_info">Will only download concurrently from self-hosted or unmetered sources</string>
-    <string name="unseen">Unseen</string>
-    <string name="label_manga_extension_repos">Manga extension repos</string>
-    <string name="label_anime_extension_repos">Anime extension repos</string>
-    <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
-    <string name="download_speed_limit">Chapter download speed limit</string>
-    <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
 </resources>
