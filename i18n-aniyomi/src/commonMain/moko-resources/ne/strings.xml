@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_summary">वर्गहरू, ग्लोबल अपडेट, अध्याय स्वाइप</string>
+    <string name="pref_library_update_show_tab_badge">अपडेट आइकनमा नपढिएको संख्या देखाउनुहोस्</string>
+    <string name="manga_categories">वर्गहरू</string>
+    <string name="action_display_local_badge_manga">लोकल माङ्गा</string>
+    <string name="default_manga_category">पूर्वनिर्धारित वर्ग</string>
+    <string name="pref_manga_library_update_categories_details">\"बहिष्कृत\" वर्गहरूमा रहेका माङ्गा \"समावेश गरिएका\" वर्गहरूमा भए पनि अपडेट हुने छैनन्।</string>
+    <string name="pref_remove_exclude_categories_manga">बहिष्कृत वर्गहरू</string>
+    <string name="pref_clear_manga_database">डाटाबेस खाली गर्नुहोस्</string>
+    <string name="pref_clear_manga_database_summary">पुस्तकालयमा नभएका माङ्गाको इतिहास हटाउनुहोस्</string>
+    <string name="snack_add_to_manga_library">माङ्गा पुस्तकालयमा राख्ने?</string>
+    <string name="download_error">त्रुटि</string>
+    <string name="download_paused">रोकिएको</string>
+    <string name="download_notifier_download_paused_chapters">डाउनलोडहरु रोकियो</string>
+    <string name="channel_new_chapters_episodes">अध्याय अपडेटहरू</string>
+</resources>

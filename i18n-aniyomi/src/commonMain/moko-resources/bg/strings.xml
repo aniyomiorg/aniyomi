@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_summary">Категории, глобални обновления</string>
+    <string name="pref_library_update_show_tab_badge">Покажи броя на непрочетените в иконата за ъпдейти</string>
+    <string name="manga_categories">Категории</string>
+    <string name="action_display_local_badge_manga">Локална манга</string>
+    <string name="default_manga_category">Категория по подразбиране</string>
+    <string name="pref_manga_library_update_categories_details">Манга в изключените категории няма да бъде обновявана дори ако се намира във включените категории.</string>
+    <string name="pref_remove_exclude_categories_manga">Изключени категории</string>
+    <string name="pref_clear_manga_database">Изчисти базата данни</string>
+    <string name="pref_clear_manga_database_summary">Изтрий историята на манги, които не са запазени в библиотеката</string>
+    <string name="snack_add_to_manga_library">Добавяне на мангата към библиотеката?</string>
+    <string name="download_error">Грешка</string>
+    <string name="download_paused">На пауза</string>
+    <string name="download_notifier_download_paused_chapters">Изтеглянето спряно</string>
+    <string name="channel_new_chapters_episodes">Нови глави</string>
+</resources>

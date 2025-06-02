@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_summary">Пухмӑшсем, пӗтӗмӗшле ҫӗнетӳ, сыпӑксене туртни</string>
+    <string name="manga_categories">Пухмӑшсем</string>
+    <string name="action_display_local_badge_manga">Вырӑнти ҫӑл куҫран</string>
+    <string name="default_manga_category">Яланхилле пухмӑш</string>
+    <string name="pref_clear_manga_database">Пӗлӗмсен кӗлете тасат</string>
+    <string name="pref_clear_manga_database_summary">Санӑн вулавӑшра упранман манкӑн вуланӑ кун-ҫулне катерт</string>
+    <string name="snack_add_to_manga_library">Манкка вулавăша хушмалла-и?</string>
+    <string name="download_error">Йӑнӑш</string>
+    <string name="download_paused">Вӑхӑтлӑха чарнӑ</string>
+    <string name="download_notifier_download_paused_chapters">Тиеве вӑхӑтлӑха чарнӑ</string>
+    <string name="channel_new_chapters_episodes">Сыпӑксен ҫӗнетӗвӗсем</string>
+</resources>

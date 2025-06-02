@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_exit">Шығу үшін тағы да артқа басыңыз</string>
+    <string name="action_filter_started">Басталды</string>
+    <string name="action_sort_airing_time">Шыққан уақыты</string>
+    <string name="action_reorganize_by">Қайта реттеу</string>
+    <string name="relative_time_now">Қазір</string>
+    <string name="pref_library_summary">Санаттар, ауқымды жаңарту, бөлімдерді парақтау</string>
+    <string name="pref_library_update_show_tab_badge">Жаңартулар белгішесінде оқылмағандар санын көрсету</string>
+    <string name="label_player_settings">Ойнатқышты баптау</string>
+    <string name="action_search_player_settings">Ойнатқыш баптауында іздеу</string>
+    <string name="pref_player_internal">Қолданба ойнатқышы</string>
+    <string name="pref_progress_mark_as_seen">Қай кезде бөлімді көрілген деп есептеу керек</string>
+    <string name="pref_preserve_watching_position">Көрілген бөлімдерде де тоқтаған кезді есте сақтау</string>
+    <string name="pref_category_external_player">Сыртқы ойнатқыш</string>
+    <string name="pref_general_summary">Қолданба тілі, хабарландырулар</string>
+    <string name="theme_sapphire">Жақұт</string>
+    <string name="manga_categories">Санаттар</string>
+    <string name="action_display_local_badge_manga">Локалды дереккөз</string>
+    <string name="default_manga_category">Әдепкі санат</string>
+    <string name="pref_manga_library_update_categories_details">Шығарылған санаттардағы жазбалар енгізілген санаттарда болса да жаңартылмайды.</string>
+    <string name="pref_remove_exclude_categories_manga">Саналмайтын санаттар</string>
+    <string name="pref_clear_manga_database">Дерекқорды тазалау</string>
+    <string name="pref_clear_manga_database_summary">Кітапханада жоқ жазбалардың тарихын жою</string>
+    <string name="snack_add_to_manga_library">Кітапханаға қосайық па?</string>
+</resources>
