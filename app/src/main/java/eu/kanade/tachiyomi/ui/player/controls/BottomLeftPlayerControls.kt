@@ -34,7 +34,7 @@ import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import eu.kanade.tachiyomi.ui.player.controls.components.CurrentChapter
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -64,7 +64,7 @@ fun BottomLeftPlayerControls(
             onClick = onCycleRotation,
         )
         ControlsButton(
-            text = stringResource(MR.strings.player_speed, playbackSpeed),
+            text = stringResource(AYMR.strings.player_speed, playbackSpeed),
             onClick = {
                 val newSpeed = if (playbackSpeed >= 2) 0.25f else playbackSpeed + 0.25f
                 onPlaybackSpeedChange(newSpeed)

@@ -121,6 +121,7 @@
     <string name="pref_create_backup">ಬ್ಯಾಕಪ್ ರಚಿಸಿ</string>
     <string name="tracking_info">ಟ್ರ್ಯಾಕಿಂಗ್ ಸೇವೆಗಳಲ್ಲಿ ಅಧ್ಯಾಯದ ಪ್ರಗತಿಯನ್ನು ನವೀಕರಿಸಲು ಏಕಮುಖ ಸಿಂಕ್. ಅವರ ಟ್ರ್ಯಾಕಿಂಗ್ ಬಟನ್ ನಿಂದ ಪ್ರತ್ಯೇಕ ಮಾಂಗಾ ನಮೂದುಗಳಿಗಾಗಿ ಟ್ರ್ಯಾಕಿಂಗ್ ಅನ್ನು ಹೊಂದಿಸಿ.</string>
     <string name="services">ಸೇವೆಗಳು</string>
+    <string name="pref_auto_update_manga_sync">ಓದಿದ ನಂತರ ಅಧ್ಯಾಯದ ಪ್ರಗತಿಯನ್ನು ನವೀಕರಿಸಿ</string>
     <string name="pref_download_new">ಹೊಸ ಅಧ್ಯಾಯಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
     <string name="fifth_to_last">ಕೊನೆಯ ಅಧ್ಯಾಯದಿಂದ ಐದನೆಯದು</string>
     <string name="fourth_to_last">ಕೊನೆಯ ಅಧ್ಯಾಯದಿಂದ ನಾಲ್ಕನೆಯದು</string>
@@ -189,6 +190,11 @@
     <string name="pref_cutout_short">ಕಟೌಟ್ ಆದಂತಹ ಪ್ರದೇಶದಲ್ಲಿ ವಿಷಯವನ್ನು ತೋರಿಸಿ</string>
     <string name="pref_fullscreen">ಪೂರ್ಣ ಪರದೆ</string>
     <string name="obsolete_extension_message">ಈ ವಿಸ್ತರಣೆ ಇನ್ನು ಮುಂದೆ ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="untrusted_extension_message">ಈ ವಿಸ್ತರಣೆಯನ್ನು ವಿಶ್ವಾಸಾರ್ಹವಲ್ಲದ ಪ್ರಮಾಣಪತ್ರದೊಂದಿಗೆ ಸಹಿ ಮಾಡಲಾಗಿದೆ ಮತ್ತು ಅದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿಲ್ಲ.
+\n
+\nದುರುದ್ದೇಶಪೂರಿತ ವಿಸ್ತರಣೆಯು ತಚಿಯೋಮಿಯಲ್ಲಿ ಸಂಗ್ರಹವಾಗಿರುವ ಯಾವುದೇ ಲಾಗಿನ್ ರುಜುವಾತುಗಳನ್ನು ಓದಬಹುದು ಅಥವಾ ಅನಿಯಂತ್ರಿತ ಕೋಡ್ ಅನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸಬಹುದು.
+\n
+\nಈ ಪ್ರಮಾಣಪತ್ರವನ್ನು ನಂಬುವ ಮೂಲಕ ನೀವು ಈ ಅಪಾಯಗಳನ್ನು ಸ್ವೀಕರಿಸುತ್ತೀರಿ.</string>
     <string name="untrusted_extension">ವಿಶ್ವಾಸಾರ್ಹವಲ್ಲದ ವಿಸ್ತರಣೆ</string>
     <string name="ext_uninstall">ಅನ್ಇನ್ಸ್ಟಾಲ್</string>
     <string name="ext_untrusted">ವಿಶ್ವಾಸಾರ್ಹವಲ್ಲ</string>
@@ -225,6 +231,7 @@
     <string name="download_notifier_title_error">ದೋಷ</string>
     <string name="download_notifier_downloader_title">ಡೌನ್‌ಲೋಡರ್</string>
     <string name="information_webview_outdated">ಉತ್ತಮ ಹೊಂದಾಣಿಕೆಗಾಗಿ ದಯವಿಟ್ಟು ವೆಬ್‌ವೀಕ್ಷಣೆ ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ನವೀಕರಿಸಿ</string>
+    <string name="information_webview_required">ತಚಿಯೋಮಿಗೆ ವೆಬ್‌ವೀಕ್ಷಣೆ ಅಗತ್ಯವಿದೆ</string>
     <string name="information_cloudflare_bypass_failure">ಕ್ಲೌಡ್‌ಫ್ಲೇರ್ ಅನ್ನು ಬೈಪಾಸ್ ಮಾಡಲು ವಿಫಲವಾಗಿದೆ</string>
     <string name="update_check_notification_update_available">ಹೊಸ ಆವೃತ್ತಿ ಲಭ್ಯವಿದೆ!</string>
     <string name="update_check_notification_download_error">ಡೌನ್‌ಲೋಡ್ ದೋಷ</string>
@@ -257,7 +264,7 @@
     <string name="transition_finished">ಮುಗಿದಿದೆ:</string>
     <string name="viewer">ಓದುವಿಕೆ ರೀತಿ</string>
     <string name="pref_category_for_this_series">ಈ ಸರಣಿಗಾಗಿ</string>
-    <string name="confirm_set_image_as_cover">ಈ ಚಿತ್ರವನ್ನು ಕವರ್ ಆರ್ಟ್ ಆಗಿ ಬಳಸುವುದೇ\?</string>
+    <string name="confirm_set_image_as_cover">ಈ ಚಿತ್ರವನ್ನು ಕವರ್ ಆರ್ಟ್ ಆಗಿ ಬಳಸುವುದೇ?</string>
     <string name="decode_image_error">ಈ ಚಿತ್ರವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗಲಿಲ್ಲ</string>
     <string name="no_next_chapter">ಮುಂದಿನ ಅಧ್ಯಾಯ ಕಂಡುಬಂದಿಲ್ಲ</string>
     <string name="chapter_progress">ಪುಟ: %1$d</string>
@@ -265,7 +272,8 @@
     <string name="set_as_cover">ಕವರ್ ಆಗಿ ಹೊಂದಿಸಿ</string>
     <string name="custom_filter">ಕಸ್ಟಮ್ ಫಿಲ್ಟರ್</string>
     <string name="picture_saved">ಚಿತ್ರ ಉಳಿಸಲಾಗಿದೆ</string>
-    <string name="dialog_with_checkbox_remove_description">ಇದು ಈ ಅಧ್ಯಾಯದ ಓದುವ ದಿನಾಂಕವನ್ನು ತೆಗೆದುಹಾಕುತ್ತದೆ. ನೀವು ಖಚಿತವಾಗಿರುವಿರಾ\?</string>
+    <string name="dialog_with_checkbox_reset">ಈ ಮಾಂಗಾದ ಎಲ್ಲಾ ಅಧ್ಯಾಯಗಳನ್ನು ಮರುಹೊಂದಿಸಿ</string>
+    <string name="dialog_with_checkbox_remove_description">ಇದು ಈ ಅಧ್ಯಾಯದ ಓದುವ ದಿನಾಂಕವನ್ನು ತೆಗೆದುಹಾಕುತ್ತದೆ. ನೀವು ಖಚಿತವಾಗಿರುವಿರಾ?</string>
     <string name="snack_categories_deleted">ವರ್ಗಗಳನ್ನು ಅಳಿಸಲಾಗಿದೆ</string>
     <string name="error_category_exists">ಈ ಹೆಸರಿನ ವರ್ಗವು ಈಗಾಗಲೇ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ!</string>
     <string name="track_type">ಮಾದರಿ</string>
@@ -282,19 +290,22 @@
     <string name="reading">ಓದುತ್ತಿರುವ</string>
     <string name="add_tracking">ಟ್ರ್ಯಾಕಿಂಗ್ ಸೇರಿಸಿ</string>
     <string name="manga_tracking_tab">ಟ್ರ್ಯಾಕಿಂಗ್</string>
-    <string name="confirm_delete_chapters">ಆಯ್ದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ\?</string>
+    <string name="confirm_delete_chapters">ಆಯ್ದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
     <string name="download_unread">ಓದದ</string>
     <string name="manga_download">ಡೌನ್‌ಲೋಡ್</string>
     <string name="sort_by_number">ಅಧ್ಯಾಯದ ಸಂಖ್ಯೆಯ ಪ್ರಕಾರ</string>
     <string name="sort_by_source">ಮೂಲದ ಪ್ರಕಾರ</string>
     <string name="show_chapter_number">ಅಧ್ಯಾಯ ಸಂಖ್ಯೆ</string>
     <string name="show_title">ಮೂಲ ಶೀರ್ಷಿಕೆ</string>
+    <string name="chapter_paused">ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="chapter_error">ದೋಷ</string>
     <string name="chapter_downloading_progress">ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ (%1$d/%2$d)</string>
     <string name="display_mode_chapter">ಅಧ್ಯಾಯ %1$s</string>
+    <string name="snack_add_to_library">ಮಾಂಗಾವನ್ನು ಗ್ರಂಥಾಲಯಕ್ಕೆ ಸೇರಿಸುವುದೇ?</string>
     <string name="source_not_installed">ಮೂಲವನ್ನು ಸ್ಥಾಪಿಸಲಾಗಿಲ್ಲ: %1$s</string>
     <string name="copied_to_clipboard">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಿದೆ:
 \n%1$s</string>
-    <string name="delete_downloads_for_manga">ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸುವುದೇ\?</string>
+    <string name="delete_downloads_for_manga">ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸುವುದೇ?</string>
     <string name="manga_info_collapse">ಕಡಿಮೆ</string>
     <string name="manga_info_expand">ಹೆಚ್ಚು</string>
     <string name="manga_removed_library">ಗ್ರಂಥಾಲಯದಿಂದ ತೆಗೆದುಹಾಕಲಾಗಿದೆ</string>
@@ -319,7 +330,7 @@
     <string name="unknown_error">ಅಜ್ಞಾತ ದೋಷ</string>
     <string name="logout_success">ನೀವು ಈಗ ಲಾಗ್ ಔಟ್ ಆಗಿದ್ದೀರಿ</string>
     <string name="logout">ಲಾಗ್ ಔಟ್</string>
-    <string name="logout_title">%1$s ನಿಂದ ಲಾಗ್ ಔಟ್ ಆಗುವುದೇ\?</string>
+    <string name="logout_title">%1$s ನಿಂದ ಲಾಗ್ ಔಟ್ ಆಗುವುದೇ?</string>
     <string name="login_success">ಲಾಗ್ ಇನ್ ಮಾಡಲಾಗಿದೆ</string>
     <string name="login">ಲಾಗಿನ್</string>
     <string name="password">ಪಾಸ್ ವರ್ಡ್</string>
@@ -328,6 +339,8 @@
     <string name="login_title">%1$s ಗೆ ಲಾಗ್ ಇನ್ ಮಾಡಿ</string>
     <string name="downloaded_only_summary">ನಿಮ್ಮ ಗ್ರಂಥಾಲಯದ ಎಲ್ಲಾ ಮಾಂಗಾವನ್ನು ಫಿಲ್ಟರ್ ಮಾಡುತ್ತದೆ</string>
     <string name="label_downloaded_only">ಡೌನ್ಲೋಡ್ ಮಾಡಿದ</string>
+    <string name="pref_acra_summary">ಯಾವುದೇ ದೋಷಗಳನ್ನು ಸರಿಪಡಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. ಯಾವುದೇ ಸೂಕ್ಷ್ಮ ಡೇಟಾವನ್ನು ಕಳುಹಿಸಲಾಗುವುದಿಲ್ಲ</string>
+    <string name="pref_enable_acra">ಕ್ರ್ಯಾಶ್ ವರದಿಗಳನ್ನು ಕಳುಹಿಸಿ</string>
     <string name="check_for_updates">ನವೀಕರಣಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ</string>
     <string name="licenses">ಓಪನ್ ಸೋರ್ಸ್ ಪರವಾನಗಿಗಳು</string>
     <string name="version">ಆವೃತ್ತಿ</string>
@@ -338,6 +351,7 @@
     <string name="pref_disable_battery_optimization">ಬ್ಯಾಟರಿ ಆಪ್ಟಿಮೈಸೇಶನ್ ಅನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</string>
     <string name="pref_refresh_library_covers">ಗ್ರಂಥಾಲಯದ ಮಾಂಗಾ ಕವರ್‌ಗಳನ್ನು ರಿಫ್ರೆಶ್ ಮಾಡಿ</string>
     <string name="clear_database_completed">ನಮೂದುಗಳನ್ನು ಅಳಿಸಲಾಗಿದೆ</string>
+    <string name="clear_database_confirmation">ನೀವು ಖಚಿತವಾಗಿರುವಿರಾ? ಅಧ್ಯಾಯಗಳು ಗ್ರಂಥಾಲಯೇತರ ಮಾಂಗಾದ ಓದು ಮತ್ತು ಪ್ರಗತಿ ಕಳೆದುಹೋಗುತ್ತದೆ</string>
     <string name="pref_clear_database_summary">ನಿಮ್ಮ ಗ್ರಂಥಾಲಯದಲ್ಲಿ ಇಲ್ಲದ ಮಾಂಗಾದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿ</string>
     <string name="pref_clear_database">ಡೇಟಾಬೇಸ್ ತೆರವುಗೊಳಿಸಿ</string>
     <string name="cookies_cleared">ಕುಕೀಗಳನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
@@ -345,13 +359,14 @@
     <string name="cache_delete_error">ಸಂಗ್ರಹವನ್ನು ತೆರವುಗೊಳಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ</string>
     <string name="cache_deleted">ಸಂಗ್ರಹವನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ. %1$d ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸಲಾಗಿದೆ</string>
     <string name="used_cache">ಬಳಸಲಾಗಿದೆ: %1$s</string>
+    <string name="pref_clear_chapter_cache">ಅಧ್ಯಾಯ ಸಂಗ್ರಹವನ್ನು ತೆರವುಗೊಳಿಸಿ</string>
     <string name="restoring_backup_canceled">ಮರುಸ್ಥಾಪನೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ</string>
     <string name="restoring_backup_error">ಬ್ಯಾಕಪ್ ಮರುಸ್ಥಾಪಿಸುವುದು ವಿಫಲವಾಗಿದೆ</string>
     <string name="restoring_backup">ಬ್ಯಾಕಪ್ ಅನ್ನು ಮರುಸ್ಥಾಪಿಸಲಾಗುತ್ತಿದೆ</string>
     <string name="restore_in_progress">ಮರುಸ್ಥಾಪನೆ ಈಗಾಗಲೇ ಪ್ರಗತಿಯಲ್ಲಿದೆ</string>
     <string name="creating_backup_error">ಬ್ಯಾಕಪ್ ವಿಫಲವಾಗಿದೆ</string>
     <string name="creating_backup">ಬ್ಯಾಕಪ್ ರಚಿಸಲಾಗುತ್ತಿದೆ</string>
-    <string name="backup_choice">ನೀವು ಏನು ಬ್ಯಾಕಪ್ ಮಾಡಲು ಬಯಸುತ್ತೀರಿ\?</string>
+    <string name="backup_choice">ನೀವು ಏನು ಬ್ಯಾಕಪ್ ಮಾಡಲು ಬಯಸುತ್ತೀರಿ?</string>
     <string name="backup_in_progress">ಬ್ಯಾಕಪ್ ಈಗಾಗಲೇ ಪ್ರಗತಿಯಲ್ಲಿದೆ</string>
     <string name="sort_by_upload_date">ಅಪ್‌ಲೋಡ್ ದಿನಾಂಕದ ಮೂಲಕ</string>
     <string name="label_data">ಡೇಟಾ</string>
@@ -377,6 +392,7 @@
     <string name="tapping_inverted_horizontal">ಅಡ್ಡ</string>
     <string name="tapping_inverted_none">ಯಾವುದು ಅಲ್ಲ</string>
     <string name="pref_read_with_tapping_inverted">ಟ್ಯಾಪಿಂಗ ಅನ್ನು ತಿರುಗಿಸಿ</string>
+    <string name="download_insufficient_space">ಕಡಿಮೆ ಶೇಖರಣಾ ಸ್ಥಳದ ಕಾರಣ ಅಧ್ಯಾಯಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
     <string name="unknown_status">ಅಜ್ಞಾತ ಸ್ಥಿತಿ</string>
     <string name="unknown_author">ಅಜ್ಞಾತ ಲೇಖಕ</string>
     <string name="action_global_search_query">\"%1$s\" ಅನ್ನು ಗ್ಲೋಬಲ್ ಸರ್ಚ್ ಮಾಡಿ</string>
@@ -396,10 +412,14 @@
     <string name="share_page_info">%1$s: %2$s, ಪುಟ %3$d</string>
     <string name="no_chapters_error">ಯಾವುದೇ ಅಧ್ಯಾಯಗಳು ಕಂಡುಬಂದಿಲ್ಲ</string>
     <string name="set_chapter_settings_as_default">ಡೀಫಾಲ್ಟ್ ಆಗಿ ಹೊಂದಿಸಿ</string>
-    <string name="confirm_set_chapter_settings">ಈ ಸೆಟ್ಟಿಂಗ್ ಗಳನ್ನು ಡೀಫಾಲ್ಟ್ ರೂಪದಲ್ಲಿ ಉಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ\?</string>
+    <string name="also_set_chapter_settings_for_library">ನನ್ನ ಗ್ರಂಥಾಲಯದಲ್ಲಿರುವ ಎಲ್ಲಾ ಮಾಂಗಾಗಳಿಗೂ ಅನ್ವಯಿಸಿ</string>
+    <string name="confirm_set_chapter_settings">ಈ ಸೆಟ್ಟಿಂಗ್ ಗಳನ್ನು ಡೀಫಾಲ್ಟ್ ರೂಪದಲ್ಲಿ ಉಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
     <string name="chapter_settings">ಅಧ್ಯಾಯದ ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
     <string name="downloaded_chapters">ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳು</string>
+    <string name="manga_from_library">ಗ್ರಂಥಾಲಯದಿಂದ ಮಾಂಗಾ</string>
     <string name="backup_restore_missing_trackers">ಟ್ರ್ಯಾಕರ್ ಗಳು ಲಾಗಿನ್ ಆಗಿಲ್ಲ:</string>
+    <string name="pref_remove_bookmarked_chapters">ಬುಕ್ ಮಾರ್ಕ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
+    <string name="pref_category_delete_chapters">ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
     <string name="ext_nsfw_warning">NSFW (18+) ವಿಷಯವನ್ನು ಹೊಂದಿರಬಹುದು</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="action_search_settings">ಸಂಯೋಜನೆಗಳಲ್ಲಿ ಹುಡುಕಿ</string>
@@ -408,9 +428,10 @@
     <string name="file_picker_error">ಯಾವುದೇ ಫೈಲ್ ಪಿಕ್ಕರ್ ಅಪ್ಲಿಕೇಶನ್ ಕಂಡುಬಂದಿಲ್ಲ</string>
     <string name="migration_help_guide">ಮೂಲ ವಲಸೆ ಮಾರ್ಗದರ್ಶಿ</string>
     <string name="myanimelist_relogin">ದಯವಿಟ್ಟು ಮತ್ತೆ MAL ಗೆ ಲಾಗಿನ್ ಮಾಡಿ</string>
+    <string name="pref_incognito_mode_summary">ಓದುವ ಇತಿಹಾಸವನ್ನು ವಿರಾಮಗೊಳಿಸುತ್ತದೆ</string>
     <string name="pref_incognito_mode">ಅಜ್ಞಾತ ಮೋಡ್</string>
     <string name="pref_clear_history">ಇತಿಹಾಸವನ್ನು ತೆರವುಗೊಳಿಸಿ</string>
-    <string name="clear_history_confirmation">ನೀವು ಖಚಿತವಾಗಿರುವಿರಾ\? ಎಲ್ಲಾ ಇತಿಹಾಸವೂ ಕಳೆದುಹೋಗುತ್ತದೆ.</string>
+    <string name="clear_history_confirmation">ನೀವು ಖಚಿತವಾಗಿರುವಿರಾ? ಎಲ್ಲಾ ಇತಿಹಾಸವೂ ಕಳೆದುಹೋಗುತ್ತದೆ.</string>
     <string name="clear_history_completed">ಇತಿಹಾಸವನ್ನು ಅಳಿಸಲಾಗಿದೆ</string>
     <string name="pref_show_nsfw_source">ಮೂಲಗಳ ಪಟ್ಟಿಯಲ್ಲಿ ತೋರಿಸಿ</string>
     <string name="pref_category_nsfw_content">ವಯಸ್ಕ (18+) ಮೂಲಗಳು</string>
@@ -448,6 +469,7 @@
     <string name="exclude">ಹೊರಗಿಡಿ: %s</string>
     <string name="include">ಸೇರಿಸಿ: %s</string>
     <string name="none">ಯಾವುದು ಅಲ್ಲ</string>
+    <string name="pref_library_update_categories_details">ಹೊರಗಿಡಲಾದ ವರ್ಗಗಳಲ್ಲಿನ ಮಾಂಗಾ ಸೇರಿಸಿದ ವಿಭಾಗಗಳಲ್ಲಿದ್ದರೂ ನವೀಕರಿಸಲಾಗುವುದಿಲ್ಲ.</string>
     <string name="action_show_errors">ದೋಷಗಳನ್ನು ತೋರಿಸು</string>
     <string name="cancel_all_for_series">ಈ ಸರಣಿಯ ಎಲ್ಲವನ್ನೂ ರದ್ದುಮಾಡಿ</string>
     <string name="action_display_local_badge">ಸ್ಥಳೀಯ ಬ್ಯಾಡ್ಜ್ ಗಳು</string>
@@ -471,6 +493,8 @@
     <string name="rotation_portrait">ಉದ್ದವಾದ ಪುಟ</string>
     <string name="rotation_type">ತಿರುಗುವಿಕೆಯ ಪ್ರಕಾರ</string>
     <string name="automatic_background">ಸ್ವಯಂಚಾಲಿತ</string>
+    <string name="pref_create_folder_per_manga_summary">ಮಾಂಗಾ ಶೀರ್ಷಿಕೆಗೆ ಅನುಗುಣವಾಗಿ ಫೋಲ್ಡರ್ ಗಳನ್ನು ರಚಿಸುತ್ತದೆ</string>
+    <string name="pref_create_folder_per_manga">ಪ್ರತ್ಯೇಕ ಫೋಲ್ಡರ್ ಗಳಲ್ಲಿ ಪುಟಗಳನ್ನು ಉಳಿಸಿ</string>
     <string name="pref_reader_actions">ಕ್ರಿಯೆಗಳು</string>
     <string name="pref_grayscale">ಗ್ರೇಸ್ಕೇಲ್</string>
     <string name="off">ಆಫ</string>
@@ -478,30 +502,4 @@
     <string name="categorized_display_settings">ಪ್ರತಿ ವರ್ಗದ ವಿಂಗಡಣೆ ಮತ್ತು ಪ್ರದರ್ಶನಕ್ಕಾಗಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
     <string name="restrictions">ನಿರ್ಬಂಧಗಳು: %s</string>
     <string name="action_start_downloading_now">ಈಗಲೇ ಡೌನ್‌ಲೋಡ್ ಪ್ರಾರಂಭಿಸಿ</string>
-    <string name="manga_categories">ವರ್ಗಗಳು</string>
-    <string name="action_display_local_badge_manga">ಸ್ಥಳೀಯ ಬ್ಯಾಡ್ಜ್ ಗಳು</string>
-    <string name="default_manga_category">ಡೀಫಾಲ್ಟ್ ವರ್ಗ</string>
-    <string name="pref_manga_library_update_categories_details">ಹೊರಗಿಡಲಾದ ವರ್ಗಗಳಲ್ಲಿನ ಮಾಂಗಾ ಸೇರಿಸಿದ ವಿಭಾಗಗಳಲ್ಲಿದ್ದರೂ ನವೀಕರಿಸಲಾಗುವುದಿಲ್ಲ.</string>
-    <string name="pref_category_delete_chapters">ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
-    <string name="pref_remove_after_marked_as_read">ಓದಿದಂತೆ ಗುರುತಿಸಿದಾಗ ತೆಗೆದುಹಾಕಿ</string>
-    <string name="pref_remove_after_read">ಓದಿದ ನಂತರ</string>
-    <string name="pref_remove_bookmarked_chapters">ಬುಕ್ ಮಾರ್ಕ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
-    <string name="pref_auto_update_manga_sync">ಓದಿದ ನಂತರ ಅಧ್ಯಾಯದ ಪ್ರಗತಿಯನ್ನು ನವೀಕರಿಸಿ</string>
-    <string name="pref_clear_chapter_cache">ಅಧ್ಯಾಯ ಸಂಗ್ರಹವನ್ನು ತೆರವುಗೊಳಿಸಿ</string>
-    <string name="pref_clear_manga_database">ಡೇಟಾಬೇಸ್ ತೆರವುಗೊಳಿಸಿ</string>
-    <string name="pref_clear_manga_database_summary">ನಿಮ್ಮ ಗ್ರಂಥಾಲಯದಲ್ಲಿ ಇಲ್ಲದ ಮಾಂಗಾದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿ</string>
-    <string name="clear_database_confirmation">ನೀವು ಖಚಿತವಾಗಿರುವಿರಾ? ಅಧ್ಯಾಯಗಳು ಗ್ರಂಥಾಲಯೇತರ ಮಾಂಗಾದ ಓದು ಮತ್ತು ಪ್ರಗತಿ ಕಳೆದುಹೋಗುತ್ತದೆ</string>
-    <string name="pref_incognito_mode_summary">ಓದುವ ಇತಿಹಾಸವನ್ನು ವಿರಾಮಗೊಳಿಸುತ್ತದೆ</string>
-    <string name="manga_from_library">ಗ್ರಂಥಾಲಯದಿಂದ ಮಾಂಗಾ</string>
-    <string name="snack_add_to_manga_library">ಮಾಂಗಾವನ್ನು ಗ್ರಂಥಾಲಯಕ್ಕೆ ಸೇರಿಸುವುದೇ?</string>
-    <string name="download_error">ದೋಷ</string>
-    <string name="download_paused">ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
-    <string name="also_set_chapter_settings_for_library">ನನ್ನ ಗ್ರಂಥಾಲಯದಲ್ಲಿರುವ ಎಲ್ಲಾ ಮಾಂಗಾಗಳಿಗೂ ಅನ್ವಯಿಸಿ</string>
-    <string name="dialog_with_checkbox_reset">ಈ ಮಾಂಗಾದ ಎಲ್ಲಾ ಅಧ್ಯಾಯಗಳನ್ನು ಮರುಹೊಂದಿಸಿ</string>
-    <string name="download_insufficient_space">ಕಡಿಮೆ ಶೇಖರಣಾ ಸ್ಥಳದ ಕಾರಣ ಅಧ್ಯಾಯಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
-    <string name="information_webview_required">ತಚಿಯೋಮಿಗೆ ವೆಬ್‌ವೀಕ್ಷಣೆ ಅಗತ್ಯವಿದೆ</string>
-    <string name="download_notifier_download_paused_chapters">ಡೌನ್‌ಲೋಡ್ ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
-    <string name="channel_new_chapters_episodes">ಅಧ್ಯಾಯ ನವೀಕರಣಗಳು</string>
-    <string name="not_selected">ಆಯ್ಕೆ ಮಾಡಿಲ್ಲ</string>
-    <string name="delete_downloaded">ಡೌನ್‌ಲೋಡ್ ಅಳಿಸಿ</string>
 </resources>

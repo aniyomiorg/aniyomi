@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_filter_started">चालु केले</string>
+    <string name="manga_categories">श्रेण्या</string>
+    <string name="default_manga_category">मूलभूत श्रेणी</string>
+</resources>

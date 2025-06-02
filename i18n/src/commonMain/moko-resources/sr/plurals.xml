@@ -41,9 +41,9 @@
         <item quantity="other">Завршено у %1$s са %2$s грешака</item>
     </plurals>
     <plurals name="num_trackers">
-        <item quantity="one">%d трекер</item>
-        <item quantity="few">%d трекера</item>
-        <item quantity="other">%d трекера</item>
+        <item quantity="one">%d пратилац</item>
+        <item quantity="few">%d пратиоца</item>
+        <item quantity="other">%d пратилаца</item>
     </plurals>
     <plurals name="manga_num_chapters">
         <item quantity="one">%1$s поглавље</item>
@@ -70,6 +70,11 @@
         <item quantity="few">Следећа %d поглавља</item>
         <item quantity="other">Следећих %d поглавља</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">Недостаје %1$s поглавље</item>
+        <item quantity="few">Недостају %1$s поглавља</item>
+        <item quantity="other">Недостаје %1$s поглавља</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">1 дан</item>
         <item quantity="few">%d дана</item>
@@ -80,39 +85,9 @@
         <item quantity="few">%d репозиторија</item>
         <item quantity="other">%d репозиторија</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">За %1$d дан</item>
+        <item quantity="few">За %1$d дана</item>
+        <item quantity="other">За %1$d дана</item>
     </plurals>
 </resources>

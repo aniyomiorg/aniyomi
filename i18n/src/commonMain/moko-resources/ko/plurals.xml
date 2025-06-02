@@ -42,31 +42,13 @@
     <plurals name="download_amount">
         <item quantity="other">다음 %d화</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="other">누락된 회차 %1$s개</item>
+    </plurals>
     <plurals name="day">
         <item quantity="other">%d일</item>
     </plurals>
     <plurals name="num_repos">
         <item quantity="other">%d 저장소</item>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="other">보지 않은 다음 %d 에피소드</item>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="other">%1$s개의 에피소드</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="other">%d개의 애니메이션</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="other">%1$d개의 새로운 에피소드</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="other">%d 초</item>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="other">에피소드 %1$s와 그 외 %2$d</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="other">다음 %d 에피스드</item>
     </plurals>
 </resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_summary">หมวดหมู่, การอัปเดตคลัง, การปัดรายการตอน</string>
+    <string name="pref_library_update_show_tab_badge">แสดงไอคอนจำนวนตอนที่ยังไม่ได้อ่าน</string>
+    <string name="manga_categories">หมวดหมู่</string>
+    <string name="action_display_local_badge_manga">มังงะในเครื่อง</string>
+    <string name="default_manga_category">หมวดหมู่เริ่มต้น</string>
+    <string name="pref_manga_library_update_categories_details">มังงะในหมวดหมู่ที่ยกเว้นจะไม่ได้รับการอัปเดตแม้ว่าจะอยู่ในหมวดหมู่ที่รวมอยู่ด้วยก็ตาม</string>
+    <string name="pref_remove_exclude_categories_manga">หมวดหมู่ที่ยกเว้น</string>
+    <string name="pref_clear_manga_database">ล้างฐานข้อมูล</string>
+    <string name="pref_clear_manga_database_summary">ลบประวัติมังงะที่ไม่ได้บันทึกไว้ในคลัง</string>
+    <string name="snack_add_to_manga_library">เพิ่มมังงะไปยังคลัง?</string>
+    <string name="download_error">เกิดข้อผิดพลาด</string>
+    <string name="download_paused">หยุดชั่วคราว</string>
+    <string name="download_notifier_download_paused_chapters">การดาวน์โหลดหยุดชั่วคราว</string>
+    <string name="channel_new_chapters_episodes">อัปเดตตอน</string>
+</resources>

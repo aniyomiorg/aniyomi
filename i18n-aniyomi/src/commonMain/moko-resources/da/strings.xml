@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Kategorier</string>
+    <string name="action_display_local_badge_manga">Lokale manga</string>
+    <string name="default_manga_category">Standard kategori</string>
+    <string name="pref_manga_library_update_categories_details">Manga i ekskluderede kategorier vil ikke blive opdateret selv hvis de også er i inkluderede kategorier.</string>
+</resources>

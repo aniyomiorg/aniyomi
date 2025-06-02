@@ -84,6 +84,12 @@
         <item quantity="many">Следующие %d глав</item>
         <item quantity="other">Следующие %d глав</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">Отсутствует %1$s глава</item>
+        <item quantity="few">Отсутствуют %1$s главы</item>
+        <item quantity="many">Отсутствуют %1$s глав</item>
+        <item quantity="other">Отсутствуют %1$s глав</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">1 день</item>
         <item quantity="few">%d дня</item>
@@ -96,47 +102,11 @@
         <item quantity="many">%d репозиториев</item>
         <item quantity="other">%d репозиториев</item>
     </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">Завтра</item>
+        <item quantity="few">В течении %1$d дней</item>
+        <item quantity="many">В течении %1$d дней</item>
+        <item quantity="other">В течении %1$d дней</item>
     </plurals>
     <plurals name="pref_pages">
         <item quantity="one">1 страница</item>

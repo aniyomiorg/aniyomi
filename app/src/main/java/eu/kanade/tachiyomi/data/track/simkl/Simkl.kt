@@ -13,6 +13,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
@@ -102,11 +103,11 @@ class Simkl(id: Long) : BaseTracker(id, "Simkl"), AnimeTracker {
     }
 
     override fun getStatusForAnime(status: Long): StringResource? = when (status) {
-        WATCHING -> MR.strings.watching
-        PLAN_TO_WATCH -> MR.strings.plan_to_watch
+        WATCHING -> AYMR.strings.watching
+        PLAN_TO_WATCH -> AYMR.strings.plan_to_watch
         COMPLETED -> MR.strings.completed
         ON_HOLD -> MR.strings.on_hold
-        NOT_INTERESTING -> MR.strings.not_interesting
+        NOT_INTERESTING -> AYMR.strings.not_interesting
         else -> null
     }
 

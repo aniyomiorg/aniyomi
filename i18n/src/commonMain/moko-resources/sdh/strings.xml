@@ -5,6 +5,7 @@
     <string name="name">ناو</string>
     <string name="label_more">زیاتر</string>
     <string name="label_settings">سازکارییەکان</string>
+    <string name="label_download_queue">لیستی داونلۆد</string>
     <string name="history">تۆماری ڕابردوو</string>
     <string name="confirm_lock_change">دڵنیابوونەوە تا گۆڕانکاری بکرێت</string>
     <string name="action_mark_previous_as_read">ئاماژەکردنی پێشوو وەک خوێندراو</string>
@@ -25,6 +26,7 @@
     <string name="manga">مانگا</string>
     <string name="chapters">چاپتەرەکان</string>
     <string name="track">بەدواداچوون</string>
+    <string name="categories">کاتیگۆرییەکان</string>
     <string name="action_settings">سازکارییەکان</string>
     <string name="action_menu">لیست</string>
     <string name="action_filter_bookmarked">نیشانکراو</string>
@@ -94,6 +96,7 @@
     <string name="action_retry">دووبارەکردنەوە</string>
     <string name="action_display">پیشاندان</string>
     <string name="action_display_list">لیست</string>
+    <string name="action_display_local_badge">مانگای ناوخۆیی</string>
     <string name="action_display_language_badge">زمان</string>
     <string name="action_display_show_tabs">پیشاندانی خشتەبەندی کاتیگۆرییەکان</string>
     <string name="action_order_by_chapter_number">بە پێی ژمارەی چاپتەر</string>
@@ -163,12 +166,14 @@
     <string name="secure_screen_summary">سکرین شۆت بلۆکردن و شاردنەوەی ناوەڕۆک، لە کاتی گۆڕین و دەرچوون لە بەرنامە</string>
     <string name="pref_category_nsfw_content">سەرچاوەی سەروو (18) ساڵ</string>
     <string name="pref_show_nsfw_source">پیشاندان لە لیستی سەرچاوە و زیادکراوەکان</string>
+    <string name="relative_time_today">ئەمڕۆ</string>
     <string name="pref_category_display">شێوازی پیشاندان</string>
     <string name="pref_read_with_tapping_inverted">نەرمە لێدانی پێچەوانە</string>
     <string name="tapping_inverted_none">هیچ</string>
     <string name="tapping_inverted_vertical">ستوونی</string>
     <string name="tapping_inverted_both">هەردووکیان</string>
     <string name="pref_reader_actions">کردارەکان</string>
+    <string name="pref_create_folder_per_manga">خەزێنە کردنی لاپەڕەکان لە فۆڵدەری جیاوزدا</string>
     <string name="white_background">سپی</string>
     <string name="pref_grayscale">خۆڵەمێشی پلە پلە</string>
     <string name="pref_inverted_colors">پێچەوانەکراو</string>
@@ -181,6 +186,7 @@
     <string name="add_tracking">بەدواداچوون زیاد بکە</string>
     <string name="add_to_library">کردنە ناو کۆکراوەکان</string>
     <string name="notification_first_add_to_library">تکایە مانگا بۆ کۆکراوەکان زیاد بکە پێش کردنی ئەمە</string>
+    <string name="snack_add_to_library">زیادکردنی مانگا بۆ کۆکراوەکان؟</string>
     <string name="ext_downloading">داونلۆدکردن</string>
     <string name="label_downloaded_only">تەنها داونلۆدکراوەکان</string>
     <string name="parental_controls_info">ئەمە ڕێگری ناکات لە دەرکەوتنی بابەتی سەروو 18 ی نا فەرمی لە بەرنامەکە.</string>
@@ -196,6 +202,7 @@
     <string name="pref_image_scale_type">دەوروبەری لاپەڕە</string>
     <string name="scale_type_fit_screen">گونجاو بە شاشە</string>
     <string name="rotation_free">ئازاد</string>
+    <string name="pref_create_folder_per_manga_summary">درووستکردنی فۆڵدەر بە پێی تایتڵی مانگا</string>
     <string name="pref_reader_theme">ڕەنگی باکگراوند</string>
     <string name="edge_nav">سووچ</string>
     <string name="right_and_left_nav">ڕاست و چەپ</string>
@@ -221,15 +228,11 @@
     <string name="pref_always_show_chapter_transition">هەمیشە تێپەڕینی چاپتەر پیشان بدە</string>
     <string name="off">کوژاوە</string>
     <string name="on">پێکراو</string>
+    <string name="action_show_manga">نیشاندانی مانگا</string>
+    <string name="action_sort_last_manga_update">کۆتانوێکردنەوەی مانگا</string>
     <string name="action_sort_unread_count">ژمارەی نەخوێندراوە</string>
     <string name="delete_category">ڕەشکردنەوەی بەش</string>
     <string name="action_remove_everything">لادانی هەمووشتێك</string>
     <string name="action_search_hint">گەڕان…</string>
     <string name="delete_category_confirmation">\?ڕەشبکەیتەوە \"%s\"ئایا ئەتەوێ کە بەشی</string>
-    <string name="label_download_queue">لیستی داونلۆد</string>
-    <string name="manga_categories">کاتیگۆرییەکان</string>
-    <string name="action_sort_last_manga_update">کۆتانوێکردنەوەی مانگا</string>
-    <string name="action_show_manga">نیشاندانی مانگا</string>
-    <string name="action_display_local_badge_manga">مانگای ناوخۆیی</string>
-    <string name="snack_add_to_manga_library">زیادکردنی مانگا بۆ کۆکراوەکان؟</string>
 </resources>

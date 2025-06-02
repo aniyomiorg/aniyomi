@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Siguiente episodio sin ver</item>
+        <item quantity="many">Siguientes %d episodios sin ver</item>
+        <item quantity="other">Siguientes %d episodios sin ver</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">%1$s episodio</item>
+        <item quantity="many">%1$s episodios</item>
+        <item quantity="other">%1$s episodios</item>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Siguiente episodio</item>
+        <item quantity="many">Próximos %d episodios</item>
+        <item quantity="other">Próximos %d episodios</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one">Para 1 título</item>
+        <item quantity="many">Para %d títulos</item>
+        <item quantity="other">Para %d títulos</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">1 nuevo episodio</item>
+        <item quantity="many">%1$d nuevos episodios</item>
+        <item quantity="other">%1$d nuevos episodios</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="many">%d segundos</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Episodios %1$s y 1 más</item>
+        <item quantity="many">Episodios %1$s y %2$d más</item>
+        <item quantity="other">Episodios %1$s y %2$d más</item>
+    </plurals>
+</resources>

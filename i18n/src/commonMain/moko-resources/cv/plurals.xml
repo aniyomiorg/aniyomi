@@ -29,12 +29,12 @@
         <item quantity="other">%d хайлав валли</item>
     </plurals>
     <plurals name="manga_num_chapters">
-        <item quantity="one">1 сыпӑк</item>
+        <item quantity="one">%1$s сыпӑк</item>
         <item quantity="other">%1$s сыпӑк</item>
     </plurals>
     <plurals name="download_queue_summary">
-        <item quantity="one">1 юлчӗ</item>
-        <item quantity="other">%1$s юлчӗ</item>
+        <item quantity="one">%1$s йулчӗ</item>
+        <item quantity="other">%1$s йулчӗ</item>
     </plurals>
     <plurals name="num_trackers">
         <item quantity="one">%d йӗрлев</item>
@@ -48,33 +48,21 @@
         <item quantity="one">Ӗнер</item>
         <item quantity="other">%1$d кун кайалла</item>
     </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="next_unread_chapters">
+        <item quantity="one">Тепӗр вуламан сыпӑк</item>
+        <item quantity="other">Тепӗр %d вуламан сыпӑк</item>
     </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="day">
+        <item quantity="one">1 кун</item>
+        <item quantity="other">%d кун</item>
     </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="missing_chapters">
+        <item quantity="one">%1$s сыпӑк ҫук</item>
+        <item quantity="other">%1$s сыпӑк ҫук</item>
     </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="download_amount">
+        <item quantity="one">Тепӗр сыпӑк</item>
+        <item quantity="other">Тепӗр %d сыпӑк</item>
     </plurals>
     <plurals name="num_repos">
         <item quantity="one">%d усрав</item>

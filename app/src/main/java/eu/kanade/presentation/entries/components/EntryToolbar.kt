@@ -23,6 +23,7 @@ import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.presentation.entries.DownloadAction
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.theme.active
 
@@ -116,7 +117,7 @@ fun EntryToolbar(
                     if (changeAnimeSkipIntro != null) {
                         add(
                             AppBar.OverflowAction(
-                                title = stringResource(MR.strings.action_change_intro_length),
+                                title = stringResource(AYMR.strings.action_change_intro_length),
                                 onClick = changeAnimeSkipIntro,
                             ),
                         )
@@ -155,7 +156,7 @@ fun EntryToolbar(
                     if (onClickSettings != null) {
                         add(
                             AppBar.OverflowAction(
-                                title = stringResource(MR.strings.settings),
+                                title = stringResource(AYMR.strings.settings),
                                 onClick = onClickSettings,
                             ),
                         )

@@ -82,6 +82,7 @@ import tachiyomi.domain.items.episode.service.missingEpisodesCount
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.TwoPanelBox
 import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
@@ -502,7 +503,7 @@ private fun AnimeScreenSmallImpl(
                             ) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
-                                        MR.strings.display_mode_episode,
+                                        AYMR.strings.display_mode_episode,
                                         formatEpisodeNumber(state.airingEpisodeNumber),
                                     ),
                                     date = formatTime(state.airingTime, useDayFormat = true),
@@ -781,7 +782,7 @@ fun AnimeScreenLargeImpl(
                                     ) {
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
-                                                MR.strings.display_mode_episode,
+                                                AYMR.strings.display_mode_episode,
                                                 formatEpisodeNumber(state.airingEpisodeNumber),
                                             ),
                                             date = formatTime(state.airingTime, useDayFormat = true),
@@ -891,7 +892,7 @@ private fun LazyListScope.sharedEpisodeItems(
                 AnimeEpisodeListItem(
                     title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                         stringResource(
-                            MR.strings.display_mode_episode,
+                            AYMR.strings.display_mode_episode,
                             formatEpisodeNumber(episodeItem.episode.episodeNumber),
                         )
                     } else {
@@ -902,7 +903,7 @@ private fun LazyListScope.sharedEpisodeItems(
                         .takeIf { !episodeItem.episode.seen && it > 0L }
                         ?.let {
                             stringResource(
-                                MR.strings.episode_progress,
+                                AYMR.strings.episode_progress,
                                 formatTime(it),
                                 formatTime(episodeItem.episode.totalSeconds),
                             )

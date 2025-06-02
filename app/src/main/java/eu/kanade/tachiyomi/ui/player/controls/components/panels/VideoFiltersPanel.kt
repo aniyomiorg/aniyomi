@@ -49,6 +49,7 @@ import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.common.preference.deleteAndGet
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -96,7 +97,7 @@ fun FiltersCard(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                stringResource(MR.strings.player_sheets_filters_title),
+                stringResource(AYMR.strings.player_sheets_filters_title),
                 style = MaterialTheme.typography.headlineMedium,
             )
             Row(
@@ -140,7 +141,7 @@ fun FiltersCard(
                     horizontalAlignment = Alignment.Start,
                 ) {
                     Icon(Icons.Outlined.Info, null)
-                    Text(stringResource(MR.strings.player_sheets_filters_warning))
+                    Text(stringResource(AYMR.strings.player_sheets_filters_warning))
                 }
             }
         }

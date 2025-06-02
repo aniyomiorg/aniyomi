@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Następny nieobejrzany odcinek</item>
+        <item quantity="few">Następne %d nieobejrzane odcinki</item>
+        <item quantity="many">Następne %d nieobejrzane odcinki</item>
+        <item quantity="other">Następne %d nieobejrzane odcinki</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">%1$s odcinek</item>
+        <item quantity="few">%1$s odcinki</item>
+        <item quantity="many">%1$s odcinków</item>
+        <item quantity="other">%1$s odcinków</item>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Następny odcinek</item>
+        <item quantity="few">Następne %d odcinki</item>
+        <item quantity="many">Następnych %d odcinków</item>
+        <item quantity="other">Następnych %d odcinków</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one">Dla 1 tytuł</item>
+        <item quantity="few">Dla %d tytułów</item>
+        <item quantity="many">Dla %d tytułów</item>
+        <item quantity="other">Dla %d tytułów</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">1 Nowy odcinek</item>
+        <item quantity="few">%1$d Nowy odcinki</item>
+        <item quantity="many">%1$d Nowych odcinków</item>
+        <item quantity="other">%1$d Nowych odcinków</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
+        <item quantity="other">%d sekund</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Odcinki %1$s i 1 więcej</item>
+        <item quantity="few">Odcinki %1$s i %2$d więcej</item>
+        <item quantity="many">Odcinki %1$s i %2$d więcej</item>
+        <item quantity="other">Odcinki %1$s i %2$d więcej</item>
+    </plurals>
+</resources>

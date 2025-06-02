@@ -4,6 +4,10 @@
         <item quantity="one">Etter %1$s minutt</item>
         <item quantity="other">Etter %1$s minuttar</item>
     </plurals>
+    <plurals name="relative_time">
+        <item quantity="one">I går</item>
+        <item quantity="other">%1$d dagar sidan</item>
+    </plurals>
     <plurals name="num_categories">
         <item quantity="one">%d kategori</item>
         <item quantity="other">%d kategoriar</item>
@@ -11,33 +15,5 @@
     <plurals name="restore_completed_message">
         <item quantity="one">Gjort på %1$s med %2$s feil</item>
         <item quantity="other">Gjort på %1$s med %2$s feil</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
     </plurals>
 </resources>

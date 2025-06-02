@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_exit">പുറത്തുകടക്കാൻ വീണ്ടും പിന്‍ ബട്ടൺ അമർത്തുക</string>
+    <string name="action_filter_started">ആരംഭിച്ചു</string>
+    <string name="action_sort_airing_time">സംപ്രേഷണ സമയം</string>
+    <string name="action_reorganize_by">പുനഃക്രമീകരിക്കുക</string>
+    <string name="download_speed_limit_hint">വേഗപരിധി അപ്രാപ്തമാക്കാൻ 0 ആയി സജ്ജമാക്കുക.</string>
+</resources>

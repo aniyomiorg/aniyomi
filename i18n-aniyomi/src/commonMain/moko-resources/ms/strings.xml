@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_reorganize_by">Susun semula</string>
+    <string name="pref_library_summary">Kategori, Kemas kini keseluruhan, leret bab</string>
+    <string name="pref_library_update_show_tab_badge">Tunjuk bilangan belum dibaca pada ikon Kemas kini</string>
+    <string name="pref_general_summary">Bahasa apl, pemberitahuan</string>
+    <string name="theme_cloudflare">Cloudflare</string>
+    <string name="theme_sapphire">nilam</string>
+    <string name="theme_doom">azab</string>
+    <string name="theme_matrix">Matriks</string>
+    <string name="manga_categories">Kategori</string>
+    <string name="action_display_local_badge_manga">Sumber setempat</string>
+    <string name="default_manga_category">Kategori lalai</string>
+    <string name="pref_manga_library_update_categories_details">Entri di dalam kategori berkecuali tidak akan dikemas kini walaupun ianya ada di dalam kategori hanya.</string>
+    <string name="pref_remove_exclude_categories_manga">Kategori dikecualikan</string>
+    <string name="pref_clear_manga_database">Hapus pangkalan data</string>
+    <string name="pref_clear_manga_database_summary">Hapus sejarah entri yang tidak disimpan di dalam pustaka</string>
+    <string name="snack_add_to_manga_library">Tambah ke pustaka?</string>
+    <string name="download_error">Ralat</string>
+    <string name="download_paused">Ditangguh</string>
+    <string name="download_notifier_download_paused_chapters">Muat turun dihentikan sebentar</string>
+    <string name="channel_new_chapters_episodes">Pengemaskinian bab</string>
+</resources>

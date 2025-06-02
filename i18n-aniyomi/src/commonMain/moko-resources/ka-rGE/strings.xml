@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">კატეგორიები</string>
+    <string name="default_manga_category">ნაგულისხმევი კატეგორია</string>
+    <string name="pref_clear_manga_database">მონაცემთა ბაზის გასუფთავება</string>
+    <string name="pref_clear_manga_database_summary">ბიბლიოთეკაში შეუნახავი მანგების ისტორიის წაშლა</string>
+    <string name="snack_add_to_manga_library">დავამატო მანგა ბიბლიოთეკაში?</string>
+    <string name="download_error">შეცდომა</string>
+    <string name="download_paused">დაპაუზებულია</string>
+    <string name="download_notifier_download_paused_chapters">გადმოწერა დაპაუზებულია</string>
+    <string name="channel_new_chapters_episodes">თავების განახლებები</string>
+</resources>

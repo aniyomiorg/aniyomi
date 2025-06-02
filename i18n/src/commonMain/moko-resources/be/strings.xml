@@ -102,6 +102,7 @@
     <string name="include">Уключаць: %s</string>
     <string name="none">Ніхто</string>
     <string name="all">Усе</string>
+    <string name="pref_library_update_categories_details">Манга ў выключаных катэгорыях не будзе абнаўляцца, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
     <string name="categorized_display_settings">Налады для кожнай катэгорыі для сартавання і адлюстравання</string>
     <string name="default_category_summary">Заўсёды пытацца</string>
     <string name="default_category">Катэгорыя па змаўчанні</string>
@@ -184,6 +185,11 @@
     <string name="ext_nsfw_warning">Можа ўтрымліваць кантэнт NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="obsolete_extension_message">Гэта пашырэнне больш недаступна.</string>
+    <string name="untrusted_extension_message">Гэта пашырэнне было падпісана ненадзейным сертыфікатам і не было актывавана.
+\n
+\nШкоднаснае пашырэнне можа счытваць любыя ўліковыя дадзеныя для ўваходу, якія захоўваюцца ў Mihon, або выконваць адвольны код.
+\n
+\nДавяраючы гэтаму сертыфікату, вы прымаеце на сябе гэтыя рызыкі.</string>
     <string name="untrusted_extension">Ненадзейнае пашырэнне</string>
     <string name="pref_viewer_nav">Схема навігацыі</string>
     <string name="pager_viewer">Пастаронкава</string>
@@ -206,6 +212,8 @@
     <string name="gray_background">Шэры</string>
     <string name="white_background">Белы</string>
     <string name="pref_reader_theme">Колер фону</string>
+    <string name="pref_create_folder_per_manga_summary">Ствараць тэчкі ў адпаведнасці з назвай мангі</string>
+    <string name="pref_create_folder_per_manga">Захоўваць старонкі ў асобныя тэчкі</string>
     <string name="pref_read_with_long_tap">Паказаць пры доўгім націску</string>
     <string name="pref_reader_actions">Дзеяння</string>
     <string name="tapping_inverted_both">Абодва</string>
@@ -251,6 +259,7 @@
     <string name="scale_type_fit_screen">Змясціць у экран</string>
     <string name="pref_image_scale_type">Маштабаванне</string>
     <string name="pref_inverted_colors">Колеры наадварот</string>
+    <string name="relative_time_today">Сёння</string>
     <string name="theme_tealturquoise">Бірузовы</string>
     <string name="pref_category_appearance">Знешнасць</string>
     <string name="confirm_lock_change">Аўтэнтыфікацыя для пацверджання змяненняў</string>
@@ -263,6 +272,7 @@
     <string name="enhanced_services">Пашыраныя паслугі</string>
     <string name="tracking_info">Аднабаковая сінхранізацыя для абнаўлення прагрэсу частак у службах адсочвання. Наладзьце адсочванне асобных запісаў мангі з дапамогай кнопкі адсочвання.</string>
     <string name="services">Паслугi</string>
+    <string name="pref_auto_update_manga_sync">Абнаўляць прагрэс пасля чытання</string>
     <string name="tracking_guide">Кіраўніцтва па адсочванні</string>
     <string name="pref_download_new_categories_details">Манга ў выключаных катэгорыях не будзе загружана, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
     <string name="pref_download_new">Спампаваць новыя часткi</string>
@@ -304,7 +314,9 @@
     <string name="ext_update_all">Абнавіць усё</string>
     <string name="ext_info_age_rating">Узроставае абмежаванне</string>
     <string name="pref_update_only_started">Не пачата</string>
+    <string name="action_show_manga">Паказаць мангу</string>
     <string name="ext_info_version">Версія</string>
+    <string name="action_sort_last_manga_update">Апошняе абнаўленне мангі</string>
     <string name="action_sort_unread_count">Колькасць непрачытаных</string>
     <string name="extension_api_error">Не ўдалося атрымаць спіс пашырэнняў</string>
     <string name="action_display_cover_only_grid">Сетка без назвы</string>
@@ -325,17 +337,19 @@
     <string name="action_remove_everything">Выдаліць усё</string>
     <string name="update_72hour">Кожныя 3 дні</string>
     <string name="connected_to_wifi">Толькі па Wi-Fi</string>
-    <string name="manga_categories">Катэгорыі</string>
-    <string name="action_sort_last_manga_update">Апошняе абнаўленне мангі</string>
-    <string name="action_show_manga">Паказаць мангу</string>
-    <string name="action_display_local_badge_manga">Значкі лакальных</string>
-    <string name="pref_update_only_completely_read">Ёсць непрачытаныя главы</string>
-    <string name="pref_library_update_show_tab_badge">Паказваць непрачытаныя главы ў укладцы \"Абнаўленні\"</string>
-    <string name="default_manga_category">Катэгорыя па змаўчанні</string>
-    <string name="pref_manga_library_update_categories_details">Манга ў выключаных катэгорыях не будзе абнаўляцца, нават калі яны таксама знаходзяцца ў уключаных катэгорыях.</string>
-    <string name="pref_category_delete_chapters">Выдаліць часткі</string>
-    <string name="pref_remove_after_marked_as_read">Пасля таго, як пазначана як \"Прачытанае\"</string>
-    <string name="pref_remove_after_read">Аўтаматычна пасля чытання</string>
-    <string name="pref_remove_bookmarked_chapters">Дазволіць выдаленне частак з закладкамі</string>
-    <string name="pref_auto_update_manga_sync">Абнаўляць прагрэс пасля чытання</string>
+    <string name="not_selected">Не выбрана</string>
+    <string name="action_bar_up_description">Перайсці ўверх</string>
+    <string name="unlock_app_title">Разблакіраваць %s</string>
+    <string name="label_started">Пачата</string>
+    <string name="selected">Выбрана</string>
+    <string name="action_menu_overflow_description">Другія опцыі</string>
+    <string name="delete_downloaded">Выдаліць загружанае</string>
+    <string name="label_data_storage">Даныя і хаванне</string>
+    <string name="label_stats">Статыстыка</string>
+    <string name="label_local">На ўстройстве</string>
+    <string name="action_set_interval">Задаць інтэрвал</string>
+    <string name="action_filter_interval_custom">Наладжвальная частата абнаўлення</string>
+    <string name="label_upcoming">Наступнае</string>
+    <string name="scanlator">Перакладчык</string>
+    <string name="label_downloaded">Загружана</string>
 </resources>

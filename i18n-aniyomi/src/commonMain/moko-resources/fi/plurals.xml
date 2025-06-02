@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">%1$s jakso</item>
+        <item quantity="other">%1$s jaksoa</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">1 uusi jakso</item>
+        <item quantity="other">%1$d uutta jaksoa</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d sekunti</item>
+        <item quantity="other">%d sekuntia</item>
+    </plurals>
+</resources>

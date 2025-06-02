@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -22,7 +22,7 @@ object PlayerSettingsAdvancedScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
-    override fun getTitleRes() = MR.strings.pref_player_advanced
+    override fun getTitleRes() = AYMR.strings.pref_player_advanced
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -37,8 +37,8 @@ object PlayerSettingsAdvancedScreen : SearchableSettings {
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
                 preference = enableScripts,
-                title = stringResource(MR.strings.pref_mpv_scripts),
-                subtitle = stringResource(MR.strings.pref_mpv_scripts_summary),
+                title = stringResource(AYMR.strings.pref_mpv_scripts),
+                subtitle = stringResource(AYMR.strings.pref_mpv_scripts_summary),
                 onValueChanged = {
                     // Ask for external storage permission
                     if (it) {
@@ -56,14 +56,14 @@ object PlayerSettingsAdvancedScreen : SearchableSettings {
                 scope = scope,
                 context = context,
                 fileName = "mpv.conf",
-                title = stringResource(MR.strings.pref_mpv_conf),
+                title = stringResource(AYMR.strings.pref_mpv_conf),
             ),
             Preference.PreferenceItem.MPVConfPreference(
                 preference = mpvInput,
                 scope = scope,
                 context = context,
                 fileName = "input.conf",
-                title = stringResource(MR.strings.pref_mpv_input),
+                title = stringResource(AYMR.strings.pref_mpv_input),
             ),
         )
     }

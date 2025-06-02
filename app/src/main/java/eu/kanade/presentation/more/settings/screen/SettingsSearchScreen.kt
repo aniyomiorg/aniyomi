@@ -58,6 +58,7 @@ import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsPlayerSc
 import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsSubtitleScreen
 import eu.kanade.presentation.util.Screen
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -125,7 +126,7 @@ class SettingsSearchScreen(
                                         Text(
                                             text = stringResource(
                                                 resource = if (isPlayer) {
-                                                    MR.strings.action_search_player_settings
+                                                    AYMR.strings.action_search_player_settings
                                                 } else {
                                                     MR.strings.action_search_settings
                                                 },

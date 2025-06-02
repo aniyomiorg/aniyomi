@@ -57,6 +57,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -71,7 +72,7 @@ data object AnimeLibraryTab : Tab {
     override val options: TabOptions
         @Composable
         get() {
-            val title = MR.strings.label_anime_library
+            val title = AYMR.strings.label_anime_library
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(
                 R.drawable.anim_animelibrary_leave,
@@ -116,7 +117,7 @@ data object AnimeLibraryTab : Tab {
             MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         }
 
-        val defaultTitle = stringResource(MR.strings.label_anime_library)
+        val defaultTitle = stringResource(AYMR.strings.label_anime_library)
 
         Scaffold(
             topBar = { scrollBehavior ->

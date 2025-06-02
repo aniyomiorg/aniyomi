@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import eu.kanade.presentation.theme.TachiyomiPreviewTheme
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
@@ -38,15 +39,15 @@ fun HistoryDeleteDialog(
                 val subtitle = if (isManga) {
                     MR.strings.dialog_with_checkbox_remove_description
                 } else {
-                    MR.strings.dialog_with_checkbox_remove_description_anime
+                    AYMR.strings.dialog_with_checkbox_remove_description_anime
                 }
                 Text(text = stringResource(subtitle))
 
                 LabeledCheckbox(
                     label = if (isManga) {
-                        stringResource(MR.strings.dialog_with_checkbox_reset)
+                        stringResource(AYMR.strings.dialog_with_checkbox_reset)
                     } else {
-                        stringResource(MR.strings.dialog_with_checkbox_reset_anime)
+                        stringResource(AYMR.strings.dialog_with_checkbox_reset_anime)
                     },
                     checked = removeEverything,
                     onCheckedChange = { removeEverything = it },

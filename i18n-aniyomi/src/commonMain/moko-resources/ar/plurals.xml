@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="zero">الحلقة الغير مشاهدة التالية</item>
+        <item quantity="one">الحلقة الغير مشاهدة التالية</item>
+        <item quantity="two">الحلقتين الغير مشاهدة التالية</item>
+        <item quantity="few">بعض الحلقات %d الغير مشاهدة التالية</item>
+        <item quantity="many">الحلقات %d الغير مشاهدة التالية</item>
+        <item quantity="other">الحلقات %d الغير مشاهدة التالية</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="zero">حلقة</item>
+        <item quantity="one">أول حلقة</item>
+        <item quantity="two">حلقتان</item>
+        <item quantity="few">%1$s حلقات</item>
+        <item quantity="many">%1$s حلقة</item>
+        <item quantity="other">%1$s حلقة</item>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="zero">لا يوجد</item>
+        <item quantity="one">الحلقة التالية</item>
+        <item quantity="two">الحلقتان التالية</item>
+        <item quantity="few">الحلقات التالية</item>
+        <item quantity="many">الحلقات التالية</item>
+        <item quantity="other">الحلقات التالية</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="zero">لعنوان واحد</item>
+        <item quantity="one">لـ 1 عنوان</item>
+        <item quantity="two">لعنوانين</item>
+        <item quantity="few">لـ %d عناوين</item>
+        <item quantity="many">لـ %d عنوان</item>
+        <item quantity="other">لـ %d عناوين</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="zero">حلقة جديدة</item>
+        <item quantity="one">1 حلقة جديدة</item>
+        <item quantity="two">حلقتين جديدتين</item>
+        <item quantity="few">%1$d حلقات جديدة</item>
+        <item quantity="many">%1$d حلقة جديدة</item>
+        <item quantity="other">%1$d حلقات جديدة</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="zero">ثانية</item>
+        <item quantity="one">%d ثانية واحدة</item>
+        <item quantity="two">%d ثانيتان</item>
+        <item quantity="few">%d ثواني</item>
+        <item quantity="many">%d ثانية</item>
+        <item quantity="other">%d ثانية</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="zero">الحلقات %1$s و 1 أخرى</item>
+        <item quantity="one">الحلقات %1$s و 1 أخرى</item>
+        <item quantity="two">الحلقات %1$s و حلقتين أخرى</item>
+        <item quantity="few">الحلقات %1$s و %2$d أخرى</item>
+        <item quantity="many">الحلقات %1$s و %2$d أخرى</item>
+        <item quantity="other">الحلقات %1$s و %2$d أخرى</item>
+    </plurals>
+</resources>

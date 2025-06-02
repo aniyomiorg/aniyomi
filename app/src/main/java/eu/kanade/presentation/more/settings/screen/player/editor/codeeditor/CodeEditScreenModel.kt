@@ -16,7 +16,7 @@ import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.storage.service.StorageManager
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.FileOutputStream
@@ -107,13 +107,13 @@ class CodeEditScreenModel(
 
     fun save() {
         val file = currentFile.value ?: kotlin.run {
-            context.toast(MR.strings.editor_save_error)
+            context.toast(AYMR.strings.editor_save_error)
             return
         }
 
         val content = (mutableState.value as? CodeEditScreenState.Success)
             ?.content?.annotatedString?.text ?: kotlin.run {
-            context.toast(MR.strings.editor_save_error)
+            context.toast(AYMR.strings.editor_save_error)
             return
         }
 
@@ -122,10 +122,10 @@ class CodeEditScreenModel(
                 .also { (it as? FileOutputStream)?.channel?.truncate(0) }
                 .use { it.write(content.toByteArray()) }
             _hasModified.update { _ -> false }
-            context.toast(context.stringResource(MR.strings.editor_save_success))
+            context.toast(context.stringResource(AYMR.strings.editor_save_success))
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
-            context.toast(e.message ?: context.stringResource(MR.strings.editor_save_error))
+            context.toast(e.message ?: context.stringResource(AYMR.strings.editor_save_error))
         }
     }
 

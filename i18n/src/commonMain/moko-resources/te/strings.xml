@@ -149,11 +149,14 @@
     <string name="label_stats">గణాంకాలు</string>
     <string name="label_started">ప్రారంభించారు</string>
     <string name="action_close">బంజేయండి</string>
+    <string name="action_display_show_continue_reading_button">చదవడం కొనసాగించే బటన్ చూపియండి</string>
     <string name="label_local">లోకల్</string>
     <string name="label_downloaded">డౌన్లోడ్ అయినవి</string>
     <string name="on">ఓన్</string>
+    <string name="action_show_manga">ఎంట్రీ చూపియండి</string>
     <string name="off">ఆఫ్</string>
     <string name="action_sort_unread_count">చదవని లెక్క</string>
+    <string name="action_sort_last_manga_update">చివరి అప్డేట్ తనిఖీ</string>
     <string name="action_remove_everything">మొత్తం తీసేయండి</string>
     <string name="delete_category_confirmation">మీరు \"%s\" క్యాటగిరీ తీసివేయాలి అనుకుంటున్నారా?</string>
     <string name="delete_category">క్యాటగిరీ తీసేయండి</string>
@@ -189,5 +192,4 @@
     <string name="portrait">చిత్తరువు</string>
     <string name="landscape">ప్రకృతి దృశ్యం</string>
     <string name="paused">నిలిపివేయబడింది</string>
-    <string name="manga_categories">విభాగములు</string>
 </resources>

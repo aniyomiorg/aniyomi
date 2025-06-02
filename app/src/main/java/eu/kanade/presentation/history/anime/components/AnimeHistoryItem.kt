@@ -29,6 +29,7 @@ import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -75,7 +76,7 @@ fun AnimeHistoryItem(
             Text(
                 text = if (history.episodeNumber > -1) {
                     stringResource(
-                        MR.strings.recent_anime_time,
+                        AYMR.strings.recent_anime_time,
                         formatEpisodeNumber(history.episodeNumber),
                         seenAt,
                     )

@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.injectLazy
 
@@ -58,7 +59,7 @@ fun Screen.animeHistoryTab(
         if (episode != null) {
             MainActivity.startPlayerActivity(context, episode.animeId, episode.id, extPlayer)
         } else {
-            snackbarHostState.showSnackbar(context.stringResource(MR.strings.no_next_episode))
+            snackbarHostState.showSnackbar(context.stringResource(AYMR.strings.no_next_episode))
         }
     }
 
@@ -76,7 +77,7 @@ fun Screen.animeHistoryTab(
     }
 
     return TabContent(
-        titleRes = MR.strings.label_anime_history,
+        titleRes = AYMR.strings.label_anime_history,
         searchEnabled = true,
         content = { contentPadding, _ ->
             AnimeHistoryScreen(

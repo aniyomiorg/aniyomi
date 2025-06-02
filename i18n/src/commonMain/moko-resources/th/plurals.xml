@@ -42,6 +42,9 @@
     <plurals name="download_amount">
         <item quantity="other">%d ตอนถัดไป</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="other">ไม่พบ %1$s ตอน</item>
+    </plurals>
     <plurals name="day">
         <item quantity="other">%d วัน</item>
     </plurals>

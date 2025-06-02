@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Další nezhlédnuté epizody</item>
+        <item quantity="few">Další %d nezhlédnuté epizody</item>
+        <item quantity="other">Dalších %d nezhlédnutých epizod</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">1 epizoda</item>
+        <item quantity="few">%1$s epizody</item>
+        <item quantity="other">%1$s epizod</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one">Pro 1 titul</item>
+        <item quantity="few">Pro %d tituly</item>
+        <item quantity="other">Pro %d titulů</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">1 nová epizoda</item>
+        <item quantity="few">%1$d nové epizody</item>
+        <item quantity="other">%1$d nových epizod</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="other">%d sekund</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Epizody %1$s a 1 další</item>
+        <item quantity="few">Epizody %1$s a další %2$d</item>
+        <item quantity="other">Epizody %1$s a dalších %2$d</item>
+    </plurals>
+</resources>

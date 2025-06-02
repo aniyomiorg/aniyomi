@@ -16,6 +16,7 @@ import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notify
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.injectLazy
 import java.util.regex.Pattern
 
@@ -85,7 +86,7 @@ internal class MangaDownloadNotifier(private val context: Context) {
                 )
                 addAction(
                     R.drawable.ic_book_24dp,
-                    context.stringResource(MR.strings.action_show_manga),
+                    context.stringResource(AYMR.strings.action_show_manga),
                     NotificationReceiver.openMangaEntryPendingActivity(context, download.manga.id),
                 )
             }
@@ -122,8 +123,8 @@ internal class MangaDownloadNotifier(private val context: Context) {
      */
     fun onPaused() {
         with(progressNotificationBuilder) {
-            setContentTitle(context.stringResource(MR.strings.download_paused))
-            setContentText(context.stringResource(MR.strings.download_notifier_download_paused_chapters))
+            setContentTitle(context.stringResource(AYMR.strings.download_paused))
+            setContentText(context.stringResource(AYMR.strings.download_notifier_download_paused_chapters))
             setSmallIcon(R.drawable.ic_pause_24dp)
             setProgress(0, 0, false)
             setOngoing(false)
@@ -179,7 +180,7 @@ internal class MangaDownloadNotifier(private val context: Context) {
             if (mangaId != null) {
                 addAction(
                     R.drawable.ic_book_24dp,
-                    context.stringResource(MR.strings.action_show_manga),
+                    context.stringResource(AYMR.strings.action_show_manga),
                     NotificationReceiver.openMangaEntryPendingActivity(context, mangaId),
                 )
             }
@@ -217,7 +218,7 @@ internal class MangaDownloadNotifier(private val context: Context) {
             if (mangaId != null) {
                 addAction(
                     R.drawable.ic_book_24dp,
-                    context.stringResource(MR.strings.action_show_manga),
+                    context.stringResource(AYMR.strings.action_show_manga),
                     NotificationReceiver.openMangaEntryPendingActivity(context, mangaId),
                 )
             }

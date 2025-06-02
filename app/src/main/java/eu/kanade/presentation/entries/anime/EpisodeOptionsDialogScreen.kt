@@ -78,6 +78,7 @@ import tachiyomi.domain.items.episode.interactor.GetEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
@@ -426,7 +427,7 @@ fun EpisodeOptionsDialog(
         )
 
         Text(
-            text = stringResource(MR.strings.choose_video_quality),
+            text = stringResource(AYMR.strings.choose_video_quality),
             modifier = Modifier.padding(horizontal = TabbedDialogPaddings.Horizontal),
             fontStyle = FontStyle.Italic,
             style = MaterialTheme.typography.bodyMedium,
@@ -486,7 +487,7 @@ private fun VideoList(
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val copiedString = stringResource(MR.strings.copied_video_link_to_clipboard)
+    val copiedString = stringResource(AYMR.strings.copied_video_link_to_clipboard)
 
     AnimatedVisibility(
         visible = !showAllQualities,
@@ -605,7 +606,7 @@ private fun QualityOptions(
         )
 
         ClickableRow(
-            text = stringResource(MR.strings.action_start_download_internally),
+            text = stringResource(AYMR.strings.action_start_download_internally),
             icon = Icons.Outlined.Download,
             onClick = {
                 onDownloadClicked()
@@ -614,7 +615,7 @@ private fun QualityOptions(
         )
 
         ClickableRow(
-            text = stringResource(MR.strings.action_start_download_externally),
+            text = stringResource(AYMR.strings.action_start_download_externally),
             icon = Icons.Outlined.SystemUpdateAlt,
             onClick = {
                 onExtDownloadClicked()
@@ -623,7 +624,7 @@ private fun QualityOptions(
         )
 
         ClickableRow(
-            text = stringResource(MR.strings.action_play_externally),
+            text = stringResource(AYMR.strings.action_play_externally),
             icon = Icons.Outlined.OpenInNew,
             onClick = {
                 onExtPlayerClicked()
@@ -632,7 +633,7 @@ private fun QualityOptions(
         )
 
         ClickableRow(
-            text = stringResource(MR.strings.action_play_internally),
+            text = stringResource(AYMR.strings.action_play_internally),
             icon = Icons.Outlined.Input,
             onClick = {
                 onIntPlayerClicked()

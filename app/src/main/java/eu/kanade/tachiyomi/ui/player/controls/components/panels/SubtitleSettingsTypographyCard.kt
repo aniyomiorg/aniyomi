@@ -74,6 +74,7 @@ import kotlinx.coroutines.withContext
 import tachiyomi.core.common.preference.deleteAndGet
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
@@ -123,7 +124,7 @@ fun SubtitleSettingsTypographyCard(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
             ) {
                 Icon(Icons.Default.FormatColorText, null)
-                Text(stringResource(MR.strings.player_sheets_sub_typography_title))
+                Text(stringResource(AYMR.strings.player_sheets_sub_typography_title))
             }
         },
         modifier = modifier.widthIn(max = CARDS_MAX_WIDTH),
@@ -247,7 +248,7 @@ fun SubtitleSettingsTypographyCard(
                 ExposedTextDropDownMenu(
                     selectedValue = font,
                     options = fonts.toImmutableList(),
-                    label = stringResource(MR.strings.player_sheets_sub_typography_font),
+                    label = stringResource(AYMR.strings.player_sheets_sub_typography_font),
                     onValueChangedEvent = {
                         font = it
                         preferences.subtitleFont().set(it)
@@ -257,7 +258,7 @@ fun SubtitleSettingsTypographyCard(
                 )
             }
             SliderItem(
-                label = stringResource(MR.strings.player_sheets_sub_typography_font_size),
+                label = stringResource(AYMR.strings.player_sheets_sub_typography_font_size),
                 max = 100,
                 min = 1,
                 value = fontSize,
@@ -291,7 +292,7 @@ fun SubtitleSettingsTypographyCard(
                     Icon(Icons.Default.BorderStyle, null)
                     Column {
                         Text(
-                            text = stringResource(MR.strings.player_sheets_sub_typography_border_style),
+                            text = stringResource(AYMR.strings.player_sheets_sub_typography_border_style),
                             style = MaterialTheme.typography.bodyLarge,
                         )
                         Text(
@@ -323,7 +324,7 @@ fun SubtitleSettingsTypographyCard(
                 }
             }
             SliderItem(
-                stringResource(MR.strings.player_sheets_sub_typography_border_size),
+                stringResource(AYMR.strings.player_sheets_sub_typography_border_size),
                 value = borderSize,
                 valueText = borderSize.toString(),
                 onChange = {
@@ -335,7 +336,7 @@ fun SubtitleSettingsTypographyCard(
                 icon = { Icon(Icons.Default.BorderColor, null) },
             )
             SliderItem(
-                stringResource(MR.strings.player_sheets_subtitles_shadow_offset),
+                stringResource(AYMR.strings.player_sheets_subtitles_shadow_offset),
                 value = shadowOffset,
                 valueText = shadowOffset.toString(),
                 onChange = {
@@ -368,7 +369,7 @@ enum class SubtitlesBorderStyle(
     val value: String,
     val titleRes: StringResource,
 ) {
-    OutlineAndShadow("outline-and-shadow", MR.strings.player_sheets_subtitles_border_style_outline_and_shadow),
-    OpaqueBox("opaque-box", MR.strings.player_sheets_subtitles_border_style_opaque_box),
-    BackgroundBox("background-box", MR.strings.player_sheets_subtitles_border_style_background_box),
+    OutlineAndShadow("outline-and-shadow", AYMR.strings.player_sheets_subtitles_border_style_outline_and_shadow),
+    OpaqueBox("opaque-box", AYMR.strings.player_sheets_subtitles_border_style_opaque_box),
+    BackgroundBox("background-box", AYMR.strings.player_sheets_subtitles_border_style_background_box),
 }

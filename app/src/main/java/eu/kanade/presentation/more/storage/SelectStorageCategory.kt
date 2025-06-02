@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import tachiyomi.domain.category.model.Category
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.SelectItem
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -15,7 +16,7 @@ fun SelectStorageCategory(
     modifier: Modifier = Modifier,
     onCategorySelected: (Category) -> Unit,
 ) {
-    val all = stringResource(MR.strings.label_all)
+    val all = stringResource(AYMR.strings.label_all)
     val default = stringResource(MR.strings.label_default)
     val mappedCategories = remember(categories) {
         categories.map {
@@ -29,7 +30,7 @@ fun SelectStorageCategory(
 
     SelectItem(
         modifier = modifier,
-        label = stringResource(MR.strings.label_category),
+        label = stringResource(AYMR.strings.label_category),
         selectedIndex = mappedCategories.indexOfFirst { it.id == selectedCategory.id },
         options = mappedCategories,
         onSelect = { index ->

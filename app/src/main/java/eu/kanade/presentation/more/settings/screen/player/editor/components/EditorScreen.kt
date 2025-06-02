@@ -30,7 +30,7 @@ import eu.kanade.presentation.more.settings.screen.player.editor.EditorListItem
 import eu.kanade.presentation.more.settings.screen.player.editor.EditorListType
 import eu.kanade.presentation.more.settings.screen.player.editor.EditorScreenState
 import kotlinx.collections.immutable.toPersistentList
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -76,7 +76,7 @@ fun EditorScreen(
             is EditorScreenState.Success -> {
                 if (state.isEmpty) {
                     EmptyScreen(
-                        stringRes = MR.strings.pref_player_no_items,
+                        stringRes = AYMR.strings.pref_player_no_items,
                         modifier = Modifier.padding(paddingValues),
                     )
                     return@Scaffold
@@ -158,7 +158,7 @@ private fun FileListItem(
                 onDismissRequest = { onExpand(false) },
             ) {
                 DropdownMenuItem(
-                    text = { Text(text = stringResource(MR.strings.editor_action_rename)) },
+                    text = { Text(text = stringResource(AYMR.strings.editor_action_rename)) },
                     onClick = {
                         onRename()
                         onExpand(false)
@@ -166,7 +166,7 @@ private fun FileListItem(
                 )
 
                 DropdownMenuItem(
-                    text = { Text(text = stringResource(MR.strings.editor_action_delete)) },
+                    text = { Text(text = stringResource(AYMR.strings.editor_action_delete)) },
                     onClick = {
                         onDelete()
                         onExpand(false)

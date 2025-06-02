@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="obsolete_extension_message">ይህ ቅጥያ ከእንግዲህ አይገኝም።</string>
+    <string name="untrusted_extension_message">ይህ ቅጥያ ባልታመነ የእውቅና ማረጋገጫ ተፈርሟል እና አልነቃም።
+\n
+\nተንኮል አዘል ቅጥያ በታቺሚሚ ውስጥ የተከማቸውን ማንኛውንም የመግቢያ ማስረጃዎችን በማንበብ ወይም የዘፈቀደ ኮድን ሊፈጽም ይችላል ፡፡
+\n
+\nበዚህ የምስክር ወረቀት በመተማመን እነዚህን አደጋዎች ይቀበላሉ ፡፡</string>
     <string name="untrusted_extension">የማይታመን ቅጥያ</string>
     <string name="ext_uninstall">ማራገፍ</string>
     <string name="ext_untrusted">የማይታመን</string>
@@ -214,6 +219,7 @@
     <string name="ext_nsfw_warning">18+ ይዘትን ይያዝ</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="action_sort_alpha">በፊደል ደርድር</string>
+    <string name="information_webview_required">ለታቺዮሚ የድር እይታ ያስፈልጋል</string>
     <string name="information_cloudflare_bypass_failure">ክላዉድ ፍሌር ን ማለፍ አልተሳካም</string>
     <string name="download_notifier_no_network">ምንም የአውታረ መረብ ግንኙነት አይገኝም</string>
     <string name="tapping_inverted_both">ሁለቱም</string>
@@ -240,6 +246,7 @@
     <string name="pref_create_backup">ምትኬን ይፍጠሩ</string>
     <string name="tracking_info">በክትትል አገልግሎቶች ውስጥ የምዕራፍ እድገትን ለማዘመን የአንድ-መንገድ ማመሳሰል። ከመከታተያ አዝራራቸው የግለሰቦችን የማንጋ ግቤቶች መከታተልን ያዘጋጁ።</string>
     <string name="services">አገልግሎቶች</string>
+    <string name="pref_auto_update_manga_sync">ካነበቡ በኋላ የምዕራፍ እድገትን ያዘምኑ</string>
     <string name="pref_download_new">አዳዲስ ምዕራፎችን ያውርዱ</string>
     <string name="fifth_to_last">አምስተኛው እስከ መጨረሻው ምዕራፍ</string>
     <string name="fourth_to_last">ከአራተኛ እስከ መጨረሻው ምዕራፍ</string>
@@ -268,39 +275,4 @@
     <string name="backup_restore_missing_trackers">መከታተያዎች አልገቡም:</string>
     <string name="backup_restore_missing_sources">የጠፋ ምንጮች:</string>
     <string name="invalid_backup_file_missing_manga">ምትኬ ማንኛውንም ማንጋ አልያዘም ፡፡</string>
-    <string name="manga_categories">የማንጋ ምድቦች</string>
-    <string name="default_manga_category">ነባሪ ምድብ</string>
-    <string name="pref_category_delete_chapters">ምዕራፎችን ሰርዝ</string>
-    <string name="pref_remove_after_marked_as_read">በእጅ እንደተነበበ ምልክት ከተደረገ በኋላ</string>
-    <string name="pref_remove_after_read">ካነበብኩ በኋላ</string>
-    <string name="pref_remove_bookmarked_chapters">ዕልባት የተደረገባቸውን ምዕራፎች ሰርዝ</string>
-    <string name="information_webview_required">ለታቺዮሚ የድር እይታ ያስፈልጋል</string>
-    <string name="download_notifier_download_paused_chapters">ማውረድ ለአፍታ ቆሟል</string>
-    <string name="channel_new_chapters_episodes">የምዕራፍ ዝመናዎች</string>
-    <string name="label_manga_sources">የማንጋ ምንጮች</string>
-    <string name="label_anime_sources">የአኒሜ ምንጮች</string>
-    <string name="backup_settings_warning">ማስጠንቀቂያ፡ ቅንብሮችን በምትኬ ላይ ማስቀመጥ የትራኪንግ የይለፍ ቃሎችዎንም ያከማቻል፣ ይህን የምትኬ ፋይል ለሌላ አያጋሩ!</string>
-    <string name="chapters_episodes">ምዕራፎች እና ክፍሎች</string>
-    <string name="episodes">ክፍሎች</string>
-    <string name="anime_categories">የአኒሜ ምድቦች</string>
-    <string name="general_categories">ምድቦች</string>
-    <string name="entries">የስብስብ ግቤቶች</string>
-    <string name="label_manga_library">ማንጋ</string>
-    <string name="label_watched_episodes">ታይቷል</string>
-    <string name="label_anime_library">አኒሜ</string>
-    <string name="label_manga">ማንጋ</string>
-    <string name="label_anime">አኒሜ</string>
-    <string name="label_watched_duration">የእይታ ቆይታ</string>
-    <string name="pref_library_manga_columns">የማንጋ ዕቃዎች በአንድ ረድፍ</string>
-    <string name="pref_library_anime_columns">የአኒም ዕቃዎች በአንድ ረድፍ</string>
-    <string name="action_global_manga_search">ዓለም አቀፍ ማንጋ ፍለጋ</string>
-    <string name="action_global_anime_search">ዓለም አቀፍ አኒሜ ፍለጋ</string>
-    <string name="action_sort_total_episodes">ጠቅላላ ክፍሎች</string>
-    <string name="action_filter_unseen">የማይታይ</string>
-    <string name="pref_bottom_nav_no_updates">ዝመናዎችን ወደ ተጨማሪ ትር ይውሰዱ</string>
-    <string name="action_sort_latest_episode">የቅርብ ጊዜ ክፍል</string>
-    <string name="pref_bottom_nav_no_history">ታሪክን ወደ ተጨማሪ ትር ውሰድ</string>
-    <string name="pref_bottom_nav_no_manga">ማንጋን ወደ ተጨማሪ ትር ይውሰዱ</string>
-    <string name="action_sort_last_seen">ለመጨረሻ ግዜ የታየው</string>
-    <string name="action_sort_last_checked">መጨረሻ የተፈተሸ</string>
 </resources>

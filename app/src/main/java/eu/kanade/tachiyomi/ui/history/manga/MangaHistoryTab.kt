@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 
 val resumeLastChapterReadEvent = Channel<Unit>()
@@ -74,7 +75,7 @@ fun Screen.mangaHistoryTab(
     }
 
     return TabContent(
-        titleRes = MR.strings.label_history,
+        titleRes = AYMR.strings.label_history,
         searchEnabled = true,
         content = { contentPadding, _ ->
             MangaHistoryScreen(

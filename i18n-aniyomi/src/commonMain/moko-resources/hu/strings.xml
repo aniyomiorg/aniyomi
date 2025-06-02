@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_summary">Kategóriák, globális frissítés, fejezet csúsztatás</string>
+    <string name="pref_library_update_show_tab_badge">Az olvasatlanok számának megjelnítése a Frissítések ikonon</string>
+    <string name="manga_categories">Kategóriák</string>
+    <string name="action_display_local_badge_manga">Helyi manga</string>
+    <string name="default_manga_category">Alapértelmezett kategória</string>
+    <string name="pref_manga_library_update_categories_details">Mangák a tiltott kategóriákban nem lesznek frissítve, még akkor se, ha a kedvelt kategóriákban is vannak.</string>
+    <string name="pref_remove_exclude_categories_manga">Tiltott kategóriák</string>
+    <string name="pref_clear_manga_database">Adatbázis törlése</string>
+    <string name="pref_clear_manga_database_summary">Nem könyvtári elemek előzményeinek törlése</string>
+    <string name="snack_add_to_manga_library">Manga könyvtárhoz adása?</string>
+    <string name="download_error">Hiba</string>
+    <string name="download_paused">Szünetel</string>
+    <string name="download_notifier_download_paused_chapters">Letöltés szüneteltetve</string>
+    <string name="channel_new_chapters_episodes">Fejezetfrissítések</string>
+</resources>

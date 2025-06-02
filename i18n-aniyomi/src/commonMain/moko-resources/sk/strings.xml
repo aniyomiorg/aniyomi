@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_exit">Pre opustenie aplikácie, stačte znova tlačidlo späť</string>
+    <string name="action_sort_airing_time">Čas vysielania</string>
+    <string name="action_reorganize_by">Znovuorganizovať</string>
+    <string name="pref_library_update_show_tab_badge">Zobraziť počet neprečítaných kapitol na ikone Aktualizácie</string>
+    <string name="manga_categories">Kategórie Mangy</string>
+    <string name="action_display_local_badge_manga">Lokálna manga</string>
+    <string name="default_manga_category">Predvolená kategória</string>
+    <string name="pref_manga_library_update_categories_details">Mangy vo vylúčených kategóriách nebudú aktualizované, aj keď sú tiež v zahrnutých kategóriách.</string>
+    <string name="pref_remove_exclude_categories_manga">Vylúčené kategórie</string>
+    <string name="pref_clear_manga_database">Vymazať databázu</string>
+    <string name="pref_clear_manga_database_summary">Odstránenie histórie mangy, ktorá nie je uložená vo vašej knižnici</string>
+    <string name="snack_add_to_manga_library">Pridať mangu do knižnice?</string>
+</resources>

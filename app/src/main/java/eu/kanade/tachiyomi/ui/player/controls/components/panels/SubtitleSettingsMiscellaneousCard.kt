@@ -48,6 +48,7 @@ import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import `is`.xyz.mpv.MPVLib
 import tachiyomi.core.common.preference.deleteAndGet
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
@@ -62,7 +63,7 @@ fun SubtitlesMiscellaneousCard(modifier: Modifier = Modifier) {
         title = {
             Row(horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium)) {
                 Icon(Icons.Default.Tune, null)
-                Text(stringResource(MR.strings.player_sheets_sub_misc_title))
+                Text(stringResource(AYMR.strings.player_sheets_sub_misc_title))
             }
         },
         onExpand = { isExpanded = !isExpanded },
@@ -80,7 +81,7 @@ fun SubtitlesMiscellaneousCard(modifier: Modifier = Modifier) {
                     preferences.overrideSubsASS().set(it)
                     MPVLib.setPropertyString("sub-ass-override", if (it) "force" else "scale")
                 },
-                content = { Text(stringResource(MR.strings.player_sheets_sub_override_ass)) },
+                content = { Text(stringResource(AYMR.strings.player_sheets_sub_override_ass)) },
                 modifier = Modifier
                     .padding(MaterialTheme.padding.medium)
                     .fillMaxWidth(),
@@ -92,7 +93,7 @@ fun SubtitlesMiscellaneousCard(modifier: Modifier = Modifier) {
                 mutableStateOf(MPVLib.getPropertyInt("sub-pos"))
             }
             SliderItem(
-                label = stringResource(MR.strings.player_sheets_sub_scale),
+                label = stringResource(AYMR.strings.player_sheets_sub_scale),
                 value = subScale,
                 valueText = subScale.toFixed(2).toString(),
                 onChange = {
@@ -109,7 +110,7 @@ fun SubtitlesMiscellaneousCard(modifier: Modifier = Modifier) {
                 },
             )
             SliderItem(
-                label = stringResource(MR.strings.player_sheets_sub_position),
+                label = stringResource(AYMR.strings.player_sheets_sub_position),
                 value = subPos,
                 valueText = subPos.toString(),
                 onChange = {

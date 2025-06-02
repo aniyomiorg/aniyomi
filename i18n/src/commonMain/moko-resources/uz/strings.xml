@@ -65,10 +65,12 @@
     <string name="off">Oʻchiq</string>
     <string name="action_sort_count">Jami qismlar</string>
     <string name="on">Yoniq</string>
+    <string name="action_sort_last_manga_update">Oxirgi yangilanish tekshiruvi</string>
     <string name="label_warning">Ogohlantirish</string>
     <string name="confirm_lock_change">O\'zgartirishni tasdiqlash uchun autentifikatsiya qiling</string>
     <string name="action_filter_tracked">Kuzatilayotgan</string>
     <string name="action_display_show_number_of_items">Qismlar sonini ko\'rsatish</string>
+    <string name="action_display_show_continue_reading_button">«Davom ettirish» tugmasi</string>
     <string name="action_pin">Pin</string>
     <string name="action_order_by_upload_date">Yuklab olish sanasi</string>
     <string name="action_oldest">Eng eski</string>
@@ -148,6 +150,7 @@
     <string name="theme_yotsuba">Yotsuba</string>
     <string name="pref_category_library">Kutubxona</string>
     <string name="action_close">Yopish</string>
+    <string name="action_show_manga">Qismni ko\'rsatish</string>
     <string name="action_not_now">Hozir emas</string>
     <string name="theme_tealturquoise">Firuz</string>
     <string name="lock_with_biometrics">Biometrik qulflash</string>
@@ -173,17 +176,24 @@
     <string name="secure_screen">Ilova ekrani himoyasi</string>
     <string name="pref_show_nsfw_source">Manbaa va kengaytmalar ro\'yhatida ko\'rsatish</string>
     <string name="parental_controls_info">Bu, ilovada norasmiy yoki noto\'g\'ri belgilangan kengaytmalardan NSFW (18+) kontent paydo bo\'lishini oldini olmaydi.</string>
+    <string name="relative_time_today">Bugun</string>
     <string name="pref_category_display">Ko\'rsatish</string>
     <string name="pref_library_columns">Qismlar soni</string>
     <string name="pref_update_only_started">Qism boshlanmagan</string>
     <string name="pref_library_update_refresh_metadata_summary">Kutubxona yangilanishida yangi muqova va ma\'lumotlarni tekshirish</string>
     <string name="default_category_summary">Doim so\'rash</string>
     <string name="categorized_display_settings">Har toifa o\'z sozlamasiga ega</string>
+    <string name="pref_library_update_categories_details">Cheklangan toifalardagi qismlar yangilanmaydi, yoniq toifalarga kirsaham.</string>
     <string name="none">Yo\'q</string>
     <string name="multi_lang">Ko\'p tilli</string>
     <string name="ext_updates_pending">Yangilanishlar mavjud</string>
     <string name="untrusted_extension">Ishonchsiz kengaytma</string>
     <string name="ext_untrusted">Ishonchsiz</string>
+    <string name="untrusted_extension_message">Bu kengaytma ishonchsiz sertifikat tomonidan imzolangan va faollashtirilmagan.
+\n
+\nZararli kengaytma Mihonda saqlanadigan barcha hisobga kirish ma\'lumotlarini o\'qishi, yoki ixtiyoriy kodni bajarishi mumkin.
+\n
+\nBu sertifikatga ishonish orqali, ushbu xavflarni qabul qilasiz.</string>
     <string name="pref_dual_page_invert_summary">Agar keng sahifalarning bo\'linishi o\'qish yo\'nalishiga mos kelmasa</string>
     <string name="pref_fullscreen">To\'liq ekran rejimi</string>
     <string name="pref_dual_page_split">Keng sahifalarni bo\'lish</string>
@@ -191,6 +201,7 @@
     <string name="pref_crop_borders">Chetlarini kesish</string>
     <string name="pref_color_filter_mode">Rang filtri rejimi</string>
     <string name="all">Barchasi</string>
+    <string name="pref_library_update_show_tab_badge">O\'qilmagan boblar soni «Yangilanishlar» ikonida</string>
     <string name="ext_pending">Kutilmoqda</string>
     <string name="ext_downloading">Yuklanmoqda</string>
     <string name="ext_installing">O\'rnatilmoqda</string>
@@ -198,6 +209,7 @@
     <string name="extension_api_error">Kengaytmalar ro\'yhatini olib bo\'lmadi</string>
     <string name="pref_category_nsfw_content">NSFW (18+) manbaalari</string>
     <string name="secure_screen_summary">Ilova himoyasi dasturlar orasida almashishda ilova ekranini yashiradi, va skrinshot qilish imkonini cheklaydi</string>
+    <string name="pref_update_only_completely_read">O\'qilmagan bob(lar) bor</string>
     <string name="ext_update">Yangilash</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="pref_show_page_number">Sahifa raqamini ko\'rsatish</string>
@@ -260,6 +272,7 @@
     <string name="filter_mode_screen">Ekran</string>
     <string name="pref_library_update_restriction">Uskuna uchun avtomatik yangilanishlarni cheklash</string>
     <string name="pref_skip_dupe_chapters">Takrorlanuvchi boblarni o\'tkazib yuborish</string>
+    <string name="pref_create_folder_per_manga">Sahifalarni alohida papkalarga saqlash</string>
     <string name="tapping_inverted_horizontal">Gorizontal</string>
     <string name="tapping_inverted_vertical">Vertikal</string>
     <string name="tapping_inverted_both">Ikkala taraf</string>
@@ -282,6 +295,7 @@
     <string name="pager_viewer">Sahifabay</string>
     <string name="white_background">Oq</string>
     <string name="tapping_inverted_none">Yo\'q</string>
+    <string name="pref_create_folder_per_manga_summary">Qism nomiga asoslanib papka yaratish</string>
     <string name="nav_zone_next">Keyingi</string>
     <string name="left_to_right_viewer">Chapdan o\'ngga</string>
     <string name="pref_read_with_volume_keys">Ovoz tugmalari</string>
@@ -311,6 +325,7 @@
     <string name="pref_lowest">Eng past</string>
     <string name="rotation_landscape">Landshaft</string>
     <string name="rotation_reverse_portrait">Teskari portret</string>
+    <string name="pref_category_delete_chapters">Boblarni o\'chirish</string>
     <string name="invalid_location">Noto\'g\'ri joylashuv: %s</string>
     <string name="pref_low">Past</string>
     <string name="pref_remove_after_marked_as_read">«O\'qilgan» deb belgilangandan so\'ng o\'chirish</string>
@@ -320,6 +335,7 @@
     <string name="pref_hide_threshold">Aylantirish vaqtida menyu yashirish sezuvchanligi</string>
     <string name="rotation_force_landscape">O\'zgarmas landshaft</string>
     <string name="pref_image_scale_type">Kattalashtirish</string>
+    <string name="pref_remove_after_read">O\'qib bo\'lingandan so\'ng o\'chirish</string>
     <string name="last_read_chapter">Oxirgi o\'qilgan bob</string>
     <string name="second_to_last">Oxiridan oldingi o\'qilgan bob</string>
     <string name="pref_landscape_zoom">Tasvirni gorizontal kattalashtirish</string>
@@ -338,6 +354,6 @@
     <string name="pref_category_reading">O\'qish</string>
     <string name="scale_type_fit_height">Uzunasiga</string>
     <string name="pref_webtoon_side_padding">Yon bo\'shliq</string>
+    <string name="pref_remove_bookmarked_chapters">Xatchopli boblarni o\'chirish</string>
     <string name="third_to_last">O\'qilgan bobdan uchinchisi</string>
-    <string name="manga_categories">Kategoriyalar</string>
 </resources>

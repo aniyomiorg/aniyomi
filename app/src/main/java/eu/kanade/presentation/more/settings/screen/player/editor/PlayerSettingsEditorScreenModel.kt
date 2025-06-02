@@ -18,7 +18,7 @@ import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.domain.storage.service.SCRIPTS_PATH
 import tachiyomi.domain.storage.service.SCRIPT_OPTS_PATH
 import tachiyomi.domain.storage.service.StorageManager
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.SimpleDateFormat
@@ -56,7 +56,7 @@ class PlayerSettingsEditorScreenModel(
             ?.createDirectory(selectedType.value.directoryName)
             ?.createFile(fileName)
             ?: run {
-                context.toast(context.stringResource(MR.strings.editor_create_error))
+                context.toast(context.stringResource(AYMR.strings.editor_create_error))
                 return
             }
 
@@ -71,7 +71,7 @@ class PlayerSettingsEditorScreenModel(
         if (file?.renameTo(fileName) == true) {
             updateItems(selectedType.value)
         } else {
-            context.toast(context.stringResource(MR.strings.editor_rename_error))
+            context.toast(context.stringResource(AYMR.strings.editor_rename_error))
         }
     }
 
@@ -83,7 +83,7 @@ class PlayerSettingsEditorScreenModel(
         if (file?.delete() == true) {
             updateItems(selectedType.value)
         } else {
-            context.toast(context.stringResource(MR.strings.editor_delete_error))
+            context.toast(context.stringResource(AYMR.strings.editor_delete_error))
         }
     }
 
@@ -95,11 +95,11 @@ class PlayerSettingsEditorScreenModel(
             .orEmpty()
 
         if (names.any { it.equals(name, true) }) {
-            return FileCreationResult.Failure(MR.strings.editor_file_already_exists)
+            return FileCreationResult.Failure(AYMR.strings.editor_file_already_exists)
         }
 
         if (name != DiskUtil.buildValidFilename(name)) {
-            return FileCreationResult.Failure(MR.strings.editor_invalid_filename)
+            return FileCreationResult.Failure(AYMR.strings.editor_invalid_filename)
         }
 
         return FileCreationResult.Success
@@ -157,8 +157,8 @@ sealed interface EditorFileDialog {
 }
 
 enum class EditorListType(val directoryName: String, val stringRes: StringResource, val fileExtension: String) {
-    SCRIPTS(SCRIPTS_PATH, MR.strings.pref_player_editor_script, "lua"),
-    SCRIPTS_OPTS(SCRIPT_OPTS_PATH, MR.strings.pref_player_editor_script_opts, "conf"),
+    SCRIPTS(SCRIPTS_PATH, AYMR.strings.pref_player_editor_script, "lua"),
+    SCRIPTS_OPTS(SCRIPT_OPTS_PATH, AYMR.strings.pref_player_editor_script_opts, "conf"),
 }
 
 data class EditorListItem(

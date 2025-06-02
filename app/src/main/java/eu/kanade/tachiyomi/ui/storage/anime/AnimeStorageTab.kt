@@ -9,7 +9,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.more.storage.StorageScreenContent
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 
 @Composable
 fun Screen.animeStorageTab(): TabContent {
@@ -19,7 +19,7 @@ fun Screen.animeStorageTab(): TabContent {
     val state by screenModel.state.collectAsState()
 
     return TabContent(
-        titleRes = MR.strings.label_anime,
+        titleRes = AYMR.strings.label_anime,
         content = { contentPadding, _ ->
             StorageScreenContent(
                 state = state,

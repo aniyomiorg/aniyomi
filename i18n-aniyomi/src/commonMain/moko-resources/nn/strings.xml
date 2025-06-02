@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_exit">Trykk tilbake igjen for å gå ut</string>
+    <string name="action_filter_started">Starta</string>
+    <string name="action_sort_airing_time">Kringkastingstid</string>
+    <string name="local_source_badge">Lokal</string>
+    <string name="manga_categories">Manga Kategoriar</string>
+    <string name="action_edit_manga_categories">Endra manga kategoriar</string>
+    <string name="action_display_local_badge_manga">Lokal manga</string>
+    <string name="default_manga_category">Standard kategori</string>
+    <string name="pref_manga_library_update_categories_details">Manga i utelatne kategoriar vil ikkje bli oppdatert sjølv om dei òg er i inkluderte kategoriar.</string>
+    <string name="pref_remove_exclude_categories_manga">Utelatne kategoriar</string>
+    <string name="snack_add_to_manga_library">Legg manga til i bibliotek?</string>
+    <string name="download_error">Feil</string>
+</resources>

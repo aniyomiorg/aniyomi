@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="relative_time_hours">
+        <item quantity="one">1 hour ago</item>
+        <item quantity="other">%1$d hours ago</item>
+    </plurals>
+    <plurals name="relative_time_minutes">
+        <item quantity="one">1 minute ago</item>
+        <item quantity="other">%1$d minutes ago</item>
+    </plurals>
+    <plurals name="upcoming_relative_time_hours">
+        <item quantity="one">In 1 hour</item>
+        <item quantity="other">In %1$d hours</item>
+    </plurals>
+    <plurals name="upcoming_relative_time_minutes">
+        <item quantity="one">In 1 minute</item>
+        <item quantity="other">In %1$d minutes</item>
+    </plurals>
+    <plurals name="missing_items">
+        <item quantity="one">Missing %1$s item</item>
+        <item quantity="other">Missing %1$s items</item>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Next unseen episodes</item>
+        <item quantity="other">Next %d unseen episodes</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">%1$s episode</item>
+        <item quantity="other">%1$s episodes</item>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Next episode</item>
+        <item quantity="other">Next %d episodes</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one">For %d title</item>
+        <item quantity="other">For %d titles</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">%d new episode</item>
+        <item quantity="other">%1$d new episodes</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Episodes %1$s and %2$d more</item>
+        <item quantity="other">Episodes %1$s and %2$d more</item>
+    </plurals>
+    <plurals name="hoster_video_count">
+        <item quantity="one">%d video</item>
+        <item quantity="other">%d videos</item>
+    </plurals>
+</resources>

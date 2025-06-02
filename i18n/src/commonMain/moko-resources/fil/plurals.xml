@@ -9,8 +9,8 @@
         <item quantity="other">%d (na) kategorya</item>
     </plurals>
     <plurals name="update_check_notification_ext_updates">
-        <item quantity="one">Ang extension ay available upang i-update</item>
-        <item quantity="other">Ang mga %d (na) extension ay available upang i-update</item>
+        <item quantity="one">Ang extension ay maaari nang i-update</item>
+        <item quantity="other">Ang mga %d (na) extension ay maaari nang i-update</item>
     </plurals>
     <plurals name="notification_chapters_multiple_and_more">
         <item quantity="one">Mga kabanata %1$s at isa pa</item>
@@ -38,7 +38,7 @@
     </plurals>
     <plurals name="num_trackers">
         <item quantity="one">%d tracker</item>
-        <item quantity="other">%d na na tracker</item>
+        <item quantity="other">%d na tracker</item>
     </plurals>
     <plurals name="missing_chapters_warning">
         <item quantity="one">Nilaktawan ang %d na kabanata, maaaring ito ay wala sa source o na-filter ang mga ito</item>
@@ -64,32 +64,16 @@
         <item quantity="one">1 araw</item>
         <item quantity="other">%d (na) araw</item>
     </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one">Mga Episode %1$s at 1 pa</item>
-        <item quantity="other">Mga Episode %1$s at %2$d pa</item>
+    <plurals name="num_repos">
+        <item quantity="one">%d na repo</item>
+        <item quantity="other">%d na mga repo</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%d segundo</item>
-        <item quantity="other">%d (mga) segundo</item>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">Bukas</item>
+        <item quantity="other">Sa loob ng %1$d na araw</item>
     </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one">Para sa 1 palabas</item>
-        <item quantity="other">Para sa %d na mga palabas</item>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one">Susunod na hindi nakitang episode</item>
-        <item quantity="other">Susunod na %d hindi nakitang mga episode</item>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one">%1$s na episode</item>
-        <item quantity="other">%1$s na mga episode</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one">1 bagong episode</item>
-        <item quantity="other">%1$d (na) mga bagong episode</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one">Susunod na episode</item>
-        <item quantity="other">Susunod na %d (mga) episode</item>
+    <plurals name="pref_pages">
+        <item quantity="one">1 pahina</item>
+        <item quantity="other">%1$s na mga pahina</item>
     </plurals>
 </resources>

@@ -49,7 +49,7 @@ import eu.kanade.presentation.player.components.SwitchPreference
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import `is`.xyz.mpv.MPVLib
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -74,9 +74,9 @@ fun PlaybackSpeedSheet(
                 .padding(vertical = MaterialTheme.padding.medium),
         ) {
             SliderItem(
-                label = stringResource(MR.strings.player_sheets_speed_slider_label),
+                label = stringResource(AYMR.strings.player_sheets_speed_slider_label),
                 value = speed,
-                valueText = stringResource(MR.strings.player_speed, speed),
+                valueText = stringResource(AYMR.strings.player_speed, speed),
                 onChange = onSpeedChange,
                 max = 6f,
                 min = 0.01f,
@@ -106,7 +106,7 @@ fun PlaybackSpeedSheet(
                         InputChip(
                             selected = speed == it,
                             onClick = { onSpeedChange(it) },
-                            label = { Text(stringResource(MR.strings.player_speed, it)) },
+                            label = { Text(stringResource(AYMR.strings.player_speed, it)) },
                             modifier = Modifier
                                 .animateItem(),
                             trailingIcon = {
@@ -143,9 +143,9 @@ fun PlaybackSpeedSheet(
                     Column(
                         modifier = Modifier.weight(1f),
                     ) {
-                        Text(text = stringResource(MR.strings.pref_audio_pitch_correction_title))
+                        Text(text = stringResource(AYMR.strings.pref_audio_pitch_correction_title))
                         Text(
-                            text = stringResource(MR.strings.pref_audio_pitch_correction_summary),
+                            text = stringResource(AYMR.strings.pref_audio_pitch_correction_summary),
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }
@@ -162,7 +162,7 @@ fun PlaybackSpeedSheet(
                     modifier = Modifier.weight(1f),
                     onClick = { preferences.playerSpeed().set(speed) },
                 ) {
-                    Text(text = stringResource(MR.strings.player_sheets_speed_make_default))
+                    Text(text = stringResource(AYMR.strings.player_sheets_speed_make_default))
                 }
                 FilledIconButton(
                     onClick = {

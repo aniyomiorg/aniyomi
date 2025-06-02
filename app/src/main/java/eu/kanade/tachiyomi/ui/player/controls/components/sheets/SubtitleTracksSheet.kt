@@ -40,7 +40,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -60,7 +60,7 @@ fun SubtitlesSheet(
         onDismissRequest = onDismissRequest,
         header = {
             TrackSheetTitle(
-                title = stringResource(MR.strings.pref_player_subtitle),
+                title = stringResource(AYMR.strings.pref_player_subtitle),
                 actions = {
                     TextButton(onClick = onOpenSubtitleSettings) {
                         Row(
@@ -68,7 +68,7 @@ fun SubtitlesSheet(
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                         ) {
                             Icon(imageVector = Icons.Default.Palette, contentDescription = null)
-                            Text(text = stringResource(MR.strings.player_sheets_track_palette))
+                            Text(text = stringResource(AYMR.strings.player_sheets_track_palette))
                         }
                     }
                     TextButton(onClick = onOpenSubtitleDelay) {
@@ -77,13 +77,13 @@ fun SubtitlesSheet(
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                         ) {
                             Icon(imageVector = Icons.Default.MoreTime, contentDescription = null)
-                            Text(text = stringResource(MR.strings.player_sheets_track_delay))
+                            Text(text = stringResource(AYMR.strings.player_sheets_track_delay))
                         }
                     }
                 },
             )
             AddTrackRow(
-                title = stringResource(MR.strings.player_sheets_add_ext_sub),
+                title = stringResource(AYMR.strings.player_sheets_add_ext_sub),
                 onClick = onAddSubtitle,
             )
         },
@@ -103,7 +103,7 @@ fun SubtitlesSheet(
                 horizontalAlignment = Alignment.Start,
             ) {
                 Icon(Icons.Outlined.Info, null)
-                Text(stringResource(MR.strings.player_sheets_subtitles_footer_secondary_sid_no_styles))
+                Text(stringResource(AYMR.strings.player_sheets_subtitles_footer_secondary_sid_no_styles))
             }
         },
         modifier = modifier,

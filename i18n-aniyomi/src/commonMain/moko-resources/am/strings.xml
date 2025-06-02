@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">የማንጋ ምድቦች</string>
+    <string name="general_categories">ምድቦች</string>
+    <string name="anime_categories">የአኒሜ ምድቦች</string>
+    <string name="entries">የስብስብ ግቤቶች</string>
+    <string name="chapters_episodes">ምዕራፎች እና ክፍሎች</string>
+    <string name="episodes">ክፍሎች</string>
+    <string name="backup_settings_warning">ማስጠንቀቂያ፡ ቅንብሮችን በምትኬ ላይ ማስቀመጥ የትራኪንግ የይለፍ ቃሎችዎንም ያከማቻል፣ ይህን የምትኬ ፋይል ለሌላ አያጋሩ!</string>
+    <string name="label_manga_library">ማንጋ</string>
+    <string name="label_anime_library">አኒሜ</string>
+    <string name="label_anime">አኒሜ</string>
+    <string name="label_manga">ማንጋ</string>
+    <string name="label_manga_sources">የማንጋ ምንጮች</string>
+    <string name="label_anime_sources">የአኒሜ ምንጮች</string>
+    <string name="label_watched_duration">የእይታ ቆይታ</string>
+    <string name="label_watched_episodes">ታይቷል</string>
+    <string name="pref_library_manga_columns">የማንጋ ዕቃዎች በአንድ ረድፍ</string>
+    <string name="pref_library_anime_columns">የአኒም ዕቃዎች በአንድ ረድፍ</string>
+    <string name="pref_bottom_nav_no_history">ታሪክን ወደ ተጨማሪ ትር ውሰድ</string>
+    <string name="pref_bottom_nav_no_updates">ዝመናዎችን ወደ ተጨማሪ ትር ይውሰዱ</string>
+    <string name="pref_bottom_nav_no_manga">ማንጋን ወደ ተጨማሪ ትር ይውሰዱ</string>
+    <string name="action_filter_unseen">የማይታይ</string>
+    <string name="action_global_manga_search">ዓለም አቀፍ ማንጋ ፍለጋ</string>
+    <string name="action_global_anime_search">ዓለም አቀፍ አኒሜ ፍለጋ</string>
+    <string name="action_sort_total_episodes">ጠቅላላ ክፍሎች</string>
+    <string name="action_sort_last_seen">ለመጨረሻ ግዜ የታየው</string>
+    <string name="action_sort_last_checked">መጨረሻ የተፈተሸ</string>
+    <string name="action_sort_latest_episode">የቅርብ ጊዜ ክፍል</string>
+    <string name="default_manga_category">ነባሪ ምድብ</string>
+    <string name="download_notifier_download_paused_chapters">ማውረድ ለአፍታ ቆሟል</string>
+    <string name="channel_new_chapters_episodes">የምዕራፍ ዝመናዎች</string>
+</resources>

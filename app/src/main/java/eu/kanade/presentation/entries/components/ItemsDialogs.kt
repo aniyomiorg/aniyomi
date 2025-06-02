@@ -24,6 +24,7 @@ import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
 import tachiyomi.domain.entries.manga.interactor.MangaFetchInterval
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
@@ -38,7 +39,7 @@ fun DeleteItemsDialog(
     onConfirm: () -> Unit,
     isManga: Boolean,
 ) {
-    val subtitle = if (isManga) MR.strings.confirm_delete_chapters else MR.strings.confirm_delete_episodes
+    val subtitle = if (isManga) MR.strings.confirm_delete_chapters else AYMR.strings.confirm_delete_episodes
     AlertDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
@@ -95,7 +96,7 @@ fun SetIntervalDialog(
                             if (isManga) {
                                 MR.strings.manga_interval_expected_update
                             } else {
-                                MR.strings.anime_interval_expected_update
+                                AYMR.strings.anime_interval_expected_update
                             },
                             pluralStringResource(
                                 MR.plurals.day,
@@ -115,7 +116,7 @@ fun SetIntervalDialog(
                             if (isManga) {
                                 MR.strings.manga_interval_expected_update_null
                             } else {
-                                MR.strings.anime_interval_expected_update_null
+                                AYMR.strings.anime_interval_expected_update_null
                             },
                         ),
                     )
