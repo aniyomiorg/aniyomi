@@ -29,6 +29,7 @@ import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.BaseSortItem
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
@@ -301,7 +302,7 @@ private fun ColumnScope.DisplayPage(
         pref = screenModel.libraryPreferences.languageBadge(),
     )
     CheckboxItem(
-        label = stringResource(MR.strings.action_display_show_continue_reading_button),
+        label = stringResource(AYMR.strings.action_display_show_continue_reading_button),
         pref = screenModel.libraryPreferences.showContinueViewingButton(),
     )
 

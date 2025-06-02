@@ -69,6 +69,7 @@ import eu.kanade.tachiyomi.ui.download.manga.mangaDownloadTab
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.Pill
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.TabText
@@ -256,7 +257,7 @@ data object DownloadsTab : Tab {
                             onClick = { scope.launch { state.animateScrollToPage(1) } },
                             text = {
                                 TabText(
-                                    text = stringResource(MR.strings.manga),
+                                    text = stringResource(AYMR.strings.manga),
                                     badgeCount = mangaDownloadCount,
                                 )
                             },

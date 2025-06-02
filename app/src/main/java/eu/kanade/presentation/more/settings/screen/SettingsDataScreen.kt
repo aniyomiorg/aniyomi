@@ -76,6 +76,7 @@ import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.storage.service.StoragePreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -316,7 +317,7 @@ object SettingsDataScreen : SearchableSettings {
                 ),
 
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.pref_clear_chapter_cache),
+                    title = stringResource(AYMR.strings.pref_clear_chapter_cache),
                     subtitle = stringResource(MR.strings.used_cache, cacheReadableSize),
                     onClick = {
                         scope.launchNonCancellable {
@@ -335,7 +336,7 @@ object SettingsDataScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = libraryPreferences.autoClearItemCache(),
-                    title = stringResource(MR.strings.pref_auto_clear_chapter_cache),
+                    title = stringResource(AYMR.strings.pref_auto_clear_chapter_cache),
                 ),
             ),
         )

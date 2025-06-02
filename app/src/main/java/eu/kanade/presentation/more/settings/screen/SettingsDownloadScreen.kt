@@ -36,6 +36,7 @@ import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.OutlinedNumericChooser
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
@@ -128,11 +129,11 @@ object SettingsDownloadScreen : SearchableSettings {
         mangaCategories: ImmutableList<Category>,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_category_delete_chapters),
+            title = stringResource(AYMR.strings.pref_category_delete_chapters),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     preference = downloadPreferences.removeAfterMarkedAsRead(),
-                    title = stringResource(MR.strings.pref_remove_after_marked_as_read),
+                    title = stringResource(AYMR.strings.pref_remove_after_marked_as_read),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     preference = downloadPreferences.removeAfterReadSlots(),
@@ -144,11 +145,11 @@ object SettingsDownloadScreen : SearchableSettings {
                         3 to stringResource(MR.strings.fourth_to_last),
                         4 to stringResource(MR.strings.fifth_to_last),
                     ),
-                    title = stringResource(MR.strings.pref_remove_after_read),
+                    title = stringResource(AYMR.strings.pref_remove_after_read),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = downloadPreferences.removeBookmarkedChapters(),
-                    title = stringResource(MR.strings.pref_remove_bookmarked_chapters),
+                    title = stringResource(AYMR.strings.pref_remove_bookmarked_chapters),
                 ),
                 getExcludedAnimeCategoriesPreference(
                     downloadPreferences = downloadPreferences,
@@ -337,7 +338,7 @@ object SettingsDownloadScreen : SearchableSettings {
                     title = stringResource(MR.strings.auto_download_while_reading),
                 ),
                 Preference.PreferenceItem.InfoPreference(
-                    stringResource(MR.strings.download_ahead_info),
+                    stringResource(AYMR.strings.download_ahead_info),
                 ),
             ),
         )

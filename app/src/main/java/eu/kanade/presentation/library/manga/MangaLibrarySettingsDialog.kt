@@ -29,6 +29,7 @@ import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.BaseSortItem
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
@@ -178,7 +179,7 @@ private fun ColumnScope.SortPage(
             MR.strings.action_sort_alpha to MangaLibrarySort.Type.Alphabetical,
             MR.strings.action_sort_total to MangaLibrarySort.Type.TotalChapters,
             MR.strings.action_sort_last_read to MangaLibrarySort.Type.LastRead,
-            MR.strings.action_sort_last_manga_update to MangaLibrarySort.Type.LastUpdate,
+            AYMR.strings.action_sort_last_manga_update to MangaLibrarySort.Type.LastUpdate,
             MR.strings.action_sort_unread_count to MangaLibrarySort.Type.UnreadCount,
             MR.strings.action_sort_latest_chapter to MangaLibrarySort.Type.LatestChapter,
             MR.strings.action_sort_chapter_fetch_date to MangaLibrarySort.Type.ChapterFetchDate,
@@ -301,7 +302,7 @@ private fun ColumnScope.DisplayPage(
         pref = screenModel.libraryPreferences.languageBadge(),
     )
     CheckboxItem(
-        label = stringResource(MR.strings.action_display_show_continue_reading_button),
+        label = stringResource(AYMR.strings.action_display_show_continue_reading_button),
         pref = screenModel.libraryPreferences.showContinueViewingButton(),
     )
 

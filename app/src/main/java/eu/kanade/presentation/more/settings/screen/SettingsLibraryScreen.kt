@@ -42,6 +42,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLIC
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_EPISODE_SEEN_EXISTING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_EPISODE_SEEN_NEW
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -281,7 +282,7 @@ object SettingsLibraryScreen : SearchableSettings {
                 Preference.PreferenceItem.MultiSelectListPreference(
                     preference = libraryPreferences.autoUpdateItemRestrictions(),
                     entries = persistentMapOf(
-                        ENTRY_HAS_UNVIEWED to stringResource(MR.strings.pref_update_only_completely_read),
+                        ENTRY_HAS_UNVIEWED to stringResource(AYMR.strings.pref_update_only_completely_read),
                         ENTRY_NON_VIEWED to stringResource(MR.strings.pref_update_only_started),
                         ENTRY_NON_COMPLETED to stringResource(MR.strings.pref_update_only_non_completed),
                         ENTRY_OUTSIDE_RELEASE_PERIOD to stringResource(MR.strings.pref_update_only_in_release_period),
@@ -290,7 +291,7 @@ object SettingsLibraryScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = libraryPreferences.newShowUpdatesCount(),
-                    title = stringResource(MR.strings.pref_library_update_show_tab_badge),
+                    title = stringResource(AYMR.strings.pref_library_update_show_tab_badge),
                 ),
             ),
         )
@@ -301,7 +302,7 @@ object SettingsLibraryScreen : SearchableSettings {
         libraryPreferences: LibraryPreferences,
     ): Preference.PreferenceGroup {
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_behavior),
+            title = stringResource(AYMR.strings.pref_behavior),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
                     preference = libraryPreferences.swipeChapterStartAction(),

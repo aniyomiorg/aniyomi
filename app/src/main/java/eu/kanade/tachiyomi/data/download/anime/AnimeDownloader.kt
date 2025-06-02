@@ -55,6 +55,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -324,7 +325,7 @@ class AnimeDownloader(
                     maxDownloadsFromSource > EPISODES_PER_SOURCE_QUEUE_WARNING_THRESHOLD
                 ) {
                     notifier.onWarning(
-                        context.stringResource(MR.strings.download_queue_size_warning),
+                        context.stringResource(AYMR.strings.download_queue_size_warning),
                         WARNING_NOTIF_TIMEOUT_MS,
                         NotificationHandler.openUrl(
                             context,
@@ -349,7 +350,7 @@ class AnimeDownloader(
 
             val availSpace = DiskUtil.getAvailableStorageSpace(animeDir)
             if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
-                throw Exception(context.stringResource(MR.strings.download_insufficient_space))
+                throw Exception(context.stringResource(AYMR.strings.download_insufficient_space))
             }
 
             val episodeDirname = provider.getEpisodeDirName(download.episode.name, download.episode.scanlator)

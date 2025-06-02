@@ -76,6 +76,7 @@ import tachiyomi.core.common.util.system.ImageUtil
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.manga.interactor.ResetMangaViewerFlags
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -194,7 +195,7 @@ object SettingsAdvancedScreen : SearchableSettings {
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(MR.strings.pref_invalidate_download_cache),
-                    subtitle = stringResource(MR.strings.pref_invalidate_download_cache_summary),
+                    subtitle = stringResource(AYMR.strings.pref_invalidate_download_cache_summary),
                     onClick = {
                         Injekt.get<MangaDownloadCache>().invalidateCache()
                         Injekt.get<AnimeDownloadCache>().invalidateCache()
