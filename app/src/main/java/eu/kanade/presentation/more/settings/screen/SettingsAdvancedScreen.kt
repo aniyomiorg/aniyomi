@@ -203,13 +203,13 @@ object SettingsAdvancedScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.pref_clear_manga_database),
-                    subtitle = stringResource(MR.strings.pref_clear_manga_database_summary),
+                    title = stringResource(AYMR.strings.pref_clear_manga_database),
+                    subtitle = stringResource(AYMR.strings.pref_clear_manga_database_summary),
                     onClick = { navigator.push(ClearDatabaseScreen()) },
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.pref_clear_anime_database),
-                    subtitle = stringResource(MR.strings.pref_clear_anime_database_summary),
+                    title = stringResource(AYMR.strings.pref_clear_anime_database),
+                    subtitle = stringResource(AYMR.strings.pref_clear_anime_database_summary),
                     onClick = { navigator.push(ClearAnimeDatabaseScreen()) },
                 ),
             ),
@@ -482,38 +482,38 @@ object SettingsAdvancedScreen : SearchableSettings {
         val sourcePreferences = remember { Injekt.get<SourcePreferences>() }
         val dataSaver by sourcePreferences.dataSaver().collectAsState()
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.data_saver),
+            title = stringResource(AYMR.strings.data_saver),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.ListPreference(
                     preference = sourcePreferences.dataSaver(),
                     entries = persistentMapOf(
                         DataSaver.NONE to stringResource(MR.strings.disabled),
-                        DataSaver.BANDWIDTH_HERO to stringResource(MR.strings.bandwidth_hero),
-                        DataSaver.WSRV_NL to stringResource(MR.strings.wsrv),
-                        DataSaver.RESMUSH_IT to stringResource(MR.strings.resmush),
+                        DataSaver.BANDWIDTH_HERO to stringResource(AYMR.strings.bandwidth_hero),
+                        DataSaver.WSRV_NL to stringResource(AYMR.strings.wsrv),
+                        DataSaver.RESMUSH_IT to stringResource(AYMR.strings.resmush),
                     ),
-                    title = stringResource(MR.strings.data_saver),
-                    subtitle = stringResource(MR.strings.data_saver_summary),
+                    title = stringResource(AYMR.strings.data_saver),
+                    subtitle = stringResource(AYMR.strings.data_saver_summary),
                 ),
                 Preference.PreferenceItem.EditTextPreference(
                     preference = sourcePreferences.dataSaverServer(),
-                    title = stringResource(MR.strings.bandwidth_data_saver_server),
-                    subtitle = stringResource(MR.strings.data_saver_server_summary),
+                    title = stringResource(AYMR.strings.bandwidth_data_saver_server),
+                    subtitle = stringResource(AYMR.strings.data_saver_server_summary),
                     enabled = dataSaver == DataSaver.BANDWIDTH_HERO,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = sourcePreferences.dataSaverDownloader(),
-                    title = stringResource(MR.strings.data_saver_downloader),
+                    title = stringResource(AYMR.strings.data_saver_downloader),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = sourcePreferences.dataSaverIgnoreJpeg(),
-                    title = stringResource(MR.strings.data_saver_ignore_jpeg),
+                    title = stringResource(AYMR.strings.data_saver_ignore_jpeg),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = sourcePreferences.dataSaverIgnoreGif(),
-                    title = stringResource(MR.strings.data_saver_ignore_gif),
+                    title = stringResource(AYMR.strings.data_saver_ignore_gif),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 Preference.PreferenceItem.ListPreference(
@@ -528,26 +528,26 @@ object SettingsAdvancedScreen : SearchableSettings {
                         "90%",
                         "95%",
                     ).associateBy { it.trimEnd('%').toInt() }.toPersistentMap(),
-                    title = stringResource(MR.strings.data_saver_image_quality),
-                    subtitle = stringResource(MR.strings.data_saver_image_quality_summary),
+                    title = stringResource(AYMR.strings.data_saver_image_quality),
+                    subtitle = stringResource(AYMR.strings.data_saver_image_quality_summary),
                     enabled = dataSaver != DataSaver.NONE,
                 ),
                 kotlin.run {
                     val dataSaverImageFormatJpeg by sourcePreferences.dataSaverImageFormatJpeg().collectAsState()
                     Preference.PreferenceItem.SwitchPreference(
                         preference = sourcePreferences.dataSaverImageFormatJpeg(),
-                        title = stringResource(MR.strings.data_saver_image_format),
+                        title = stringResource(AYMR.strings.data_saver_image_format),
                         subtitle = if (dataSaverImageFormatJpeg) {
-                            stringResource(MR.strings.data_saver_image_format_summary_on)
+                            stringResource(AYMR.strings.data_saver_image_format_summary_on)
                         } else {
-                            stringResource(MR.strings.data_saver_image_format_summary_off)
+                            stringResource(AYMR.strings.data_saver_image_format_summary_off)
                         },
                         enabled = dataSaver != DataSaver.NONE && dataSaver != DataSaver.RESMUSH_IT,
                     )
                 },
                 Preference.PreferenceItem.SwitchPreference(
                     preference = sourcePreferences.dataSaverColorBW(),
-                    title = stringResource(MR.strings.data_saver_color_bw),
+                    title = stringResource(AYMR.strings.data_saver_color_bw),
                     enabled = dataSaver == DataSaver.BANDWIDTH_HERO,
                 ),
             ),

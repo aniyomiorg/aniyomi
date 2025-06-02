@@ -81,7 +81,7 @@ object SettingsDownloadScreen : SearchableSettings {
                 title = stringResource(MR.strings.connected_to_wifi),
             ),
             Preference.PreferenceItem.TextPreference(
-                title = stringResource(MR.strings.download_speed_limit),
+                title = stringResource(AYMR.strings.download_speed_limit),
                 subtitle = if (speedLimit == 0) {
                     stringResource(MR.strings.off)
                 } else {
@@ -101,9 +101,9 @@ object SettingsDownloadScreen : SearchableSettings {
             Preference.PreferenceItem.ListPreference(
                 preference = downloadPreferences.numberOfDownloads(),
                 entries = (1..5).associateWith { it.toString() }.toImmutableMap(),
-                title = stringResource(MR.strings.pref_download_slots),
+                title = stringResource(AYMR.strings.pref_download_slots),
             ),
-            Preference.PreferenceItem.InfoPreference(stringResource(MR.strings.download_slots_info)),
+            Preference.PreferenceItem.InfoPreference(stringResource(AYMR.strings.download_slots_info)),
             getDeleteChaptersGroup(
                 downloadPreferences = downloadPreferences,
                 animeCategories = allAnimeCategories.toImmutableList(),
@@ -173,7 +173,7 @@ object SettingsDownloadScreen : SearchableSettings {
             entries = categories()
                 .associate { it.id.toString() to it.visualName }
                 .toImmutableMap(),
-            title = stringResource(MR.strings.pref_remove_exclude_categories_manga),
+            title = stringResource(AYMR.strings.pref_remove_exclude_categories_manga),
         )
     }
 
@@ -187,7 +187,7 @@ object SettingsDownloadScreen : SearchableSettings {
             entries = categories()
                 .associate { it.id.toString() to it.visualName }
                 .toImmutableMap(),
-            title = stringResource(MR.strings.pref_remove_exclude_categories_anime),
+            title = stringResource(AYMR.strings.pref_remove_exclude_categories_anime),
         )
     }
 
@@ -209,7 +209,7 @@ object SettingsDownloadScreen : SearchableSettings {
         var showAnimeDialog by rememberSaveable { mutableStateOf(false) }
         if (showAnimeDialog) {
             TriStateListDialog(
-                title = stringResource(MR.strings.anime_categories),
+                title = stringResource(AYMR.strings.anime_categories),
                 message = stringResource(MR.strings.pref_download_new_categories_details),
                 items = allAnimeCategories,
                 initialChecked = includedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
@@ -240,7 +240,7 @@ object SettingsDownloadScreen : SearchableSettings {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
             TriStateListDialog(
-                title = stringResource(MR.strings.manga_categories),
+                title = stringResource(AYMR.strings.manga_categories),
                 message = stringResource(MR.strings.pref_download_new_categories_details),
                 items = allMangaCategories,
                 initialChecked = included.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
@@ -264,15 +264,15 @@ object SettingsDownloadScreen : SearchableSettings {
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     preference = downloadNewEpisodesPref,
-                    title = stringResource(MR.strings.pref_download_new_episodes),
+                    title = stringResource(AYMR.strings.pref_download_new_episodes),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = downloadNewUnseenEpisodesOnlyPref,
-                    title = stringResource(MR.strings.pref_download_new_unseen_episodes_only),
+                    title = stringResource(AYMR.strings.pref_download_new_unseen_episodes_only),
                     enabled = downloadNewEpisodes,
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.anime_categories),
+                    title = stringResource(AYMR.strings.anime_categories),
                     subtitle = getCategoriesLabel(
                         allCategories = allAnimeCategories,
                         included = includedAnime,
@@ -291,7 +291,7 @@ object SettingsDownloadScreen : SearchableSettings {
                     enabled = downloadNewChapters,
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.manga_categories),
+                    title = stringResource(AYMR.strings.manga_categories),
                     subtitle = getCategoriesLabel(
                         allCategories = allMangaCategories,
                         included = included,
@@ -318,11 +318,11 @@ object SettingsDownloadScreen : SearchableSettings {
                             if (it == 0) {
                                 stringResource(MR.strings.disabled)
                             } else {
-                                pluralStringResource(MR.plurals.next_unseen_episodes, count = it, it)
+                                pluralStringResource(AYMR.plurals.next_unseen_episodes, count = it, it)
                             }
                         }
                         .toImmutableMap(),
-                    title = stringResource(MR.strings.auto_download_while_watching),
+                    title = stringResource(AYMR.strings.auto_download_while_watching),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     preference = downloadPreferences.autoDownloadWhileReading(),
@@ -371,16 +371,16 @@ object SettingsDownloadScreen : SearchableSettings {
             mapOf("" to "None") + packageNames.zip(packageNamesReadable).toMap()
 
         return Preference.PreferenceGroup(
-            title = stringResource(MR.strings.pref_category_external_downloader),
+            title = stringResource(AYMR.strings.pref_category_external_downloader),
             preferenceItems = persistentListOf(
                 Preference.PreferenceItem.SwitchPreference(
                     preference = useExternalDownloader,
-                    title = stringResource(MR.strings.pref_use_external_downloader),
+                    title = stringResource(AYMR.strings.pref_use_external_downloader),
                 ),
                 Preference.PreferenceItem.ListPreference(
                     preference = externalDownloaderPreference,
                     entries = packageNamesMap.toPersistentMap(),
-                    title = stringResource(MR.strings.pref_external_downloader_selection),
+                    title = stringResource(AYMR.strings.pref_external_downloader_selection),
                 ),
             ),
         )
@@ -395,7 +395,7 @@ object SettingsDownloadScreen : SearchableSettings {
     ) {
         AlertDialog(
             onDismissRequest = onDismissRequest,
-            title = { Text(stringResource(MR.strings.download_speed_limit)) },
+            title = { Text(stringResource(AYMR.strings.download_speed_limit)) },
             text = {
                 Column {
                     Row(
@@ -406,7 +406,7 @@ object SettingsDownloadScreen : SearchableSettings {
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
                         OutlinedNumericChooser(
-                            label = stringResource(MR.strings.download_speed_limit),
+                            label = stringResource(AYMR.strings.download_speed_limit),
                             placeholder = "0",
                             suffix = "KiB/s",
                             value = initialValue,
@@ -415,7 +415,7 @@ object SettingsDownloadScreen : SearchableSettings {
                             onValueChanged = onValueChanged,
                         )
                     }
-                    Text(text = stringResource(MR.strings.download_speed_limit_hint))
+                    Text(text = stringResource(AYMR.strings.download_speed_limit_hint))
                 }
             },
             dismissButton = {

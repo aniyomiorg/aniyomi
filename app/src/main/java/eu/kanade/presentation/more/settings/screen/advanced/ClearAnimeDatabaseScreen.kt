@@ -104,7 +104,7 @@ class ClearAnimeDatabaseScreen : Screen() {
                 Scaffold(
                     topBar = { scrollBehavior ->
                         AppBar(
-                            title = stringResource(MR.strings.pref_clear_anime_database),
+                            title = stringResource(AYMR.strings.pref_clear_anime_database),
                             navigateUp = navigator::pop,
                             actions = {
                                 if (s.items.isNotEmpty()) {

@@ -246,7 +246,7 @@ data object DownloadsTab : Tab {
                             onClick = { scope.launch { state.animateScrollToPage(0) } },
                             text = {
                                 TabText(
-                                    text = stringResource(MR.strings.label_anime),
+                                    text = stringResource(AYMR.strings.label_anime),
                                     badgeCount = animeDownloadCount,
                                 )
                             },
@@ -331,7 +331,7 @@ data object DownloadsTab : Tab {
                 NestedMenuItem(
                     text = {
                         Text(
-                            text = stringResource(MR.strings.action_order_by_episode_number),
+                            text = stringResource(AYMR.strings.action_order_by_episode_number),
                         )
                     },
                     children = { closeMenu ->

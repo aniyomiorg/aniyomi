@@ -122,7 +122,7 @@ fun MoreScreen(
             }
             item {
                 TextPreferenceWidget(
-                    title = stringResource(MR.strings.general_categories),
+                    title = stringResource(AYMR.strings.general_categories),
                     icon = Icons.AutoMirrored.Outlined.Label,
                     onPreferenceClick = onClickCategories,
                 )
@@ -153,7 +153,7 @@ fun MoreScreen(
             }
             item {
                 TextPreferenceWidget(
-                    title = stringResource(MR.strings.label_player_settings),
+                    title = stringResource(AYMR.strings.label_player_settings),
                     icon = Icons.Outlined.VideoSettings,
                     onPreferenceClick = onClickPlayerSettings,
                 )

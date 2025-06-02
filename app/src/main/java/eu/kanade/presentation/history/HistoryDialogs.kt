@@ -39,7 +39,7 @@ fun HistoryDeleteDialog(
                 val subtitle = if (isManga) {
                     MR.strings.dialog_with_checkbox_remove_description
                 } else {
-                    MR.strings.dialog_with_checkbox_remove_description_anime
+                    AYMR.strings.dialog_with_checkbox_remove_description_anime
                 }
                 Text(text = stringResource(subtitle))
 
@@ -47,7 +47,7 @@ fun HistoryDeleteDialog(
                     label = if (isManga) {
                         stringResource(AYMR.strings.dialog_with_checkbox_reset)
                     } else {
-                        stringResource(MR.strings.dialog_with_checkbox_reset_anime)
+                        stringResource(AYMR.strings.dialog_with_checkbox_reset_anime)
                     },
                     checked = removeEverything,
                     onCheckedChange = { removeEverything = it },

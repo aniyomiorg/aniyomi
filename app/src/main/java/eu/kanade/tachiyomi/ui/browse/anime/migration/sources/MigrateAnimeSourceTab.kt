@@ -16,6 +16,7 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrateAnimeScreen
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
@@ -26,7 +27,7 @@ fun Screen.migrateAnimeSourceTab(): TabContent {
     val state by screenModel.state.collectAsState()
 
     return TabContent(
-        titleRes = MR.strings.label_migration_anime,
+        titleRes = AYMR.strings.label_migration_anime,
         actions = persistentListOf(
             AppBar.Action(
                 title = stringResource(MR.strings.migration_help_guide),

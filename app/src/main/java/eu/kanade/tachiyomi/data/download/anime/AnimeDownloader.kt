@@ -365,7 +365,7 @@ class AnimeDownloader(
                     download.video = fetchedVideo
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)
-                    throw Exception(context.stringResource(MR.strings.video_list_empty_error))
+                    throw Exception(context.stringResource(AYMR.strings.video_list_empty_error))
                 }
             }
 

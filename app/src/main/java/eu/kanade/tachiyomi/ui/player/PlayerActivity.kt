@@ -97,6 +97,7 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -998,7 +999,7 @@ class PlayerActivity : BaseActivity() {
             when (switchMethod) {
                 null -> {
                     if (viewModel.currentAnime.value != null && !autoPlay) {
-                        launchUI { toast(MR.strings.no_next_episode) }
+                        launchUI { toast(AYMR.strings.no_next_episode) }
                     }
                     viewModel.isLoading.update { _ -> false }
                 }
@@ -1009,7 +1010,7 @@ class PlayerActivity : BaseActivity() {
                             switchMethod.hosterList.isEmpty() -> setInitialEpisodeError(
                                 PlayerViewModel.ExceptionWithStringResource(
                                     "Hoster list is empty",
-                                    MR.strings.no_hosters,
+                                    AYMR.strings.no_hosters,
                                 ),
                             )
                             else -> {
@@ -1116,7 +1117,7 @@ class PlayerActivity : BaseActivity() {
 
         val intent = uri.toShareIntent(
             context = applicationContext,
-            message = stringResource(MR.strings.share_screenshot_info, anime.title, episode.name, seconds),
+            message = stringResource(AYMR.strings.share_screenshot_info, anime.title, episode.name, seconds),
         )
         startActivity(Intent.createChooser(intent, stringResource(MR.strings.action_share)))
     }
@@ -1247,7 +1248,7 @@ class PlayerActivity : BaseActivity() {
         }.toString().padStart(2, '0')
 
         val title = stringResource(
-            MR.strings.mpv_media_title,
+            AYMR.strings.mpv_media_title,
             anime.title,
             epNumber,
             episode.name,

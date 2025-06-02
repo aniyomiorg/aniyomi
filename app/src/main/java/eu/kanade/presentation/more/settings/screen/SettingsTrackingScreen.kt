@@ -143,11 +143,11 @@ object SettingsTrackingScreen : SearchableSettings {
             ),
             Preference.PreferenceItem.SwitchPreference(
                 preference = trackPreferences.trackOnAddingToLibrary(),
-                title = stringResource(MR.strings.pref_track_on_add_library),
+                title = stringResource(AYMR.strings.pref_track_on_add_library),
             ),
             Preference.PreferenceItem.SwitchPreference(
                 preference = trackPreferences.showNextEpisodeAiringTime(),
-                title = stringResource(MR.strings.pref_show_next_episode_airing_time),
+                title = stringResource(AYMR.strings.pref_show_next_episode_airing_time),
             ),
             Preference.PreferenceItem.ListPreference(
                 preference = trackPreferences.autoUpdateTrackOnMarkRead(),

@@ -45,12 +45,12 @@ data class BackupOptions(
     companion object {
         val libraryOptions = persistentListOf(
             Entry(
-                label = MR.strings.entries,
+                label = AYMR.strings.entries,
                 getter = BackupOptions::libraryEntries,
                 setter = { options, enabled -> options.copy(libraryEntries = enabled) },
             ),
             Entry(
-                label = MR.strings.chapters_episodes,
+                label = AYMR.strings.chapters_episodes,
                 getter = BackupOptions::chapters,
                 setter = { options, enabled -> options.copy(chapters = enabled) },
                 enabled = { it.libraryEntries },
@@ -92,7 +92,7 @@ data class BackupOptions(
                 setter = { options, enabled -> options.copy(extensionRepoSettings = enabled) },
             ),
             Entry(
-                label = MR.strings.custom_button_settings,
+                label = AYMR.strings.custom_button_settings,
                 getter = BackupOptions::customButton,
                 setter = { options, enabled -> options.copy(customButton = enabled) },
             ),

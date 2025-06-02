@@ -15,6 +15,7 @@ import eu.kanade.presentation.category.components.CategoryRenameDialog
 import eu.kanade.presentation.components.TabContent
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -25,7 +26,7 @@ fun Screen.mangaCategoryTab(): TabContent {
     val state by screenModel.state.collectAsState()
 
     return TabContent(
-        titleRes = MR.strings.label_manga,
+        titleRes = AYMR.strings.label_manga,
         searchEnabled = false,
         content = { contentPadding, _ ->
             if (state is MangaCategoryScreenState.Loading) {

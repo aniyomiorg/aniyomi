@@ -260,7 +260,7 @@ private fun ColumnScope.DisplayPage(
         SliderItem(
             value = columns,
             valueRange = 0..10,
-            label = stringResource(MR.strings.pref_library_rows),
+            label = stringResource(AYMR.strings.pref_library_rows),
             valueText = if (columns > 0) {
                 columns.toString()
             } else {

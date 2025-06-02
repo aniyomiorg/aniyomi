@@ -123,8 +123,8 @@ internal class MangaDownloadNotifier(private val context: Context) {
      */
     fun onPaused() {
         with(progressNotificationBuilder) {
-            setContentTitle(context.stringResource(MR.strings.download_paused))
-            setContentText(context.stringResource(MR.strings.download_notifier_download_paused_chapters))
+            setContentTitle(context.stringResource(AYMR.strings.download_paused))
+            setContentText(context.stringResource(AYMR.strings.download_notifier_download_paused_chapters))
             setSmallIcon(R.drawable.ic_pause_24dp)
             setProgress(0, 0, false)
             setOngoing(false)

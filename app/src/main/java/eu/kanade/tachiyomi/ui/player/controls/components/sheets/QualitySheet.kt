@@ -43,6 +43,7 @@ import eu.kanade.presentation.player.components.PlayerSheet
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.Video
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
@@ -93,7 +94,7 @@ fun QualitySheet(
     ) {
         Column {
             Text(
-                text = stringResource(MR.strings.player_sheets_qualities_title),
+                text = stringResource(AYMR.strings.player_sheets_qualities_title),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(
                     top = MaterialTheme.padding.medium,
@@ -303,13 +304,13 @@ fun HosterTrack(
         when (hoster) {
             is HosterState.Idle -> {
                 Text(
-                    text = stringResource(MR.strings.player_hoster_tap_to_load),
+                    text = stringResource(AYMR.strings.player_hoster_tap_to_load),
                     modifier = Modifier.alpha(DISABLED_ALPHA),
                 )
             }
             is HosterState.Error -> {
                 Text(
-                    text = stringResource(MR.strings.player_hoster_failed),
+                    text = stringResource(AYMR.strings.player_hoster_failed),
                     modifier = Modifier.alpha(DISABLED_ALPHA),
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -325,7 +326,7 @@ fun HosterTrack(
             is HosterState.Ready -> {
                 Text(
                     text = pluralStringResource(
-                        MR.plurals.hoster_video_count,
+                        AYMR.plurals.hoster_video_count,
                         hoster.videoList.size,
                         hoster.videoList.size,
                     ),

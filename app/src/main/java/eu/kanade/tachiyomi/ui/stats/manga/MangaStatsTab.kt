@@ -11,6 +11,7 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.more.stats.MangaStatsScreenContent
 import eu.kanade.presentation.more.stats.StatsScreenState
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -25,7 +26,7 @@ fun Screen.mangaStatsTab(): TabContent {
     }
 
     return TabContent(
-        titleRes = MR.strings.label_manga,
+        titleRes = AYMR.strings.label_manga,
         content = { contentPadding, _ ->
 
             if (state is StatsScreenState.Loading) {

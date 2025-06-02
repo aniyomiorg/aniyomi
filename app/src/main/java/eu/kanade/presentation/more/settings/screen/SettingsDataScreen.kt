@@ -309,7 +309,7 @@ object SettingsDataScreen : SearchableSettings {
                 },
 
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(MR.strings.label_storage),
+                    title = stringResource(AYMR.strings.label_storage),
                     icon = Icons.Outlined.Storage,
                     onClick = {
                         navigator.push(StorageTab)
@@ -449,7 +449,7 @@ object SettingsDataScreen : SearchableSettings {
                             onCheckedChange = { typeSelected = it },
                             enabled = titleSelected,
                         )
-                        Text(text = stringResource(MR.strings.type))
+                        Text(text = stringResource(AYMR.strings.type))
                     }
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
