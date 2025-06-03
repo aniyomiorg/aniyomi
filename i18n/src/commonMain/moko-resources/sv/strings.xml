@@ -548,7 +548,6 @@
     <string name="action_move_to_top_all_for_series">Flytta serien till toppen</string>
     <string name="disabled_nav">Inaktiverad</string>
     <string name="error_saving_picture">Fel vid lagring av bild</string>
-    <string name="update_check_fdroid_migration_info">En ny version finns tillgänglig i de officiella utgåvorna. Tryck på för att lära dig hur du flyttar från inofficiella F-Droid-versioner.</string>
     <string name="empty_backup_error">Inga biblioteksposter att säkerhetskopiera</string>
     <string name="update_check_open">Öppna på GitHub</string>
     <string name="pref_clear_webview_data">Rensa data från WebView</string>
@@ -674,12 +673,10 @@
     <string name="manga_display_modified_interval_title">Ställ in för att uppdatera varje</string>
     <string name="has_results">Har resultat</string>
     <string name="label_completed_titles">Avslutade inlägg</string>
-    <string name="pref_library_columns_per_row">%d per rad</string>
     <string name="library_sync_complete">Bibliotekssynkronisering slutförd</string>
     <string name="download_cache_invalidated">Index för nedladdningar ogiltigt</string>
     <string name="label_overview_section">Översikt</string>
     <string name="delete_downloaded">Radera nedladdat</string>
-    <string name="pref_chapter_swipe">Kapitel svepning</string>
     <string name="pref_chapter_swipe_end">Svep till höger åtgärd</string>
     <string name="pref_chapter_swipe_start">Svep till vänster åtgärd</string>
     <string name="label_read_duration">Lästid</string>
@@ -695,9 +692,7 @@
     <string name="exception_unknown_host">Kunde inte nå %s</string>
     <string name="unlock_app_title">Lås upp %s</string>
     <string name="action_move_to_bottom_all_for_series">Flytta serien till botten</string>
-    <string name="action_sort_category">Sortera kategorier</string>
     <string name="notification_updating_progress">Uppdaterar biblioteket… (%s)</string>
-    <string name="sort_category_confirmation">Vill du sortera kategorierna i alfabetisk ordning\?</string>
     <string name="source_settings">Inställningar för källa</string>
     <string name="app_settings">Appinställningar</string>
     <string name="pref_relative_format">Relativa tidsstämplar</string>

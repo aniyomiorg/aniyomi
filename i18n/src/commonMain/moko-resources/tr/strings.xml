@@ -551,7 +551,6 @@
     <string name="rotation_reverse_portrait">Ters dikey</string>
     <string name="action_move_to_top_all_for_series">Seriyi en üste taşı</string>
     <string name="disabled_nav">Devre dışı</string>
-    <string name="update_check_fdroid_migration_info">Resmi yayınlardan yeni bir sürüm var. Resmi olmayan F-Droid sürümlerinden nasıl geçiş yapacağınızı öğrenmek için dokunun.</string>
     <string name="error_saving_picture">Resim kaydedilirken hata oluştu</string>
     <string name="empty_backup_error">Yedeklenecek kitaplık girdisi yok</string>
     <string name="update_check_open">GitHub\'da aç</string>
@@ -667,11 +666,9 @@
     <string name="pref_page_rotate">Geniş sayfaları sığdırmak için döndür</string>
     <string name="pref_page_rotate_invert">Döndürülen geniş sayfaların yönünü ters çevir</string>
     <string name="pref_debug_info">Hata ayıklama bilgisi</string>
-    <string name="pref_chapter_swipe">Bölüm kaydırma</string>
     <string name="pref_chapter_swipe_end">Sağa kaydırma eylemi</string>
     <string name="pref_chapter_swipe_start">Sola kaydırma eylemi</string>
     <string name="pref_double_tap_zoom">Yakınlaştırmak için iki kez dokun</string>
-    <string name="pref_library_columns_per_row">Satır başına %d</string>
     <string name="action_set_interval">Aralığı ayarla</string>
     <string name="action_filter_interval_custom">Özel güncelleme aralığı</string>
     <string name="intervals_header">Zaman aralıkları</string>
@@ -697,9 +694,7 @@
     <string name="syncing_library">Kitaplık eşitleniyor</string>
     <string name="unlock_app_title">Aç: %s</string>
     <string name="action_move_to_bottom_all_for_series">Seriyi en alta taşı</string>
-    <string name="action_sort_category">Kategorileri sırala</string>
     <string name="notification_updating_progress">Kitaplık güncelleniyor… (%s)</string>
-    <string name="sort_category_confirmation">Kategorileri alfabetik olarak sıralamak ister misiniz?</string>
     <string name="file_null_uri_error">Seçilen dosya yok</string>
     <string name="source_settings">Kaynak ayarları</string>
     <string name="app_settings">Uygulama ayarları</string>
@@ -1002,7 +997,6 @@
     <string name="wsrv">wsrv.nl</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
-    <string name="pref_episode_swipe">Bölüm kaydırma işlevi</string>
     <string name="resmush">resmush.it</string>
     <string name="theme_mocha">Mocha</string>
     <string name="action_hide">Gizle</string>

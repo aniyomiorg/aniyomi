@@ -523,7 +523,6 @@
     <string name="ext_updates_pending">Čakajúce aktualizácie</string>
     <string name="spen_next_page">Ďalšia strana</string>
     <string name="update_check_open">Otvoriť na GitHub-e</string>
-    <string name="update_check_fdroid_migration_info">Nová verzia je k dispozícii z oficiálnych vydaní. Klepnutím sa dozviete, ako migrovať z neoficiálnych vydaní F-Droid.</string>
     <string name="getting_started_guide">Príručka Začíname</string>
     <string name="notification_incognito_text">Zakázať režim inkognito</string>
     <string name="manga_info_collapse">Menej</string>
@@ -635,8 +634,6 @@
     <string name="action_filter_interval_custom">Prispôsobený interval obnovenia</string>
     <string name="action_sort_airing_time">Čas vysielania</string>
     <string name="action_update_category">Aktualizovať kategóriu</string>
-    <string name="action_sort_category">Zoradiť kategórie</string>
-    <string name="sort_category_confirmation">Chceli by ste zoradiť kategórie abecedne?</string>
     <string name="action_copy_to_clipboard">Skopírovať do schránky</string>
     <string name="action_apply">Použiť</string>
     <string name="action_ok">OK</string>

@@ -588,7 +588,6 @@
     <string name="empty_screen">Қателік пайда болды</string>
     <string name="download_notifier_downloader_title">Жүктеуіш</string>
     <string name="file_picker_error">Файл таңдайтын қолданба табылмады</string>
-    <string name="update_check_fdroid_migration_info">Жаңа нұсқа Aniyomi сайтында қолжетімді. F-Droid қолданбасының бейресми нұсқасынан көшуді білу үшін басыңыз.</string>
     <string name="complete_list">Оқылғандар Тізімі</string>
     <string name="on_hold_list">Тоқтап тұрғандар Тізімі</string>
     <string name="no_next_chapter">Келісі тарау табылмады</string>
@@ -703,7 +702,6 @@
     <string name="pref_library_update_smart_update">Ақылды жаңарту</string>
     <string name="not_selected">Таңдалмаған</string>
     <string name="action_bar_up_description">Жоғары</string>
-    <string name="sort_category_confirmation">Санаттарды әліпби бойынша сұрыптағыңыз келе ме?</string>
     <string name="action_apply">Қолдану</string>
     <string name="onboarding_description">Алдымен біраз нәрсені реттеп шығайық. Оларды кейінірек баптауда әрқашан өзгерте аласыз.</string>
     <string name="onboarding_action_next">Келесі</string>
@@ -730,7 +728,6 @@
     <string name="onboarding_guides_returning_user">%s қолданбасын қайта орнатып жатсыз ба?</string>
     <string name="theme_nord">Солтүстік</string>
     <string name="theme_sapphire">Жақұт</string>
-    <string name="pref_library_columns_per_row">Әр қатарға %d</string>
     <string name="ext_permission_install_apps_warning">Қолданба орнатуға рұқсат керек. Рұқсатты беру үшін мұнда басыңыз.</string>
     <string name="label_upcoming">Жақында шығады</string>
     <string name="confirm_exit">Шығу үшін тағы да артқа басыңыз</string>
@@ -744,7 +741,6 @@
     <string name="pref_update_only_in_release_period">Келесі жаңарту уақытын болжау</string>
     <string name="selected">Таңдалған</string>
     <string name="action_sort_airing_time">Шыққан уақыты</string>
-    <string name="action_sort_category">Санаттарды сұрыптау</string>
     <string name="action_reorganize_by">Қайта реттеу</string>
     <string name="action_menu_overflow_description">Тағы параметр</string>
     <string name="label_data_storage">Дерек пен жад</string>

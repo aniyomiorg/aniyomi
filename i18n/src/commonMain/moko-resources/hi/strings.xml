@@ -559,7 +559,6 @@
     <string name="pref_clear_webview_data">WebView डाटा साफ करें</string>
     <string name="download_notifier_split_page_path_not_found">चित्र %d का फ़ाइल पथ नहीं खोजा जा सका</string>
     <string name="empty_backup_error">बैकअप करने के लिए कोई पुस्तकालय प्रविष्टि नहीं</string>
-    <string name="update_check_fdroid_migration_info">एक नया संस्करण आधिकारिक रिलीज के द्वारा उपलब्ध है। अनौपचारिक F-Droid रिलीज से माइग्रेट करने का तरीका जानने के लिए यह टैप करें ।</string>
     <string name="ext_info_version">संस्करण</string>
     <string name="ext_info_language">भाषा</string>
     <string name="ext_info_age_rating">आयु रेटिंग</string>
@@ -623,7 +622,6 @@
     <string name="action_filter_interval_custom">अनुकूलित लाने का अंतराल</string>
     <string name="intervals_header">अंतराल</string>
     <string name="pref_chapter_swipe_end">दाईं ओर स्वाइप करने पर</string>
-    <string name="pref_chapter_swipe">अध्याय स्वाइप</string>
     <string name="action_sort_next_updated">अगला अपेक्षित अपडेट</string>
     <string name="pref_debug_info">डीबग जानकारी</string>
     <string name="pref_advanced_summary">डंप क्रैश लॉग, बैटरी अनुकूलन</string>

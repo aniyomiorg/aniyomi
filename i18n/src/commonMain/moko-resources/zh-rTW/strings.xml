@@ -554,7 +554,6 @@
     <string name="empty_backup_error">媒體櫃中尚無作品可供備份</string>
     <string name="update_check_open">在 GitHub 上檢視</string>
     <string name="error_saving_picture">儲存圖片錯誤</string>
-    <string name="update_check_fdroid_migration_info">新版本已正式推出。輕觸以瞭解如何從非官方的 F-Droid 版遷移至官方發行版。</string>
     <string name="pref_clear_webview_data">清除 WebView 資料</string>
     <string name="webview_data_deleted">已清除 WebView 資料</string>
     <string name="action_close">關閉</string>
@@ -672,8 +671,6 @@
     <string name="pref_chapter_swipe_start">向左滑動</string>
     <string name="pref_double_tap_zoom">輕觸兩下以縮放</string>
     <string name="pref_chapter_swipe_end">向右滑動</string>
-    <string name="pref_chapter_swipe">目錄滑動動作</string>
-    <string name="pref_library_columns_per_row">每列 %d 欄</string>
     <string name="action_ok">確定</string>
     <string name="delete_downloaded">刪除舊有下載章節</string>
     <string name="track_delete_title">移除「%s」歷程平台？</string>
@@ -702,9 +699,7 @@
     <string name="pref_relative_format">相對時間戳記</string>
     <string name="pref_relative_format_summary">以「%1$s」表示「%2$s」</string>
     <string name="app_settings">應用程式設定</string>
-    <string name="action_sort_category">排序類別</string>
     <string name="notification_updating_progress">正在更新媒體櫃… (%s)</string>
-    <string name="sort_category_confirmation">欲依照字母順序排列類別嗎？</string>
     <string name="source_settings">來源設定</string>
     <string name="file_null_uri_error">未選擇檔案</string>
     <string name="relative_time_span_never">永不</string>
@@ -1009,7 +1004,6 @@
     <string name="enable_volume_brightness_gestures">啟用音量和亮度手勢</string>
     <string name="enable_horizontal_seek_gesture">啟用水平定位手勢</string>
     <string name="episode_settings">劇集設定</string>
-    <string name="pref_episode_swipe">劇集滑動</string>
     <string name="pref_episode_swipe_start">向左滑動操作</string>
     <string name="settings">設置</string>
     <string name="copied_video_link_to_clipboard">已將影片品質連結複製到剪貼簿</string>

@@ -555,7 +555,6 @@
     <string name="rotation_reverse_portrait">En vertical, al revés</string>
     <string name="action_move_to_top_all_for_series">Mover al primer puesto</string>
     <string name="disabled_nav">Desactivado</string>
-    <string name="update_check_fdroid_migration_info">Hay una actualización disponible en la página oficial. Toca para aprender a migrar desde una versión no oficial de F-Droid.</string>
     <string name="error_saving_picture">No se ha podido guardar la imagen</string>
     <string name="empty_backup_error">No hay ningún elemento en la biblioteca que respaldar</string>
     <string name="update_check_open">Abrir en GitHub</string>
@@ -674,11 +673,9 @@
     <string name="pref_page_rotate">Girar las páginas anchas para adaptarlas a la pantalla</string>
     <string name="pref_page_rotate_invert">Girar las páginas anchas en la dirección opuesta</string>
     <string name="pref_debug_info">Información de depuración</string>
-    <string name="pref_chapter_swipe">Deslizamiento de dedo en capítulos</string>
     <string name="pref_chapter_swipe_start">Deslizar a la izquierda</string>
     <string name="pref_chapter_swipe_end">Deslizar a la derecha</string>
     <string name="pref_double_tap_zoom">Ampliar tocando dos veces la pantalla</string>
-    <string name="pref_library_columns_per_row">%d por fila</string>
     <string name="action_sort_next_updated">Próxima actualización prevista</string>
     <string name="pref_update_only_in_release_period">Intentar predecir cuándo sale el siguiente número</string>
     <string name="intervals_header">Intervalos</string>
@@ -709,8 +706,6 @@
     <string name="notification_updating_progress">Actualizando biblioteca… (%s)</string>
     <string name="source_settings">Ajustes de la fuente</string>
     <string name="app_settings">Ajustes de la aplicación</string>
-    <string name="action_sort_category">Ordenar categorías</string>
-    <string name="sort_category_confirmation">¿Quieres ordenar las categorías alfabéticamente?</string>
     <string name="file_null_uri_error">No has elegido ningún archivo</string>
     <string name="relative_time_span_never">Nunca</string>
     <string name="pref_flash_page_summ">Esta transición minimiza las manchas y el efecto de retención de imagen en pantallas de tinta electrónica</string>
@@ -983,7 +978,6 @@
     <string name="copied_video_link_to_clipboard">Enlace de calidad del video copiado al portapapeles</string>
     <string name="choose_video_quality">Elige la calidad del vídeo:</string>
     <string name="extension_settings">Configuración de las extensiones</string>
-    <string name="pref_episode_swipe">Pasar episodio</string>
     <string name="pref_episode_swipe_end">Deslizar a la derecha</string>
     <string name="data_saver_exclude">Excluir del protector de datos</string>
     <string name="pref_episode_swipe_start">Deslizar a la izquierda</string>

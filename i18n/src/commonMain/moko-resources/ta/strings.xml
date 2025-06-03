@@ -65,7 +65,6 @@
     <string name="choose_video_quality">வீடியோ தரத்தைத் தேர்வுசெய்க:</string>
     <string name="extension_settings">நீட்டிப்பு அமைப்புகள்</string>
     <string name="theme_cottoncandy">பருத்தி மிட்டாய்</string>
-    <string name="pref_episode_swipe">எபிசோட் ச்வைப்</string>
     <string name="pref_episode_swipe_end">சரியான செயலுக்கு ச்வைப் செய்யுங்கள்</string>
     <string name="pref_episode_swipe_start">இடது செயலுக்கு ச்வைப் செய்யவும்</string>
     <string name="pref_category_hide_hidden">வகைகள் மற்றும் சேமிப்பக திரையில் இருந்து மறைக்கப்பட்ட வகைகளை மறைக்கவும்</string>
@@ -176,8 +175,6 @@
     <string name="action_move_category">வகைகளை அமைக்கவும்</string>
     <string name="delete_category_confirmation">\"%s\" என்ற வகையை நீக்க விரும்புகிறீர்களா?</string>
     <string name="delete_category">வகையை நீக்கு</string>
-    <string name="action_sort_category">வகைகளை வரிசைப்படுத்துங்கள்</string>
-    <string name="sort_category_confirmation">வகைகளை அகர வரிசைப்படி வரிசைப்படுத்த விரும்புகிறீர்களா?</string>
     <string name="action_edit_cover">கவர் திருத்து</string>
     <string name="action_view_chapters">அத்தியாயங்களைக் காண்க</string>
     <string name="action_pause">இடைநிறுத்தம்</string>
@@ -388,7 +385,6 @@
     <string name="relative_time_today">இன்று</string>
     <string name="pref_category_display">காட்சி</string>
     <string name="pref_library_columns">கட்டம் அளவு</string>
-    <string name="pref_library_columns_per_row">ஒரு வரிசையில் %d</string>
     <string name="portrait">உருவப்படம்</string>
     <string name="landscape">நிலப்பரப்பு</string>
     <string name="pref_category_library_update">உலகளாவிய புதுப்பிப்பு</string>
@@ -418,7 +414,6 @@
     <string name="none">எதுவுமில்லை</string>
     <string name="include">அடங்கும்: %s</string>
     <string name="exclude">விலக்கு: %s</string>
-    <string name="pref_chapter_swipe">அத்தியாயம் ச்வைப்</string>
     <string name="pref_chapter_swipe_end">சரியான செயலுக்கு ச்வைப் செய்யுங்கள்</string>
     <string name="pref_chapter_swipe_start">இடது செயலுக்கு ச்வைப் செய்யவும்</string>
     <string name="multi_lang">பல</string>
@@ -909,7 +904,6 @@
     <string name="update_check_notification_download_complete">புதுப்பிப்பை நிறுவ தட்டவும்</string>
     <string name="update_check_notification_download_error">பிழையைப் பதிவிறக்கவும்</string>
     <string name="update_check_notification_update_available">புதிய பதிப்பு கிடைக்கிறது!</string>
-    <string name="update_check_fdroid_migration_info">அதிகாரப்பூர்வ வெளியீடுகளிலிருந்து புதிய பதிப்பு கிடைக்கிறது. அதிகாரப்பூர்வமற்ற எஃப்-டிராய்டு வெளியீடுகளிலிருந்து எவ்வாறு குடியேறுவது என்பதை அறிய தட்டவும்.</string>
     <string name="information_no_downloads">பதிவிறக்கங்கள் இல்லை</string>
     <string name="information_no_recent">அண்மைக் கால புதுப்பிப்புகள் இல்லை</string>
     <string name="information_no_recent_manga">அண்மைக் காலத்தில் எதுவும் படிக்கவில்லை</string>

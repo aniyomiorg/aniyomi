@@ -555,7 +555,6 @@
     <string name="action_move_to_top_all_for_series">Serie nach oben verschieben</string>
     <string name="disabled_nav">Deaktiviert</string>
     <string name="error_saving_picture">Fehler beim Speichern des Bildes</string>
-    <string name="update_check_fdroid_migration_info">Eine neue Version ist aus dem offiziellen Repository verfügbar. Tippe, um zu erfahren, wie man aus inoffiziellen F-Droid-Versionen migriert.</string>
     <string name="empty_backup_error">Keine zu sichernden Bibliothekseinträge verfügbar</string>
     <string name="update_check_open">Auf GitHub öffnen</string>
     <string name="pref_clear_webview_data">WebView-Daten löschen</string>
@@ -672,11 +671,9 @@
     <string name="pref_page_rotate">Breite Seiten drehen, damit sie passen</string>
     <string name="pref_page_rotate_invert">Ausrichtung gedrehter breiter Seiten spiegeln</string>
     <string name="pref_debug_info">Debug-Info</string>
-    <string name="pref_chapter_swipe">Kapitelaktionen</string>
     <string name="pref_chapter_swipe_end">Aktion beim Streichen nach rechts</string>
     <string name="pref_chapter_swipe_start">Aktion beim Streichen nach links</string>
     <string name="pref_double_tap_zoom">Zum Zoomen doppeltippen</string>
-    <string name="pref_library_columns_per_row">%d pro Zeile</string>
     <string name="intervals_header">Intervalle</string>
     <string name="action_filter_interval_custom">Benutzerdefiniertes Abrufintervall</string>
     <string name="action_set_interval">Intervall einstellen</string>
@@ -707,8 +704,6 @@
     <string name="app_settings">App-Einstellungen</string>
     <string name="source_settings">Quelleneinstellungen</string>
     <string name="notification_updating_progress">Bibliothek wird aktualisiert… (%s)</string>
-    <string name="action_sort_category">Kategorien sortieren</string>
-    <string name="sort_category_confirmation">Möchtest du die Kategorien alphabetisch sortieren\?</string>
     <string name="file_null_uri_error">Keine Datei ausgewählt</string>
     <string name="relative_time_span_never">Nie</string>
     <string name="pref_flash_page_summ">Reduziert Ghosting auf E-Papier-Displays</string>
@@ -999,7 +994,6 @@
     <string name="pref_reset_mpv_conf">MPV-Konfigurationsdatei zurücksetzen</string>
     <string name="data_saver_downloader">Datensparer im Downloader verwenden</string>
     <string name="data_saver_image_quality">Bildqualität</string>
-    <string name="pref_episode_swipe">Folgenaktionen</string>
     <string name="pref_anime_storage_usage">Anime-Speicherverbrauch</string>
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_hero">Bandwidth Hero (erfordert einen Bandwidth Hero Proxy-Server)</string>

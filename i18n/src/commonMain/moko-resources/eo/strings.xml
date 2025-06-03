@@ -460,8 +460,6 @@
     <string name="action_revert_to_default">Restarigi al defaŭltaj</string>
     <string name="action_close">Fermi</string>
     <string name="action_ok">Bone</string>
-    <string name="action_sort_category">Ordigi kategoriojn</string>
-    <string name="sort_category_confirmation">Ĉu vi volas ordigi la kategoriojn alfabete?</string>
     <string name="action_remove_everything">Forigi ĉiojn</string>
     <string name="onboarding_heading">Bonvenon!</string>
     <string name="onboarding_action_skip">Preterpasi</string>

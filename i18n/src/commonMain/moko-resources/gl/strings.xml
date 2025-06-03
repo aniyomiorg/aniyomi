@@ -510,7 +510,6 @@
     <string name="chapter_downloading_progress">Baixando (%1$d/%2$d)</string>
     <string name="download_unread">Non lidos</string>
     <string name="track_remove_start_date_conf_text">Isto eliminará a data de comezo seleccionada de %s</string>
-    <string name="update_check_fdroid_migration_info">Está dispoñible unha nova versión oficial. Preme para saber como migrar das versións non oficiais de F-Droid.</string>
     <string name="spen_next_page">Páxina seguinte</string>
     <string name="migrate">Migrar</string>
     <string name="manga_removed_library">Eliminado da biblioteca</string>
@@ -665,10 +664,8 @@
     <string name="pref_page_rotate">Xirar as páxinas anchas para adaptalas á pantalla</string>
     <string name="pref_page_rotate_invert">Voltear a orientación das páxinas anchas xiradas</string>
     <string name="overlay_header">Superposición</string>
-    <string name="pref_library_columns_per_row">%d por fila</string>
     <string name="pref_chapter_swipe_start">Acción de arrastrar á esquerda</string>
     <string name="pref_double_tap_zoom">Amplía dando dous toques na pantalla</string>
-    <string name="pref_chapter_swipe">Arrastre de capítulo</string>
     <string name="pref_chapter_swipe_end">Acción de arrastrar á dereita</string>
     <string name="pref_debug_info">Información de depuración</string>
     <string name="manga_categories">Categorías</string>

@@ -546,7 +546,6 @@
     <string name="action_move_to_top_all_for_series">Déplacer la série vers le haut</string>
     <string name="disabled_nav">Désactivé</string>
     <string name="error_saving_picture">Erreur d\'enregistrement de l\'image</string>
-    <string name="update_check_fdroid_migration_info">Une nouvelle version est disponible à partir des versions officielles. Appuyez pour apprendre comment migrer depuis les versions non officielles de F-Droid.</string>
     <string name="empty_backup_error">Aucune entrée de bibliothèque à sauvegarder</string>
     <string name="update_check_open">Ouvrir sur GitHub</string>
     <string name="pref_clear_webview_data">Effacer les données WebView</string>
@@ -664,8 +663,6 @@
     <string name="pref_page_rotate">Tourner les pages larges pour qu\'elles rentrent</string>
     <string name="pref_debug_info">Informations de débogage</string>
     <string name="pref_chapter_swipe_start">Action de glisser à gauche</string>
-    <string name="pref_library_columns_per_row">%d par ligne</string>
-    <string name="pref_chapter_swipe">Glissement de chapitre</string>
     <string name="pref_chapter_swipe_end">Action de glisser à droite</string>
     <string name="pref_double_tap_zoom">Appuyez deux fois pour zoomer</string>
     <string name="action_sort_next_updated">Prochaine mise à jour prévue</string>
@@ -692,7 +689,6 @@
     <string name="delete_downloaded">Supprimer le(s) téléchargement(s)</string>
     <string name="action_apply">Appliquer</string>
     <string name="action_revert_to_default">Réintialiser les valeurs par défaut</string>
-    <string name="action_sort_category">Trier les catégories</string>
     <string name="action_menu_overflow_description">Plus d\'options</string>
     <string name="selected">Sélectionné</string>
     <string name="not_selected">Pas sélectionné(e)</string>
@@ -701,7 +697,6 @@
     <string name="action_bar_up_description">Naviguer vers le haut</string>
     <string name="action_sort_tracker_score">Score du service de suivi</string>
     <string name="label_data_storage">Données et stockage</string>
-    <string name="sort_category_confirmation">Voulez-vous trier les catégories par ordre alphabétique ?</string>
     <string name="track_activity_name">Se connecter au service de suivi</string>
     <string name="pref_relative_format_summary">« %1$s » au lieu de « %2$s »</string>
     <string name="pref_storage_location">Emplacement de stockage</string>
@@ -941,7 +936,6 @@
     <string name="pref_enable_auto_skip_ani_skip">Activer le passage d\'intro automatique</string>
     <string name="label_storage">Stockage</string>
     <string name="choose_video_quality">Choisir la qualité de la vidéo :</string>
-    <string name="pref_episode_swipe">Balayage d\'épisode</string>
     <string name="pref_episode_swipe_end">Action balayée vers la droite</string>
     <string name="pref_episode_swipe_start">Action balayée vers la gauche</string>
     <string name="pref_category_hide_hidden">Masquer les catégories cachées de l\'écran des catégories et du stockage</string>
