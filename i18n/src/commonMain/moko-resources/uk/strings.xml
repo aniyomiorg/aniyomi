@@ -70,7 +70,7 @@
     <string name="pref_category_tracking">Відстеження</string>
     <string name="pref_category_advanced">Додатково</string>
     <string name="pref_category_about">Інформація</string>
-    <string name="pref_library_columns">Розмір сітки</string>
+    <string name="pref_library_columns">Елементи в рядку</string>
     <string name="portrait">Портретна</string>
     <string name="landscape">Альбомна</string>
     <string name="pref_library_update_interval">Автоматичне оновлення</string>
@@ -135,10 +135,10 @@
     <string name="rotation_free">Вільна</string>
     <string name="rotation_force_portrait">Заблокована портретна</string>
     <string name="rotation_force_landscape">Заблокована альбомна</string>
-    <string name="color_filter_r_value">R</string>
-    <string name="color_filter_g_value">G</string>
-    <string name="color_filter_b_value">B</string>
-    <string name="color_filter_a_value">A</string>
+    <string name="color_filter_r_value">Червоний</string>
+    <string name="color_filter_g_value">Зелений</string>
+    <string name="color_filter_b_value">Синій</string>
+    <string name="color_filter_a_value">Альфа</string>
     <string name="pref_remove_after_marked_as_read">Після того, як було відмічено прочитаним вручну</string>
     <string name="pref_remove_after_read">Автоматично видаляти після прочитання</string>
     <string name="disabled">Вимкнено</string>
@@ -354,7 +354,7 @@
     <string name="restore_in_progress">Відновлення вже відбувається</string>
     <string name="creating_backup_error">Резервне копіювання не вдалося</string>
     <string name="backup_in_progress">Резервне копіювання вже виконується</string>
-    <string name="restore_duration">%02d хв, %02d сек</string>
+    <string name="restore_duration">%1$02d хв, %2$02d сек</string>
     <string name="backup_restore_missing_sources">Відсутні джерела:</string>
     <string name="invalid_backup_file_missing_manga">У резервній копії не міститься жодного запису бібліотеки.</string>
     <string name="invalid_backup_file">Недійсний файл резервної копії:</string>
@@ -472,7 +472,7 @@
     <string name="chapter_not_found">Розділ не знайдено</string>
     <string name="tracking_guide">Посібник з відстежень</string>
     <string name="off">Вимкнено</string>
-    <string name="on">Увімкнено</string>
+    <string name="on">Увімк</string>
     <string name="categorized_display_settings">Налаштування сортування для кожної категорії</string>
     <string name="restrictions">Обмеження: %s</string>
     <string name="action_display_local_badge">Локальне джерело</string>
@@ -520,7 +520,7 @@
     <string name="notification_size_warning">Попередження: великі оновлення можуть призвести до сповільнення джерел або збільшити використання батареї. Тицьніть задля подробиць.</string>
     <string name="channel_app_updates">Оновлення застосунку</string>
     <string name="ext_update_all">Оновити все</string>
-    <string name="backup_info">Слід зберігати дублікати резервних копій і в інших місцях.</string>
+    <string name="backup_info">Вам також слід зберігати копії резервних копій в інших місцях. Резервні копії можуть містити конфіденційні дані, зокрема будь-які збережені паролі; будьте обережні, якщо ділитеся ними.</string>
     <string name="label_warning">Попередження</string>
     <string name="action_display_language_badge">Мова</string>
     <string name="update_72hour">Що 3 дні</string>
@@ -664,8 +664,8 @@
     <string name="pref_page_rotate">Повернути широкі за розміром сторінки</string>
     <string name="pref_page_rotate_invert">Перевернути орієнтацію обернутих широких сторінок</string>
     <string name="pref_debug_info">Інформація для відлагодження</string>
-    <string name="pref_chapter_swipe_end">Проведіть пальцем праворуч</string>
-    <string name="pref_chapter_swipe_start">Проведіть пальцем ліворуч</string>
+    <string name="pref_chapter_swipe_end">Розділ про свайп праворуч</string>
+    <string name="pref_chapter_swipe_start">Розділ про свайп ліворуч</string>
     <string name="pref_double_tap_zoom">Двічі торкніться, щоб збільшити</string>
     <string name="action_set_interval">Встановити інтервал</string>
     <string name="manga_display_interval_title">Оцініть кожну</string>
@@ -825,7 +825,7 @@
     <string name="action_global_manga_search">Глобальний пошук манґи</string>
     <string name="pref_search_pinned_anime_sources_only">У глобальному пошуку шукайте лише закріплені джерела аніме</string>
     <string name="rotation_sensor_portrait">Вертикальне зображення</string>
-    <string name="pref_category_player_seeking">Пошук</string>
+    <string name="pref_category_player_seeking">Шукаю</string>
     <string name="pref_category_pip">Картинка в картинці (PiP)</string>
     <string name="pref_enable_pip">Ввімкнути використання режиму PiP</string>
     <string name="not_interesting">Не цікаво</string>
@@ -928,8 +928,8 @@
     <string name="data_saver_image_format_summary_off">Розмір файлу Jpeg значно менший, ніж Webp (тобто зберігається більше даних), але це також робить зображення якіснішими.
 \nВ даний час стискає Webp</string>
     <string name="data_saver_image_quality_summary">Більші значення означають, що зберігається більший відсоток якості зображення, але це також означає, що розмір файлу більший, 80 відсотків — хороша середина між розміром файлу та якістю зображення</string>
-    <string name="pref_episode_swipe_end">Проведіть пальцем праворуч</string>
-    <string name="pref_episode_swipe_start">Проведіть пальцем ліворуч</string>
+    <string name="pref_episode_swipe_end">Епізод при проведенні пальцем праворуч</string>
+    <string name="pref_episode_swipe_start">Епізод при проведенні пальцем праворуч</string>
     <string name="data_saver">Зберігач даних</string>
     <string name="data_saver_summary">Стисніть зображення перед завантаженням або завантаженням у читачі</string>
     <string name="data_saver_ignore_gif">Ігнорувати Gif анімації</string>
@@ -1282,4 +1282,27 @@
     <string name="pref_player_editor_script_opts">Параметри скриптів</string>
     <string name="editor_unsaved_progress">У вас є незбережені зміни. Ви все ще хочете повернутися?</string>
     <string name="editor_create_error">Не вдалося створити файл</string>
+    <string name="pref_behavior">Поведінка розділу</string>
+    <string name="pref_mark_duplicate_read_chapter_read_new">Після отримання нового розділу</string>
+    <string name="pref_hardware_bitmap_threshold">Поріг власного апаратного растрового зображення</string>
+    <string name="pref_hardware_bitmap_threshold_default">За замовчуванням (%d)</string>
+    <string name="pref_hardware_bitmap_threshold_summary">Якщо зчитувач завантажує порожнє зображення, поступово зменште поріг.\nВибрано: %s</string>
+    <string name="pref_always_decode_long_strip_with_ssiv_2">Використовуйте застарілий декодер для зчитування довгих смуг</string>
+    <string name="action_toggle_private_off">Відстежувати публічно</string>
+    <string name="export">Експорт</string>
+    <string name="library_exported">Бібліотеку експортовано</string>
+    <string name="pref_behavior_episode">Поведінка епізоду</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_existing">Після перегляду епізоду</string>
+    <string name="action_toggle_private_on">Відстежувати конфіденційно</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_new">Після отримання нового епізоду</string>
+    <string name="artist">Художник</string>
+    <string name="pref_incognito_mode_extension_summary">Призупинити читання історії для розширення</string>
+    <string name="library_list">Список бібліотек</string>
+    <string name="pref_mark_duplicate_read_chapter_read_existing">Після прочитання розділу</string>
+    <string name="pref_always_decode_long_strip_with_ssiv_summary">Впливає на продуктивність. Увімкніть, лише якщо зменшення порогу растрового зображення не вирішує проблеми з порожнім зображенням</string>
+    <string name="author">Автор</string>
+    <string name="type">Тип</string>
+    <string name="tracked_privately">Відстежується конфіденційно</string>
+    <string name="pref_mark_duplicate_read_chapter_read">Позначити дублікат прочитаного розділу як прочитаний</string>
+    <string name="pref_mark_duplicate_seen_episode_seen">Позначити дублікат переглянутого епізоду як переглянуте</string>
 </resources>
