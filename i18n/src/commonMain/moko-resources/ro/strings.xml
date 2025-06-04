@@ -574,7 +574,6 @@
     <string name="notification_size_warning">Actualizări mari dăunează surselor și pot duce la actualizări mai lente și creșterea nivelului de utilizare a bateriei. Apasă pentru a afla mai multe.</string>
     <string name="label_background_activity">Activități în fundal</string>
     <string name="update_check_open">Deschide pe GitHub</string>
-    <string name="update_check_fdroid_migration_info">O versiune nouă este disponibilă ca release oficial. Apasă pentru a învăța cum să migrezi de la release-urile neoficiale F-Droid.</string>
     <string name="not_installed">Nu este instalat</string>
     <string name="action_sort_count">Total intrări</string>
     <string name="action_search_hint">Caută…</string>
@@ -668,7 +667,6 @@
     <string name="information_cloudflare_help">Atinge aici pentru ajutor cu Cloudflare</string>
     <string name="action_create">Creați</string>
     <string name="relative_time_span_never">Niciodată</string>
-    <string name="pref_library_columns_per_row">%d pe rând</string>
     <string name="pref_flash_page_summ">Reduceți imaginile fantomă pe ecranele e-ink</string>
     <string name="action_copy_to_clipboard">Copiați în clipboard</string>
     <string name="pref_page_rotate">Rotiți paginile late pentru a se potrivi</string>
@@ -679,7 +677,6 @@
     <string name="create_backup_file_error">Copia de rezervă nu a putut fi creată</string>
     <string name="intervals_header">Intervale</string>
     <string name="action_revert_to_default">Reveniți la implicit</string>
-    <string name="action_sort_category">Sortează categoriile</string>
     <string name="action_update_category">Actualizați categoria</string>
     <string name="action_menu_overflow_description">Mai multe opțiuni</string>
     <string name="library_sync_complete">Sincronizare bibliotecă completă</string>
@@ -696,7 +693,6 @@
     <string name="download_cache_invalidated">Indexul de descărcări a fost invalidat</string>
     <string name="action_bar_up_description">Navighează în sus</string>
     <string name="action_sort_tracker_score">Scorul tracker-ului</string>
-    <string name="sort_category_confirmation">Ați dori să sortați categoriile alfabetic?</string>
     <string name="skipped_reason_not_in_release_period">Sărit peste deoarece nici o lansare nu era așteptată astăzi</string>
     <string name="file_null_uri_error">Nici o filă selectată</string>
     <string name="track_delete_title">Eliminați monitorizarea %s?</string>
@@ -718,7 +714,6 @@
     <string name="exception_unknown_host">Nu a putut fi accesat %s</string>
     <string name="label_tracked_titles">Înregistrări monitorizate</string>
     <string name="exclude_scanlators">Exclude scanlator</string>
-    <string name="pref_chapter_swipe">Glisare capitol</string>
     <string name="manga_categories">Categorii</string>
     <string name="action_sort_last_manga_update">Ultima actualizare manga</string>
     <string name="action_show_manga">Afișați manga</string>

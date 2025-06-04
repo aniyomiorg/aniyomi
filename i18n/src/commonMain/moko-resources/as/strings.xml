@@ -114,8 +114,6 @@
     <string name="action_move_category">শ্ৰেণীসমূহ স্থাপন কৰক</string>
     <string name="delete_category_confirmation">আপুনি \" %s\" শ্ৰেণী আঁতৰাব বিচাৰে নেকি?</string>
     <string name="delete_category">শ্ৰেণী আঁতৰাওক</string>
-    <string name="action_sort_category">শ্ৰেণীসমূহ চাবি অনুযায়ী বাছনি কৰক</string>
-    <string name="sort_category_confirmation">আপুনি শ্ৰেণীসমূহ বৰ্ণানুক্ৰমে বাছনি কৰিব বিচাৰে নেকি?</string>
     <string name="action_edit_cover">ক\'ভাৰ সম্পাদনা কৰক</string>
     <string name="action_view_chapters">অধ্যায়সমূহ চাওক</string>
     <string name="action_pause">বিৰতি</string>
@@ -252,7 +250,6 @@
     <string name="relative_time_today">আজি</string>
     <string name="pref_category_display">প্ৰদৰ্শন</string>
     <string name="pref_library_columns">গ্ৰিডৰ মাপ</string>
-    <string name="pref_library_columns_per_row">%d খন এক শাৰী</string>
     <string name="portrait">উল্লম্ব</string>
     <string name="landscape">আনুভূমিক</string>
     <string name="update_72hour">প্ৰতি ৩ দিন</string>
@@ -282,7 +279,6 @@
     <string name="include">অন্তৰ্ভুক্ত কৰক: %s</string>
     <string name="pref_update_only_in_release_period">পৰৱৰ্তী মুক্তিৰ সময় অনুমান কৰক</string>
     <string name="exclude">বিৰত কৰক: %s</string>
-    <string name="pref_chapter_swipe">অধ্যায় সুৱাইক</string>
     <string name="pref_chapter_swipe_end">ডাঙৰ ঠেলাৰ কাৰ্য</string>
     <string name="ext_update_all">সকলো আপডেট কৰক</string>
     <string name="ext_obsolete">অপ্ৰচলিত</string>
@@ -761,7 +757,6 @@
     <string name="update_check_notification_download_in_progress">ডাউনলোড হৈছে…</string>
     <string name="update_check_notification_download_complete">আপডেট ইনষ্টল কৰিবলৈ টেপ কৰক</string>
     <string name="update_check_notification_update_available">নতুন সংস্কৰণ উপলব্ধ!</string>
-    <string name="update_check_fdroid_migration_info">অৱিচাৰিত F-Droid মুক্তিসমূহৰ পৰা স্থানান্তৰ কৰিবলৈ কেনেকৈ জানিবলৈ, দয়া কৰি নতুন সংস্কৰণৰ বিষয়ে জানিবলৈ টেপ কৰক।</string>
     <string name="information_no_downloads">কোনো ডাউনলোড নাই</string>
     <string name="information_no_recent">নতুন কোনো আপডেট নাই</string>
     <string name="information_no_recent_manga">সাম্প্ৰতিকভাৱে পঢ়া কিছু নাই</string>
@@ -1025,7 +1020,6 @@
     <string name="theme_cottoncandy">কটন কেণ্ডী</string>
     <string name="theme_mocha">ম’চা</string>
     <string name="pref_update_anime_release_grace_period">প্ৰত্যাশিত এনিমে মুক্তিৰ গ্ৰেছ পিৰিয়ড</string>
-    <string name="pref_episode_swipe">এপিচ’ড সৱাইপ</string>
     <string name="pref_episode_swipe_end">সৱাইপ ডান দিশৰ কাৰ্য</string>
     <string name="pref_episode_swipe_start">সৱাইপ বাওঁ দিশৰ কাৰ্য</string>
     <string name="pref_category_hide_hidden">বিভাগ আৰু সঞ্চয় স্ক্ৰীনৰ পৰা লুকোৱা বিভাগবোৰ লুকাওক</string>

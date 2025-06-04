@@ -523,7 +523,6 @@
     <string name="ext_info_version">Версси</string>
     <string name="ext_update_all">Пурне те ҫӗнет</string>
     <string name="delete_downloaded">Тийесе илнисене катерт</string>
-    <string name="pref_library_columns_per_row">Ретре %d</string>
     <string name="pref_update_only_in_release_period">Кӗтӗнекен кӑларӑм тапхӑрӗ тулашӗнче</string>
     <string name="pref_chapter_swipe_end">Сылтӑмалла туртни</string>
     <string name="pref_chapter_swipe_start">Сулахайалла туртни</string>
@@ -531,7 +530,6 @@
     <string name="ext_installer_shizuku_stopped">Shizuku ӗҫлемест</string>
     <string name="ext_info_age_rating">Ҫул-ӳсӗм чаравӗ</string>
     <string name="action_sort_next_updated">Тепӗр кӗтӗнекен ҫӗнетӳпе</string>
-    <string name="pref_chapter_swipe">Сыпӑк туртни</string>
     <string name="ext_install_service_notif">Хушма лартни…</string>
     <string name="action_set_interval">Тӑтӑшлӑх палӑрт</string>
     <string name="action_filter_interval_custom">Ӗнерӳллӗ илӳ тӑтӑшлӑхӗ</string>

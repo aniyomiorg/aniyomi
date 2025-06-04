@@ -545,7 +545,6 @@
     <string name="disabled_nav">Zakázáno</string>
     <string name="empty_backup_error">Žádné záznamy v knihovně k zálohování</string>
     <string name="source_empty_screen">Žádný zdroj nenalezen</string>
-    <string name="update_check_fdroid_migration_info">Nová oficiální verze je dostupná. Pro informace pro přechod z neoficiálních F-Droid verzí klepněte sem.</string>
     <string name="pref_landscape_zoom">Automatické přiblížení širokých obrázků</string>
     <string name="source_filter_empty_screen">Žádný nainstalovaný zdroj nenalezen</string>
     <string name="update_check_open">Otevřít na GitHubu</string>
@@ -664,11 +663,9 @@
     <string name="pref_page_rotate_invert">Překlopení orientace otočených širokých stránek</string>
     <string name="pref_page_rotate">Otočení širokých stránek tak, aby se vešly</string>
     <string name="pref_debug_info">Ladící informace</string>
-    <string name="pref_chapter_swipe">Přejetí po kapitole</string>
     <string name="pref_chapter_swipe_end">Přejetí prstem doprava</string>
     <string name="pref_chapter_swipe_start">Přejetí prstem doleva</string>
     <string name="pref_double_tap_zoom">Přiblížení dvojitým klepnutím</string>
-    <string name="pref_library_columns_per_row">%d na řádek</string>
     <string name="action_filter_interval_custom">Přizpůsobený interval načítání</string>
     <string name="action_sort_next_updated">Další očekávaná aktualizace</string>
     <string name="manga_display_interval_title">Odhadovat každý</string>
@@ -699,8 +696,6 @@
     <string name="app_settings">Nastavení aplikace</string>
     <string name="source_settings">Nastavení zdroje</string>
     <string name="notification_updating_progress">Aktualizace knihovny… (%s)</string>
-    <string name="action_sort_category">Seřadit kategorie</string>
-    <string name="sort_category_confirmation">Chtěli byste seřadit kategorie abecedně?</string>
     <string name="action_create">Vytvořit</string>
     <string name="relative_time_span_never">Nikdy</string>
     <string name="pref_flash_page_summ">Snižuje vytváření artefaktů na e-ink displejích</string>

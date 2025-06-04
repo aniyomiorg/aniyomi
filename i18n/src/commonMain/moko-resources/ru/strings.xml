@@ -547,7 +547,6 @@
     <string name="rotation_reverse_portrait">Портретная наоборот</string>
     <string name="action_move_to_top_all_for_series">Переместить серию в начало</string>
     <string name="disabled_nav">Откл.</string>
-    <string name="update_check_fdroid_migration_info">Новая версия доступна на оф. странице Aniyomi. Коснитесь для подробностей, как перенестись с неофициальной версии из F-Droid.</string>
     <string name="error_saving_picture">Не удалось сохранить изображение</string>
     <string name="empty_backup_error">Нет тайтлов в библиотеке для резервирования</string>
     <string name="update_check_open">Открыть в GitHub</string>
@@ -662,11 +661,9 @@
     <string name="pref_page_rotate">Развернуть широкие страницы под размер экрана</string>
     <string name="pref_page_rotate_invert">Отразить ориентацию развёрнутых широких страниц</string>
     <string name="pref_debug_info">Отладочная информация</string>
-    <string name="pref_chapter_swipe">Перелистывание глав</string>
     <string name="pref_chapter_swipe_end">Проведите право</string>
     <string name="pref_chapter_swipe_start">Проведите влево</string>
     <string name="pref_double_tap_zoom">Двойное касание для увеличения</string>
-    <string name="pref_library_columns_per_row">%d в ряд</string>
     <string name="action_filter_interval_custom">Настраиваемая частота обновления</string>
     <string name="intervals_header">Интервалы</string>
     <string name="manga_display_interval_title">Оценивать каждые</string>
@@ -697,8 +694,6 @@
     <string name="app_settings">Настройки приложения</string>
     <string name="source_settings">Настройки источников</string>
     <string name="notification_updating_progress">Обновление библиотеки… (%s)</string>
-    <string name="action_sort_category">Сортировка категорий</string>
-    <string name="sort_category_confirmation">Хотите ли вы сортировать категории по алфавиту\?</string>
     <string name="file_null_uri_error">Файл не выбран</string>
     <string name="label_data_storage">Данные и хранение</string>
     <string name="relative_time_span_never">Никогда</string>
@@ -1000,7 +995,6 @@
     <string name="notification_episodes_single_and_more">Эпизод %1$s и ещё %2$d</string>
     <string name="pref_clear_anime_database_summary">Удалить историю для аниме, которое не находится в вашей библиотеке</string>
     <string name="episode_settings">Настройка эпизода</string>
-    <string name="pref_episode_swipe">Пропустить эпизод</string>
     <string name="data_saver_image_quality_summary">Более высокие значения означают, что сохраняется более высокий процент качества изображения, но это также означает, что размер файла больше, 80 процентов – хорошее среднее значение между размером файла и качеством изображения</string>
     <string name="pref_external_downloader_selection">Настройка загрузчика</string>
     <string name="pref_backup_flags">Варианты резервного копирования</string>
