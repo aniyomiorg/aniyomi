@@ -554,7 +554,6 @@
     <string name="disabled_nav">無効</string>
     <string name="empty_backup_error">バックアップできるライブラリ項目はありません</string>
     <string name="update_check_open">GitHubに移動</string>
-    <string name="update_check_fdroid_migration_info">公式リリースで新しいバージョンが取得可能です。非公式のF-Droidリリースからの移行については、タップで手順をご覧ください。</string>
     <string name="error_saving_picture">画像の保存時にエラー発生</string>
     <string name="action_close">閉じる</string>
     <string name="pref_clear_webview_data">WebViewデータを消去</string>
@@ -672,8 +671,6 @@
     <string name="pref_debug_info">デバッグ情報</string>
     <string name="pref_chapter_swipe_start">左へスワイプ時の操作</string>
     <string name="pref_chapter_swipe_end">右へスワイプ時の操作</string>
-    <string name="pref_library_columns_per_row">列あたり%d件の項目</string>
-    <string name="pref_chapter_swipe">章の間のスワイプ</string>
     <string name="pref_double_tap_zoom">ダブルタップでズーム</string>
     <string name="action_set_interval">間隔を設定</string>
     <string name="action_filter_interval_custom">カスタマイズした取得間隔</string>
@@ -702,9 +699,7 @@
     <string name="action_move_to_bottom_all_for_series">シリーズを底に移動</string>
     <string name="pref_relative_format">相対的なタイムスタンプ</string>
     <string name="pref_relative_format_summary">「%2$s」の代わりに「%1$s」を使用</string>
-    <string name="action_sort_category">カテゴリの並べ替え</string>
     <string name="notification_updating_progress">ライブラリの更新中… (%s)</string>
-    <string name="sort_category_confirmation">カテゴリをアルファベット順で並べ替えますか？</string>
     <string name="source_settings">ソース設定</string>
     <string name="app_settings">アプリ設定</string>
     <string name="file_null_uri_error">選択したファイルがありません</string>

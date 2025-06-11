@@ -554,7 +554,6 @@
     <string name="update_check_open">Obre al GitHub</string>
     <string name="error_saving_picture">S’ha produït un error en desar la imatge</string>
     <string name="empty_backup_error">No hi ha cap element a la biblioteca del qual fer còpia de seguretat</string>
-    <string name="update_check_fdroid_migration_info">Hi ha una nova versió disponible als llançaments oficials. Premeu per a obtenir informació de com migrar a partir dels llançaments no oficials d’F-Droid.</string>
     <string name="pref_clear_webview_data">Neteja les dades de la WebView</string>
     <string name="webview_data_deleted">S’han netejat les dades de la WebView</string>
     <string name="action_close">Tanca</string>
@@ -665,8 +664,6 @@
     <string name="action_copy_to_clipboard">Copia al porta-retalls</string>
     <string name="action_update_category">Actualitza la categoria</string>
     <string name="split_tall_images">Divideix les imatges altes</string>
-    <string name="pref_library_columns_per_row">%d per fila</string>
-    <string name="pref_chapter_swipe">Lliscament en capítols</string>
     <string name="pref_chapter_swipe_end">Acció en lliscar cap a la dreta</string>
     <string name="pref_chapter_swipe_start">Acció en lliscar cap a l’esquerra</string>
     <string name="pref_double_tap_zoom">Toca dues vegades per a ampliar</string>
@@ -701,9 +698,7 @@
     <string name="action_move_to_bottom_all_for_series">Mou la sèrie a baix de tot</string>
     <string name="pref_relative_format">Marques de temps relatives</string>
     <string name="pref_relative_format_summary">«%1$s» en comptes de «%2$s»</string>
-    <string name="action_sort_category">Ordena les categories</string>
     <string name="notification_updating_progress">S’està actualitzant la biblioteca… (%s)</string>
-    <string name="sort_category_confirmation">Voleu ordenar les categories alfabèticament\?</string>
     <string name="source_settings">Configuració de la font</string>
     <string name="app_settings">Configuració de l’aplicació</string>
     <string name="file_null_uri_error">No s’ha seleccionat cap fitxer</string>
@@ -1022,7 +1017,6 @@
     <string name="pref_debanding_gpu">GPU</string>
     <string name="choose_video_quality">Tria la qualitat del vídeo:</string>
     <string name="theme_mocha">Mocha</string>
-    <string name="pref_episode_swipe">Acció de lliscar episodi</string>
     <string name="extension_settings">Configuració de l\'extensió</string>
     <string name="pref_episode_swipe_end">Acció en lliscar cap a la dreta</string>
     <string name="data_saver">Estalviador de dades</string>

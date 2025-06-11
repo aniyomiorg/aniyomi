@@ -570,7 +570,6 @@
     <string name="empty_screen">Cóż, to troszkę niezręczne</string>
     <string name="ext_info_language">Język</string>
     <string name="reading_list">Lista czytanych</string>
-    <string name="update_check_fdroid_migration_info">Nowa wersja jest dostępna z oficjalnych wydań. Naciśnij, by dowiedzieć się jak przeprowadzić migrację z nieoficjalnych wydań F-Droid.</string>
     <string name="custom_cover">Niestandardowa okładka</string>
     <string name="complete_list">Lista zakończonych</string>
     <string name="network_not_metered">Tylko na nielimitowanych połączeniach</string>
@@ -665,11 +664,9 @@
     <string name="pref_page_rotate">Dopasuj szerokie strony</string>
     <string name="pref_page_rotate_invert">Zmień orientację obróconych obrazów</string>
     <string name="pref_debug_info">Informacje debugowania</string>
-    <string name="pref_library_columns_per_row">%d na rząd</string>
     <string name="pref_double_tap_zoom">Dotknij dwukrotnie, aby powiększyć</string>
     <string name="pref_chapter_swipe_end">Przesuń palcem w prawo</string>
     <string name="pref_chapter_swipe_start">Przesuń palcem w lewo</string>
-    <string name="pref_chapter_swipe">Przesunięcie rozdziału</string>
     <string name="action_set_interval">Ustaw interwał</string>
     <string name="action_sort_next_updated">Następna spodziewana aktualizacja</string>
     <string name="manga_display_modified_interval_title">Aktualizuj co</string>
@@ -697,7 +694,6 @@
     <string name="manga_interval_expected_update">Następna aktualizacja spodziewana za około %1$s, sprawdzanie co %2$s.</string>
     <string name="onboarding_storage_selection_required">Folder musi być wybrany</string>
     <string name="onboarding_permission_notifications">Uprawnienia powiadomień</string>
-    <string name="action_sort_category">Sortuj kategorie</string>
     <string name="onboarding_heading">Witaj!</string>
     <string name="action_menu_overflow_description">Więcej opcji</string>
     <string name="scanlator">Scanlator</string>
@@ -706,7 +702,6 @@
     <string name="onboarding_permission_ignore_battery_opts">Zużycie baterii w tle</string>
     <string name="notification_updating_progress">Aktualizowanie biblioteki… (%s)</string>
     <string name="invalid_repo_name">Nieprawidłowa nazwa repozytorium</string>
-    <string name="sort_category_confirmation">Czy chciałbyś posortować kategorie alfabetycznie?</string>
     <string name="source_settings">Ustawienia źródła</string>
     <string name="app_settings">Ustawienia aplikacji</string>
     <string name="action_delete_repo">Usuń repozytorium</string>
@@ -861,7 +856,6 @@
     <string name="data_saver_image_quality">Jakość Obrazu</string>
     <string name="pref_waiting_time_aniskip_10">10 sekund</string>
     <string name="dialog_with_checkbox_reset_anime">Zresetuj wszystkie odcinki dla tego anime</string>
-    <string name="pref_episode_swipe">Przesunięcie odcinka</string>
     <string name="notification_episodes_single_and_more">Odcinek %1$s i jeszcze %2$d</string>
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_hero">Bandwidth Hero (Wymaga serwera Proxy Bandwidth Hero)</string>
