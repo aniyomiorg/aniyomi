@@ -307,8 +307,6 @@
     <string name="action_update_category">Oppdater kategori</string>
     <string name="action_open_random_manga">Opna tilfeldig innlegg</string>
     <string name="delete_category_confirmation">Ynskjar du å sletta kategorien \"%s\"?</string>
-    <string name="action_sort_category">Sorter kategoriar</string>
-    <string name="sort_category_confirmation">Vil du sortera kategoriane i alfabetisk rekkjefylgje?</string>
     <string name="action_remove_everything">Fjern alt</string>
     <string name="action_resume">Fortset</string>
     <string name="action_copy_to_clipboard">Kopier til utklippstavle</string>

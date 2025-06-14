@@ -557,7 +557,6 @@
     <string name="action_move_to_top_all_for_series">将作品移到顶部</string>
     <string name="disabled_nav">关闭</string>
     <string name="error_saving_picture">保存图片出错</string>
-    <string name="update_check_fdroid_migration_info">官方发布了新版本，点击了解如何从非官方 F-Droid 版本迁移到新版本。</string>
     <string name="empty_backup_error">仓库中没有可备份的作品</string>
     <string name="update_check_open">打开 GitHub 页面</string>
     <string name="webview_data_deleted">已清除 WebView 数据</string>
@@ -674,11 +673,9 @@
     <string name="pref_page_rotate">旋转横向图片</string>
     <string name="pref_page_rotate_invert">旋转横向图片时反转方向</string>
     <string name="pref_debug_info">调试信息</string>
-    <string name="pref_chapter_swipe">漫画章节目录左右滑动</string>
     <string name="pref_chapter_swipe_end">向右滑动操作</string>
     <string name="pref_chapter_swipe_start">向左滑动操作</string>
     <string name="pref_double_tap_zoom">双击放大</string>
-    <string name="pref_library_columns_per_row">每行 %d 个</string>
     <string name="pref_update_only_in_release_period">预测下次更新时间</string>
     <string name="action_ok">确定</string>
     <string name="track_delete_title">要删除 %s 的记录吗？</string>
@@ -705,10 +702,8 @@
     <string name="source_settings">资源设置</string>
     <string name="app_settings">应用设置</string>
     <string name="unlock_app_title">解锁 Aniyomi</string>
-    <string name="action_sort_category">分类排序</string>
     <string name="action_move_to_bottom_all_for_series">将作品移到底部</string>
     <string name="notification_updating_progress">正在更新仓库…(%s)</string>
-    <string name="sort_category_confirmation">确定要按字母顺序对分类进行排序吗？</string>
     <string name="file_null_uri_error">未选择文件</string>
     <string name="pref_relative_format">相对时间戳</string>
     <string name="pref_relative_format_summary">显示“%1$s”而不是“%2$s”</string>
@@ -965,7 +960,6 @@
     <string name="label_anime_extension_repos">动画插件仓库</string>
     <string name="pref_episode_swipe_end">向右滑动操作</string>
     <string name="pref_episode_swipe_start">向左滑动操作</string>
-    <string name="pref_episode_swipe">动画剧集目录左右滑动</string>
     <string name="pref_invalidate_download_cache_summary">强制重新扫描已下载的章节以及剧集</string>
     <string name="label_manga_extension_repos">漫画插件仓库</string>
     <string name="download_speed_limit_hint">归零则取消限速。</string>

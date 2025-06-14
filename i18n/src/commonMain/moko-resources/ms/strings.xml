@@ -549,7 +549,6 @@
     <string name="action_move_to_top_all_for_series">Alih siri ke atas</string>
     <string name="disabled_nav">Dinyahkan</string>
     <string name="error_saving_picture">Ralat menyimpan gambar</string>
-    <string name="update_check_fdroid_migration_info">Versi baharu tersedia daripada pengeluaran rasmi. Ketik untuk mengetahui bagaimana untuk berhijrah daripada keluaran tidak rasmi F-Droid.</string>
     <string name="empty_backup_error">Tiada entri pustaka untuk disandarkan</string>
     <string name="update_check_open">Buka di GitHub</string>
     <string name="pref_clear_webview_data">Hapus data WebView</string>
@@ -667,8 +666,6 @@
     <string name="pref_page_rotate">Putar muka surat lebar agar muat</string>
     <string name="pref_debug_info">Maklumat nyahpepijat</string>
     <string name="pref_chapter_swipe_end">Tindakan leret ke kanan</string>
-    <string name="pref_library_columns_per_row">%d setiap baris</string>
-    <string name="pref_chapter_swipe">Leret bab</string>
     <string name="pref_double_tap_zoom">Ketik dua kali untuk zum</string>
     <string name="pref_chapter_swipe_start">Tindakan leret ke kiri</string>
     <string name="action_set_interval">Tetapkan jarak masa</string>
@@ -726,7 +723,6 @@
     <string name="information_webview_required">WebView diperlukan untuk Aniyomi</string>
     <string name="download_notifier_download_paused_chapters">Muat turun dihentikan sebentar</string>
     <string name="channel_new_chapters_episodes">Pengemaskinian bab</string>
-    <string name="sort_category_confirmation">Adakah anda ingin mengisih kategori mengikut abjad?</string>
     <string name="onboarding_storage_help_info">Mengemas kini daripada versi yang lebih lama dan tidak pasti apa yang perlu dipilih? Rujuk panduan penyimpanan untuk maklumat lanjut.</string>
     <string name="onboarding_permission_ignore_battery_opts">Penggunaan bateri latar belakang</string>
     <string name="onboarding_permission_ignore_battery_opts_description">Elakkan gangguan pada kemas kini pustaka yang berjalan lama, muat turun dan pemulihan sandaran.</string>

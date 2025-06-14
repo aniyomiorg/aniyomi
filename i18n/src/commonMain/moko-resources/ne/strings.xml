@@ -637,7 +637,6 @@
     <string name="label_total_chapters">कुल</string>
     <string name="label_read_chapters">पढेको</string>
     <string name="download_notifier_cache_renewal">डाउनलोडहरू जाँच गर्दै</string>
-    <string name="update_check_fdroid_migration_info">आधिकारिक रिलिजबाट नयाँ संस्करण उपलब्ध छ। अनौपचारिक F-Droid रिलीजहरूबाट कसरी स्थानान्तरण गर्ने भनेर जान्न ट्याप गर्नुहोस्।</string>
     <string name="description_placeholder">कुनै वर्णन छैन</string>
     <string name="appwidget_unavailable_locked">एप लक सक्षम हुँदा विजेट उपलब्ध छैन</string>
     <string name="empty_backup_error">ब्याकअप गर्न कुनै पुस्तकालय इन्ट्रीहरू छैनन्</string>
@@ -666,11 +665,9 @@
     <string name="pref_page_rotate">फिट गर्न चौडा पृष्ठहरू घुमाउनुहोस्</string>
     <string name="pref_page_rotate_invert">घुमाइएका चौडा पृष्ठहरूको अभिमुखीकरण फ्लिप गर्नुहोस्</string>
     <string name="pref_debug_info">Debug जानकारी</string>
-    <string name="pref_chapter_swipe">अध्याय स्वाइप</string>
     <string name="pref_chapter_swipe_end">दायाँ स्वाइप</string>
     <string name="pref_chapter_swipe_start">बायाँ स्वाइप</string>
     <string name="pref_double_tap_zoom">जूम गर्न डबल ट्याप गर्नुहोस्</string>
-    <string name="pref_library_columns_per_row">%d प्रति पङ्क्ति</string>
     <string name="action_set_interval">अन्तराल सेट गर्नुहोस्</string>
     <string name="action_filter_interval_custom">कस्टम गरिएको ल्याउने अन्तराल</string>
     <string name="manga_display_modified_interval_title">प्रत्येक अपडेट गर्न सेट गर्नुहोस्</string>
@@ -696,9 +693,7 @@
     <string name="exception_http">HTTP %d, WebView मा वेबसाइट जाँच गर्नुहोस्</string>
     <string name="unlock_app_title">अनलक %s</string>
     <string name="action_move_to_bottom_all_for_series">श्रृङ्खलालाई तल सार्नुहोस्</string>
-    <string name="action_sort_category">वर्गहरू क्रमबद्ध गर्नुहोस्</string>
     <string name="notification_updating_progress">पुस्तकालय अपडेट गर्दै… (%s)</string>
-    <string name="sort_category_confirmation">के तपाई वर्गहरू वर्णमाला अनुसार क्रमबद्ध गर्न चाहनुहुन्छ\?</string>
     <string name="source_settings">स्रोत सेटिङहरू</string>
     <string name="app_settings">एप सेटिङहरू</string>
     <string name="pref_relative_format">सापेक्ष टाइमस्ट्याम्पहरू</string>

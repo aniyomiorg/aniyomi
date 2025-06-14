@@ -357,7 +357,7 @@
     <string name="label_data">Δεδομένα</string>
     <string name="backup_restore_missing_sources">Πηγές που λείπουν:</string>
     <string name="invalid_backup_file_missing_manga">Το αντίγραφο ασφαλείας δεν περιέχει καταχωρήσεις βιβλιοθήκης.</string>
-    <string name="invalid_backup_file">Μη έγκυρο αρχείο αντιγράφου ασφαλείας</string>
+    <string name="invalid_backup_file">Μη έγκυρο αρχείο αντιγράφων ασφαλείας:</string>
     <string name="pref_library_update_refresh_metadata_summary">Έλεγχος για νέο εξώφυλλο και λεπτομέρειες κατά την ενημέρωση της βιβλιοθήκης</string>
     <string name="pref_library_update_refresh_metadata">Αυτόματη ανανέωση μεταδεδομένων</string>
     <string name="action_migrate">Μεταφορά</string>
@@ -432,9 +432,7 @@
     <string name="pref_dual_page_split">Διαχωρισμός πλατιών σελίδων</string>
     <string name="pref_dual_page_invert_summary">Εάν η τοποθέτηση των διαχωρισμένων πλατιών σελίδων δεν ταιριάζει με την κατεύθυνση ανάγνωσης</string>
     <string name="pref_dual_page_invert">Αντιστροφή τοποθέτησης διαχωρισμένης σελίδας</string>
-    <string name="backup_restore_content_full">Τα δεδομένα από το αντίγραφο ασφαλείας θα αποκατασταθούν
-\n
-\nΘα χρειαστεί να εγκαταστήσετε τυχόν επεκτάσεις που λείπουν και στη συνέχεια να συνδεθείτε στις υπηρεσίες παρακολούθησης για να τις χρησιμοποιήσετε.</string>
+    <string name="backup_restore_content_full">Ενδέχεται να χρειαστεί να εγκαταστήσετε τυχόν επεκτάσεις που λείπουν και να συνδεθείτε στις υπηρεσίες παρακολούθησης στη συνέχεια για να τις χρησιμοποιήσετε.</string>
     <string name="pref_show_navigation_mode_summary">Εμφάνιση εν συντομία κατά το άνοιγμα του προγράμματος ανάγνωσης</string>
     <string name="pref_show_navigation_mode">Εμφάνιση επικάλυψης ζωνών πατήματος</string>
     <string name="nav_zone_right">Δεξιά</string>
@@ -548,7 +546,6 @@
     <string name="rotation_reverse_portrait">Αντίστροφο πορτρέτο</string>
     <string name="action_move_to_top_all_for_series">Μετακίνηση σειράς προς τα πάνω</string>
     <string name="disabled_nav">Απενεργοποιημένο</string>
-    <string name="update_check_fdroid_migration_info">Μια νέα έκδοση είναι διαθέσιμη από τις επίσημες κυκλοφορίες. Πατήστε για να μάθετε πώς να μεταβείτε από ανεπίσημες κυκλοφορίες του F-Droid.</string>
     <string name="error_saving_picture">Σφάλμα κατά την αποθήκευση της εικόνας</string>
     <string name="empty_backup_error">Δεν υπάρχουν καταχωρήσεις βιβλιοθήκης για δημιουργία αντιγράφων ασφαλείας</string>
     <string name="update_check_open">Άνοιγμα στο GitHub</string>
@@ -627,7 +624,7 @@
     <string name="track_remove_date_conf_title">Κατάργηση ημερομηνίας;</string>
     <string name="track_remove_finish_date_conf_text">Αυτό θα καταργήσει την ημερομηνία λήξης που επιλέξατε προηγουμένως από το %s</string>
     <string name="track_remove_start_date_conf_text">Αυτό θα καταργήσει την ημερομηνία έναρξης που επιλέξατε προηγουμένως από το %s</string>
-    <string name="pref_invalidate_download_cache">Ακύρωση ευρετηρίου λήψεων</string>
+    <string name="pref_invalidate_download_cache">Επαναπροσδιορισμός λήψεων</string>
     <string name="label_stats">Στατιστικά</string>
     <string name="label_local">Τοπικό</string>
     <string name="label_started">Ξεκίνησε</string>
@@ -666,11 +663,9 @@
     <string name="pref_page_rotate">Περιστροφή πλατιών σελίδων για να χωρέσουν</string>
     <string name="pref_page_rotate_invert">Αναστροφή του προσανατολισμού των πλατιών σελίδων που έχουν περιστραφεί</string>
     <string name="pref_debug_info">Πληροφορίες εντοπισμού σφαλμάτων</string>
-    <string name="pref_chapter_swipe">Σύρσιμο κεφαλαίου</string>
     <string name="pref_double_tap_zoom">Διπλό πάτημα για ζουμ</string>
     <string name="pref_chapter_swipe_start">Ενέργεια συρσίματος προς τα αριστερά</string>
     <string name="pref_chapter_swipe_end">Ενέργεια συρσίματος προς τα δεξιά</string>
-    <string name="pref_library_columns_per_row">%d ανά σειρά</string>
     <string name="action_set_interval">Ορισμός χρονικού διαστήματος</string>
     <string name="action_filter_interval_custom">Προσαρμοσμένο διάστημα ανάκτησης</string>
     <string name="pref_update_only_in_release_period">Εκτός αναμενόμενης περιόδου κυκλοφορίας</string>
@@ -694,14 +689,12 @@
     <string name="exception_unknown_host">Δεν μπορούσε να φτάσει το %s</string>
     <string name="exception_http">HTTP %d, ελέγξτε την ιστοσελίδα στο WebView</string>
     <string name="exception_offline">Δεν υπάρχει σύνδεση στο διαδίκτυο</string>
-    <string name="unlock_app_title">Ξεκλείδωμα %s</string>
+    <string name="unlock_app_title">Ξεκλειδώστε την Aniyomi</string>
     <string name="action_move_to_bottom_all_for_series">Μετακίνηση σειράς προς τα κάτω</string>
     <string name="pref_relative_format">Σχετικές χρονικές σημάνσεις</string>
     <string name="pref_relative_format_summary">\"%1$s\" αντί του \"%2$s\"</string>
     <string name="app_settings">Ρυθμίσεις εφαρμογής</string>
-    <string name="action_sort_category">Ταξινόμηση κατηγοριών</string>
     <string name="notification_updating_progress">Ενημέρωση βιβλιοθήκης… (%s)</string>
-    <string name="sort_category_confirmation">Θέλετε να ταξινομήσετε τις κατηγορίες αλφαβητικά;</string>
     <string name="source_settings">Ρυθμίσεις πηγών</string>
     <string name="file_null_uri_error">Δεν έχει επιλεγεί αρχείο</string>
     <string name="relative_time_span_never">Ποτέ</string>
@@ -766,7 +759,7 @@
     <string name="pref_clear_chapter_cache">Καθάρισμα προσωρινής μνήμης κεφαλαίου</string>
     <string name="pref_auto_clear_chapter_cache">Εκκαθάριση της προσωρινής μνήμης κεφαλαίων στο κλείσιμο της εφαρμογής</string>
     <string name="pref_clear_manga_database">Καθαρισμός βάσης δεδομένων</string>
-    <string name="pref_clear_manga_database_summary">Διαγραφή ιστορικού για καταχωρήσεις που δεν έχουν αποθηκευτεί στη βιβλιοθήκη σας</string>
+    <string name="pref_clear_manga_database_summary">Διαγραφή ιστορικού για manga που δεν είναι αποθηκευμένα στη βιβλιοθήκη σας</string>
     <string name="clear_database_confirmation">Είστε σίγουροι; Τα διαβασμένα κεφάλαια και η πρόοδος των καταχωρήσεων εκτός βιβλιοθήκης θα χαθούν</string>
     <string name="pref_incognito_mode_summary">Παύει το ιστορικό ανάγνωσης</string>
     <string name="manga_from_library">Από βιβλιοθήκη</string>
