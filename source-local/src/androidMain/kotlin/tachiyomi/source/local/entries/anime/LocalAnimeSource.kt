@@ -179,6 +179,11 @@ actual class LocalAnimeSource(
         return@withIOContext anime
     }
 
+    // Seasons
+    override suspend fun getSeasonList(anime: SAnime): List<SAnime> {
+        TODO("Not yet implemented")
+    }
+
     // Episodes
     override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> = withIOContext {
         val episodesData = fileSystem.getFilesInAnimeDirectory(anime.url)

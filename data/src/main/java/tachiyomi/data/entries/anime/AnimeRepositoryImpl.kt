@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
+import tachiyomi.data.FetchTypeColumnAdapter
 import tachiyomi.data.StringListColumnAdapter
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.entries.anime.model.Anime
@@ -120,6 +121,7 @@ class AnimeRepositoryImpl(
                 dateAdded = anime.dateAdded,
                 updateStrategy = anime.updateStrategy,
                 version = anime.version,
+                fetchType = anime.fetchType,
             )
             animesQueries.selectLastInsertedRowId()
         }
@@ -171,6 +173,7 @@ class AnimeRepositoryImpl(
                     updateStrategy = value.updateStrategy?.let(AnimeUpdateStrategyColumnAdapter::encode),
                     version = value.version,
                     isSyncing = 0,
+                    fetchType = value.fetchType?.let(FetchTypeColumnAdapter::encode),
                 )
             }
         }

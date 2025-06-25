@@ -2,6 +2,7 @@ package tachiyomi.domain.entries.anime.model
 
 import androidx.compose.runtime.Immutable
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import tachiyomi.core.common.preference.TriState
 import java.io.Serializable
@@ -33,6 +34,7 @@ data class Anime(
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
     val version: Long,
+    val fetchType: FetchType,
 ) : Serializable {
 
     val expectedNextUpdate: Instant?
@@ -149,6 +151,7 @@ data class Anime(
             lastModifiedAt = 0L,
             favoriteModifiedAt = null,
             version = 0L,
+            fetchType = FetchType.Unknown,
         )
     }
 }

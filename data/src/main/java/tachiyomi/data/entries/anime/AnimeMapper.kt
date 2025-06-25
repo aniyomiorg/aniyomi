@@ -1,6 +1,7 @@
 package tachiyomi.data.entries.anime
 
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.library.anime.LibraryAnime
 
@@ -31,6 +32,7 @@ object AnimeMapper {
         version: Long,
         @Suppress("UNUSED_PARAMETER")
         isSyncing: Long,
+        fetchType: FetchType,
     ): Anime = Anime(
         id = id,
         source = source,
@@ -55,6 +57,7 @@ object AnimeMapper {
         lastModifiedAt = lastModifiedAt,
         favoriteModifiedAt = favoriteModifiedAt,
         version = version,
+        fetchType = fetchType,
     )
 
     fun mapLibraryAnime(
@@ -82,6 +85,7 @@ object AnimeMapper {
         favoriteModifiedAt: Long?,
         version: Long,
         isSyncing: Long,
+        fetchType: FetchType,
         totalCount: Long,
         seenCount: Double,
         latestUpload: Long,
@@ -115,6 +119,7 @@ object AnimeMapper {
             favoriteModifiedAt,
             version,
             isSyncing,
+            fetchType,
         ),
         category = category,
         totalEpisodes = totalCount,

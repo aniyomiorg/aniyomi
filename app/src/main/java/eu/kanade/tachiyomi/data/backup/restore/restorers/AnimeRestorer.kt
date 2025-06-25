@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.data.backup.models.BackupAnimeTracking
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
 import eu.kanade.tachiyomi.data.backup.models.BackupEpisode
 import tachiyomi.data.AnimeUpdateStrategyColumnAdapter
+import tachiyomi.data.FetchTypeColumnAdapter
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
@@ -100,6 +101,7 @@ class AnimeRestorer(
             status = newer.status,
             initialized = this.initialized || newer.initialized,
             version = newer.version,
+            fetchType = newer.fetchType,
         )
     }
 
@@ -128,6 +130,7 @@ class AnimeRestorer(
                 updateStrategy = anime.updateStrategy.let(AnimeUpdateStrategyColumnAdapter::encode),
                 version = anime.version,
                 isSyncing = 1,
+                fetchType = anime.fetchType.let(FetchTypeColumnAdapter::encode),
             )
         }
         return anime
@@ -262,6 +265,7 @@ class AnimeRestorer(
                 dateAdded = anime.dateAdded,
                 updateStrategy = anime.updateStrategy,
                 version = anime.version,
+                fetchType = anime.fetchType,
             )
             animesQueries.selectLastInsertedRowId()
         }
