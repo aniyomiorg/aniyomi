@@ -20,7 +20,7 @@ android {
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
-        applicationId = "xyz.jmir.tachiyomi.mi"
+        applicationId = "xyz.jmir.tachiyomi.mi.angel"
 
         versionCode = 128
         versionName = "0.16.4.3"
