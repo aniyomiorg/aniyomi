@@ -38,4 +38,8 @@ interface AnimeRepository {
     suspend fun updateAnime(update: AnimeUpdate): Boolean
 
     suspend fun updateAllAnime(animeUpdates: List<AnimeUpdate>): Boolean
+
+    suspend fun getAnimeSeasonsById(parentId: Long): List<LibraryAnime>
+
+    fun getAnimeSeasonsByIdAsFlow(parentId: Long): Flow<List<LibraryAnime>>
 }

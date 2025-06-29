@@ -35,6 +35,7 @@ data class Anime(
     val favoriteModifiedAt: Long?,
     val version: Long,
     val fetchType: FetchType,
+    val parentId: Long?,
 ) : Serializable {
 
     val expectedNextUpdate: Instant?
@@ -152,6 +153,7 @@ data class Anime(
             favoriteModifiedAt = null,
             version = 0L,
             fetchType = FetchType.Unknown,
+            parentId = null,
         )
     }
 }

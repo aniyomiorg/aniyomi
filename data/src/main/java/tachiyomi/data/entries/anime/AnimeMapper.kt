@@ -33,6 +33,7 @@ object AnimeMapper {
         @Suppress("UNUSED_PARAMETER")
         isSyncing: Long,
         fetchType: FetchType,
+        parentId: Long?,
     ): Anime = Anime(
         id = id,
         source = source,
@@ -58,6 +59,7 @@ object AnimeMapper {
         favoriteModifiedAt = favoriteModifiedAt,
         version = version,
         fetchType = fetchType,
+        parentId = parentId,
     )
 
     fun mapLibraryAnime(
@@ -86,6 +88,7 @@ object AnimeMapper {
         version: Long,
         isSyncing: Long,
         fetchType: FetchType,
+        parentId: Long?,
         totalCount: Long,
         seenCount: Double,
         latestUpload: Long,
@@ -120,6 +123,7 @@ object AnimeMapper {
             version,
             isSyncing,
             fetchType,
+            parentId,
         ),
         category = category,
         totalEpisodes = totalCount,

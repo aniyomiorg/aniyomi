@@ -26,6 +26,7 @@ data class AnimeUpdate(
     val initialized: Boolean? = null,
     val version: Long? = null,
     val fetchType: FetchType? = null,
+    val parentId: Long? = null,
 )
 
 fun Anime.toAnimeUpdate(): AnimeUpdate {
@@ -52,5 +53,6 @@ fun Anime.toAnimeUpdate(): AnimeUpdate {
         initialized = initialized,
         version = version,
         fetchType = fetchType,
+        parentId = parentId,
     )
 }

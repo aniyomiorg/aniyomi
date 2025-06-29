@@ -40,6 +40,7 @@ data class BackupAnime(
     @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
     @ProtoNumber(109) var version: Long = 0,
     @ProtoNumber(110) var fetchType: FetchType = FetchType.Unknown,
+    @ProtoNumber(111) var parentId: Long? = null,
 ) {
     fun getAnimeImpl(): Anime {
         return Anime.create().copy(

@@ -193,6 +193,9 @@ class AnimeScreen(
             onEpisodeSelected = screenModel::toggleSelection,
             onAllEpisodeSelected = screenModel::toggleAllSelection,
             onInvertSelection = screenModel::invertSelection,
+            onSeasonClicked = {
+                navigator.push(AnimeScreen(it.id))
+            }
         )
 
         val onDismissRequest = {

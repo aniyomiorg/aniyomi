@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.entries.anime
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -12,6 +13,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
+import eu.kanade.domain.entries.anime.interactor.SyncSeasonsWithSource
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.downloadedFilter
 import eu.kanade.domain.entries.anime.model.toSAnime
@@ -26,6 +28,7 @@ import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.util.formattedMessage
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
@@ -67,10 +70,11 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
-import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
+import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodesAndSeasons
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.NoSeasonsException
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
@@ -80,6 +84,7 @@ import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.items.episode.service.calculateEpisodeGap
 import tachiyomi.domain.items.episode.service.getEpisodeSort
+import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
@@ -106,7 +111,7 @@ class AnimeScreenModel(
     private val trackEpisode: TrackEpisode = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
-    private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
+    private val getAnimeAndEpisodesAndSeasons: GetAnimeWithEpisodesAndSeasons = Injekt.get(),
     private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val setAnimeEpisodeFlags: SetAnimeEpisodeFlags = Injekt.get(),
     private val setAnimeDefaultEpisodeFlags: SetAnimeDefaultEpisodeFlags = Injekt.get(),
@@ -114,6 +119,7 @@ class AnimeScreenModel(
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
+    private val syncSeasonsWithSource: SyncSeasonsWithSource = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val addTracks: AddAnimeTracks = Injekt.get(),
@@ -173,16 +179,17 @@ class AnimeScreenModel(
     init {
         screenModelScope.launchIO {
             combine(
-                getAnimeAndEpisodes.subscribe(animeId).distinctUntilChanged(),
+                getAnimeAndEpisodesAndSeasons.subscribe(animeId).distinctUntilChanged(),
                 downloadCache.changes,
                 downloadManager.queueState,
-            ) { animeAndEpisodes, _, _ -> animeAndEpisodes }
+            ) { animeAndEpisodesAndSeasons, _, _ -> animeAndEpisodesAndSeasons }
                 .flowWithLifecycle(lifecycle)
-                .collectLatest { (anime, episodes) ->
+                .collectLatest { (anime, episodes, seasons) ->
                     updateSuccessState {
                         it.copy(
                             anime = anime,
                             episodes = episodes.toEpisodeListItems(anime),
+                            seasons = seasons,
                         )
                     }
                 }
@@ -191,16 +198,28 @@ class AnimeScreenModel(
         observeDownloads()
 
         screenModelScope.launchIO {
-            val anime = getAnimeAndEpisodes.awaitAnime(animeId)
-            val episodes = getAnimeAndEpisodes.awaitEpisodes(animeId)
-                .toEpisodeListItems(anime)
+            val anime = getAnimeAndEpisodesAndSeasons.awaitAnime(animeId)
+
+            val episodes = if (anime.fetchType == FetchType.Seasons) {
+                emptyList()
+            } else {
+                getAnimeAndEpisodesAndSeasons.awaitEpisodes(animeId)
+                    .toEpisodeListItems(anime)
+            }
+
+            val seasons = if (anime.fetchType == FetchType.Episodes) {
+                emptyList()
+            } else {
+                getAnimeAndEpisodesAndSeasons.awaitSeasons(animeId)
+            }
 
             if (!anime.favorite) {
                 setAnimeDefaultEpisodeFlags.await(anime)
             }
 
             val needRefreshInfo = !anime.initialized
-            val needRefreshEpisode = episodes.isEmpty()
+            val needRefreshEpisode = episodes.isEmpty() && anime.fetchType != FetchType.Seasons
+            val needRefreshSeason = seasons.isEmpty() && anime.fetchType != FetchType.Episodes
 
             // Show what we have earlier
             mutableState.update {
@@ -209,6 +228,7 @@ class AnimeScreenModel(
                     source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source),
                     isFromSource = isFromSource,
                     episodes = episodes,
+                    seasons = seasons,
                     isRefreshingData = needRefreshInfo || needRefreshEpisode,
                     dialog = null,
                 )
@@ -221,6 +241,7 @@ class AnimeScreenModel(
                 val fetchFromSourceTasks = listOf(
                     async { if (needRefreshInfo) fetchAnimeFromSource() },
                     async { if (needRefreshEpisode) fetchEpisodesFromSource() },
+                    async { if (needRefreshSeason) fetchSeasonsFromSource() },
                 )
                 fetchFromSourceTasks.awaitAll()
             }
@@ -235,7 +256,16 @@ class AnimeScreenModel(
             updateSuccessState { it.copy(isRefreshingData = true) }
             val fetchFromSourceTasks = listOf(
                 async { fetchAnimeFromSource(manualFetch) },
-                async { fetchEpisodesFromSource(manualFetch) },
+                async {
+                    if (successState?.anime?.fetchType != FetchType.Seasons) {
+                        fetchEpisodesFromSource(manualFetch)
+                    }
+                },
+                async {
+                    if (successState?.anime?.fetchType != FetchType.Episodes) {
+                        fetchSeasonsFromSource()
+                    }
+                },
             )
             fetchFromSourceTasks.awaitAll()
             updateSuccessState { it.copy(isRefreshingData = false) }
@@ -543,6 +573,7 @@ class AnimeScreenModel(
      */
     private suspend fun fetchEpisodesFromSource(manualFetch: Boolean = false) {
         val state = successState ?: return
+        if (state.anime.fetchType == FetchType.Seasons) return
         try {
             withIOContext {
                 val episodes = state.source.getEpisodeList(state.anime.toSAnime())
@@ -561,6 +592,36 @@ class AnimeScreenModel(
         } catch (e: Throwable) {
             val message = if (e is NoEpisodesException) {
                 context.stringResource(MR.strings.no_episodes_error)
+            } else {
+                logcat(LogPriority.ERROR, e)
+                with(context) { e.formattedMessage }
+            }
+
+            screenModelScope.launch {
+                snackbarHostState.showSnackbar(message = message)
+            }
+            val newAnime = animeRepository.getAnimeById(animeId)
+            updateSuccessState { it.copy(anime = newAnime, isRefreshingData = false) }
+        }
+    }
+
+    private suspend fun fetchSeasonsFromSource() {
+        val state = successState ?: return
+        if (state.anime.fetchType == FetchType.Episodes) return
+        try {
+            withIOContext {
+                val seasons = state.source.getSeasonList(state.anime.toSAnime())
+
+                syncSeasonsWithSource.await(
+                    seasons,
+                    state.anime,
+                    state.source,
+                )
+            }
+        } catch (e: Throwable) {
+            val message = if (e is NoSeasonsException) {
+                // TODO(seasons): string resource
+                "No seasons available"
             } else {
                 logcat(LogPriority.ERROR, e)
                 with(context) { e.formattedMessage }
@@ -1152,6 +1213,7 @@ class AnimeScreenModel(
             val source: AnimeSource,
             val isFromSource: Boolean,
             val episodes: List<EpisodeList.Item>,
+            val seasons: List<LibraryAnime>,
             val trackingCount: Int = 0,
             val hasLoggedInTrackers: Boolean = false,
             val isRefreshingData: Boolean = false,

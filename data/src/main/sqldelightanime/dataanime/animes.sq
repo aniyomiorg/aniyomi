@@ -29,7 +29,8 @@ CREATE TABLE animes(
     favorite_modified_at INTEGER,
     version INTEGER NOT NULL DEFAULT 0,
     is_syncing INTEGER NOT NULL DEFAULT 0,
-    fetch_type INTEGER AS FetchType NOT NULL DEFAULT 0
+    fetch_type INTEGER AS FetchType NOT NULL DEFAULT 0,
+    parent_id INTEGER
 );
 
 CREATE INDEX animelib_favorite_index ON animes(favorite) WHERE favorite = 1;
@@ -150,8 +151,8 @@ DELETE FROM animes
 WHERE favorite = 0 AND source IN :sourceIds;
 
 insert:
-INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type)
-VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType);
+INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id)
+VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType, :parentId);
 
 update:
 UPDATE animes SET
@@ -176,7 +177,8 @@ UPDATE animes SET
     calculate_interval = coalesce(:calculateInterval, calculate_interval),
     version = coalesce(:version, version),
     is_syncing = coalesce(:isSyncing, is_syncing),
-    fetch_type = coalesce(:fetchType, fetch_type)
+    fetch_type = coalesce(:fetchType, fetch_type),
+    parent_id = coalesce(:parentId, parent_id)
 WHERE _id = :animeId;
 
 selectLastInsertedRowId:

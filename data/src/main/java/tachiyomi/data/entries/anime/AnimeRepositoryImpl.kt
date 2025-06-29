@@ -122,6 +122,7 @@ class AnimeRepositoryImpl(
                 updateStrategy = anime.updateStrategy,
                 version = anime.version,
                 fetchType = anime.fetchType,
+                parentId = anime.parentId,
             )
             animesQueries.selectLastInsertedRowId()
         }
@@ -145,6 +146,14 @@ class AnimeRepositoryImpl(
             logcat(LogPriority.ERROR, e)
             false
         }
+    }
+
+    override suspend fun getAnimeSeasonsById(parentId: Long): List<LibraryAnime> {
+        return handler.awaitList { animeseasonsViewQueries.getAnimeSeasonsById(parentId, AnimeMapper::mapLibraryAnime) }
+    }
+
+    override fun getAnimeSeasonsByIdAsFlow(parentId: Long): Flow<List<LibraryAnime>> {
+        return handler.subscribeToList { animeseasonsViewQueries.getAnimeSeasonsById(parentId, AnimeMapper::mapLibraryAnime) }
     }
 
     private suspend fun partialUpdateAnime(vararg animeUpdates: AnimeUpdate) {
@@ -174,6 +183,7 @@ class AnimeRepositoryImpl(
                     version = value.version,
                     isSyncing = 0,
                     fetchType = value.fetchType?.let(FetchTypeColumnAdapter::encode),
+                    parentId = value.parentId,
                 )
             }
         }
