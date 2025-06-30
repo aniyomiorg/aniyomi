@@ -8,7 +8,6 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.NoSeasonsException
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.source.local.entries.anime.isLocal
-import java.time.ZonedDateTime
 
 class SyncSeasonsWithSource(
     private val updateAnime: UpdateAnime,
@@ -23,9 +22,6 @@ class SyncSeasonsWithSource(
             throw NoSeasonsException()
         }
 
-        val now = ZonedDateTime.now()
-        val nowMillis = now.toInstant().toEpochMilli()
-
         val sourceSeasons = rawSourceSeasons
             .distinctBy { it.url }
             .mapIndexed { i, sAnime ->
@@ -33,6 +29,7 @@ class SyncSeasonsWithSource(
                     .copy(parentId = anime.id)
             }
 
+        // TODO(seasons): add more checks here
         val seasonUpdates = sourceSeasons.map { it.toAnimeUpdate() }
         updateAnime.awaitAll(seasonUpdates)
     }
