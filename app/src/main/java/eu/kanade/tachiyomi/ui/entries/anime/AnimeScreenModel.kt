@@ -8,6 +8,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import aniyomi.domain.anime.SeasonAnime
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.addOrRemove
@@ -109,6 +110,7 @@ class AnimeScreenModel(
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
     private val trackEpisode: TrackEpisode = Injekt.get(),
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val getAnimeAndEpisodesAndSeasons: GetAnimeWithEpisodesAndSeasons = Injekt.get(),
@@ -189,7 +191,7 @@ class AnimeScreenModel(
                         it.copy(
                             anime = anime,
                             episodes = episodes.toEpisodeListItems(anime),
-                            seasons = seasons,
+                            seasons = seasons.toAnimeSeasonItems(),
                         )
                     }
                 }
@@ -211,6 +213,7 @@ class AnimeScreenModel(
                 emptyList()
             } else {
                 getAnimeAndEpisodesAndSeasons.awaitSeasons(animeId)
+                    .toAnimeSeasonItems()
             }
 
             if (!anime.favorite) {
@@ -225,7 +228,7 @@ class AnimeScreenModel(
             mutableState.update {
                 State.Success(
                     anime = anime,
-                    source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source),
+                    source = sourceManager.getOrStub(anime.source),
                     isFromSource = isFromSource,
                     episodes = episodes,
                     seasons = seasons,
@@ -564,6 +567,18 @@ class AnimeScreenModel(
                 downloadState = downloadState,
                 downloadProgress = activeDownload?.progress ?: 0,
                 selected = episode.id in selectedEpisodeIds,
+            )
+        }
+    }
+
+    private fun List<SeasonAnime>.toAnimeSeasonItems(): List<AnimeSeasonItem> {
+        return map { seasonAnime ->
+            AnimeSeasonItem(
+                seasonAnime = seasonAnime,
+                downloadCount = downloadManager.getDownloadCount(seasonAnime.anime).toLong(),
+                unseenCount = seasonAnime.unseenEpisodeCount,
+                isLocal = seasonAnime.anime.isLocal(),
+                sourceLanguage = sourceManager.getOrStub(seasonAnime.anime.source).lang,
             )
         }
     }
@@ -1213,7 +1228,7 @@ class AnimeScreenModel(
             val source: AnimeSource,
             val isFromSource: Boolean,
             val episodes: List<EpisodeList.Item>,
-            val seasons: List<LibraryAnime>,
+            val seasons: List<AnimeSeasonItem>,
             val trackingCount: Int = 0,
             val hasLoggedInTrackers: Boolean = false,
             val isRefreshingData: Boolean = false,

@@ -6,8 +6,7 @@ SELECT
     coalesce(C.latestUpload, 0) AS latestUpload,
     coalesce(C.fetchedAt, 0) AS episodeFetchedAt,
     coalesce(C.lastSeen, 0) AS lastSeen,
-    coalesce(C.bookmarkCount, 0) AS bookmarkCount,
-    coalesce(MC.category_id, 0) AS category
+    coalesce(C.bookmarkCount, 0) AS bookmarkCount
 FROM animes M
 LEFT JOIN(
     SELECT
@@ -24,8 +23,6 @@ LEFT JOIN(
     GROUP BY episodes.anime_id
 ) AS C
 ON M._id = C.anime_id
-LEFT JOIN animes_categories AS MC
-ON MC.anime_id = M._id
 WHERE M.parent_id IS NOT NULL;
 
 getAnimeSeasonsById:

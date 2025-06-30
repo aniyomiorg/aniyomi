@@ -1,5 +1,6 @@
 package tachiyomi.data.entries.anime
 
+import aniyomi.domain.anime.SeasonAnime
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.core.common.util.system.logcat
@@ -148,12 +149,12 @@ class AnimeRepositoryImpl(
         }
     }
 
-    override suspend fun getAnimeSeasonsById(parentId: Long): List<LibraryAnime> {
-        return handler.awaitList { animeseasonsViewQueries.getAnimeSeasonsById(parentId, AnimeMapper::mapLibraryAnime) }
+    override suspend fun getAnimeSeasonsById(parentId: Long): List<SeasonAnime> {
+        return handler.awaitList { animeseasonsViewQueries.getAnimeSeasonsById(parentId, AnimeMapper::mapSeasonAnime) }
     }
 
-    override fun getAnimeSeasonsByIdAsFlow(parentId: Long): Flow<List<LibraryAnime>> {
-        return handler.subscribeToList { animeseasonsViewQueries.getAnimeSeasonsById(parentId, AnimeMapper::mapLibraryAnime) }
+    override fun getAnimeSeasonsByIdAsFlow(parentId: Long): Flow<List<SeasonAnime>> {
+        return handler.subscribeToList { animeseasonsViewQueries.getAnimeSeasonsById(parentId, AnimeMapper::mapSeasonAnime) }
     }
 
     private suspend fun partialUpdateAnime(vararg animeUpdates: AnimeUpdate) {

@@ -1,5 +1,6 @@
 package tachiyomi.domain.entries.anime.repository
 
+import aniyomi.domain.anime.SeasonAnime
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
@@ -39,7 +40,7 @@ interface AnimeRepository {
 
     suspend fun updateAllAnime(animeUpdates: List<AnimeUpdate>): Boolean
 
-    suspend fun getAnimeSeasonsById(parentId: Long): List<LibraryAnime>
+    suspend fun getAnimeSeasonsById(parentId: Long): List<SeasonAnime>
 
-    fun getAnimeSeasonsByIdAsFlow(parentId: Long): Flow<List<LibraryAnime>>
+    fun getAnimeSeasonsByIdAsFlow(parentId: Long): Flow<List<SeasonAnime>>
 }
