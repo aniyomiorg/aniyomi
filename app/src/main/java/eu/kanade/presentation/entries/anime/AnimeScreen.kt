@@ -5,9 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,17 +18,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -47,12 +39,10 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onSizeChanged
@@ -82,13 +72,13 @@ import eu.kanade.presentation.entries.components.EntryBottomActionMenu
 import eu.kanade.presentation.entries.components.EntryToolbar
 import eu.kanade.presentation.entries.components.ItemHeader
 import eu.kanade.presentation.entries.components.MissingItemCountListItem
-import eu.kanade.presentation.library.anime.AnimeLibraryComfortableGrid
 import eu.kanade.presentation.library.components.DownloadsBadge
 import eu.kanade.presentation.library.components.EntryComfortableGridItem
 import eu.kanade.presentation.library.components.LanguageBadge
 import eu.kanade.presentation.library.components.UnviewedBadge
 import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
@@ -96,20 +86,17 @@ import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeSourcePreferen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenModel
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeSeasonItem
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeList
-import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.service.missingEpisodesCount
-import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.FastScrollLazyVerticalGrid
 import tachiyomi.presentation.core.components.TwoPanelBox
-import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -172,6 +159,7 @@ fun AnimeScreen(
 
     // Season clicked
     onSeasonClicked: (SeasonAnime) -> Unit,
+    onContinueWatchingClicked: ((SeasonAnime) -> Unit)?,
 ) {
     val context = LocalContext.current
     val onCopyTagToClipboard: (tag: String) -> Unit = {
@@ -224,6 +212,7 @@ fun AnimeScreen(
             onInvertSelection = onInvertSelection,
             onSettingsClicked = onSettingsClicked,
             onSeasonClicked = onSeasonClicked,
+            onClickContinueWatching = onContinueWatchingClicked,
         )
     } else {
         AnimeScreenLargeImpl(
@@ -264,6 +253,7 @@ fun AnimeScreen(
             onInvertSelection = onInvertSelection,
             onSettingsClicked = onSettingsClicked,
             onSeasonClicked = onSeasonClicked,
+            onClickContinueWatching = onContinueWatchingClicked,
         )
     }
 }
@@ -323,9 +313,14 @@ private fun AnimeScreenSmallImpl(
 
     // Season clicked
     onSeasonClicked: (SeasonAnime) -> Unit,
+    onClickContinueWatching: ((SeasonAnime) -> Unit)?,
 ) {
+    val density = LocalDensity.current
+    val offsetGridPaddingPx = with(density) { GRID_PADDING.roundToPx() }
+
     val itemListState = rememberLazyGridState()
 
+    val seasons = remember(state) { state.seasons }
     val episodes = remember(state) { state.processedEpisodes }
     val listItem = remember(state) { state.episodeListItems }
 
@@ -441,10 +436,6 @@ private fun AnimeScreenSmallImpl(
             indicatorPadding = PaddingValues(top = topPadding),
         ) {
             val layoutDirection = LocalLayoutDirection.current
-            val density = LocalDensity.current
-            val offsetPx = with(density) {
-                GRID_PADDING.roundToPx()
-            }
 
             FastScrollLazyVerticalGrid(
                 modifier = Modifier.fillMaxHeight(),
@@ -470,7 +461,7 @@ private fun AnimeScreenSmallImpl(
                         isStubSource = remember { state.source is StubAnimeSource },
                         onCoverClick = onCoverClicked,
                         doSearch = onSearch,
-                        modifier = Modifier.ignorePadding(offsetPx),
+                        modifier = Modifier.ignorePadding(offsetGridPaddingPx),
                     )
                 }
 
@@ -490,7 +481,7 @@ private fun AnimeScreenSmallImpl(
                         onTrackingClicked = onTrackingClicked,
                         onEditIntervalClicked = onEditIntervalClicked,
                         onEditCategory = onEditCategoryClicked,
-                        modifier = Modifier.ignorePadding(offsetPx),
+                        modifier = Modifier.ignorePadding(offsetGridPaddingPx),
                     )
                 }
 
@@ -505,7 +496,7 @@ private fun AnimeScreenSmallImpl(
                         tagsProvider = { state.anime.genre },
                         onTagSearch = onTagSearch,
                         onCopyTagToClipboard = onCopyTagToClipboard,
-                        modifier = Modifier.ignorePadding(offsetPx),
+                        modifier = Modifier.ignorePadding(offsetGridPaddingPx),
                     )
                 }
 
@@ -519,62 +510,72 @@ private fun AnimeScreenSmallImpl(
                     }
                     ItemHeader(
                         enabled = !isAnySelected,
-                        itemCount = episodes.size,
+                        itemCount = when (state.anime.fetchType) {
+                            FetchType.Unknown -> 0
+                            FetchType.Seasons -> seasons.size
+                            FetchType.Episodes -> episodes.size
+                        },
                         missingItemsCount = missingEpisodesCount,
                         onClick = onFilterClicked,
                         isManga = false,
-                        modifier = Modifier.ignorePadding(offsetPx),
+                        fetchType = state.anime.fetchType,
+                        modifier = Modifier.ignorePadding(offsetGridPaddingPx),
                     )
                 }
 
-                if (state.seasons.isNotEmpty()) {
-                    sharedSeasons(
-                        seasons = state.seasons,
-                        onSeasonClicked = onSeasonClicked,
-                    )
-                } else if (state.episodes.isNotEmpty()) {
-                    if (state.airingTime > 0L) {
-                        item(
-                            key = EntryScreenItem.AIRING_TIME,
-                            contentType = EntryScreenItem.AIRING_TIME,
-                            span = { GridItemSpan(maxLineSpan) },
-                        ) {
-                            // Handles the second by second countdown
-                            var timer by remember { mutableLongStateOf(state.airingTime) }
-                            LaunchedEffect(key1 = timer) {
-                                if (timer > 0L) {
-                                    delay(1000L)
-                                    timer -= 1000L
+                when (state.anime.fetchType) {
+                    FetchType.Seasons -> {
+                        sharedSeasons(
+                            seasons = seasons,
+                            onSeasonClicked = onSeasonClicked,
+                            onClickContinueWatching = onClickContinueWatching,
+                        )
+                    }
+                    FetchType.Episodes -> {
+                        if (state.airingTime > 0L) {
+                            item(
+                                key = EntryScreenItem.AIRING_TIME,
+                                contentType = EntryScreenItem.AIRING_TIME,
+                                span = { GridItemSpan(maxLineSpan) },
+                            ) {
+                                // Handles the second by second countdown
+                                var timer by remember { mutableLongStateOf(state.airingTime) }
+                                LaunchedEffect(key1 = timer) {
+                                    if (timer > 0L) {
+                                        delay(1000L)
+                                        timer -= 1000L
+                                    }
+                                }
+                                if (timer > 0L &&
+                                    showNextEpisodeAirTime &&
+                                    state.anime.status.toInt() != SAnime.COMPLETED
+                                ) {
+                                    NextEpisodeAiringListItem(
+                                        title = stringResource(
+                                            MR.strings.display_mode_episode,
+                                            formatEpisodeNumber(state.airingEpisodeNumber),
+                                        ),
+                                        date = formatTime(state.airingTime, useDayFormat = true),
+                                        modifier = Modifier.ignorePadding(offsetGridPaddingPx),
+                                    )
                                 }
                             }
-                            if (timer > 0L &&
-                                showNextEpisodeAirTime &&
-                                state.anime.status.toInt() != SAnime.COMPLETED
-                            ) {
-                                NextEpisodeAiringListItem(
-                                    title = stringResource(
-                                        MR.strings.display_mode_episode,
-                                        formatEpisodeNumber(state.airingEpisodeNumber),
-                                    ),
-                                    date = formatTime(state.airingTime, useDayFormat = true),
-                                    modifier = Modifier.ignorePadding(offsetPx),
-                                )
-                            }
                         }
-                    }
 
-                    sharedEpisodeItems(
-                        anime = state.anime,
-                        episodes = listItem,
-                        isAnyEpisodeSelected = episodes.fastAny { it.selected },
-                        episodeSwipeStartAction = episodeSwipeStartAction,
-                        episodeSwipeEndAction = episodeSwipeEndAction,
-                        onEpisodeClicked = onEpisodeClicked,
-                        onDownloadEpisode = onDownloadEpisode,
-                        onEpisodeSelected = onEpisodeSelected,
-                        onEpisodeSwipe = onEpisodeSwipe,
-                        modifier = Modifier.ignorePadding(offsetPx),
-                    )
+                        sharedEpisodeItems(
+                            anime = state.anime,
+                            episodes = listItem,
+                            isAnyEpisodeSelected = episodes.fastAny { it.selected },
+                            episodeSwipeStartAction = episodeSwipeStartAction,
+                            episodeSwipeEndAction = episodeSwipeEndAction,
+                            onEpisodeClicked = onEpisodeClicked,
+                            onDownloadEpisode = onDownloadEpisode,
+                            onEpisodeSelected = onEpisodeSelected,
+                            onEpisodeSwipe = onEpisodeSwipe,
+                            modifier = Modifier.ignorePadding(offsetGridPaddingPx),
+                        )
+                    }
+                    FetchType.Unknown -> {}
                 }
             }
         }
@@ -636,10 +637,12 @@ fun AnimeScreenLargeImpl(
 
     // Season clicked
     onSeasonClicked: (SeasonAnime) -> Unit,
+    onClickContinueWatching: ((SeasonAnime) -> Unit)?,
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
 
+    val seasons = remember(state) { state.seasons }
     val episodes = remember(state) { state.processedEpisodes }
     val listItem = remember(state) { state.episodeListItems }
 
@@ -651,6 +654,7 @@ fun AnimeScreenLargeImpl(
 
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableIntStateOf(0) }
+    val offsetGridPaddingPx = with(density) { GRID_PADDING.roundToPx() }
 
     val itemListState = rememberLazyGridState()
 
@@ -748,11 +752,6 @@ fun AnimeScreenLargeImpl(
                 end = insetPadding.calculateEndPadding(layoutDirection),
             ),
         ) {
-            val density = LocalDensity.current
-            val offsetPx = with(density) {
-                GRID_PADDING.roundToPx()
-            }
-
             TwoPanelBox(
                 modifier = Modifier.padding(
                     start = contentPadding.calculateStartPadding(layoutDirection),
@@ -807,70 +806,80 @@ fun AnimeScreenLargeImpl(
                             bottom = contentPadding.calculateBottomPadding(),
                         ),
                     ) {
-                        if (state.seasons.isNotEmpty()) {
-                            sharedSeasons(
-                                seasons = state.seasons,
-                                onSeasonClicked = onSeasonClicked,
+                        item(
+                            key = EntryScreenItem.ITEM_HEADER,
+                            contentType = EntryScreenItem.ITEM_HEADER,
+                        ) {
+                            val missingEpisodesCount = remember(episodes) {
+                                episodes.map { it.episode.episodeNumber }.missingEpisodesCount()
+                            }
+                            ItemHeader(
+                                enabled = !isAnySelected,
+                                itemCount = when (state.anime.fetchType) {
+                                    FetchType.Unknown -> 0
+                                    FetchType.Seasons -> seasons.size
+                                    FetchType.Episodes -> episodes.size
+                                },
+                                missingItemsCount = missingEpisodesCount,
+                                onClick = onFilterButtonClicked,
+                                isManga = false,
+                                fetchType = state.anime.fetchType,
+                                modifier = Modifier.ignorePadding(offsetGridPaddingPx),
                             )
-                        } else if (state.episodes.isNotEmpty()) {
-                            item(
-                                key = EntryScreenItem.ITEM_HEADER,
-                                contentType = EntryScreenItem.ITEM_HEADER,
-                            ) {
-                                val missingEpisodesCount = remember(episodes) {
-                                    episodes.map { it.episode.episodeNumber }.missingEpisodesCount()
-                                }
-                                ItemHeader(
-                                    enabled = !isAnySelected,
-                                    itemCount = episodes.size,
-                                    missingItemsCount = missingEpisodesCount,
-                                    onClick = onFilterButtonClicked,
-                                    isManga = false,
-                                    modifier = Modifier.ignorePadding(offsetPx),
+                        }
+
+                        when (state.anime.fetchType) {
+                            FetchType.Seasons -> {
+                                sharedSeasons(
+                                    seasons = seasons,
+                                    onSeasonClicked = onSeasonClicked,
+                                    onClickContinueWatching = onClickContinueWatching,
                                 )
                             }
-
-                            if (state.airingTime > 0L) {
-                                item(
-                                    key = EntryScreenItem.AIRING_TIME,
-                                    contentType = EntryScreenItem.AIRING_TIME,
-                                ) {
-                                    // Handles the second by second countdown
-                                    var timer by remember { mutableLongStateOf(state.airingTime) }
-                                    LaunchedEffect(key1 = timer) {
-                                        if (timer > 0L) {
-                                            delay(1000L)
-                                            timer -= 1000L
+                            FetchType.Episodes -> {
+                                if (state.airingTime > 0L) {
+                                    item(
+                                        key = EntryScreenItem.AIRING_TIME,
+                                        contentType = EntryScreenItem.AIRING_TIME,
+                                    ) {
+                                        // Handles the second by second countdown
+                                        var timer by remember { mutableLongStateOf(state.airingTime) }
+                                        LaunchedEffect(key1 = timer) {
+                                            if (timer > 0L) {
+                                                delay(1000L)
+                                                timer -= 1000L
+                                            }
+                                        }
+                                        if (timer > 0L &&
+                                            showNextEpisodeAirTime &&
+                                            state.anime.status.toInt() != SAnime.COMPLETED
+                                        ) {
+                                            NextEpisodeAiringListItem(
+                                                title = stringResource(
+                                                    MR.strings.display_mode_episode,
+                                                    formatEpisodeNumber(state.airingEpisodeNumber),
+                                                ),
+                                                date = formatTime(state.airingTime, useDayFormat = true),
+                                                modifier = Modifier.ignorePadding(offsetGridPaddingPx),
+                                            )
                                         }
                                     }
-                                    if (timer > 0L &&
-                                        showNextEpisodeAirTime &&
-                                        state.anime.status.toInt() != SAnime.COMPLETED
-                                    ) {
-                                        NextEpisodeAiringListItem(
-                                            title = stringResource(
-                                                MR.strings.display_mode_episode,
-                                                formatEpisodeNumber(state.airingEpisodeNumber),
-                                            ),
-                                            date = formatTime(state.airingTime, useDayFormat = true),
-                                            modifier = Modifier.ignorePadding(offsetPx),
-                                        )
-                                    }
                                 }
-                            }
 
-                            sharedEpisodeItems(
-                                anime = state.anime,
-                                episodes = listItem,
-                                isAnyEpisodeSelected = episodes.fastAny { it.selected },
-                                episodeSwipeStartAction = episodeSwipeStartAction,
-                                episodeSwipeEndAction = episodeSwipeEndAction,
-                                onEpisodeClicked = onEpisodeClicked,
-                                onDownloadEpisode = onDownloadEpisode,
-                                onEpisodeSelected = onEpisodeSelected,
-                                onEpisodeSwipe = onEpisodeSwipe,
-                                modifier = Modifier.ignorePadding(offsetPx),
-                            )
+                                sharedEpisodeItems(
+                                    anime = state.anime,
+                                    episodes = listItem,
+                                    isAnyEpisodeSelected = episodes.fastAny { it.selected },
+                                    episodeSwipeStartAction = episodeSwipeStartAction,
+                                    episodeSwipeEndAction = episodeSwipeEndAction,
+                                    onEpisodeClicked = onEpisodeClicked,
+                                    onDownloadEpisode = onDownloadEpisode,
+                                    onEpisodeSelected = onEpisodeSelected,
+                                    onEpisodeSwipe = onEpisodeSwipe,
+                                    modifier = Modifier.ignorePadding(offsetGridPaddingPx),
+                                )
+                            }
+                            FetchType.Unknown -> {}
                         }
                     }
                 },
@@ -933,6 +942,7 @@ private fun SharedAnimeBottomActionMenu(
 private fun LazyGridScope.sharedSeasons(
     seasons: List<AnimeSeasonItem>,
     onSeasonClicked: (SeasonAnime) -> Unit,
+    onClickContinueWatching: ((SeasonAnime) -> Unit)?,
 ) {
     items(
         items = seasons,
@@ -961,6 +971,14 @@ private fun LazyGridScope.sharedSeasons(
             },
             onLongClick = { onSeasonClicked(item.seasonAnime) },
             onClick = { onSeasonClicked(item.seasonAnime) },
+            onClickContinueViewing = if (anime.fetchType == FetchType.Episodes &&
+                onClickContinueWatching != null &&
+                item.seasonAnime.unseenEpisodeCount > 0
+            ) {
+                { onClickContinueWatching(item.seasonAnime) }
+            } else {
+                null
+            },
         )
     }
 }

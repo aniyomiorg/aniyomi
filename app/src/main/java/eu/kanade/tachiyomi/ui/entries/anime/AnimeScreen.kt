@@ -41,6 +41,7 @@ import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.isLocalOrStub
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
@@ -132,7 +133,9 @@ class AnimeScreen(
                     openEpisode(context, episode, extPlayer)
                 }
             },
-            onDownloadEpisode = screenModel::runEpisodeDownloadActions.takeIf { !successState.source.isLocalOrStub() },
+            onDownloadEpisode = screenModel::runEpisodeDownloadActions.takeIf {
+                !successState.source.isLocalOrStub() && successState.anime.fetchType == FetchType.Episodes
+            },
             onAddToLibraryClicked = {
                 screenModel.toggleFavorite()
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -176,7 +179,9 @@ class AnimeScreen(
                     screenModel.source,
                 )
             }.takeIf { isAnimeHttpSource },
-            onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
+            onDownloadActionClicked = screenModel::runDownloadAction.takeIf {
+                !successState.source.isLocalOrStub() && successState.anime.fetchType == FetchType.Episodes
+            },
             onEditCategoryClicked = screenModel::showChangeCategoryDialog.takeIf { successState.anime.favorite },
             onEditFetchIntervalClicked = screenModel::showSetAnimeFetchIntervalDialog.takeIf {
                 successState.anime.favorite
@@ -195,7 +200,15 @@ class AnimeScreen(
             onInvertSelection = screenModel::invertSelection,
             onSeasonClicked = {
                 navigator.push(AnimeScreen(it.id))
-            }
+            },
+            onContinueWatchingClicked = {
+                scope.launchIO {
+                    val episode = screenModel.getNextUnseenEpisode(it.anime)
+                    episode?.let { ep ->
+                        openEpisode(context, ep, screenModel.alwaysUseExternalPlayer)
+                    }
+                }
+            },
         )
 
         val onDismissRequest = {

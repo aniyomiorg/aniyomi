@@ -154,7 +154,9 @@ class AnimeRepositoryImpl(
     }
 
     override fun getAnimeSeasonsByIdAsFlow(parentId: Long): Flow<List<SeasonAnime>> {
-        return handler.subscribeToList { animeseasonsViewQueries.getAnimeSeasonsById(parentId, AnimeMapper::mapSeasonAnime) }
+        return handler.subscribeToList {
+            animeseasonsViewQueries.getAnimeSeasonsById(parentId, AnimeMapper::mapSeasonAnime)
+        }
     }
 
     private suspend fun partialUpdateAnime(vararg animeUpdates: AnimeUpdate) {

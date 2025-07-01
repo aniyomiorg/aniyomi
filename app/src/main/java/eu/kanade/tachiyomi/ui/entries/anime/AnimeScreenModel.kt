@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.entries.anime
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -50,6 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -83,6 +83,7 @@ import tachiyomi.domain.entries.anime.model.NoSeasonsException
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.applyFilter
+import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.Episode
@@ -101,6 +102,7 @@ import java.util.Calendar
 import kotlin.collections.filter
 import kotlin.collections.forEach
 import kotlin.math.floor
+import kotlin.time.Duration.Companion.seconds
 
 class AnimeScreenModel(
     private val context: Context,
@@ -131,6 +133,7 @@ class AnimeScreenModel(
     private val addTracks: AddAnimeTracks = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
     private val animeRepository: AnimeRepository = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val filterEpisodesForDownload: FilterEpisodesForDownload = Injekt.get(),
     internal val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
@@ -622,6 +625,8 @@ class AnimeScreenModel(
                     if (state.anime.fetchType == FetchType.Seasons) throw NoEpisodesException()
                     val episodes = state.source.getEpisodeList(state.anime.toSAnime())
 
+                    delay(3.seconds)
+
                     if (episodes.isNotEmpty()) {
                         updateFetchMode(state.anime, FetchType.Episodes)
                     }
@@ -642,6 +647,8 @@ class AnimeScreenModel(
                 runCatching {
                     if (state.anime.fetchType == FetchType.Episodes) throw NoSeasonsException()
                     val seasons = state.source.getSeasonList(state.anime.toSAnime())
+
+                    delay(3.seconds)
 
                     if (seasons.isNotEmpty()) {
                         updateFetchMode(state.anime, FetchType.Seasons)
@@ -669,7 +676,8 @@ class AnimeScreenModel(
                     when {
                         episodeError !is NoEpisodesException -> {
                             logcat(LogPriority.ERROR, episodeError)
-                            episodeError.formattedMessage }
+                            episodeError.formattedMessage
+                        }
                         seasonError !is NoSeasonsException -> {
                             logcat(LogPriority.ERROR, seasonError)
                             seasonError.formattedMessage
@@ -749,6 +757,10 @@ class AnimeScreenModel(
             }
             LibraryPreferences.EpisodeSwipeAction.Disabled -> throw IllegalStateException()
         }
+    }
+
+    suspend fun getNextUnseenEpisode(anime: Anime): Episode? {
+        return getEpisodesByAnimeId.await(anime.id).getNextUnseen(anime, downloadManager)
     }
 
     /**

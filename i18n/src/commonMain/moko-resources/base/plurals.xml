@@ -112,6 +112,14 @@
         <item quantity="one">%d new episode</item>
         <item quantity="other">%1$d new episodes</item>
     </plurals>
+    <plurals name="anime_num_seasons">
+        <item quantity="one">%d season</item>
+        <item quantity="other">%d seasons</item>
+    </plurals>
+    <plurals name="anime_num_entries">
+        <item quantity="one">%d entry</item>
+        <item quantity="other">%d entries</item>
+    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
