@@ -71,6 +71,7 @@ class UpdateAnime(
                 thumbnailUrl = thumbnailUrl,
                 status = remoteAnime.status.toLong(),
                 updateStrategy = remoteAnime.update_strategy,
+                fetchType = remoteAnime.fetch_type,
                 initialized = true,
             ),
         )

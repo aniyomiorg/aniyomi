@@ -33,6 +33,7 @@ fun Anime.toSAnime(): SAnime = SAnime.create().also {
     it.genre = genre.orEmpty().joinToString()
     it.status = status.toInt()
     it.thumbnail_url = thumbnailUrl
+    it.fetch_type = fetchType
     it.initialized = initialized
 }
 
@@ -54,6 +55,7 @@ fun Anime.copyFrom(other: SAnime): Anime {
         thumbnailUrl = thumbnailUrl,
         status = other.status.toLong(),
         updateStrategy = other.update_strategy,
+        fetchType = other.fetch_type,
         initialized = other.initialized && initialized,
     )
 }
@@ -69,6 +71,7 @@ fun SAnime.toDomainAnime(sourceId: Long): Anime {
         status = status.toLong(),
         thumbnailUrl = thumbnail_url,
         updateStrategy = update_strategy,
+        fetchType =  fetch_type,
         initialized = initialized,
         source = sourceId,
     )
