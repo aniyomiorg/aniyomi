@@ -35,6 +35,8 @@ object AnimeMapper {
         isSyncing: Long,
         fetchType: FetchType,
         parentId: Long?,
+        seasonFlags: Long,
+        seasonSourceOrder: Long,
     ): Anime = Anime(
         id = id,
         source = source,
@@ -61,6 +63,8 @@ object AnimeMapper {
         version = version,
         fetchType = fetchType,
         parentId = parentId,
+        seasonFlags = seasonFlags,
+        seasonSourceOrder = seasonSourceOrder,
     )
 
     fun mapLibraryAnime(
@@ -90,6 +94,8 @@ object AnimeMapper {
         isSyncing: Long,
         fetchType: FetchType,
         parentId: Long?,
+        seasonFlags: Long,
+        seasonSourceOrder: Long,
         totalCount: Long,
         seenCount: Double,
         latestUpload: Long,
@@ -125,6 +131,8 @@ object AnimeMapper {
             isSyncing,
             fetchType,
             parentId,
+            seasonFlags,
+            seasonSourceOrder,
         ),
         category = category,
         totalEpisodes = totalCount,
@@ -162,6 +170,8 @@ object AnimeMapper {
         isSyncing: Long,
         fetchType: FetchType,
         parentId: Long?,
+        seasonFlags: Long,
+        seasonSourceOrder: Long,
         totalCount: Long,
         seenCount: Double,
         latestUpload: Long,
@@ -196,6 +206,8 @@ object AnimeMapper {
             isSyncing,
             fetchType,
             parentId,
+            seasonFlags,
+            seasonSourceOrder,
         ),
         totalEpisodes = totalCount,
         seenEpisodesCount = seenCount.toLong(),

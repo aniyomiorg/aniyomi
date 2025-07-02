@@ -41,6 +41,8 @@ data class BackupAnime(
     @ProtoNumber(109) var version: Long = 0,
     @ProtoNumber(110) var fetchType: FetchType = FetchType.Unknown,
     @ProtoNumber(111) var parentId: Long? = null,
+    @ProtoNumber(112) var seasonFlags: Long = 0,
+    @ProtoNumber(113) var seasonSourceOrder: Long = 0,
 ) {
     fun getAnimeImpl(): Anime {
         return Anime.create().copy(
@@ -62,6 +64,9 @@ data class BackupAnime(
             favoriteModifiedAt = this@BackupAnime.favoriteModifiedAt,
             version = this@BackupAnime.version,
             fetchType = this@BackupAnime.fetchType,
+            parentId = this@BackupAnime.parentId,
+            seasonFlags = this@BackupAnime.seasonFlags,
+            seasonSourceOrder = this@BackupAnime.seasonSourceOrder,
         )
     }
 }

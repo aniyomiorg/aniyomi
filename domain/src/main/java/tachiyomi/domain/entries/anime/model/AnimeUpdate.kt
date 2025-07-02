@@ -27,6 +27,8 @@ data class AnimeUpdate(
     val version: Long? = null,
     val fetchType: FetchType? = null,
     val parentId: Long? = null,
+    val seasonFlags: Long? = null,
+    val seasonSourceOrder: Long? = null,
 )
 
 fun Anime.toAnimeUpdate(): AnimeUpdate {
@@ -54,5 +56,7 @@ fun Anime.toAnimeUpdate(): AnimeUpdate {
         version = version,
         fetchType = fetchType,
         parentId = parentId,
+        seasonFlags = seasonFlags,
+        seasonSourceOrder = seasonSourceOrder,
     )
 }

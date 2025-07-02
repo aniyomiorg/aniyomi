@@ -124,6 +124,8 @@ class AnimeRepositoryImpl(
                 version = anime.version,
                 fetchType = anime.fetchType,
                 parentId = anime.parentId,
+                seasonFlags = anime.seasonFlags,
+                seasonSourceOrder = anime.seasonSourceOrder,
             )
             animesQueries.selectLastInsertedRowId()
         }
@@ -187,6 +189,8 @@ class AnimeRepositoryImpl(
                     isSyncing = 0,
                     fetchType = value.fetchType?.let(FetchTypeColumnAdapter::encode),
                     parentId = value.parentId,
+                    seasonFlags = value.seasonFlags,
+                    seasonSourceOrder = value.seasonSourceOrder,
                 )
             }
         }

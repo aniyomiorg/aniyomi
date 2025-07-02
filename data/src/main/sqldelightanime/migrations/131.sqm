@@ -4,6 +4,12 @@ ALTER TABLE animes ADD COLUMN fetch_type INTEGER NOT NULL DEFAULT 0;
 -- Add parent id column
 ALTER TABLE animes ADD COLUMN parent_id INTEGER;
 
+-- Add source flags column
+ALTER TABLE animes ADD COLUMN source_flags INTEGER NOT NULL DEFAULT 0;
+
+-- Add source order for seasons
+ALTER TABLE animes ADD COLUMN season_source_order INTEGER NOT NULL DEFAULT 0;
+
 -- Create view for anime seasons
 DROP VIEW IF EXISTS animeseasonsView;
 

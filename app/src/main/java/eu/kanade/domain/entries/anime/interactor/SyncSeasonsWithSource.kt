@@ -26,7 +26,7 @@ class SyncSeasonsWithSource(
             .distinctBy { it.url }
             .mapIndexed { i, sAnime ->
                 networkToLocalAnime.await(sAnime.toDomainAnime(source.id))
-                    .copy(parentId = anime.id)
+                    .copy(parentId = anime.id, seasonSourceOrder = i.toLong())
             }
 
         // TODO(seasons): add more checks here

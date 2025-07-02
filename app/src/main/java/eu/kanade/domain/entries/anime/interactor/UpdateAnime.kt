@@ -1,6 +1,7 @@
 package eu.kanade.domain.entries.anime.interactor
 
 import eu.kanade.domain.entries.anime.model.hasCustomCover
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import tachiyomi.domain.entries.anime.interactor.AnimeFetchInterval
@@ -59,6 +60,9 @@ class UpdateAnime(
 
         val thumbnailUrl = remoteAnime.thumbnail_url?.takeIf { it.isNotEmpty() }
 
+        // If the fetch type has been set, don't change it
+        val fetchType = if (localAnime.fetchType == FetchType.Unknown) remoteAnime.fetch_type else localAnime.fetchType
+
         return animeRepository.updateAnime(
             AnimeUpdate(
                 id = localAnime.id,
@@ -71,7 +75,7 @@ class UpdateAnime(
                 thumbnailUrl = thumbnailUrl,
                 status = remoteAnime.status.toLong(),
                 updateStrategy = remoteAnime.update_strategy,
-                fetchType = remoteAnime.fetch_type,
+                fetchType = fetchType,
                 initialized = true,
             ),
         )
