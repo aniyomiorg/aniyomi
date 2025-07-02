@@ -37,6 +37,7 @@ data class Anime(
     val fetchType: FetchType,
     val parentId: Long?,
     val seasonFlags: Long,
+    val seasonNumber: Double,
     val seasonSourceOrder: Long,
 ) : Serializable {
 
@@ -157,6 +158,7 @@ data class Anime(
             fetchType = FetchType.Unknown,
             parentId = null,
             seasonFlags = 0L,
+            seasonNumber = -1.0,
             seasonSourceOrder = 0L,
         )
     }

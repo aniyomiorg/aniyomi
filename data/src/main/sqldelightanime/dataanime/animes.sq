@@ -32,6 +32,7 @@ CREATE TABLE animes(
     fetch_type INTEGER AS FetchType NOT NULL DEFAULT 0,
     parent_id INTEGER,
     season_flags INTEGER NOT NULL,
+    season_number REAL NOT NULL,
     season_source_order INTEGER NOT NULL
 );
 
@@ -153,8 +154,8 @@ DELETE FROM animes
 WHERE favorite = 0 AND source IN :sourceIds;
 
 insert:
-INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id, season_flags, season_source_order)
-VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType, :parentId, :seasonFlags, :seasonSourceOrder);
+INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id, season_flags, season_number, season_source_order)
+VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType, :parentId, :seasonFlags, :seasonNumber, :seasonSourceOrder);
 
 update:
 UPDATE animes SET
@@ -182,6 +183,7 @@ UPDATE animes SET
     fetch_type = coalesce(:fetchType, fetch_type),
     parent_id = coalesce(:parentId, parent_id),
     season_flags = coalesce(:seasonFlags, season_flags),
+    season_number = coalesce(:seasonNumber, season_number),
     season_source_order = coalesce(:seasonSourceOrder, season_source_order)
 WHERE _id = :animeId;
 

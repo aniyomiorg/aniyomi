@@ -36,6 +36,7 @@ object AnimeMapper {
         fetchType: FetchType,
         parentId: Long?,
         seasonFlags: Long,
+        seasonNumber: Double,
         seasonSourceOrder: Long,
     ): Anime = Anime(
         id = id,
@@ -64,6 +65,7 @@ object AnimeMapper {
         fetchType = fetchType,
         parentId = parentId,
         seasonFlags = seasonFlags,
+        seasonNumber = seasonNumber,
         seasonSourceOrder = seasonSourceOrder,
     )
 
@@ -95,6 +97,7 @@ object AnimeMapper {
         fetchType: FetchType,
         parentId: Long?,
         seasonFlags: Long,
+        seasonNumber: Double,
         seasonSourceOrder: Long,
         totalCount: Long,
         seenCount: Double,
@@ -132,6 +135,7 @@ object AnimeMapper {
             fetchType,
             parentId,
             seasonFlags,
+            seasonNumber,
             seasonSourceOrder,
         ),
         category = category,
@@ -171,6 +175,7 @@ object AnimeMapper {
         fetchType: FetchType,
         parentId: Long?,
         seasonFlags: Long,
+        seasonNumber: Double,
         seasonSourceOrder: Long,
         totalCount: Long,
         seenCount: Double,
@@ -207,6 +212,7 @@ object AnimeMapper {
             fetchType,
             parentId,
             seasonFlags,
+            seasonNumber,
             seasonSourceOrder,
         ),
         totalEpisodes = totalCount,

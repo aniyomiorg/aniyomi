@@ -76,6 +76,7 @@ class UpdateAnime(
                 status = remoteAnime.status.toLong(),
                 updateStrategy = remoteAnime.update_strategy,
                 fetchType = fetchType,
+                seasonNumber = remoteAnime.season_number,
                 initialized = true,
             ),
         )

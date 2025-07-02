@@ -25,4 +25,6 @@ class SAnimeImpl : SAnime {
     override var update_strategy: AnimeUpdateStrategy = AnimeUpdateStrategy.ALWAYS_UPDATE
 
     override var fetch_type: FetchType = FetchType.Unknown
+
+    override var season_number: Double = -1.0
 }

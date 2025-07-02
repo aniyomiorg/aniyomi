@@ -42,7 +42,8 @@ data class BackupAnime(
     @ProtoNumber(110) var fetchType: FetchType = FetchType.Unknown,
     @ProtoNumber(111) var parentId: Long? = null,
     @ProtoNumber(112) var seasonFlags: Long = 0,
-    @ProtoNumber(113) var seasonSourceOrder: Long = 0,
+    @ProtoNumber(113) var seasonNumber: Double = 0.0,
+    @ProtoNumber(114) var seasonSourceOrder: Long = 0,
 ) {
     fun getAnimeImpl(): Anime {
         return Anime.create().copy(
@@ -66,6 +67,7 @@ data class BackupAnime(
             fetchType = this@BackupAnime.fetchType,
             parentId = this@BackupAnime.parentId,
             seasonFlags = this@BackupAnime.seasonFlags,
+            seasonNumber = this@BackupAnime.seasonNumber,
             seasonSourceOrder = this@BackupAnime.seasonSourceOrder,
         )
     }

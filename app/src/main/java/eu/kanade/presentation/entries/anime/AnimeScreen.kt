@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -91,7 +90,7 @@ import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.items.episode.model.Episode
-import tachiyomi.domain.items.episode.service.missingEpisodesCount
+import tachiyomi.domain.items.episode.service.missingEntriesCount
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.i18n.MR
@@ -506,7 +505,10 @@ private fun AnimeScreenSmallImpl(
                     span = { GridItemSpan(maxLineSpan) },
                 ) {
                     val missingEpisodesCount = remember(episodes) {
-                        episodes.map { it.episode.episodeNumber }.missingEpisodesCount()
+                        episodes.map { it.episode.episodeNumber }.missingEntriesCount()
+                    }
+                    val missingSeasonsCount = remember(seasons) {
+                        seasons.map { it.seasonAnime.anime.seasonNumber }.missingEntriesCount()
                     }
                     ItemHeader(
                         enabled = !isAnySelected,
@@ -515,7 +517,7 @@ private fun AnimeScreenSmallImpl(
                             FetchType.Seasons -> seasons.size
                             FetchType.Episodes -> episodes.size
                         },
-                        missingItemsCount = missingEpisodesCount,
+                        missingItemsCount = maxOf(missingEpisodesCount, missingSeasonsCount),
                         onClick = onFilterClicked,
                         isManga = false,
                         fetchType = state.anime.fetchType,
@@ -811,7 +813,10 @@ fun AnimeScreenLargeImpl(
                             contentType = EntryScreenItem.ITEM_HEADER,
                         ) {
                             val missingEpisodesCount = remember(episodes) {
-                                episodes.map { it.episode.episodeNumber }.missingEpisodesCount()
+                                episodes.map { it.episode.episodeNumber }.missingEntriesCount()
+                            }
+                            val missingSeasonsCount = remember(seasons) {
+                                seasons.map { it.seasonAnime.anime.seasonNumber }.missingEntriesCount()
                             }
                             ItemHeader(
                                 enabled = !isAnySelected,
@@ -820,7 +825,7 @@ fun AnimeScreenLargeImpl(
                                     FetchType.Seasons -> seasons.size
                                     FetchType.Episodes -> episodes.size
                                 },
-                                missingItemsCount = missingEpisodesCount,
+                                missingItemsCount = maxOf(missingEpisodesCount, missingSeasonsCount),
                                 onClick = onFilterButtonClicked,
                                 isManga = false,
                                 fetchType = state.anime.fetchType,

@@ -7,6 +7,9 @@ ALTER TABLE animes ADD COLUMN parent_id INTEGER;
 -- Add source flags column
 ALTER TABLE animes ADD COLUMN source_flags INTEGER NOT NULL DEFAULT 0;
 
+-- Add season number column
+ALTER TABLE animes ADD COLUMN season_number REAL NOT NULL DEFAULT -1.0;
+
 -- Add source order for seasons
 ALTER TABLE animes ADD COLUMN season_source_order INTEGER NOT NULL DEFAULT 0;
 

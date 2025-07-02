@@ -125,6 +125,7 @@ class AnimeRepositoryImpl(
                 fetchType = anime.fetchType,
                 parentId = anime.parentId,
                 seasonFlags = anime.seasonFlags,
+                seasonNumber = anime.seasonNumber,
                 seasonSourceOrder = anime.seasonSourceOrder,
             )
             animesQueries.selectLastInsertedRowId()
@@ -190,6 +191,7 @@ class AnimeRepositoryImpl(
                     fetchType = value.fetchType?.let(FetchTypeColumnAdapter::encode),
                     parentId = value.parentId,
                     seasonFlags = value.seasonFlags,
+                    seasonNumber = value.seasonNumber,
                     seasonSourceOrder = value.seasonSourceOrder,
                 )
             }

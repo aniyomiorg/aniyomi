@@ -134,6 +134,7 @@ class AnimeRestorer(
                 fetchType = anime.fetchType.let(FetchTypeColumnAdapter::encode),
                 parentId = anime.parentId,
                 seasonFlags = anime.seasonFlags,
+                seasonNumber = anime.seasonNumber,
                 seasonSourceOrder = anime.seasonSourceOrder,
             )
         }
@@ -272,6 +273,7 @@ class AnimeRestorer(
                 fetchType = anime.fetchType,
                 parentId = anime.parentId,
                 seasonFlags = anime.seasonFlags,
+                seasonNumber = anime.seasonNumber,
                 seasonSourceOrder = anime.seasonSourceOrder,
             )
             animesQueries.selectLastInsertedRowId()
