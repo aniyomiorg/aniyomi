@@ -1,5 +1,5 @@
--- Add fetch type column
-ALTER TABLE animes ADD COLUMN fetch_type INTEGER NOT NULL DEFAULT 0;
+-- Add fetch type column, all current entries are episodes
+ALTER TABLE animes ADD COLUMN fetch_type INTEGER NOT NULL DEFAULT 2;
 
 -- Add parent id column
 ALTER TABLE animes ADD COLUMN parent_id INTEGER;

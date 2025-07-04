@@ -4,8 +4,8 @@ import tachiyomi.domain.entries.anime.model.Anime
 
 data class SeasonAnime(
     val anime: Anime,
-    val totalEpisodes: Long,
-    val seenEpisodesCount: Long,
+    val totalCount: Long,
+    val seenCount: Long,
     val bookmarkCount: Long,
     val latestUpload: Long,
     val fetchedAt: Long,
@@ -13,11 +13,11 @@ data class SeasonAnime(
 ) {
     val id: Long = anime.id
 
-    val unseenEpisodeCount
-        get() = totalEpisodes - seenEpisodesCount
+    val unseenCount
+        get() = totalCount - seenCount
 
     val hasBookmarks
         get() = bookmarkCount > 0
 
-    val hasStarted = seenEpisodesCount > 0
+    val hasStarted = seenCount > 0
 }

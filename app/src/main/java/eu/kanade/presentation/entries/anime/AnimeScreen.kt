@@ -978,7 +978,7 @@ private fun LazyGridScope.sharedSeasons(
             onClick = { onSeasonClicked(item.seasonAnime) },
             onClickContinueViewing = if (anime.fetchType == FetchType.Episodes &&
                 onClickContinueWatching != null &&
-                item.seasonAnime.unseenEpisodeCount > 0
+                item.seasonAnime.unseenCount > 0
             ) {
                 { onClickContinueWatching(item.seasonAnime) }
             } else {

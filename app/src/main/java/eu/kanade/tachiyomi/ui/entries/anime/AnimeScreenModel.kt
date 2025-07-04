@@ -606,7 +606,7 @@ class AnimeScreenModel(
             AnimeSeasonItem(
                 seasonAnime = seasonAnime,
                 downloadCount = downloadManager.getDownloadCount(seasonAnime.anime).toLong(),
-                unseenCount = seasonAnime.unseenEpisodeCount,
+                unseenCount = seasonAnime.unseenCount,
                 isLocal = seasonAnime.anime.isLocal(),
                 sourceLanguage = sourceManager.getOrStub(seasonAnime.anime.source).lang,
             )

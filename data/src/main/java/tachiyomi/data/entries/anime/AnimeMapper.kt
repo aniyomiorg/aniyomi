@@ -139,7 +139,7 @@ object AnimeMapper {
             seasonSourceOrder,
         ),
         category = category,
-        totalEpisodes = totalCount,
+        totalCount = totalCount,
         seenCount = seenCount.toLong(),
         bookmarkCount = bookmarkCount.toLong(),
         latestUpload = latestUpload,
@@ -180,7 +180,7 @@ object AnimeMapper {
         totalCount: Long,
         seenCount: Double,
         latestUpload: Long,
-        episodeFetchedAt: Long,
+        fetchedAt: Long,
         lastSeen: Long,
         bookmarkCount: Double,
     ): SeasonAnime = SeasonAnime(
@@ -215,11 +215,11 @@ object AnimeMapper {
             seasonNumber,
             seasonSourceOrder,
         ),
-        totalEpisodes = totalCount,
-        seenEpisodesCount = seenCount.toLong(),
+        totalCount = totalCount,
+        seenCount = seenCount.toLong(),
         bookmarkCount = bookmarkCount.toLong(),
         latestUpload = latestUpload,
-        fetchedAt = episodeFetchedAt,
+        fetchedAt = fetchedAt,
         lastSeen = lastSeen,
     )
 }
