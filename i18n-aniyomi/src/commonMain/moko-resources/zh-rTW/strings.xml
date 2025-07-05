@@ -269,4 +269,10 @@
     <string name="onboarding_storage_action_create_folder">建立預設的 Aniyomi 資料夾</string>
     <string name="download_speed_limit">下載速度限制</string>
     <string name="download_speed_limit_hint">設定為 0 以停用速度限制。</string>
+    <string name="manga">藏書</string>
+    <string name="action_show_manga">顯示作品</string>
+    <string name="pref_clear_chapter_cache">清除章節快取</string>
+    <string name="pref_incognito_mode_summary">暫停閱讀記錄</string>
+    <string name="dialog_with_checkbox_reset">重設此作品所有章節</string>
+    <string name="download_insufficient_space">由於儲存空間不足，無法下載章節</string>
 </resources>
