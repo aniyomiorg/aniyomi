@@ -31,6 +31,7 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -59,12 +60,12 @@ class AnimeImageScreenModel(
         val savedStringResource = if (isCover) {
             MR.strings.cover_saved
         } else {
-            MR.strings.background_saved
+            AYMR.strings.background_saved
         }
         val errorSavingStringResource = if (isCover) {
             MR.strings.error_saving_cover
         } else {
-            MR.strings.error_saving_background
+            AYMR.strings.error_saving_background
         }
         screenModelScope.launch {
             try {
@@ -87,7 +88,7 @@ class AnimeImageScreenModel(
         val errorSharingStringResource = if (isCover) {
             MR.strings.error_sharing_cover
         } else {
-            MR.strings.error_sharing_background
+            AYMR.strings.error_sharing_background
         }
         screenModelScope.launch {
             try {
@@ -179,7 +180,7 @@ class AnimeImageScreenModel(
         val updatedStringResource = if (isCover) {
             MR.strings.cover_updated
         } else {
-            MR.strings.background_updated
+            AYMR.strings.background_updated
         }
         screenModelScope.launch {
             snackbarHostState.showSnackbar(
@@ -193,7 +194,7 @@ class AnimeImageScreenModel(
         val updateFailedStringResource = if (isCover) {
             MR.strings.notification_cover_update_failed
         } else {
-            MR.strings.notification_background_update_failed
+            AYMR.strings.notification_background_update_failed
         }
         screenModelScope.launch {
             snackbarHostState.showSnackbar(

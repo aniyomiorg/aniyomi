@@ -221,7 +221,7 @@ private fun AnimeUpdatesUiItem(
                 if (update.fillermark) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.Label,
-                        contentDescription = stringResource(MR.strings.action_filter_fillermarked),
+                        contentDescription = stringResource(AYMR.strings.action_filter_fillermarked),
                         modifier = Modifier
                             .sizeIn(
                                 maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },

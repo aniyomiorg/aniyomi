@@ -56,6 +56,7 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import me.saket.swipe.SwipeableActionsBox
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.IconButtonTokens
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
@@ -381,12 +382,12 @@ private fun EpisodeInformation(
             if (fillermark) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Label,
-                    contentDescription = stringResource(MR.strings.filler),
+                    contentDescription = stringResource(AYMR.strings.filler),
                     tint = MaterialTheme.colorScheme.tertiary.copy(alpha = subtitleStyle.alpha),
                     modifier = Modifier.padding(end = 4.dp),
                 )
                 Text(
-                    text = stringResource(MR.strings.filler),
+                    text = stringResource(AYMR.strings.filler),
                     maxLines = 1,
                     color = MaterialTheme.colorScheme.tertiary.copy(alpha = subtitleStyle.alpha),
                 )

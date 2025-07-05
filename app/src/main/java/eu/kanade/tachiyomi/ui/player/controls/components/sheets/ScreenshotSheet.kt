@@ -63,14 +63,14 @@ fun ScreenshotSheet(
                 )
                 ActionButton(
                     modifier = Modifier.weight(1f),
-                    title = stringResource(MR.strings.set_as_background),
+                    title = stringResource(AYMR.strings.set_as_background),
                     icon = Icons.Outlined.Photo,
                     onClick = { setArtTypeAs = ArtType.Background },
                 )
                 if (isLocalSource) {
                     ActionButton(
                         modifier = Modifier.weight(1f),
-                        title = stringResource(MR.strings.set_as_thumbnail),
+                        title = stringResource(AYMR.strings.set_as_thumbnail),
                         icon = Icons.Outlined.Photo,
                         onClick = { setArtTypeAs = ArtType.Thumbnail },
                     )

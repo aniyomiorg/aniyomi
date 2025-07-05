@@ -27,6 +27,7 @@ import tachiyomi.core.common.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
+import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
@@ -144,7 +145,7 @@ private fun ColumnScope.FilterPage(
         onClick = onBookmarkedFilterChanged,
     )
     TriStateItem(
-        label = stringResource(MR.strings.action_filter_fillermarked),
+        label = stringResource(AYMR.strings.action_filter_fillermarked),
         state = fillermarkedFilter,
         onClick = onFillermarkedFilterChanged,
     )
@@ -191,13 +192,13 @@ private fun ColumnScope.DisplayPage(
     }
     val showPreviewsFlag = if (showPreviews) Anime.EPISODE_SHOW_NOT_PREVIEWS else Anime.EPISODE_SHOW_PREVIEWS
     CheckboxItem(
-        label = stringResource(MR.strings.show_episode_previews),
+        label = stringResource(AYMR.strings.show_episode_previews),
         checked = showPreviews,
         onClick = { onShowPreviewsEnabled(showPreviewsFlag) },
     )
     val showSummariesFlag = if (showSummaries) Anime.EPISODE_SHOW_NOT_SUMMARIES else Anime.EPISODE_SHOW_SUMMARIES
     CheckboxItem(
-        label = stringResource(MR.strings.show_episode_summaries),
+        label = stringResource(AYMR.strings.show_episode_summaries),
         checked = showSummaries,
         onClick = { onShowSummariesEnabled(showSummariesFlag) },
     )

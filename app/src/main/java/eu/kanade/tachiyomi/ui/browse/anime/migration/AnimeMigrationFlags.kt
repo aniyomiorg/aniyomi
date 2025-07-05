@@ -77,7 +77,7 @@ object AnimeMigrationFlags {
                 flags += AnimeMigrationFlag.create(
                     CUSTOM_BACKGROUND,
                     defaultSelectedBitMap,
-                    MR.strings.custom_background,
+                    AYMR.strings.custom_background,
                 )
             }
             if (downloadCache.getDownloadCount(anime) > 0) {

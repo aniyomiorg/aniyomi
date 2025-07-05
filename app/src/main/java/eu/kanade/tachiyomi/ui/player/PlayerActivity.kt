@@ -1157,8 +1157,8 @@ class PlayerActivity : BaseActivity() {
                 SetAsArt.Success ->
                     when (artType) {
                         ArtType.Cover -> MR.strings.cover_updated
-                        ArtType.Background -> MR.strings.background_updated
-                        ArtType.Thumbnail -> MR.strings.thumbnail_updated
+                        ArtType.Background -> AYMR.strings.background_updated
+                        ArtType.Thumbnail -> AYMR.strings.thumbnail_updated
                     }
                 SetAsArt.AddToLibraryFirst -> MR.strings.notification_first_add_to_library
                 SetAsArt.Error -> MR.strings.notification_cover_update_failed

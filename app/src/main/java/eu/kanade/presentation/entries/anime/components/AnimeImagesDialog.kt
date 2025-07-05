@@ -57,6 +57,7 @@ import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.clickableNoIndication
@@ -83,9 +84,9 @@ fun AnimeImagesDialog(
     }
 
     val (editImageStringResource, alternateImageStringResource) = if (isCover) {
-        MR.strings.action_edit_cover to MR.strings.action_edit_background
+        MR.strings.action_edit_cover to AYMR.strings.action_edit_background
     } else {
-        MR.strings.action_edit_background to MR.strings.action_edit_cover
+        AYMR.strings.action_edit_background to MR.strings.action_edit_cover
     }
 
     val onImageSwitchClicked: () -> Unit = {

@@ -151,7 +151,7 @@ fun EntryBottomActionMenu(
                 }
                 if (onFillermarkClicked != null) {
                     Button(
-                        title = stringResource(MR.strings.action_fillermark_episode),
+                        title = stringResource(AYMR.strings.action_fillermark_episode),
                         icon = Icons.Outlined.NewLabel,
                         toConfirm = confirm[2],
                         onLongClick = { onLongClickItem(2) },
@@ -160,7 +160,7 @@ fun EntryBottomActionMenu(
                 }
                 if (onRemoveFillermarkClicked != null) {
                     Button(
-                        title = stringResource(MR.strings.action_remove_fillermark_episode),
+                        title = stringResource(AYMR.strings.action_remove_fillermark_episode),
                         icon = Icons.AutoMirrored.Outlined.LabelOff,
                         toConfirm = confirm[3],
                         onLongClick = { onLongClickItem(3) },
