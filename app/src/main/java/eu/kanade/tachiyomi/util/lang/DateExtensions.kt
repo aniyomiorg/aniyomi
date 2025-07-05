@@ -4,6 +4,7 @@ import android.content.Context
 import tachiyomi.core.common.i18n.pluralStringResource
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import java.text.DateFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -93,7 +94,7 @@ fun LocalDateTime.toRelativeString(
             val hourDifference = ChronoUnit.HOURS.between(this, now)
             when {
                 hourDifference < 0 -> context.pluralStringResource(
-                    MR.plurals.upcoming_relative_time_hours,
+                    AYMR.plurals.upcoming_relative_time_hours,
                     hourDifference.toInt().absoluteValue,
                     hourDifference.toInt().absoluteValue,
                 )
@@ -101,20 +102,20 @@ fun LocalDateTime.toRelativeString(
                     val minuteDifference = ChronoUnit.MINUTES.between(this, now)
                     when {
                         minuteDifference < 0 -> context.pluralStringResource(
-                            MR.plurals.upcoming_relative_time_minutes,
+                            AYMR.plurals.upcoming_relative_time_minutes,
                             minuteDifference.toInt().absoluteValue,
                             minuteDifference.toInt().absoluteValue,
                         )
-                        minuteDifference == 0L -> context.stringResource(MR.strings.relative_time_now)
+                        minuteDifference == 0L -> context.stringResource(AYMR.strings.relative_time_now)
                         else -> context.pluralStringResource(
-                            MR.plurals.relative_time_minutes,
+                            AYMR.plurals.relative_time_minutes,
                             minuteDifference.toInt(),
                             minuteDifference.toInt(),
                         )
                     }
                 }
                 else -> context.pluralStringResource(
-                    MR.plurals.relative_time_hours,
+                    AYMR.plurals.relative_time_hours,
                     hourDifference.toInt(),
                     hourDifference.toInt(),
                 )

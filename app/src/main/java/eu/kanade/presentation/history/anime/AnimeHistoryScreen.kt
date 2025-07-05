@@ -16,6 +16,7 @@ import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -43,7 +44,7 @@ fun AnimeHistoryScreen(
                 val msg = if (!searchQuery.isNullOrEmpty()) {
                     MR.strings.no_results_found
                 } else {
-                    MR.strings.information_no_recent_anime
+                    AYMR.strings.information_no_recent_anime
                 }
                 EmptyScreen(
                     stringRes = msg,

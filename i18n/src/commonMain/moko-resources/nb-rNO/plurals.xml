@@ -56,6 +56,10 @@
         <item quantity="one">Neste kapittel</item>
         <item quantity="other">Neste %d kapitler</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">Mangler %1$s kapittel</item>
+        <item quantity="other">Mangler %1$s kapitler</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">%d dag</item>
         <item quantity="other">%d dager</item>
@@ -63,33 +67,5 @@
     <plurals name="num_repos">
         <item quantity="one">%d pakkebrønn</item>
         <item quantity="other">%d pakkebrønner</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
     </plurals>
 </resources>

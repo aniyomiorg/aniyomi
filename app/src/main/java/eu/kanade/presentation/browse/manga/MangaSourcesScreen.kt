@@ -27,6 +27,7 @@ import eu.kanade.tachiyomi.util.system.LocaleHelper
 import tachiyomi.domain.source.manga.model.Pin
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.components.material.padding
@@ -201,9 +202,9 @@ fun MangaSourceOptionsDialog(
                 if (onClickToggleDataSaver != null) {
                     Text(
                         text = if (source.isExcludedFromDataSaver) {
-                            stringResource(MR.strings.data_saver_stop_exclude)
+                            stringResource(AYMR.strings.data_saver_stop_exclude)
                         } else {
-                            stringResource(MR.strings.data_saver_exclude)
+                            stringResource(AYMR.strings.data_saver_exclude)
                         },
                         modifier = Modifier
                             .clickable(onClick = onClickToggleDataSaver)

@@ -16,6 +16,7 @@ import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.notify
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.injectLazy
 import java.util.regex.Pattern
 
@@ -87,7 +88,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 )
                 addAction(
                     R.drawable.ic_book_24dp,
-                    context.stringResource(MR.strings.action_show_anime),
+                    context.stringResource(AYMR.strings.action_show_anime),
                     NotificationReceiver.openAnimeEntryPendingActivity(context, download.anime.id),
                 )
             }
@@ -95,7 +96,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             val downloadingProgressText = if (download.progress == 0) {
                 context.stringResource(MR.strings.update_check_notification_download_in_progress)
             } else {
-                context.stringResource(MR.strings.episode_downloading_progress, download.progress)
+                context.stringResource(AYMR.strings.episode_downloading_progress, download.progress)
             }
 
             if (preferences.hideNotificationContent().get()) {
@@ -127,8 +128,8 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      */
     fun onPaused() {
         with(progressNotificationBuilder) {
-            setContentTitle(context.stringResource(MR.strings.download_paused))
-            setContentText(context.stringResource(MR.strings.download_notifier_download_paused_episodes))
+            setContentTitle(context.stringResource(AYMR.strings.download_paused))
+            setContentText(context.stringResource(AYMR.strings.download_notifier_download_paused_episodes))
             setSmallIcon(R.drawable.ic_pause_24dp)
             setProgress(0, 0, false)
             setOngoing(false)
@@ -183,7 +184,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             if (animeId != null) {
                 addAction(
                     R.drawable.ic_book_24dp,
-                    context.stringResource(MR.strings.action_show_anime),
+                    context.stringResource(AYMR.strings.action_show_anime),
                     NotificationReceiver.openAnimeEntryPendingActivity(context, animeId),
                 )
             }
@@ -221,7 +222,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             if (animeId != null) {
                 addAction(
                     R.drawable.ic_book_24dp,
-                    context.stringResource(MR.strings.action_show_anime),
+                    context.stringResource(AYMR.strings.action_show_anime),
                     NotificationReceiver.openAnimeEntryPendingActivity(context, animeId),
                 )
             }

@@ -19,8 +19,8 @@ android {
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 129
-        versionName = "0.16.4.3"
+        versionCode = 130
+        versionName = "0.18.0.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -182,6 +182,7 @@ kotlin {
 
 dependencies {
     implementation(projects.i18n)
+    implementation(projects.i18nAniyomi)
     implementation(projects.core.archive)
     implementation(projects.core.common)
     implementation(projects.coreMetadata)
@@ -221,13 +222,13 @@ dependencies {
     implementation(androidx.appcompat)
     implementation(androidx.biometricktx)
     implementation(androidx.constraintlayout)
-    implementation(androidx.compose.constraintlayout)
+    implementation(aniyomilibs.compose.constraintlayout)
     implementation(androidx.corektx)
     implementation(androidx.splashscreen)
     implementation(androidx.recyclerview)
     implementation(androidx.viewpager)
     implementation(androidx.profileinstaller)
-    implementation(androidx.mediasession)
+    implementation(aniyomilibs.mediasession)
 
     implementation(androidx.bundles.lifecycle)
 
@@ -300,14 +301,14 @@ dependencies {
     testImplementation(kotlinx.coroutines.test)
 
     // mpv-android
-    implementation(libs.aniyomi.mpv)
+    implementation(aniyomilibs.aniyomi.mpv)
     // FFmpeg-kit
-    implementation(libs.ffmpeg.kit)
-    implementation(libs.arthenica.smartexceptions)
+    implementation(aniyomilibs.ffmpeg.kit)
+    implementation(aniyomilibs.arthenica.smartexceptions)
     // seeker seek bar
-    implementation(libs.seeker)
+    implementation(aniyomilibs.seeker)
     // true type parser
-    implementation(libs.truetypeparser)
+    implementation(aniyomilibs.truetypeparser)
 }
 
 androidComponents {

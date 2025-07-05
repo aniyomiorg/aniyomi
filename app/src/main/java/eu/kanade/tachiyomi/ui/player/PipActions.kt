@@ -27,6 +27,7 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.R
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 
 fun createPipActions(
     context: Context,
@@ -39,7 +40,7 @@ fun createPipActions(
         createPipAction(
             context,
             R.drawable.ic_skip_previous_24dp,
-            MR.strings.action_previous_episode,
+            AYMR.strings.action_previous_episode,
             PIP_PREVIOUS,
             PIP_PREVIOUS,
             playlistPosition != 0,
@@ -48,7 +49,7 @@ fun createPipActions(
         createPipAction(
             context,
             R.drawable.ic_forward_10_24dp,
-            MR.strings.pref_skip_10,
+            AYMR.strings.pref_skip_10,
             PIP_SKIP,
             PIP_SKIP,
         )
@@ -57,7 +58,7 @@ fun createPipActions(
         createPipAction(
             context,
             R.drawable.ic_play_arrow_24dp,
-            MR.strings.action_play,
+            AYMR.strings.action_play,
             PIP_PLAY,
             PIP_PLAY,
         )
@@ -73,7 +74,7 @@ fun createPipActions(
     createPipAction(
         context,
         R.drawable.ic_skip_next_24dp,
-        MR.strings.action_next_episode,
+        AYMR.strings.action_next_episode,
         PIP_NEXT,
         PIP_NEXT,
         playlistPosition != playlistCount - 1,

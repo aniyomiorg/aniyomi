@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import eu.kanade.presentation.more.settings.screen.player.editor.FileCreationResult
 import kotlinx.coroutines.delay
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import kotlin.time.Duration.Companion.seconds
 
@@ -71,9 +72,9 @@ fun FileCreateDialog(
                     if (initialName ==
                         null
                     ) {
-                        MR.strings.editor_create_file
+                        AYMR.strings.editor_create_file
                     } else {
-                        MR.strings.editor_edit_file
+                        AYMR.strings.editor_edit_file
                     },
                 ),
             )
@@ -83,7 +84,7 @@ fun FileCreateDialog(
                 modifier = Modifier.focusRequester(focusRequester),
                 value = fileName,
                 onValueChange = { fileName = it },
-                label = { Text(text = stringResource(MR.strings.editor_filename)) },
+                label = { Text(text = stringResource(AYMR.strings.editor_filename)) },
                 supportingText = {
                     when (result) {
                         is FileCreationResult.Failure -> {
@@ -127,10 +128,10 @@ fun FileDeleteDialog(
             }
         },
         title = {
-            Text(text = stringResource(MR.strings.editor_delete_file))
+            Text(text = stringResource(AYMR.strings.editor_delete_file))
         },
         text = {
-            Text(text = stringResource(MR.strings.editor_delete_file_confirmation, name))
+            Text(text = stringResource(AYMR.strings.editor_delete_file_confirmation, name))
         },
     )
 }
@@ -159,7 +160,7 @@ fun UnsavedChangesDialog(
             Text(text = stringResource(MR.strings.label_warning))
         },
         text = {
-            Text(text = stringResource(MR.strings.editor_unsaved_progress))
+            Text(text = stringResource(AYMR.strings.editor_unsaved_progress))
         },
     )
 }

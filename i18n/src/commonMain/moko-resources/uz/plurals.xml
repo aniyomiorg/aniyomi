@@ -4,36 +4,12 @@
         <item quantity="one">%d toifa</item>
         <item quantity="other">%d toifa</item>
     </plurals>
+    <plurals name="relative_time">
+        <item quantity="one">Kecha</item>
+        <item quantity="other">%1$d kun oldin</item>
+    </plurals>
     <plurals name="lock_after_mins">
         <item quantity="one">%1$s daqiqadan so\'ng</item>
         <item quantity="other">%1$s daqiqadan so\'ng</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
     </plurals>
 </resources>

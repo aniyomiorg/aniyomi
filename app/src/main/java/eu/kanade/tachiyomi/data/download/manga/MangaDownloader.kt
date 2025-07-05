@@ -62,6 +62,7 @@ import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -315,7 +316,7 @@ class MangaDownloader(
                     maxDownloadsFromSource > CHAPTERS_PER_SOURCE_QUEUE_WARNING_THRESHOLD
                 ) {
                     notifier.onWarning(
-                        context.stringResource(MR.strings.download_queue_size_warning),
+                        context.stringResource(AYMR.strings.download_queue_size_warning),
                         WARNING_NOTIF_TIMEOUT_MS,
                         NotificationHandler.openUrl(context, MangaLibraryUpdateNotifier.HELP_WARNING_URL),
                     )
@@ -337,7 +338,7 @@ class MangaDownloader(
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = MangaDownload.State.ERROR
             notifier.onError(
-                context.stringResource(MR.strings.download_insufficient_space),
+                context.stringResource(AYMR.strings.download_insufficient_space),
                 download.chapter.name,
                 download.manga.title,
                 download.manga.id,
