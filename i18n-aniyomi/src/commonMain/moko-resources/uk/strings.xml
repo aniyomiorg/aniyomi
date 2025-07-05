@@ -427,5 +427,6 @@
     <string name="onboarding_storage_action_create_folder">Створіть папку Aniyomi за замовчуванням</string>
     <string name="download_speed_limit">Обмеження швидкості завантаження розділу</string>
     <string name="download_speed_limit_hint">Встановіть значення 0, щоб вимкнути обмеження швидкості.</string>
-    <string name="action_display_unseen_badge">Unseen episodes</string>
+    <string name="action_display_unseen_badge">Непереглянуті епізоди</string>
+    <string name="manga">Manga</string>
 </resources>
