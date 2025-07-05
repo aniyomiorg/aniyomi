@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import `is`.xyz.mpv.Utils
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import kotlin.math.abs
@@ -89,7 +89,7 @@ fun MiddlePlayerControls(
             gestureSeekAmount != null -> {
                 Text(
                     stringResource(
-                        MR.strings.player_gesture_seek_indicator,
+                        AYMR.strings.player_gesture_seek_indicator,
                         if (gestureSeekAmount.second >= 0) '+' else '-',
                         Utils.prettyTime(abs(gestureSeekAmount.second)),
                         Utils.prettyTime(gestureSeekAmount.first + gestureSeekAmount.second),

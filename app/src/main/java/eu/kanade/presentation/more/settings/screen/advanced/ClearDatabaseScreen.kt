@@ -46,6 +46,7 @@ import tachiyomi.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryMan
 import tachiyomi.domain.source.manga.model.MangaSourceWithCount
 import tachiyomi.domain.source.manga.model.Source
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.LazyColumnWithAction
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
@@ -91,7 +92,7 @@ class ClearDatabaseScreen : Screen() {
                             }
                         },
                         text = {
-                            Text(text = stringResource(MR.strings.clear_database_confirmation))
+                            Text(text = stringResource(AYMR.strings.clear_database_confirmation))
                         },
                     )
                 }
@@ -99,7 +100,7 @@ class ClearDatabaseScreen : Screen() {
                 Scaffold(
                     topBar = { scrollBehavior ->
                         AppBar(
-                            title = stringResource(MR.strings.pref_clear_manga_database),
+                            title = stringResource(AYMR.strings.pref_clear_manga_database),
                             navigateUp = navigator::pop,
                             actions = {
                                 if (s.items.isNotEmpty()) {

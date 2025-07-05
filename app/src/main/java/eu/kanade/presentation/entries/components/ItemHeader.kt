@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
@@ -38,10 +39,10 @@ fun ItemHeader(
     ) {
         Text(
             text = if (itemCount == null) {
-                val count = if (isManga) MR.strings.chapters else MR.strings.episodes
+                val count = if (isManga) MR.strings.chapters else AYMR.strings.episodes
                 stringResource(count)
             } else {
-                val pluralCount = if (isManga) MR.plurals.manga_num_chapters else MR.plurals.anime_num_episodes
+                val pluralCount = if (isManga) MR.plurals.manga_num_chapters else AYMR.plurals.anime_num_episodes
                 pluralStringResource(pluralCount, count = itemCount, itemCount)
             },
             style = MaterialTheme.typography.titleMedium,
@@ -59,7 +60,7 @@ private fun MissingItemsWarning(count: Int) {
     }
 
     Text(
-        text = pluralStringResource(MR.plurals.missing_items, count = count, count),
+        text = pluralStringResource(AYMR.plurals.missing_items, count = count, count),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         style = MaterialTheme.typography.bodySmall,

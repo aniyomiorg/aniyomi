@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_exit">Tryck tillbaka igen för att lämna</string>
+    <string name="action_filter_started">Börjat</string>
+    <string name="relative_time_now">Nu</string>
+    <string name="pref_library_summary">Kategorier, global uppdatering, kapitel svepning</string>
+    <string name="pref_library_update_show_tab_badge">Visa antalet olästa på ikonen Uppdateringar</string>
+    <string name="label_player_settings">Player inställningar</string>
+    <string name="pref_player_internal_summary">Framsteg, kontroll, orientering</string>
+    <string name="manga_categories">Kategorier</string>
+    <string name="action_display_local_badge_manga">Lokal manga</string>
+    <string name="default_manga_category">Standardkategori</string>
+    <string name="pref_manga_library_update_categories_details">Manga i uteslutna kategorier uppdateras inte även om de också ingår i inkluderade kategorier.</string>
+    <string name="pref_remove_exclude_categories_manga">Uteslutna kategorier</string>
+    <string name="pref_clear_manga_database">Rensa databas</string>
+    <string name="pref_clear_manga_database_summary">Ta bort historik för manga som inte finns i ditt bibliotek</string>
+    <string name="snack_add_to_manga_library">Lägg till manga i biblioteket?</string>
+    <string name="download_error">Fel</string>
+    <string name="download_paused">Pausad</string>
+    <string name="download_notifier_download_paused_chapters">Nedladdning pausad</string>
+    <string name="channel_new_chapters_episodes">Kapiteluppdateringar</string>
+</resources>

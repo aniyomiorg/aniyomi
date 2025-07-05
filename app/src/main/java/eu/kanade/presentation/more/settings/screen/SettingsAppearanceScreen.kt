@@ -25,6 +25,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableMap
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -134,7 +135,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                     entries = StartScreen.entries
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
-                    title = stringResource(MR.strings.pref_start_screen),
+                    title = stringResource(AYMR.strings.pref_start_screen),
                     onValueChanged = {
                         context.toast(MR.strings.requires_app_restart)
                         true

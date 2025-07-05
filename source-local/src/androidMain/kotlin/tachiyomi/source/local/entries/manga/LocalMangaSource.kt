@@ -35,6 +35,7 @@ import tachiyomi.core.metadata.tachiyomi.MangaDetails
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.source.local.filter.manga.MangaOrderBy
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
 import tachiyomi.source.local.io.ArchiveManga
@@ -64,7 +65,7 @@ actual class LocalMangaSource(
     @Suppress("PrivatePropertyName")
     private val LatestFilters = FilterList(MangaOrderBy.Latest(context))
 
-    override val name: String = context.stringResource(MR.strings.local_manga_source)
+    override val name: String = context.stringResource(AYMR.strings.local_manga_source)
 
     override val id: Long = ID
 

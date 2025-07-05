@@ -12,6 +12,7 @@ kotlin {
             dependencies {
                 implementation(projects.sourceApi)
                 api(projects.i18n)
+                api(projects.i18nAniyomi)
 
                 implementation(libs.unifile)
             }
@@ -49,6 +50,6 @@ android {
 
     dependencies {
         // FFmpeg-kit
-        implementation(libs.ffmpeg.kit)
+        implementation(aniyomilibs.ffmpeg.kit)
     }
 }

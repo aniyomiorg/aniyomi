@@ -57,6 +57,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -71,7 +72,7 @@ data object MangaLibraryTab : Tab {
         @Composable
         get() {
             val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
-            val title = MR.strings.label_manga_library
+            val title = AYMR.strings.label_manga_library
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_enter)
             val index: UShort = if (fromMore) 5u else 1u
@@ -123,7 +124,7 @@ data object MangaLibraryTab : Tab {
             null
         }
 
-        val defaultTitle = stringResource(MR.strings.label_manga_library)
+        val defaultTitle = stringResource(AYMR.strings.label_manga_library)
 
         Scaffold(
             topBar = { scrollBehavior ->

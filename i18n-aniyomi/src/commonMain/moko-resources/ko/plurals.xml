@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="other">보지 않은 다음 %d 에피소드</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="other">%1$s개의 에피소드</item>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="other">다음 %d 에피스드</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="other">%d개의 애니메이션</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="other">%1$d개의 새로운 에피소드</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%d 초</item>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="other">에피소드 %1$s와 그 외 %2$d</item>
+    </plurals>
+</resources>

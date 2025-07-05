@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_summary">Categorías, actualización global, accións ao arrastrar</string>
+    <string name="manga_categories">Categorías</string>
+    <string name="default_manga_category">Categoría por defecto</string>
+</resources>

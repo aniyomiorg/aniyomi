@@ -42,32 +42,17 @@
     <plurals name="download_amount">
         <item quantity="other">berikutnya %d chapter</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="other">%1$s bab hilang</item>
+    </plurals>
     <plurals name="day">
         <item quantity="other">%d hari</item>
     </plurals>
     <plurals name="num_repos">
         <item quantity="other">%d repo</item>
     </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="other">Berikut %d episode yang belum dilihat</item>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="other">%1$s episode</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="other">Untuk judul %d</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="other">episode baru %1$d</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="other">%d detik</item>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="other">Episode %1$s dan %2$d lainnya</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="other">%d Episode selanjutnya</item>
+    <plurals name="upcoming_relative_time">
+        <item quantity="other">Dalam %1$d hari</item>
     </plurals>
     <plurals name="pref_pages">
         <item quantity="other">%1$s halaman</item>

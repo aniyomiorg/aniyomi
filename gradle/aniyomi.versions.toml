@@ -1,0 +1,17 @@
+[versions]
+aniyomi-mpv-lib = "1.17.n"
+arthenica-smartexceptions = "0.2.1"
+constraint-layout = "1.1.0"
+ffmpeg-kit = "1.17"
+media = "1.7.0"
+seeker = "1.2.2"
+truetypeparser = "2.1.4"
+
+[libraries]
+aniyomi-mpv = { module = "com.github.aniyomiorg:aniyomi-mpv-lib", version.ref = "aniyomi-mpv-lib" }
+arthenica-smartexceptions = { module = "com.arthenica:smart-exception-java", version.ref = "arthenica-smartexceptions" }
+compose-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraint-layout" }
+ffmpeg-kit = { module = "com.github.jmir1:ffmpeg-kit", version.ref = "ffmpeg-kit" }
+mediasession = { module = "androidx.media:media", version.ref = "media" }
+seeker = { module = "io.github.2307vivek:seeker", version.ref = "seeker" }
+truetypeparser = { module = "io.github.yubyf:truetypeparser-light", version.ref = "truetypeparser" }
