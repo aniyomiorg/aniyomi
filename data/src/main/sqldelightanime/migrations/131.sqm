@@ -52,7 +52,7 @@ SELECT
             LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
             WHERE season.parent_id = A._id
               AND season.fetch_type = 2
-              AND season_stats.total = season_stats.seenCount
+              AND coalesce(season_stats.total, 0) = coalesce(season_stats.seenCount, 0)
         )
         ELSE 0
     END AS seenCount,
@@ -89,7 +89,7 @@ SELECT
     CASE A.fetch_type
         WHEN 2 THEN coalesce(ESA.bookmarkCount, 0)
         WHEN 1 THEN (
-            SELECT sum(season_stats.bookmarkCount)
+            SELECT coalesce(sum(season_stats.bookmarkCount), 0)
             FROM animes season
             LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
             WHERE season.parent_id = A._id
@@ -120,10 +120,10 @@ SELECT
         WHEN 1 THEN (
             SELECT count(*)
             FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
             WHERE season.parent_id = SA._id
               AND season.fetch_type = 2
-              AND (SELECT count(*) FROM episodes WHERE anime_id = season._id) =
-                  (SELECT sum(seen) FROM episodes WHERE anime_id = season._id)
+              AND coalesce(season_stats.total, 0) = coalesce(season_stats.seenCount, 0)
         )
         ELSE 0
     END AS seenCount,

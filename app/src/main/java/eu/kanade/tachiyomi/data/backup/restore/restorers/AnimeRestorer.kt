@@ -57,6 +57,7 @@ class AnimeRestorer(
     suspend fun restore(
         backupAnime: BackupAnime,
         backupCategories: List<BackupCategory>,
+        backupSeasons: List<BackupAnime>,
     ) {
         handler.await(inTransaction = true) {
             val dbAnime = findExistingAnime(backupAnime)
@@ -65,6 +66,18 @@ class AnimeRestorer(
                 restoreNewAnime(anime)
             } else {
                 restoreExistingAnime(anime, dbAnime)
+            }
+
+            backupSeasons.forEach { bs ->
+                val dbAnime = findExistingAnime(bs)
+                val anime = backupAnime.getAnimeImpl().copy(
+                    parentId = restoredAnime.id,
+                )
+                if (dbAnime == null) {
+                    restoreNewAnime(anime)
+                } else {
+                    restoreExistingAnime(anime, dbAnime)
+                }
             }
 
             restoreAnimeDetails(
