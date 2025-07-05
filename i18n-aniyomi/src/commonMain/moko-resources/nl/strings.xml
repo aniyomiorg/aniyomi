@@ -57,4 +57,17 @@
     <string name="onboarding_storage_action_create_folder">Maak standaard Aniyomi-map</string>
     <string name="download_speed_limit">Beperk downloadsnelheid</string>
     <string name="download_speed_limit_hint">Zet op 0 voor onbeperkte downloadsnelheid.</string>
+    <string name="manga">Bibliotheek</string>
+    <string name="action_sort_last_manga_update">Laatst gecontroleerd op updates</string>
+    <string name="pref_update_only_completely_read">Heeft ongelezen hoofdstukken</string>
+    <string name="pref_category_delete_chapters">Hoofdstukken verwijderen</string>
+    <string name="pref_remove_after_marked_as_read">Nadat ze handmatig gemarkeerd zijn als gelezen</string>
+    <string name="pref_remove_after_read">Automatisch verwijderen na het lezen</string>
+    <string name="pref_remove_bookmarked_chapters">Verwijderen van hoofdstukken met bladwijzers toestaan</string>
+    <string name="pref_auto_update_manga_sync">Voortgang bijwerken na lezen</string>
+    <string name="pref_clear_chapter_cache">Leeg hoofdstukkencache</string>
+    <string name="pref_auto_clear_chapter_cache">Hoofdstuk cache leegmaken na het sluiten van de app</string>
+    <string name="pref_incognito_mode_summary">Pauzeert leesgeschiedenis</string>
+    <string name="dialog_with_checkbox_reset">Stel alle hoofdstukken voor dit item opnieuw in</string>
+    <string name="download_insufficient_space">Kon hoofdstukken niet downloaden omdat er te weinig opslagruimte is</string>
 </resources>
