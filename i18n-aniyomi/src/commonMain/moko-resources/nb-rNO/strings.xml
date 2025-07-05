@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_summary">Kategorier, global oppdatering, kapittelsveip</string>
+    <string name="pref_library_update_show_tab_badge">Vis antall uleste på oppdateringsikonet</string>
+    <string name="manga_categories">Kategorier</string>
+    <string name="action_display_local_badge_manga">Lokal kilde</string>
+    <string name="default_manga_category">Standard kategori</string>
+    <string name="pref_manga_library_update_categories_details">Oppførninger i utelukkede kategorier vil ikke bli oppdatert selv om de også er i inkluderte kategorier.</string>
+    <string name="pref_remove_exclude_categories_manga">Utelukkede kategorier</string>
+    <string name="pref_clear_manga_database">Tøm database</string>
+    <string name="pref_clear_manga_database_summary">Slett historikk for oppføringer som ikke er lagret i biblioteket ditt</string>
+    <string name="snack_add_to_manga_library">Legg til i bibliotek?</string>
+    <string name="download_error">Feil</string>
+    <string name="download_paused">Pauset</string>
+    <string name="download_notifier_download_paused_chapters">Nedlasting pauset</string>
+    <string name="channel_new_chapters_episodes">Kapitteloppdateringer</string>
+</resources>

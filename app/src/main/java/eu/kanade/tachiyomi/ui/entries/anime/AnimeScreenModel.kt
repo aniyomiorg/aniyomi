@@ -84,6 +84,7 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -272,7 +273,7 @@ class AnimeScreenModel(
                 screenModelScope.launch {
                     if (!hasDownloads()) return@launch
                     val result = snackbarHostState.showSnackbar(
-                        message = context.stringResource(MR.strings.delete_downloads_for_anime),
+                        message = context.stringResource(AYMR.strings.delete_downloads_for_anime),
                         actionLabel = context.stringResource(MR.strings.action_delete),
                         withDismissAction = true,
                     )
@@ -560,7 +561,7 @@ class AnimeScreenModel(
             }
         } catch (e: Throwable) {
             val message = if (e is NoEpisodesException) {
-                context.stringResource(MR.strings.no_episodes_error)
+                context.stringResource(AYMR.strings.no_episodes_error)
             } else {
                 logcat(LogPriority.ERROR, e)
                 with(context) { e.formattedMessage }
@@ -658,7 +659,7 @@ class AnimeScreenModel(
                     state.copy(hasPromptedToAddBefore = true)
                 }
                 val result = snackbarHostState.showSnackbar(
-                    message = context.stringResource(MR.strings.snack_add_to_anime_library),
+                    message = context.stringResource(AYMR.strings.snack_add_to_anime_library),
                     actionLabel = context.stringResource(MR.strings.action_add),
                     withDismissAction = true,
                 )
@@ -756,14 +757,14 @@ class AnimeScreenModel(
                 trackEpisode.await(context, animeId, maxEpisodeNumber)
                 withUIContext {
                     context.toast(
-                        context.stringResource(MR.strings.trackers_updated_summary_anime, maxEpisodeNumber.toInt()),
+                        context.stringResource(AYMR.strings.trackers_updated_summary_anime, maxEpisodeNumber.toInt()),
                     )
                 }
                 return@launchIO
             }
 
             val result = snackbarHostState.showSnackbar(
-                message = context.stringResource(MR.strings.confirm_tracker_update_anime, maxEpisodeNumber.toInt()),
+                message = context.stringResource(AYMR.strings.confirm_tracker_update_anime, maxEpisodeNumber.toInt()),
                 actionLabel = context.stringResource(MR.strings.action_ok),
                 duration = SnackbarDuration.Short,
                 withDismissAction = true,
@@ -941,7 +942,7 @@ class AnimeScreenModel(
                 setAnimeDefaultEpisodeFlags.awaitAll()
             }
             snackbarHostState.showSnackbar(
-                message = context.stringResource(MR.strings.episode_settings_updated),
+                message = context.stringResource(AYMR.strings.episode_settings_updated),
             )
         }
     }

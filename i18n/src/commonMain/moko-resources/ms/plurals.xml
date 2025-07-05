@@ -42,6 +42,9 @@
     <plurals name="download_amount">
         <item quantity="other">%d bab seterusnya</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="other">Hilang %1$s bab</item>
+    </plurals>
     <plurals name="day">
         <item quantity="other">%d hari</item>
     </plurals>

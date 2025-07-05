@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">ವರ್ಗಗಳು</string>
+    <string name="action_display_local_badge_manga">ಸ್ಥಳೀಯ ಬ್ಯಾಡ್ಜ್ ಗಳು</string>
+    <string name="default_manga_category">ಡೀಫಾಲ್ಟ್ ವರ್ಗ</string>
+    <string name="pref_manga_library_update_categories_details">ಹೊರಗಿಡಲಾದ ವರ್ಗಗಳಲ್ಲಿನ ಮಾಂಗಾ ಸೇರಿಸಿದ ವಿಭಾಗಗಳಲ್ಲಿದ್ದರೂ ನವೀಕರಿಸಲಾಗುವುದಿಲ್ಲ.</string>
+    <string name="pref_clear_manga_database">ಡೇಟಾಬೇಸ್ ತೆರವುಗೊಳಿಸಿ</string>
+    <string name="pref_clear_manga_database_summary">ನಿಮ್ಮ ಗ್ರಂಥಾಲಯದಲ್ಲಿ ಇಲ್ಲದ ಮಾಂಗಾದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಿ</string>
+    <string name="snack_add_to_manga_library">ಮಾಂಗಾವನ್ನು ಗ್ರಂಥಾಲಯಕ್ಕೆ ಸೇರಿಸುವುದೇ?</string>
+    <string name="download_error">ದೋಷ</string>
+    <string name="download_paused">ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="download_notifier_download_paused_chapters">ಡೌನ್‌ಲೋಡ್ ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="channel_new_chapters_episodes">ಅಧ್ಯಾಯ ನವೀಕರಣಗಳು</string>
+</resources>

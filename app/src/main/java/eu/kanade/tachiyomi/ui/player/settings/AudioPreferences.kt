@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.ui.player.settings
 import dev.icerock.moko.resources.StringResource
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 
 class AudioPreferences(
     private val preferenceStore: PreferenceStore,
@@ -19,9 +19,9 @@ class AudioPreferences(
 }
 
 enum class AudioChannels(val titleRes: StringResource, val property: String, val value: String) {
-    Auto(MR.strings.pref_player_audio_channels_auto, "audio-channels", "auto-safe"),
-    AutoSafe(MR.strings.pref_player_audio_channels_auto_safe, "audio-channels", "auto"),
-    Mono(MR.strings.pref_player_audio_channels_mono, "audio-channels", "mono"),
-    Stereo(MR.strings.pref_player_audio_channels_stereo, "audio-channels", "stereo"),
-    ReverseStereo(MR.strings.pref_player_audio_channels_reverse_stereo, "af", "pan=[stereo|c0=c1|c1=c0]"),
+    Auto(AYMR.strings.pref_player_audio_channels_auto, "audio-channels", "auto-safe"),
+    AutoSafe(AYMR.strings.pref_player_audio_channels_auto_safe, "audio-channels", "auto"),
+    Mono(AYMR.strings.pref_player_audio_channels_mono, "audio-channels", "mono"),
+    Stereo(AYMR.strings.pref_player_audio_channels_stereo, "audio-channels", "stereo"),
+    ReverseStereo(AYMR.strings.pref_player_audio_channels_reverse_stereo, "af", "pan=[stereo|c0=c1|c1=c0]"),
 }

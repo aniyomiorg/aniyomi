@@ -3,7 +3,7 @@
     <plurals name="lock_after_mins">
         <item quantity="one">După %1$s minut</item>
         <item quantity="few">După %1$s minute</item>
-        <item quantity="other">După %1$s minute</item>
+        <item quantity="other">După %1$s de minute</item>
     </plurals>
     <plurals name="notification_chapters_generic">
         <item quantity="one">%1$d capitol nou</item>
@@ -33,7 +33,7 @@
     <plurals name="num_categories">
         <item quantity="one">%d categorie</item>
         <item quantity="few">%d categorii</item>
-        <item quantity="other">%d categorii</item>
+        <item quantity="other">%d de categorii</item>
     </plurals>
     <plurals name="restore_completed_message">
         <item quantity="one">Gata în %1$s cu eroarea %2$s</item>
@@ -46,9 +46,9 @@
         <item quantity="other">%1$s de capitole</item>
     </plurals>
     <plurals name="num_trackers">
-        <item quantity="one">%d tracker</item>
-        <item quantity="few">%d trackere</item>
-        <item quantity="other">%d trackere</item>
+        <item quantity="one">%d serviciu de urmărire</item>
+        <item quantity="few">%d servicii de urmărire</item>
+        <item quantity="other">%d de servicii de urmărire</item>
     </plurals>
     <plurals name="missing_chapters_warning">
         <item quantity="one">Omiterea %d capitol, fie că sursa lipsește, fie că a fost filtrată</item>
@@ -58,61 +58,41 @@
     <plurals name="relative_time">
         <item quantity="one">Ieri</item>
         <item quantity="few">Acum %1$d zile</item>
-        <item quantity="other">Acum %1$d zile</item>
+        <item quantity="other">Acum %1$d de zile</item>
     </plurals>
     <plurals name="next_unread_chapters">
         <item quantity="one">Următorul capitol necitit</item>
         <item quantity="few">Următoarele %d capitole necitite</item>
-        <item quantity="other">Următoarele %d capitole necitite</item>
+        <item quantity="other">Următoarele %d de capitole necitite</item>
     </plurals>
     <plurals name="download_amount">
         <item quantity="one">Următorul capitol</item>
         <item quantity="few">Următoarele %d capitole</item>
         <item quantity="other">Următoarele %d capitole</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">Lipsește %1$s capitol</item>
+        <item quantity="few">Lipsesc %1$s capitole</item>
+        <item quantity="other">Lipsesc %1$s capitole</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">O zi</item>
         <item quantity="few">%d zile</item>
         <item quantity="other">%d zile</item>
     </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
+    <plurals name="num_repos">
+        <item quantity="one">%d repozitoriu</item>
+        <item quantity="few">%d repozitorii</item>
+        <item quantity="other">%d de repozitorii</item>
     </plurals>
     <plurals name="upcoming_relative_time">
         <item quantity="one">Mâine</item>
         <item quantity="few">În %1$d zile</item>
         <item quantity="other">În %1$d de zile</item>
+    </plurals>
+    <plurals name="pref_pages">
+        <item quantity="one">O pagină</item>
+        <item quantity="few">%1$s pagini</item>
+        <item quantity="other">%1$s de pagini</item>
     </plurals>
 </resources>

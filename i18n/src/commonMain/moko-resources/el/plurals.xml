@@ -56,36 +56,16 @@
         <item quantity="one">Επόμενο κεφάλαιο</item>
         <item quantity="other">Επόμενα %d κεφάλαια</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">Λείπει %1$s κεφάλαιο</item>
+        <item quantity="other">Λείπουν %1$s κεφάλαια</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">1 ημέρα</item>
         <item quantity="other">%d ημέρες</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="num_repos">
+        <item quantity="one">%d αποθετήριο</item>
+        <item quantity="other">%d αποθετήρια</item>
     </plurals>
 </resources>
