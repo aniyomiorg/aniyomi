@@ -245,7 +245,6 @@
     <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
     <string name="toast_sleep_timer_ended">Sleep timer ended</string>
     <string name="player_generic_unit_ms">ms</string>
-    <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
     <string name="numeric_chooser_value_too_big">Value too big</string>
     <string name="numeric_chooser_value_too_small">Value too small</string>
     <string name="enable_auto_play">Auto-play is on</string>
@@ -307,9 +306,6 @@
     <string name="player_sheets_sub_typography_border_style">Border style</string>
     <string name="player_sheets_sub_typography_border_size">Border size</string>
     <string name="player_sheets_subtitles_shadow_offset">Shadow offset</string>
-    <string name="player_sheets_subtitles_border_style_outline_and_shadow">Outline and shadow</string>
-    <string name="player_sheets_subtitles_border_style_opaque_box">Opaque box</string>
-    <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
 
     <!-- Sheets - Miscellaneous -->
     <string name="player_sheets_sub_misc_title">Miscellaneous</string>
@@ -351,7 +347,6 @@
     <string name="player_sheets_stats_page_chip">Page %d</string>
     <string name="player_sheets_custom_buttons_title">Custom buttons</string>
     <string name="player_seek_n_seconds">%d seconds</string>
-    <string name="player_speed" translatable="false">%.2fx</string>
     <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
     <string name="timer_title">Sleep Timer</string>
     <string name="timer_remaining">%s remaining</string>
