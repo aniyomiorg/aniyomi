@@ -426,4 +426,8 @@
     <string name="onboarding_storage_action_create_folder">Varsayılan Aniyomi klasörünü oluştur</string>
     <string name="download_speed_limit">Bölüm indirme hızı sınırı</string>
     <string name="download_speed_limit_hint">Hız sınırını devre dışı bırakmak için 0 olarak ayarlayın.</string>
+    <string name="pref_category_delete_chapters">Bölümleri sil</string>
+    <string name="download_ahead_info">Yalnızca geçerli bölüm ile bir sonraki bölüm zaten indirildiyse çalışır.</string>
+    <string name="pref_clear_chapter_cache">Bölüm önbelleğini temizle</string>
+    <string name="pref_incognito_mode_summary">Okuma geçmişini duraklatır</string>
 </resources>
