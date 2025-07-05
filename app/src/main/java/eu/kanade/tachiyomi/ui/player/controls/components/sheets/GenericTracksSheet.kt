@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.player.components.PlayerSheet
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -95,11 +95,11 @@ fun AddTrackRow(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                Icons.Default.Add,
-                null,
+                imageVector = Icons.Default.Add,
+                contentDescription = null,
                 modifier = Modifier.size(32.dp),
             )
-            Text(title)
+            Text(text = title)
         }
         actions()
     }
@@ -113,17 +113,47 @@ fun getTrackTitle(track: VideoTrack): String {
         }
 
         track.language.isNullOrBlank() && track.name.isNotBlank() -> {
-            stringResource(MR.strings.player_sheets_track_title_wo_lang, track.id, track.name)
+            stringResource(AYMR.strings.player_sheets_track_title_wo_lang, track.id, track.name)
         }
 
         !track.language.isNullOrBlank() && track.name.isNotBlank() -> {
-            stringResource(MR.strings.player_sheets_track_title_w_lang, track.id, track.name, track.language)
+            stringResource(AYMR.strings.player_sheets_track_title_w_lang, track.id, track.name, track.language)
         }
 
         !track.language.isNullOrBlank() && track.name.isBlank() -> {
-            stringResource(MR.strings.player_sheets_track_lang_wo_title, track.id, track.language)
+            stringResource(AYMR.strings.player_sheets_track_lang_wo_title, track.id, track.language)
         }
 
-        else -> stringResource(MR.strings.player_sheets_track_title_wo_lang, track.id, track.name)
+        else -> stringResource(AYMR.strings.player_sheets_track_title_wo_lang, track.id, track.name)
+    }
+}
+
+@Composable
+fun TrackSheetTitle(
+    title: String,
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    Row(
+        modifier = modifier.fillMaxWidth()
+            .padding(
+                start = MaterialTheme.padding.medium,
+                end = MaterialTheme.padding.medium,
+                top = MaterialTheme.padding.small,
+                bottom = MaterialTheme.padding.extraSmall,
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
+        ) {
+            actions()
+        }
     }
 }

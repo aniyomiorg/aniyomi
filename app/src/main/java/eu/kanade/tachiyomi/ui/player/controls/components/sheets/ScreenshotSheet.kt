@@ -22,6 +22,7 @@ import eu.kanade.presentation.player.components.SwitchPreference
 import eu.kanade.tachiyomi.ui.player.ArtType
 import eu.kanade.tachiyomi.ui.player.controls.components.dialogs.PlayerDialog
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.ActionButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
@@ -99,7 +100,7 @@ fun ScreenshotSheet(
                     modifier = Modifier.padding(bottom = MaterialTheme.padding.medium),
                     content = {
                         Text(
-                            text = stringResource(MR.strings.screenshot_show_subs),
+                            text = stringResource(AYMR.strings.screenshot_show_subs),
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary,
                         )

@@ -44,6 +44,7 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.ListGroupHeader
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
@@ -111,7 +112,7 @@ internal fun LazyListScope.animeUpdatesUiItems(
                         .takeIf { !updatesItem.update.seen && it > 0L }
                         ?.let {
                             stringResource(
-                                MR.strings.episode_progress,
+                                AYMR.strings.episode_progress,
                                 formatProgress(it),
                                 formatProgress(updatesItem.update.totalSeconds),
                             )

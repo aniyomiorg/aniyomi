@@ -82,6 +82,7 @@ import tachiyomi.domain.items.episode.service.missingEpisodesCount
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.TwoPanelBox
 import tachiyomi.presentation.core.components.VerticalFastScroller
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
@@ -103,7 +104,7 @@ fun AnimeScreen(
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
     alwaysUseExternalPlayer: Boolean,
-    onBackClicked: () -> Unit,
+    navigateUp: () -> Unit,
     onEpisodeClicked: (episode: Episode, alt: Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
@@ -166,7 +167,7 @@ fun AnimeScreen(
             episodeSwipeEndAction = episodeSwipeEndAction,
             showNextEpisodeAirTime = showNextEpisodeAirTime,
             alwaysUseExternalPlayer = alwaysUseExternalPlayer,
-            onBackClicked = onBackClicked,
+            navigateUp = navigateUp,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
             onAddToLibraryClicked = onAddToLibraryClicked,
@@ -206,7 +207,7 @@ fun AnimeScreen(
             episodeSwipeEndAction = episodeSwipeEndAction,
             showNextEpisodeAirTime = showNextEpisodeAirTime,
             alwaysUseExternalPlayer = alwaysUseExternalPlayer,
-            onBackClicked = onBackClicked,
+            navigateUp = navigateUp,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
             onAddToLibraryClicked = onAddToLibraryClicked,
@@ -250,7 +251,7 @@ private fun AnimeScreenSmallImpl(
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
     alwaysUseExternalPlayer: Boolean,
-    onBackClicked: () -> Unit,
+    navigateUp: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
@@ -305,14 +306,14 @@ private fun AnimeScreenSmallImpl(
         }
     }
 
-    val internalOnBackPressed = {
+    BackHandler(onBack = {
         if (isAnySelected) {
             onAllEpisodeSelected(false)
         } else {
-            onBackClicked()
+            navigateUp()
         }
-    }
-    BackHandler(onBack = internalOnBackPressed)
+    })
+
     Scaffold(
         topBar = {
             val selectedEpisodeCount: Int = remember(episodes) {
@@ -324,20 +325,18 @@ private fun AnimeScreenSmallImpl(
             val isFirstItemScrolled by remember {
                 derivedStateOf { episodeListState.firstVisibleItemScrollOffset > 0 }
             }
-            val animatedTitleAlpha by animateFloatAsState(
+            val titleAlpha by animateFloatAsState(
                 if (!isFirstItemVisible) 1f else 0f,
                 label = "Top Bar Title",
             )
-            val animatedBgAlpha by animateFloatAsState(
+            val backgroundAlpha by animateFloatAsState(
                 if (!isFirstItemVisible || isFirstItemScrolled) 1f else 0f,
                 label = "Top Bar Background",
             )
             EntryToolbar(
                 title = state.anime.title,
-                titleAlphaProvider = { animatedTitleAlpha },
-                backgroundAlphaProvider = { animatedBgAlpha },
                 hasFilters = state.anime.episodesFiltered(),
-                onBackClicked = internalOnBackPressed,
+                navigateUp = navigateUp,
                 onClickFilter = onFilterClicked,
                 onClickShare = onShareClicked,
                 onClickDownload = onDownloadActionClicked,
@@ -347,8 +346,11 @@ private fun AnimeScreenSmallImpl(
                 onClickSettings = onSettingsClicked,
                 changeAnimeSkipIntro = changeAnimeSkipIntro,
                 actionModeCounter = selectedEpisodeCount,
+                onCancelActionMode = { onAllEpisodeSelected(false) },
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
+                titleAlphaProvider = { titleAlpha },
+                backgroundAlphaProvider = { backgroundAlpha },
                 isManga = false,
             )
         },
@@ -506,7 +508,7 @@ private fun AnimeScreenSmallImpl(
                             ) {
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
-                                        MR.strings.display_mode_episode,
+                                        AYMR.strings.display_mode_episode,
                                         formatEpisodeNumber(state.airingEpisodeNumber),
                                     ),
                                     date = formatTime(state.airingTime, useDayFormat = true),
@@ -545,7 +547,7 @@ fun AnimeScreenLargeImpl(
     episodeSwipeEndAction: LibraryPreferences.EpisodeSwipeAction,
     showNextEpisodeAirTime: Boolean,
     alwaysUseExternalPlayer: Boolean,
-    onBackClicked: () -> Unit,
+    navigateUp: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
@@ -606,14 +608,13 @@ fun AnimeScreenLargeImpl(
 
     val episodeListState = rememberLazyListState()
 
-    val internalOnBackPressed = {
+    BackHandler(onBack = {
         if (isAnySelected) {
             onAllEpisodeSelected(false)
         } else {
-            onBackClicked()
+            navigateUp()
         }
-    }
-    BackHandler(onBack = internalOnBackPressed)
+    })
 
     Scaffold(
         topBar = {
@@ -623,21 +624,22 @@ fun AnimeScreenLargeImpl(
             EntryToolbar(
                 modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                 title = state.anime.title,
-                titleAlphaProvider = { if (isAnySelected) 1f else 0f },
-                backgroundAlphaProvider = { 1f },
                 hasFilters = state.anime.episodesFiltered(),
-                onBackClicked = internalOnBackPressed,
+                navigateUp = navigateUp,
                 onClickFilter = onFilterButtonClicked,
                 onClickShare = onShareClicked,
                 onClickDownload = onDownloadActionClicked,
                 onClickEditCategory = onEditCategoryClicked,
                 onClickRefresh = onRefresh,
                 onClickMigrate = onMigrateClicked,
+                onCancelActionMode = { onAllEpisodeSelected(false) },
                 onClickSettings = onSettingsClicked,
                 changeAnimeSkipIntro = changeAnimeSkipIntro,
                 actionModeCounter = selectedChapterCount,
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
+                titleAlphaProvider = { 1f },
+                backgroundAlphaProvider = { 1f },
                 isManga = false,
             )
         },
@@ -790,7 +792,7 @@ fun AnimeScreenLargeImpl(
                                     ) {
                                         NextEpisodeAiringListItem(
                                             title = stringResource(
-                                                MR.strings.display_mode_episode,
+                                                AYMR.strings.display_mode_episode,
                                                 formatEpisodeNumber(state.airingEpisodeNumber),
                                             ),
                                             date = formatTime(state.airingTime, useDayFormat = true),
@@ -913,7 +915,7 @@ private fun LazyListScope.sharedEpisodeItems(
                 AnimeEpisodeListItem(
                     title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                         stringResource(
-                            MR.strings.display_mode_episode,
+                            AYMR.strings.display_mode_episode,
                             formatEpisodeNumber(episodeItem.episode.episodeNumber),
                         )
                     } else {
@@ -924,7 +926,7 @@ private fun LazyListScope.sharedEpisodeItems(
                         .takeIf { !episodeItem.episode.seen && it > 0L }
                         ?.let {
                             stringResource(
-                                MR.strings.episode_progress,
+                                AYMR.strings.episode_progress,
                                 formatTime(it),
                                 formatTime(episodeItem.episode.totalSeconds),
                             )

@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import mihon.feature.upcoming.manga.UpcomingMangaScreen
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
@@ -55,7 +56,7 @@ fun Screen.mangaUpdatesTab(
     }
 
     return TabContent(
-        titleRes = MR.strings.label_updates,
+        titleRes = AYMR.strings.label_updates,
         searchEnabled = false,
         content = { contentPadding, _ ->
             MangaUpdateScreen(

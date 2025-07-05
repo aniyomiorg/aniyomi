@@ -139,6 +139,7 @@
     <string name="secure_screen">ការពារអេក្រង់</string>
     <string name="pref_category_nsfw_content">ប្រភពមិនល្អ(១៨+)</string>
     <string name="pref_show_nsfw_source">បង្ហាញនៅក្នុងបញ្ចីប្រភព</string>
+    <string name="relative_time_today">ថ្ងៃនេះ</string>
     <string name="pref_category_display">ការបង្ហាញ</string>
     <string name="pref_library_columns">ធាតុក្នុងមួយជួ</string>
     <string name="portrait">បញ្ឈរ</string>
@@ -190,7 +191,6 @@
     <string name="delete_downloaded">លុបអ្វីដែលបានទាញហើយ</string>
     <string name="label_local">ក្នុងទូរស័ព្ទ</string>
     <string name="on">បើក</string>
-    <string name="action_sort_category">តម្រៀបតាមថ្នាក់ក្រម</string>
     <string name="action_update_category">ធ្វើបច្ចុប្បន្នភាពថ្នាក់ក្រម</string>
     <string name="action_menu_overflow_description">ជម្រើសបន្ថែមទៀត</string>
     <string name="off">បិទ</string>
@@ -201,15 +201,10 @@
     <string name="action_bar_up_description">រុករកទៅលើ</string>
     <string name="label_data_storage">ទិន្នន័យ និងអង្គផ្ទុក</string>
     <string name="action_remove_everything">ដកអ្វីៗទាំងអស់ចេញ</string>
-    <string name="sort_category_confirmation">តើអ្នកចង់តម្រៀប តាមអក្ខរក្រមទេ?</string>
     <string name="action_open_random_manga">បើកត្លុកដោយចៃដន្យ</string>
     <string name="label_started">បានចាប់ផ្តើមហើយ</string>
     <string name="action_sort_unread_count">ចំនួនមិនទាន់អាន</string>
     <string name="action_sort_last_manga_update">ពិនិត្យបច្ចុប្បន្នភាពចុងក្រោយ</string>
     <string name="delete_category">លុបថ្នាក់ក្រម</string>
     <string name="action_sort_next_updated">ភាគថ្មីរំពឹងទុកនៅ</string>
-    <string name="manga_categories">ការតម្រៀបថ្នាក់</string>
-    <string name="action_show_manga">បង្ហាញម៊េងហ្គា</string>
-    <string name="action_display_local_badge_manga">ម៊េងហ្គាដែលមានស្រាប់ក្នុងឧបករណ៍</string>
-    <string name="default_manga_category">ថ្នាក់ធម្មតា</string>
 </resources>

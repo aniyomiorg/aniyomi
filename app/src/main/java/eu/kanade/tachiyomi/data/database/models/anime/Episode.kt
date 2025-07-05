@@ -29,6 +29,9 @@ interface Episode : SEpisode, Serializable {
     var version: Long
 }
 
+val Episode.isRecognizedNumber: Boolean
+    get() = episode_number >= 0f
+
 fun Episode.toDomainEpisode(): DomainEpisode? {
     if (id == null || anime_id == null) return null
     return DomainEpisode(

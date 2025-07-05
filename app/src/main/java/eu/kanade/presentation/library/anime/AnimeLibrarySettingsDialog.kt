@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,8 +20,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsScreenModel
-import eu.kanade.tachiyomi.util.system.isDevFlavor
-import eu.kanade.tachiyomi.util.system.isPreviewBuildType
+import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.domain.category.model.Category
@@ -29,6 +29,7 @@ import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.BaseSortItem
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
@@ -36,7 +37,6 @@ import tachiyomi.presentation.core.components.SettingsChipRow
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
-import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 
@@ -95,7 +95,7 @@ private fun ColumnScope.FilterPage(
     )
     val filterUnseen by screenModel.libraryPreferences.filterUnseen().collectAsState()
     TriStateItem(
-        label = stringResource(MR.strings.action_filter_unseen),
+        label = stringResource(AYMR.strings.action_filter_unseen),
         state = filterUnseen,
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterUnseen) },
     )
@@ -118,10 +118,7 @@ private fun ColumnScope.FilterPage(
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterCompletedAnime) },
     )
     // TODO: re-enable when custom intervals are ready for stable
-    if (
-        (isDevFlavor || isPreviewBuildType) &&
-        LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in autoUpdateAnimeRestrictions
-    ) {
+    if ((!isReleaseBuildType) && LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in autoUpdateAnimeRestrictions) {
         val filterIntervalCustom by screenModel.libraryPreferences.filterIntervalCustom().collectAsState()
         TriStateItem(
             label = stringResource(MR.strings.action_filter_interval_custom),
@@ -179,15 +176,15 @@ private fun ColumnScope.SortPage(
         }
         listOfNotNull(
             MR.strings.action_sort_alpha to AnimeLibrarySort.Type.Alphabetical,
-            MR.strings.action_sort_total_episodes to AnimeLibrarySort.Type.TotalEpisodes,
-            MR.strings.action_sort_last_seen to AnimeLibrarySort.Type.LastSeen,
-            MR.strings.action_sort_last_anime_update to AnimeLibrarySort.Type.LastUpdate,
-            MR.strings.action_sort_unseen_count to AnimeLibrarySort.Type.UnseenCount,
-            MR.strings.action_sort_latest_episode to AnimeLibrarySort.Type.LatestEpisode,
-            MR.strings.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
+            AYMR.strings.action_sort_total_episodes to AnimeLibrarySort.Type.TotalEpisodes,
+            AYMR.strings.action_sort_last_seen to AnimeLibrarySort.Type.LastSeen,
+            AYMR.strings.action_sort_last_anime_update to AnimeLibrarySort.Type.LastUpdate,
+            AYMR.strings.action_sort_unseen_count to AnimeLibrarySort.Type.UnseenCount,
+            AYMR.strings.action_sort_latest_episode to AnimeLibrarySort.Type.LatestEpisode,
+            AYMR.strings.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
             MR.strings.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
             trackerMeanPair,
-            MR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
+            AYMR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
             MR.strings.action_sort_random to AnimeLibrarySort.Type.Random,
         )
     }
@@ -261,34 +258,40 @@ private fun ColumnScope.DisplayPage(
     val columns by columnPreference.collectAsState()
     if (displayMode == LibraryDisplayMode.List) {
         SliderItem(
-            label = stringResource(MR.strings.pref_library_rows),
-            max = 10,
             value = columns,
+            valueRange = 0..10,
+            label = stringResource(AYMR.strings.pref_library_rows),
             valueText = if (columns > 0) {
-                pluralStringResource(MR.plurals.pref_library_entries_in_column, columns, columns)
+                columns.toString()
             } else {
-                stringResource(MR.strings.label_default)
+                stringResource(MR.strings.label_auto)
             },
             onChange = columnPreference::set,
+            pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         )
     } else {
         SliderItem(
-            label = stringResource(MR.strings.pref_library_columns),
-            max = 10,
             value = columns,
+            valueRange = 0..10,
+            label = stringResource(MR.strings.pref_library_columns),
             valueText = if (columns > 0) {
-                stringResource(MR.strings.pref_library_columns_per_row, columns)
+                columns.toString()
             } else {
-                stringResource(MR.strings.label_default)
+                stringResource(MR.strings.label_auto)
             },
             onChange = columnPreference::set,
+            pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         )
     }
 
     HeadingItem(MR.strings.overlay_header)
     CheckboxItem(
-        label = stringResource(MR.strings.action_display_download_badge_anime),
+        label = stringResource(AYMR.strings.action_display_download_badge_anime),
         pref = screenModel.libraryPreferences.downloadBadge(),
+    )
+    CheckboxItem(
+        label = stringResource(AYMR.strings.action_display_unseen_badge),
+        pref = screenModel.libraryPreferences.unreadBadge(),
     )
     CheckboxItem(
         label = stringResource(MR.strings.action_display_local_badge),
@@ -299,7 +302,7 @@ private fun ColumnScope.DisplayPage(
         pref = screenModel.libraryPreferences.languageBadge(),
     )
     CheckboxItem(
-        label = stringResource(MR.strings.action_display_show_continue_reading_button),
+        label = stringResource(AYMR.strings.action_display_show_continue_reading_button),
         pref = screenModel.libraryPreferences.showContinueViewingButton(),
     )
 

@@ -2,14 +2,11 @@ package eu.kanade.presentation.category.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Label
-import androidx.compose.material.icons.outlined.ArrowDropDown
-import androidx.compose.material.icons.outlined.ArrowDropUp
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.DragHandle
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
@@ -21,58 +18,44 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import sh.calvin.reorderable.ReorderableCollectionItemScope
 import tachiyomi.domain.category.model.Category
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
-fun CategoryListItem(
+fun ReorderableCollectionItemScope.CategoryListItem(
     category: Category,
-    canMoveUp: Boolean,
-    canMoveDown: Boolean,
-    onMoveUp: (Category) -> Unit,
-    onMoveDown: (Category) -> Unit,
     onRename: () -> Unit,
     onHide: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ElevatedCard(
-        modifier = modifier,
-    ) {
+    ElevatedCard(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onRename() }
+                .clickable(onClick = onRename)
+                .padding(vertical = MaterialTheme.padding.small)
                 .padding(
-                    start = MaterialTheme.padding.medium,
-                    top = MaterialTheme.padding.medium,
+                    start = MaterialTheme.padding.small,
                     end = MaterialTheme.padding.medium,
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(imageVector = Icons.AutoMirrored.Outlined.Label, contentDescription = null)
+            Icon(
+                imageVector = Icons.Outlined.DragHandle,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(MaterialTheme.padding.medium)
+                    .draggableHandle(),
+            )
             Text(
                 text = category.name,
-                modifier = Modifier
-                    .padding(start = MaterialTheme.padding.medium),
+                modifier = Modifier.weight(1f),
             )
-        }
-        Row {
-            IconButton(
-                onClick = { onMoveUp(category) },
-                enabled = canMoveUp,
-            ) {
-                Icon(imageVector = Icons.Outlined.ArrowDropUp, contentDescription = null)
-            }
-            IconButton(
-                onClick = { onMoveDown(category) },
-                enabled = canMoveDown,
-            ) {
-                Icon(imageVector = Icons.Outlined.ArrowDropDown, contentDescription = null)
-            }
-            Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = onRename) {
                 Icon(
                     imageVector = Icons.Outlined.Edit,
@@ -88,7 +71,7 @@ fun CategoryListItem(
                         } else {
                             Icons.Outlined.VisibilityOff
                         },
-                        contentDescription = stringResource(MR.strings.action_hide),
+                        contentDescription = stringResource(AYMR.strings.action_hide),
                     )
                 },
             )

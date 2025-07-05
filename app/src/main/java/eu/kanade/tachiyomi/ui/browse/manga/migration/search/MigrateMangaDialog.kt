@@ -47,6 +47,7 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
@@ -104,7 +105,7 @@ internal fun MigrateMangaDialog(
                             onClickTitle()
                         },
                     ) {
-                        Text(text = stringResource(MR.strings.action_show_manga))
+                        Text(text = stringResource(AYMR.strings.action_show_manga))
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -284,7 +285,7 @@ internal class MigrateMangaDialogScreenModel(
         }
 
         if (replace) {
-            updateManga.await(MangaUpdate(oldManga.id, favorite = false, dateAdded = 0))
+            updateManga.awaitUpdateFavorite(oldManga.id, favorite = false)
         }
 
         // Update custom cover (recheck if custom cover exists)

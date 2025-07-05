@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_summary">Kategorijas, globāli atjauninājumi, nodaļu vilkšana</string>
+    <string name="action_hide">Paslēpt</string>
+    <string name="label_all">Visi</string>
+    <string name="label_category">Kategorija</string>
+    <string name="manga_categories">Manga Kategorijas</string>
+    <string name="general_categories">Kategorijas</string>
+    <string name="anime_categories">Anime Kategorijas</string>
+    <string name="chapters_episodes">Nodaļas un epizodes</string>
+    <string name="episodes">Epizodes</string>
+    <string name="action_display_local_badge_manga">Lokālais avots</string>
+    <string name="default_manga_category">Noklusētā kategorija</string>
+    <string name="pref_manga_library_update_categories_details">Izslēgto kategoriju manga netiks atjaunināta, pat ja tās ir arī iekļautajās kategorijās.</string>
+    <string name="pref_remove_exclude_categories_manga">Izslēgtās kategorijas</string>
+    <string name="pref_clear_manga_database">Notīrīt datu bāzi</string>
+    <string name="pref_clear_manga_database_summary">Dzēst vēsturi preikš manga, kas nav saglabāta bibliotēkā</string>
+    <string name="snack_add_to_manga_library">Pievienot manga bibliotēkai?</string>
+    <string name="download_notifier_download_paused_chapters">Lejuplāde pauzēta</string>
+    <string name="channel_new_chapters_episodes">Nodaļu atjauninājumi</string>
+</resources>

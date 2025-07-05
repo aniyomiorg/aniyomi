@@ -13,24 +13,27 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.model.downloadedFilter
-import eu.kanade.domain.entries.anime.model.forceDownloaded
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.i18n.MR
-import tachiyomi.presentation.core.components.CheckboxItem
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
 import tachiyomi.presentation.core.i18n.stringResource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @Composable
 fun EpisodeSettingsDialog(
@@ -53,6 +56,8 @@ fun EpisodeSettingsDialog(
             onConfirmed = onSetAsDefault,
         )
     }
+
+    val downloadedOnly = remember { Injekt.get<BasePreferences>().downloadedOnly().get() }
 
     TabbedDialog(
         onDismissRequest = onDismissRequest,
@@ -81,7 +86,7 @@ fun EpisodeSettingsDialog(
                     FilterPage(
                         downloadFilter = anime?.downloadedFilter ?: TriState.DISABLED,
                         onDownloadFilterChanged = onDownloadFilterChanged
-                            .takeUnless { anime?.forceDownloaded() == true },
+                            .takeUnless { downloadedOnly },
                         unseenFilter = anime?.unseenFilter ?: TriState.DISABLED,
                         onUnseenFilterChanged = onUnseenFilterChanged,
                         bookmarkedFilter = anime?.bookmarkedFilter ?: TriState.DISABLED,
@@ -129,7 +134,7 @@ private fun ColumnScope.FilterPage(
         onClick = onDownloadFilterChanged,
     )
     TriStateItem(
-        label = stringResource(MR.strings.action_filter_unseen),
+        label = stringResource(AYMR.strings.action_filter_unseen),
         state = unseenFilter,
         onClick = onUnseenFilterChanged,
     )
@@ -153,7 +158,7 @@ private fun ColumnScope.SortPage(
 ) {
     listOf(
         MR.strings.sort_by_source to Anime.EPISODE_SORTING_SOURCE,
-        MR.strings.sort_by_episode_number to Anime.EPISODE_SORTING_NUMBER,
+        AYMR.strings.sort_by_episode_number to Anime.EPISODE_SORTING_NUMBER,
         MR.strings.sort_by_upload_date to Anime.EPISODE_SORTING_UPLOAD_DATE,
         MR.strings.action_sort_alpha to Anime.EPISODE_SORTING_ALPHABET,
     ).map { (titleRes, mode) ->
@@ -176,7 +181,7 @@ private fun ColumnScope.DisplayPage(
 ) {
     listOf(
         MR.strings.show_title to Anime.EPISODE_DISPLAY_NAME,
-        MR.strings.show_episode_number to Anime.EPISODE_DISPLAY_NUMBER,
+        AYMR.strings.show_episode_number to Anime.EPISODE_DISPLAY_NUMBER,
     ).map { (titleRes, mode) ->
         RadioItem(
             label = stringResource(titleRes),
@@ -206,7 +211,7 @@ private fun SetAsDefaultDialog(
     var optionalChecked by rememberSaveable { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(text = stringResource(MR.strings.episode_settings)) },
+        title = { Text(text = stringResource(AYMR.strings.episode_settings)) },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -214,7 +219,7 @@ private fun SetAsDefaultDialog(
                 Text(text = stringResource(MR.strings.confirm_set_chapter_settings))
 
                 LabeledCheckbox(
-                    label = stringResource(MR.strings.also_set_episode_settings_for_library),
+                    label = stringResource(AYMR.strings.also_set_episode_settings_for_library),
                     checked = optionalChecked,
                     onCheckedChange = { optionalChecked = it },
                 )

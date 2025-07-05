@@ -66,8 +66,11 @@ class EpisodeLoader {
             // TODO(1.6): Remove else block when dropping support for ext lib <1.6
             return if (source.javaClass.declaredMethods.any { it.name == "getHosterList" }) {
                 source.getHosterList(episode.toSEpisode())
+                    .let { source.run { it.sortHosters() } }
             } else {
-                source.getVideoList(episode.toSEpisode()).toHosterList()
+                source.getVideoList(episode.toSEpisode())
+                    .let { source.run { it.sortVideos() } }
+                    .toHosterList()
             }
         }
 
@@ -142,7 +145,9 @@ class EpisodeLoader {
          * @param hoster the hoster.
          */
         private suspend fun getVideosOnHttp(source: AnimeHttpSource, hoster: Hoster): List<Video> {
-            return source.getVideoList(hoster).parseVideoUrls(source)
+            return source.getVideoList(hoster)
+                .let { source.run { it.sortVideos() } }
+                .parseVideoUrls(source)
         }
 
         // TODO(1.6): Remove after ext lib bump

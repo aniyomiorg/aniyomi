@@ -25,6 +25,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableMap
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -85,7 +86,7 @@ object SettingsAppearanceScreen : SearchableSettings {
                     }
                 },
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = amoledPref,
+                    preference = amoledPref,
                     title = stringResource(MR.strings.pref_dark_theme_pure_black),
                     enabled = themeMode != ThemeMode.LIGHT,
                     onValueChanged = {
@@ -119,47 +120,47 @@ object SettingsAppearanceScreen : SearchableSettings {
                     onClick = { navigator.push(AppLanguageScreen()) },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = uiPreferences.tabletUiMode(),
-                    title = stringResource(MR.strings.pref_tablet_ui_mode),
+                    preference = uiPreferences.tabletUiMode(),
                     entries = TabletUiMode.entries
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
+                    title = stringResource(MR.strings.pref_tablet_ui_mode),
                     onValueChanged = {
                         context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = uiPreferences.startScreen(),
-                    title = stringResource(MR.strings.pref_start_screen),
+                    preference = uiPreferences.startScreen(),
                     entries = StartScreen.entries
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
+                    title = stringResource(AYMR.strings.pref_start_screen),
                     onValueChanged = {
                         context.toast(MR.strings.requires_app_restart)
                         true
                     },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = uiPreferences.navStyle(),
-                    title = "Navigation Style",
+                    preference = uiPreferences.navStyle(),
                     entries = NavStyle.entries
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
+                    title = "Navigation Style",
                     onValueChanged = { true },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = uiPreferences.dateFormat(),
-                    title = stringResource(MR.strings.pref_date_format),
+                    preference = uiPreferences.dateFormat(),
                     entries = DateFormats
                         .associateWith {
                             val formattedDate = UiPreferences.dateFormat(it).format(now)
                             "${it.ifEmpty { stringResource(MR.strings.label_default) }} ($formattedDate)"
                         }
                         .toImmutableMap(),
+                    title = stringResource(MR.strings.pref_date_format),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = uiPreferences.relativeTime(),
+                    preference = uiPreferences.relativeTime(),
                     title = stringResource(MR.strings.pref_relative_format),
                     subtitle = stringResource(
                         MR.strings.pref_relative_format_summary,

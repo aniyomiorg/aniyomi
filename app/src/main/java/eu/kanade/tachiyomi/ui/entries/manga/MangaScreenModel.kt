@@ -24,6 +24,7 @@ import eu.kanade.domain.items.chapter.interactor.GetAvailableScanlators
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.track.manga.interactor.AddMangaTracks
+import eu.kanade.domain.track.manga.interactor.RefreshMangaTracks
 import eu.kanade.domain.track.manga.interactor.TrackChapter
 import eu.kanade.domain.track.model.AutoTrackState
 import eu.kanade.domain.track.service.TrackPreferences
@@ -84,6 +85,7 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -680,7 +682,7 @@ class MangaScreenModel(
                     state.copy(hasPromptedToAddBefore = true)
                 }
                 val result = snackbarHostState.showSnackbar(
-                    message = context.stringResource(MR.strings.snack_add_to_manga_library),
+                    message = context.stringResource(AYMR.strings.snack_add_to_manga_library),
                     actionLabel = context.stringResource(MR.strings.action_add),
                     withDismissAction = true,
                 )
@@ -751,6 +753,7 @@ class MangaScreenModel(
      */
     fun markChaptersRead(chapters: List<Chapter>, read: Boolean) {
         toggleAllSelection(false)
+        if (chapters.isEmpty()) return
         screenModelScope.launchIO {
             setReadStatus.await(
                 read = read,
@@ -760,6 +763,8 @@ class MangaScreenModel(
             if (!read || successState?.hasLoggedInTrackers == false || autoTrackState == AutoTrackState.NEVER) {
                 return@launchIO
             }
+
+            refreshTrackers()
 
             val tracks = getTracks.await(mangaId)
             val maxChapterNumber = chapters.maxOf { it.chapterNumber }
@@ -771,7 +776,7 @@ class MangaScreenModel(
                 trackChapter.await(context, mangaId, maxChapterNumber)
                 withUIContext {
                     context.toast(
-                        context.stringResource(MR.strings.trackers_updated_summary_manga, maxChapterNumber.toInt()),
+                        context.stringResource(AYMR.strings.trackers_updated_summary_manga, maxChapterNumber.toInt()),
                     )
                 }
                 return@launchIO
@@ -787,6 +792,27 @@ class MangaScreenModel(
                 trackChapter.await(context, mangaId, maxChapterNumber)
             }
         }
+    }
+
+    private suspend fun refreshTrackers(
+        refreshTracks: RefreshMangaTracks = Injekt.get(),
+    ) {
+        refreshTracks.await(mangaId)
+            .filter { it.first != null }
+            .forEach { (track, e) ->
+                logcat(LogPriority.ERROR, e) {
+                    "Failed to refresh track data mangaId=$mangaId for service ${track!!.id}"
+                }
+                withUIContext {
+                    context.toast(
+                        context.stringResource(
+                            MR.strings.track_error,
+                            track!!.name,
+                            e.message ?: "",
+                        ),
+                    )
+                }
+            }
     }
 
     /**

@@ -56,33 +56,9 @@
         <item quantity="one">O seguinte capítulo</item>
         <item quantity="other">Os seguintes %d capítulos</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="missing_chapters">
+        <item quantity="one">Falta %1$s capítulo</item>
+        <item quantity="other">Faltan %1$s capítulos</item>
     </plurals>
     <plurals name="num_repos">
         <item quantity="one">%d repositorio</item>
@@ -95,5 +71,9 @@
     <plurals name="day">
         <item quantity="one">Un día</item>
         <item quantity="other">%d días</item>
+    </plurals>
+    <plurals name="pref_pages">
+        <item quantity="one">1 páxina</item>
+        <item quantity="other">%1$s páxinas</item>
     </plurals>
 </resources>

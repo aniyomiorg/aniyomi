@@ -25,10 +25,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreTime
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -51,17 +51,27 @@ fun AudioTracksSheet(
     modifier: Modifier = Modifier,
 ) {
     GenericTracksSheet(
-        tracks,
+        tracks = tracks,
         onDismissRequest = onDismissRequest,
         header = {
-            AddTrackRow(
-                stringResource(MR.strings.player_sheets_add_ext_audio),
-                onAddAudioTrack,
+            TrackSheetTitle(
+                title = stringResource(AYMR.strings.pref_player_audio),
                 actions = {
-                    IconButton(onClick = onOpenDelayPanel) {
-                        Icon(Icons.Default.MoreTime, null)
+                    TextButton(onClick = onOpenDelayPanel) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
+                        ) {
+                            Icon(imageVector = Icons.Default.MoreTime, contentDescription = null)
+                            Text(text = stringResource(AYMR.strings.player_sheets_track_delay))
+                        }
                     }
                 },
+            )
+
+            AddTrackRow(
+                title = stringResource(AYMR.strings.player_sheets_add_ext_audio),
+                onClick = onAddAudioTrack,
             )
         },
         track = {
@@ -91,8 +101,8 @@ fun AudioTrackRow(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         RadioButton(
-            isSelected,
-            onClick,
+            selected = isSelected,
+            onClick = onClick,
         )
         Text(
             title,

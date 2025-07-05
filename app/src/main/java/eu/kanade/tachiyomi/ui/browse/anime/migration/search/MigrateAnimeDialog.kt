@@ -49,6 +49,7 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
@@ -106,7 +107,7 @@ internal fun MigrateAnimeDialog(
                             onClickTitle()
                         },
                     ) {
-                        Text(text = stringResource(MR.strings.action_show_anime))
+                        Text(text = stringResource(AYMR.strings.action_show_anime))
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -288,7 +289,7 @@ internal class MigrateAnimeDialogScreenModel(
         }
 
         if (replace) {
-            updateAnime.await(AnimeUpdate(oldAnime.id, favorite = false, dateAdded = 0))
+            updateAnime.awaitUpdateFavorite(oldAnime.id, favorite = false)
         }
 
         // Update custom cover (recheck if custom cover exists)

@@ -22,6 +22,8 @@ abstract class BaseTracker(
     // Application and remote support for reading dates
     override val supportsReadingDates: Boolean = false
 
+    override val supportsPrivateTracking: Boolean = false
+
     @CallSuper
     override fun logout() {
         trackPreferences.setCredentials(this, "", "")

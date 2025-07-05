@@ -5,16 +5,16 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.animesource.model.ChapterType
 import eu.kanade.tachiyomi.animesource.model.TimeStamp
 import eu.kanade.tachiyomi.ui.player.controls.components.IndexedSegment
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import kotlin.math.abs
 
 class ChapterUtils {
     companion object {
         fun ChapterType.getStringRes(): StringResource? = when (this) {
-            ChapterType.Opening -> MR.strings.player_chapter_type_opening
-            ChapterType.Ending -> MR.strings.player_chapter_type_ending
-            ChapterType.Recap -> MR.strings.player_chapter_type_recap
-            ChapterType.MixedOp -> MR.strings.player_chapter_type_mixedop
+            ChapterType.Opening -> AYMR.strings.player_chapter_type_opening
+            ChapterType.Ending -> AYMR.strings.player_chapter_type_ending
+            ChapterType.Recap -> AYMR.strings.player_chapter_type_recap
+            ChapterType.MixedOp -> AYMR.strings.player_chapter_type_mixedop
             ChapterType.Other -> null
         }
 

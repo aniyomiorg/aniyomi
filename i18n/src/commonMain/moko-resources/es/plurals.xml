@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <plurals name="lock_after_mins">
-        <item quantity="one">Tras %1$s minuto</item>
-        <item quantity="many">Tras %1$s minutos</item>
-        <item quantity="other">Tras %1$s minutos</item>
+        <item quantity="one">Después de %1$s minuto</item>
+        <item quantity="many">Después de %1$s minutos</item>
+        <item quantity="other">Después de %1$s minutos</item>
     </plurals>
     <plurals name="notification_chapters_generic">
         <item quantity="one">%1$d nuevo capítulo</item>
@@ -16,9 +16,9 @@
         <item quantity="other">Capítulos %1$s y %2$d más</item>
     </plurals>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="one">Para %d título</item>
-        <item quantity="many">Para %d títulos</item>
-        <item quantity="other">Para %d títulos</item>
+        <item quantity="one">Para %d entrada</item>
+        <item quantity="many">Para %d entradas</item>
+        <item quantity="other">Para %d entradas</item>
     </plurals>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Actualización de extensión disponible</item>
@@ -26,9 +26,9 @@
         <item quantity="other">%d actualizaciones de extensiones disponibles</item>
     </plurals>
     <plurals name="download_queue_summary">
-        <item quantity="one">Restante %1$s</item>
-        <item quantity="many">Restantes %1$s</item>
-        <item quantity="other">Restantes %1$s</item>
+        <item quantity="one">Queda %1$s</item>
+        <item quantity="many">Quedan %1$s</item>
+        <item quantity="other">Quedan %1$s</item>
     </plurals>
     <plurals name="num_categories">
         <item quantity="one">%d categoría</item>
@@ -46,9 +46,9 @@
         <item quantity="other">%1$s capítulos</item>
     </plurals>
     <plurals name="num_trackers">
-        <item quantity="one">%d servicio de seguimiento</item>
-        <item quantity="many">%d servicios de seguimiento</item>
-        <item quantity="other">%d servicios de seguimiento</item>
+        <item quantity="one">%d rastreador</item>
+        <item quantity="many">%d rastreadores</item>
+        <item quantity="other">%d rastreadores</item>
     </plurals>
     <plurals name="missing_chapters_warning">
         <item quantity="one">Se omite %d capítulo, o bien falta en la fuente o ha sido filtrado</item>
@@ -63,12 +63,17 @@
     <plurals name="next_unread_chapters">
         <item quantity="one">Siguiente capítulo sin leer</item>
         <item quantity="many">Siguientes %d capítulos sin leer</item>
-        <item quantity="other">Los siguientes %d capítulos sin leer</item>
+        <item quantity="other">Siguientes %d capítulos sin leer</item>
     </plurals>
     <plurals name="download_amount">
-        <item quantity="one">El siguiente capítulo</item>
-        <item quantity="many">Los siguientes %d capítulos</item>
-        <item quantity="other">Los siguientes %d capítulos</item>
+        <item quantity="one">Siguiente capítulo</item>
+        <item quantity="many">Siguientes %d capítulos</item>
+        <item quantity="other">Siguientes %d capítulos</item>
+    </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">Falta %1$s capítulo</item>
+        <item quantity="many">Faltan %1$s capítulos</item>
+        <item quantity="other">Faltan %1$s capítulos</item>
     </plurals>
     <plurals name="day">
         <item quantity="one">Un día</item>
@@ -80,40 +85,10 @@
         <item quantity="many">%d repositorios</item>
         <item quantity="other">%d repositorios</item>
     </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one">Siguiente episodio sin ver</item>
-        <item quantity="many">Siguientes %d episodios sin ver</item>
-        <item quantity="other">Siguientes %d episodios sin ver</item>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one">%1$s episodio</item>
-        <item quantity="many">%1$s episodios</item>
-        <item quantity="other">%1$s episodios</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one">Para 1 título</item>
-        <item quantity="many">Para %d títulos</item>
-        <item quantity="other">Para %d títulos</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one">1 nuevo episodio</item>
-        <item quantity="many">%1$d nuevos episodios</item>
-        <item quantity="other">%1$d nuevos episodios</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%d segundo</item>
-        <item quantity="many">%d segundos</item>
-        <item quantity="other">%d segundos</item>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one">Episodios %1$s y 1 más</item>
-        <item quantity="many">Episodios %1$s y %2$d más</item>
-        <item quantity="other">Episodios %1$s y %2$d más</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one">Siguiente episodio</item>
-        <item quantity="many">Próximos %d episodios</item>
-        <item quantity="other">Próximos %d episodios</item>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">Mañana</item>
+        <item quantity="many">Dentro de %1$d días</item>
+        <item quantity="other">Dentro de %1$d días</item>
     </plurals>
     <plurals name="pref_pages">
         <item quantity="one">1 página</item>

@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.player.components.PlayerSheet
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.Video
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
@@ -90,55 +91,69 @@ fun QualitySheet(
         dismissEvent = dismissSheet,
         modifier = modifier,
     ) {
-        AnimatedVisibility(
-            visible = isLoadingHosters,
-            enter = fadeIn() + slideInVertically(
-                initialOffsetY = { it / 2 },
-            ),
-            exit = fadeOut() + slideOutVertically(
-                targetOffsetY = { it / 2 },
-            ),
-        ) {
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(vertical = MaterialTheme.padding.medium),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator()
-            }
-        }
+        Column {
+            Text(
+                text = stringResource(AYMR.strings.player_sheets_qualities_title),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(
+                    top = MaterialTheme.padding.medium,
+                    start = MaterialTheme.padding.medium,
+                    bottom = MaterialTheme.padding.extraSmall,
+                ),
+            )
 
-        AnimatedVisibility(
-            visible = !isLoadingHosters,
-            enter = fadeIn() + slideInVertically(
-                initialOffsetY = { it / 2 },
-            ),
-            exit = fadeOut() + slideOutVertically(
-                targetOffsetY = { it / 2 },
-            ),
-        ) {
-            if (hosterState.size == 1 &&
-                hosterState.first().name == Hoster.NO_HOSTER_LIST &&
-                hosterState.first() is HosterState.Ready
+            AnimatedVisibility(
+                visible = isLoadingHosters,
+                enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 }),
             ) {
-                QualitySheetVideoContent(
-                    videoList = (hosterState.first() as HosterState.Ready).videoList,
-                    videoState = (hosterState.first() as HosterState.Ready).videoState,
-                    selectedVideoIndex = selectedVideoIndex.second,
-                    onClickVideo = onClickVideo,
-                    modifier = modifier.padding(MaterialTheme.padding.medium),
-                )
-            } else {
-                QualitySheetHosterContent(
-                    hosterState = hosterState,
-                    expandedState = expandedState,
-                    selectedVideoIndex = selectedVideoIndex,
-                    onClickHoster = onClickHoster,
-                    onClickVideo = onClickVideo,
-                    displayHosters = displayHosters,
-                    modifier = modifier.padding(MaterialTheme.padding.medium),
-                )
+                Box(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(vertical = MaterialTheme.padding.medium),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            val qualitySheetPadding = PaddingValues(
+                bottom = MaterialTheme.padding.medium,
+                start = MaterialTheme.padding.medium,
+                end = MaterialTheme.padding.medium,
+            )
+
+            AnimatedVisibility(
+                visible = !isLoadingHosters,
+                enter = fadeIn() + slideInVertically(
+                    initialOffsetY = { it / 2 },
+                ),
+                exit = fadeOut() + slideOutVertically(
+                    targetOffsetY = { it / 2 },
+                ),
+            ) {
+                if (hosterState.size == 1 &&
+                    hosterState.first().name == Hoster.NO_HOSTER_LIST &&
+                    hosterState.first() is HosterState.Ready
+                ) {
+                    QualitySheetVideoContent(
+                        videoList = (hosterState.first() as HosterState.Ready).videoList,
+                        videoState = (hosterState.first() as HosterState.Ready).videoState,
+                        selectedVideoIndex = selectedVideoIndex.second,
+                        onClickVideo = onClickVideo,
+                        modifier = modifier.padding(paddingValues = qualitySheetPadding),
+                    )
+                } else {
+                    QualitySheetHosterContent(
+                        hosterState = hosterState,
+                        expandedState = expandedState,
+                        selectedVideoIndex = selectedVideoIndex,
+                        onClickHoster = onClickHoster,
+                        onClickVideo = onClickVideo,
+                        displayHosters = displayHosters,
+                        modifier = modifier.padding(paddingValues = qualitySheetPadding),
+                    )
+                }
             }
         }
     }
@@ -152,10 +167,7 @@ fun QualitySheetVideoContent(
     onClickVideo: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier
-            .fillMaxWidth(),
-    ) {
+    LazyColumn(modifier = modifier.fillMaxWidth()) {
         itemsIndexed(videoList) { videoIdx, video ->
             VideoTrack(
                 video = video,
@@ -190,9 +202,7 @@ fun QualitySheetHosterContent(
         state is HosterState.Ready && state.videoList.isEmpty()
     }
 
-    LazyColumn(
-        modifier.fillMaxWidth(),
-    ) {
+    LazyColumn(modifier = modifier.fillMaxWidth()) {
         hosterContent(
             hosters = validHosters,
             expandedState = expandedState,
@@ -293,13 +303,13 @@ fun HosterTrack(
         when (hoster) {
             is HosterState.Idle -> {
                 Text(
-                    text = stringResource(MR.strings.player_hoster_tap_to_load),
+                    text = stringResource(AYMR.strings.player_hoster_tap_to_load),
                     modifier = Modifier.alpha(DISABLED_ALPHA),
                 )
             }
             is HosterState.Error -> {
                 Text(
-                    text = stringResource(MR.strings.player_hoster_failed),
+                    text = stringResource(AYMR.strings.player_hoster_failed),
                     modifier = Modifier.alpha(DISABLED_ALPHA),
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -315,7 +325,7 @@ fun HosterTrack(
             is HosterState.Ready -> {
                 Text(
                     text = pluralStringResource(
-                        MR.plurals.hoster_video_count,
+                        AYMR.plurals.hoster_video_count,
                         hoster.videoList.size,
                         hoster.videoList.size,
                     ),

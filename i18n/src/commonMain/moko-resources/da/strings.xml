@@ -69,6 +69,7 @@
     <string name="action_pause">Pause</string>
     <string name="action_previous_chapter">Forrige kapitel</string>
     <string name="action_open_in_browser">Åben i browser</string>
+    <string name="action_show_manga">Vis manga</string>
     <string name="action_open_in_web_view">Åben i WebView</string>
     <string name="action_start">Start</string>
     <string name="action_resume">Fortsæt</string>
@@ -177,11 +178,13 @@
     <string name="pref_library_update_refresh_metadata_summary">Søg efter nyt cover og detaljer, når biblioteket opdateres</string>
     <string name="pref_library_update_refresh_metadata">Opdater automatisk metadata</string>
     <string name="default_category">Standard kategori</string>
+    <string name="action_sort_last_manga_update">Nyeste manga opdateringer</string>
     <string name="action_sort_unread_count">Antal ulæst</string>
     <string name="delete_category">Slet kategori</string>
     <string name="exclude">Ekskluder: %s</string>
     <string name="theme_lavender">Lavendel</string>
     <string name="default_category_summary">Spørg altid</string>
+    <string name="pref_library_update_categories_details">Manga i ekskluderede kategorier vil ikke blive opdateret selv hvis de også er i inkluderede kategorier.</string>
     <string name="all">Alle</string>
     <string name="none">Ingen</string>
     <string name="include">Inkluder: %s</string>
@@ -202,7 +205,6 @@
     <string name="pref_fullscreen">Fuldskærmsvisning</string>
     <string name="white_background">Hvid</string>
     <string name="ext_pending">Ventende</string>
-    <string name="pref_library_columns_per_row">%d pr. række</string>
     <string name="ext_installer_pref">Installationsprogram</string>
     <string name="action_copy_to_clipboard">Kopiér til udklipsholder</string>
     <string name="unlock_app_title">Lås op for %s</string>
@@ -222,7 +224,6 @@
     <string name="disabled_nav">Deaktiveret</string>
     <string name="action_search_hint">Søg…</string>
     <string name="nav_zone_next">Næste</string>
-    <string name="action_sort_category">Sortér kategorier</string>
     <string name="pref_skip_read_chapters">Spring over kapitler markeret som læst</string>
     <string name="pref_downloads_summary">Automatisk nedhentning, nedhent forud</string>
     <string name="ext_installing">Installerer</string>
@@ -238,7 +239,6 @@
     <string name="tapping_inverted_both">Begge</string>
     <string name="tapping_inverted_horizontal">Vandret</string>
     <string name="label_data_storage">Data og lagring</string>
-    <string name="sort_category_confirmation">Vil du sortere kategorierne i alfabetisk rækkefølge?</string>
     <string name="pref_reader_summary">Læsetilstand, skærmvisning, navigation</string>
     <string name="nav_zone_right">Højre</string>
     <string name="nav_zone_prev">Forrige</string>
@@ -272,6 +272,7 @@
     <string name="used_cache">Brugt: %1$s</string>
     <string name="pref_lowest">Laveste</string>
     <string name="rotation_type">Rotation</string>
+    <string name="pref_category_delete_chapters">Slet kapitler</string>
     <string name="pref_create_backup">Opret sikkerhedskopi</string>
     <string name="rotation_portrait">Stående</string>
     <string name="pref_category_reading">Læser</string>
@@ -312,11 +313,4 @@
     <string name="creating_backup">Opretter sikkerhedskopi</string>
     <string name="exception_unknown_host">Kunne ikke nå %s</string>
     <string name="channel_new_chapters">Kapitelopdateringer</string>
-    <string name="manga_categories">Kategorier</string>
-    <string name="action_sort_last_manga_update">Nyeste manga opdateringer</string>
-    <string name="action_show_manga">Vis manga</string>
-    <string name="action_display_local_badge_manga">Lokale manga</string>
-    <string name="pref_update_only_completely_read">Med ulæst kapitler</string>
-    <string name="default_manga_category">Standard kategori</string>
-    <string name="pref_manga_library_update_categories_details">Manga i ekskluderede kategorier vil ikke blive opdateret selv hvis de også er i inkluderede kategorier.</string>
 </resources>

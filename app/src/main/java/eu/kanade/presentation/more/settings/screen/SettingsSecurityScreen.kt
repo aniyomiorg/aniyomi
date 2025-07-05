@@ -37,7 +37,7 @@ object SettingsSecurityScreen : SearchableSettings {
 
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
-                pref = useAuthPref,
+                preference = useAuthPref,
                 title = stringResource(MR.strings.lock_with_biometrics),
                 enabled = authSupported,
                 onValueChanged = {
@@ -47,9 +47,7 @@ object SettingsSecurityScreen : SearchableSettings {
                 },
             ),
             Preference.PreferenceItem.ListPreference(
-                pref = securityPreferences.lockAppAfter(),
-                title = stringResource(MR.strings.lock_when_idle),
-                enabled = authSupported && useAuth,
+                preference = securityPreferences.lockAppAfter(),
                 entries = LockAfterValues
                     .associateWith {
                         when (it) {
@@ -63,6 +61,8 @@ object SettingsSecurityScreen : SearchableSettings {
                         }
                     }
                     .toImmutableMap(),
+                title = stringResource(MR.strings.lock_when_idle),
+                enabled = authSupported && useAuth,
                 onValueChanged = {
                     (context as FragmentActivity).authenticate(
                         title = context.stringResource(MR.strings.lock_when_idle),
@@ -70,15 +70,15 @@ object SettingsSecurityScreen : SearchableSettings {
                 },
             ),
             Preference.PreferenceItem.SwitchPreference(
-                pref = securityPreferences.hideNotificationContent(),
+                preference = securityPreferences.hideNotificationContent(),
                 title = stringResource(MR.strings.hide_notification_content),
             ),
             Preference.PreferenceItem.ListPreference(
-                pref = securityPreferences.secureScreen(),
-                title = stringResource(MR.strings.secure_screen),
+                preference = securityPreferences.secureScreen(),
                 entries = SecurityPreferences.SecureScreenMode.entries
                     .associateWith { stringResource(it.titleRes) }
                     .toImmutableMap(),
+                title = stringResource(MR.strings.secure_screen),
             ),
             Preference.PreferenceItem.InfoPreference(stringResource(MR.strings.secure_screen_summary)),
         )

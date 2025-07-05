@@ -102,6 +102,11 @@ interface AnimeTracker {
         updateRemote(track)
     }
 
+    suspend fun setRemotePrivate(track: AnimeTrack, private: Boolean) {
+        track.private = private
+        updateRemote(track)
+    }
+
     private suspend fun updateRemote(track: AnimeTrack): Unit = withIOContext {
         try {
             update(track)

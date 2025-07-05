@@ -28,6 +28,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -116,7 +117,7 @@ class BackupRestorer(
                 )
             }
             if (options.appSettings) {
-                restoreAppPreferences(backup.backupPreferences)
+                restoreAppPreferences(backup.backupPreferences, backup.backupCategories.takeIf { options.categories })
             }
             if (options.sourceSettings) {
                 restoreSourcePreferences(backup.backupSourcePreferences)
@@ -196,9 +197,15 @@ class BackupRestorer(
             }
     }
 
-    private fun CoroutineScope.restoreAppPreferences(preferences: List<BackupPreference>) = launch {
+    private fun CoroutineScope.restoreAppPreferences(
+        preferences: List<BackupPreference>,
+        categories: List<BackupCategory>?,
+    ) = launch {
         ensureActive()
-        preferenceRestorer.restoreApp(preferences)
+        preferenceRestorer.restoreApp(
+            preferences,
+            categories,
+        )
 
         restoreProgress += 1
         notifier.showRestoreProgress(
@@ -271,7 +278,7 @@ class BackupRestorer(
 
         restoreProgress += 1
         notifier.showRestoreProgress(
-            context.stringResource(MR.strings.custom_button_settings),
+            context.stringResource(AYMR.strings.custom_button_settings),
             restoreProgress,
             restoreAmount,
             isSync,

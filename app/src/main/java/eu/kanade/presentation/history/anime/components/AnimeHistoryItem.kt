@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -39,6 +41,7 @@ fun AnimeHistoryItem(
     onClickCover: () -> Unit,
     onClickResume: () -> Unit,
     onClickDelete: () -> Unit,
+    onClickFavorite: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -73,7 +76,7 @@ fun AnimeHistoryItem(
             Text(
                 text = if (history.episodeNumber > -1) {
                     stringResource(
-                        MR.strings.recent_anime_time,
+                        AYMR.strings.recent_anime_time,
                         formatEpisodeNumber(history.episodeNumber),
                         seenAt,
                     )
@@ -83,6 +86,16 @@ fun AnimeHistoryItem(
                 modifier = Modifier.padding(top = 4.dp),
                 style = textStyle,
             )
+        }
+
+        if (!history.coverData.isAnimeFavorite) {
+            IconButton(onClick = onClickFavorite) {
+                Icon(
+                    imageVector = Icons.Outlined.FavoriteBorder,
+                    contentDescription = stringResource(MR.strings.add_to_library),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            }
         }
 
         IconButton(onClick = onClickDelete) {
@@ -108,6 +121,7 @@ private fun HistoryItemPreviews(
                 onClickCover = {},
                 onClickResume = {},
                 onClickDelete = {},
+                onClickFavorite = {},
             )
         }
     }

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+
 plugins {
     id("mihon.library")
     kotlin("multiplatform")
@@ -10,6 +12,7 @@ kotlin {
             dependencies {
                 implementation(projects.sourceApi)
                 api(projects.i18n)
+                api(projects.i18nAniyomi)
 
                 implementation(libs.unifile)
             }
@@ -27,6 +30,14 @@ kotlin {
             }
         }
     }
+
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xexpect-actual-classes",
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        )
+    }
 }
 
 android {
@@ -39,16 +50,6 @@ android {
 
     dependencies {
         // FFmpeg-kit
-        implementation(libs.ffmpeg.kit)
-    }
-}
-
-tasks {
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        compilerOptions.freeCompilerArgs.addAll(
-            listOf(
-                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
-            ),
-        )
+        implementation(aniyomilibs.ffmpeg.kit)
     }
 }

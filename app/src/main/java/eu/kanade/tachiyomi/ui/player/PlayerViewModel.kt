@@ -42,6 +42,7 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.items.episode.model.toDbEpisode
+import eu.kanade.domain.source.anime.interactor.GetAnimeIncognitoState
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
@@ -55,7 +56,9 @@ import eu.kanade.tachiyomi.animesource.model.TimeStamp
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
+import eu.kanade.tachiyomi.data.database.models.anime.isRecognizedNumber
 import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
+import eu.kanade.tachiyomi.data.database.models.manga.isRecognizedNumber
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.saver.Image
@@ -120,9 +123,11 @@ import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.service.getEpisodeSort
+import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -162,6 +167,8 @@ class PlayerViewModel @JvmOverloads constructor(
     private val basePreferences: BasePreferences = Injekt.get(),
     private val getCustomButtons: GetCustomButtons = Injekt.get(),
     private val trackSelect: TrackSelect = Injekt.get(),
+    private val getIncognitoState: GetAnimeIncognitoState = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
 
@@ -331,7 +338,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 delay(1000)
             }
             pause()
-            withUIContext { Injekt.get<Application>().toast(MR.strings.toast_sleep_timer_ended) }
+            withUIContext { Injekt.get<Application>().toast(AYMR.strings.toast_sleep_timer_ended) }
         }
     }
 
@@ -723,9 +730,9 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun setAutoPlay(value: Boolean) {
         val textRes = if (value) {
-            MR.strings.enable_auto_play
+            AYMR.strings.enable_auto_play
         } else {
-            MR.strings.disable_auto_play
+            AYMR.strings.disable_auto_play
         }
         playerUpdate.update { PlayerUpdates.ShowTextResource(textRes) }
         playerPreferences.autoplayEnabled().set(value)
@@ -949,12 +956,12 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun changeEpisode(previous: Boolean, autoPlay: Boolean = false) {
         if (previous && !hasPreviousEpisode.value) {
-            activity.showToast(activity.stringResource(MR.strings.no_prev_episode))
+            activity.showToast(activity.stringResource(AYMR.strings.no_prev_episode))
             return
         }
 
         if (!previous && !hasNextEpisode.value) {
-            activity.showToast(activity.stringResource(MR.strings.no_next_episode))
+            activity.showToast(activity.stringResource(AYMR.strings.no_next_episode))
             return
         }
 
@@ -1024,7 +1031,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    private val incognitoMode = basePreferences.incognitoMode().get()
+    private val incognitoMode: Boolean by lazy { getIncognitoState.await(currentAnime.value?.source) }
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileWatching().get()
 
     internal val relativeTime = uiPreferences.relativeTime().get()
@@ -1146,10 +1153,10 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     /**
-     * Whether this presenter is initialized yet.
+     * Whether this viewModel is initialized with the correct episode.
      */
-    private fun needsInit(): Boolean {
-        return currentAnime.value == null || currentEpisode.value == null
+    private fun needsInit(animeId: Long, episodeId: Long): Boolean {
+        return currentAnime.value?.id != animeId || currentEpisode.value?.id != episodeId
     }
 
     data class InitResult(
@@ -1173,14 +1180,14 @@ class PlayerViewModel @JvmOverloads constructor(
         vidIndex: Int,
     ): Pair<InitResult, Result<Boolean>> {
         val defaultResult = InitResult(currentHosterList, qualityIndex, null)
-        if (!needsInit()) return Pair(defaultResult, Result.success(true))
+        if (!needsInit(animeId, initialEpisodeId)) return Pair(defaultResult, Result.success(true))
         return try {
             val anime = getAnime.await(animeId)
             if (anime != null) {
                 _currentAnime.update { _ -> anime }
                 animeTitle.update { _ -> anime.title }
                 sourceManager.isInitialized.first { it }
-                if (episodeId == -1L) episodeId = initialEpisodeId
+                episodeId = initialEpisodeId
 
                 checkTrackers(anime)
 
@@ -1208,13 +1215,13 @@ class PlayerViewModel @JvmOverloads constructor(
                 )
 
                 val currentEp = currentEpisode.value
-                    ?: throw ExceptionWithStringResource("No episode loaded", MR.strings.no_episode_loaded)
+                    ?: throw ExceptionWithStringResource("No episode loaded", AYMR.strings.no_episode_loaded)
                 if (hostList.isNotBlank()) {
                     currentHosterList = hostList.toHosterList().ifEmpty {
                         currentHosterList = null
                         throw ExceptionWithStringResource(
                             "Hoster selected from empty list",
-                            MR.strings.select_hoster_from_empty_list,
+                            AYMR.strings.select_hoster_from_empty_list,
                         )
                     }
                     qualityIndex = Pair(hostIndex, vidIndex)
@@ -1224,7 +1231,7 @@ class PlayerViewModel @JvmOverloads constructor(
                         ?.also { currentHosterList = it }
                         ?: run {
                             currentHosterList = null
-                            throw ExceptionWithStringResource("Hoster list is empty", MR.strings.no_hosters)
+                            throw ExceptionWithStringResource("Hoster list is empty", AYMR.strings.no_hosters)
                         }
                 }
 
@@ -1347,7 +1354,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     if (hasFoundPreferredVideo.compareAndSet(false, true)) {
                         val (hosterIdx, videoIdx) = HosterLoader.selectBestVideo(hosterState.value)
                         if (hosterIdx == -1) {
-                            throw ExceptionWithStringResource("No available videos", MR.strings.no_available_videos)
+                            throw ExceptionWithStringResource("No available videos", AYMR.strings.no_available_videos)
                         }
 
                         val video = (hosterState.value[hosterIdx] as HosterState.Ready).videoList[videoIdx]
@@ -1400,7 +1407,7 @@ class PlayerViewModel @JvmOverloads constructor(
                         _selectedHosterVideoIndex.update { _ -> Pair(-1, -1) }
                         return false
                     } else {
-                        throw ExceptionWithStringResource("No available videos", MR.strings.no_available_videos)
+                        throw ExceptionWithStringResource("No available videos", AYMR.strings.no_available_videos)
                     }
                 }
 
@@ -1501,7 +1508,7 @@ class PlayerViewModel @JvmOverloads constructor(
             try {
                 val currentEpisode =
                     currentEpisode.value
-                        ?: throw ExceptionWithStringResource("No episode loaded", MR.strings.no_episode_loaded)
+                        ?: throw ExceptionWithStringResource("No episode loaded", AYMR.strings.no_episode_loaded)
                 currentHosterList = EpisodeLoader.getHosters(
                     currentEpisode.toDomainEpisode()!!,
                     anime,
@@ -1542,9 +1549,9 @@ class PlayerViewModel @JvmOverloads constructor(
         val progress = playerPreferences.progressPreference().get()
         val shouldTrack = !incognitoMode || hasTrackers
         if (seconds >= totalSeconds * progress && shouldTrack) {
-            currentEp.seen = true
-            updateTrackEpisodeSeen(currentEp)
-            deleteEpisodeIfNeeded(currentEp)
+            viewModelScope.launchNonCancellable {
+                updateEpisodeProgressOnComplete(currentEp)
+            }
         }
 
         saveWatchingProgress(currentEp)
@@ -1553,6 +1560,30 @@ class PlayerViewModel @JvmOverloads constructor(
         if (inDownloadRange) {
             downloadNextEpisodes()
         }
+    }
+
+    private suspend fun updateEpisodeProgressOnComplete(currentEp: Episode) {
+        currentEp.seen = true
+        updateTrackEpisodeSeen(currentEp)
+        deleteEpisodeIfNeeded(currentEp)
+
+        val markDuplicateAsSeen = libraryPreferences.markDuplicateSeenEpisodeAsSeen().get()
+            .contains(LibraryPreferences.MARK_DUPLICATE_EPISODE_SEEN_EXISTING)
+        if (!markDuplicateAsSeen) return
+
+        val duplicateUnseenEpisodes = currentPlaylist.value
+            .mapNotNull { episode ->
+                if (
+                    !episode.seen &&
+                    episode.isRecognizedNumber &&
+                    episode.episode_number == currentEp.episode_number
+                ) {
+                    EpisodeUpdate(id = episode.id!!, seen = true)
+                } else {
+                    null
+                }
+            }
+        updateEpisode.awaitAll(duplicateUnseenEpisodes)
     }
 
     private fun downloadNextEpisodes() {
@@ -1926,7 +1957,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     if (waitingSkipIntro == defaultWaitingTime) {
                         activity.showToast(
                             "Skip Intro: ${activity.stringResource(
-                                MR.strings.player_aniskip_dontskip_toast,
+                                AYMR.strings.player_aniskip_dontskip_toast,
                                 chapter.name,
                                 waitingSkipIntro,
                             )}",
@@ -1937,7 +1968,7 @@ class PlayerViewModel @JvmOverloads constructor(
                 } else if (autoSkip) {
                     seekToWithText(
                         seekValue = nextChapterPos.toInt(),
-                        text = activity.stringResource(MR.strings.player_intro_skipped, chapter.name),
+                        text = activity.stringResource(AYMR.strings.player_intro_skipped, chapter.name),
                     )
                 } else {
                     updateSkipIntroButton(chapter.chapterType)
@@ -1952,7 +1983,7 @@ class PlayerViewModel @JvmOverloads constructor(
         _skipIntroText.update { _ ->
             skipButtonString?.let {
                 activity.stringResource(
-                    MR.strings.player_skip_action,
+                    AYMR.strings.player_skip_action,
                     activity.stringResource(skipButtonString),
                 )
             }
@@ -1962,11 +1993,11 @@ class PlayerViewModel @JvmOverloads constructor(
     private fun showSkipIntroButton(chapter: IndexedSegment, nextChapterPos: Float, waitingTime: Int) {
         if (waitingTime > -1) {
             if (waitingTime > 0) {
-                _skipIntroText.update { _ -> activity.stringResource(MR.strings.player_aniskip_dontskip) }
+                _skipIntroText.update { _ -> activity.stringResource(AYMR.strings.player_aniskip_dontskip) }
             } else {
                 seekToWithText(
                     seekValue = nextChapterPos.toInt(),
-                    text = activity.stringResource(MR.strings.player_aniskip_skip, chapter.name),
+                    text = activity.stringResource(AYMR.strings.player_aniskip_skip, chapter.name),
                 )
             }
         } else {
@@ -1987,7 +2018,7 @@ class PlayerViewModel @JvmOverloads constructor(
 
             seekToWithText(
                 seekValue = nextChapterPos.toInt(),
-                text = activity.stringResource(MR.strings.player_aniskip_skip, chapter.name),
+                text = activity.stringResource(AYMR.strings.player_aniskip_skip, chapter.name),
             )
         }
     }

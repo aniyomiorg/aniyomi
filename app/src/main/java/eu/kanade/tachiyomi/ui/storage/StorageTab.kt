@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.storage.anime.animeStorageTab
 import eu.kanade.tachiyomi.ui.storage.manga.mangaStorageTab
 import kotlinx.collections.immutable.persistentListOf
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 
 data object StorageTab : Tab {
@@ -28,7 +28,7 @@ data object StorageTab : Tab {
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_updates_enter)
             return TabOptions(
                 index = 8u,
-                title = stringResource(MR.strings.label_storage),
+                title = stringResource(AYMR.strings.label_storage),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -44,7 +44,7 @@ data object StorageTab : Tab {
         val state = rememberPagerState { tabs.size }
 
         TabbedScreen(
-            titleRes = MR.strings.label_storage,
+            titleRes = AYMR.strings.label_storage,
             tabs = tabs,
             state = state,
         )

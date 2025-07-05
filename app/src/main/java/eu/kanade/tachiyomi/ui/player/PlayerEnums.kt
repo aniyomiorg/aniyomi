@@ -21,6 +21,7 @@ import dev.icerock.moko.resources.StringResource
 import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 
 /**
  * Results of the set as art feature.
@@ -39,30 +40,30 @@ enum class ArtType {
 
 enum class PlayerOrientation(val titleRes: StringResource) {
     Free(MR.strings.rotation_free),
-    Video(MR.strings.rotation_video),
+    Video(AYMR.strings.rotation_video),
     Portrait(MR.strings.rotation_portrait),
     ReversePortrait(MR.strings.rotation_reverse_portrait),
-    SensorPortrait(MR.strings.rotation_sensor_portrait),
+    SensorPortrait(AYMR.strings.rotation_sensor_portrait),
     Landscape(MR.strings.rotation_landscape),
-    ReverseLandscape(MR.strings.rotation_reverse_landscape),
-    SensorLandscape(MR.strings.rotation_sensor_landscape),
+    ReverseLandscape(AYMR.strings.rotation_reverse_landscape),
+    SensorLandscape(AYMR.strings.rotation_sensor_landscape),
 }
 
 enum class VideoAspect(val titleRes: StringResource) {
-    Crop(MR.strings.video_crop_screen),
-    Fit(MR.strings.video_fit_screen),
-    Stretch(MR.strings.video_stretch_screen),
+    Crop(AYMR.strings.video_crop_screen),
+    Fit(AYMR.strings.video_fit_screen),
+    Stretch(AYMR.strings.video_stretch_screen),
 }
 
 /**
  * Action performed by a button, like double tap or media controls
  */
 enum class SingleActionGesture(val stringRes: StringResource) {
-    None(stringRes = MR.strings.single_action_none),
-    Seek(stringRes = MR.strings.single_action_seek),
-    PlayPause(stringRes = MR.strings.single_action_playpause),
-    Switch(stringRes = MR.strings.single_action_switch),
-    Custom(stringRes = MR.strings.single_action_custom),
+    None(stringRes = AYMR.strings.single_action_none),
+    Seek(stringRes = AYMR.strings.single_action_seek),
+    PlayPause(stringRes = AYMR.strings.single_action_playpause),
+    Switch(stringRes = AYMR.strings.single_action_switch),
+    Custom(stringRes = AYMR.strings.single_action_custom),
 }
 
 /**
@@ -143,27 +144,27 @@ enum class VideoFilters(
     val mpvProperty: String,
 ) {
     BRIGHTNESS(
-        MR.strings.player_sheets_filters_brightness,
+        AYMR.strings.player_sheets_filters_brightness,
         { it.brightnessFilter() },
         "brightness",
     ),
     SATURATION(
-        MR.strings.player_sheets_filters_Saturation,
+        AYMR.strings.player_sheets_filters_Saturation,
         { it.saturationFilter() },
         "saturation",
     ),
     CONTRAST(
-        MR.strings.player_sheets_filters_contrast,
+        AYMR.strings.player_sheets_filters_contrast,
         { it.contrastFilter() },
         "contrast",
     ),
     GAMMA(
-        MR.strings.player_sheets_filters_gamma,
+        AYMR.strings.player_sheets_filters_gamma,
         { it.gammaFilter() },
         "gamma",
     ),
     HUE(
-        MR.strings.player_sheets_filters_hue,
+        AYMR.strings.player_sheets_filters_hue,
         { it.hueFilter() },
         "hue",
     ),

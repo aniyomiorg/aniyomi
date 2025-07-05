@@ -56,7 +56,7 @@
         <item quantity="other">Preskače se %d poglavlja. Ne postoje u izvoru ili su filtrirana</item>
     </plurals>
     <plurals name="relative_time">
-        <item quantity="one">Prije %1$d dan</item>
+        <item quantity="one">Jučer</item>
         <item quantity="few">Prije %1$d dana</item>
         <item quantity="other">Prije %1$d dana</item>
     </plurals>
@@ -70,49 +70,29 @@
         <item quantity="few">Sljedeća %d poglavlja</item>
         <item quantity="other">Sljedećih %d poglavlja</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">Nedostaje %1$s poglavlje</item>
+        <item quantity="few">Nedostaju %1$s poglavlja</item>
+        <item quantity="other">Nedostaje %1$s poglavlja</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">%d dan</item>
         <item quantity="few">%d dana</item>
         <item quantity="other">%d dana</item>
     </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one">Sljedeće nepogledane epizode</item>
-        <item quantity="few">Sljedeće %d nepogledane epizode</item>
-        <item quantity="other">Sljedećih %d nepogledanih epizoda</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one">Za jedan naslov</item>
-        <item quantity="few">Za %d naslova</item>
-        <item quantity="other">Za %d naslova</item>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one">%1$s epizoda</item>
-        <item quantity="few">%1$s epizode</item>
-        <item quantity="other">%1$s epizoda</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one">Jedna nova epizoda</item>
-        <item quantity="few">%1$d nove epizode</item>
-        <item quantity="other">%1$d novih epizoda</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%d sekunda</item>
-        <item quantity="few">%d sekunde</item>
-        <item quantity="other">%d sekunda</item>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one">Epizode %1$s i još jedna</item>
-        <item quantity="few">Epizode %1$s i još %2$d</item>
-        <item quantity="other">Epizode %1$s i još %2$d</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one">Sljedeća epizoda</item>
-        <item quantity="few">Sljedeće %d epizode</item>
-        <item quantity="other">Sljedećih %d epizoda</item>
+    <plurals name="num_repos">
+        <item quantity="one">%d repozitorij</item>
+        <item quantity="few">%d repozitorija</item>
+        <item quantity="other">%d repozitorija</item>
     </plurals>
     <plurals name="upcoming_relative_time">
         <item quantity="one">Sutra</item>
         <item quantity="few">Za %1$d dana</item>
         <item quantity="other">Za %1$d dana</item>
+    </plurals>
+    <plurals name="pref_pages">
+        <item quantity="one">%1$s stranica</item>
+        <item quantity="few">%1$s stranice</item>
+        <item quantity="other">%1$s stranica</item>
     </plurals>
 </resources>

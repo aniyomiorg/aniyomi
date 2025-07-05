@@ -13,11 +13,16 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.presentation.entries.manga.DuplicateMangaDialog
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.HistoryDeleteDialog
 import eu.kanade.presentation.history.manga.MangaHistoryScreen
+import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaDialog
+import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaDialogScreenModel
+import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -30,6 +35,7 @@ import kotlinx.coroutines.launch
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 
 val resumeLastChapterReadEvent = Channel<Unit>()
@@ -69,7 +75,7 @@ fun Screen.mangaHistoryTab(
     }
 
     return TabContent(
-        titleRes = MR.strings.label_history,
+        titleRes = AYMR.strings.label_history,
         searchEnabled = true,
         content = { contentPadding, _ ->
             MangaHistoryScreen(
@@ -79,6 +85,7 @@ fun Screen.mangaHistoryTab(
                 onClickCover = { navigator.push(MangaScreen(it)) },
                 onClickResume = screenModel::getNextChapterForManga,
                 onDialogChange = screenModel::setDialog,
+                onClickFavorite = screenModel::addFavorite,
             )
 
             val onDismissRequest = { screenModel.setDialog(null) }
@@ -100,6 +107,41 @@ fun Screen.mangaHistoryTab(
                     HistoryDeleteAllDialog(
                         onDismissRequest = onDismissRequest,
                         onDelete = screenModel::removeAllHistory,
+                    )
+                }
+                is MangaHistoryScreenModel.Dialog.DuplicateManga -> {
+                    DuplicateMangaDialog(
+                        onDismissRequest = onDismissRequest,
+                        onConfirm = {
+                            screenModel.addFavorite(dialog.manga)
+                        },
+                        onOpenManga = { navigator.push(MangaScreen(dialog.duplicate.id)) },
+                        onMigrate = {
+                            screenModel.showMigrateDialog(dialog.manga, dialog.duplicate)
+                        },
+                    )
+                }
+                is MangaHistoryScreenModel.Dialog.ChangeCategory -> {
+                    ChangeCategoryDialog(
+                        initialSelection = dialog.initialSelection,
+                        onDismissRequest = onDismissRequest,
+                        onEditCategories = {
+                            navigator.push(CategoriesTab)
+                            CategoriesTab.showMangaCategory()
+                        },
+                        onConfirm = { include, _ ->
+                            screenModel.moveMangaToCategoriesAndAddToLibrary(dialog.manga, include)
+                        },
+                    )
+                }
+                is MangaHistoryScreenModel.Dialog.Migrate -> {
+                    MigrateMangaDialog(
+                        oldManga = dialog.oldManga,
+                        newManga = dialog.newManga,
+                        screenModel = MigrateMangaDialogScreenModel(),
+                        onDismissRequest = onDismissRequest,
+                        onClickTitle = { navigator.push(MangaScreen(dialog.oldManga.id)) },
+                        onPopScreen = { navigator.replace(MangaScreen(dialog.newManga.id)) },
                     )
                 }
                 null -> {}

@@ -70,6 +70,11 @@
         <item quantity="many">%d chapitres suivants</item>
         <item quantity="other">%d chapitres suivants</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">%1$s chapitre manquant</item>
+        <item quantity="many">%1$s chapitres manquants</item>
+        <item quantity="other">%1$s chapitres manquants</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">1 jour</item>
         <item quantity="many">%d jours</item>
@@ -80,39 +85,14 @@
         <item quantity="many">%d dépôts</item>
         <item quantity="other">%d dépôts</item>
     </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one">Épisode non vu suivant</item>
-        <item quantity="many">%d épisodes non vus suivants</item>
-        <item quantity="other">%d épisodes non vus suivants</item>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">Demain</item>
+        <item quantity="many">Dans %1$d jours</item>
+        <item quantity="other">Dans %1$d jours</item>
     </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one">%1$s épisode</item>
-        <item quantity="many">%1$s épisodes</item>
-        <item quantity="other">%1$s épisodes</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one">Pour 1 titre</item>
-        <item quantity="many">Pour %d titres</item>
-        <item quantity="other">Pour %d titres</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one">1 nouvel épisode</item>
-        <item quantity="many">%1$d nouveaux épisodes</item>
-        <item quantity="other">%1$d nouveaux épisodes</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%d seconde</item>
-        <item quantity="many">%d secondes</item>
-        <item quantity="other">%d secondes</item>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one">Épisodes %1$s et 1 autre</item>
-        <item quantity="many">Épisodes %1$s et %2$d autres</item>
-        <item quantity="other">Épisodes %1$s et %2$d autres</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
+    <plurals name="pref_pages">
+        <item quantity="one">1 page</item>
+        <item quantity="many">%1$s pages</item>
+        <item quantity="other">%1$s pages</item>
     </plurals>
 </resources>

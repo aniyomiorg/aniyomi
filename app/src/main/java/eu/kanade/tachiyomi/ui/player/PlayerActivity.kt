@@ -49,6 +49,7 @@ import androidx.activity.viewModels
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -76,6 +77,7 @@ import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils
 import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
+import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
@@ -86,6 +88,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
@@ -96,6 +99,7 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -312,6 +316,7 @@ class PlayerActivity : BaseActivity() {
 
         player.isExiting = true
         if (isFinishing) {
+            viewModel.deletePendingEpisodes()
             MPVLib.command(arrayOf("stop"))
         } else {
             viewModel.pause()
@@ -327,8 +332,8 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
-        if (isInPictureInPictureMode) {
-            finishAndRemoveTask()
+        if (isInPictureInPictureMode && powerManager.isInteractive) {
+            viewModel.deletePendingEpisodes()
         }
 
         super.onStop()
@@ -967,11 +972,6 @@ class PlayerActivity : BaseActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun finishAndRemoveTask() {
-        viewModel.deletePendingEpisodes()
-        super.finishAndRemoveTask()
-    }
-
     /**
      * Switches to the episode based on [episodeId],
      * @param episodeId id of the episode to switch the player to
@@ -997,7 +997,7 @@ class PlayerActivity : BaseActivity() {
             when (switchMethod) {
                 null -> {
                     if (viewModel.currentAnime.value != null && !autoPlay) {
-                        launchUI { toast(MR.strings.no_next_episode) }
+                        launchUI { toast(AYMR.strings.no_next_episode) }
                     }
                     viewModel.isLoading.update { _ -> false }
                 }
@@ -1008,7 +1008,7 @@ class PlayerActivity : BaseActivity() {
                             switchMethod.hosterList.isEmpty() -> setInitialEpisodeError(
                                 PlayerViewModel.ExceptionWithStringResource(
                                     "Hoster list is empty",
-                                    MR.strings.no_hosters,
+                                    AYMR.strings.no_hosters,
                                 ),
                             )
                             else -> {
@@ -1062,7 +1062,19 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
-        MPVLib.command(arrayOf("loadfile", parseVideoUrl(video.videoUrl)))
+        val videoOptions = video.mpvArgs.joinToString(",") { (option, value) ->
+            "$option=\"$value\""
+        }
+
+        MPVLib.command(
+            arrayOf(
+                "loadfile",
+                parseVideoUrl(video.videoUrl),
+                "replace",
+                "0",
+                videoOptions,
+            ),
+        )
     }
 
     /**
@@ -1080,7 +1092,7 @@ class PlayerActivity : BaseActivity() {
     }
 
     fun parseVideoUrl(videoUrl: String?): String? {
-        return Uri.parse(videoUrl).resolveUri(this)
+        return videoUrl?.toUri()?.resolveUri(this)
             ?: videoUrl
     }
 
@@ -1115,7 +1127,7 @@ class PlayerActivity : BaseActivity() {
 
         val intent = uri.toShareIntent(
             context = applicationContext,
-            message = stringResource(MR.strings.share_screenshot_info, anime.title, episode.name, seconds),
+            message = stringResource(AYMR.strings.share_screenshot_info, anime.title, episode.name, seconds),
         )
         startActivity(Intent.createChooser(intent, stringResource(MR.strings.action_share)))
     }
@@ -1162,6 +1174,7 @@ class PlayerActivity : BaseActivity() {
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     private fun fileLoaded() {
         if (player.isExiting) return
+        setMpvOptions()
         setMpvMediaTitle()
         setupPlayerOrientation()
         setupChapters()
@@ -1186,6 +1199,33 @@ class PlayerActivity : BaseActivity() {
                     viewModel.setChapter(viewModel.pos.value)
                 }
             }
+        }
+    }
+
+    private fun setMpvOptions() {
+        if (player.isExiting) return
+        val video = viewModel.currentVideo.value ?: return
+
+        // Only check for `MPV_ARGS_TAG` on downloaded videos
+        if (listOf("file", "content", "data").none { video.videoUrl.startsWith(it) }) {
+            return
+        }
+
+        try {
+            val metadata = Json.decodeFromString<Map<String, String>>(
+                MPVLib.getPropertyString("metadata"),
+            )
+
+            val opts = metadata[Video.MPV_ARGS_TAG]
+                ?.split(";")
+                ?.map { it.split("=", limit = 2) }
+                ?: return
+
+            opts.forEach { (option, value) ->
+                MPVLib.setPropertyString(option, value)
+            }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Failed to read video metadata" }
         }
     }
 
@@ -1251,7 +1291,7 @@ class PlayerActivity : BaseActivity() {
         }.toString().padStart(2, '0')
 
         val title = stringResource(
-            MR.strings.mpv_media_title,
+            AYMR.strings.mpv_media_title,
             anime.title,
             epNumber,
             episode.name,

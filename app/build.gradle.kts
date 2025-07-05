@@ -1,7 +1,7 @@
+import mihon.buildlogic.Config
 import mihon.buildlogic.getBuildTime
 import mihon.buildlogic.getCommitCount
 import mihon.buildlogic.getGitSha
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("mihon.android.application")
@@ -13,23 +13,19 @@ plugins {
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
-@Suppress("PropertyName")
-val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-
 android {
     namespace = "eu.kanade.tachiyomi"
 
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
-        versionCode = 128
+        versionCode = 129
         versionName = "0.16.4.3"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
-        buildConfigField("String", "BUILD_TIME", "\"${getBuildTime()}\"")
-        buildConfigField("boolean", "INCLUDE_UPDATER", "false")
-        buildConfigField("boolean", "PREVIEW", "false")
+        buildConfigField("String", "BUILD_TIME", "\"${getBuildTime(useLastCommitTime = false)}\"")
+        buildConfigField("boolean", "UPDATER_ENABLED", "${Config.enableUpdater}")
 
         // Put these fields in acra.properties
         // val acraProperties = Properties()
@@ -43,52 +39,49 @@ android {
         // buildConfigField("String", "ACRA_LOGIN", "\"$acraLogin\"")
         // buildConfigField("String", "ACRA_PASSWORD", "\"$acraPassword\"")
 
-        ndk {
-            abiFilters += SUPPORTED_ABIS
-        }
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include(*SUPPORTED_ABIS.toTypedArray())
-            isUniversalApk = true
-        }
-    }
-
     buildTypes {
-        named("debug") {
+        val debug by getting {
+            applicationIdSuffix = ".dev"
             versionNameSuffix = "-${getCommitCount()}"
-            applicationIdSuffix = ".debug"
             isPseudoLocalesEnabled = true
         }
-        named("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
-        }
-        create("preview") {
-            initWith(getByName("release"))
-            buildConfigField("boolean", "PREVIEW", "true")
+        val release by getting {
+            isMinifyEnabled = Config.enableCodeShrink
+            isShrinkResources = Config.enableCodeShrink
 
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks.add("release")
-            val debugType = getByName("debug")
-            versionNameSuffix = debugType.versionNameSuffix
-            applicationIdSuffix = debugType.applicationIdSuffix
+            proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
+
+            buildConfigField("String", "BUILD_TIME", "\"${getBuildTime(useLastCommitTime = true)}\"")
+        }
+
+        val commonMatchingFallbacks = listOf(release.name)
+
+        create("preview") {
+            initWith(release)
+
+            applicationIdSuffix = ".debug"
+
+            versionNameSuffix = debug.versionNameSuffix
+            signingConfig = debug.signingConfig
+
+            matchingFallbacks.addAll(commonMatchingFallbacks)
+
+            buildConfigField("String", "BUILD_TIME", "\"${getBuildTime(useLastCommitTime = false)}\"")
         }
         create("benchmark") {
-            initWith(getByName("release"))
+            initWith(release)
 
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks.add("release")
             isDebuggable = false
             isProfileable = true
             versionNameSuffix = "-benchmark"
             applicationIdSuffix = ".benchmark"
+
+            signingConfig = debug.signingConfig
+
+            matchingFallbacks.addAll(commonMatchingFallbacks)
         }
     }
 
@@ -97,39 +90,60 @@ android {
         getByName("benchmark").res.srcDirs("src/debug/res")
     }
 
-    flavorDimensions.add("default")
-
-    productFlavors {
-        create("standard") {
-            buildConfigField("boolean", "INCLUDE_UPDATER", "true")
-            dimension = "default"
-        }
-        create("dev") {
-            // Include pseudolocales: https://developer.android.com/guide/topics/resources/pseudolocales
-            resourceConfigurations.addAll(listOf("en", "en_XA", "ar_XB", "xxhdpi"))
-            dimension = "default"
+    splits {
+        abi {
+            isEnable = true
+            isUniversalApk = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
         }
     }
 
     packaging {
-        resources.excludes.addAll(
-            listOf(
+        jniLibs {
+            keepDebugSymbols += listOf(
+                "libandroidx.graphics.path",
+                "libarchive-jni",
+                "libavcodec",
+                "libavdevice",
+                "libavfilter",
+                "libavformat",
+                "libavutil",
+                "libconscrypt_jni",
+                "libc++_shared",
+                "libffmpegkit_abidetect",
+                "libffmpegkit",
+                "libimagedecoder",
+                "libmpv",
+                "libplayer",
+                "libpostproc",
+                "libquickjs",
+                "libsqlite3x",
+                "libswresample",
+                "libswscale",
+                "libxml2",
+            )
+                .map { "**/$it.so" }
+        }
+        resources {
+            excludes += setOf(
                 "kotlin-tooling-metadata.json",
-                "META-INF/DEPENDENCIES",
                 "LICENSE.txt",
-                "META-INF/LICENSE",
+                "META-INF/**/*.properties",
                 "META-INF/**/LICENSE.txt",
                 "META-INF/*.properties",
-                "META-INF/**/*.properties",
-                "META-INF/README.md",
-                "META-INF/NOTICE",
                 "META-INF/*.version",
-            ),
-        )
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/NOTICE",
+                "META-INF/README.md",
+            )
+        }
     }
 
     dependenciesInfo {
-        includeInApk = false
+        includeInApk = Config.includeDependencyInfo
+        includeInBundle = Config.includeDependencyInfo
     }
 
     buildFeatures {
@@ -148,8 +162,27 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
+            "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
+            "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+            "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+            "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
+            "-opt-in=coil3.annotation.ExperimentalCoilApi",
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=kotlinx.coroutines.FlowPreview",
+            "-opt-in=kotlinx.coroutines.InternalCoroutinesApi",
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+        )
+    }
+}
+
 dependencies {
     implementation(projects.i18n)
+    implementation(projects.i18nAniyomi)
     implementation(projects.core.archive)
     implementation(projects.core.common)
     implementation(projects.coreMetadata)
@@ -189,13 +222,13 @@ dependencies {
     implementation(androidx.appcompat)
     implementation(androidx.biometricktx)
     implementation(androidx.constraintlayout)
-    implementation(androidx.compose.constraintlayout)
+    implementation(aniyomilibs.compose.constraintlayout)
     implementation(androidx.corektx)
     implementation(androidx.splashscreen)
     implementation(androidx.recyclerview)
     implementation(androidx.viewpager)
     implementation(androidx.profileinstaller)
-    implementation(androidx.mediasession)
+    implementation(aniyomilibs.mediasession)
 
     implementation(androidx.bundles.lifecycle)
 
@@ -249,6 +282,7 @@ dependencies {
     implementation(libs.swipe)
     implementation(libs.compose.webview)
     implementation(libs.compose.grid)
+    implementation(libs.reorderable)
 
     // Logging
     implementation(libs.logcat)
@@ -267,14 +301,14 @@ dependencies {
     testImplementation(kotlinx.coroutines.test)
 
     // mpv-android
-    implementation(libs.aniyomi.mpv)
+    implementation(aniyomilibs.aniyomi.mpv)
     // FFmpeg-kit
-    implementation(libs.ffmpeg.kit)
-    implementation(libs.arthenica.smartexceptions)
+    implementation(aniyomilibs.ffmpeg.kit)
+    implementation(aniyomilibs.arthenica.smartexceptions)
     // seeker seek bar
-    implementation(libs.seeker)
+    implementation(aniyomilibs.seeker)
     // true type parser
-    implementation(libs.truetypeparser)
+    implementation(aniyomilibs.truetypeparser)
 }
 
 androidComponents {
@@ -290,30 +324,6 @@ androidComponents {
         // Only excluding in standard flavor because this breaks
         // Layout Inspector's Compose tree
         it.packaging.resources.excludes.add("META-INF/*.version")
-    }
-}
-
-tasks {
-    // See https://kotlinlang.org/docs/reference/experimental.html#experimental-status-of-experimental-api(-markers)
-    withType<KotlinCompile> {
-        compilerOptions.freeCompilerArgs.addAll(
-            listOf(
-                "-Xcontext-receivers",
-                "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
-                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
-                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-                "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
-                "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
-                "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-                "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
-                "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
-                "-opt-in=coil3.annotation.ExperimentalCoilApi",
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-opt-in=kotlinx.coroutines.FlowPreview",
-                "-opt-in=kotlinx.coroutines.InternalCoroutinesApi",
-                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
-            ),
-        )
     }
 }
 

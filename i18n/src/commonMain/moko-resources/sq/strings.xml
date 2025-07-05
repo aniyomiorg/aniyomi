@@ -58,6 +58,7 @@
     <string name="pref_update_only_completely_read">Me kapituj të palexuar</string>
     <string name="pref_library_update_refresh_metadata_summary">Kontrolloni për kopertinë dhe detaje të reja kur përditësoni bibliotekën</string>
     <string name="default_category">Kategoria e parazgjedhur</string>
+    <string name="pref_library_update_categories_details">Elementet në kategoritë e përjashtuara nuk do të përditësohen edhe nëse janë gjithashtu në kategoritë e përfshira.</string>
     <string name="all">Të gjitha</string>
     <string name="none">Asnje</string>
     <string name="include">Përfshi: %s</string>
@@ -74,6 +75,7 @@
     <string name="getting_started_guide">Udhëzues për fillimin</string>
     <string name="information_no_entries_found">Nuk u gjet asnjë element në këtë kategori</string>
     <string name="information_empty_category">Nuk ke kategori. Prekni butonin plus për të krijuar një për organizimin e bibliotekës tuaj.</string>
+    <string name="information_webview_required">WebView kërkohet për Mihon</string>
     <string name="information_cloudflare_bypass_failure">Dështoi të anashkalojë Cloudflare</string>
     <string name="information_empty_category_dialog">Nuk ke ende asnjë kategori.</string>
     <string name="download_notifier_download_paused">Shkarkimet u ndërprenë</string>
@@ -112,6 +114,7 @@
     <string name="action_display_list">Lista</string>
     <string name="action_display_cover_only_grid">Rrjetë vetëm me mbulesë</string>
     <string name="action_display_language_badge">Gjuha</string>
+    <string name="action_display_show_continue_reading_button">Shfaq butonin për të vazhduar leximin</string>
     <string name="action_display_show_number_of_items">Trego numrin e artikujve</string>
     <string name="action_pin">Gozhdo</string>
     <string name="action_newest">Më të rejat</string>
@@ -184,6 +187,7 @@
     <string name="chapters">Kapituj</string>
     <string name="track">Gjurmimi</string>
     <string name="history">Historia</string>
+    <string name="action_sort_last_manga_update">Kontrolli i përditësimit të fundit</string>
     <string name="action_sort_unread_count">Numër i palexuar</string>
     <string name="action_sort_latest_chapter">Kapitulli i fundit</string>
     <string name="action_sort_chapter_fetch_date">Data e marrjes së kapitullit</string>
@@ -211,7 +215,7 @@
     <string name="action_edit_categories">Redakto kategoritë</string>
     <string name="action_rename_category">Riemërto kategorinë</string>
     <string name="action_move_category">Vendosni kategori</string>
-    <string name="delete_category_confirmation">Dëshironi të fshini kategorinë \"%s\"\?</string>
+    <string name="delete_category_confirmation">Dëshironi të fshini kategorinë \"%s\"?</string>
     <string name="delete_category">Fshi kategorinë</string>
     <string name="action_edit_cover">Redakto kopertinën</string>
     <string name="action_view_chapters">Shiko kapitujt</string>
@@ -223,6 +227,7 @@
     <string name="action_remove_everything">Hiqni gjithçka</string>
     <string name="action_start">Fillo</string>
     <string name="action_resume">Rifillo</string>
+    <string name="action_show_manga">Shfaq hyrjen</string>
     <string name="action_open_in_web_view">Hapni në WebView</string>
     <string name="action_open_in_browser">Hapni në shfletues</string>
     <string name="action_migrate">Migroni</string>
@@ -282,6 +287,11 @@
     <string name="ext_downloading">Po shkarkohet</string>
     <string name="ext_uninstall">Çinstaloni</string>
     <string name="ext_installer_legacy">Trashëgimia</string>
+    <string name="untrusted_extension_message">Kjo shtesë u nënshkrua me një certifikatë të pabesueshme dhe nuk u aktivizua.
+\n
+\n Një shtesë me qëllim të keq mund të lexojë çdo kredencial identifikimi të ruajtur në Mihon ose të ekzekutojë kod arbitrar.
+\n
+\n Duke i besuar kësaj certifikate ju i pranoni këto rreziqe.</string>
     <string name="obsolete_extension_message">Kjo shtesë nuk është më e disponueshme. Mund të mos funksionojë siç duhet dhe mund të shkaktojë probleme me aplikacionin. Rekomandohet ta çinstaloni.</string>
     <string name="ext_info_language">Gjuha</string>
     <string name="pref_read_with_volume_keys">Çelsat e volumit</string>
@@ -289,6 +299,7 @@
     <string name="ext_installer_shizuku_unavailable_dialog">Instaloni dhe filloni Shizuku për të përdorur Shizuku si instalues shtesë.</string>
     <string name="pref_page_transitions">Animoni tranzicionet e faqeve</string>
     <string name="pref_show_reading_mode_summary">Trego shkurtimisht modalitetin aktual kur hapet lexuesi</string>
+    <string name="pref_create_folder_per_manga">Ruani faqet në dosje të veçanta</string>
     <string name="pref_reader_theme">Ngjyra e sfondit</string>
     <string name="white_background">E bardhë</string>
     <string name="gray_background">Gri</string>
@@ -361,6 +372,9 @@
     <string name="pref_hide_threshold">Ndjeshmëria për fshehjen e menysë në lëvizje</string>
     <string name="pref_high">E lartë</string>
     <string name="pref_lowest">Më e ulëta</string>
+    <string name="pref_remove_after_marked_as_read">Pasi është shënuar manualisht si e lexuar</string>
+    <string name="pref_remove_after_read">Pas leximit fshi automatikisht</string>
+    <string name="pref_remove_bookmarked_chapters">Lejo fshirjen e kapitujve të shënuar</string>
     <string name="second_to_last">Kapitulli i dytë deri tek i fundit i lexuar</string>
     <string name="third_to_last">Kapitulli i tretë deri tek i fundit i lexuar</string>
     <string name="fifth_to_last">Kapitulli i pestë deri tek i fundit i lexuar</string>
@@ -389,7 +403,7 @@
     <string name="unknown_status">Status i panjohur</string>
     <string name="licensed">I licencuar</string>
     <string name="manga_removed_library">U hoq nga biblioteka</string>
-    <string name="delete_downloads_for_manga">Të fshihen kapitujt e shkarkuar\?</string>
+    <string name="delete_downloads_for_manga">Të fshihen kapitujt e shkarkuar?</string>
     <string name="clipboard_copy_error">Kopjimi në kujtesën e fragmenteve dështoi</string>
     <string name="source_not_installed">Burimi nuk është i instaluar: %1$s</string>
     <string name="sort_by_upload_date">Sipas datës së ngarkimit</string>
@@ -401,6 +415,7 @@
     <string name="track_type">Lloji</string>
     <string name="error_category_exists">Një kategori me këtë emër ekziston tashmë!</string>
     <string name="error_no_match">Nuk u gjet asnjë përputhje</string>
+    <string name="dialog_with_checkbox_reset">Rivendos të gjithë kapitujt për këtë hyrje</string>
     <string name="set_as_cover">Vendos si kopertinë</string>
     <string name="viewer">Mënyra e leximit</string>
     <string name="transition_next">Tjetra:</string>
@@ -434,6 +449,7 @@
     <string name="crash_screen_title">Ups!</string>
     <string name="update_check_notification_download_error">Gabim shkarkimi</string>
     <string name="pref_invalidate_download_cache">Anuloni indeksin e shkarkimeve</string>
+    <string name="pref_auto_clear_chapter_cache">Pastro memorjen e kapitullit në mbylljen e aplikacionit</string>
     <string name="pref_clear_database">Pastro bazën e të dhënave</string>
     <string name="clear_database_confirmation">A je i sigurt? Kapitujt e lexuar dhe progresi i elementeve që nuk janë në bibliotekë do të humbasin</string>
     <string name="no_pinned_sources">Nuk ke burime të gozhduara</string>
@@ -456,12 +472,12 @@
     <string name="chapter_progress">Faqe: %1$d</string>
     <string name="no_next_chapter">Kapitulli tjetër nuk u gjet</string>
     <string name="decode_image_error">Imazhi nuk mund të ngarkohej</string>
-    <string name="confirm_set_image_as_cover">Të përdoret ky imazh si kopertinë\?</string>
+    <string name="confirm_set_image_as_cover">Të përdoret ky imazh si kopertinë?</string>
     <string name="transition_finished">Përfunduar:</string>
     <string name="transition_current">Aktuale:</string>
     <string name="transition_previous">E mëparshme:</string>
     <string name="cant_open_last_read_chapter">I paafte për të hapur kapitullin e lexuar së fundi</string>
-    <string name="clear_history_confirmation">A je i sigurt\? E gjithë historia do të humbasë.</string>
+    <string name="clear_history_confirmation">A je i sigurt? E gjithë historia do të humbasë.</string>
     <string name="empty_screen">Epo, kjo është e sikletshme</string>
     <string name="not_installed">Nuk është instaluar</string>
     <string name="copy">Kopjo</string>
@@ -469,7 +485,6 @@
     <string name="notification_chapters_multiple">Kapitujt %1$s</string>
     <string name="notification_chapters_single">Kapitulli %1$s</string>
     <string name="library_errors_help">Për ndihmë se si të rregulloni gabimet e përditësimit të bibliotekës, shihni %1$s</string>
-    <string name="update_check_fdroid_migration_info">Një version i ri është në dispozicion nga publikimet zyrtare. Prekni për të mësuar se si të migroni nga publikimet jozyrtare të F-Droid.</string>
     <string name="pref_create_backup">Krijo kopje rezervë</string>
     <string name="pref_create_backup_summ">Mund të përdoret për të rivendosur bibliotekën aktuale</string>
     <string name="pref_restore_backup">Rivendos kopjen rezervë</string>
@@ -477,7 +492,7 @@
     <string name="backup_restore_missing_sources">Burimet që mungojnë:</string>
     <string name="restore_completed">Rivendosja përfundoi</string>
     <string name="backup_in_progress">Rezervimi është tashmë në proces</string>
-    <string name="backup_choice">Çfarë dëshironi të bëni rezervë\?</string>
+    <string name="backup_choice">Çfarë dëshironi të bëni rezervë?</string>
     <string name="creating_backup">Duke krijuar rezervë</string>
     <string name="creating_backup_error">Rezervimi dështoi</string>
     <string name="missing_storage_permission">Lejet e ruajtjes nuk janë dhënë</string>
@@ -511,16 +526,19 @@
     <string name="battery_optimization_setting_activity_not_found">Cilësimet e pajisjes nuk mund të hapeshin</string>
     <string name="check_for_updates">Kontrolloni për përditësime</string>
     <string name="updated_version">Përditësuar në v%1$s</string>
+    <string name="pref_enable_acra">Dërgoni raporte përplasjesh</string>
+    <string name="pref_acra_summary">Ndihmon në rregullimin e çdo defekti. Nuk do të dërgohen të dhëna sensitive</string>
     <string name="fdroid_warning">Ndërtimet e F-Droid nuk mbështeten zyrtarisht.
 \nTrokit për të mësuar më shumë.</string>
     <string name="label_downloaded_only">Vetëm të shkarkuarat</string>
     <string name="pref_incognito_mode">Modaliteti i fshehtë</string>
     <string name="pref_incognito_mode_summary">Ndalon leximin e historisë</string>
     <string name="downloaded_only_summary">Filtro të gjitha elementet në bibliotekën tuaj</string>
-    <string name="logout_title">Dil nga %1$s\?</string>
+    <string name="logout_title">Dil nga %1$s?</string>
     <string name="logout_success">Tani keni dalë nga llogaria</string>
     <string name="unknown_error">Gabim i panjohur</string>
     <string name="updating_category">Kategoria po përditësohet</string>
+    <string name="manga_from_library">Nga biblioteka</string>
     <string name="downloaded_chapters">Kapitujt e shkarkuar</string>
     <string name="tabs_header">Skedat</string>
     <string name="no_more_results">Nuk ka më rezultate</string>
@@ -536,8 +554,11 @@
     <string name="in_library">Në bibliotekë</string>
     <string name="copied_to_clipboard">Kopjuar në kujtesën e fragmenteve:
 \n %1$s</string>
+    <string name="snack_add_to_library">Të shtohet në bibliotekë?</string>
     <string name="display_mode_chapter">Kapitulli %1$s</string>
     <string name="chapter_downloading_progress">Po shkarkohet (%1$d/%2$d)</string>
+    <string name="chapter_error">Gabim</string>
+    <string name="chapter_paused">Ndaloi</string>
     <string name="show_title">Titulli i burimit</string>
     <string name="sort_by_source">Sipas burimit</string>
     <string name="sort_by_number">Sipas numrit të kapitullit</string>
@@ -546,11 +567,11 @@
     <string name="manga_cover">Kopertina</string>
     <string name="cover_saved">Kopertina u ruajt</string>
     <string name="error_sharing_cover">Gabim në ndarjen e kopertinës</string>
-    <string name="confirm_delete_chapters">Jeni i sigurt që dëshironi të fshini kapitujt e zgjedhur\?</string>
+    <string name="confirm_delete_chapters">Jeni i sigurt që dëshironi të fshini kapitujt e zgjedhur?</string>
     <string name="also_set_chapter_settings_for_library">Aplikoni gjithashtu për të gjitha elementet në bibliotekën time</string>
     <string name="set_chapter_settings_as_default">Vendose si parësore</string>
     <string name="no_chapters_error">Nuk u gjet asnjë kapitull</string>
-    <string name="are_you_sure">A je i sigurt\?</string>
+    <string name="are_you_sure">A je i sigurt?</string>
     <string name="reading">Leximi</string>
     <string name="completed">E përfunduar</string>
     <string name="on_hold">Ne pritje</string>
@@ -592,7 +613,7 @@
     <string name="crash_screen_description">%s hasi në një gabim të papritur. Ne ju sugjerojmë që të fotografoni këtë mesazh, të hidhni regjistrat e aksidenteve dhe më pas ta shpërndani në kanalin tonë të mbështetjes në Discord.</string>
     <string name="crash_screen_restart_application">Rinisni aplikacionin</string>
     <string name="download_insufficient_space">Kapitujt nuk mund të shkarkoheshin për shkak të hapësirës së ulët të ruajtjes</string>
-    <string name="download_queue_size_warning">Paralajmërim: shkarkimet e mëdha me shumicë mund të çojnë në ngadalësimin e burimeve dhe/ose bllokimin e Aniyomi. Trokit për të mësuar më shumë.</string>
+    <string name="download_queue_size_warning">Paralajmërim: shkarkimet e mëdha me shumicë mund të çojnë në ngadalësimin e burimeve dhe/ose bllokimin e Mihon. Trokit për të mësuar më shumë.</string>
     <string name="notification_new_chapters">U gjetën kapituj të rinj</string>
     <string name="learn_more">Trokit për të mësuar më shumë</string>
     <string name="notification_cover_update_failed">Përditësimi i kopertinës dështoi</string>
@@ -620,8 +641,8 @@
     <string name="remove_from_library">Hiqe nga biblioteka</string>
     <string name="error_saving_cover">Gabim gjatë ruajtjes së kopertinës</string>
     <string name="notification_first_add_to_library">Ju lutemi shtoni hyrjen në bibliotekën tuaj përpara se ta bëni këtë</string>
-    <string name="confirm_set_chapter_settings">Jeni i sigurt që dëshironi t\'i ruani këto cilësime si parazgjedhje\?</string>
-    <string name="dialog_with_checkbox_remove_description">Kjo do të heqë datën e leximit të këtij kapitulli. A je i sigurt\?</string>
+    <string name="confirm_set_chapter_settings">Jeni i sigurt që dëshironi t\'i ruani këto cilësime si parazgjedhje?</string>
+    <string name="dialog_with_checkbox_remove_description">Kjo do të heqë datën e leximit të këtij kapitulli. A je i sigurt?</string>
     <string name="track_remove_start_date_conf_text">Kjo do të heqë datën e fillimit të zgjedhur më parë nga %s</string>
     <string name="update_check_eol">Ky version Android nuk mbështetet më</string>
     <string name="website">Faqja e internetit</string>
@@ -634,12 +655,14 @@
     <string name="pref_tablet_ui_mode">Ndërfaqja e përdoruesve të tabletit</string>
     <string name="pref_verbose_logging_summary">Printoni regjistrat me fjalë në regjistrin e sistemit (ul performancën e aplikacionit)</string>
     <string name="file_picker_error">Nuk u gjet asnjë aplikacion për përzgjedhjen e skedarëve</string>
+    <string name="pref_library_update_show_tab_badge">Trego numrin e të pa lezuarave ne ikonën e Përditësimeve</string>
     <string name="label_overview_section">Pasqyrë e Përgjithshme</string>
     <string name="seconds_short">%ds</string>
     <string name="label_stats">Statistikë</string>
     <string name="label_started">Filluar</string>
     <string name="label_local">Lokale</string>
     <string name="label_downloaded">Shkarkuar</string>
+    <string name="pref_invalidate_download_cache_summary">Detyro applikacionin te rikontrolloj kapitujtë e shkarkuar</string>
     <string name="label_total_chapters">Total</string>
     <string name="label_mean_score">Pikët mesatare</string>
     <string name="label_used">I përdorur</string>
@@ -662,7 +685,7 @@
     <string name="action_copy_to_clipboard">Kopjo në kujtesën e fragmenteve</string>
     <string name="confirm_add_duplicate_manga">Ju keni një hyrje në librarni me të njëjtin emër.
 \n
-\nDëshironi të vazhdoni\?</string>
+\nDëshironi të vazhdoni?</string>
     <string name="action_update_category">Përditëso kategorinë</string>
     <string name="track_error">%1$s gabim: %2$s</string>
     <string name="information_required_plain">*kërkohet</string>

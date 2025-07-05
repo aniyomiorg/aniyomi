@@ -67,7 +67,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -331,7 +331,7 @@ fun DoubleTapToSeekOvals(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         DoubleTapSeekTriangles(isForward = amount > 0)
                         Text(
-                            text = text ?: pluralStringResource(MR.plurals.seconds, amount, amount),
+                            text = text ?: pluralStringResource(AYMR.plurals.seconds, amount, amount),
                             fontSize = 12.sp,
                             textAlign = TextAlign.Center,
                             color = Color.White,

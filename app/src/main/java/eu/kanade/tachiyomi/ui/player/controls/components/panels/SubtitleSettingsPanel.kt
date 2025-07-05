@@ -51,7 +51,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import eu.kanade.tachiyomi.ui.player.controls.CARDS_MAX_WIDTH
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -86,7 +86,7 @@ fun SubtitleSettingsPanel(
                 TopAppBar(
                     title = {
                         Text(
-                            text = stringResource(MR.strings.player_sheets_subtitles_settings_title),
+                            text = stringResource(AYMR.strings.player_sheets_subtitles_settings_title),
                             style = MaterialTheme.typography.headlineMedium.copy(shadow = Shadow(blurRadius = 20f)),
                         )
                     },
@@ -126,7 +126,7 @@ fun SubtitleSettingsPanel(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = stringResource(MR.strings.player_sheets_subtitles_settings_title),
+                        text = stringResource(AYMR.strings.player_sheets_subtitles_settings_title),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             shadow = Shadow(blurRadius = 20f),
                         ),

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_update_show_tab_badge">नवीकरणचित्रकस्य उपरि अपठितसङ्ख्यां दर्शयतु</string>
+    <string name="manga_categories">वर्गाः</string>
+    <string name="action_display_local_badge_manga">स्थानीयाः माङ्गाः</string>
+    <string name="default_manga_category">प्राथमिकवर्गः</string>
+    <string name="pref_manga_library_update_categories_details">माङ्गाः याः वर्जितवर्गेषु सन्ति ताः अन्तर्भूतवर्गेषु सन्ति चेदपि तासां नवीकरणं न भविष्यति।</string>
+    <string name="pref_remove_exclude_categories_manga">वर्जितवर्गाः</string>
+    <string name="pref_clear_manga_database">दत्तनिधिं मार्जयतु</string>
+    <string name="pref_clear_manga_database_summary">तव ग्रन्थालये न रक्षितानां माङ्गानां चरित्रं नाशय</string>
+    <string name="snack_add_to_manga_library">माङ्गां ग्रन्थालये योजयानि किम्</string>
+    <string name="download_error">दोषः</string>
+    <string name="download_paused">विरमितम्</string>
+    <string name="download_notifier_download_paused_chapters">अवारोपणं विरमितम्</string>
+    <string name="channel_new_chapters_episodes">अध्यायनवीकरणानि</string>
+</resources>

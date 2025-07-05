@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.util.system.buildNotificationChannel
 import eu.kanade.tachiyomi.util.system.buildNotificationChannelGroup
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 
 /**
  * Class to manage the basic information of all the notifications used in the app.
@@ -75,6 +76,7 @@ object Notifications {
     const val CHANNEL_APP_UPDATE = "app_apk_update_channel"
     const val ID_APP_UPDATER = 1
     const val ID_APP_UPDATE_PROMPT = 2
+    const val ID_APP_UPDATE_ERROR = 3
     const val CHANNEL_EXTENSIONS_UPDATE = "ext_apk_update_channel"
     const val ID_UPDATES_TO_EXTS = -401
     const val ID_EXTENSION_INSTALLER = -402
@@ -136,7 +138,7 @@ object Notifications {
                     setShowBadge(false)
                 },
                 buildNotificationChannel(CHANNEL_NEW_CHAPTERS_EPISODES, IMPORTANCE_DEFAULT) {
-                    setName(context.stringResource(MR.strings.channel_new_chapters_episodes))
+                    setName(context.stringResource(AYMR.strings.channel_new_chapters_episodes))
                 },
                 buildNotificationChannel(CHANNEL_DOWNLOADER_PROGRESS, IMPORTANCE_LOW) {
                     setName(context.stringResource(MR.strings.channel_progress))

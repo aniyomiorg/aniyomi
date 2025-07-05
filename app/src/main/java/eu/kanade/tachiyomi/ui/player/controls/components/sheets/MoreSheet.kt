@@ -74,6 +74,7 @@ import `is`.xyz.mpv.MPVLib
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -96,8 +97,8 @@ fun MoreSheet(
     val statisticsPage by advancedPreferences.playerStatisticsPage().collectAsState()
 
     PlayerSheet(
-        onDismissRequest,
-        modifier,
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier
@@ -112,7 +113,7 @@ fun MoreSheet(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = stringResource(MR.strings.player_sheets_more_title),
+                    text = stringResource(AYMR.strings.player_sheets_more_title),
                     style = MaterialTheme.typography.headlineMedium,
                 )
                 Row(
@@ -129,10 +130,10 @@ fun MoreSheet(
                             Text(
                                 text =
                                 if (remainingTime == 0) {
-                                    stringResource(MR.strings.timer_title)
+                                    stringResource(AYMR.strings.timer_title)
                                 } else {
                                     stringResource(
-                                        MR.strings.timer_remaining,
+                                        AYMR.strings.timer_remaining,
                                         DateUtils.formatElapsedTime(remainingTime.toLong()),
                                     )
                                 },
@@ -152,13 +153,13 @@ fun MoreSheet(
                             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
                         ) {
                             Icon(imageVector = Icons.Default.Tune, contentDescription = null)
-                            Text(text = stringResource(MR.strings.player_sheets_filters_title))
+                            Text(text = stringResource(AYMR.strings.player_sheets_filters_title))
                         }
                     }
                 }
             }
 
-            Text(stringResource(MR.strings.player_hwdec_mode))
+            Text(stringResource(AYMR.strings.player_hwdec_mode))
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
@@ -171,7 +172,7 @@ fun MoreSheet(
                 }
             }
 
-            Text(stringResource(MR.strings.player_sheets_stats_page_title))
+            Text(stringResource(AYMR.strings.player_sheets_stats_page_title))
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
@@ -183,9 +184,9 @@ fun MoreSheet(
                                     if (page ==
                                         0
                                     ) {
-                                        MR.strings.player_sheets_tracks_off
+                                        AYMR.strings.player_sheets_tracks_off
                                     } else {
-                                        MR.strings.player_sheets_stats_page_chip
+                                        AYMR.strings.player_sheets_stats_page_chip
                                     },
                                     page,
                                 ),
@@ -206,7 +207,7 @@ fun MoreSheet(
             }
 
             if (customButtons.isNotEmpty()) {
-                Text(text = stringResource(MR.strings.player_sheets_custom_buttons_title))
+                Text(text = stringResource(AYMR.strings.player_sheets_custom_buttons_title))
                 FlowRow(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.mediumSmall),
                     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
@@ -237,7 +238,7 @@ fun MoreSheet(
                     }
                 }
             }
-            Text(text = stringResource(MR.strings.pref_audio_channels))
+            Text(text = stringResource(AYMR.strings.pref_audio_channels))
             val audioChannels by audioPreferences.audioChannels().collectAsState()
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
@@ -290,9 +291,9 @@ fun TimePickerDialog(
                 Text(
                     text = stringResource(
                         if (currentLayoutType == 1) {
-                            MR.strings.timer_picker_pick_time
+                            AYMR.strings.timer_picker_pick_time
                         } else {
-                            MR.strings.timer_picker_enter_timer
+                            AYMR.strings.timer_picker_enter_timer
                         },
                     ),
                 )
@@ -333,7 +334,7 @@ fun TimePickerDialog(
                                 onTimeSelect(0)
                                 onDismissRequest()
                             }) {
-                                Text(stringResource(MR.strings.timer_cancel_timer))
+                                Text(stringResource(AYMR.strings.timer_cancel_timer))
                             }
                         }
                         Spacer(modifier = Modifier.width(8.dp))

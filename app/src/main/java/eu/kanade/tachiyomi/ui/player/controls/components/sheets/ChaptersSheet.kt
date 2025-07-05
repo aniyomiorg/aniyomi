@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import dev.vivvvek.seeker.Segment
 import `is`.xyz.mpv.Utils
 import kotlinx.collections.immutable.ImmutableList
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -46,10 +46,16 @@ fun ChaptersSheet(
     modifier: Modifier = Modifier,
 ) {
     GenericTracksSheet(
-        chapters,
+        tracks = chapters,
+        header = {
+            TrackSheetTitle(
+                title = stringResource(AYMR.strings.player_sheets_chapters_title),
+                modifier = modifier.padding(top = MaterialTheme.padding.small),
+            )
+        },
         track = {
             ChapterTrack(
-                it,
+                chapter = it,
                 index = chapters.indexOf(it),
                 selected = currentChapter == it,
                 onClick = { onClick(it) },
@@ -57,8 +63,7 @@ fun ChaptersSheet(
         },
         onDismissRequest = onDismissRequest,
         dismissEvent = dismissSheet,
-        modifier = modifier
-            .padding(vertical = MaterialTheme.padding.medium),
+        modifier = modifier,
     )
 }
 
@@ -78,7 +83,7 @@ fun ChapterTrack(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
-            stringResource(MR.strings.player_sheets_track_title_wo_lang, index + 1, chapter.name),
+            stringResource(AYMR.strings.player_sheets_track_title_wo_lang, index + 1, chapter.name),
             fontStyle = if (selected) FontStyle.Italic else FontStyle.Normal,
             fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Normal,
             maxLines = 1,

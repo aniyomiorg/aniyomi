@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.data.download.anime
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import androidx.core.net.toUri
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFprobeSession
@@ -12,6 +12,7 @@ import com.arthenica.ffmpegkit.Level
 import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.ReturnCode
 import com.arthenica.ffmpegkit.SessionState
+import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.Track
@@ -47,12 +48,13 @@ import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.storage.extension
 import tachiyomi.core.common.util.lang.launchIO
+import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -322,7 +324,7 @@ class AnimeDownloader(
                     maxDownloadsFromSource > EPISODES_PER_SOURCE_QUEUE_WARNING_THRESHOLD
                 ) {
                     notifier.onWarning(
-                        context.stringResource(MR.strings.download_queue_size_warning),
+                        context.stringResource(AYMR.strings.download_queue_size_warning),
                         WARNING_NOTIF_TIMEOUT_MS,
                         NotificationHandler.openUrl(
                             context,
@@ -347,7 +349,7 @@ class AnimeDownloader(
 
             val availSpace = DiskUtil.getAvailableStorageSpace(animeDir)
             if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
-                throw Exception(context.stringResource(MR.strings.download_insufficient_space))
+                throw Exception(context.stringResource(AYMR.strings.download_insufficient_space))
             }
 
             val episodeDirname = provider.getEpisodeDirName(download.episode.name, download.episode.scanlator)
@@ -362,7 +364,7 @@ class AnimeDownloader(
                     download.video = fetchedVideo
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)
-                    throw Exception(context.stringResource(MR.strings.video_list_empty_error))
+                    throw Exception(context.stringResource(AYMR.strings.video_list_empty_error))
                 }
             }
 
@@ -519,29 +521,25 @@ class AnimeDownloader(
         }
 
         var duration = 0L
-        var nextLineIsDuration = false
 
         val logCallback = LogCallback { log ->
-            if (nextLineIsDuration) {
-                parseDuration(log.message)?.let { duration = it }
-                nextLineIsDuration = false
-            }
             if (log.level <= Level.AV_LOG_WARNING) {
                 log.message?.let {
                     logcat(LogPriority.ERROR) { it }
                 }
             }
-            if (duration != 0L && log.message.startsWith("frame=")) {
-                val outTime = log.message
-                    .substringAfter("time=", "")
-                    .substringBefore(" ", "")
-                    .let { parseTimeStringToSeconds(it) }
-                if (outTime != null && outTime > 0L) download.progress = (100 * outTime / duration).toInt()
+        }
+
+        val statCallback = StatisticsCallback { s ->
+            val outTime = (s.time / 1000.0).toLong()
+
+            if (duration != 0L && outTime > 0) {
+                download.progress = (100 * outTime / duration).toInt()
             }
         }
 
-        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, {})
-        val inputDuration = getDuration(ffprobeCommand(video.videoUrl!!, headerOptions)) ?: 0F
+        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, statCallback)
+        val inputDuration = getDuration(ffprobeCommand(video.videoUrl, headerOptions)) ?: 0F
 
         duration = inputDuration.toLong()
 
@@ -564,30 +562,15 @@ class AnimeDownloader(
         }
     }
 
-    private fun parseTimeStringToSeconds(timeString: String): Long? {
-        val parts = timeString.split(":")
-        if (parts.size != 3) {
-            // Invalid format
-            return null
-        }
-
-        return try {
-            val hours = parts[0].toInt()
-            val minutes = parts[1].toInt()
-            val secondsAndMilliseconds = parts[2].split(".")
-            val seconds = secondsAndMilliseconds[0].toInt()
-            val milliseconds = secondsAndMilliseconds[1].toInt()
-
-            (hours * 3600 + minutes * 60 + seconds + milliseconds / 100.0).toLong()
-        } catch (_: NumberFormatException) {
-            // Invalid number format
-            null
-        }
-    }
-
     private fun getFFmpegOptions(video: Video, headerOptions: String, ffmpegFilename: String): Array<String> {
         fun formatInputs(tracks: List<Track>) = tracks.joinToString(" ", postfix = " ") {
-            "$headerOptions -i \"${it.url}\""
+            buildList {
+                if (it.url.startsWith("http")) {
+                    add(headerOptions)
+                }
+                add("-i")
+                add("\"${it.url}\"")
+            }.joinToString(" ")
         }
 
         fun formatMaps(tracks: List<Track>, type: String, offset: Int = 0) = tracks.indices.joinToString(" ") {
@@ -606,11 +589,27 @@ class AnimeDownloader(
         val audioMaps = formatMaps(video.audioTracks, "a", video.subtitleTracks.size)
         val audioMetadata = formatMetadata(video.audioTracks, "a")
 
+        val sourceStreamOptions = video.ffmpegStreamArgs.joinToString(" ") { (key, value) ->
+            "-$key \"$value\""
+        }
+        val sourceVideoOptions = video.ffmpegVideoArgs.joinToString(" ") { (key, value) ->
+            "-$key \"$value\""
+        }
+
+        val videoInput = buildList {
+            if (video.videoUrl.startsWith("http")) {
+                add(headerOptions)
+            }
+            add(sourceStreamOptions)
+            add("-i")
+            add("\"${video.videoUrl}\"")
+        }.joinToString(" ")
+
         val command = listOf(
-            headerOptions, "-i \"${video.videoUrl}\"", subtitleInputs, audioInputs,
+            videoInput, subtitleInputs, audioInputs,
             "-map 0:v", audioMaps, "-map 0:a?", subtitleMaps, "-map 0:s? -map 0:t?",
             "-f matroska -c:a copy -c:v copy -c:s copy",
-            subtitleMetadata, audioMetadata,
+            subtitleMetadata, audioMetadata, sourceVideoOptions,
             "\"$ffmpegFilename\" -y",
         )
             .filter(String::isNotBlank)
@@ -626,23 +625,6 @@ class AnimeDownloader(
     }
 
     /**
-     * Returns the parsed duration in milliseconds
-     *
-     * @param durationString the string formatted in HOURS:MINUTES:SECONDS.HUNDREDTHS
-     */
-    private fun parseDuration(durationString: String): Long? {
-        val splitString = durationString.split(":")
-        if (splitString.lastIndex != 2) return null
-        val hours = splitString[0].toLong()
-        val minutes = splitString[1].toLong()
-        val secondsString = splitString[2].split(".")
-        if (secondsString.lastIndex != 1) return null
-        val fullSeconds = secondsString[0].toLong()
-        val hundredths = secondsString[1].toLong()
-        return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
-    }
-
-    /**
      * Returns the observable which downloads the video with an external downloader.
      *
      * @param video the video to download.
@@ -650,7 +632,7 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
      */
-    private fun downloadVideoExternal(
+    private suspend fun downloadVideoExternal(
         video: Video,
         source: AnimeHttpSource,
         tmpDir: UniFile,
@@ -658,7 +640,9 @@ class AnimeDownloader(
     ): UniFile {
         try {
             val file = tmpDir.createFile("${filename}_tmp.mkv")!!
-            context.copyToClipboard("Episode download location", tmpDir.filePath!!.substringBeforeLast("_tmp"))
+            withUIContext {
+                context.copyToClipboard("Episode download location", tmpDir.filePath!!.substringBeforeLast("_tmp"))
+            }
 
             // TODO: support other file formats!!
             // start download with intent
@@ -672,15 +656,22 @@ class AnimeDownloader(
                 when {
                     // 1DM
                     pkgName.startsWith("idm.internet.download.manager") -> {
+                        val headers = (video.headers ?: source.headers).toMap()
+                        val bundle = Bundle()
+                        for ((key, value) in headers) {
+                            bundle.putString(key, value)
+                        }
+
                         intent.apply {
                             component = ComponentName(
                                 pkgName,
                                 "idm.internet.download.manager.Downloader",
                             )
                             action = Intent.ACTION_VIEW
-                            data = Uri.parse(video.videoUrl)
+                            data = video.videoUrl.toUri()
 
                             putExtra("extra_filename", "$filename.mkv")
+                            putExtra("extra_headers", bundle)
                         }
                     }
                     // ADM
@@ -699,7 +690,7 @@ class AnimeDownloader(
                             action = Intent.ACTION_VIEW
                             putExtra(
                                 "com.dv.get.ACTION_LIST_ADD",
-                                "${Uri.parse(video.videoUrl)}<info>$filename.mkv",
+                                "${video.videoUrl.toUri()}<info>$filename.mkv",
                             )
                             putExtra(
                                 "com.dv.get.ACTION_LIST_PATH",
@@ -725,7 +716,7 @@ class AnimeDownloader(
             } else {
                 intent = Intent(Intent.ACTION_VIEW).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    setDataAndType(Uri.parse(video.videoUrl), "video/*")
+                    setDataAndType(video.videoUrl.toUri(), "video/*")
                     putExtra("extra_filename", filename)
                 }
             }

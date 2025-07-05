@@ -68,6 +68,7 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 
@@ -126,7 +127,7 @@ class AnimeScreen(
             episodeSwipeEndAction = screenModel.episodeSwipeEndAction,
             showNextEpisodeAirTime = screenModel.showNextEpisodeAirTime,
             alwaysUseExternalPlayer = screenModel.alwaysUseExternalPlayer,
-            onBackClicked = navigator::pop,
+            navigateUp = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {
                     val extPlayer = screenModel.alwaysUseExternalPlayer != alt
@@ -337,7 +338,7 @@ class AnimeScreen(
                 EpisodeOptionsDialogScreen.onDismissDialog = onDismissRequest
                 val episodeTitle = if (dialog.anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                     stringResource(
-                        MR.strings.display_mode_episode,
+                        AYMR.strings.display_mode_episode,
                         formatEpisodeNumber(dialog.episode.episodeNumber),
                     )
                 } else {

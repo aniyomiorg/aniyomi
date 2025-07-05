@@ -63,7 +63,7 @@ import eu.kanade.tachiyomi.ui.player.controls.panelCardsColors
 import eu.kanade.tachiyomi.ui.player.settings.SubtitlePreferences
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.delay
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
@@ -173,7 +173,7 @@ fun SubtitleDelayCard(
             when (affectedSubtitle) {
                 SubtitleDelayType.Primary -> {
                     OutlinedNumericChooser(
-                        label = { Text(stringResource(MR.strings.player_sheets_sub_delay_speed)) },
+                        label = { Text(stringResource(AYMR.strings.player_sheets_sub_delay_speed)) },
                         value = speed,
                         onChange = onSpeedChange,
                         max = 10f,
@@ -193,9 +193,9 @@ fun SubtitleDelayCard(
 enum class SubtitleDelayType(
     val title: StringResource,
 ) {
-    Primary(MR.strings.player_sheets_sub_delay_subtitle_type_primary),
-    Secondary(MR.strings.player_sheets_sub_delay_subtitle_type_secondary),
-    Both(MR.strings.player_sheets_sub_delay_subtitle_type_primary_and_secondary),
+    Primary(AYMR.strings.player_sheets_sub_delay_subtitle_type_primary),
+    Secondary(AYMR.strings.player_sheets_sub_delay_subtitle_type_secondary),
+    Both(AYMR.strings.player_sheets_sub_delay_subtitle_type_primary_and_secondary),
 }
 
 @Suppress("LambdaParameterInRestartableEffect") // Intentional
@@ -227,13 +227,13 @@ fun DelayCard(
         ) {
             title()
             OutlinedNumericChooser(
-                label = { Text(stringResource(MR.strings.player_sheets_sub_delay_delay)) },
+                label = { Text(stringResource(AYMR.strings.player_sheets_sub_delay_delay)) },
                 value = delay,
                 onChange = onDelayChange,
                 step = 50,
                 min = Int.MIN_VALUE,
                 max = Int.MAX_VALUE,
-                suffix = { Text(stringResource(MR.strings.player_generic_unit_ms)) },
+                suffix = { Text(stringResource(AYMR.strings.player_generic_unit_ms)) },
             )
             Column(
                 modifier = Modifier.animateContentSize(),
@@ -270,9 +270,9 @@ fun DelayCard(
                     Text(
                         stringResource(
                             if (delayType == DelayType.Audio) {
-                                MR.strings.player_sheets_sub_delay_audio_sound_heard
+                                AYMR.strings.player_sheets_sub_delay_audio_sound_heard
                             } else {
-                                MR.strings.player_sheets_sub_delay_subtitle_voice_heard
+                                AYMR.strings.player_sheets_sub_delay_subtitle_voice_heard
                             },
                         ),
                     )
@@ -287,9 +287,9 @@ fun DelayCard(
                     Text(
                         stringResource(
                             if (delayType == DelayType.Audio) {
-                                MR.strings.player_sheets_sub_delay_sound_sound_spotted
+                                AYMR.strings.player_sheets_sub_delay_sound_sound_spotted
                             } else {
-                                MR.strings.player_sheets_sub_delay_subtitle_text_seen
+                                AYMR.strings.player_sheets_sub_delay_subtitle_text_seen
                             },
                         ),
                     )
@@ -303,7 +303,7 @@ fun DelayCard(
                     modifier = Modifier.weight(1f),
                     enabled = isDirectionPositive == null,
                 ) {
-                    Text(stringResource(MR.strings.player_sheets_delay_set_as_default))
+                    Text(stringResource(AYMR.strings.player_sheets_delay_set_as_default))
                 }
                 FilledIconButton(
                     onClick = onReset,
@@ -329,7 +329,7 @@ fun SubtitleDelayTitle(
         modifier = modifier.fillMaxWidth(),
     ) {
         Text(
-            stringResource(MR.strings.player_sheets_sub_delay_title),
+            stringResource(AYMR.strings.player_sheets_sub_delay_title),
             style = MaterialTheme.typography.headlineMedium,
         )
         var showDropDownMenu by remember { mutableStateOf(false) }

@@ -21,11 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.TextFieldValue
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.presentation.more.settings.screen.player.editor.codeeditor.githubTheme
+import eu.kanade.presentation.more.settings.screen.player.editor.codeeditor.luaHighlight
+import eu.kanade.presentation.more.settings.screen.player.editor.codeeditor.toAnnotatedString
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
@@ -41,9 +46,32 @@ fun CustomButtonButtonDialog(
     initialState: CustomButton?,
 ) {
     var title by remember { mutableStateOf(initialState?.name ?: "") }
-    var content by remember { mutableStateOf(initialState?.content ?: "") }
-    var longPressContent by remember { mutableStateOf(initialState?.longPressContent ?: "") }
-    var startUp by remember { mutableStateOf(initialState?.onStartup ?: "") }
+
+    val luaHighlight = remember { luaHighlight(githubTheme) }
+    var content by remember {
+        mutableStateOf(
+            TextFieldValue(
+                annotatedString = luaHighlight.toAnnotatedString(initialState?.content ?: ""),
+                composition = null,
+            ),
+        )
+    }
+    var longPressContent by remember {
+        mutableStateOf(
+            TextFieldValue(
+                annotatedString = luaHighlight.toAnnotatedString(initialState?.longPressContent ?: ""),
+                composition = null,
+            ),
+        )
+    }
+    var startUp by remember {
+        mutableStateOf(
+            TextFieldValue(
+                annotatedString = luaHighlight.toAnnotatedString(initialState?.onStartup ?: ""),
+                composition = null,
+            ),
+        )
+    }
 
     val focusRequester = remember { FocusRequester() }
     val titleAlreadyExists = remember(title) { buttonNames.contains(title) }
@@ -52,9 +80,9 @@ fun CustomButtonButtonDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
-                enabled = title.isNotEmpty() && content.isNotEmpty() && !titleAlreadyExists,
+                enabled = title.isNotEmpty() && content.text.isNotEmpty() && !titleAlreadyExists,
                 onClick = {
-                    onAction(title, content, longPressContent, startUp)
+                    onAction(title, content.text, longPressContent.text, startUp.text)
                     onDismissRequest()
                 },
             ) {
@@ -72,7 +100,7 @@ fun CustomButtonButtonDialog(
                 initialState?.id?.let { buttonId ->
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = stringResource(MR.strings.pref_player_custom_button_id, buttonId),
+                        text = stringResource(AYMR.strings.pref_player_custom_button_id, buttonId),
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.alpha(alpha = DISABLED_ALPHA),
                     )
@@ -90,11 +118,11 @@ fun CustomButtonButtonDialog(
                     value = title,
                     onValueChange = { title = it },
                     label = {
-                        Text(text = stringResource(MR.strings.pref_player_custom_button_title))
+                        Text(text = stringResource(AYMR.strings.pref_player_custom_button_title))
                     },
                     supportingText = {
                         val msgRes = if (title.isNotEmpty() && titleAlreadyExists) {
-                            MR.strings.pref_player_custom_button_error_exists
+                            AYMR.strings.pref_player_custom_button_error_exists
                         } else {
                             MR.strings.information_required_plain
                         }
@@ -106,9 +134,9 @@ fun CustomButtonButtonDialog(
 
                 OutlinedTextField(
                     value = content,
-                    onValueChange = { content = it },
+                    onValueChange = { content = it.copy(luaHighlight.toAnnotatedString(it.text)) },
                     label = {
-                        Text(text = stringResource(MR.strings.pref_player_custom_button_content))
+                        Text(text = stringResource(AYMR.strings.pref_player_custom_button_content))
                     },
                     supportingText = {
                         Text(text = stringResource(MR.strings.information_required_plain))
@@ -119,12 +147,12 @@ fun CustomButtonButtonDialog(
 
                 OutlinedTextField(
                     value = longPressContent,
-                    onValueChange = { longPressContent = it },
+                    onValueChange = { longPressContent = it.copy(luaHighlight.toAnnotatedString(it.text)) },
                     label = {
-                        Text(text = stringResource(MR.strings.pref_player_custom_button_content_long))
+                        Text(text = stringResource(AYMR.strings.pref_player_custom_button_content_long))
                     },
                     supportingText = {
-                        Text(text = stringResource(MR.strings.pref_player_custom_button_optional))
+                        Text(text = stringResource(AYMR.strings.pref_player_custom_button_optional))
                     },
                     minLines = 3,
                     maxLines = 5,
@@ -132,12 +160,12 @@ fun CustomButtonButtonDialog(
 
                 OutlinedTextField(
                     value = startUp,
-                    onValueChange = { startUp = it },
+                    onValueChange = { startUp = it.copy(luaHighlight.toAnnotatedString(it.text)) },
                     label = {
-                        Text(text = stringResource(MR.strings.pref_player_custom_button_startup))
+                        Text(text = stringResource(AYMR.strings.pref_player_custom_button_startup))
                     },
                     supportingText = {
-                        Text(text = stringResource(MR.strings.pref_player_custom_button_optional))
+                        Text(text = stringResource(AYMR.strings.pref_player_custom_button_optional))
                     },
                     minLines = 2,
                     maxLines = 4,
@@ -162,7 +190,7 @@ fun CustomButtonCreateDialog(
     CustomButtonButtonDialog(
         onDismissRequest = onDismissRequest,
         onAction = onCreate,
-        titleRes = MR.strings.pref_player_custom_button_add,
+        titleRes = AYMR.strings.pref_player_custom_button_add,
         actionRes = MR.strings.action_add,
         buttonNames = buttonNames,
         initialState = null,
@@ -179,7 +207,7 @@ fun CustomButtonEditDialog(
     CustomButtonButtonDialog(
         onDismissRequest = onDismissRequest,
         onAction = onEdit,
-        titleRes = MR.strings.pref_player_custom_button_edit,
+        titleRes = AYMR.strings.pref_player_custom_button_edit,
         actionRes = MR.strings.action_edit,
         buttonNames = buttonNames,
         initialState = initialState,
@@ -208,10 +236,10 @@ fun CustomButtonDeleteDialog(
             }
         },
         title = {
-            Text(text = stringResource(MR.strings.pref_player_custom_button_delete))
+            Text(text = stringResource(AYMR.strings.pref_player_custom_button_delete))
         },
         text = {
-            Text(text = stringResource(MR.strings.pref_player_custom_button_delete_confirm, buttonTitle))
+            Text(text = stringResource(AYMR.strings.pref_player_custom_button_delete_confirm, buttonTitle))
         },
     )
 }

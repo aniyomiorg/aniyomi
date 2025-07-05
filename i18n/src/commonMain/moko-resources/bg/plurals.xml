@@ -52,32 +52,20 @@
         <item quantity="one">Следващата непрочетена глава</item>
         <item quantity="other">Следващите %d непрочетени глави</item>
     </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="day">
+        <item quantity="one">1 ден</item>
+        <item quantity="other">%d дни</item>
     </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="missing_chapters">
+        <item quantity="one">Липсваща %1$s глава</item>
+        <item quantity="other">Липсващи %1$s глави</item>
     </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="download_amount">
+        <item quantity="one">Следваща глава</item>
+        <item quantity="other">Следващи %d глави</item>
     </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="num_repos">
+        <item quantity="one">%d хранилище</item>
+        <item quantity="other">%d хранилища</item>
     </plurals>
 </resources>

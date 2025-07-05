@@ -30,9 +30,9 @@ import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +40,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel.VideoTrack
 import kotlinx.collections.immutable.ImmutableList
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
@@ -56,20 +56,35 @@ fun SubtitlesSheet(
     modifier: Modifier = Modifier,
 ) {
     GenericTracksSheet(
-        tracks,
+        tracks = tracks,
         onDismissRequest = onDismissRequest,
         header = {
-            AddTrackRow(
-                stringResource(MR.strings.player_sheets_add_ext_sub),
-                onAddSubtitle,
+            TrackSheetTitle(
+                title = stringResource(AYMR.strings.pref_player_subtitle),
                 actions = {
-                    IconButton(onClick = onOpenSubtitleSettings) {
-                        Icon(Icons.Default.Palette, null)
+                    TextButton(onClick = onOpenSubtitleSettings) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
+                        ) {
+                            Icon(imageVector = Icons.Default.Palette, contentDescription = null)
+                            Text(text = stringResource(AYMR.strings.player_sheets_track_palette))
+                        }
                     }
-                    IconButton(onClick = onOpenSubtitleDelay) {
-                        Icon(Icons.Default.MoreTime, null)
+                    TextButton(onClick = onOpenSubtitleDelay) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
+                        ) {
+                            Icon(imageVector = Icons.Default.MoreTime, contentDescription = null)
+                            Text(text = stringResource(AYMR.strings.player_sheets_track_delay))
+                        }
                     }
                 },
+            )
+            AddTrackRow(
+                title = stringResource(AYMR.strings.player_sheets_add_ext_sub),
+                onClick = onAddSubtitle,
             )
         },
         track = { track ->
@@ -88,7 +103,7 @@ fun SubtitlesSheet(
                 horizontalAlignment = Alignment.Start,
             ) {
                 Icon(Icons.Outlined.Info, null)
-                Text(stringResource(MR.strings.player_sheets_subtitles_footer_secondary_sid_no_styles))
+                Text(stringResource(AYMR.strings.player_sheets_subtitles_footer_secondary_sid_no_styles))
             }
         },
         modifier = modifier,
@@ -110,18 +125,18 @@ fun SubtitleTrackRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
-            selected > -1,
+            checked = selected > -1,
             onCheckedChange = { _ -> onClick() },
         )
         Text(
-            title,
+            text = title,
             fontStyle = if (selected > -1) FontStyle.Italic else FontStyle.Normal,
             fontWeight = if (selected > -1) FontWeight.ExtraBold else FontWeight.Normal,
         )
         Spacer(modifier = Modifier.weight(1f))
         if (selected != -1) {
             Text(
-                "#${selected + 1}",
+                text = "#${selected + 1}",
                 fontStyle = if (selected > -1) FontStyle.Italic else FontStyle.Normal,
                 fontWeight = if (selected > -1) FontWeight.ExtraBold else FontWeight.Normal,
             )

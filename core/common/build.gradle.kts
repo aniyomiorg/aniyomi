@@ -6,10 +6,11 @@ plugins {
 
 android {
     namespace = "eu.kanade.tachiyomi.core.common"
+}
 
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-Xcontext-receivers",
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
         )
@@ -49,7 +50,7 @@ dependencies {
     implementation(libs.bundles.js.engine)
 
     // FFmpeg-kit
-    implementation(libs.ffmpeg.kit)
+    implementation(aniyomilibs.ffmpeg.kit)
 
     // Tests
     testImplementation(libs.bundles.test)

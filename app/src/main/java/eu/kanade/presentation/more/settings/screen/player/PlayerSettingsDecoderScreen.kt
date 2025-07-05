@@ -8,7 +8,7 @@ import eu.kanade.presentation.more.settings.screen.SearchableSettings
 import eu.kanade.tachiyomi.ui.player.Debanding
 import eu.kanade.tachiyomi.ui.player.settings.DecoderPreferences
 import kotlinx.collections.immutable.toImmutableMap
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -17,7 +17,7 @@ object PlayerSettingsDecoderScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
-    override fun getTitleRes() = MR.strings.pref_player_decoder
+    override fun getTitleRes() = AYMR.strings.pref_player_decoder
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -30,26 +30,26 @@ object PlayerSettingsDecoderScreen : SearchableSettings {
 
         return listOf(
             Preference.PreferenceItem.SwitchPreference(
-                pref = tryHw,
-                title = stringResource(MR.strings.pref_try_hw),
+                preference = tryHw,
+                title = stringResource(AYMR.strings.pref_try_hw),
             ),
             Preference.PreferenceItem.SwitchPreference(
-                pref = useGpuNext,
-                title = stringResource(MR.strings.pref_gpu_next_title),
-                subtitle = stringResource(MR.strings.pref_gpu_next_subtitle),
+                preference = useGpuNext,
+                title = stringResource(AYMR.strings.pref_gpu_next_title),
+                subtitle = stringResource(AYMR.strings.pref_gpu_next_subtitle),
             ),
             Preference.PreferenceItem.ListPreference(
-                pref = debanding,
-                title = stringResource(MR.strings.pref_debanding_title),
+                preference = debanding,
                 entries = Debanding.entries.associateWith {
                     it.name
                     // stringResource(it.)
                 }.toImmutableMap(),
+                title = stringResource(AYMR.strings.pref_debanding_title),
             ),
             Preference.PreferenceItem.SwitchPreference(
-                pref = yuv420p,
-                title = stringResource(MR.strings.pref_use_yuv420p_title),
-                subtitle = stringResource(MR.strings.pref_use_yuv420p_subtitle),
+                preference = yuv420p,
+                title = stringResource(AYMR.strings.pref_use_yuv420p_title),
+                subtitle = stringResource(AYMR.strings.pref_use_yuv420p_subtitle),
             ),
         )
     }

@@ -18,9 +18,9 @@ import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.injectLazy
 import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
@@ -61,6 +61,8 @@ class Anilist(id: Long) :
 
     override val supportsReadingDates: Boolean = true
 
+    override val supportsPrivateTracking: Boolean = true
+
     private val scorePreference = trackPreferences.anilistScoreType()
 
     init {
@@ -96,10 +98,10 @@ class Anilist(id: Long) :
     }
 
     override fun getStatusForAnime(status: Long): StringResource? = when (status) {
-        WATCHING -> MR.strings.watching
-        PLAN_TO_WATCH -> MR.strings.plan_to_watch
+        WATCHING -> AYMR.strings.watching
+        PLAN_TO_WATCH -> AYMR.strings.plan_to_watch
         COMPLETED -> MR.strings.completed
-        REWATCHING -> MR.strings.repeating_anime
+        REWATCHING -> AYMR.strings.repeating_anime
         ON_HOLD -> MR.strings.paused
         DROPPED -> MR.strings.dropped
         else -> null
@@ -278,7 +280,7 @@ class Anilist(id: Long) :
     override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         val remoteTrack = api.findLibManga(track, getUsername().toInt())
         return if (remoteTrack != null) {
-            track.copyPersonalFrom(remoteTrack)
+            track.copyPersonalFrom(remoteTrack, copyRemotePrivate = false)
             track.library_id = remoteTrack.library_id
 
             if (track.status != COMPLETED) {
@@ -298,7 +300,7 @@ class Anilist(id: Long) :
     override suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean): AnimeTrack {
         val remoteTrack = api.findLibAnime(track, getUsername().toInt())
         return if (remoteTrack != null) {
-            track.copyPersonalFrom(remoteTrack)
+            track.copyPersonalFrom(remoteTrack, copyRemotePrivate = false)
             track.library_id = remoteTrack.library_id
 
             if (track.status != COMPLETED) {

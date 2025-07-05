@@ -9,7 +9,7 @@ import eu.kanade.presentation.more.settings.screen.SearchableSettings
 import eu.kanade.tachiyomi.ui.player.settings.AudioChannels
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
 import kotlinx.collections.immutable.toImmutableMap
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
@@ -19,7 +19,7 @@ object PlayerSettingsAudioScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
-    override fun getTitleRes() = MR.strings.pref_player_audio
+    override fun getTitleRes() = AYMR.strings.pref_player_audio
 
     @Composable
     override fun getPreferences(): List<Preference> {
@@ -33,28 +33,27 @@ object PlayerSettingsAudioScreen : SearchableSettings {
 
         return listOf(
             Preference.PreferenceItem.EditTextInfoPreference(
-                pref = prefLangs,
-                title = stringResource(MR.strings.pref_player_audio_lang),
-                dialogSubtitle = stringResource(MR.strings.pref_player_audio_lang_info),
+                preference = prefLangs,
+                dialogSubtitle = stringResource(AYMR.strings.pref_player_audio_lang_info),
+                title = stringResource(AYMR.strings.pref_player_audio_lang),
             ),
             Preference.PreferenceItem.SwitchPreference(
-                pref = pitchCorrection,
-                title = stringResource(MR.strings.pref_player_audio_pitch_correction),
-                subtitle = stringResource(MR.strings.pref_player_audio_pitch_correction_summary),
+                preference = pitchCorrection,
+                title = stringResource(AYMR.strings.pref_player_audio_pitch_correction),
+                subtitle = stringResource(AYMR.strings.pref_player_audio_pitch_correction_summary),
             ),
             Preference.PreferenceItem.ListPreference(
-                pref = audioChannels,
-                title = stringResource(MR.strings.pref_player_audio_channels),
+                preference = audioChannels,
                 entries = AudioChannels.entries.associateWith {
                     stringResource(it.titleRes)
                 }.toImmutableMap(),
+                title = stringResource(AYMR.strings.pref_player_audio_channels),
             ),
             Preference.PreferenceItem.SliderPreference(
                 value = boostCap,
-                title = stringResource(MR.strings.pref_player_audio_boost_cap),
+                valueRange = 0..200,
+                title = stringResource(AYMR.strings.pref_player_audio_boost_cap),
                 subtitle = boostCap.toString(),
-                min = 0,
-                max = 200,
                 onValueChanged = {
                     boostCapPref.set(it)
                     true

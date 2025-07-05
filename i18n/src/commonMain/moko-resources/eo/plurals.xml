@@ -40,33 +40,9 @@
         <item quantity="one">Farita en %1$s kun %2$s eraro</item>
         <item quantity="other">Farita en %1$s kun %2$s eraroj</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one"/>
-        <item quantity="other"/>
+    <plurals name="relative_time">
+        <item quantity="one">Hieraŭ</item>
+        <item quantity="other">Antaŭ %1$d tagoj</item>
     </plurals>
     <plurals name="day">
         <item quantity="one">1 tago</item>
@@ -91,5 +67,13 @@
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Disponebla ĝisdatigo de etendaĵo</item>
         <item quantity="other">Disponeblaj ĝisdatigoj de %d etendaĵoj</item>
+    </plurals>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">Morgaŭ</item>
+        <item quantity="other">post %1$d tagoj</item>
+    </plurals>
+    <plurals name="pref_pages">
+        <item quantity="one">1 paĝo</item>
+        <item quantity="other">%1$s paĝoj</item>
     </plurals>
 </resources>
