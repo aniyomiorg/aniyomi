@@ -2,4 +2,6 @@
 <resources>
     <string name="pref_library_summary">Toifalar, global yangilanish</string>
     <string name="manga_categories">Kategoriyalar</string>
+    <string name="manga">Kutubxona yozuvlari</string>
+    <string name="pref_remove_after_marked_as_read">«O\'qilgan» deb belgilangandan so\'ng o\'chirish</string>
 </resources>
