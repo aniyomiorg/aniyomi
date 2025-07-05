@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Only Stuff in Animetail -->
+    <!-- unpublished -> 4C1B4D71 / published -> F033F567 -->
+    <string name="app_cast_id" translatable="false">F033F567</string>
+    <string name="media_route_menu_title">EXTEND</string>
 
     <!-- Library Grouping -->
     <string name="tracking_status">Tracking status</string>

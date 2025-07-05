@@ -175,6 +175,11 @@ class PlayerActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+        internal const val MPV_DIR = "mpv"
+        private const val MPV_FONTS_DIR = "fonts"
+        private const val MPV_SCRIPTS_DIR = "scripts"
+        private const val MPV_SCRIPTS_OPTS_DIR = "script-opts"
+        private const val MPV_SHADERS_DIR = "shaders"
     }
 
     // AM (CONNECTIONS) -->
@@ -1142,18 +1147,18 @@ class PlayerActivity : BaseActivity() {
             }
         } else {
             val videoOptions = video.mpvArgs.joinToString(",") { (option, value) ->
-            "$option=\"$value\""
-        }
+                "$option=\"$value\""
+            }
 
-        MPVLib.command(
-            arrayOf(
-                "loadfile",
-                parseVideoUrl(video?.videoUrl),
-                "replace",
-                "0",
-                videoOptions,
-            ),
-        )
+            MPVLib.command(
+                arrayOf(
+                    "loadfile",
+                    parseVideoUrl(video?.videoUrl),
+                    "replace",
+                    "0",
+                    videoOptions,
+                ),
+            )
         }
         updateDiscordRPC(exitingPlayer = false)
     }
