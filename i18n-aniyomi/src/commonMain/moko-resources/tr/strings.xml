@@ -426,4 +426,9 @@
     <string name="onboarding_storage_action_create_folder">Varsayılan Aniyomi klasörünü oluştur</string>
     <string name="download_speed_limit">Bölüm indirme hızı sınırı</string>
     <string name="download_speed_limit_hint">Hız sınırını devre dışı bırakmak için 0 olarak ayarlayın.</string>
+    <string name="action_display_unseen_badge">Görülmemiş bölümler</string>
+    <string name="manga">Manga</string>
+    <string name="pref_behavior">Manga bölüm davranışı</string>
+    <string name="action_add_repo_message">%s\'ye ek depolar ekleyin. Bu, \"index.min.json\" ile biten bir URL olmalıdır.</string>
+    <string name="download_ahead_info">Yalnızca manganın/animenin şu anki bölümü ve sonraki bölümğ indirilmişse çalışır.</string>
 </resources>
