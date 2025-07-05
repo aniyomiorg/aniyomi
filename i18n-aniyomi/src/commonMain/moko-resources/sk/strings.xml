@@ -12,4 +12,20 @@
     <string name="pref_clear_manga_database">Vymazať databázu</string>
     <string name="pref_clear_manga_database_summary">Odstránenie histórie mangy, ktorá nie je uložená vo vašej knižnici</string>
     <string name="snack_add_to_manga_library">Pridať mangu do knižnice?</string>
+    <string name="manga">Záznamy v knižnici</string>
+    <string name="pref_update_only_completely_read">S neprečítanými kapitolami</string>
+    <string name="pref_category_delete_chapters">Odstrániť kapitoly</string>
+    <string name="pref_remove_after_marked_as_read">Po manuálnom označení ako prečítané</string>
+    <string name="pref_remove_after_read">Po prečítaní automaticky odstrániť</string>
+    <string name="pref_remove_bookmarked_chapters">Povoliť odstraňovanie kapitol so záložkami</string>
+    <string name="download_ahead_info">Funguje iba na položkách v knižnici a ak je aktuálna kapitola a nasledujúca kapitola už stiahnutá.</string>
+    <string name="pref_auto_update_manga_sync">Aktualizácia priebehu po prečítaní</string>
+    <string name="pref_clear_chapter_cache">Vymazať vyrovnávaciu pamäť kapitol</string>
+    <string name="pref_auto_clear_chapter_cache">Vymazanie vyrovnávacej pamäte kapitoly pri zatvorení aplikácie</string>
+    <string name="clear_database_confirmation">Ste si istý? Čítanie kapitol a pokrok v mangách mimo vašu knižnicu sa stratí</string>
+    <string name="pref_incognito_mode_summary">Pozastaví históriu čítania</string>
+    <string name="manga_from_library">Manga z knižnice</string>
+    <string name="also_set_chapter_settings_for_library">Taktiež nastaviť pre všetky mangy v mojej knižnici</string>
+    <string name="dialog_with_checkbox_reset">Resetovať všetky kapitoly mangy</string>
+    <string name="download_insufficient_space">Nepodarilo sa stiahnuť kapitoly z dôvodu nedostatku úložného priestoru</string>
 </resources>
