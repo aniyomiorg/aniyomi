@@ -55,4 +55,20 @@
     <string name="download_paused">In pàusa</string>
     <string name="download_notifier_download_paused_chapters">Iscarrigamentu in pàusa</string>
     <string name="channel_new_chapters_episodes">Agiornamentos de sos capìtulos</string>
+    <string name="action_sort_last_manga_update">Ùrtimu agiornamentu</string>
+    <string name="action_show_manga">Ammustra s\'elementu</string>
+    <string name="pref_update_only_completely_read">Cun capìtulos non lèghidos</string>
+    <string name="pref_category_delete_chapters">Iscantzella capìtulos</string>
+    <string name="pref_remove_after_marked_as_read">A pustis de l\'àere marcadu manualmente comente lèghidu</string>
+    <string name="pref_remove_after_read">Iscantzella in automàticu a pustis de sa leghidura</string>
+    <string name="pref_remove_bookmarked_chapters">Permite s\'iscantzelladura de sos capìtulos cun sinnalibros</string>
+    <string name="download_ahead_info">Funtzionat petzi si su capìtulu atuale e s\'imbeniente sunt giai iscarrigados.</string>
+    <string name="pref_auto_update_manga_sync">Agiorna su progressu a pustis de sa leghidura</string>
+    <string name="pref_clear_chapter_cache">Isbòida sa memòria temporànea de sos capìtulos</string>
+    <string name="clear_database_confirmation">Seguru ses? Sos capìtulos lèghidos e su progressu de sos elementos chi non sunt in sa biblioteca s\'ant a pèrdere</string>
+    <string name="pref_incognito_mode_summary">Ponet in pàusa sa registratzione de sa cronologia de leghidura</string>
+    <string name="manga_from_library">Dae sa biblioteca</string>
+    <string name="also_set_chapter_settings_for_library">Àplica fintzas a totu sos elementos in sa biblioteca mea</string>
+    <string name="dialog_with_checkbox_reset">Reseta totu sos capìtulos pro custu elementu</string>
+    <string name="download_insufficient_space">Iscarrigamentu de sos capìtulos fallidu pro neghe de su pagu ispàtziu lìberu in su discu</string>
 </resources>
