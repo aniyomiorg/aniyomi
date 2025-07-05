@@ -14,4 +14,16 @@
     <string name="download_paused">Întrerupt</string>
     <string name="download_notifier_download_paused_chapters">Descărcare întreruptă</string>
     <string name="channel_new_chapters_episodes">Actualizări de capitole</string>
+    <string name="manga">Intrări în bibliotecă</string>
+    <string name="pref_update_only_completely_read">Cu capitol(e) necitit(e)</string>
+    <string name="pref_category_delete_chapters">Ștergeți capitole</string>
+    <string name="pref_remove_after_marked_as_read">După ce a fost marcat manual ca citit</string>
+    <string name="pref_remove_after_read">După citire ștergeți automat</string>
+    <string name="pref_remove_bookmarked_chapters">Permite ștergerea capitolelor marcate</string>
+    <string name="download_ahead_info">Funcționează numai dacă capitolul curent + următorul sunt deja descărcate.</string>
+    <string name="pref_auto_update_manga_sync">Actualizarea progresului după citire</string>
+    <string name="pref_clear_chapter_cache">Curățare capitole depozitate</string>
+    <string name="pref_auto_clear_chapter_cache">Șterge memoria cache a capitolului la închiderea aplicației</string>
+    <string name="pref_incognito_mode_summary">Întrerupe citirea istoricului</string>
+    <string name="download_insufficient_space">Nu s-au putut descărca capitole din cauza spațiului de stocare redus</string>
 </resources>
