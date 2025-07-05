@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_exit">Paspauskite atgal dar kartą, kad išeitumėte</string>
+    <string name="pref_library_summary">Kategorijos, visuotinis atnaujinimas</string>
+    <string name="pref_library_update_show_tab_badge">Rodyti neperskaitytų skyrių skaičių prie \"Naujiniai\" ikonos</string>
+    <string name="manga_categories">Kategorijos</string>
+    <string name="action_sort_last_seen">Paskiausiai žiurėtas</string>
+    <string name="action_sort_unseen_count">Neperžiūrėtų skaičius</string>
+    <string name="action_mark_as_seen">Pažymėti kaip peržiūrėtą</string>
+    <string name="action_mark_as_unseen">Pažymėti kaip nežiūrėtą</string>
+    <string name="action_display_local_badge_manga">Vietinis šaltinis</string>
+    <string name="default_manga_category">Numatyta kategorija</string>
+    <string name="pref_manga_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
+    <string name="pref_remove_exclude_categories_manga">Neįtrauktos kategorijos</string>
+    <string name="pref_clear_manga_database">Išvalyti duomenų bazę</string>
+    <string name="pref_clear_manga_database_summary">Ištrinkite įrašų istoriją, kurie nėra išsaugoti jūsų bibliotekoje</string>
+    <string name="snack_add_to_manga_library">Pridėti į biblioteką?</string>
+    <string name="download_error">Klaida</string>
+    <string name="download_paused">Pristabdyta</string>
+</resources>

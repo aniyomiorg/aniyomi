@@ -17,6 +17,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentMap
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
@@ -219,7 +220,16 @@ object SettingsReaderScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = readerPreferences.preserveReadingPosition(),
-                    title = stringResource(MR.strings.pref_preserve_reading_position),
+                    title = stringResource(AYMR.strings.pref_preserve_reading_position),
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = preloadSize,
+                    title = stringResource(TLMR.strings.pref_page_preload_amount),
+                    valueRange = ReaderPreferences.PRELOAD_SIZE_MIN..ReaderPreferences.PRELOAD_SIZE_MAX,
+                    onValueChanged = {
+                        preloadSizePref.set(it)
+                        true
+                    },
                 ),
                 Preference.PreferenceItem.SliderPreference(
                     value = preloadSize,

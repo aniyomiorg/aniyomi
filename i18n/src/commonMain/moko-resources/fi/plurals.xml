@@ -52,32 +52,4 @@
         <item quantity="one">Seuraava lukematon luku</item>
         <item quantity="other">Seuraavat %d lukematonta lukua</item>
     </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one">1 uusi jakso</item>
-        <item quantity="other">%1$d uutta jaksoa</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%d sekunti</item>
-        <item quantity="other">%d sekuntia</item>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one">%1$s jakso</item>
-        <item quantity="other">%1$s jaksoa</item>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one"/>
-        <item quantity="other"/>
-    </plurals>
 </resources>

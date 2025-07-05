@@ -52,6 +52,7 @@ include(":core:common")
 include(":data")
 include(":domain")
 include(":i18n")
+include(":i18n-aniyomi")
 // TAIL -->
 include(":i18n-tail")
 // TAIL <--

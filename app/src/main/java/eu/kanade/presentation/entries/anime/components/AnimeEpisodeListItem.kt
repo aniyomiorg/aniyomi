@@ -44,6 +44,7 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import me.saket.swipe.SwipeableActionsBox
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.i18n.stringResource
@@ -117,7 +118,7 @@ fun AnimeEpisodeListItem(
                     if (!seen) {
                         Icon(
                             imageVector = Icons.Filled.Circle,
-                            contentDescription = stringResource(MR.strings.unseen),
+                            contentDescription = stringResource(AYMR.strings.unseen),
                             modifier = Modifier
                                 .height(8.dp)
                                 .padding(end = 4.dp),

@@ -207,6 +207,8 @@ sealed class Preference {
         data class EditTextInfoPreference(
             val preference: PreferenceData<String>,
             val dialogSubtitle: String?,
+            val validate: (String) -> Boolean = { true },
+            val errorMessage: @Composable ((String) -> String)? = null,
             override val title: String,
             override val subtitle: String? = "%s",
             override val icon: ImageVector? = null,

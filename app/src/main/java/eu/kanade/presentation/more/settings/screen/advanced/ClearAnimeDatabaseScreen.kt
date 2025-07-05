@@ -50,6 +50,7 @@ import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAni
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.mi.data.AnimeDatabase
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
@@ -95,7 +96,7 @@ class ClearAnimeDatabaseScreen : Screen() {
                             }
                         },
                         text = {
-                            Text(text = stringResource(MR.strings.clear_database_confirmation))
+                            Text(text = stringResource(AYMR.strings.clear_database_confirmation))
                         },
                     )
                 }
@@ -103,7 +104,7 @@ class ClearAnimeDatabaseScreen : Screen() {
                 Scaffold(
                     topBar = { scrollBehavior ->
                         AppBar(
-                            title = stringResource(MR.strings.pref_clear_anime_database),
+                            title = stringResource(AYMR.strings.pref_clear_anime_database),
                             navigateUp = navigator::pop,
                             actions = {
                                 if (s.items.isNotEmpty()) {

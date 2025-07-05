@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_update_show_tab_badge">Ipakita ang wala pa mabasa nga ihap sa icon sa Updates</string>
+    <string name="manga_categories">Mga Kategoriya</string>
+    <string name="default_manga_category">Default nga kategorya</string>
+    <string name="pref_manga_library_update_categories_details">Ang manga sa wala iapil nga mga kategorya dili ma-update bisan kung naa usab sila sa mga gilakip nga kategorya.</string>
+    <string name="pref_remove_exclude_categories_manga">Wala iapil nga mga kategorya</string>
+    <string name="pref_clear_manga_database">Klaro nga database</string>
+    <string name="pref_clear_manga_database_summary">I-delete ang history para sa manga nga wala ma-save sa imong library</string>
+</resources>

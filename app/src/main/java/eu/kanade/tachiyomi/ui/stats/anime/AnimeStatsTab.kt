@@ -10,7 +10,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.more.stats.AnimeStatsScreenContent
 import eu.kanade.presentation.more.stats.StatsScreenState
-import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -25,7 +25,7 @@ fun Screen.animeStatsTab(): TabContent {
     }
 
     return TabContent(
-        titleRes = MR.strings.label_anime,
+        titleRes = AYMR.strings.label_anime,
         content = { contentPadding, _ ->
 
             if (state is StatsScreenState.Loading) {

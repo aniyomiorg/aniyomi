@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_exit">Druk opnieuw op terug om te sluiten</string>
+    <string name="action_filter_started">Begonnen</string>
+    <string name="action_sort_airing_time">Uitzendtijd</string>
+    <string name="pref_library_summary">Categorieën, globaal bijwerken</string>
+    <string name="pref_library_update_show_tab_badge">Geef ongelezen aantal weer op het Update icoon</string>
+    <string name="manga_categories">Manga Categorieën</string>
+    <string name="general_categories">Categorieën</string>
+    <string name="anime_categories">Anime Categorieën</string>
+    <string name="chapters_episodes">Hoofdstukken en afleveringen</string>
+    <string name="episodes">Afleveringen</string>
+    <string name="backup_settings_warning">Let op! Een back-up van je instellingen bevat ook de tracker wachtwoorden. Deel dit back-upbestand niet!</string>
+    <string name="label_manga">Manga</string>
+    <string name="pref_bottom_nav_no_history">Verplaats Geschiedenis naar Meer</string>
+    <string name="pref_bottom_nav_no_updates">Verplaats Updates naar Meer</string>
+    <string name="pref_bottom_nav_no_manga">Verplaats Manga naar Meer</string>
+    <string name="pref_bottom_nav_no_browse">Verplaats Bladeren naar Meer</string>
+    <string name="action_filter_unseen">Onbekeken</string>
+    <string name="action_display_local_badge_manga">Lokale manga</string>
+    <string name="default_manga_category">Standaard categorie</string>
+    <string name="pref_manga_library_update_categories_details">Manga in uitgesloten categorieën worden niet bijgewerkt, zelfs niet als ze onder opgenomen categorieën vallen.</string>
+    <string name="pref_remove_exclude_categories_manga">Uitgesloten categoriën</string>
+    <string name="pref_clear_manga_database">Database leegmaken</string>
+    <string name="pref_clear_manga_database_summary">Verwijder geschiedenis voor manga die niet in je bibliotheek zijn opgeslagen</string>
+    <string name="snack_add_to_manga_library">Manga toevoegen aan bibliotheek?</string>
+    <string name="download_error">Fout</string>
+    <string name="download_paused">Gepauzeerd</string>
+    <string name="download_unseen">Onbekeken</string>
+    <string name="confirm_delete_episodes">Weet je zeker dat je de geselecteerde afleveringen wilt verwijderen?</string>
+    <string name="download_notifier_download_paused_chapters">Download gepauzeerd</string>
+    <string name="channel_new_chapters_episodes">Hoofdstukupdates</string>
+    <string name="data_saver_exclude">Uitsluiten van databesparing</string>
+    <string name="data_saver_stop_exclude">Stop met uitsluiten van databesparing</string>
+    <string name="data_saver">Databesparing</string>
+    <string name="data_saver_summary">Afbeeldingen comprimeren voordat je ze downloadt of in de reader laadt</string>
+    <string name="data_saver_downloader">Gebruik databespaarder voor downloads</string>
+    <string name="data_saver_ignore_jpeg">Negeer JPEG-afbeeldingen</string>
+    <string name="data_saver_ignore_gif">Negeer GIF-animaties</string>
+    <string name="data_saver_image_quality">Afbeeldingskwaliteit</string>
+    <string name="data_saver_image_quality_summary">Hogere waarden resulteren in een hogere beeldkwaliteit, maar ook in een grotere bestandsgrootte. 80% is een goed compromis tussen bestandsgrootte en beeldkwaliteit</string>
+    <string name="data_saver_image_format">Comprimeren naar JPEG</string>
+    <string name="data_saver_image_format_summary_on">JPEG-bestanden zijn aanzienlijk kleiner dan WebP (waardoor je data bespaart), maar ten koste van de beeldkwaliteit.
+\nMomenteel wordt er gecomprimeerd naar JPEG</string>
+    <string name="data_saver_image_format_summary_off">JPEG-bestanden zijn aanzienlijk kleiner dan WebP (waardoor je data bespaart), maar ten koste van de beeldkwaliteit.
+\nMomenteel wordt er gecomprimeerd naar WebP</string>
+    <string name="data_saver_color_bw">Omzetten naar zwart-wit</string>
+    <string name="bandwidth_hero">Bandwidth Hero (vereist een Bandwidth Hero Proxy server)</string>
+    <string name="wsrv">wsrv.nl</string>
+    <string name="resmush">resmush.it</string>
+    <string name="bandwidth_data_saver_server">Bandwidth Hero Proxy Server</string>
+    <string name="data_saver_server_summary">Voer hier de URL van de Bandwidth Hero Proxy server in</string>
+    <string name="download_slots_info">Downloadt alleen gelijktijdig van zelf gehoste of onbeperkte bronnen</string>
+    <string name="unseen">Onbekeken</string>
+    <string name="label_manga_extension_repos">Bronnen voor Manga extensies</string>
+    <string name="label_anime_extension_repos">Bronnen voor Anime extensies</string>
+    <string name="onboarding_storage_action_create_folder">Maak standaard Aniyomi-map</string>
+    <string name="download_speed_limit">Beperk downloadsnelheid</string>
+    <string name="download_speed_limit_hint">Zet op 0 voor onbeperkte downloadsnelheid.</string>
+</resources>

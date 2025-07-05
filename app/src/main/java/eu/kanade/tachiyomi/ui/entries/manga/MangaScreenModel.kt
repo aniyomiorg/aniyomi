@@ -90,6 +90,7 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
@@ -764,7 +765,7 @@ class MangaScreenModel(
                     state.copy(hasPromptedToAddBefore = true)
                 }
                 val result = snackbarHostState.showSnackbar(
-                    message = context.stringResource(MR.strings.snack_add_to_manga_library),
+                    message = context.stringResource(AYMR.strings.snack_add_to_manga_library),
                     actionLabel = context.stringResource(MR.strings.action_add),
                     withDismissAction = true,
                 )
@@ -861,7 +862,7 @@ class MangaScreenModel(
                 trackChapter.await(context, mangaId, maxChapterNumber)
                 withUIContext {
                     context.toast(
-                        context.stringResource(MR.strings.trackers_updated_summary_manga, maxChapterNumber.toInt()),
+                        context.stringResource(AYMR.strings.trackers_updated_summary_manga, maxChapterNumber.toInt()),
                     )
                 }
                 return@launchIO

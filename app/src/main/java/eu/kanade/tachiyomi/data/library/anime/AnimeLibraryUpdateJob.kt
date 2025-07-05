@@ -72,6 +72,7 @@ import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -365,7 +366,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {
                                             is NoEpisodesException -> context.stringResource(
-                                                MR.strings.no_episodes_error,
+                                                AYMR.strings.no_episodes_error,
                                             )
                                             // failedUpdates will already have the source, don't need to copy it into the message
                                             is AnimeSourceNotInstalledException -> context.stringResource(

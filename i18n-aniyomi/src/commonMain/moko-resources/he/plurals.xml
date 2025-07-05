@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">הפרק הבא שלא נצפה</item>
+        <item quantity="two">ה-%d פרקים הבאים שלא נצפו</item>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">פרק %1$s</item>
+        <item quantity="two">%1$s פרקים</item>
+        <item quantity="many">%1$s פרקים</item>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one">הפרק הבא</item>
+        <item quantity="two">הפרקים הבאים</item>
+        <item quantity="many">הפרקים הבאים</item>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one">לסדרה אחת</item>
+        <item quantity="two">ל-%d סדרות</item>
+        <item quantity="many">ל-%d סדרות</item>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">פרק אחד חדש</item>
+        <item quantity="two">%1$d פרקים חדשים</item>
+        <item quantity="many">%1$d פרקים חדשים</item>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d שנייה</item>
+        <item quantity="two">%d שניות</item>
+        <item quantity="many">%d שניות</item>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">פרקים %1$s ועוד 1</item>
+        <item quantity="two">פרקים %1$s ו-%2$d נוספים</item>
+        <item quantity="many">פרקים %1$s ו-%2$d נוספים</item>
+        <item quantity="other"/>
+    </plurals>
+</resources>

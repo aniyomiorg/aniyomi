@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_library_update_show_tab_badge">Erakutsi irakurri gabekoen kopurua Eguneraketak ikonoan</string>
+    <string name="manga_categories">Kategoriak</string>
+    <string name="action_display_local_badge_manga">Manga lokala</string>
+    <string name="default_manga_category">Kategoria lehentsia</string>
+    <string name="pref_manga_library_update_categories_details">Baztertutako kategorietako mangak ez dira eguneratuko, sarturiko kategorietan egon arren.</string>
+    <string name="pref_remove_exclude_categories_manga">Baztertutako kategoriak</string>
+    <string name="pref_clear_manga_database">Garbitu datu-basea</string>
+    <string name="pref_clear_manga_database_summary">Ezabatu zure liburutegian gordeta ez dauden mangen historia</string>
+    <string name="snack_add_to_manga_library">Manga liburutegira gehitu?</string>
+    <string name="download_error">Errorea</string>
+    <string name="download_paused">Gelditurik</string>
+    <string name="download_notifier_download_paused_chapters">Deskarga pausatu da</string>
+    <string name="channel_new_chapters_episodes">Kapituluaren eguneraketak</string>
+</resources>

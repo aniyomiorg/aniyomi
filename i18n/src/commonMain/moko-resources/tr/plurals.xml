@@ -56,6 +56,10 @@
         <item quantity="one">Sonraki bölüm</item>
         <item quantity="other">Sonraki %d bölüm</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">%1$s bölüm eksik</item>
+        <item quantity="other">%1$s bölüm eksik</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">1 gün</item>
         <item quantity="other">%d gün</item>
@@ -64,33 +68,9 @@
         <item quantity="one">%d depo</item>
         <item quantity="other">%d depo</item>
     </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one">Bir Sonraki İzlenmemiş Bölüm</item>
-        <item quantity="other">Sonraki İzlenmemiş %d Bölüm</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one">1 yeni bölüm</item>
-        <item quantity="other">%1$d yeni bölüm</item>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one">%1$s bölüm</item>
-        <item quantity="other">%1$s bölümler</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%d saniye</item>
-        <item quantity="other">%d saniyeler</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one">Sıradaki bölüm</item>
-        <item quantity="other">Sıradaki %d bölüm</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one">1 seri için</item>
-        <item quantity="other">%d seri için</item>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one">%1$s bölüm ve 1 tane daha</item>
-        <item quantity="other">%1$s bölüm ve %2$d tane daha</item>
+    <plurals name="upcoming_relative_time">
+        <item quantity="one">Yarın</item>
+        <item quantity="other">%1$d gün içinde</item>
     </plurals>
     <plurals name="pref_pages">
         <item quantity="one">1 sayfa</item>

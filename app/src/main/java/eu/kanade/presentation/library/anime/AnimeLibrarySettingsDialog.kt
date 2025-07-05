@@ -34,6 +34,7 @@ import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.BaseSortItem
 import tachiyomi.presentation.core.components.CheckboxItem
@@ -114,7 +115,7 @@ private fun ColumnScope.FilterPage(
     )
     val filterUnseen by screenModel.libraryPreferences.filterUnseen().collectAsState()
     TriStateItem(
-        label = stringResource(MR.strings.action_filter_unseen),
+        label = stringResource(AYMR.strings.action_filter_unseen),
         state = filterUnseen,
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterUnseen) },
     )
@@ -206,15 +207,15 @@ private fun ColumnScope.SortPage(
         }
         listOfNotNull(
             MR.strings.action_sort_alpha to AnimeLibrarySort.Type.Alphabetical,
-            MR.strings.action_sort_total_episodes to AnimeLibrarySort.Type.TotalEpisodes,
-            MR.strings.action_sort_last_seen to AnimeLibrarySort.Type.LastSeen,
-            MR.strings.action_sort_last_anime_update to AnimeLibrarySort.Type.LastUpdate,
-            MR.strings.action_sort_unseen_count to AnimeLibrarySort.Type.UnseenCount,
-            MR.strings.action_sort_latest_episode to AnimeLibrarySort.Type.LatestEpisode,
-            MR.strings.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
+            AYMR.strings.action_sort_total_episodes to AnimeLibrarySort.Type.TotalEpisodes,
+            AYMR.strings.action_sort_last_seen to AnimeLibrarySort.Type.LastSeen,
+            AYMR.strings.action_sort_last_anime_update to AnimeLibrarySort.Type.LastUpdate,
+            AYMR.strings.action_sort_unseen_count to AnimeLibrarySort.Type.UnseenCount,
+            AYMR.strings.action_sort_latest_episode to AnimeLibrarySort.Type.LatestEpisode,
+            AYMR.strings.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
             MR.strings.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
             trackerMeanPair,
-            MR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
+            AYMR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
             MR.strings.action_sort_random to AnimeLibrarySort.Type.Random,
         )
     }
@@ -290,7 +291,7 @@ private fun ColumnScope.DisplayPage(
         SliderItem(
             value = columns,
             valueRange = 0..10,
-            label = stringResource(MR.strings.pref_library_rows),
+            label = stringResource(AYMR.strings.pref_library_rows),
             valueText = if (columns > 0) {
                 columns.toString()
             } else {
@@ -316,11 +317,11 @@ private fun ColumnScope.DisplayPage(
 
     HeadingItem(MR.strings.overlay_header)
     CheckboxItem(
-        label = stringResource(MR.strings.action_display_download_badge_anime),
+        label = stringResource(AYMR.strings.action_display_download_badge_anime),
         pref = screenModel.libraryPreferences.downloadBadge(),
     )
     CheckboxItem(
-        label = stringResource(MR.strings.action_display_unseen_badge),
+        label = stringResource(AYMR.strings.action_display_unseen_badge),
         pref = screenModel.libraryPreferences.unreadBadge(),
     )
     CheckboxItem(
@@ -332,7 +333,7 @@ private fun ColumnScope.DisplayPage(
         pref = screenModel.libraryPreferences.languageBadge(),
     )
     CheckboxItem(
-        label = stringResource(MR.strings.action_display_show_continue_reading_button),
+        label = stringResource(AYMR.strings.action_display_show_continue_reading_button),
         pref = screenModel.libraryPreferences.showContinueViewingButton(),
     )
 

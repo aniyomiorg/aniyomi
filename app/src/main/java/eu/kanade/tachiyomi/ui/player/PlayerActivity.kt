@@ -39,7 +39,6 @@ import android.media.session.PlaybackState
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Rational
 import android.view.KeyEvent
 import android.view.View
@@ -84,6 +83,7 @@ import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils
 import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
+import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
@@ -95,6 +95,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
@@ -105,10 +106,9 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.custombuttons.model.CustomButton
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -175,6 +175,11 @@ class PlayerActivity : BaseActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+        internal const val MPV_DIR = "mpv"
+        private const val MPV_FONTS_DIR = "fonts"
+        private const val MPV_SCRIPTS_DIR = "scripts"
+        private const val MPV_SCRIPTS_OPTS_DIR = "script-opts"
+        private const val MPV_SHADERS_DIR = "shaders"
     }
 
     // AM (CONNECTIONS) -->
@@ -349,6 +354,7 @@ class PlayerActivity : BaseActivity() {
 
         player.isExiting = true
         if (isFinishing) {
+            viewModel.deletePendingEpisodes()
             MPVLib.command(arrayOf("stop"))
         } else {
             viewModel.pause()
@@ -364,8 +370,8 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
-        if (isInPictureInPictureMode) {
-            finishAndRemoveTask()
+        if (isInPictureInPictureMode && powerManager.isInteractive) {
+            viewModel.deletePendingEpisodes()
         }
 
         super.onStop()
@@ -441,29 +447,31 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
+    private fun UniFile.writeText(text: String) {
+        this.openOutputStream().use {
+            it.write(text.toByteArray())
+        }
+    }
+
     private fun setupPlayerMPV() {
         val logLevel = if (networkPreferences.verboseLogging().get()) "info" else "warn"
 
-        val configDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
-            storageManager.getMPVConfigDirectory()!!.filePath!!
-        } else {
-            applicationContext.filesDir.path
-        }
+        val mpvDir = UniFile.fromFile(applicationContext.filesDir)!!.createDirectory(MPV_DIR)!!
 
-        val mpvConfFile = File("$configDir/mpv.conf")
+        val mpvConfFile = mpvDir.createFile("mpv.conf")!!
         advancedPlayerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
-        val mpvInputFile = File("$configDir/input.conf")
+        val mpvInputFile = mpvDir.createFile("input.conf")!!
         advancedPlayerPreferences.mpvInput().get().let { mpvInputFile.writeText(it) }
 
-        copyScripts()
-        copyAssets(configDir)
-        copyFontsDirectory()
+        copyUserFiles(mpvDir)
+        copyAssets(mpvDir)
+        copyFontsDirectory(mpvDir)
 
         MPVLib.setOptionString("sub-ass-force-margins", "yes")
         MPVLib.setOptionString("sub-use-margins", "yes")
 
         player.initialize(
-            configDir = configDir,
+            configDir = mpvDir.filePath!!,
             cacheDir = applicationContext.cacheDir.path,
             logLvl = logLevel,
         )
@@ -471,19 +479,18 @@ class PlayerActivity : BaseActivity() {
         MPVLib.addObserver(playerObserver)
     }
 
-    private fun copyScripts() {
+    private fun copyUserFiles(mpvDir: UniFile) {
         // First, delete all present scripts
-        val scriptsDir = {
-            UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
-        }
-        val scriptOptsDir = {
-            UniFile.fromFile(applicationContext.filesDir)?.createDirectory("script-opts")
-        }
+        val scriptsDir = { mpvDir.createDirectory(MPV_SCRIPTS_DIR) }
+        val scriptOptsDir = { mpvDir.createDirectory(MPV_SCRIPTS_OPTS_DIR) }
+        val shadersDir = { mpvDir.createDirectory(MPV_SHADERS_DIR) }
+
         scriptsDir()?.delete()
         scriptOptsDir()?.delete()
+        shadersDir()?.delete()
 
-        // Then, copy the scripts from the Aniyomi directory
-        if (advancedPlayerPreferences.mpvScripts().get()) {
+        // Then, copy the user files from the Aniyomi directory
+        if (advancedPlayerPreferences.mpvUserFiles().get()) {
             storageManager.getScriptsDirectory()?.listFiles()?.forEach { file ->
                 val outFile = scriptsDir()?.createFile(file.name)
                 outFile?.let {
@@ -492,6 +499,12 @@ class PlayerActivity : BaseActivity() {
             }
             storageManager.getScriptOptsDirectory()?.listFiles()?.forEach { file ->
                 val outFile = scriptOptsDir()?.createFile(file.name)
+                outFile?.let {
+                    file.openInputStream().copyTo(it.openOutputStream())
+                }
+            }
+            storageManager.getShadersDirectory()?.listFiles()?.forEach { file ->
+                val outFile = shadersDir()?.createFile(file.name)
                 outFile?.let {
                     file.openInputStream().copyTo(it.openOutputStream())
                 }
@@ -506,7 +519,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private fun copyAssets(configDir: String) {
+    private fun copyAssets(mpvDir: UniFile) {
         val assetManager = this.assets
         val files = arrayOf("subfont.ttf", "cacert.pem")
         for (filename in files) {
@@ -514,14 +527,14 @@ class PlayerActivity : BaseActivity() {
             var out: OutputStream? = null
             try {
                 ins = assetManager.open(filename, AssetManager.ACCESS_STREAMING)
-                val outFile = File("$configDir/$filename")
+                val outFile = mpvDir.createFile(filename)!!
                 // Note that .available() officially returns an *estimated* number of bytes available
                 // this is only true for generic streams, asset streams return the full file size
                 if (outFile.length() == ins.available().toLong()) {
                     logcat(LogPriority.VERBOSE) { "Skipping copy of asset file (exists same size): $filename" }
                     continue
                 }
-                out = FileOutputStream(outFile)
+                out = outFile.openOutputStream()
                 ins.copyTo(out)
                 logcat(LogPriority.WARN) { "Copied asset file: $filename" }
             } catch (e: IOException) {
@@ -533,31 +546,30 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private fun copyFontsDirectory() {
+    private fun copyFontsDirectory(mpvDir: UniFile) {
         // TODO: I think this is a bad hack.
         //  We need to find a way to let MPV directly access our fonts directory.
         CoroutineScope(Dispatchers.IO).launchIO {
+            val fontsDirectory = mpvDir.createDirectory(MPV_FONTS_DIR)!!
+
             storageManager.getFontsDirectory()?.listFiles()?.forEach { font ->
-                val outFile = UniFile.fromFile(applicationContext.filesDir)?.createFile(font.name)
+                val outFile = fontsDirectory.createFile(font.name)
                 outFile?.let {
                     font.openInputStream().copyTo(it.openOutputStream())
                 }
             }
-            MPVLib.setPropertyString(
-                "sub-fonts-dir",
-                applicationContext.filesDir.path,
-            )
-            MPVLib.setPropertyString(
-                "osd-fonts-dir",
-                applicationContext.filesDir.path,
-            )
+
+            MPVLib.setPropertyString("sub-fonts-dir", fontsDirectory.filePath!!)
+            MPVLib.setPropertyString("osd-fonts-dir", fontsDirectory.filePath!!)
         }
     }
 
     fun setupCustomButtons(buttons: List<CustomButton>) {
         CoroutineScope(Dispatchers.IO).launchIO {
             val scriptsDir = {
-                UniFile.fromFile(applicationContext.filesDir)?.createDirectory("scripts")
+                UniFile.fromFile(applicationContext.filesDir)
+                    ?.createDirectory(MPV_DIR)
+                    ?.createDirectory(MPV_SCRIPTS_DIR)
             }
 
             val primaryButtonId = viewModel.primaryButton.value?.id ?: 0L
@@ -1034,11 +1046,6 @@ class PlayerActivity : BaseActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun finishAndRemoveTask() {
-        viewModel.deletePendingEpisodes()
-        super.finishAndRemoveTask()
-    }
-
     /**
      * Switches to the episode based on [episodeId],
      * @param episodeId id of the episode to switch the player to
@@ -1064,7 +1071,7 @@ class PlayerActivity : BaseActivity() {
             when (switchMethod) {
                 null -> {
                     if (viewModel.currentAnime.value != null && !autoPlay) {
-                        launchUI { toast(MR.strings.no_next_episode) }
+                        launchUI { toast(AYMR.strings.no_next_episode) }
                     }
                     viewModel.isLoading.update { _ -> false }
                 }
@@ -1075,7 +1082,7 @@ class PlayerActivity : BaseActivity() {
                             switchMethod.hosterList.isEmpty() -> setInitialEpisodeError(
                                 PlayerViewModel.ExceptionWithStringResource(
                                     "Hoster list is empty",
-                                    MR.strings.no_hosters,
+                                    AYMR.strings.no_hosters,
                                 ),
                             )
                             else -> {
@@ -1139,7 +1146,19 @@ class PlayerActivity : BaseActivity() {
                 torrentLinkHandler(video.videoUrl!!, video.quality)
             }
         } else {
-            MPVLib.command(arrayOf("loadfile", parseVideoUrl(video?.videoUrl)))
+            val videoOptions = video.mpvArgs.joinToString(",") { (option, value) ->
+                "$option=\"$value\""
+            }
+
+            MPVLib.command(
+                arrayOf(
+                    "loadfile",
+                    parseVideoUrl(video?.videoUrl),
+                    "replace",
+                    "0",
+                    videoOptions,
+                ),
+            )
         }
         updateDiscordRPC(exitingPlayer = false)
     }
@@ -1222,7 +1241,7 @@ class PlayerActivity : BaseActivity() {
 
         val intent = uri.toShareIntent(
             context = applicationContext,
-            message = stringResource(MR.strings.share_screenshot_info, anime.title, episode.name, seconds),
+            message = stringResource(AYMR.strings.share_screenshot_info, anime.title, episode.name, seconds),
         )
         startActivity(Intent.createChooser(intent, stringResource(MR.strings.action_share)))
     }
@@ -1264,6 +1283,7 @@ class PlayerActivity : BaseActivity() {
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     private fun fileLoaded() {
         if (player.isExiting) return
+        setMpvOptions()
         setMpvMediaTitle()
         setupPlayerOrientation()
         setupChapters()
@@ -1288,6 +1308,33 @@ class PlayerActivity : BaseActivity() {
                     viewModel.setChapter(viewModel.pos.value)
                 }
             }
+        }
+    }
+
+    private fun setMpvOptions() {
+        if (player.isExiting) return
+        val video = viewModel.currentVideo.value ?: return
+
+        // Only check for `MPV_ARGS_TAG` on downloaded videos
+        if (listOf("file", "content", "data").none { video.videoUrl.startsWith(it) }) {
+            return
+        }
+
+        try {
+            val metadata = Json.decodeFromString<Map<String, String>>(
+                MPVLib.getPropertyString("metadata"),
+            )
+
+            val opts = metadata[Video.MPV_ARGS_TAG]
+                ?.split(";")
+                ?.map { it.split("=", limit = 2) }
+                ?: return
+
+            opts.forEach { (option, value) ->
+                MPVLib.setPropertyString(option, value)
+            }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e) { "Failed to read video metadata" }
         }
     }
 
@@ -1353,7 +1400,7 @@ class PlayerActivity : BaseActivity() {
         }.toString().padStart(2, '0')
 
         val title = stringResource(
-            MR.strings.mpv_media_title,
+            AYMR.strings.mpv_media_title,
             anime.title,
             epNumber,
             episode.name,

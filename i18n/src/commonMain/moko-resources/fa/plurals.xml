@@ -56,36 +56,12 @@
         <item quantity="one">قسمت بعدی</item>
         <item quantity="other">%d قسمت بعدی</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="one">%1$s قسمت گم شده</item>
+        <item quantity="other">%1$s قسمت گم شده</item>
+    </plurals>
     <plurals name="day">
         <item quantity="one">1 روز</item>
         <item quantity="other">%d روز</item>
-    </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="one">1 قسمت جدید</item>
-        <item quantity="other">%1$d قسمت جدید</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="one">برای 1 عنوان</item>
-        <item quantity="other">برای %d عنوان</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%d ثانیه</item>
-        <item quantity="other">%d ثانیه</item>
-    </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="one">%1$s قسمت</item>
-        <item quantity="other">%1$s قسمت</item>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one">قسمت‌های %1$s و 1 قسمت دیگر</item>
-        <item quantity="other">قسمت‌های %1$s و %2$d قسمت دیگر</item>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one">قسمت‌های دیده نشده بعدی</item>
-        <item quantity="other">%d قسمت دیده نشده بعدی</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="one">قسمت بعدی</item>
-        <item quantity="other">%d قسمت بعدی</item>
     </plurals>
 </resources>

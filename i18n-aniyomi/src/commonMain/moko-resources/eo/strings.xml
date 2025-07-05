@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manga_categories">Kategorioj</string>
+    <string name="action_display_local_badge_manga">Lokaj ŝildoj</string>
+    <string name="default_manga_category">Defaŭlta kategorio</string>
+    <string name="pref_clear_manga_database">Viŝi datumbazon</string>
+    <string name="snack_add_to_manga_library">Ĉu aldoni mangaon al biblioteko?</string>
+    <string name="download_error">Eraro</string>
+    <string name="download_paused">Paŭzigita</string>
+    <string name="download_notifier_download_paused_chapters">Elŝutito paŭzigita</string>
+    <string name="channel_new_chapters_episodes">Ĉapitraj ĝisdatigoj</string>
+</resources>

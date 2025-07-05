@@ -29,8 +29,8 @@ android {
 
         applicationId = "com.dark.animetailv2"
 
-        versionCode = 129
-        versionName = "0.16.5.8"
+        versionCode = 130
+        versionName = "0.18.0.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -180,6 +180,7 @@ kotlin {
 
 dependencies {
     implementation(projects.i18n)
+    implementation(projects.i18nAniyomi)
     // TAIL
     implementation(projects.i18nTail)
     // TAIL

@@ -90,8 +90,8 @@
     </plurals>
     <plurals name="relative_time">
         <item quantity="zero">الأمس</item>
-        <item quantity="one">منذ %1$d أيام</item>
-        <item quantity="two">منذ %1$d أيام</item>
+        <item quantity="one">منذ يوم</item>
+        <item quantity="two">منذ يومين</item>
         <item quantity="few">منذ %1$d أيام</item>
         <item quantity="many">منذ %1$d أيام</item>
         <item quantity="other">منذ %1$d أيام</item>
@@ -112,6 +112,14 @@
         <item quantity="many">%d فصل تالي</item>
         <item quantity="other">%d فصل تالي</item>
     </plurals>
+    <plurals name="missing_chapters">
+        <item quantity="zero">لا يوجد أيُّ فصل مفقود</item>
+        <item quantity="one">فصل واحد مفقود</item>
+        <item quantity="two">فصلان مفقودان</item>
+        <item quantity="few">%1$s فصول مفقودة</item>
+        <item quantity="many">%1$s فصلًا مفقودًا</item>
+        <item quantity="other">%1$s فصل مفقود</item>
+    </plurals>
     <plurals name="day">
         <item quantity="zero">لا يوم</item>
         <item quantity="one">يوم واحد</item>
@@ -120,60 +128,28 @@
         <item quantity="many">%d يومًا</item>
         <item quantity="other">%d يوم</item>
     </plurals>
-    <plurals name="seconds">
-        <item quantity="zero">ثانية</item>
-        <item quantity="one">%d ثانية واحدة</item>
-        <item quantity="two">%d ثانيتان</item>
-        <item quantity="few">%d ثواني</item>
-        <item quantity="many">%d ثانية</item>
-        <item quantity="other">%d ثانية</item>
+    <plurals name="num_repos">
+        <item quantity="zero">لا مستودعات</item>
+        <item quantity="one">مستودع</item>
+        <item quantity="two">مستودعان</item>
+        <item quantity="few">%d مستودعات</item>
+        <item quantity="many">%d مستودعات</item>
+        <item quantity="other">%d مستودعات</item>
     </plurals>
-    <plurals name="notification_episodes_generic">
-        <item quantity="zero">حلقة جديدة</item>
-        <item quantity="one">1 حلقة جديدة</item>
-        <item quantity="two">حلقتين جديدتين</item>
-        <item quantity="few">%1$d حلقات جديدة</item>
-        <item quantity="many">%1$d حلقة جديدة</item>
-        <item quantity="other">%1$d حلقات جديدة</item>
+    <plurals name="pref_pages">
+        <item quantity="zero">%1$s صفحات</item>
+        <item quantity="one">صفحة</item>
+        <item quantity="two">صفحتان</item>
+        <item quantity="few">%1$s صفحات</item>
+        <item quantity="many">%1$s صفحات</item>
+        <item quantity="other">%1$s صفحات</item>
     </plurals>
-    <plurals name="anime_num_episodes">
-        <item quantity="zero">حلقة</item>
-        <item quantity="one">أول حلقة</item>
-        <item quantity="two">حلقتان</item>
-        <item quantity="few">%1$s حلقات</item>
-        <item quantity="many">%1$s حلقة</item>
-        <item quantity="other">%1$s حلقة</item>
-    </plurals>
-    <plurals name="next_unseen_episodes">
-        <item quantity="zero">الحلقة الغير مشاهدة التالية</item>
-        <item quantity="one">الحلقة الغير مشاهدة التالية</item>
-        <item quantity="two">الحلقتين الغير مشاهدة التالية</item>
-        <item quantity="few">بعض الحلقات %d الغير مشاهدة التالية</item>
-        <item quantity="many">الحلقات %d الغير مشاهدة التالية</item>
-        <item quantity="other">الحلقات %d الغير مشاهدة التالية</item>
-    </plurals>
-    <plurals name="notification_new_episodes_summary">
-        <item quantity="zero">لعنوان واحد</item>
-        <item quantity="one">لـ 1 عنوان</item>
-        <item quantity="two">لعنوانين</item>
-        <item quantity="few">لـ %d عناوين</item>
-        <item quantity="many">لـ %d عنوان</item>
-        <item quantity="other">لـ %d عناوين</item>
-    </plurals>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="zero">الحلقات %1$s و 1 أخرى</item>
-        <item quantity="one">الحلقات %1$s و 1 أخرى</item>
-        <item quantity="two">الحلقات %1$s و حلقتين أخرى</item>
-        <item quantity="few">الحلقات %1$s و %2$d أخرى</item>
-        <item quantity="many">الحلقات %1$s و %2$d أخرى</item>
-        <item quantity="other">الحلقات %1$s و %2$d أخرى</item>
-    </plurals>
-    <plurals name="download_amount_anime">
-        <item quantity="zero">لا يوجد</item>
-        <item quantity="one">الحلقة التالية</item>
-        <item quantity="two">الحلقتان التالية</item>
-        <item quantity="few">الحلقات التالية</item>
-        <item quantity="many">الحلقات التالية</item>
-        <item quantity="other">الحلقات التالية</item>
+    <plurals name="upcoming_relative_time">
+        <item quantity="zero">اليوم</item>
+        <item quantity="one">غداً</item>
+        <item quantity="two">بعد غد</item>
+        <item quantity="few">بعد %1$d أيام</item>
+        <item quantity="many">بعد %1$d أيام</item>
+        <item quantity="other">بعد %1$d أيام</item>
     </plurals>
 </resources>
