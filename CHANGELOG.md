@@ -76,9 +76,14 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
   - Fix downloader not working for certain types of tracks & duration sometimes not being logged ([@Secozzi](https://github.com/Secozzi)) ([#2001](https://github.com/aniyomiorg/aniyomi/pull/2001))
 - Fix some issues with intro skip length ([@jmir1](https://github.com/jmir1)) ([`72cac57`](https://github.com/aniyomiorg/aniyomi/commit/72cac57d8e66366cbc0f3106eb351c82250c460b), [`25dd3ea`](https://github.com/aniyomiorg/aniyomi/commit/25dd3ea69fb217de7b0485c29e4a9b970737fd45))
 - Force clipboard to use UI thread when copying path for external players ([@quickdesh](https://github.com/quickdesh)) ([#1994](https://github.com/aniyomiorg/aniyomi/pull/1994))
+- Use application directory for storing files used by mpv ([@Secozzi](https://github.com/Secozzi)) ([#1995](https://github.com/aniyomiorg/aniyomi/pull/1995))
 - Update backup warning string (follow Mihon) ([@cuong-tran](https://github.com/cuong-tran)) ([#2012](https://github.com/aniyomiorg/aniyomi/pull/2012))
+- Fix issues with episode deletion & more ([@quickdesh](https://github.com/quickdesh)) ([#2017](https://github.com/aniyomiorg/aniyomi/pull/2017))
 - Fix vertical slider width issues and shift boost volume value to slider ([@quickdesh](https://github.com/quickdesh)) ([#2018](https://github.com/aniyomiorg/aniyomi/pull/2018))
 - Fix MyAnimeList login ([@choppeh](https://github.com/choppeh)) ([#2035](https://github.com/aniyomiorg/aniyomi/pull/2035))
+- Call sort methods for videos and hosters ([@cuong-tran](https://github.com/cuong-tran)) ([#2058](https://github.com/aniyomiorg/aniyomi/pull/2058))
+- Invalidate preferred languages in settings ([@Secozzi](https://github.com/Secozzi)) ([#2075](https://github.com/aniyomiorg/aniyomi/pull/2075))
+- Fix crash when using sort by airing time ([@quickdesh](https://github.com/quickdesh)) ([#2076](https://github.com/aniyomiorg/aniyomi/pull/2076))
 
 ### Other
 
