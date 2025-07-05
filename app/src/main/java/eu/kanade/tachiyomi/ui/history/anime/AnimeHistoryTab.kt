@@ -13,11 +13,16 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.HistoryDeleteDialog
 import eu.kanade.presentation.history.anime.AnimeHistoryScreen
+import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
+import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialogScreenModel
+import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -81,6 +86,7 @@ fun Screen.animeHistoryTab(
                 onClickCover = { navigator.push(AnimeScreen(it)) },
                 onClickResume = screenModel::getNextEpisodeForAnime,
                 onDialogChange = screenModel::setDialog,
+                onClickFavorite = screenModel::addFavorite,
             )
 
             val onDismissRequest = { screenModel.setDialog(null) }
@@ -102,6 +108,38 @@ fun Screen.animeHistoryTab(
                     HistoryDeleteAllDialog(
                         onDismissRequest = onDismissRequest,
                         onDelete = screenModel::removeAllHistory,
+                    )
+                }
+                is AnimeHistoryScreenModel.Dialog.DuplicateAnime -> {
+                    DuplicateAnimeDialog(
+                        onDismissRequest = onDismissRequest,
+                        onConfirm = {
+                            screenModel.addFavorite(dialog.anime)
+                        },
+                        onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
+                        onMigrate = {
+                            screenModel.showMigrateDialog(dialog.anime, dialog.duplicate)
+                        },
+                    )
+                }
+                is AnimeHistoryScreenModel.Dialog.ChangeCategory -> {
+                    ChangeCategoryDialog(
+                        initialSelection = dialog.initialSelection,
+                        onDismissRequest = onDismissRequest,
+                        onEditCategories = { navigator.push(CategoriesTab) },
+                        onConfirm = { include, _ ->
+                            screenModel.moveAnimeToCategoriesAndAddToLibrary(dialog.anime, include)
+                        },
+                    )
+                }
+                is AnimeHistoryScreenModel.Dialog.Migrate -> {
+                    MigrateAnimeDialog(
+                        oldAnime = dialog.oldAnime,
+                        newAnime = dialog.newAnime,
+                        screenModel = MigrateAnimeDialogScreenModel(),
+                        onDismissRequest = onDismissRequest,
+                        onClickTitle = { navigator.push(AnimeScreen(dialog.oldAnime.id)) },
+                        onPopScreen = { navigator.replace(AnimeScreen(dialog.oldAnime.id)) },
                     )
                 }
                 null -> {}

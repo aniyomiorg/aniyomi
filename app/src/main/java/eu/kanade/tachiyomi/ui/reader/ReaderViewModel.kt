@@ -12,8 +12,10 @@ import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
 import eu.kanade.domain.entries.manga.model.readerOrientation
 import eu.kanade.domain.entries.manga.model.readingMode
 import eu.kanade.domain.items.chapter.model.toDbChapter
+import eu.kanade.domain.source.manga.interactor.GetMangaIncognitoState
 import eu.kanade.domain.track.manga.interactor.TrackChapter
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.tachiyomi.data.database.models.manga.isRecognizedNumber
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
@@ -71,6 +73,7 @@ import tachiyomi.domain.items.chapter.interactor.GetChaptersByMangaId
 import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.service.getChapterSort
+import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
@@ -87,7 +90,6 @@ class ReaderViewModel @JvmOverloads constructor(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val downloadProvider: MangaDownloadProvider = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
-    preferences: BasePreferences = Injekt.get(),
     val readerPreferences: ReaderPreferences = Injekt.get(),
     private val basePreferences: BasePreferences = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
@@ -99,6 +101,8 @@ class ReaderViewModel @JvmOverloads constructor(
     private val upsertHistory: UpsertMangaHistory = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val setMangaViewerFlags: SetMangaViewerFlags = Injekt.get(),
+    private val getIncognitoState: GetMangaIncognitoState = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(State())
@@ -218,7 +222,7 @@ class ReaderViewModel @JvmOverloads constructor(
             .map(::ReaderChapter)
     }
 
-    private val incognitoMode = preferences.incognitoMode().get()
+    private val incognitoMode: Boolean by lazy { getIncognitoState.await(manga?.source) }
     private val downloadAheadAmount = downloadPreferences.autoDownloadWhileReading().get()
 
     init {
@@ -534,9 +538,7 @@ class ReaderViewModel @JvmOverloads constructor(
             readerChapter.chapter.last_page_read = pageIndex
 
             if (readerChapter.pages?.lastIndex == pageIndex) {
-                readerChapter.chapter.read = true
-                updateTrackChapterRead(readerChapter)
-                deleteChapterIfNeeded(readerChapter)
+                updateChapterProgressOnComplete(readerChapter)
             }
 
             updateChapter.await(
@@ -547,6 +549,31 @@ class ReaderViewModel @JvmOverloads constructor(
                 ),
             )
         }
+    }
+
+    private suspend fun updateChapterProgressOnComplete(readerChapter: ReaderChapter) {
+        readerChapter.chapter.read = true
+        updateTrackChapterRead(readerChapter)
+        deleteChapterIfNeeded(readerChapter)
+
+        val markDuplicateAsRead = libraryPreferences.markDuplicateReadChapterAsRead().get()
+            .contains(LibraryPreferences.MARK_DUPLICATE_CHAPTER_READ_EXISTING)
+        if (!markDuplicateAsRead) return
+
+        val duplicateUnreadChapters = chapterList
+            .mapNotNull {
+                val chapter = it.chapter
+                if (
+                    !chapter.read &&
+                    chapter.isRecognizedNumber &&
+                    chapter.chapter_number == readerChapter.chapter.chapter_number
+                ) {
+                    ChapterUpdate(id = chapter.id!!, read = true)
+                } else {
+                    null
+                }
+            }
+        updateChapter.awaitAll(duplicateUnreadChapters)
     }
 
     fun restartReadTimer() {

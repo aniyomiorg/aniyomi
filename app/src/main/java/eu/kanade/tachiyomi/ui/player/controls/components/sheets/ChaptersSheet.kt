@@ -46,10 +46,16 @@ fun ChaptersSheet(
     modifier: Modifier = Modifier,
 ) {
     GenericTracksSheet(
-        chapters,
+        tracks = chapters,
+        header = {
+            TrackSheetTitle(
+                title = stringResource(MR.strings.player_sheets_chapters_title),
+                modifier = modifier.padding(top = MaterialTheme.padding.small),
+            )
+        },
         track = {
             ChapterTrack(
-                it,
+                chapter = it,
                 index = chapters.indexOf(it),
                 selected = currentChapter == it,
                 onClick = { onClick(it) },
@@ -57,8 +63,7 @@ fun ChaptersSheet(
         },
         onDismissRequest = onDismissRequest,
         dismissEvent = dismissSheet,
-        modifier = modifier
-            .padding(vertical = MaterialTheme.padding.medium),
+        modifier = modifier,
     )
 }
 

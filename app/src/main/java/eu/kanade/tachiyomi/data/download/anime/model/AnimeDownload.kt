@@ -43,27 +43,6 @@ data class AnimeDownload(
             progressStateFlow.value = value
         }
 
-    @Transient
-    @Volatile
-    var totalContentLength: Long = 0L
-
-    @Transient
-    private val bytesDownloadedFlow = MutableStateFlow(0L)
-
-    var bytesDownloaded: Long
-        get() = bytesDownloadedFlow.value
-        set(value) {
-            bytesDownloadedFlow.value += value
-        }
-
-    /**
-     * resets the internal progress state of download
-     */
-    fun resetProgress() {
-        bytesDownloadedFlow.value = 0L
-        progressStateFlow.value = 0
-    }
-
     /**
      * Updates the status of the download
      *

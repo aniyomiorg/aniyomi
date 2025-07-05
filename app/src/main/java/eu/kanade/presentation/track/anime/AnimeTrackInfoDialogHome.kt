@@ -9,15 +9,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -59,6 +66,7 @@ fun AnimeTrackInfoDialogHome(
     onOpenInBrowser: (AnimeTrackItem) -> Unit,
     onRemoved: (AnimeTrackItem) -> Unit,
     onCopyLink: (AnimeTrackItem) -> Unit,
+    onTogglePrivate: (AnimeTrackItem) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -73,6 +81,7 @@ fun AnimeTrackInfoDialogHome(
             if (item.track != null) {
                 val supportsScoring = item.tracker.animeService.getScoreList().isNotEmpty()
                 val supportsReadingDates = item.tracker.supportsReadingDates
+                val supportsPrivate = item.tracker.supportsPrivateTracking
                 TrackInfoItem(
                     title = item.track.title,
                     tracker = item.tracker,
@@ -108,6 +117,9 @@ fun AnimeTrackInfoDialogHome(
                     onOpenInBrowser = { onOpenInBrowser(item) },
                     onRemoved = { onRemoved(item) },
                     onCopyLink = { onCopyLink(item) },
+                    private = item.track.private,
+                    onTogglePrivate = { onTogglePrivate(item) }
+                        .takeIf { supportsPrivate },
                 )
             } else {
                 TrackInfoItemEmpty(
@@ -137,17 +149,37 @@ private fun TrackInfoItem(
     onOpenInBrowser: () -> Unit,
     onRemoved: () -> Unit,
     onCopyLink: () -> Unit,
+    private: Boolean,
+    onTogglePrivate: (() -> Unit)?,
 ) {
     val context = LocalContext.current
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            TrackLogoIcon(
-                tracker = tracker,
-                onClick = onOpenInBrowser,
-                onLongClick = onCopyLink,
-            )
+            BadgedBox(
+                badge = {
+                    if (private) {
+                        Badge(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.absoluteOffset(x = (-5).dp),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.VisibilityOff,
+                                contentDescription = stringResource(MR.strings.tracked_privately),
+                                modifier = Modifier.size(14.dp),
+                            )
+                        }
+                    }
+                },
+            ) {
+                TrackLogoIcon(
+                    tracker = tracker,
+                    onClick = onOpenInBrowser,
+                    onLongClick = onCopyLink,
+                )
+            }
             Box(
                 modifier = Modifier
                     .height(48.dp)
@@ -174,6 +206,8 @@ private fun TrackInfoItem(
                 onOpenInBrowser = onOpenInBrowser,
                 onRemoved = onRemoved,
                 onCopyLink = onCopyLink,
+                private = private,
+                onTogglePrivate = onTogglePrivate,
             )
         }
 

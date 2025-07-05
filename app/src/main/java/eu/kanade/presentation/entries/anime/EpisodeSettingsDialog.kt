@@ -13,12 +13,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.model.downloadedFilter
-import eu.kanade.domain.entries.anime.model.forceDownloaded
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import kotlinx.collections.immutable.persistentListOf
@@ -30,6 +31,8 @@ import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
 import tachiyomi.presentation.core.i18n.stringResource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @Composable
 fun EpisodeSettingsDialog(
@@ -49,6 +52,8 @@ fun EpisodeSettingsDialog(
             onConfirmed = onSetAsDefault,
         )
     }
+
+    val downloadedOnly = remember { Injekt.get<BasePreferences>().downloadedOnly().get() }
 
     TabbedDialog(
         onDismissRequest = onDismissRequest,
@@ -77,7 +82,7 @@ fun EpisodeSettingsDialog(
                     FilterPage(
                         downloadFilter = anime?.downloadedFilter ?: TriState.DISABLED,
                         onDownloadFilterChanged = onDownloadFilterChanged
-                            .takeUnless { anime?.forceDownloaded() == true },
+                            .takeUnless { downloadedOnly },
                         unseenFilter = anime?.unseenFilter ?: TriState.DISABLED,
                         onUnseenFilterChanged = onUnseenFilterChanged,
                         bookmarkedFilter = anime?.bookmarkedFilter ?: TriState.DISABLED,

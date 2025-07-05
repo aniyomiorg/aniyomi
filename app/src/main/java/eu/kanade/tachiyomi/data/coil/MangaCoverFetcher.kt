@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.coil
 
-import android.net.Uri
+import androidx.core.net.toUri
 import coil3.Extras
 import coil3.ImageLoader
 import coil3.decode.DataSource
@@ -81,7 +81,7 @@ class MangaCoverFetcher(
     }
 
     private fun uniFileLoader(urlString: String): FetchResult {
-        val uniFile = UniFile.fromUri(options.context, Uri.parse(urlString))!!
+        val uniFile = UniFile.fromUri(options.context, urlString.toUri())!!
         val tempFile = uniFile.openInputStream().source().buffer()
         return SourceFetchResult(
             source = ImageSource(source = tempFile, fileSystem = FileSystem.SYSTEM),

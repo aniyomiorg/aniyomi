@@ -252,6 +252,7 @@ actual class LocalMangaSource(
 
         val chapters = fileSystem.getFilesInMangaDirectory(manga.url)
             // Only keep supported formats
+            .filterNot { it.name.orEmpty().startsWith('.') }
             .filter { it.isDirectory || ArchiveManga.isSupported(it) || it.extension.equals("epub", true) }
             .map { chapterFile ->
                 SChapter.create().apply {
