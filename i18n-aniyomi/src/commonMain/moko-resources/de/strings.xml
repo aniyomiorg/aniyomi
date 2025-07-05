@@ -359,4 +359,10 @@
     <string name="pref_category_intro_skip">Intros überspringen</string>
     <string name="pref_enable_intro_skip">Intros überspringen aktivieren</string>
     <string name="pref_disable_aniskip_chapter">AniSkip deaktivieren, falls das Video schon Kapitel enthält</string>
+    <string name="pref_behavior_episode">Episoden-Verhalten</string>
+    <string name="pref_mark_duplicate_seen_episode_seen">Doppelt gesehene Episode als gesehen markieren</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_existing">Nach dem schauen einer Episode</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_new">Nach dem Abrufen einer neuen Episode</string>
+    <string name="pref_panel_opacity">Deckkraft des Panels</string>
+    <string name="pref_controls_swap_vol_brightness">Lautstärke- und Helligkeitsregler tauschen</string>
 </resources>
