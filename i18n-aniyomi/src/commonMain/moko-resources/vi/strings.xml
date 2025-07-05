@@ -269,4 +269,19 @@
     <string name="onboarding_storage_action_create_folder">Tạo thư mục Aniyomi mặc định</string>
     <string name="download_speed_limit">Giới hạn tốc độ tải xuống</string>
     <string name="download_speed_limit_hint">Đặt thành 0 để tắt giới hạn tốc độ.</string>
+    <string name="manga">Truyện trong thư viện</string>
+    <string name="pref_update_only_completely_read">Có chương chưa đọc</string>
+    <string name="pref_category_delete_chapters">Xoá chương</string>
+    <string name="pref_remove_after_marked_as_read">Sau khi đánh dấu thủ công là đã đọc</string>
+    <string name="pref_remove_after_read">Tự động xóa sau khi đọc</string>
+    <string name="pref_remove_bookmarked_chapters">Cho phép xóa các chương đã đánh dấu</string>
+    <string name="download_ahead_info">Tải trước chỉ áp dụng cho các mục ở trong thư viện và nếu chương cuối cùng đã được tải rồi.</string>
+    <string name="pref_auto_update_manga_sync">Cập nhật tiến triển sau khi đọc</string>
+    <string name="pref_clear_chapter_cache">Dọn dẹp bộ nhớ đệm</string>
+    <string name="pref_auto_clear_chapter_cache">Xóa bộ nhớ đệm các chương khi tắt ứng dụng</string>
+    <string name="clear_database_confirmation">Bạn có chắc không? Các chương đã đọc và tiến độ đọc các truyện không nằm trong thư viện sẽ bị mất</string>
+    <string name="pref_incognito_mode_summary">Dừng lưu giữ lịch sử đọc</string>
+    <string name="manga_from_library">Từ thư viện</string>
+    <string name="also_set_chapter_settings_for_library">Ngoài ra có hiệu lực với tất cả truyện trong thư viện</string>
+    <string name="download_insufficient_space">Không thể tãi chương vì dung lượng bộ nhớ xuống thấp</string>
 </resources>
