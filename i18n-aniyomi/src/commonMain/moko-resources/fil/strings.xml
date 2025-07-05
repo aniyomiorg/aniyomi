@@ -165,7 +165,6 @@
     <string name="player_sheets_sub_typography_border_style">Estilo ng border</string>
     <string name="player_sheets_sub_typography_border_size">Laki ng border</string>
     <string name="player_sheets_subtitles_shadow_offset">Shadow offset</string>
-    <string name="player_sheets_subtitles_border_style_outline_and_shadow"></string>
     <string name="player_sheets_subtitles_border_style_opaque_box">Opaque na kahon</string>
     <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
     <string name="player_sheets_sub_misc_title">At iba pa</string>
