@@ -418,4 +418,6 @@
     <string name="onboarding_storage_action_create_folder">Crie a pasta Aniyomi padrão</string>
     <string name="download_speed_limit">Limite de velocidade de download</string>
     <string name="download_speed_limit_hint">Defina como 0 para desativar o limite de velocidade.</string>
+    <string name="download_ahead_info">Funciona somente se o capítulo atual e próximo já estão disponíveis offline.</string>
+    <string name="also_set_chapter_settings_for_library">Também aplicar a todos os itens na minha biblioteca</string>
 </resources>
