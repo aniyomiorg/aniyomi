@@ -262,4 +262,9 @@
     <string name="onboarding_storage_action_create_folder">Criar a pasta padrão para Aniyomi</string>
     <string name="download_speed_limit">Limite de velocidade de download</string>
     <string name="download_speed_limit_hint">Defina como 0 para desativar o limite de velocidade.</string>
+    <string name="pref_update_only_completely_read">Com capítulo(s) não lidos</string>
+    <string name="pref_remove_after_read">Eliminar automaticamente após a leitura</string>
+    <string name="download_ahead_info">Apenas funciona em entradas na biblioteca e se o capítulo atual, mais o próximo, já estiverem transferidos</string>
+    <string name="pref_auto_update_manga_sync">Atualizar progresso após a leitura</string>
+    <string name="also_set_chapter_settings_for_library">Também aplicar a todos os itens na minha biblioteca</string>
 </resources>
