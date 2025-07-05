@@ -29,6 +29,8 @@ import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.ResetMangaCategoryFlags
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.anime.model.AnimeGroupLibraryMode
+import tachiyomi.domain.library.manga.model.MangaGroupLibraryMode
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
@@ -43,6 +45,7 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLIC
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.MARK_DUPLICATE_EPISODE_SEEN_NEW
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -274,6 +277,38 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                     onClick = { showMangaCategoriesDialog = true },
                 ),
+                // SY -->
+                Preference.PreferenceItem.ListPreference(
+                    preference = libraryPreferences.groupAnimeLibraryUpdateType(),
+                    title = stringResource(TLMR.strings.anime_library_group_updates),
+                    entries = persistentMapOf(
+                        AnimeGroupLibraryMode.GLOBAL to stringResource(
+                            TLMR.strings.library_group_updates_global,
+                        ),
+                        AnimeGroupLibraryMode.ALL_BUT_UNGROUPED to stringResource(
+                            TLMR.strings.library_group_updates_all_but_ungrouped,
+                        ),
+                        AnimeGroupLibraryMode.ALL to stringResource(
+                            TLMR.strings.library_group_updates_all,
+                        ),
+                    ),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    preference = libraryPreferences.groupMangaLibraryUpdateType(),
+                    title = stringResource(TLMR.strings.manga_library_group_updates),
+                    entries = persistentMapOf(
+                        MangaGroupLibraryMode.GLOBAL to stringResource(
+                            TLMR.strings.library_group_updates_global,
+                        ),
+                        MangaGroupLibraryMode.ALL_BUT_UNGROUPED to stringResource(
+                            TLMR.strings.library_group_updates_all_but_ungrouped,
+                        ),
+                        MangaGroupLibraryMode.ALL to stringResource(
+                            TLMR.strings.library_group_updates_all,
+                        ),
+                    ),
+                ),
+                // SY <--
                 Preference.PreferenceItem.SwitchPreference(
                     preference = libraryPreferences.autoUpdateMetadata(),
                     title = stringResource(MR.strings.pref_library_update_refresh_metadata),

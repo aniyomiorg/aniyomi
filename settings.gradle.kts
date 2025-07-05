@@ -44,7 +44,7 @@ plugins {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Aniyomi"
+rootProject.name = "Animetail"
 include(":app")
 include(":core-metadata")
 include(":core:archive")
@@ -53,6 +53,9 @@ include(":data")
 include(":domain")
 include(":i18n")
 include(":i18n-aniyomi")
+// TAIL -->
+include(":i18n-tail")
+// TAIL <--
 include(":macrobenchmark")
 include(":presentation-core")
 include(":presentation-widget")

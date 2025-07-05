@@ -58,10 +58,11 @@ fun BrowseAnimeSourceComfortableGrid(
 }
 
 @Composable
-private fun BrowseAnimeSourceComfortableGridItem(
+fun BrowseAnimeSourceComfortableGridItem(
     anime: Anime,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,
+    isSelected: Boolean = false,
 ) {
     EntryComfortableGridItem(
         title = anime.title,
@@ -72,6 +73,8 @@ private fun BrowseAnimeSourceComfortableGridItem(
             url = anime.thumbnailUrl,
             lastModified = anime.coverLastModified,
         ),
+        // KMK -->
+        isSelected = isSelected,
         coverAlpha = if (anime.favorite) CommonEntryItemDefaults.BrowseFavoriteCoverAlpha else 1f,
         coverBadgeStart = {
             InLibraryBadge(enabled = anime.favorite)

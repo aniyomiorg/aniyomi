@@ -2,6 +2,7 @@ package tachiyomi.data.track.anime
 
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.data.track.anime.AnimeTrackMapper.mapTrack
 import tachiyomi.domain.track.anime.model.AnimeTrack
 import tachiyomi.domain.track.anime.repository.AnimeTrackRepository
 
@@ -12,6 +13,20 @@ class AnimeTrackRepositoryImpl(
     override suspend fun getTrackByAnimeId(id: Long): AnimeTrack? {
         return handler.awaitOneOrNull { anime_syncQueries.getTrackByAnimeId(id, AnimeTrackMapper::mapTrack) }
     }
+
+    // SY -->
+    override suspend fun getAnimeTracks(): List<AnimeTrack> {
+        return handler.awaitList {
+            anime_syncQueries.getAnimeTracks(::mapTrack)
+        }
+    }
+
+    override suspend fun getTracksByAnimeIds(animeIds: List<Long>): List<AnimeTrack> {
+        return handler.awaitList {
+            anime_syncQueries.getTracksByAnimeIds(animeIds, ::mapTrack)
+        }
+    }
+    // SY <--
 
     override suspend fun getTracksByAnimeId(animeId: Long): List<AnimeTrack> {
         return handler.awaitList {

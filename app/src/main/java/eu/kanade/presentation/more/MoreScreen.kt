@@ -37,6 +37,10 @@ fun MoreScreen(
     onDownloadedOnlyChange: (Boolean) -> Unit,
     incognitoMode: Boolean,
     onIncognitoModeChange: (Boolean) -> Unit,
+    // SY -->
+    showNavUpdates: Boolean,
+    showNavHistory: Boolean,
+    // SY <--
     navStyle: NavStyle,
     onClickAlt: () -> Unit,
     onClickDownloadQueue: () -> Unit,

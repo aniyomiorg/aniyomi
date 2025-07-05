@@ -128,6 +128,17 @@ fun BrowseAnimeSourceContent(
                 onAnimeLongClick = onAnimeLongClick,
             )
         }
+        // KMK -->
+        LibraryDisplayMode.ComfortableGridPanorama -> {
+            BrowseAnimeSourceComfortableGrid(
+                animeList = animeList,
+                columns = columns,
+                contentPadding = contentPadding,
+                onAnimeClick = onAnimeClick,
+                onAnimeLongClick = onAnimeLongClick,
+            )
+        }
+        // KMK <--
         LibraryDisplayMode.List -> {
             BrowseAnimeSourceList(
                 animeList = animeList,

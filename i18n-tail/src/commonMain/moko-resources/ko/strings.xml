@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Tracking status</string>
+  <string name="tag">Tags</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Not tracked</string>
+  <string name="group" comment="group More Info Menu">Group</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Library dynamic category updates</string>
+  <string name="manga_library_group_updates">Manga Library dynamic category updates</string>
+  <string name="library_group_updates_global">Always launch global updates</string>
+  <string name="library_group_updates_all_but_ungrouped">Launch global updates only for ungrouped, category updates for others</string>
+  <string name="library_group_updates_all">Launch category updates all the time</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Reset Tags</string>
+  <string name="add_tag">Add Tag</string>
+  <string name="title_hint">Title: %1$s</string>
+  <string name="description_hint">Description: %1$s</string>
+  <string name="author_hint">Author: %1$s</string>
+  <string name="artist_hint">Artist: %1$s</string>
+  <string name="custom_entry_info">Custom entry info</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Cast Settings</string>
+  <string name="pref_enable_cast">Enable or disable Cast</string>
+  <string name="action_cast">Send to Cast</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Show downloaded episode file size</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Fork Settings</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Edit info</string>
+  <string name="special_services" comment="special_services Connections section">Special Services</string>
+  <string name="pref_category_connections">Connections</string>
+  <string name="pref_connections_summary">Discord, more to come..</string>
+  <string name="connections_info">Special Services that are unique to Animetail and enhance the way you use the app</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">This Discord Service works through token logging. Use at your own risk. Your token is stored locally and Animetail does not share it anywhere else</string>
+  <string name="pref_discord_rpc">Discord Rich Presence</string>
+  <string name="show_chapters_titles_title">Show Episodes/Chapters Titles</string>
+  <string name="show_chapters_titles_subtitle">Show the title of the episode/chapter you are reading</string>
+  <string name="pref_enable_discord_rpc">Enable Discord Rich Presence</string>
+  <string name="pref_discord_status">Discord Status</string>
+  <string name="pref_discord_dnd">⛔ Do Not Disturb</string>
+  <string name="pref_discord_idle">🌙 Idle</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Discord Incognito mode</string>
+  <string name="pref_discord_incognito_summary">Overridden when Incognito Mode is enabled</string>
+  <string name="pref_discord_incognito_categories_details">Entries in included categories will not be displayed in Discord</string>
+  <string name="browsing" comment="browsing Discord section">Browsing</string>
+  <string name="scrolling">Scrolling through</string>
+  <string name="messing">Messing around with</string>
+  <string name="video">Video</string>
+  <string name="comic">Comic</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player needs to be installed</string>
+  <string name="pref_category_torrentserver">TorrentServer Preferences</string>
+  <string name="pref_torrentserver_port">TorrentServer Port</string>
+  <string name="torrentserver_is_running">Torrent Server is running</string>
+  <string name="pref_torrent_trackers">Torrent Trackers</string>
+  <string name="pref_reset_torrent_trackers_string">Reset default torrent trackers string</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Page preload amount</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Preserve reading position on read entries</string>
+  <string name="reader_bottom_buttons">Reader Bottom Buttons</string>
+  <string name="reader_bottom_buttons_summary">Customize what buttons appear at the bottom of the reader</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Set first page as cover</string>
+  <string name="action_set_second_page_cover">Set second page as cover</string>
+  <string name="action_save_first_page">Save first page</string>
+  <string name="action_save_second_page">Save second page</string>
+  <string name="action_share_first_page">Share first page</string>
+  <string name="action_share_second_page">Share second page</string>
+  <string name="action_save_combined_page">Save combined page</string>
+  <string name="action_share_combined_page">Share combined page</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, pages %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Page layout</string>
+  <string name="shift_double_pages">Shift one page over</string>
+  <string name="double_pages">Double pages</string>
+  <string name="single_page">Single page</string>
+  <string name="automatic_orientation">Automatic (based on orientation)</string>
+  <string name="automatic_can_still_switch">While using automatic page layout, you can still switch between layouts while reading without overriding this setting</string>
+  <string name="invert_double_pages">Invert double pages </string>
+  <string name="center_margin" comment="center_margin Center margin">Center Margin</string>
+  <string name="center_margin_none">None</string>
+  <string name="center_margin_double_page">Add to double Page</string>
+  <string name="center_margin_wide_page">Add to wide Page</string>
+  <string name="center_margin_double_and_wide_page">Add to both</string>
+  <string name="pref_center_margin">Center margin type</string>
+  <string name="pref_center_margin_summary">Insert spacer to accommodate deadspace on foldable devices.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Custom Color Picker</string>
+  <string name="custom_color_description">Pick a color for the custom Theme</string>
+  <string name="theme_custom">Custom Theme</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Backup</string>
+  <string name="label_sync">Sync</string>
+  <string name="label_triggers">Triggers</string>
+  <string name="pref_backup_and_sync_summary">Manual &amp; automatic backups and sync</string>
+  <string name="update_30min">Every 30 minutes</string>
+  <string name="update_1hour">Every hour</string>
+  <string name="update_3hour">Every 3 hours</string>
+  <string name="sync_error">Syncing library failed</string>
+  <string name="sync_complete">Syncing library complete</string>
+  <string name="sync_in_progress">Sync is already in progress</string>
+  <string name="pref_sync_host">Host</string>
+  <string name="pref_sync_host_summ">Enter the host address for synchronizing your library</string>
+  <string name="pref_sync_api_key">API key</string>
+  <string name="pref_sync_api_key_summ">Enter the API key to synchronize your library</string>
+  <string name="pref_sync_now_group_title">Sync Actions</string>
+  <string name="pref_sync_now">Sync now</string>
+  <string name="pref_sync_confirmation_title">Sync confirmation</string>
+  <string name="pref_sync_now_subtitle">Initiate immediate synchronization of your data</string>
+  <string name="pref_sync_confirmation_message">Syncing will overwrite your local library with the remote library. Are you sure you want to continue?</string>
+  <string name="pref_sync_service">Service</string>
+  <string name="pref_sync_service_summ">Select the service to sync your library with</string>
+  <string name="pref_sync_service_category">Sync</string>
+  <string name="pref_sync_automatic_category">Automatic Synchronization</string>
+  <string name="pref_sync_interval">Synchronization frequency</string>
+  <string name="pref_choose_what_to_sync">Choose what to sync</string>
+  <string name="success_reset_sync_timestamp">Last sync timestamp reset</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Done in %1$s</string>
+  <string name="last_synchronization">Last Synchronization: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Sign in</string>
+  <string name="google_drive_sign_in_success">Signed in successfully</string>
+  <string name="google_drive_sign_in_failed">Sign in failed</string>
+  <string name="authentication">Authentication</string>
+  <string name="pref_google_drive_purge_sync_data">Clear Sync Data from Google Drive</string>
+  <string name="google_drive_sync_data_purged">Sync data purged from Google Drive</string>
+  <string name="google_drive_sync_data_not_found">No sync data found in Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">Error purging sync data from Google Drive, Try to sign in again.</string>
+  <string name="google_drive_login_success">Logged in to Google Drive</string>
+  <string name="google_drive_login_failed">Failed to log in to Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">Not signed in to Google Drive</string>
+  <string name="error_uploading_sync_data">Error uploading sync data to Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Error Deleting Google Drive Lock File</string>
+  <string name="error_before_sync_gdrive">Error before sync: %s</string>
+  <string name="pref_purge_confirmation_title">Purge confirmation</string>
+  <string name="pref_purge_confirmation_message">Purging sync data will delete all your sync data from Google Drive. Are you sure you want to continue?</string>
+  <string name="pref_sync_options">Create sync triggers</string>
+  <string name="pref_sync_options_summ">Can be used to set sync triggers</string>
+  <string name="sync_on_chapter_read">Sync on Chapter Read</string>
+  <string name="sync_on_chapter_open">Sync on Chapter Open</string>
+  <string name="sync_on_episode_seen">Sync on Episode Seen</string>
+  <string name="sync_on_episode_open">Sync on Episode Open</string>
+  <string name="sync_on_app_start">Sync on App Start</string>
+  <string name="sync_on_app_resume">Sync on App Resume</string>
+  <string name="sync_library">Sync library</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Refresh extension page to update list.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Navbar</string>
+  <string name="pref_hide_updates_button">Show updates in the nav</string>
+  <string name="pref_hide_history_button">Show history in the nav</string>
+  <string name="pref_show_bottom_bar_labels">Always show nav labels</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Select a tracker</string>
+  <string name="entry_not_tracked">Entry is not tracked.</string>
+  <string name="fill_from_tracker">Fill from tracker</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr is working. User agent updated. Please restart the app</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr is not working. User agent not updated. Please check your settings</string>
+  <string name="flare_solver_error">Error contacting FlareSolverr</string>
+  <string name="flare_solver_error_webview">Error resolving with WebView</string>
+  <string name="pref_enable_flare_solverr">Enable FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Use FlareSolverr to bypass Cloudflare\'s anti-bot protection</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">URL of the FlareSolverr instance to use for example http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr and update user agent</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr to update the user agent. Only required once; then toggle as needed.</string>
+  <string-array name="title_cast_quality">
+    <item>Choose Cast Quality/Provider</item>
+    <item>Select Quality</item>
+  </string-array>
+  <string name="cast_not_connected">Cast not connected</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video added to queue</item>
+    <item>Video added to queue</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Error loading video from Cast</item>
+    <item>Error loading video</item>
+  </string-array>
+  <string name="server_local_notification_casting">The local server is running. Tap to stop it.</string>
+  <string name="server_local_notification_channel_description">Local server notification channel</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscroll</string>
+  <string name="eh_retry_all">Retry all</string>
+  <string name="eh_boost_page">Boost page</string>
+  <string name="eh_autoscroll_help">Autoscroll help</string>
+  <string name="eh_autoscroll_help_message">Automatically scroll to the next page in the specified interval. Interval is specified in seconds.</string>
+  <string name="eh_autoscroll_freq_invalid">Invalid frequency</string>
+  <string name="eh_retry_all_help">Retry all help</string>
+  <string name="eh_retry_all_help_message">Re-add all failed pages to the download queue.</string>
+  <string name="eh_boost_page_help">Boost page help</string>
+  <string name="eh_boost_page_help_message">Normally the downloader can only download a specific amount of pages at the same time. This means you can be waiting for a page to download but the downloader will not start downloading the page until it has a free download slot. Pressing \'Boost page\' will force the downloader to begin downloading the current page, regardless of whether or not there is an available slot.</string>
+  <string name="eh_boost_page_invalid">This page cannot be boosted (invalid page)!</string>
+  <string name="eh_boost_page_errored">Page failed to load, press the retry button instead!</string>
+  <string name="eh_boost_page_downloading">This page is already downloading!</string>
+  <string name="eh_boost_page_downloaded">This page has already been downloaded!</string>
+  <string name="eh_boost_boosted">Boosted current page!</string>
+  <string name="eh_boost_invalid_loader">This page cannot be boosted (invalid page loader)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="other">Retrying %1$d failed pages…</item>
+  </plurals>
+  <string name="pref_category_castserver">Cast Server</string>
+  <string name="pref_cast_server_port">Cast Server Port</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discord Customization</string>
+  <string name="pref_discord_custom_message">Custom Message</string>
+  <string name="pref_discord_custom_message_summary">Custom message that will be displayed on Discord</string>
+  <string name="pref_discord_show_progress">Show Progress</string>
+  <string name="pref_discord_show_progress_summary">Display the current episode/chapter progress</string>
+  <string name="pref_discord_show_timestamp">Show Time</string>
+  <string name="pref_discord_show_timestamp_summary">Display elapsed/remaining time</string>
+  <string name="pref_discord_show_buttons">Show Buttons</string>
+  <string name="pref_discord_show_buttons_summary">Display buttons to download the app or join the Discord server</string>
+  <string name="pref_discord_show_download_button">Show Download Button</string>
+  <string name="pref_discord_show_download_button_summary">Displays a button to download the app</string>
+  <string name="pref_discord_show_discord_button">Show Discord Button</string>
+  <string name="pref_discord_show_discord_button_summary">Displays a button to join the Discord server</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Playback Queue</string>
+  <string name="action_clear_queue">Clear Queue</string>
+  <string name="cast_remove_from_queue">Remove from queue</string>
+  <string name="move_to_top">Move to Top</string>
+  <string name="move_to_position">Move to Position</string>
+  <string name="position">Position</string>
+  <string name="select_position">Select Position</string>
+  <string name="remove_from_queue_confirmation">Remove from Queue?</string>
+  <string name="clear_queue_confirmation">Clear Queue</string>
+  <string name="clear_queue_confirmation_message">Are you sure you want to clear the entire queue?</string>
+  <string name="queue">Queue</string>
+  <string name="move_to_bottom">Move to Bottom</string>
+  <string name="action_end_session">End Cast Session</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Available Devices</string>
+  <string name="cast_media_info">Media Info</string>
+  <string name="cast_previous_video">Previous Video</string>
+  <string name="cast_next_video">Next Video</string>
+  <string name="cast_play">Play</string>
+  <string name="cast_pause">Pause</string>
+  <string name="cast_rewind_30s">Rewind 30s</string>
+  <string name="cast_forward_30s">Forward 30s</string>
+  <string name="cast_volume">Volume</string>
+  <string name="cast_end_session">End Cast Session</string>
+  <string name="empty_queue">Queue is empty</string>
+  <string name="cast_end_session_message">Are you sure you want to end the current cast session?</string>
+  <string name="cast_end_session_confirm">End Session</string>
+  <string name="cast_end_session_cancel">Cancel</string>
+  <string name="playback_speed">Playback Speed</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Subtitle Settings</item>
+    <item>Subtitle Settings</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Text Color</string>
+  <string name="cast_subtitle_background">Background</string>
+  <string name="cast_subtitle_shadow">Shadow</string>
+  <string name="cast_subtitle_apply">Apply</string>
+  <string name="cast_subtitle_reset">Reset to Default</string>
+  <string name="cast_subtitle_shadow_None">None</string>
+  <string name="cast_subtitle_shadow_Light">Light</string>
+  <string name="cast_subtitle_shadow_Medium">Medium</string>
+  <string name="cast_subtitle_shadow_Strong">Strong</string>
+  <string name="cast_subtitle_preview">Preview Text あ漢</string>
+  <string name="cast_tracks">Select Subtitle/Audio Track</string>
+  <string name="cast_volume_down">Volume Down</string>
+  <string name="cast_volume_up">Volume Up</string>
+  <string name="cast_subtitles">Subtitles</string>
+  <string name="cast_audio_tracks">Audio Tracks</string>
+  <string name="cast_no_subtitles">No Subtitles</string>
+  <string name="cast_close">Close</string>
+  <string name="cast_subtitle_font_family">Font Family</string>
+  <string name="cast_subtitle_border_style">Border Style</string>
+  <string name="cast_subtitle_border_none">None</string>
+  <string name="cast_subtitle_border_outline">Outline</string>
+  <string name="cast_subtitle_border_drop_shadow">Drop Shadow</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Soft Drop Shadow</string>
+  <string name="cast_subtitle_border_raised">Raised</string>
+  <string name="cast_subtitle_border_depressed">Depressed</string>
+  <string name="cast_connection_error">Connection Error</string>
+  <string name="discord_accounts">Discord Accounts</string>
+  <string name="active_account">Active Account</string>
+  <string name="no_accounts_found">No accounts found</string>
+  <string name="login_failed">Failed to login</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama comfortable grid</string>
+  <string name="action_bulk_select">Bulk selection mode</string>
+  <string name="action_move_up">Move Up</string>
+  <string name="action_move_down">Move Down</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Too many sources in your feed, cannot add more than 20</string>
+  <string name="action_sort_feed">Sort feeds</string>
+  <string name="sort_feed_confirmation">Would you like to sort the feeds alphabetically?</string>
+  <string name="saved_searches_feeds">Saved Searches &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Saved Searches (Hold to add to Feed)</string>
+  <string name="pref_hide_feed">Hide Feed tab</string>
+  <string name="pref_feed_position">Feed tab position</string>
+  <string name="pref_feed_position_summery">Do you want the feed tab to be the first tab in browse? This will make it the default tab when opening browse, not recommended if you\'re on data or a metered network</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">Delete feed item?</string>
+  <string name="feed_tab_empty">You don\'t have any sources in your feed, navigate to the top right to add one</string>
+  <string name="feed_add">Add %1$s to feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Saved Searches</string>
+  <string name="save_search">Save current search query?</string>
+  <string name="save_search_hint">My search name</string>
+  <string name="save_search_failed_to_load">Failed to load saved searches!</string>
+  <string name="save_search_failed_to_load_message">An error occurred while loading your saved searches.</string>
+  <string name="save_search_delete">Delete saved search query?</string>
+  <string name="save_search_delete_message">Are you sure you wish to delete your saved search query: \'%1$s\'?</string>
+  <string name="save_search_invalid">Saved search invalid, filters have changed</string>
+  <string name="save_search_invalid_name">Invalid saved search name</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">No source categories available</string>
+  <string name="invalid_category_name">Invalid category name</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Suggestions</string>
+  <string name="pref_source_related_mangas_summary">Show source-website\'s Suggestions while viewing entry</string>
+  <string name="related_mangas_website_suggestions">Website Suggestions</string>
+  <string name="related_mangas_more">More like these...</string>
+  <string name="saved_searches_delete">Saved Searches (Hold to delete)</string>
+  <string name="pref_expand_related_animes">Expand Suggestions</string>
+  <string name="pref_expand_related_animes_summary">If turned off, Suggestions won\'t automatically load &amp; show expanded</string>
+  <string name="put_related_animes_in_overflow">Suggestions in overflow</string>
+  <string name="put_related_animes_in_overflow_summary">Put the Suggestions button in the overflow menu instead of on the entry page</string>
+  <string name="pref_show_home_on_related_animes">Home from Suggestions</string>
+  <string name="pref_show_home_on_related_animes_summary">Show an icon while browsing Suggestions to navigate directly back to Home</string>
+  <string name="pref_source_related_animes">Suggestions</string>
+  <string name="pref_source_related_animes_summary">Show source-website\'s Suggestions while viewing entry</string>
+  <string name="pref_source_navigation">Replace latest button</string>
+  <string name="pref_source_navigation_summery">Replace latest button with a custom browse view that includes both latest and browse</string>
+</resources>

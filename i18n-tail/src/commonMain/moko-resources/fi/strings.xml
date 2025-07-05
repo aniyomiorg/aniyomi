@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Seurannan tila</string>
+  <string name="tag">Tunnisteet</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Ei seurattu</string>
+  <string name="group" comment="group More Info Menu">Ryhmä</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Library dynaamiset kategoriapäivitykset</string>
+  <string name="manga_library_group_updates">Manga Kirjaston dynaamiset tuoteryhmäpäivitykset</string>
+  <string name="library_group_updates_global">Käynnistä aina globaalit päivitykset</string>
+  <string name="library_group_updates_all_but_ungrouped">Käynnistä maailmanlaajuiset päivitykset vain ryhmitämättömille, kategoriapäivityksille muille</string>
+  <string name="library_group_updates_all">Käynnistä kategorian päivitykset koko ajan</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Nollaa Tagit</string>
+  <string name="add_tag">Lisää Tagi</string>
+  <string name="title_hint">Arvonimi: %1$s</string>
+  <string name="description_hint">Kuvaus: %1$s</string>
+  <string name="author_hint">Tekijä: %1$s</string>
+  <string name="artist_hint">Esittäjä: %1$s</string>
+  <string name="custom_entry_info">Mukautetut tietueen tiedot</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Lähetyksen Asetukset</string>
+  <string name="pref_enable_cast">Ota käyttöön tai poista käytöstä</string>
+  <string name="action_cast">Lähetä lähetykseen</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Näytä ladatun jakson tiedoston koko</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Forkin Asetukset</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Muokkaa tietoja</string>
+  <string name="special_services" comment="special_services Connections section">Erityiset Palvelut</string>
+  <string name="pref_category_connections">Yhteydet</string>
+  <string name="pref_connections_summary">Discord, lisää tullaan..</string>
+  <string name="connections_info">Erikoispalvelut, jotka ovat ainutlaatuisia Animetail ja parantaa tapaa käyttää sovellusta</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Tämä Discord-palvelu toimii tunnuksen lokilla. Käytä omalla vastuullasi. Tunnuksesi tallennetaan paikallisesti ja Animetail ei jaa sitä mistään muualta.</string>
+  <string name="pref_discord_rpc">Discord Rich Presence</string>
+  <string name="show_chapters_titles_title">Näytä Jaksot/Lukujen Otsikot</string>
+  <string name="show_chapters_titles_subtitle">Näytä jakson / luvun otsikko, jota olet lukemassa</string>
+  <string name="pref_enable_discord_rpc">Ota Discordin Rich Presence Käyttöön</string>
+  <string name="pref_discord_status">Discordin Tila</string>
+  <string name="pref_discord_dnd">⛔ Älä Häiritse</string>
+  <string name="pref_discord_idle">🌙 Käyttämätön</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Discord Incognito -tila</string>
+  <string name="pref_discord_incognito_summary">Ohita kun Incognito-tila on käytössä</string>
+  <string name="pref_discord_incognito_categories_details">Sisällytettyjä kategorioita ei näytetä Discordissa</string>
+  <string name="browsing" comment="browsing Discord section">Selataan</string>
+  <string name="scrolling">Vieritä läpi</string>
+  <string name="messing">Messing noin kanssa</string>
+  <string name="video">Video</string>
+  <string name="comic">Sarjakuva</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player täytyy asentaa</string>
+  <string name="pref_category_torrentserver">TorrentServer Asetukset</string>
+  <string name="pref_torrentserver_port">TorrentServer Portti</string>
+  <string name="torrentserver_is_running">Torrent- palvelin on käynnissä</string>
+  <string name="pref_torrent_trackers">Torrent- Seurantapalvelimet</string>
+  <string name="pref_reset_torrent_trackers_string">Palauta torrent-tiedosto merkkijono</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Sivun esilatauksen määrä</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Säilytä lukemisen sijainti luetuissa merkinnöissä</string>
+  <string name="reader_bottom_buttons">Lukija Alapainikkeet</string>
+  <string name="reader_bottom_buttons_summary">Mukauta mitä painikkeita lukijan alareunassa näkyy</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Aseta ensimmäinen sivu kansiksi</string>
+  <string name="action_set_second_page_cover">Aseta toinen sivu kansiksi</string>
+  <string name="action_save_first_page">Tallenna ensimmäinen sivu</string>
+  <string name="action_save_second_page">Tallenna toinen sivu</string>
+  <string name="action_share_first_page">Jaa ensimmäinen sivu</string>
+  <string name="action_share_second_page">Jaa toinen sivu</string>
+  <string name="action_save_combined_page">Tallenna yhdistetty sivu</string>
+  <string name="action_share_combined_page">Jaa yhdistetty sivu</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, sivut %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Sivun asettelu</string>
+  <string name="shift_double_pages">Siirrä yksi sivu yli</string>
+  <string name="double_pages">Kaksinkertaiset sivut</string>
+  <string name="single_page">Yksi sivu</string>
+  <string name="automatic_orientation">Automaattinen (suuntautumisen perusteella)</string>
+  <string name="automatic_can_still_switch">Kun käytät automaattista sivuasettelua, voit silti vaihtaa asettelujen välillä lukematta tätä asetusta</string>
+  <string name="invert_double_pages">Käännä kaksoissivut </string>
+  <string name="center_margin" comment="center_margin Center margin">Keski- Marginaali</string>
+  <string name="center_margin_none">Ei Mitään</string>
+  <string name="center_margin_double_page">Lisää tuplasivulle</string>
+  <string name="center_margin_wide_page">Lisää laajalle sivulle</string>
+  <string name="center_margin_double_and_wide_page">Lisää molempiin</string>
+  <string name="pref_center_margin">Keskelle marginaalin tyyppi</string>
+  <string name="pref_center_margin_summary">Aseta välilyönti asentoon kokoontaitettavien laitteiden osalta.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Mukautettu Värivalitsin</string>
+  <string name="custom_color_description">Valitse väri mukautetulle teemalle</string>
+  <string name="theme_custom">Muokattu Teema</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Varmuuskopio</string>
+  <string name="label_sync">Synkronointi</string>
+  <string name="label_triggers">Käynnistimet</string>
+  <string name="pref_backup_and_sync_summary">Manual &amp; automatic backups and sync</string>
+  <string name="update_30min">Joka 30 minuutti</string>
+  <string name="update_1hour">Joka tunti</string>
+  <string name="update_3hour">Joka 3. tunti</string>
+  <string name="sync_error">Kirjaston synkronointi epäonnistui</string>
+  <string name="sync_complete">Kirjaston synkronointi valmis</string>
+  <string name="sync_in_progress">Synkronointi on jo käynnissä</string>
+  <string name="pref_sync_host">Isäntä</string>
+  <string name="pref_sync_host_summ">Syötä isäntäosoite, kun haluat synkronoida kirjaston</string>
+  <string name="pref_sync_api_key">API avain</string>
+  <string name="pref_sync_api_key_summ">Syötä API-avain synkronoidaksesi kirjaston</string>
+  <string name="pref_sync_now_group_title">Synkronoi Toiminnot</string>
+  <string name="pref_sync_now">Synkronoi nyt</string>
+  <string name="pref_sync_confirmation_title">Synkronoinnin vahvistus</string>
+  <string name="pref_sync_now_subtitle">Aloita tietojen välitön synkronointi</string>
+  <string name="pref_sync_confirmation_message">Synkronointi korvaa paikallisen kirjaston etäkirjaston kanssa. Oletko varma, että haluat jatkaa?</string>
+  <string name="pref_sync_service">Palvelu</string>
+  <string name="pref_sync_service_summ">Valitse palvelu, jonka avulla kirjastosi synkronoidaan</string>
+  <string name="pref_sync_service_category">Synkronointi</string>
+  <string name="pref_sync_automatic_category">Automaattinen Synkronointi</string>
+  <string name="pref_sync_interval">Synkronoinnin taajuus</string>
+  <string name="pref_choose_what_to_sync">Valitse mitä synkronoida</string>
+  <string name="success_reset_sync_timestamp">Viimeisin synkronoinnin aikaleiman nollaus</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Valmis kohteessa %1$s</string>
+  <string name="last_synchronization">Viimeisin Synkronointi: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Kirjaudu sisään</string>
+  <string name="google_drive_sign_in_success">Kirjauduttu onnistuneesti</string>
+  <string name="google_drive_sign_in_failed">Kirjautuminen epäonnistui</string>
+  <string name="authentication">Todennus</string>
+  <string name="pref_google_drive_purge_sync_data">Poista synkronointitiedot Google Drivesta</string>
+  <string name="google_drive_sync_data_purged">Synkronoi Google Drivesta puhdistetut tiedot</string>
+  <string name="google_drive_sync_data_not_found">Synkronointitietoja ei löytynyt Google Drivesta</string>
+  <string name="google_drive_sync_data_purge_error">Virhe tallennettaessa synkronointitietoja Google Drivesta, Yritä kirjautua sisään uudelleen.</string>
+  <string name="google_drive_login_success">Kirjautunut sisään Google Driveen</string>
+  <string name="google_drive_login_failed">Kirjautuminen Google Drivelle epäonnistui: %s</string>
+  <string name="google_drive_not_signed_in">Ei kirjautunut Google Driveen</string>
+  <string name="error_uploading_sync_data">Virhe siirrettäessä synkronointitietoja Google Driveen</string>
+  <string name="error_deleting_google_drive_lock_file">Virhe Poistettaessa Google Drive Lukitustiedostoa</string>
+  <string name="error_before_sync_gdrive">Virhe ennen synkronointia: %s</string>
+  <string name="pref_purge_confirmation_title">Tyhjennä vahvistus</string>
+  <string name="pref_purge_confirmation_message">Synkronointitietojen poistaminen poistaa kaikki synkronointitiedot Google Drivesta. Oletko varma, että haluat jatkaa?</string>
+  <string name="pref_sync_options">Luo synkronointikäynnistimet</string>
+  <string name="pref_sync_options_summ">Voidaan käyttää synkronoinnin käynnistimien asettamiseen</string>
+  <string name="sync_on_chapter_read">Synkronoi luku luetuissa</string>
+  <string name="sync_on_chapter_open">Synkronoi luku auki</string>
+  <string name="sync_on_episode_seen">Synkronointi Jakson päällä</string>
+  <string name="sync_on_episode_open">Synkronoi Jakson avauksessa</string>
+  <string name="sync_on_app_start">Synkronoi sovelluksen käynnistyessä</string>
+  <string name="sync_on_app_resume">Synkronoi sovelluksen ollessa uudelleen</string>
+  <string name="sync_library">Synkronoi kirjasto</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Päivitä lisäosa sivu päivitettäväksi.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Navbar</string>
+  <string name="pref_hide_updates_button">Näytä päivitykset nav</string>
+  <string name="pref_hide_history_button">Näytä historia navissa</string>
+  <string name="pref_show_bottom_bar_labels">Näytä aina navigointitunnisteet</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Valitse seurantaohjelma</string>
+  <string name="entry_not_tracked">Merkintää ei jäljitetä.</string>
+  <string name="fill_from_tracker">Täytä seurantapalvelusta</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr toimii. Käyttäjäagentti päivitetty. Käynnistä sovellus uudelleen</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr ei toimi. Käyttäjäagenttia ei ole päivitetty. Tarkista asetuksesi</string>
+  <string name="flare_solver_error">Virhe yhteyttä FlareSolverriin</string>
+  <string name="flare_solver_error_webview">Virhe selvitettäessä WebView:ää</string>
+  <string name="pref_enable_flare_solverr">Salli FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Käytä FlareSolverria ohittaaksesi Cloudflaren anti-bottisuojan</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">FlareSolverrin ilmentymän URL-osoite, jota käytetään esimerkiksi http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Testaa FlareSolverr ja päivitä käyttäjä agentti</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Testaa FlareSolverr päivittääksesi käyttäjän agentin. Tarvittava vain kerran; ota sitten tarvittaessa käyttöön.</string>
+  <string-array name="title_cast_quality">
+    <item>Valitse Cast Quality/Provider</item>
+    <item>Valitse Laatu</item>
+  </string-array>
+  <string name="cast_not_connected">Suora ei yhdistetty</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video lisätty jonoon</item>
+    <item>Video lisätty jonoon</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Virhe ladattaessa videota Cast</item>
+    <item>Virhe ladattaessa videota</item>
+  </string-array>
+  <string name="server_local_notification_casting">Paikallinen palvelin on käynnissä. Napauta pysäyttääksesi sen.</string>
+  <string name="server_local_notification_channel_description">Paikallisen palvelimen ilmoituskanava</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Automaattinen Vieritys</string>
+  <string name="eh_retry_all">Yritä uudelleen</string>
+  <string name="eh_boost_page">Tehosta sivu</string>
+  <string name="eh_autoscroll_help">Automaattinen vieritysohje</string>
+  <string name="eh_autoscroll_help_message">Vieritä automaattisesti seuraavalle sivulle määritetyllä ajanjaksolla. Aikaväli on määritetty sekunneissa.</string>
+  <string name="eh_autoscroll_freq_invalid">Virheellinen taajuus</string>
+  <string name="eh_retry_all_help">Yritä uudelleen kaikkea apua</string>
+  <string name="eh_retry_all_help_message">Lisää kaikki epäonnistuneet sivut uudelleen latausjonoon.</string>
+  <string name="eh_boost_page_help">Tehosta sivun ohje</string>
+  <string name="eh_boost_page_help_message">Normaalisti lataaja voi ladata vain tietyn määrän sivuja samaan aikaan. Tämä tarkoittaa, että voit odottaa sivun lataamista, mutta lataaja ei aloita sivun lataamista, ennen kuin sillä on ilmainen latauspaikka. Painamalla \'Boost page\' pakottaa lataajan aloittamaan nykyisen sivun lataamisen riippumatta siitä, onko olemassa saatavilla oleva paikka.</string>
+  <string name="eh_boost_page_invalid">Sivua ei voi lisätä (virheellinen sivu)!</string>
+  <string name="eh_boost_page_errored">Sivua ei voitu ladata. Paina sen sijaan uudelleen -painiketta!</string>
+  <string name="eh_boost_page_downloading">Tämä sivu on jo ladataan!</string>
+  <string name="eh_boost_page_downloaded">Tämä sivu on jo ladattu!</string>
+  <string name="eh_boost_boosted">Tehostettu nykyinen sivu!</string>
+  <string name="eh_boost_invalid_loader">Sivua ei voi lisätä (virheellinen sivun lataus)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Retrying %1$d failed page…</item>
+    <item quantity="other">Noudetaan %1$d epäonnistunutta sivua…</item>
+  </plurals>
+  <string name="pref_category_castserver">Lähetä Palvelin</string>
+  <string name="pref_cast_server_port">Lähetä Palvelimen Portti</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discordin Mukauttaminen</string>
+  <string name="pref_discord_custom_message">Mukautettu Viesti</string>
+  <string name="pref_discord_custom_message_summary">Mukautettu viesti, joka näytetään Discordissa</string>
+  <string name="pref_discord_show_progress">Näytä Edistyminen</string>
+  <string name="pref_discord_show_progress_summary">Näytä nykyisen jakson/luvun edistyminen</string>
+  <string name="pref_discord_show_timestamp">Näytä Aika</string>
+  <string name="pref_discord_show_timestamp_summary">Näyttö kulunut / jäljellä oleva aika</string>
+  <string name="pref_discord_show_buttons">Näytä Painikkeet</string>
+  <string name="pref_discord_show_buttons_summary">Näytä painikkeet, joilla voit ladata sovelluksen tai liittyä Discord-palvelimeen</string>
+  <string name="pref_discord_show_download_button">Näytä Latauspainike</string>
+  <string name="pref_discord_show_download_button_summary">Näyttää painikkeen, jolla sovellus ladataan</string>
+  <string name="pref_discord_show_discord_button">Näytä Discord-painike</string>
+  <string name="pref_discord_show_discord_button_summary">Näyttää painikkeen, jolla voit liittyä Discord-palvelimeen</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Soiton Jono</string>
+  <string name="action_clear_queue">Tyhjennä Jono</string>
+  <string name="cast_remove_from_queue">Poista jonosta</string>
+  <string name="move_to_top">Siirrä ylimmäksi</string>
+  <string name="move_to_position">Siirrä sijaintiin</string>
+  <string name="position">Sijainti</string>
+  <string name="select_position">Valitse Sijainti</string>
+  <string name="remove_from_queue_confirmation">Poistetaanko jonosta?</string>
+  <string name="clear_queue_confirmation">Tyhjennä Jono</string>
+  <string name="clear_queue_confirmation_message">Oletko varma, että haluat tyhjentää koko jonon?</string>
+  <string name="queue">Jono</string>
+  <string name="move_to_bottom">Siirrä alimmaksi</string>
+  <string name="action_end_session">Lopeta Cast Istunto</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Käytettävissä Olevat Laitteet</string>
+  <string name="cast_media_info">Median Tiedot</string>
+  <string name="cast_previous_video">Edellinen Video</string>
+  <string name="cast_next_video">Seuraava Video</string>
+  <string name="cast_play">Toista</string>
+  <string name="cast_pause">Tauko</string>
+  <string name="cast_rewind_30s">Rewind 30s</string>
+  <string name="cast_forward_30s">Eteenpäin 30s</string>
+  <string name="cast_volume">Tilavuus</string>
+  <string name="cast_end_session">Lopeta Cast Istunto</string>
+  <string name="empty_queue">Jono on tyhjä</string>
+  <string name="cast_end_session_message">Oletko varma, että haluat lopettaa nykyisen heitetyn istunnon?</string>
+  <string name="cast_end_session_confirm">Lopeta Istunto</string>
+  <string name="cast_end_session_cancel">Peruuta</string>
+  <string name="playback_speed">Toiston Nopeus</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Tekstityksen Asetukset</item>
+    <item>Tekstityksen Asetukset</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Tekstin Väri</string>
+  <string name="cast_subtitle_background">Tausta</string>
+  <string name="cast_subtitle_shadow">Varjo</string>
+  <string name="cast_subtitle_apply">Käytä</string>
+  <string name="cast_subtitle_reset">Palauta oletukset</string>
+  <string name="cast_subtitle_shadow_None">Ei Mitään</string>
+  <string name="cast_subtitle_shadow_Light">Vaalea</string>
+  <string name="cast_subtitle_shadow_Medium">Keskitaso</string>
+  <string name="cast_subtitle_shadow_Strong">Vahva</string>
+  <string name="cast_subtitle_preview">Esikatsele Tekstiä -</string>
+  <string name="cast_tracks">Valitse Tekstitys/Ääniraita</string>
+  <string name="cast_volume_down">Taltio Alas</string>
+  <string name="cast_volume_up">Äänenvoimakkuus Ylös</string>
+  <string name="cast_subtitles">Tekstitykset</string>
+  <string name="cast_audio_tracks">Ääni Kappaleet</string>
+  <string name="cast_no_subtitles">Ei Tekstityksiä</string>
+  <string name="cast_close">Sulje</string>
+  <string name="cast_subtitle_font_family">Kirjasinperhe</string>
+  <string name="cast_subtitle_border_style">Reunuksen Tyyli</string>
+  <string name="cast_subtitle_border_none">Ei Mitään</string>
+  <string name="cast_subtitle_border_outline">Ääriviiva</string>
+  <string name="cast_subtitle_border_drop_shadow">Pudota Varjo</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Pehmeä Pudota Varjo</string>
+  <string name="cast_subtitle_border_raised">Nostettu</string>
+  <string name="cast_subtitle_border_depressed">Masennettu</string>
+  <string name="cast_connection_error">Virhe Yhteydessä</string>
+  <string name="discord_accounts">Discordin Tilit</string>
+  <string name="active_account">Aktiivinen Tili</string>
+  <string name="no_accounts_found">Tilejä ei löytynyt</string>
+  <string name="login_failed">Kirjautuminen epäonnistui</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama mukava ruudukko</string>
+  <string name="action_bulk_select">Bulk valintatila</string>
+  <string name="action_move_up">Siirrä Ylös</string>
+  <string name="action_move_down">Siirrä Alas</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Liian monta lähdettä rehussa, ei voi lisätä enemmän kuin 20</string>
+  <string name="action_sort_feed">Lajittele syötteet</string>
+  <string name="sort_feed_confirmation">Haluatko lajitella syötteet aakkosellisesti?</string>
+  <string name="saved_searches_feeds">Tallennetut Haut &amp; Syötteet</string>
+  <string name="saved_searches_add_feed">Tallennetut haut (pidä lisätäksesi syötteeseen)</string>
+  <string name="pref_hide_feed">Piilota syötteen välilehti</string>
+  <string name="pref_feed_position">Syötteen välilehden sijainti</string>
+  <string name="pref_feed_position_summery">Haluatko että syöte välilehti on ensimmäinen välilehti selailussa? Tämä tekee siitä oletusvälilehden, kun avaat selailun, ei suositella, jos olet datassa tai mitatussa verkossa</string>
+  <string name="feed">Syöte</string>
+  <string name="feed_delete">Poista syötteen kohde?</string>
+  <string name="feed_tab_empty">Sinulla ei ole mitään lähteitä syötteessäsi, siirry yläoikealle lisätäksesi yhden lähteen</string>
+  <string name="feed_add">Lisää %1$s syötteeseen?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Tallennetut Haut</string>
+  <string name="save_search">Tallennetaanko nykyinen haku?</string>
+  <string name="save_search_hint">Minun hakuni nimi</string>
+  <string name="save_search_failed_to_load">Tallennetun haun lataaminen epäonnistui!</string>
+  <string name="save_search_failed_to_load_message">Tapahtui virhe ladattaessa tallennettuja hakuja.</string>
+  <string name="save_search_delete">Poistetaanko tallennettu haku?</string>
+  <string name="save_search_delete_message">Oletko varma, että haluat poistaa tallennetun hakukyselyn: \'%1$s\'?</string>
+  <string name="save_search_invalid">Tallennetut hakutulokset eivät kelpaa, suodattimet ovat muuttuneet</string>
+  <string name="save_search_invalid_name">Virheellinen tallennettu hakunimi</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Lähdekategorioita ei ole saatavilla</string>
+  <string name="invalid_category_name">Kategorian nimi ei kelpaa</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Ehdotukset</string>
+  <string name="pref_source_related_mangas_summary">Näytä lähdesivuston ehdotukset katseltaessa merkintää</string>
+  <string name="related_mangas_website_suggestions">Verkkosivujen Ehdotukset</string>
+  <string name="related_mangas_more">Enemmän näiden...</string>
+  <string name="saved_searches_delete">Tallennetut haut (poistettavaksi)</string>
+  <string name="pref_expand_related_animes">Laajenna Ehdotukset</string>
+  <string name="pref_expand_related_animes_summary">Jos pois päältä, Ehdotukset eivät lataa automaattisesti &amp; näytä laajennettu</string>
+  <string name="put_related_animes_in_overflow">Ehdotukset ylivuoto</string>
+  <string name="put_related_animes_in_overflow_summary">Laita ehdotuspainike ylivuotovalikkoon sen sijaan, että se olisi merkitty sivulle</string>
+  <string name="pref_show_home_on_related_animes">Koti ehdotuksista</string>
+  <string name="pref_show_home_on_related_animes_summary">Näytä kuvake selatessa ehdotuksia navigoidaksesi suoraan takaisin kotiin</string>
+  <string name="pref_source_related_animes">Ehdotukset</string>
+  <string name="pref_source_related_animes_summary">Näytä lähdesivuston ehdotukset katseltaessa merkintää</string>
+  <string name="pref_source_navigation">Korvaa uusin painike</string>
+  <string name="pref_source_navigation_summery">Korvaa uusin painike mukautetulla selausnäkymällä, joka sisältää sekä uusimman että selailun</string>
+</resources>

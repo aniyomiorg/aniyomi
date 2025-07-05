@@ -6,12 +6,16 @@ import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALAnime
+import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALAnimeMetadata
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALListAnimeItem
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALListAnimeItemStatus
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALListMangaItem
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALListMangaItemStatus
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALManga
+import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALMangaMetadata
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALOAuth
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALSearchResult
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALUser
@@ -320,6 +324,74 @@ class MyAnimeListApi(
         }
     }
 
+    suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata? {
+        return withIOContext {
+            val url = "$BASE_API_URL/anime".toUri().buildUpon()
+                .appendPath(track.remoteId.toString())
+                .appendQueryParameter(
+                    "fields",
+                    "id,title,synopsis,main_picture,studios{name}",
+                )
+                .build()
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<MALAnimeMetadata>()
+                    .let { it ->
+                        TrackAnimeMetadata(
+                            remoteId = it.id,
+                            title = it.title,
+                            thumbnailUrl = it.covers.large.ifEmpty { null } ?: it.covers.medium,
+                            description = it.synopsis,
+                            authors = it.studios
+                                .map { it.name.trim() }
+                                .joinToString(separator = ", ")
+                                .ifEmpty { null },
+                            artists = it.studios
+                                .map { it.name.trim() }
+                                .joinToString(separator = ", ")
+                                .ifEmpty { null },
+                        )
+                    }
+            }
+        }
+    }
+
+    suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata? {
+        return withIOContext {
+            val url = "$BASE_API_URL/manga".toUri().buildUpon()
+                .appendPath(track.remoteId.toString())
+                .appendQueryParameter(
+                    "fields",
+                    "id,title,synopsis,main_picture,authors{first_name,last_name}",
+                )
+                .build()
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<MALMangaMetadata>()
+                    .let {
+                        TrackMangaMetadata(
+                            remoteId = it.id,
+                            title = it.title,
+                            thumbnailUrl = it.covers.large.ifEmpty { null } ?: it.covers.medium,
+                            description = it.synopsis,
+                            authors = it.authors
+                                .filter { it.role == "Story" || it.role == "Story & Art" }
+                                .map { "${it.node.firstName} ${it.node.lastName}".trim() }
+                                .joinToString(separator = ", ")
+                                .ifEmpty { null },
+                            artists = it.authors
+                                .filter { it.role == "Art" || it.role == "Story & Art" }
+                                .map { "${it.node.firstName} ${it.node.lastName}".trim() }
+                                .joinToString(separator = ", ")
+                                .ifEmpty { null },
+                        )
+                    }
+            }
+        }
+    }
+
     private suspend fun getListPage(offset: Int): MALUserSearchResult {
         return withIOContext {
             val urlBuilder = "$BASE_API_URL/users/@me/mangalist".toUri().buildUpon()
@@ -380,7 +452,7 @@ class MyAnimeListApi(
     }
 
     companion object {
-        private const val CLIENT_ID = "686b980ff4240fccce7f6a654cea07ce"
+        private const val CLIENT_ID = "18e5087eaeef557833a075a4d30d2afe"
 
         private const val BASE_OAUTH_URL = "https://myanimelist.net/v1/oauth2"
         private const val BASE_API_URL = "https://api.myanimelist.net/v2"

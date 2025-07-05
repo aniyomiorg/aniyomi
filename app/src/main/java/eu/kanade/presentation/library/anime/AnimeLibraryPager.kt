@@ -117,6 +117,21 @@ fun AnimeLibraryPager(
                     onGlobalSearchClicked = onGlobalSearchClicked,
                 )
             }
+            // KMK -->
+            LibraryDisplayMode.ComfortableGridPanorama -> {
+                AnimeLibraryComfortableGrid(
+                    items = library,
+                    columns = columns,
+                    contentPadding = contentPadding,
+                    selection = selectedAnime,
+                    onClick = onClickAnime,
+                    onLongClick = onLongClickAnime,
+                    onClickContinueWatching = onClickContinueWatching,
+                    searchQuery = searchQuery,
+                    onGlobalSearchClicked = onGlobalSearchClicked,
+                )
+            }
+            // KMK <--
         }
     }
 }

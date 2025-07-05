@@ -22,6 +22,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import mihon.domain.extensionrepo.anime.interactor.CreateAnimeExtensionRepo.Companion.ANIMETAIL_SIGNATURE
+import mihon.domain.extensionrepo.anime.interactor.GetAnimeExtensionRepo
+import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.core.common.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.io.File
@@ -34,6 +37,11 @@ internal object AnimeExtensionLoader {
 
     private val preferences: SourcePreferences by injectLazy()
     private val trustExtension: TrustAnimeExtension by injectLazy()
+
+    // KMK -->
+    private val getExtensionRepo: GetAnimeExtensionRepo by injectLazy()
+    // KMK <--
+
     private val loadNsfwSource by lazy {
         preferences.showNsfwSource().get()
     }
@@ -44,6 +52,7 @@ internal object AnimeExtensionLoader {
     private const val METADATA_NSFW = "tachiyomi.animeextension.nsfw"
     private const val METADATA_HAS_README = "tachiyomi.animeextension.hasReadme"
     private const val METADATA_HAS_CHANGELOG = "tachiyomi.animeextension.hasChangelog"
+    private const val METADATA_TORRENT = "tachiyomi.animeextension.torrent"
     const val LIB_VERSION_MIN = 12
     const val LIB_VERSION_MAX = 15
 
@@ -166,8 +175,19 @@ internal object AnimeExtensionLoader {
 
         // Load each extension concurrently and wait for completion
         return runBlocking {
+            // KMK -->
+            val extRepos = getExtensionRepo.getAll()
+            // KMK <--
             val deferred = extPkgs.map {
-                async { loadExtension(context, it) }
+                async {
+                    loadExtension(
+                        context,
+                        it,
+                        // KMK -->
+                        extRepos,
+                        // KMK <--
+                    )
+                }
             }
             deferred.awaitAll()
         }
@@ -234,14 +254,23 @@ internal object AnimeExtensionLoader {
      * @param context The application context.
      * @param extensionInfo The extension to load.
      */
-    private suspend fun loadExtension(context: Context, extensionInfo: AnimeExtensionInfo): AnimeLoadResult {
+    private suspend fun loadExtension(
+        context: Context,
+        extensionInfo: AnimeExtensionInfo,
+        // KMK -->
+        extRepos: List<ExtensionRepo>? = null,
+        // KMK <--
+    ): AnimeLoadResult {
+        // KMK -->
+        val repos = extRepos ?: getExtensionRepo.getAll()
+        // KMK <--
         val pkgManager = context.packageManager
 
         val pkgInfo = extensionInfo.packageInfo
         val appInfo = pkgInfo.applicationInfo!!
         val pkgName = pkgInfo.packageName
 
-        val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Aniyomi: ")
+        val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Animetail: ")
         val versionName = pkgInfo.versionName
         val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
 
@@ -272,6 +301,14 @@ internal object AnimeExtensionLoader {
                 versionCode,
                 libVersion,
                 signatures.last(),
+                // KMK -->
+                repoName = when {
+                    isOfficiallySigned(signatures) -> "Animetail"
+                    else -> repos.firstOrNull { repo ->
+                        signatures.all { it == repo.signingKeyFingerprint }
+                    }?.name
+                },
+                // KMK <--
             )
             logcat(LogPriority.WARN, message = { "Extension $pkgName isn't trusted" })
             return AnimeLoadResult.Untrusted(extension)
@@ -282,6 +319,8 @@ internal object AnimeExtensionLoader {
             logcat(LogPriority.WARN) { "NSFW extension $pkgName not allowed" }
             return AnimeLoadResult.Error
         }
+
+        val isTorrent = appInfo.metaData.getInt(METADATA_TORRENT) == 1
 
         val classLoader = try {
             ChildFirstPathClassLoader(appInfo.sourceDir, null, context.classLoader)
@@ -350,12 +389,26 @@ internal object AnimeExtensionLoader {
             libVersion = libVersion,
             lang = lang,
             isNsfw = isNsfw,
+            isTorrent = isTorrent,
             sources = sources,
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
             icon = appInfo.loadIcon(pkgManager),
             isShared = extensionInfo.isShared,
+            // KMK -->
+            signatureHash = signatures.last(),
+            repoName = when {
+                isOfficiallySigned(signatures) -> "Animetail"
+                else -> repos.firstOrNull { repo ->
+                    signatures.all { it == repo.signingKeyFingerprint }
+                }?.name
+            },
+            // KMK <--
         )
         return AnimeLoadResult.Success(extension)
+    }
+
+    private fun isOfficiallySigned(signatures: List<String>): Boolean {
+        return signatures.all { it == ANIMETAIL_SIGNATURE }
     }
 
     /**

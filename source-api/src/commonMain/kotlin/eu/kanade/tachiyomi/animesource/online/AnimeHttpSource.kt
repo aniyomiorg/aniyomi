@@ -13,6 +13,8 @@ import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.network.asObservableSuccess
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -246,6 +248,59 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param response the response from the site.
      */
     protected abstract fun animeDetailsParse(response: Response): SAnime
+
+    // KMK -->
+    /**
+     * Whether parsing related animes in anime page or extension provide custom related animes request.
+     *
+     * @default true
+     * @since komikku/extensions-lib 1.6
+     */
+    override val supportsRelatedAnimes: Boolean get() = true
+    override val supportsRelatedMangas: Boolean get() = supportsRelatedAnimes
+
+    /**
+     * Fetch related animes for a anime from source/site.
+     * Normally it's not needed to override this method.
+     *
+     * @since komikku/extensions-lib 1.6
+     * @param anime the current anime to get related animes.
+     * @return the related animes for the current anime.
+     * @throws UnsupportedOperationException if a source doesn't support related animes.
+     */
+    override suspend fun fetchRelatedAnimeList(anime: SAnime): List<SAnime> = coroutineScope {
+        async {
+            client.newCall(relatedAnimeListRequest(anime))
+                .execute()
+                .let { response ->
+                    relatedAnimeListParse(response)
+                }
+        }.await()
+    }
+    override suspend fun fetchRelatedMangaList(manga: SAnime) = fetchRelatedAnimeList(manga)
+
+    /**
+     * Returns the request for get related anime list. Override only if it's needed to override
+     * the url, send different headers or request method like POST.
+     * Normally it's not needed to override this method.
+     *
+     * @since komikku/extensions-lib 1.6
+     * @param anime the anime to look for related animes.
+     */
+    protected open fun relatedAnimeListRequest(anime: SAnime): Request {
+        return animeDetailsRequest(anime)
+    }
+    protected open fun relatedMangaListRequest(manga: SAnime) = relatedAnimeListRequest(manga)
+
+    /**
+     * Parses the response from the site and returns a list of related animes.
+     *
+     * @since komikku/extensions-lib 1.6
+     * @param response the response from the site.
+     */
+    protected open fun relatedAnimeListParse(response: Response): List<SAnime> = popularAnimeParse(response).animes
+    protected open fun relatedMangaListParse(response: Response) = relatedAnimeListParse(response)
+    // KMK <--
 
     /**
      * Get all the available episodes for an anime.

@@ -20,4 +20,8 @@ enum class EntryScreenItem {
     ITEM_HEADER,
     ITEM,
     AIRING_TIME,
+
+    // KMK -->
+    RELATED_ANIMES,
+    // KMK <--
 }

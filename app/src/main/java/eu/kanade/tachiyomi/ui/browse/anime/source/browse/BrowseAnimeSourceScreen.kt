@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -42,6 +43,8 @@ import eu.kanade.presentation.browse.anime.BrowseAnimeSourceContent
 import eu.kanade.presentation.browse.anime.MissingSourceScreen
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceToolbar
 import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
+import eu.kanade.presentation.browse.anime.components.SavedSearchCreateDialog
+import eu.kanade.presentation.browse.anime.components.SavedSearchDeleteDialog
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.util.AssistContentScreen
@@ -56,6 +59,7 @@ import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -63,6 +67,7 @@ import mihon.presentation.core.util.collectAsLazyPagingItems
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
@@ -72,6 +77,10 @@ import tachiyomi.source.local.entries.anime.LocalAnimeSource
 data class BrowseAnimeSourceScreen(
     val sourceId: Long,
     private val listingQuery: String?,
+    // SY -->
+    private val filtersJson: String? = null,
+    private val savedSearch: Long? = null,
+    // SY <--
 ) : Screen(), AssistContentScreen {
 
     private var assistUrl: String? = null
@@ -85,25 +94,41 @@ data class BrowseAnimeSourceScreen(
             return
         }
 
-        val screenModel = rememberScreenModel { BrowseAnimeSourceScreenModel(sourceId, listingQuery) }
+        val screenModel = rememberScreenModel {
+            BrowseAnimeSourceScreenModel(
+                sourceId = sourceId,
+                listingQuery = listingQuery,
+                // SY -->
+                filtersJson = filtersJson,
+                savedSearch = savedSearch,
+                // SY <--
+            )
+        }
         val state by screenModel.state.collectAsState()
 
         val navigator = LocalNavigator.currentOrThrow
         val navigateUp: () -> Unit = {
             when {
-                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(
-                    null,
-                )
+                !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(null)
+
                 else -> navigator.pop()
             }
         }
 
-        if (screenModel.source is StubAnimeSource) {
-            MissingSourceScreen(
-                source = screenModel.source,
-                navigateUp = navigateUp,
-            )
-            return
+        // SY -->
+        val context = LocalContext.current
+        // SY <--
+
+        // KMK -->
+        screenModel.source.let {
+            // KMK <--
+            if (it is StubAnimeSource) {
+                MissingSourceScreen(
+                    source = it,
+                    navigateUp = navigateUp,
+                )
+                return
+            }
         }
 
         val scope = rememberCoroutineScope()
@@ -194,9 +219,12 @@ data class BrowseAnimeSourceScreen(
                                 },
                             )
                         }
-                        if (state.filters.isNotEmpty()) {
+                        if (state.filterable) {
                             FilterChip(
-                                selected = state.listing is Listing.Search,
+                                selected = state.listing is Listing.Search &&
+                                    // KMK -->
+                                    (state.listing as Listing.Search).savedSearchId == null,
+                                // KMK <--
                                 onClick = screenModel::openFilterSheet,
                                 leadingIcon = {
                                     Icon(
@@ -207,10 +235,36 @@ data class BrowseAnimeSourceScreen(
                                     )
                                 },
                                 label = {
-                                    Text(text = stringResource(MR.strings.action_filter))
+                                    // SY -->
+                                    Text(
+                                        text = if (state.filters.isNotEmpty()) {
+                                            stringResource(MR.strings.action_filter)
+                                        } else {
+                                            stringResource(MR.strings.action_search)
+                                        },
+                                    )
+                                    // SY <--
                                 },
                             )
                         }
+                        // KMK -->
+                        state.savedSearches.forEach { savedSearch ->
+                            FilterChip(
+                                selected = state.listing is Listing.Search &&
+                                    (state.listing as Listing.Search).savedSearchId == savedSearch.id,
+                                onClick = {
+                                    screenModel.onSavedSearch(savedSearch) {
+                                        context.toast(it)
+                                    }
+                                },
+                                label = {
+                                    Text(
+                                        text = savedSearch.name,
+                                    )
+                                },
+                            )
+                        }
+                        // KMK <--
                     }
 
                     HorizontalDivider()
@@ -261,6 +315,20 @@ data class BrowseAnimeSourceScreen(
                     onReset = screenModel::resetFilters,
                     onFilter = { screenModel.search(filters = state.filters) },
                     onUpdate = screenModel::setFilters,
+                    // SY -->
+                    startExpanded = screenModel.startExpanded,
+                    onSave = screenModel::onSaveSearch,
+                    savedSearches = state.savedSearches,
+                    onSavedSearch = { search ->
+                        screenModel.onSavedSearch(search) {
+                            context.toast(it)
+                        }
+                    },
+                    onSavedSearchPress = screenModel::onSavedSearchPress,
+                    // KMK -->
+                    onSavedSearchPressDesc = stringResource(TLMR.strings.saved_searches_delete),
+                    // KMK <--
+                    // SY <--
                 )
             }
             is BrowseAnimeSourceScreenModel.Dialog.AddDuplicateAnime -> {
@@ -308,6 +376,18 @@ data class BrowseAnimeSourceScreen(
                     },
                 )
             }
+            is BrowseAnimeSourceScreenModel.Dialog.CreateSavedSearch -> SavedSearchCreateDialog(
+                onDismissRequest = onDismissRequest,
+                currentSavedSearches = dialog.currentSavedSearches,
+                saveSearch = screenModel::saveSearch,
+            )
+            is BrowseAnimeSourceScreenModel.Dialog.DeleteSavedSearch -> SavedSearchDeleteDialog(
+                onDismissRequest = onDismissRequest,
+                name = dialog.name,
+                deleteSavedSearch = {
+                    screenModel.deleteSearch(dialog.idToDelete)
+                },
+            )
             else -> {}
         }
 

@@ -1,3 +1,4 @@
+
 package tachiyomi.domain.release.interactor
 
 import tachiyomi.core.common.preference.Preference

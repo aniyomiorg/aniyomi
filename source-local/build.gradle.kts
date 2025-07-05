@@ -13,7 +13,9 @@ kotlin {
                 implementation(projects.sourceApi)
                 api(projects.i18n)
                 api(projects.i18nAniyomi)
-
+                // TAIL -->
+                api(projects.i18nTail)
+                // TAIL <--
                 implementation(libs.unifile)
             }
         }

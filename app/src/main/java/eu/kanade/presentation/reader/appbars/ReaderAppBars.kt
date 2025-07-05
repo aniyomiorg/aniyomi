@@ -35,6 +35,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 private val animationSpec = tween<IntOffset>(200)
 
 @Composable
+@Suppress("LongMethod")
 fun ReaderAppBars(
     visible: Boolean,
     fullscreen: Boolean,
@@ -65,6 +66,24 @@ fun ReaderAppBars(
     cropEnabled: Boolean,
     onClickCropBorder: () -> Unit,
     onClickSettings: () -> Unit,
+    // SY -->
+    isExhToolsVisible: Boolean,
+    onSetExhUtilsVisibility: (Boolean) -> Unit,
+    isAutoScroll: Boolean,
+    isAutoScrollEnabled: Boolean,
+    onToggleAutoscroll: (Boolean) -> Unit,
+    autoScrollFrequency: String,
+    onSetAutoScrollFrequency: (String) -> Unit,
+    onClickAutoScrollHelp: () -> Unit,
+    onClickRetryAll: () -> Unit,
+    onClickRetryAllHelp: () -> Unit,
+    currentPageText: String,
+    enabledButtons: Set<String>,
+    dualPageSplitEnabled: Boolean,
+    doublePages: Boolean,
+    onClickPageLayout: () -> Unit,
+    onClickShiftPage: () -> Unit,
+    // SY <--
 ) {
     val isRtl = viewer is R2LPagerViewer
     val backgroundColor = MaterialTheme.colorScheme
@@ -92,63 +111,80 @@ fun ReaderAppBars(
                 animationSpec = animationSpec,
             ),
         ) {
-            AppBar(
-                modifier = modifierWithInsetsPadding
-                    .clickable(onClick = onClickTopAppBar),
-                backgroundColor = backgroundColor,
-                title = mangaTitle,
-                subtitle = chapterTitle,
-                navigateUp = navigateUp,
-                actions = {
-                    AppBarActions(
-                        actions = persistentListOf<AppBar.AppBarAction>().builder()
-                            .apply {
-                                add(
-                                    AppBar.Action(
-                                        title = stringResource(
-                                            if (bookmarked) {
-                                                MR.strings.action_remove_bookmark
+            // SY -->
+            Column(modifier = modifierWithInsetsPadding.clickable(onClick = onClickTopAppBar)) {
+                AppBar(
+                    modifier = Modifier,
+                    backgroundColor = backgroundColor,
+                    title = mangaTitle,
+                    subtitle = chapterTitle,
+                    navigateUp = navigateUp,
+                    actions = {
+                        AppBarActions(
+                            actions = persistentListOf<AppBar.AppBarAction>().builder()
+                                .apply {
+                                    add(
+                                        AppBar.Action(
+                                            title = stringResource(
+                                                if (bookmarked) {
+                                                    MR.strings.action_remove_bookmark
+                                                } else {
+                                                    MR.strings.action_bookmark
+                                                },
+                                            ),
+                                            icon = if (bookmarked) {
+                                                Icons.Outlined.Bookmark
                                             } else {
-                                                MR.strings.action_bookmark
+                                                Icons.Outlined.BookmarkBorder
                                             },
-                                        ),
-                                        icon = if (bookmarked) {
-                                            Icons.Outlined.Bookmark
-                                        } else {
-                                            Icons.Outlined.BookmarkBorder
-                                        },
-                                        onClick = onToggleBookmarked,
-                                    ),
-                                )
-                                onOpenInWebView?.let {
-                                    add(
-                                        AppBar.OverflowAction(
-                                            title = stringResource(MR.strings.action_open_in_web_view),
-                                            onClick = it,
+                                            onClick = onToggleBookmarked,
                                         ),
                                     )
+                                    onOpenInWebView?.let {
+                                        add(
+                                            AppBar.OverflowAction(
+                                                title = stringResource(MR.strings.action_open_in_web_view),
+                                                onClick = it,
+                                            ),
+                                        )
+                                    }
+                                    onOpenInBrowser?.let {
+                                        add(
+                                            AppBar.OverflowAction(
+                                                title = stringResource(MR.strings.action_open_in_browser),
+                                                onClick = it,
+                                            ),
+                                        )
+                                    }
+                                    onShare?.let {
+                                        add(
+                                            AppBar.OverflowAction(
+                                                title = stringResource(MR.strings.action_share),
+                                                onClick = it,
+                                            ),
+                                        )
+                                    }
                                 }
-                                onOpenInBrowser?.let {
-                                    add(
-                                        AppBar.OverflowAction(
-                                            title = stringResource(MR.strings.action_open_in_browser),
-                                            onClick = it,
-                                        ),
-                                    )
-                                }
-                                onShare?.let {
-                                    add(
-                                        AppBar.OverflowAction(
-                                            title = stringResource(MR.strings.action_share),
-                                            onClick = it,
-                                        ),
-                                    )
-                                }
-                            }
-                            .build(),
-                    )
-                },
-            )
+                                .build(),
+                        )
+                    },
+                )
+                // SY -->
+                ExhUtils(
+                    isVisible = isExhToolsVisible,
+                    onSetExhUtilsVisibility = onSetExhUtilsVisibility,
+                    backgroundColor = backgroundColor,
+                    isAutoScroll = isAutoScroll,
+                    isAutoScrollEnabled = isAutoScrollEnabled,
+                    onToggleAutoscroll = onToggleAutoscroll,
+                    autoScrollFrequency = autoScrollFrequency,
+                    onSetAutoScrollFrequency = onSetAutoScrollFrequency,
+                    onClickAutoScrollHelp = onClickAutoScrollHelp,
+                    onClickRetryAll = onClickRetryAll,
+                    onClickRetryAllHelp = onClickRetryAllHelp,
+                )
+                // SY <--
+            } // SY <--
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -177,8 +213,12 @@ fun ReaderAppBars(
                     currentPage = currentPage,
                     totalPages = totalPages,
                     onPageIndexChange = onPageIndexChange,
+                    currentPageText = currentPageText,
                 )
                 BottomReaderBar(
+                    // SY -->
+                    enabledButtons = enabledButtons,
+                    // SY <--
                     backgroundColor = backgroundColor,
                     readingMode = readingMode,
                     onClickReadingMode = onClickReadingMode,
@@ -187,6 +227,13 @@ fun ReaderAppBars(
                     cropEnabled = cropEnabled,
                     onClickCropBorder = onClickCropBorder,
                     onClickSettings = onClickSettings,
+                    // SY -->
+                    dualPageSplitEnabled = dualPageSplitEnabled,
+                    doublePages = doublePages,
+                    onClickWebView = onOpenInWebView,
+                    onClickShare = onShare,
+                    onClickPageLayout = onClickPageLayout,
+                    onClickShiftPage = onClickShiftPage,
                 )
             }
         }

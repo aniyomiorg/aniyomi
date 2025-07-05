@@ -193,32 +193,47 @@ class MangaExtensionManager(
     private fun updatedInstalledExtensionsStatuses(
         availableExtensions: List<MangaExtension.Available>,
     ) {
-        if (availableExtensions.isEmpty()) {
-            preferences.mangaExtensionUpdatesCount().set(0)
-            return
-        }
+        // KMK -->
+        val noExtAvailable = availableExtensions.isEmpty()
+        // KMK <--
 
         val installedExtensionsMap = installedExtensionsMapFlow.value.toMutableMap()
         var changed = false
 
         for ((pkgName, extension) in installedExtensionsMap) {
-            val availableExt = availableExtensions.find { it.pkgName == pkgName }
+            val availableExt = availableExtensions.find {
+                // KMK -->
+                it.signatureHash == extension.signatureHash &&
+                    // KMK <--
+                    it.pkgName == pkgName
+            }
 
-            if (availableExt == null && !extension.isObsolete) {
-                installedExtensionsMap[pkgName] = extension.copy(isObsolete = true)
-                changed = true
-            } else if (availableExt != null) {
+            // KMK -->
+            if (availableExt == null) {
+                // Clear hasUpdate & set isObsolete
+                val isObsolete = !noExtAvailable && !extension.isObsolete
+                // KMK: installedExtensionsMap[pkgName] = extension.copy(isObsolete = true)
+                installedExtensionsMap[pkgName] = extension.copy(
+                    // KMK -->
+                    isObsolete = isObsolete,
+                    hasUpdate = false,
+                    repoUrl = null,
+                    repoName = extension.repoName,
+                    // KMK <--
+                )
+                // KMK: changed = true
+                changed = changed || isObsolete || noExtAvailable && (extension.isObsolete || extension.hasUpdate)
+                // KMK <--
+            } else {
                 val hasUpdate = extension.updateExists(availableExt)
-                if (extension.hasUpdate != hasUpdate) {
-                    installedExtensionsMap[pkgName] = extension.copy(
-                        hasUpdate = hasUpdate,
-                        repoUrl = availableExt.repoUrl,
-                    )
-                } else {
-                    installedExtensionsMap[pkgName] = extension.copy(
-                        repoUrl = availableExt.repoUrl,
-                    )
-                }
+                installedExtensionsMap[pkgName] = extension.copy(
+                    hasUpdate = hasUpdate,
+                    repoUrl = availableExt.repoUrl,
+                    // KMK -->
+                    isObsolete = false,
+                    repoName = extension.repoName ?: availableExt.repoName,
+                    // KMK <--
+                )
                 changed = true
             }
         }

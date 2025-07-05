@@ -68,6 +68,9 @@ fun AnimeEpisodeListItem(
     onClick: () -> Unit,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
     onEpisodeSwipe: (LibraryPreferences.EpisodeSwipeAction) -> Unit,
+    // AM (FILE_SIZE) -->
+    fileSize: Long?,
+    // <-- AM (FILE_SIZE)
     modifier: Modifier = Modifier,
 ) {
     val start = getSwipeAction(
@@ -182,6 +185,9 @@ fun AnimeEpisodeListItem(
                 downloadStateProvider = downloadStateProvider,
                 downloadProgressProvider = downloadProgressProvider,
                 onClick = { onDownloadClick?.invoke(it) },
+                // AM (FILE_SIZE) -->
+                fileSize = fileSize,
+                // <-- AM (FILE_SIZE)
             )
         }
     }

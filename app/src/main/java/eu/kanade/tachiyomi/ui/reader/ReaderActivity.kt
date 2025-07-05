@@ -7,6 +7,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
@@ -16,6 +17,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.View
 import android.view.View.LAYER_TYPE_HARDWARE
 import android.view.WindowManager
 import android.widget.Toast
@@ -25,6 +27,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,7 +40,10 @@ import androidx.core.transition.doOnEnd
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewModelScope
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
@@ -45,6 +51,7 @@ import com.hippo.unifile.UniFile
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.core.util.ifMangaSourcesLoaded
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.connections.service.ConnectionsPreferences
 import eu.kanade.presentation.reader.DisplayRefreshHost
 import eu.kanade.presentation.reader.OrientationSelectDialog
 import eu.kanade.presentation.reader.PageIndicatorText
@@ -56,9 +63,13 @@ import eu.kanade.presentation.reader.settings.ReaderSettingsDialog
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.common.Constants
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
+import eu.kanade.tachiyomi.data.connections.discord.DiscordRPCService
+import eu.kanade.tachiyomi.data.connections.discord.ReaderData
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.ReaderActivityBinding
+import eu.kanade.tachiyomi.source.manga.isNsfw
+import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -73,6 +84,9 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsScreenModel
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerViewer
+import eu.kanade.tachiyomi.ui.reader.viewer.webtoon.WebtoonViewer
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.hasDisplayCutout
 import eu.kanade.tachiyomi.util.system.isNightMode
@@ -80,37 +94,59 @@ import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableSet
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.common.i18n.pluralStringResource
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.lang.launchUI
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.ByteArrayOutputStream
+import kotlin.time.Duration.Companion.seconds
 
+@Suppress("LargeClass")
 class ReaderActivity : BaseActivity() {
 
     companion object {
-        fun newIntent(context: Context, mangaId: Long?, chapterId: Long?): Intent {
+        fun newIntent(
+            context: Context,
+            mangaId: Long?,
+            chapterId: Long?,
+            page: Int? = null,
+        ): Intent {
             return Intent(context, ReaderActivity::class.java).apply {
                 putExtra("manga", mangaId)
                 putExtra("chapter", chapterId)
+                // SY -->
+                putExtra("page", page)
+                // SY <--
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+
+        // AM (CONNECTIONS) -->
+        private val connectionsPreferences: ConnectionsPreferences = Injekt.get()
+        // <-- AM (CONNECTIONS)
     }
 
     private val readerPreferences = Injekt.get<ReaderPreferences>()
@@ -163,6 +199,9 @@ class ReaderActivity : BaseActivity() {
         if (viewModel.needsInit()) {
             val manga = intent.extras?.getLong("manga", -1) ?: -1L
             val chapter = intent.extras?.getLong("chapter", -1) ?: -1L
+            // SY -->
+            val page = intent.extras?.getInt("page", -1).takeUnless { it == -1 }
+            // SY <--
             if (manga == -1L || chapter == -1L) {
                 finish()
                 return
@@ -174,7 +213,7 @@ class ReaderActivity : BaseActivity() {
             )
 
             lifecycleScope.launchNonCancellable {
-                val initResult = viewModel.init(manga, chapter)
+                val initResult = viewModel.init(manga, chapter, page)
                 if (!initResult.getOrDefault(false)) {
                     val exception = initResult.exceptionOrNull() ?: IllegalStateException(
                         "Unknown err",
@@ -231,7 +270,10 @@ class ReaderActivity : BaseActivity() {
                         onSaveImageResult(event.result)
                     }
                     is ReaderViewModel.Event.ShareImage -> {
-                        onShareImageResult(event.uri, event.page)
+                        onShareImageResult(event.uri, event.page, event.secondPage)
+                    }
+                    is ReaderViewModel.Event.CopyImage -> {
+                        onCopyImageResult(event.uri)
                     }
                     is ReaderViewModel.Event.CopyImage -> {
                         onCopyImageResult(event.uri)
@@ -242,6 +284,11 @@ class ReaderActivity : BaseActivity() {
                 }
             }
             .launchIn(lifecycleScope)
+        viewModel.viewModelScope.launchUI {
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingReader = false)
+            // <-- AM (DISCORD)
+        }
     }
 
     /**
@@ -253,6 +300,9 @@ class ReaderActivity : BaseActivity() {
         config = null
         menuToggleToast?.cancel()
         readingModeToast?.cancel()
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = true)
+        // <-- AM (DISCORD)
     }
 
     override fun onPause() {
@@ -343,7 +393,9 @@ class ReaderActivity : BaseActivity() {
 
             if (!state.menuVisible && showPageNumber) {
                 PageIndicatorText(
-                    currentPage = state.currentPage,
+                    // SY -->
+                    currentPage = state.currentPageText,
+                    // SY <--
                     totalPages = state.totalPages,
                 )
             }
@@ -379,6 +431,11 @@ class ReaderActivity : BaseActivity() {
             val cropBorderWebtoon by readerPreferences.cropBordersWebtoon().collectAsState()
             val isPagerType = ReadingMode.isPagerType(viewModel.getMangaReadingMode())
             val cropEnabled = if (isPagerType) cropBorderPaged else cropBorderWebtoon
+            // SY -->
+            val readerBottomButtons by readerPreferences.readerBottomButtons().changes().map { it.toImmutableSet() }
+                .collectAsState(persistentSetOf())
+            val dualPageSplitPaged by readerPreferences.dualPageSplitPaged().collectAsState()
+            // SY <--
 
             ReaderContentOverlay(
                 brightness = state.brightnessOverlayValue,
@@ -401,7 +458,6 @@ class ReaderActivity : BaseActivity() {
                 onShare = ::shareChapter.takeIf { isHttpSource },
 
                 viewer = state.viewer,
-
                 onNextChapter = ::loadNextChapter,
                 enabledNext = state.viewerChapters?.nextChapter != null,
                 onPreviousChapter = ::loadPreviousChapter,
@@ -428,6 +484,33 @@ class ReaderActivity : BaseActivity() {
                     menuToggleToast = toast(if (enabled) MR.strings.on else MR.strings.off)
                 },
                 onClickSettings = viewModel::openSettingsDialog,
+                // SY -->
+                isExhToolsVisible = state.ehUtilsVisible,
+                onSetExhUtilsVisibility = viewModel::showEhUtils,
+                isAutoScroll = state.autoScroll,
+                isAutoScrollEnabled = state.isAutoScrollEnabled,
+                onToggleAutoscroll = viewModel::toggleAutoScroll,
+                autoScrollFrequency = state.ehAutoscrollFreq,
+                onSetAutoScrollFrequency = viewModel::setAutoScrollFrequency,
+                onClickAutoScrollHelp = viewModel::openAutoScrollHelpDialog,
+                onClickRetryAll = ::exhRetryAll,
+                onClickRetryAllHelp = viewModel::openRetryAllHelp,
+                currentPageText = state.currentPageText,
+                enabledButtons = readerBottomButtons,
+                dualPageSplitEnabled = dualPageSplitPaged,
+                doublePages = state.doublePages,
+                onClickPageLayout = {
+                    if (readerPreferences.pageLayout().get() == PagerConfig.PageLayout.AUTOMATIC) {
+                        (viewModel.state.value.viewer as? PagerViewer)?.config?.let { config ->
+                            config.doublePages = !config.doublePages
+                            reloadChapters(config.doublePages, true)
+                        }
+                    } else {
+                        readerPreferences.pageLayout().set(1 - readerPreferences.pageLayout().get())
+                    }
+                },
+                onClickShiftPage = ::shiftDoublePages,
+                // SY <--
             )
 
             if (flashOnPageChange) {
@@ -489,8 +572,44 @@ class ReaderActivity : BaseActivity() {
                         onSetAsCover = viewModel::setAsCover,
                         onShare = viewModel::shareImage,
                         onSave = viewModel::saveImage,
+                        onShareCombined = viewModel::shareImages,
+                        onSaveCombined = viewModel::saveImages,
+                        hasExtraPage = (state.dialog as? ReaderViewModel.Dialog.PageActions)?.extraPage != null,
                     )
                 }
+                // SY -->
+                ReaderViewModel.Dialog.AutoScrollHelp -> AlertDialog(
+                    onDismissRequest = onDismissRequest,
+                    confirmButton = {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(text = stringResource(MR.strings.action_ok))
+                        }
+                    },
+                    title = { Text(text = stringResource(TLMR.strings.eh_autoscroll_help)) },
+                    text = { Text(text = stringResource(TLMR.strings.eh_autoscroll_help_message)) },
+                )
+                ReaderViewModel.Dialog.BoostPageHelp -> AlertDialog(
+                    onDismissRequest = onDismissRequest,
+                    confirmButton = {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(text = stringResource(MR.strings.action_ok))
+                        }
+                    },
+                    title = { Text(text = stringResource(TLMR.strings.eh_boost_page_help)) },
+                    text = { Text(text = stringResource(TLMR.strings.eh_boost_page_help_message)) },
+                )
+                ReaderViewModel.Dialog.RetryAllHelp -> AlertDialog(
+                    onDismissRequest = onDismissRequest,
+                    confirmButton = {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(text = stringResource(MR.strings.action_ok))
+                        }
+                    },
+                    title = { Text(text = stringResource(TLMR.strings.eh_retry_all_help)) },
+                    text = { Text(text = stringResource(TLMR.strings.eh_retry_all_help_message)) },
+                )
+                // SY <--
+
                 null -> {}
             }
         }
@@ -527,6 +646,114 @@ class ReaderActivity : BaseActivity() {
         }
     }
 
+    private fun enableExhAutoScroll() {
+        readerPreferences.autoscrollInterval().changes()
+            .combine(viewModel.state.map { it.autoScroll }.distinctUntilChanged()) { interval, enabled ->
+                interval.toDouble() to enabled
+            }.mapLatest { (intervalFloat, enabled) ->
+                if (enabled) {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        val interval = intervalFloat.seconds
+                        while (true) {
+                            if (!viewModel.state.value.menuVisible) {
+                                viewModel.state.value.viewer.let { v ->
+                                    when (v) {
+                                        is PagerViewer -> v.moveToNext()
+                                        is WebtoonViewer -> {
+                                            if (readerPreferences.smoothAutoScroll().get()) {
+                                                v.linearScroll(interval)
+                                            } else {
+                                                v.scrollDown()
+                                            }
+                                        }
+                                    }
+                                }
+                                delay(interval)
+                            } else {
+                                delay(100)
+                            }
+                        }
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun exhRetryAll() {
+        var retried = 0
+
+        viewModel.state.value.viewerChapters
+            ?.currChapter
+            ?.pages
+            ?.forEachIndexed { _, page ->
+                var shouldQueuePage = false
+                if (page.status == Page.State.ERROR) {
+                    shouldQueuePage = true
+                }
+                /*else if (page.status == Page.LOAD_PAGE ||
+                   page.status == Page.DOWNLOAD_IMAGE) {
+                 // Do nothing
+              }*/
+
+                if (shouldQueuePage) {
+                    page.status = Page.State.QUEUE
+                } else {
+                    return@forEachIndexed
+                }
+
+                retried++
+            }
+
+        toast(pluralStringResource(TLMR.plurals.eh_retry_toast, retried, retried))
+    }
+
+    // SY -->
+
+    fun reloadChapters(doublePages: Boolean, force: Boolean = false) {
+        val viewer = viewModel.state.value.viewer as? PagerViewer ?: return
+        viewer.updateShifting()
+        if (!force && viewer.config.autoDoublePages) {
+            setDoublePageMode(viewer)
+        } else {
+            viewer.config.doublePages = doublePages
+            viewModel.setDoublePages(viewer.config.doublePages)
+        }
+        val currentChapter = viewModel.state.value.currentChapter
+        if (doublePages) {
+            // If we're moving from singe to double, we want the current page to be the first page
+            val currentPage = viewModel.state.value.currentPage
+            viewer.config.shiftDoublePage = (
+                currentPage + (currentChapter?.pages?.take(currentPage)?.count { it.fullPage || it.isolatedPage } ?: 0)
+                ) % 2 != 0
+        }
+        viewModel.state.value.viewerChapters?.let {
+            viewer.setChaptersDoubleShift(it)
+        }
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
+    }
+
+    private fun setDoublePageMode(viewer: PagerViewer) {
+        val currentOrientation = resources.configuration.orientation
+        viewer.config.doublePages = currentOrientation == Configuration.ORIENTATION_LANDSCAPE
+        viewModel.setDoublePages(viewer.config.doublePages)
+    }
+
+    private fun shiftDoublePages() {
+        val viewer = viewModel.state.value.viewer as? PagerViewer ?: return
+        viewer.config.let { config ->
+            config.shiftDoublePage = !config.shiftDoublePage
+            viewModel.state.value.viewerChapters?.let {
+                viewer.updateShifting()
+                viewer.setChaptersDoubleShift(it)
+                invalidateOptionsMenu()
+            }
+        }
+    }
+
+    // SY <--
+
     /**
      * Called from the presenter when a manga is ready. Used to instantiate the appropriate viewer.
      */
@@ -552,7 +779,16 @@ class ReaderActivity : BaseActivity() {
         updateViewerInset(readerPreferences.fullscreen().get())
         binding.viewerContainer.addView(newViewer.getView())
 
+        // SY -->
+        if (newViewer is PagerViewer) {
+            if (readerPreferences.pageLayout().get() == PagerConfig.PageLayout.AUTOMATIC) {
+                setDoublePageMode(newViewer)
+            }
+            viewModel.state.value.lastShiftDoubleState?.let { newViewer.config.shiftDoublePage = it }
+        }
+
         if (readerPreferences.showReadingMode().get()) {
+            // SY <--
             showReadingModeToast(viewModel.getMangaReadingMode())
         }
 
@@ -560,6 +796,9 @@ class ReaderActivity : BaseActivity() {
         binding.readerContainer.addView(loadingIndicator)
 
         startPostponedEnterTransition()
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     private fun openMangaScreen() {
@@ -613,6 +852,28 @@ class ReaderActivity : BaseActivity() {
     @SuppressLint("RestrictedApi")
     private fun setChapters(viewerChapters: ViewerChapters) {
         binding.readerContainer.removeView(loadingIndicator)
+        // SY -->
+        val state = viewModel.state.value
+        if (state.indexChapterToShift != null && state.indexPageToShift != null) {
+            viewerChapters.currChapter.pages?.find {
+                it.index == state.indexPageToShift && it.chapter.chapter.id == state.indexChapterToShift
+            }?.let {
+                (viewModel.state.value.viewer as? PagerViewer)?.updateShifting(it)
+            }
+            viewModel.setIndexChapterToShift(null)
+            viewModel.setIndexPageToShift(null)
+        } else if (state.lastShiftDoubleState != null) {
+            val currentChapter = viewerChapters.currChapter
+            (viewModel.state.value.viewer as? PagerViewer)?.config?.shiftDoublePage = (
+                currentChapter.requestedPage +
+                    (
+                        currentChapter.pages?.take(currentChapter.requestedPage)
+                            ?.count { it.fullPage || it.isolatedPage } ?: 0
+                        )
+                ) % 2 != 0
+        }
+        // SY <--
+
         viewModel.state.value.viewer?.setChapters(viewerChapters)
 
         lifecycleScope.launchIO {
@@ -620,6 +881,9 @@ class ReaderActivity : BaseActivity() {
                 assistUrl = url
             }
         }
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     /**
@@ -644,6 +908,9 @@ class ReaderActivity : BaseActivity() {
         } else {
             viewModel.closeDialog()
         }
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     /**
@@ -665,6 +932,9 @@ class ReaderActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.loadNextChapter()
             moveToPageIndex(0)
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingReader = false)
+            // <-- AM (DISCORD)
         }
     }
 
@@ -676,6 +946,9 @@ class ReaderActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.loadPreviousChapter()
             moveToPageIndex(0)
+            // AM (DISCORD) -->
+            updateDiscordRPC(exitingReader = false)
+            // <-- AM (DISCORD)
         }
     }
 
@@ -683,16 +956,35 @@ class ReaderActivity : BaseActivity() {
      * Called from the viewer whenever a [page] is marked as active. It updates the values of the
      * bottom menu and delegates the change to the presenter.
      */
-    fun onPageSelected(page: ReaderPage) {
-        viewModel.onPageSelected(page)
+    @SuppressLint("SetTextI18n")
+    fun onPageSelected(page: ReaderPage, hasExtraPage: Boolean = false) {
+        // SY -->
+        val currentPageText = if (hasExtraPage) {
+            val invertDoublePage = (viewModel.state.value.viewer as? PagerViewer)?.config?.invertDoublePages ?: false
+            if ((resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) xor invertDoublePage) {
+                "${page.number}-${page.number + 1}"
+            } else {
+                "${page.number + 1}-${page.number}"
+            }
+        } else {
+            "${page.number}"
+        }
+        viewModel.onPageSelected(page, currentPageText, hasExtraPage)
+        // SY <--
+
+        // AM (DISCORD) -->
+        updateDiscordRPC(exitingReader = false)
+        // <-- AM (DISCORD)
     }
 
     /**
      * Called from the viewer whenever a [page] is long clicked. A bottom sheet with a list of
      * actions to perform is shown.
      */
-    fun onPageLongTap(page: ReaderPage) {
-        viewModel.openPageDialog(page)
+    fun onPageLongTap(page: ReaderPage, extraPage: ReaderPage? = null) {
+        // SY -->
+        viewModel.openPageDialog(page, extraPage)
+        // SY <--
     }
 
     /**
@@ -733,13 +1025,30 @@ class ReaderActivity : BaseActivity() {
      * Called from the presenter when a page is ready to be shared. It shows Android's default
      * sharing tool.
      */
-    private fun onShareImageResult(uri: Uri, page: ReaderPage) {
+    fun onShareImageResult(uri: Uri, page: ReaderPage, secondPage: ReaderPage? = null) {
         val manga = viewModel.manga ?: return
         val chapter = page.chapter.chapter
 
+        // SY -->
+        val text = if (secondPage != null) {
+            stringResource(
+                TLMR.strings.share_pages_info,
+                manga.title,
+                chapter.name,
+                if (resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+                    "${page.number}-${page.number + 1}"
+                } else {
+                    "${page.number + 1}-${page.number}"
+                },
+            )
+        } else {
+            stringResource(MR.strings.share_page_info, manga.title, chapter.name, page.number)
+        }
+        // SY <--
+
         val intent = uri.toShareIntent(
             context = applicationContext,
-            message = stringResource(MR.strings.share_page_info, manga.title, chapter.name, page.number),
+            message = text,
         )
         startActivity(Intent.createChooser(intent, stringResource(MR.strings.action_share)))
     }
@@ -876,6 +1185,37 @@ class ReaderActivity : BaseActivity() {
                     updateViewerInset(it)
                 }
                 .launchIn(lifecycleScope)
+
+            // SY -->
+            readerPreferences.pageLayout().changes()
+                .drop(1)
+                .onEach {
+                    viewModel.setDoublePages(
+                        (viewModel.state.value.viewer as? PagerViewer)
+                            ?.config
+                            ?.doublePages
+                            ?: false,
+                    )
+                }
+                .launchIn(lifecycleScope)
+
+            readerPreferences.dualPageSplitPaged().changes()
+                .drop(1)
+                .onEach {
+                    if (viewModel.state.value.viewer !is PagerViewer) return@onEach
+                    reloadChapters(
+                        !it &&
+                            when (readerPreferences.pageLayout().get()) {
+                                PagerConfig.PageLayout.DOUBLE_PAGES -> true
+                                PagerConfig.PageLayout.AUTOMATIC ->
+                                    resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+                                else -> false
+                            },
+                        true,
+                    )
+                }
+                .launchIn(lifecycleScope)
+            // SY <--
         }
 
         /**
@@ -918,6 +1258,9 @@ class ReaderActivity : BaseActivity() {
 
             // Trigger relayout
             setMenuVisibility(viewModel.state.value.menuVisible)
+            // SY -->
+            enableExhAutoScroll()
+            // SY <--
         }
 
         /**
@@ -971,4 +1314,35 @@ class ReaderActivity : BaseActivity() {
             binding.viewerContainer.setLayerType(LAYER_TYPE_HARDWARE, paint)
         }
     }
+
+    // AM (DISCORD) -->
+    private fun updateDiscordRPC(exitingReader: Boolean) {
+        if (connectionsPreferences.enableDiscordRPC().get()) {
+            viewModel.viewModelScope.launchIO {
+                if (!exitingReader) {
+                    DiscordRPCService.setReaderActivity(
+                        context = this@ReaderActivity,
+                        ReaderData(
+                            incognitoMode = viewModel.currentSource.isNsfw() || viewModel.incognitoMode,
+                            mangaId = viewModel.manga?.id,
+                            // AM (CU)>
+                            mangaTitle = viewModel.manga?.ogTitle,
+                            thumbnailUrl = viewModel.manga?.thumbnailUrl,
+                            chapterProgress = Pair(viewModel.state.value.currentPage, viewModel.state.value.totalPages),
+                            chapterNumber =
+                            if (connectionsPreferences.useChapterTitles().get()) {
+                                viewModel.state.value.currentChapter?.chapter?.name
+                            } else {
+                                viewModel.state.value.currentChapter?.chapter?.chapter_number.toString()
+                            },
+                        ),
+                    )
+                } else {
+                    val lastUsedScreen = DiscordRPCService.lastUsedScreen
+                    DiscordRPCService.setMangaScreen(this@ReaderActivity, lastUsedScreen)
+                }
+            }
+        }
+    }
+    // <-- AM (DISCORD)
 }

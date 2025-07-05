@@ -21,6 +21,7 @@ class AnimeCategoriesRestorer(
 
             val categories = backupCategories
                 .sortedBy { it.order }
+                .distinctBy { it.name }
                 .map {
                     val dbCategory = dbCategoriesByName[it.name]
                     if (dbCategory != null) return@map dbCategory

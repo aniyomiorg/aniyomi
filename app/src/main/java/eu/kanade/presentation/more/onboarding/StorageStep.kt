@@ -1,6 +1,7 @@
 package eu.kanade.presentation.more.onboarding
 
 import android.content.ActivityNotFoundException
+import android.os.Environment
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +31,7 @@ import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 
 internal class StorageStep : OnboardingStep {
 
@@ -49,6 +51,16 @@ internal class StorageStep : OnboardingStep {
         val isTvBox = isTvBox(LocalContext.current)
 
         val pickStorageLocation = SettingsDataScreen.storageLocationPicker(storagePref)
+
+        if (!storagePref.isSet()) {
+            val storage =
+                File(Environment.getExternalStorageDirectory().toString() + "/${stringResource(MR.strings.app_name)}/")
+            if (!storage.exists()) {
+                storage.mkdirs()
+            }
+            storagePref.set("${storagePref.get()}/")
+            storagePref.changes()
+        }
 
         Column(
             modifier = Modifier.padding(16.dp),

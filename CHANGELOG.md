@@ -30,11 +30,15 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
 - Use timestamps provided by extensions ([@Secozzi](https://github.com/Secozzi)) ([#1983](https://github.com/aniyomiorg/aniyomi/pull/1983))
 - Add titles to player sheets + consistency with More sheet ([@quickdesh](https://github.com/quickdesh)) ([#2015](https://github.com/aniyomiorg/aniyomi/pull/2015))
 - Add script & script-opts editor to player settings ([@Secozzi](https://github.com/Secozzi)) ([#2019](https://github.com/aniyomiorg/aniyomi/pull/2019))
+- feat: Get manga and Anime info from tracker ([#188](https://github.com/aniyomiorg/aniyomi/pull/1674))
 
 ### Improved
 
 - Show "Now" instead of "0 minutes ago" ([@Secozzi](https://github.com/Secozzi)) ([#1715](https://github.com/aniyomiorg/aniyomi/pull/1715))
 - Add headers when using 1dm as external player ([@Secozzi](https://github.com/Secozzi)) ([#2032](https://github.com/aniyomiorg/aniyomi/pull/2032))
+- feat: add navbar preferences for updates, history, and label visibility ([#189](https://github.com/aniyomiorg/aniyomi/pull/1674))
+- feat: implement repository hide/show functionality
+- feat: add support for repository icon extensions
 
 ### Fixed
 

@@ -40,7 +40,7 @@ class MangaWidgetManager(
                     logcat(LogPriority.ERROR, e) { "Failed to update widget" }
                 }
             }
-            .flowOn(Dispatchers.Default)
+            .flowOn(Dispatchers.Main)
             .launchIn(scope)
     }
 }

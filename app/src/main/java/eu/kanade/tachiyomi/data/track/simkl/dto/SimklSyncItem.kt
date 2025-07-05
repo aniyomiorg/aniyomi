@@ -17,6 +17,7 @@ data class SimklSyncResult(
             "anime" -> anime
             "tv" -> tv
             "movies" -> movies
+            "shows" -> tv
             else -> throw Exception("Unknown type: $type")
         }
     }
@@ -70,4 +71,14 @@ data class SimklSyncResultItem(
 @Serializable
 data class SimklSyncResultIds(
     val simkl: Long,
+)
+
+@Serializable
+data class SimklAnimeResponse(
+    @SerialName("id") val id: Long? = null,
+    @SerialName("title") val title: String,
+    @SerialName("poster") val poster: String? = null,
+    @SerialName("overview") val overview: String? = null,
+    @SerialName("network") val network: String? = null,
+    @SerialName("director") val director: String? = null,
 )

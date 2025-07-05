@@ -5,17 +5,22 @@ import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.anilist.dto.ALAddEntryResult
+import eu.kanade.tachiyomi.data.track.anilist.dto.ALAnimeMetadata
 import eu.kanade.tachiyomi.data.track.anilist.dto.ALCurrentUserResult
+import eu.kanade.tachiyomi.data.track.anilist.dto.ALMangaMetadata
 import eu.kanade.tachiyomi.data.track.anilist.dto.ALOAuth
 import eu.kanade.tachiyomi.data.track.anilist.dto.ALSearchResult
 import eu.kanade.tachiyomi.data.track.anilist.dto.ALUserListEntryQueryResult
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackAnimeMetadata
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.interceptor.rateLimit
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
+import eu.kanade.tachiyomi.util.lang.htmlDecode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
@@ -549,6 +554,141 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
+    suspend fun getAnimeMetadata(track: DomainAnimeTrack): TrackAnimeMetadata {
+        return withIOContext {
+            val query = """
+            |query (${'$'}animeid: Int!) {
+                |Media (id: ${'$'}animeid) {
+                    |id
+                    |title {
+                        |userPreferred
+                    |}
+                    |coverImage {
+                        |large
+                    |}
+                    |description
+                    |studios {
+                        |edges {
+                           |isMain
+                           |node {
+                             |name
+                           |}
+                        |}
+                    |}
+                    |staff {
+                        |edges {
+                            |role
+                            |node {
+                                |name {
+                                    |userPreferred
+                                |}
+                            |}
+                        |}
+                    |}
+                |}
+            |}
+            |
+            """.trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("animeid", track.remoteId)
+                }
+            }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        API_URL,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<ALAnimeMetadata>()
+                    .let { it ->
+                        val media = it.data.media
+                        TrackAnimeMetadata(
+                            remoteId = media.id,
+                            title = media.title.userPreferred,
+                            thumbnailUrl = media.coverImage.large,
+                            description = media.description?.htmlDecode()?.ifEmpty { null },
+                            authors = media.staff.edges
+                                .filter { it.role == "Original Creator" }
+                                .joinToString(", ") { it.node.name.userPreferred }
+                                .ifEmpty { null },
+                            artists = media.studios.edges
+                                .filter { it.isMain }
+                                .takeIf { it.isNotEmpty() }
+                                ?.joinToString(", ") { it.node.name }
+                                ?: media.studios.edges.joinToString(", ") { it.node.name },
+                        )
+                    }
+            }
+        }
+    }
+
+    suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata {
+        return withIOContext {
+            val query = """
+            |query (${'$'}mangaId: Int!) {
+                |Media (id: ${'$'}mangaId) {
+                    |id
+                    |title {
+                        |userPreferred
+                    |}
+                    |coverImage {
+                        |large
+                    |}
+                    |description
+                    |staff {
+                        |edges {
+                            |role
+                            |node {
+                                |name {
+                                    |userPreferred
+                                |}
+                            |}
+                        |}
+                    |}
+                |}
+            |}
+            |
+            """.trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("mangaId", track.remoteId)
+                }
+            }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        API_URL,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<ALMangaMetadata>()
+                    .let { it ->
+                        val media = it.data.media
+                        TrackMangaMetadata(
+                            remoteId = media.id,
+                            title = media.title.userPreferred,
+                            thumbnailUrl = media.coverImage.large,
+                            description = media.description?.htmlDecode()?.ifEmpty { null },
+                            authors = media.staff.edges
+                                .filter { it.role == "Story" || it.role == "Story & Art" }
+                                .joinToString(", ") { it.node.name.userPreferred.toString() }
+                                .ifEmpty { null },
+                            artists = media.staff.edges
+                                .filter { it.role == "Art" || it.role == "Story & Art" }
+                                .joinToString(", ") { it.node.name.userPreferred.toString() }
+                                .ifEmpty { null },
+                        )
+                    }
+            }
+        }
+    }
+
     private fun createDate(dateValue: Long): JsonObject {
         if (dateValue == 0L) {
             return buildJsonObject {
@@ -567,7 +707,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
     }
 
     companion object {
-        private const val CLIENT_ID = "5338"
+        private const val CLIENT_ID = "18376"
         private const val API_URL = "https://graphql.anilist.co/"
         private const val BASE_URL = "https://anilist.co/api/v2/"
         private const val BASE_MANGA_URL = "https://anilist.co/manga/"

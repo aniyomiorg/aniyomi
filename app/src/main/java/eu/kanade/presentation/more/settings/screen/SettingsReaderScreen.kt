@@ -7,14 +7,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderBottomButton
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderOrientation
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingMode
+import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.collections.immutable.toPersistentMap
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
@@ -23,6 +27,8 @@ import uy.kohesive.injekt.api.get
 import java.text.NumberFormat
 
 object SettingsReaderScreen : SearchableSettings {
+
+    private fun readResolve(): Any = SettingsReaderScreen
 
     @ReadOnlyComposable
     @Composable
@@ -59,9 +65,16 @@ object SettingsReaderScreen : SearchableSettings {
                 title = stringResource(MR.strings.pref_show_navigation_mode),
                 subtitle = stringResource(MR.strings.pref_show_navigation_mode_summary),
             ),
+            /* SY -->
             Preference.PreferenceItem.SwitchPreference(
                 preference = readerPref.pageTransitions(),
                 title = stringResource(MR.strings.pref_page_transitions),
+            ),
+            SY <-- */
+            Preference.PreferenceItem.SwitchPreference(
+                preference = readerPref.flashOnPageChange(),
+                title = stringResource(MR.strings.pref_flash_page),
+                subtitle = stringResource(MR.strings.pref_flash_page_summ),
             ),
             getDisplayGroup(readerPreferences = readerPref),
             getEInkGroup(readerPreferences = readerPref),
@@ -70,6 +83,9 @@ object SettingsReaderScreen : SearchableSettings {
             getWebtoonGroup(readerPreferences = readerPref),
             getNavigationGroup(readerPreferences = readerPref),
             getActionsGroup(readerPreferences = readerPref),
+            // SY -->
+            getForkSettingsGroup(readerPreferences = readerPref),
+            // SY <--
         )
     }
 
@@ -179,6 +195,10 @@ object SettingsReaderScreen : SearchableSettings {
 
     @Composable
     private fun getReadingGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val preloadSizePref = readerPreferences.preloadSize()
+
+        val preloadSize by preloadSizePref.collectAsState()
+
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_reading),
             preferenceItems = persistentListOf(
@@ -201,6 +221,24 @@ object SettingsReaderScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     preference = readerPreferences.preserveReadingPosition(),
                     title = stringResource(AYMR.strings.pref_preserve_reading_position),
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = preloadSize,
+                    title = stringResource(TLMR.strings.pref_page_preload_amount),
+                    valueRange = ReaderPreferences.PRELOAD_SIZE_MIN..ReaderPreferences.PRELOAD_SIZE_MAX,
+                    onValueChanged = {
+                        preloadSizePref.set(it)
+                        true
+                    },
+                ),
+                Preference.PreferenceItem.SliderPreference(
+                    value = preloadSize,
+                    title = stringResource(TLMR.strings.pref_page_preload_amount),
+                    valueRange = ReaderPreferences.PRELOAD_SIZE_MIN..ReaderPreferences.PRELOAD_SIZE_MAX,
+                    onValueChanged = {
+                        preloadSizePref.set(it)
+                        true
+                    },
                 ),
             ),
         )
@@ -443,4 +481,45 @@ object SettingsReaderScreen : SearchableSettings {
             ),
         )
     }
+
+    // SY -->
+    @Composable
+    private fun getForkSettingsGroup(readerPreferences: ReaderPreferences): Preference.PreferenceGroup {
+        val pageLayout by readerPreferences.pageLayout().collectAsState()
+        return Preference.PreferenceGroup(
+            title = stringResource(TLMR.strings.pref_category_fork),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    preference = readerPreferences.readerBottomButtons(),
+                    title = stringResource(TLMR.strings.reader_bottom_buttons),
+                    subtitle = stringResource(TLMR.strings.reader_bottom_buttons_summary),
+                    entries = ReaderBottomButton.entries
+                        .associate { it.value to stringResource(it.stringRes) }.toPersistentMap(),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    preference = readerPreferences.pageLayout(),
+                    title = stringResource(TLMR.strings.page_layout),
+                    subtitle = stringResource(TLMR.strings.automatic_can_still_switch),
+                    entries = ReaderPreferences.PageLayouts
+                        .mapIndexed { index, it -> index + 1 to stringResource(it) }
+                        .toMap().toPersistentMap(),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    preference = readerPreferences.invertDoublePages(),
+                    title = stringResource(TLMR.strings.invert_double_pages),
+                    enabled = pageLayout != PagerConfig.PageLayout.SINGLE_PAGE,
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    preference = readerPreferences.centerMarginType(),
+                    title = stringResource(TLMR.strings.center_margin),
+                    subtitle = stringResource(TLMR.strings.pref_center_margin_summary),
+                    entries = ReaderPreferences.CenterMarginTypes
+                        .mapIndexed { index, it -> index + 1 to stringResource(it) }
+                        .toMap()
+                        .toImmutableMap(),
+                ),
+            ),
+        )
+    }
+    // SY <--
 }

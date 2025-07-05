@@ -65,10 +65,11 @@ fun BrowseAnimeSourceList(
 }
 
 @Composable
-private fun BrowseAnimeSourceListItem(
+fun BrowseAnimeSourceListItem(
     anime: Anime,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,
+    isSelected: Boolean = false,
     entries: Int,
     containerHeight: Int,
 ) {
@@ -81,6 +82,7 @@ private fun BrowseAnimeSourceListItem(
             url = anime.thumbnailUrl,
             lastModified = anime.coverLastModified,
         ),
+        isSelected = isSelected,
         coverAlpha = if (anime.favorite) CommonEntryItemDefaults.BrowseFavoriteCoverAlpha else 1f,
         badge = {
             InLibraryBadge(enabled = anime.favorite)

@@ -45,8 +45,8 @@ class BackupRestorer(
     private val animeExtensionRepoRestorer: AnimeExtensionRepoRestorer = AnimeExtensionRepoRestorer(),
     private val mangaExtensionRepoRestorer: MangaExtensionRepoRestorer = MangaExtensionRepoRestorer(),
     private val customButtonRestorer: CustomButtonRestorer = CustomButtonRestorer(),
-    private val animeRestorer: AnimeRestorer = AnimeRestorer(),
-    private val mangaRestorer: MangaRestorer = MangaRestorer(),
+    private val animeRestorer: AnimeRestorer = AnimeRestorer(isSync),
+    private val mangaRestorer: MangaRestorer = MangaRestorer(isSync),
     private val extensionsRestorer: ExtensionsRestorer = ExtensionsRestorer(context),
 ) {
 
@@ -83,7 +83,7 @@ class BackupRestorer(
 
         // Store source mapping for error messages
         val backupAnimeMaps = backup.backupAnimeSources
-        mangaSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
+        animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
         val backupMangaMaps = backup.backupSources
         mangaSourceMapping = backupMangaMaps.associate { it.sourceId to it.name }
 
@@ -301,7 +301,7 @@ class BackupRestorer(
     private fun writeErrorLog(): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = context.createFileInCacheDir("aniyomi_restore_error.txt")
+                val file = context.createFileInCacheDir("animetail_restore_error.txt")
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
 
                 file.bufferedWriter().use { out ->

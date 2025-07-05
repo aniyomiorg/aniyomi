@@ -68,4 +68,15 @@
         <item name="android:widgetLayout">@layout/pref_widget_switch_material</item>
     </style>
 
+    <!--===========-->
+    <!--CastControls-->
+    <!--===========-->
+
+    <style name="ExpandedCastControlsStyle" parent="Theme.AppCompat.NoActionBar">
+        <item name="castExpandedControllerStyle">@style/CustomCastExpandedController</item>
+    </style>
+    <style name="CustomCastExpandedController" parent="CastExpandedController">
+        <item name="castControlButtons">@array/cast_expanded_controller_control_buttons</item>
+    </style>
+
 </resources>

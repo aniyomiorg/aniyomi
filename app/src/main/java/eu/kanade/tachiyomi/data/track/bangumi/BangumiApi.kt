@@ -7,9 +7,12 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMCollectionResponse
 import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMOAuth
 import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMSearchResult
+import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMSubject
 import eu.kanade.tachiyomi.data.track.bangumi.dto.BGMUser
+import eu.kanade.tachiyomi.data.track.bangumi.dto.Infobox
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.data.track.model.TrackMangaMetadata
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.network.POST
@@ -29,6 +32,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.common.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainMangaTrack
 
 class BangumiApi(
     private val trackId: Long,
@@ -253,6 +257,37 @@ class BangumiApi(
         }
     }
 
+    suspend fun getMangaMetadata(track: DomainMangaTrack): TrackMangaMetadata {
+        return withIOContext {
+            val urlUserRead = "$API_URL/collection/${track.remoteId}"
+            val requestUserRead = Request.Builder()
+                .url(urlUserRead)
+                .cacheControl(CacheControl.FORCE_NETWORK)
+                .get()
+                .build()
+
+            with(json) {
+                authClient.newCall(GET("${API_URL}/v0/subjects/${track.remoteId}"))
+                    .awaitSuccess()
+                    .parseAs<BGMSubject>()
+                    .let {
+                        TrackMangaMetadata(
+                            remoteId = it.id,
+                            title = it.nameCn,
+                            thumbnailUrl = it.images?.common,
+                            description = it.summary,
+                            authors = it.infobox
+                                .filter { it.key == "作者" }
+                                .filterIsInstance<Infobox.SingleValue>().joinToString(", ") { it.value },
+                            artists = it.infobox
+                                .filter { it.key == "插图" }
+                                .filterIsInstance<Infobox.SingleValue>().joinToString(", ") { it.value },
+                        )
+                    }
+            }
+        }
+    }
+
     suspend fun getUsername(): String {
         return withIOContext {
             with(json) {
@@ -272,7 +307,7 @@ class BangumiApi(
         private const val OAUTH_URL = "https://bgm.tv/oauth/access_token"
         private const val LOGIN_URL = "https://bgm.tv/oauth/authorize"
 
-        private const val REDIRECT_URL = "aniyomi://bangumi-auth"
+        private const val REDIRECT_URL = "animetail://bangumi-auth"
 
         private const val APP_JSON = "application/json"
 

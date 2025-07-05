@@ -2,6 +2,7 @@ package eu.kanade.presentation.entries.anime.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.ArrowModifier
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.IndicatorModifier
@@ -38,6 +40,8 @@ import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.IconButtonTokens
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 enum class EpisodeDownloadAction {
     START,
@@ -53,6 +57,9 @@ fun EpisodeDownloadIndicator(
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
     onClick: (EpisodeDownloadAction) -> Unit,
+    // AM (FILE_SIZE) -->
+    fileSize: Long?,
+    // <-- AM (FILE_SIZE)
     modifier: Modifier = Modifier,
 ) {
     when (val downloadState = downloadStateProvider()) {
@@ -71,6 +78,9 @@ fun EpisodeDownloadIndicator(
         AnimeDownload.State.DOWNLOADED -> DownloadedIndicator(
             enabled = enabled,
             modifier = modifier,
+            // AM (FILE_SIZE) -->
+            fileSize = fileSize,
+            // <-- AM (FILE_SIZE)
             onClick = onClick,
         )
         AnimeDownload.State.ERROR -> ErrorIndicator(
@@ -193,8 +203,23 @@ private fun DownloadedIndicator(
     enabled: Boolean,
     modifier: Modifier = Modifier,
     onClick: (EpisodeDownloadAction) -> Unit,
+    // AM (FILE_SIZE) -->
+    fileSize: Long?,
+    // <-- AM (FILE_SIZE)
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
+
+    // AM (FILE_SIZE) -->
+    if (fileSize != null) {
+        Text(
+            text = formatFileSize(fileSize),
+            maxLines = 1,
+            style = MaterialTheme.typography.bodyMedium
+                .copy(color = MaterialTheme.colorScheme.primary, fontSize = 12.sp),
+            modifier = Modifier.padding(all = 10.dp),
+        )
+    }
+    // <-- AM (FILE_SIZE)
     Box(
         modifier = modifier
             .size(IconButtonTokens.StateLayerSize)
@@ -223,6 +248,18 @@ private fun DownloadedIndicator(
         }
     }
 }
+
+// AM (FILE_SIZE) -->
+private fun formatFileSize(fileSize: Long): String {
+    val megaByteSize = fileSize / 1000.0 / 1000.0
+    return if (megaByteSize > 900) {
+        val gigaByteSize = megaByteSize / 1000.0
+        "${BigDecimal(gigaByteSize).setScale(2, RoundingMode.HALF_EVEN)} GB"
+    } else {
+        "${BigDecimal(megaByteSize).setScale(0, RoundingMode.HALF_EVEN)} MB"
+    }
+}
+// <-- AM (FILE_SIZE)
 
 @Composable
 private fun ErrorIndicator(

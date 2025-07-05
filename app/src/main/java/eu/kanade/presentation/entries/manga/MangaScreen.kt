@@ -86,6 +86,7 @@ import tachiyomi.source.local.entries.manga.isLocal
 import java.time.Instant
 
 @Composable
+@Suppress("ParameterNaming", "LongMethod")
 fun MangaScreen(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
@@ -118,6 +119,9 @@ fun MangaScreen(
     onEditCategoryClicked: (() -> Unit)?,
     onEditFetchIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    // SY -->
+    onEditInfoClicked: () -> Unit,
+    // SY <--
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
@@ -171,6 +175,9 @@ fun MangaScreen(
             onEditCategoryClicked = onEditCategoryClicked,
             onEditIntervalClicked = onEditFetchIntervalClicked,
             onMigrateClicked = onMigrateClicked,
+            // SY -->
+            onEditInfoClicked = onEditInfoClicked,
+            // SY <--
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiMarkAsReadClicked = onMultiMarkAsReadClicked,
             onMarkPreviousAsReadClicked = onMarkPreviousAsReadClicked,
@@ -207,6 +214,9 @@ fun MangaScreen(
             onEditCategoryClicked = onEditCategoryClicked,
             onEditIntervalClicked = onEditFetchIntervalClicked,
             onMigrateClicked = onMigrateClicked,
+            // SY -->
+            onEditInfoClicked = onEditInfoClicked,
+            // SY <--
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiMarkAsReadClicked = onMultiMarkAsReadClicked,
             onMarkPreviousAsReadClicked = onMarkPreviousAsReadClicked,
@@ -221,6 +231,7 @@ fun MangaScreen(
 }
 
 @Composable
+@Suppress("ParameterNaming", "LongMethod")
 private fun MangaScreenSmallImpl(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
@@ -254,6 +265,10 @@ private fun MangaScreenSmallImpl(
     onEditIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     onSettingsClicked: (() -> Unit)?,
+
+    // SY -->
+    onEditInfoClicked: () -> Unit,
+    // SY <--
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
@@ -316,6 +331,9 @@ private fun MangaScreenSmallImpl(
                 onClickEditCategory = onEditCategoryClicked,
                 onClickRefresh = onRefresh,
                 onClickMigrate = onMigrateClicked,
+                // SY -->
+                onClickEditInfo = onEditInfoClicked.takeIf { state.manga.favorite },
+                // SY <--
                 onClickSettings = onSettingsClicked,
                 changeAnimeSkipIntro = null,
                 actionModeCounter = selectedChapterCount,
@@ -325,6 +343,7 @@ private fun MangaScreenSmallImpl(
                 titleAlphaProvider = { titleAlpha },
                 backgroundAlphaProvider = { backgroundAlpha },
                 isManga = true,
+                onClickRelatedAnimes = null,
             )
         },
         bottomBar = {
@@ -470,6 +489,7 @@ private fun MangaScreenSmallImpl(
 }
 
 @Composable
+@Suppress("ParameterNaming", "LongMethod")
 fun MangaScreenLargeImpl(
     state: MangaScreenModel.State.Success,
     snackbarHostState: SnackbarHostState,
@@ -503,6 +523,10 @@ fun MangaScreenLargeImpl(
     onEditIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     onSettingsClicked: (() -> Unit)?,
+
+    // SY -->
+    onEditInfoClicked: () -> Unit,
+    // SY <--
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Chapter>, bookmarked: Boolean) -> Unit,
@@ -559,6 +583,9 @@ fun MangaScreenLargeImpl(
                 onClickRefresh = onRefresh,
                 onClickMigrate = onMigrateClicked,
                 onCancelActionMode = { onAllChapterSelected(false) },
+                // SY -->
+                onClickEditInfo = onEditInfoClicked.takeIf { state.manga.favorite },
+                // SY <--
                 onClickSettings = onSettingsClicked,
                 changeAnimeSkipIntro = null,
                 actionModeCounter = selectedChapterCount,
@@ -567,6 +594,7 @@ fun MangaScreenLargeImpl(
                 titleAlphaProvider = { 1f },
                 backgroundAlphaProvider = { 1f },
                 isManga = true,
+                onClickRelatedAnimes = null,
             )
         },
         bottomBar = {

@@ -16,16 +16,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.AppBarTitle
 import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.presentation.entries.DownloadAction
+import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
+import eu.kanade.tachiyomi.ui.browse.anime.source.feed.SourceFeedScreen
+import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.theme.active
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @Composable
 fun EntryToolbar(
@@ -41,6 +49,12 @@ fun EntryToolbar(
     onClickSettings: (() -> Unit)?,
     // Anime only
     changeAnimeSkipIntro: (() -> Unit)?,
+    // SY -->
+    onClickEditInfo: (() -> Unit)?,
+    // KMK -->
+    onClickRelatedAnimes: (() -> Unit)?,
+    // KMK <--
+    // SY <--
     // For action mode
     actionModeCounter: Int,
     onCancelActionMode: () -> Unit,
@@ -51,6 +65,12 @@ fun EntryToolbar(
     isManga: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val navigator = LocalNavigator.current
+    fun onHomeClicked() = navigator?.popUntil { screen ->
+        screen is SourceFeedScreen || screen is BrowseAnimeSourceScreen
+    }
+    val isHomeEnabled = Injekt.get<UiPreferences>().showHomeOnRelatedAnimes().get()
+
     val isActionMode = actionModeCounter > 0
     AppBar(
         titleContent = {
@@ -64,7 +84,22 @@ fun EntryToolbar(
         backgroundColor = MaterialTheme.colorScheme
             .surfaceColorAtElevation(3.dp)
             .copy(alpha = if (isActionMode) 1f else backgroundAlphaProvider()),
-        navigateUp = navigateUp,
+        navigateUp = {
+            if (isActionMode) {
+                onCancelActionMode()
+            } else {
+                navigateUp()
+
+                if (isHomeEnabled && navigator != null) {
+                    if (navigator.size >= 2 &&
+                        navigator.items[navigator.size - 2] is AnimeScreen ||
+                        navigator.size >= 5
+                    ) {
+                        onHomeClicked()
+                    }
+                }
+            }
+        },
         actions = {
             var downloadExpanded by remember { mutableStateOf(false) }
             if (onClickDownload != null) {
@@ -114,6 +149,16 @@ fun EntryToolbar(
                             onClick = onClickFilter,
                         ),
                     )
+                    // SY -->
+                    if (onClickEditInfo != null) {
+                        add(
+                            AppBar.OverflowAction(
+                                title = stringResource(TLMR.strings.action_edit_info),
+                                onClick = onClickEditInfo,
+                            ),
+                        )
+                    }
+                    // SY <--
                     if (changeAnimeSkipIntro != null) {
                         add(
                             AppBar.OverflowAction(
@@ -153,6 +198,16 @@ fun EntryToolbar(
                             ),
                         )
                     }
+                    // KMK -->
+                    if (onClickRelatedAnimes != null) {
+                        add(
+                            AppBar.OverflowAction(
+                                title = stringResource(TLMR.strings.pref_source_related_mangas),
+                                onClick = onClickRelatedAnimes,
+                            ),
+                        )
+                    }
+                    // KMK <--
                     if (onClickSettings != null) {
                         add(
                             AppBar.OverflowAction(

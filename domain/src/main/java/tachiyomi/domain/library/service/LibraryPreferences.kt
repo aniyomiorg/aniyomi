@@ -6,7 +6,11 @@ import tachiyomi.core.common.preference.TriState
 import tachiyomi.core.common.preference.getEnum
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.library.anime.model.AnimeGroupLibraryMode
+import tachiyomi.domain.library.anime.model.AnimeLibraryGroup
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
+import tachiyomi.domain.library.manga.model.MangaGroupLibraryMode
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 
@@ -277,6 +281,30 @@ class LibraryPreferences(
         Download,
         Disabled,
     }
+
+    // SY -->
+
+    fun groupAnimeLibraryUpdateType() = preferenceStore.getEnum(
+        "group_anime_library_update_type",
+        AnimeGroupLibraryMode.GLOBAL,
+    )
+
+    fun groupMangaLibraryUpdateType() = preferenceStore.getEnum(
+        "group_library_update_type",
+        MangaGroupLibraryMode.GLOBAL,
+    )
+
+    fun groupAnimeLibraryBy() = preferenceStore.getInt(
+        "group_anime_library_by",
+        AnimeLibraryGroup.BY_DEFAULT,
+    )
+
+    fun groupMangaLibraryBy() = preferenceStore.getInt(
+        "group_library_by",
+        MangaLibraryGroup.BY_DEFAULT,
+    )
+
+    // SY <--
 
     companion object {
         const val DEVICE_ONLY_ON_WIFI = "wifi"

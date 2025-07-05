@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Tracking status</string>
+  <string name="tag">Labels</string>
+  <string name="ungrouped">Ungrouped</string>
+  <string name="not_tracked">Niet getrackt</string>
+  <string name="group" comment="group More Info Menu">Groeperen</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Anime Library dynamische categorie updates</string>
+  <string name="manga_library_group_updates">Manga Library dynamische categorie updates</string>
+  <string name="library_group_updates_global">Globale updates altijd starten</string>
+  <string name="library_group_updates_all_but_ungrouped">Globale updates alleen openen voor ongegroepeerde updates, categorie updates voor anderen</string>
+  <string name="library_group_updates_all">Categorieën bijwerken voortdurend</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Labels resetten</string>
+  <string name="add_tag">Label toevoegen</string>
+  <string name="title_hint">Titel: %1$s</string>
+  <string name="description_hint">Omschrijving: %1$s</string>
+  <string name="author_hint">Auteur: %1$s</string>
+  <string name="artist_hint">Artiest: %1$s</string>
+  <string name="custom_entry_info">Aangepaste invoer informatie</string>
+  <string name="reset_info">Reset Info</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Cast Instellingen</string>
+  <string name="pref_enable_cast">Casten in- of uitschakelen</string>
+  <string name="action_cast">Stuur naar Cast</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Toon gedownloade aflevering bestand grootte</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Instellingen vork</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Info bewerken</string>
+  <string name="special_services" comment="special_services Connections section">Speciale diensten</string>
+  <string name="pref_category_connections">Verbindingen</string>
+  <string name="pref_connections_summary">Discord, meer te komen..</string>
+  <string name="connections_info">Speciale diensten die uniek zijn voor Animetail en die de manier waarop u de app gebruikt verbeteren</string>
+  <string name="connections_discord">Onenigheid</string>
+  <string name="connections_discord_info">Deze Discord Service werkt door token loggen. Gebruik op eigen risico. Je token wordt lokaal opgeslagen en Animetail deelt het nergens anders</string>
+  <string name="pref_discord_rpc">Discord Rich Presence</string>
+  <string name="show_chapters_titles_title">Toon Afleveringen/Hoofdstukken Titels</string>
+  <string name="show_chapters_titles_subtitle">Toon de titel van de aflevering/hoofdstuk die je aan het lezen bent</string>
+  <string name="pref_enable_discord_rpc">Discord Rich Presence inschakelen</string>
+  <string name="pref_discord_status">Discord status</string>
+  <string name="pref_discord_dnd">⛔ Niet storen</string>
+  <string name="pref_discord_idle">🌙 Idle</string>
+  <string name="pref_discord_online">🟢 Online</string>
+  <string name="pref_category_discord_incognito">RPC Incognito</string>
+  <string name="pref_discord_incognito">Discord Incognito modus</string>
+  <string name="pref_discord_incognito_summary">Overschreven wanneer Incognito modus is ingeschakeld</string>
+  <string name="pref_discord_incognito_categories_details">Invoer in opgenomen categorieën zal niet worden weergegeven in Discord</string>
+  <string name="browsing" comment="browsing Discord section">Browsen</string>
+  <string name="scrolling">Scrollen door</string>
+  <string name="messing">Messing rond met</string>
+  <string name="video">Video</string>
+  <string name="comic">Strip</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Amnis Player moet geïnstalleerd worden</string>
+  <string name="pref_category_torrentserver">TorrentServer Voorkeuren</string>
+  <string name="pref_torrentserver_port">TorrentServer Poort</string>
+  <string name="torrentserver_is_running">Torrent Server is actief</string>
+  <string name="pref_torrent_trackers">Torrent Trackers</string>
+  <string name="pref_reset_torrent_trackers_string">Reset standaard torrent trackers string</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Voorlaad aantal pagina\'s</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Behoud de leespositie van gelezen items</string>
+  <string name="reader_bottom_buttons">Lezer onderste knoppen</string>
+  <string name="reader_bottom_buttons_summary">Pas aan welke knoppen worden weergegeven aan de onderkant van de lezer</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Eerste pagina als afdekking instellen</string>
+  <string name="action_set_second_page_cover">Tweede pagina als afdekking instellen</string>
+  <string name="action_save_first_page">Eerste pagina opslaan</string>
+  <string name="action_save_second_page">Tweede pagina opslaan</string>
+  <string name="action_share_first_page">Eerste pagina delen</string>
+  <string name="action_share_second_page">Tweede pagina delen</string>
+  <string name="action_save_combined_page">Gecombineerde pagina opslaan</string>
+  <string name="action_share_combined_page">Deel gecombineerde pagina</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, pagina\'s %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Pagina lay-out</string>
+  <string name="shift_double_pages">Eén pagina over verplaatsen</string>
+  <string name="double_pages">Dubbele pagina\'s</string>
+  <string name="single_page">Enkele pagina</string>
+  <string name="automatic_orientation">Automatisch (gebaseerd op oriëntatie)</string>
+  <string name="automatic_can_still_switch">Tijdens het gebruik van automatische pagina-lay-out kunt u nog steeds schakelen tussen lay-outs tijdens het lezen zonder deze instelling te overschrijven</string>
+  <string name="invert_double_pages">Dubbele pagina\'s omkeren </string>
+  <string name="center_margin" comment="center_margin Center margin">Centreer marge</string>
+  <string name="center_margin_none">geen</string>
+  <string name="center_margin_double_page">Aan dubbele pagina toevoegen</string>
+  <string name="center_margin_wide_page">Aan brede pagina toevoegen</string>
+  <string name="center_margin_double_and_wide_page">Voeg toe aan beide</string>
+  <string name="pref_center_margin">Centraal marchetype</string>
+  <string name="pref_center_margin_summary">Geef ruimte aan ruimte op opvouwbare apparaten.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Aangepaste kleurkiezer</string>
+  <string name="custom_color_description">Kies een kleur voor het aangepaste thema</string>
+  <string name="theme_custom">Aangepast Thema</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Back-up</string>
+  <string name="label_sync">Synchroniseren</string>
+  <string name="label_triggers">Triggeraars</string>
+  <string name="pref_backup_and_sync_summary">Handmatige &amp; automatische back-ups en synchronisatie</string>
+  <string name="update_30min">Elke 30 minuten</string>
+  <string name="update_1hour">Elk uur</string>
+  <string name="update_3hour">Elke 3 uur</string>
+  <string name="sync_error">Synchronisatie bibliotheek mislukt</string>
+  <string name="sync_complete">Bibliotheek wordt gesynchroniseerd</string>
+  <string name="sync_in_progress">Synchronisatie is al bezig</string>
+  <string name="pref_sync_host">Hostnaam</string>
+  <string name="pref_sync_host_summ">Voer het hostadres in voor het synchroniseren van uw bibliotheek</string>
+  <string name="pref_sync_api_key">API sleutel</string>
+  <string name="pref_sync_api_key_summ">Voer de API-sleutel in om uw bibliotheek te synchroniseren</string>
+  <string name="pref_sync_now_group_title">Synchroniseer acties</string>
+  <string name="pref_sync_now">Nu synchroniseren</string>
+  <string name="pref_sync_confirmation_title">Synchronisatie bevestigen</string>
+  <string name="pref_sync_now_subtitle">Begin onmiddellijke synchronisatie van uw gegevens</string>
+  <string name="pref_sync_confirmation_message">Synchroniseren overschrijft uw lokale bibliotheek met de externe bibliotheek. Weet u zeker dat u wilt doorgaan?</string>
+  <string name="pref_sync_service">Diensten</string>
+  <string name="pref_sync_service_summ">Selecteer de service om uw bibliotheek met te synchroniseren</string>
+  <string name="pref_sync_service_category">Synchroniseren</string>
+  <string name="pref_sync_automatic_category">Automatische synchronisatie</string>
+  <string name="pref_sync_interval">Synchronisatie frequentie</string>
+  <string name="pref_choose_what_to_sync">Kies wat je wilt synchroniseren</string>
+  <string name="success_reset_sync_timestamp">Laatste synchronisatie tijdstempel gereset</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Klaar in %1$s</string>
+  <string name="last_synchronization">Laatste synchronisatie: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Log in</string>
+  <string name="google_drive_sign_in_success">Succesvol ingelogd</string>
+  <string name="google_drive_sign_in_failed">Inloggen mislukt</string>
+  <string name="authentication">Authenticatie</string>
+  <string name="pref_google_drive_purge_sync_data">Verwijder Sync Data van Google Drive</string>
+  <string name="google_drive_sync_data_purged">Synchroniseer gegevens verwijderd van Google Drive</string>
+  <string name="google_drive_sync_data_not_found">Geen synchronisatiegegevens gevonden in Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">Fout bij het verwijderen van synchronisatiegegevens van Google Drive, probeer opnieuw aan te melden.</string>
+  <string name="google_drive_login_success">Ingelogd bij Google Drive</string>
+  <string name="google_drive_login_failed">Fout bij het inloggen op Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">Niet ingelogd bij Google Drive</string>
+  <string name="error_uploading_sync_data">Fout bij het uploaden van synchronisatiegegevens naar Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Fout bij het verwijderen van Google Drive Lock Bestand</string>
+  <string name="error_before_sync_gdrive">Fout vóór synchronisatie: %s</string>
+  <string name="pref_purge_confirmation_title">Opschonen bevestiging</string>
+  <string name="pref_purge_confirmation_message">Het verwijderen van synchronisatiegegevens zal al uw synchronisatiegegevens verwijderen van Google Drive. Weet u zeker dat u wilt doorgaan?</string>
+  <string name="pref_sync_options">Creëer synchronisatie-triggers</string>
+  <string name="pref_sync_options_summ">Kan worden gebruikt om synchronisatie-triggers in te stellen</string>
+  <string name="sync_on_chapter_read">Synchroniseer met hoofdstuk lezen</string>
+  <string name="sync_on_chapter_open">Synchroniseer bij openen van hoofdstuk</string>
+  <string name="sync_on_episode_seen">Synchroniseren bij aflevering gezien</string>
+  <string name="sync_on_episode_open">Synchroniseren bij open aflevering</string>
+  <string name="sync_on_app_start">Synchroniseer bij starten app</string>
+  <string name="sync_on_app_resume">Synchroniseren met App Hervatten</string>
+  <string name="sync_library">Synchroniseer bibliotheek</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Vernieuw de extensie pagina om de lijst bij te werken.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Navigatiebalk</string>
+  <string name="pref_hide_updates_button">Toon updates in nav</string>
+  <string name="pref_hide_history_button">Toon geschiedenis in de nav</string>
+  <string name="pref_show_bottom_bar_labels">Altijd nav labels weergeven</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Selecteer een tracker</string>
+  <string name="entry_not_tracked">Item wordt niet getrackt.</string>
+  <string name="fill_from_tracker">Vul van tracker</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr werkt. Gebruikersagent bijgewerkt. Start de app opnieuw op</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr werkt niet. Gebruikersagent is niet bijgewerkt. Controleer uw instellingen</string>
+  <string name="flare_solver_error">Fout bij contact opnemen FlareSolverr</string>
+  <string name="flare_solver_error_webview">Fout bij het oplossen met WebView</string>
+  <string name="pref_enable_flare_solverr">FlareSolverr inschakelen</string>
+  <string name="pref_enable_flare_solverr_summary">Gebruik FlareSolverr om Cloudflare-\'s anti-bot beveiliging te omzeilen</string>
+  <string name="pref_flare_solverr_url">FlareSolverr URL</string>
+  <string name="pref_flare_solverr_url_summary">URL van de FlareSolverr versie die bijvoorbeeld http://192.168.1.202:8191/v1 gebruikt kan worden</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Test FlareSolverr en update gebruikersagent</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Test FlareSolverr om de user agent bij te werken. Slechts één keer nodig; schakel daarna de schakelaar indien nodig.</string>
+  <string-array name="title_cast_quality">
+    <item>Kies Cast-kwaliteit/provider</item>
+    <item>Selecteer kwaliteit</item>
+  </string-array>
+  <string name="cast_not_connected">Cast niet verbonden</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Video toegevoegd aan de wachtrij</item>
+    <item>Video toegevoegd aan de wachtrij</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Fout bij het laden van video van Cast</item>
+    <item>Fout bij laden video</item>
+  </string-array>
+  <string name="server_local_notification_casting">De lokale server is actief. Tik om deze te stoppen.</string>
+  <string name="server_local_notification_channel_description">Lokaal server meldingskanaal</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">Autoscrollen</string>
+  <string name="eh_retry_all">Alles opnieuw proberen</string>
+  <string name="eh_boost_page">Boost pagina</string>
+  <string name="eh_autoscroll_help">Autoscrol hulp</string>
+  <string name="eh_autoscroll_help_message">Automatisch naar de volgende pagina scrollen in de opgegeven interval. Interval is opgegeven in seconden.</string>
+  <string name="eh_autoscroll_freq_invalid">Ongeldige frequentie</string>
+  <string name="eh_retry_all_help">Probeer alle hulp opnieuw</string>
+  <string name="eh_retry_all_help_message">Alle mislukte pagina\'s opnieuw toevoegen aan de wachtrij voor downloaden.</string>
+  <string name="eh_boost_page_help">Boost pagina help</string>
+  <string name="eh_boost_page_help_message">Normaal gesproken kan de downloader alleen een bepaald aantal pagina\'s tegelijk downloaden. Dit betekent dat je kan wachten op een pagina om te downloaden, maar de downloader zal de pagina niet starten totdat het een gratis downloadvak heeft. Het indrukken van de \'Boost page\' zal de downloader dwingen om de huidige pagina te downloaden, ongeacht of er een beschikbaar slot is of niet.</string>
+  <string name="eh_boost_page_invalid">Deze pagina kan niet worden geboost (ongeldige pagina)!</string>
+  <string name="eh_boost_page_errored">Pagina kan niet worden geladen, druk in plaats daarvan op de knop \'Opnieuw proberen\'!</string>
+  <string name="eh_boost_page_downloading">Deze pagina wordt al gedownload!</string>
+  <string name="eh_boost_page_downloaded">Deze pagina is al gedownload!</string>
+  <string name="eh_boost_boosted">Geboost huidige pagina!</string>
+  <string name="eh_boost_invalid_loader">Deze pagina kan niet worden geboost (ongeldige pagina-loader)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Opnieuw proberen van %1$d mislukte pagina…</item>
+    <item quantity="other">Opnieuw proberen %1$d mislukte pagina\'s…</item>
+  </plurals>
+  <string name="pref_category_castserver">Server casten</string>
+  <string name="pref_cast_server_port">Castserver poort</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Discord aanpassingen</string>
+  <string name="pref_discord_custom_message">Aangepast bericht</string>
+  <string name="pref_discord_custom_message_summary">Aangepast bericht dat zal worden getoond op Discord</string>
+  <string name="pref_discord_show_progress">Toon voortgang</string>
+  <string name="pref_discord_show_progress_summary">Toon de huidige aflevering/hoofdstuk voortgang</string>
+  <string name="pref_discord_show_timestamp">Toon tijd</string>
+  <string name="pref_discord_show_timestamp_summary">Verlengde/resterende tijd weergeven</string>
+  <string name="pref_discord_show_buttons">Knoppen weergeven</string>
+  <string name="pref_discord_show_buttons_summary">Toon knoppen om de app te downloaden of toe te treden tot de Discord server</string>
+  <string name="pref_discord_show_download_button">Downloadknop weergeven</string>
+  <string name="pref_discord_show_download_button_summary">Toont een knop om de app te downloaden</string>
+  <string name="pref_discord_show_discord_button">Toon Discord knop</string>
+  <string name="pref_discord_show_discord_button_summary">Toont een knop om toe te treden tot de Discord server</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Wachtrij afspelen</string>
+  <string name="action_clear_queue">Wachtrij wissen</string>
+  <string name="cast_remove_from_queue">Verwijderen uit wachtrij</string>
+  <string name="move_to_top">Naar Boven Verplaatsen</string>
+  <string name="move_to_position">Verplaats naar Positie</string>
+  <string name="position">Positie</string>
+  <string name="select_position">Positie selecteren</string>
+  <string name="remove_from_queue_confirmation">Uit de wachtrij verwijderen?</string>
+  <string name="clear_queue_confirmation">Wachtrij wissen</string>
+  <string name="clear_queue_confirmation_message">Weet u zeker dat u de hele wachtrij wilt wissen?</string>
+  <string name="queue">Wachtrij</string>
+  <string name="move_to_bottom">Naar beneden verplaatsen</string>
+  <string name="action_end_session">Beëindig sessie</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Beschikbare apparaten</string>
+  <string name="cast_media_info">Media informatie</string>
+  <string name="cast_previous_video">Vorige video</string>
+  <string name="cast_next_video">Volgende video</string>
+  <string name="cast_play">Afspelen</string>
+  <string name="cast_pause">Onderbreken</string>
+  <string name="cast_rewind_30s">30s terugspoelen</string>
+  <string name="cast_forward_30s">30 seconden vooruit</string>
+  <string name="cast_volume">Volume</string>
+  <string name="cast_end_session">Beëindig sessie</string>
+  <string name="empty_queue">Wachtrij is leeg</string>
+  <string name="cast_end_session_message">Weet u zeker dat u de huidige cast sessie wilt beëindigen?</string>
+  <string name="cast_end_session_confirm">Sessie beëindigen</string>
+  <string name="cast_end_session_cancel">annuleren</string>
+  <string name="playback_speed">Afspeel snelheid</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Ondertiteling instellingen</item>
+    <item>Ondertiteling instellingen</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Font Size</string>
+  <string name="cast_subtitle_text_color">Tekst kleur</string>
+  <string name="cast_subtitle_background">Achtergrond</string>
+  <string name="cast_subtitle_shadow">Schaduw</string>
+  <string name="cast_subtitle_apply">Toepassen</string>
+  <string name="cast_subtitle_reset">Standaardinstellingen herstellen</string>
+  <string name="cast_subtitle_shadow_None">geen</string>
+  <string name="cast_subtitle_shadow_Light">Licht</string>
+  <string name="cast_subtitle_shadow_Medium">Middelgroot</string>
+  <string name="cast_subtitle_shadow_Strong">Sterk</string>
+  <string name="cast_subtitle_preview">Voorbeeldweergave tekst ≤</string>
+  <string name="cast_tracks">Selecteer ondertiteling/Audio Track</string>
+  <string name="cast_volume_down">Volume omlaag</string>
+  <string name="cast_volume_up">Volume Omhoog</string>
+  <string name="cast_subtitles">Ondertiteling</string>
+  <string name="cast_audio_tracks">Audio tracks</string>
+  <string name="cast_no_subtitles">Geen ondertiteling</string>
+  <string name="cast_close">Afsluiten</string>
+  <string name="cast_subtitle_font_family">Lettertype Familie</string>
+  <string name="cast_subtitle_border_style">Rand stijl</string>
+  <string name="cast_subtitle_border_none">geen</string>
+  <string name="cast_subtitle_border_outline">Omlijning</string>
+  <string name="cast_subtitle_border_drop_shadow">Schaduw laten vallen</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Zacht Drop Schaduw</string>
+  <string name="cast_subtitle_border_raised">Opgeroepen</string>
+  <string name="cast_subtitle_border_depressed">Verdrietig</string>
+  <string name="cast_connection_error">Verbindingsfout</string>
+  <string name="discord_accounts">Discord accounts</string>
+  <string name="active_account">Actieve account</string>
+  <string name="no_accounts_found">Geen accounts gevonden</string>
+  <string name="login_failed">Inloggen mislukt</string>
+  <string name="action_display_comfortable_grid_panorama">Panorama comfortabel raster</string>
+  <string name="action_bulk_select">Bulk selectiemodus</string>
+  <string name="action_move_up">Omhoog verplaatsen</string>
+  <string name="action_move_down">Omlaag verplaatsen</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Te veel bronnen in je feed, kan niet meer dan 20 toevoegen</string>
+  <string name="action_sort_feed">Sorteer feeds</string>
+  <string name="sort_feed_confirmation">Wilt u het voeder alfabetisch sorteren?</string>
+  <string name="saved_searches_feeds">Saved Searches &amp; Feeds</string>
+  <string name="saved_searches_add_feed">Opgeslagen zoekopdrachten (houd vast om toe te voegen aan Feed)</string>
+  <string name="pref_hide_feed">Verberg feedtab</string>
+  <string name="pref_feed_position">Feed tab positie</string>
+  <string name="pref_feed_position_summery">Wil je dat het tabblad feed het eerste tabblad in browser is? Dit zal het tabblad standaard maken bij het openen van browsen, niet aanbevolen als je op data of een datalimiet netwerk bent</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">Verwijder feed item?</string>
+  <string name="feed_tab_empty">Je hebt geen bronnen in je feed, navigeer naar de rechterbovenhoek om er een toe te voegen</string>
+  <string name="feed_add">Voeg %1$s toe aan feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Opgeslagen zoekopdrachten</string>
+  <string name="save_search">Huidige zoekopdracht opslaan?</string>
+  <string name="save_search_hint">Mijn zoeknaam</string>
+  <string name="save_search_failed_to_load">Opgeslagen zoekopdrachten laden mislukt!</string>
+  <string name="save_search_failed_to_load_message">Er is een fout opgetreden tijdens het laden van uw opgeslagen zoekopdrachten.</string>
+  <string name="save_search_delete">Opgeslagen zoekopdracht verwijderen?</string>
+  <string name="save_search_delete_message">Weet u zeker dat u uw opgeslagen zoekopdracht wilt verwijderen: \'%1$s\'?</string>
+  <string name="save_search_invalid">Opgeslagen zoekopdracht ongeldig, filters zijn veranderd</string>
+  <string name="save_search_invalid_name">Ongeldige opgeslagen zoeknaam</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">Geen bron categorieën beschikbaar</string>
+  <string name="invalid_category_name">Ongeldige categorienaam</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Suggesties</string>
+  <string name="pref_source_related_mangas_summary">Suggesties van bron-website weergeven tijdens het bekijken van invoer</string>
+  <string name="related_mangas_website_suggestions">Website Suggesties</string>
+  <string name="related_mangas_more">Meer van deze...</string>
+  <string name="saved_searches_delete">Opgeslagen zoekopdrachten (Houd om te verwijderen)</string>
+  <string name="pref_expand_related_animes">Suggesties uitbreiden</string>
+  <string name="pref_expand_related_animes_summary">Suggesties zullen niet automatisch laden &amp; weergeven als ze zijn uitgeschakeld</string>
+  <string name="put_related_animes_in_overflow">Suggesties in overflow</string>
+  <string name="put_related_animes_in_overflow_summary">Plaats de Suggestie knop in het overloop menu in plaats van op de item pagina</string>
+  <string name="pref_show_home_on_related_animes">Huis van Suggesties</string>
+  <string name="pref_show_home_on_related_animes_summary">Toon een pictogram tijdens het browsen van suggesties om direct terug te gaan naar Home</string>
+  <string name="pref_source_related_animes">Suggesties</string>
+  <string name="pref_source_related_animes_summary">Suggesties van bron-website weergeven tijdens het bekijken van invoer</string>
+  <string name="pref_source_navigation">Laatste knop vervangen</string>
+  <string name="pref_source_navigation_summery">Vervang de nieuwste knop door een aangepaste bladerweergave die zowel nieuwste als browse bevat</string>
+</resources>

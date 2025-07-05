@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastAny
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -40,12 +41,14 @@ import eu.kanade.presentation.more.onboarding.GETTING_STARTED_URL
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
+import eu.kanade.tachiyomi.data.sync.SyncDataJob
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -56,8 +59,10 @@ import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.manga.model.MangaLibraryGroup
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
+import tachiyomi.i18n.tail.TLMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
@@ -102,7 +107,21 @@ data object MangaLibraryTab : Tab {
         val snackbarHostState = remember { SnackbarHostState() }
 
         val onClickRefresh: (Category?) -> Boolean = { category ->
-            val started = MangaLibraryUpdateJob.startNow(context, category)
+            // SY -->
+            val started = MangaLibraryUpdateJob.startNow(
+                context = context,
+                category = if (state.groupType == MangaLibraryGroup.BY_DEFAULT) category else null,
+                group = state.groupType,
+                groupExtra = when (state.groupType) {
+                    MangaLibraryGroup.BY_DEFAULT -> null
+                    MangaLibraryGroup.BY_SOURCE,
+                    MangaLibraryGroup.BY_TRACK_STATUS, MangaLibraryGroup.BY_TAG,
+                    -> category?.id?.toString()
+                    MangaLibraryGroup.BY_STATUS -> category?.id?.minus(1)?.toString()
+                    else -> null
+                },
+            )
+            // SY <--
             scope.launch {
                 val msgRes = if (started) MR.strings.updating_category else MR.strings.update_already_running
                 snackbarHostState.showSnackbar(context.stringResource(msgRes))
@@ -164,6 +183,13 @@ data object MangaLibraryTab : Tab {
                             }
                         }
                     },
+                    onClickSyncNow = {
+                        if (!SyncDataJob.isRunning(context)) {
+                            SyncDataJob.startNow(context)
+                        } else {
+                            context.toast(TLMR.strings.sync_in_progress)
+                        }
+                    },
                     searchQuery = state.searchQuery,
                     onSearchQueryChange = screenModel::search,
                     scrollBehavior = scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
@@ -179,6 +205,9 @@ data object MangaLibraryTab : Tab {
                     onDownloadClicked = screenModel::runDownloadActionSelection
                         .takeIf { state.selection.fastAll { !it.manga.isLocal() } },
                     onDeleteClicked = screenModel::openDeleteMangaDialog,
+                    // SY -->
+                    onClickResetInfo = screenModel::resetInfo.takeIf { state.showResetInfo },
+                    // SY <--
                     isManga = true,
                 )
             },
@@ -257,14 +286,13 @@ data object MangaLibraryTab : Tab {
         when (val dialog = state.dialog) {
             is MangaLibraryScreenModel.Dialog.SettingsSheet -> run {
                 val category = state.categories.getOrNull(screenModel.activeCategoryIndex)
-                if (category == null) {
-                    onDismissRequest()
-                    return@run
-                }
                 MangaLibrarySettingsDialog(
                     onDismissRequest = onDismissRequest,
                     screenModel = settingsScreenModel,
                     category = category,
+                    // SY -->
+                    hasCategories = state.categories.fastAny { !it.isSystemCategory },
+                    // SY <--
                 )
             }
             is MangaLibraryScreenModel.Dialog.ChangeCategory -> {

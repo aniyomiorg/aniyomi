@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="tracking_status" comment="tracking_status Only Stuff in Animetail Library Grouping">Estado del seguimiento</string>
+  <string name="tag">Etiquetas</string>
+  <string name="ungrouped">No agrupado</string>
+  <string name="not_tracked">No rastreado</string>
+  <string name="group" comment="group More Info Menu">Grupo</string>
+  <string name="anime_library_group_updates" comment="anime_library_group_updates Library settings">Actualizaciones dinámicas de categorías de Anime Library</string>
+  <string name="manga_library_group_updates">Actualizaciones de categorías dinámicas de Manga Library</string>
+  <string name="library_group_updates_global">Siempre lanzar actualizaciones globales</string>
+  <string name="library_group_updates_all_but_ungrouped">Lanzar actualizaciones globales para los no agrupados y por categoría para los demás</string>
+  <string name="library_group_updates_all">Lanzar actualizaciones por categoría todo el tiempo</string>
+  <string name="reset_tags" comment="reset_tags Entry Info Edit">Restablecer las etiquetas</string>
+  <string name="add_tag">Añadir etiqueta</string>
+  <string name="title_hint">Título: %1$s</string>
+  <string name="description_hint">Descripción: %1$s</string>
+  <string name="author_hint">Autor: %1$s</string>
+  <string name="artist_hint">Artista: %1$s</string>
+  <string name="custom_entry_info">Información de entrada personalizada</string>
+  <string name="reset_info">Restablecer información</string>
+  <string name="pref_category_cast" comment="pref_category_cast Cast">Configuración de transmisión</string>
+  <string name="pref_enable_cast">Habilitar o deshabilitar la transmisión</string>
+  <string name="action_cast">Enviar a la transmisión</string>
+  <string name="pref_show_downloaded_episode_file_size" comment="pref_show_downloaded_episode_file_size Preferences">Mostrar el tamaño del archivo del episodio descargado</string>
+  <string name="pref_category_fork" comment="pref_category_fork Subsections">Ajustes de bifurcación</string>
+  <string name="action_edit_info" comment="action_edit_info Actions">Editar info</string>
+  <string name="special_services" comment="special_services Connections section">Servicios Especiales</string>
+  <string name="pref_category_connections">Conexiones</string>
+  <string name="pref_connections_summary">Discord, más por venir…</string>
+  <string name="connections_info">Servicios especiales exclusivos de Animetail que mejoran la forma en que usas la app</string>
+  <string name="connections_discord">Discord</string>
+  <string name="connections_discord_info">Este servicio de Discord funciona a través de inicio de sesión con token. Úsalo bajo tu propio riesgo. Tu token se guarda localmente y Animetail no lo comparte en ningún otro lugar</string>
+  <string name="pref_discord_rpc">Discord Rica Presence</string>
+  <string name="show_chapters_titles_title">Mostrar títulos de episodios/capítulos</string>
+  <string name="show_chapters_titles_subtitle">Mostrar el título del episodio/capítulo que estás leyendo</string>
+  <string name="pref_enable_discord_rpc">Habilitar Discord Rich Presence</string>
+  <string name="pref_discord_status">Estado de Discord</string>
+  <string name="pref_discord_dnd">⛔ No molestar</string>
+  <string name="pref_discord_idle">🌙 Inactivo</string>
+  <string name="pref_discord_online">🟢 En línea</string>
+  <string name="pref_category_discord_incognito">RPC Incógnito</string>
+  <string name="pref_discord_incognito">Modo Discord Incógnito</string>
+  <string name="pref_discord_incognito_summary">Anulado cuando se habilita el modo incógnito</string>
+  <string name="pref_discord_incognito_categories_details">Las entradas en las categorías incluidas no se mostrarán en Discord</string>
+  <string name="browsing" comment="browsing Discord section">Navegando</string>
+  <string name="scrolling">Desplazándose</string>
+  <string name="messing">Experimentando con</string>
+  <string name="video">Vídeo</string>
+  <string name="comic">Cómic</string>
+  <string name="install_amnis" comment="install_amnis Torrent">Es necesario instalar Amnis Player</string>
+  <string name="pref_category_torrentserver">Preferencias de TorrentServer</string>
+  <string name="pref_torrentserver_port">Puerto para TorrentServer</string>
+  <string name="torrentserver_is_running">Torrent Server se está ejecutando</string>
+  <string name="pref_torrent_trackers">Rastreadores Torrent</string>
+  <string name="pref_reset_torrent_trackers_string">Restablecer cadena de rastreadores de torrent por defecto</string>
+  <string name="pref_page_preload_amount" comment="pref_page_preload_amount Prefs">Cantidad de precarga de página</string>
+  <string name="preserve_reading_position" comment="preserve_reading_position Reader Reader Settings">Conservar la posición de lectura en las entradas leídas</string>
+  <string name="reader_bottom_buttons">Botones inferiores del lector</string>
+  <string name="reader_bottom_buttons_summary">Personalizar los botones que aparecen en la parte inferior del lector</string>
+  <string name="action_set_first_page_cover" comment="action_set_first_page_cover Reader Actions">Establecer la primera página como portada</string>
+  <string name="action_set_second_page_cover">Establecer la segunda página como portada</string>
+  <string name="action_save_first_page">Guardar la primera página</string>
+  <string name="action_save_second_page">Guardar la segunda página</string>
+  <string name="action_share_first_page">Compartir la primera página</string>
+  <string name="action_share_second_page">Compartir la segunda página</string>
+  <string name="action_save_combined_page">Guardar la página combinada</string>
+  <string name="action_share_combined_page">Compartir la página combinada</string>
+  <string name="share_pages_info" comment="share_pages_info Reader Sharing">%1$s: %2$s, páginas %3$s</string>
+  <string name="page_layout" comment="page_layout Double page spread">Diseño de página</string>
+  <string name="shift_double_pages">Desplazar una página</string>
+  <string name="double_pages">Dobles páginas</string>
+  <string name="single_page">Una sola página</string>
+  <string name="automatic_orientation">Automático (basado en la orientación)</string>
+  <string name="automatic_can_still_switch">Al usar el diseño de página automático, aún puedes cambiar entre diseños mientras lees sin anular esta configuración</string>
+  <string name="invert_double_pages">Invertir doble página </string>
+  <string name="center_margin" comment="center_margin Center margin">Centrar margen</string>
+  <string name="center_margin_none">Nada</string>
+  <string name="center_margin_double_page">Añadir a doble página</string>
+  <string name="center_margin_wide_page">Añadir a la página ancha</string>
+  <string name="center_margin_double_and_wide_page">Agregar a ambos</string>
+  <string name="pref_center_margin">Tipo del margen central</string>
+  <string name="pref_center_margin_summary">Insertar espaciador para ajustar el espacio muerto en dispositivos plegables.</string>
+  <string name="pref_custom_color" comment="pref_custom_color Custom Color Picker">Selector de color personalizado</string>
+  <string name="custom_color_description">Elige un color para el tema personalizado</string>
+  <string name="theme_custom">Tema personalizado</string>
+  <string name="label_backup" comment="label_backup Cross Device Sync">Respaldar</string>
+  <string name="label_sync">Sincronizar</string>
+  <string name="label_triggers">Disparadores</string>
+  <string name="pref_backup_and_sync_summary">Copias de seguridad automáticas &amp; y sincronización manual</string>
+  <string name="update_30min">Cada 30 minutos</string>
+  <string name="update_1hour">Cada hora</string>
+  <string name="update_3hour">Cada 3 horas</string>
+  <string name="sync_error">Error al sincronizar la biblioteca</string>
+  <string name="sync_complete">Sincronización completa</string>
+  <string name="sync_in_progress">La sincronización ya está en progreso</string>
+  <string name="pref_sync_host">Host</string>
+  <string name="pref_sync_host_summ">Introduzca la dirección del host para sincronizar su biblioteca</string>
+  <string name="pref_sync_api_key">Clave API</string>
+  <string name="pref_sync_api_key_summ">Introduzca la clave API para sincronizar su biblioteca</string>
+  <string name="pref_sync_now_group_title">Acciones de sincronización</string>
+  <string name="pref_sync_now">Sincronizar ahora</string>
+  <string name="pref_sync_confirmation_title">Confirmación de sincronización</string>
+  <string name="pref_sync_now_subtitle">Iniciar la sincronización inmediata de sus datos</string>
+  <string name="pref_sync_confirmation_message">La sincronización sobrescribirá tu biblioteca local con la biblioteca remota. ¿Estás seguro de que deseas continuar?</string>
+  <string name="pref_sync_service">Servicio</string>
+  <string name="pref_sync_service_summ">Seleccione el servicio con el que sincronizar su biblioteca</string>
+  <string name="pref_sync_service_category">Sincronizar</string>
+  <string name="pref_sync_automatic_category">Sincronización automática</string>
+  <string name="pref_sync_interval">Frecuencia de sincronización</string>
+  <string name="pref_choose_what_to_sync">Elige qué sincronizar</string>
+  <string name="success_reset_sync_timestamp">Última marca de tiempo de sincronización restablecida</string>
+  <string name="syncyomi">SyncYomi</string>
+  <string name="sync_completed_message">Listo en %1$s</string>
+  <string name="last_synchronization">Última sincronización: %1$s</string>
+  <string name="google_drive">Google Drive</string>
+  <string name="pref_google_drive_sign_in">Iniciar sesión</string>
+  <string name="google_drive_sign_in_success">Sesión iniciada correctamente</string>
+  <string name="google_drive_sign_in_failed">Error al iniciar sesión</string>
+  <string name="authentication">Autenticación</string>
+  <string name="pref_google_drive_purge_sync_data">Borrar datos de sincronización de Google Drive</string>
+  <string name="google_drive_sync_data_purged">Sincronizar datos borrados de Google Drive</string>
+  <string name="google_drive_sync_data_not_found">No se han encontrado datos de sincronización en Google Drive</string>
+  <string name="google_drive_sync_data_purge_error">Error al purgar los datos de sincronización de Google Drive. Intenta iniciar sesión nuevamente.</string>
+  <string name="google_drive_login_success">Conectado a Google Drive</string>
+  <string name="google_drive_login_failed">No se pudo iniciar sesión en Google Drive: %s</string>
+  <string name="google_drive_not_signed_in">No has iniciado sesión en Google Drive</string>
+  <string name="error_uploading_sync_data">Error al subir los datos de sincronización a Google Drive</string>
+  <string name="error_deleting_google_drive_lock_file">Error al eliminar el archivo de bloqueo de Google Drive</string>
+  <string name="error_before_sync_gdrive">Error antes de la sincronización: %s</string>
+  <string name="pref_purge_confirmation_title">Confirmación de eliminación</string>
+  <string name="pref_purge_confirmation_message">Purgar los datos de sincronización eliminará todos tus datos de sincronización de Google Drive. ¿Estás seguro de que deseas continuar?</string>
+  <string name="pref_sync_options">Crear disparadores de sincronización</string>
+  <string name="pref_sync_options_summ">Puede usarse para configurar disparadores de sincronización</string>
+  <string name="sync_on_chapter_read">Sincronizar al leer el capítulo</string>
+  <string name="sync_on_chapter_open">Sincronizar al abrir capítulo</string>
+  <string name="sync_on_episode_seen">Sincronizar al ver el episodio</string>
+  <string name="sync_on_episode_open">Sincronizar al abrir el episodio</string>
+  <string name="sync_on_app_start">Sincronizar al iniciar la app</string>
+  <string name="sync_on_app_resume">Sincronizar al reanudar la app</string>
+  <string name="sync_library">Sincronizar biblioteca</string>
+  <string name="extensions_page_need_refresh" comment="extensions_page_need_refresh repo management">Actualiza la página de la extensión para actualizar la lista.</string>
+  <string name="pref_category_navbar" comment="pref_category_navbar navigation">Barra de navegación</string>
+  <string name="pref_hide_updates_button">Mostrar actualizaciones en la barra de navegación</string>
+  <string name="pref_hide_history_button">Mostrar historial en la barra de navegación</string>
+  <string name="pref_show_bottom_bar_labels">Mostrar siempre las etiquetas de la barra de navegación</string>
+  <string name="select_tracker" comment="select_tracker tracker anime e manga details">Seleccionar un rastreador</string>
+  <string name="entry_not_tracked">No se ha realizado seguimiento de la entrada.</string>
+  <string name="fill_from_tracker">Rellenar desde el rastreador</string>
+  <string name="flare_solver_user_agent_update_success" comment="flare_solver_user_agent_update_success FlareSolverr">FlareSolverr operativo. Agente actualizado. Reinicie la aplicación</string>
+  <string name="flare_solver_update_user_agent_failed">FlareSolverr inactivo. Agente no actualizado. Verifique la configuración</string>
+  <string name="flare_solver_error">Error de conexión con FlareSolverr</string>
+  <string name="flare_solver_error_webview">Fallo en la resolución con WebView</string>
+  <string name="pref_enable_flare_solverr">Habilitar FlareSolverr</string>
+  <string name="pref_enable_flare_solverr_summary">Utiliza FlareSolverr para superar la protección antibots de Cloudflare</string>
+  <string name="pref_flare_solverr_url">URL de FlareSolverr</string>
+  <string name="pref_flare_solverr_url_summary">URL de la instancia de FlareSolverr a utilizar, por ejemplo: http://192.168.1.202:8191/v1</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent">Probar FlareSolverr y actualizar el agente de usuario</string>
+  <string name="pref_test_flare_solverr_and_update_user_agent_summary">Pruebe FlareSolverr para actualizar el agente de usuario. Solo es necesario una vez; luego cambie según sea necesario.</string>
+  <string-array name="title_cast_quality">
+    <item>Elige calidad/proveedor de transmisión</item>
+    <item>Seleccionar Calidad</item>
+  </string-array>
+  <string name="cast_not_connected">Transmisión no establecida</string>
+  <string-array name="cast_video_added_to_queue">
+    <item>Vídeo añadido a la cola</item>
+    <item>Vídeo añadido a la cola</item>
+  </string-array>
+  <string-array name="cast_error_loading">
+    <item>Error al cargar el video desde el Cast</item>
+    <item>Error al cargar el video</item>
+  </string-array>
+  <string name="server_local_notification_casting">El servidor local está en ejecución. Toca para detenerlo.</string>
+  <string name="server_local_notification_channel_description">Canal de notificación del servidor local</string>
+  <string name="eh_autoscroll" comment="eh_autoscroll Auto scroll">AutoScroll</string>
+  <string name="eh_retry_all">Reintentar todo</string>
+  <string name="eh_boost_page">Potenciar página</string>
+  <string name="eh_autoscroll_help">Ayuda para el AutoScroll</string>
+  <string name="eh_autoscroll_help_message">Desplazamiento automático a la siguiente página en el intervalo especificado. El intervalo se especifica en segundos.</string>
+  <string name="eh_autoscroll_freq_invalid">Frecuencia no válida</string>
+  <string name="eh_retry_all_help">Ayuda el Reintentar todo</string>
+  <string name="eh_retry_all_help_message">Vuelve a agregar todas las páginas fallidas a la cola de descargas.</string>
+  <string name="eh_boost_page_help">Ayuda con el potenciador de página</string>
+  <string name="eh_boost_page_help_message">Normalmente, el descargador solo puede descargar una cantidad específica de páginas al mismo tiempo. Esto significa que puedes estar esperando a que se descargue una página, pero el descargador no comenzará a descargarla hasta que tenga un espacio de descarga disponible. Al presionar \'Potenciar página\', se forzará al descargador a comenzar a descargar la página actual, sin importar si hay o no un espacio disponible.</string>
+  <string name="eh_boost_page_invalid">¡Esta página no puede ser potenciada (página inválida)!</string>
+  <string name="eh_boost_page_errored">La página no se cargó, ¡presiona el botón de reintentar!</string>
+  <string name="eh_boost_page_downloading">¡Esta página ya se está descargando!</string>
+  <string name="eh_boost_page_downloaded">¡Esta página ya se está descargando!</string>
+  <string name="eh_boost_boosted">¡Página actual potenciada!</string>
+  <string name="eh_boost_invalid_loader">¡Esta página no puede ser potenciada (cargador de página inválido)!</string>
+  <plurals name="eh_retry_toast" comment="eh_retry_toast [one] [other]">
+    <item quantity="one">Reintentando %1$d página fallida…</item>
+    <item quantity="other">Reintentando %1$d páginas fallidas…</item>
+  </plurals>
+  <string name="pref_category_castserver">Cast Server</string>
+  <string name="pref_cast_server_port">Puerto para el Servidor Cast</string>
+  <string name="pref_category_discord_customization" comment="pref_category_discord_customization Discord RPC Customization">Personalizar Discord</string>
+  <string name="pref_discord_custom_message">Mensaje personalizado</string>
+  <string name="pref_discord_custom_message_summary">Mensaje personalizado que se mostrará en Discord</string>
+  <string name="pref_discord_show_progress">Mostrar barra de progreso</string>
+  <string name="pref_discord_show_progress_summary">Mostrar el progreso actual del episodio/capítulo</string>
+  <string name="pref_discord_show_timestamp">Mostrar Tiempo</string>
+  <string name="pref_discord_show_timestamp_summary">Mostrar el tiempo transcurrido/restante</string>
+  <string name="pref_discord_show_buttons">Mostrar Botones</string>
+  <string name="pref_discord_show_buttons_summary">Mostrar botones para descargar la aplicación o unirse al servidor de Discord</string>
+  <string name="pref_discord_show_download_button">Mostrar el botón de descarga</string>
+  <string name="pref_discord_show_download_button_summary">Muestra un botón para descargar la aplicación</string>
+  <string name="pref_discord_show_discord_button">Mostrar el botón de Discord</string>
+  <string name="pref_discord_show_discord_button_summary">Muestra un botón para unirse al servidor de Discord</string>
+  <string name="cast_queue_title" comment="cast_queue_title Cast Queue Management">Cola de Reproducción</string>
+  <string name="action_clear_queue">Vaciar Cola</string>
+  <string name="cast_remove_from_queue">Quitar de la cola</string>
+  <string name="move_to_top">Mover al principio</string>
+  <string name="move_to_position">Mover a la posición</string>
+  <string name="position">Posición</string>
+  <string name="select_position">Seleccionar posición</string>
+  <string name="remove_from_queue_confirmation">¿Quitar de la cola?</string>
+  <string name="clear_queue_confirmation">Vaciar Cola</string>
+  <string name="clear_queue_confirmation_message">¿Estás seguro de que quieres vaciar toda la cola?</string>
+  <string name="queue">Cola de Reproducción</string>
+  <string name="move_to_bottom">Mover hacia abajo</string>
+  <string name="action_end_session">Finalizar Sesión Cast</string>
+  <string name="cast_available_devices" comment="cast_available_devices Cast device picker">Dispositivos Disponibles</string>
+  <string name="cast_media_info">Media info</string>
+  <string name="cast_previous_video">Video Anterior</string>
+  <string name="cast_next_video">Siguiente Video</string>
+  <string name="cast_play">Reproducir</string>
+  <string name="cast_pause">Pausar</string>
+  <string name="cast_rewind_30s">Rebobinar 30s</string>
+  <string name="cast_forward_30s">Avanzar 30s</string>
+  <string name="cast_volume">Volumen</string>
+  <string name="cast_end_session">Finalizar Sesión Cast</string>
+  <string name="empty_queue">La cola está vacía</string>
+  <string name="cast_end_session_message">¿Seguro que quieres finalizar la transmisión actual?</string>
+  <string name="cast_end_session_confirm">Terminar sesión</string>
+  <string name="cast_end_session_cancel">Cancelar</string>
+  <string name="playback_speed">Velocidad de reproducción</string>
+  <string-array name="cast_subtitle_settings">
+    <item comment="cast_subtitle_settings&#10;Cast Subtitle Settings">Configuración de subtítulos</item>
+    <item>Configuración de subtítulos</item>
+  </string-array>
+  <string name="cast_subtitle_font_size">Tamaño de fuente</string>
+  <string name="cast_subtitle_text_color">Color del texto</string>
+  <string name="cast_subtitle_background">Fondo</string>
+  <string name="cast_subtitle_shadow">Sombras</string>
+  <string name="cast_subtitle_apply">Aplicar</string>
+  <string name="cast_subtitle_reset">Restablecer valores predeterminados</string>
+  <string name="cast_subtitle_shadow_None">Nada</string>
+  <string name="cast_subtitle_shadow_Light">Claro</string>
+  <string name="cast_subtitle_shadow_Medium">Mediano</string>
+  <string name="cast_subtitle_shadow_Strong">Negrita</string>
+  <string name="cast_subtitle_preview">Vista previa del texto あ漢</string>
+  <string name="cast_tracks">Seleccionar Subtítulo/Audio</string>
+  <string name="cast_volume_down">Bajar Volumen</string>
+  <string name="cast_volume_up">Subir Volumen</string>
+  <string name="cast_subtitles">Subtítulos</string>
+  <string name="cast_audio_tracks">Audio</string>
+  <string name="cast_no_subtitles">Sin subtítulos</string>
+  <string name="cast_close">Cerrar</string>
+  <string name="cast_subtitle_font_family">Familia de la fuente</string>
+  <string name="cast_subtitle_border_style">Estilo del borde</string>
+  <string name="cast_subtitle_border_none">Nada</string>
+  <string name="cast_subtitle_border_outline">Contorno</string>
+  <string name="cast_subtitle_border_drop_shadow">Sombra paralela</string>
+  <string name="cast_subtitle_border_drop_shadow_soft">Sombra Suave</string>
+  <string name="cast_subtitle_border_raised">Elevado</string>
+  <string name="cast_subtitle_border_depressed">Melancólico</string>
+  <string name="cast_connection_error">Error de Conexión</string>
+  <string name="discord_accounts">Cuentas de Discord</string>
+  <string name="active_account">Cuenta Activa</string>
+  <string name="no_accounts_found">No se encontraron cuentas</string>
+  <string name="login_failed">No se ha podido iniciar sesión</string>
+  <string name="action_display_comfortable_grid_panorama">Panel panorámico adaptable</string>
+  <string name="action_bulk_select">Modo de selección múltiple</string>
+  <string name="action_move_up">Mover arriba</string>
+  <string name="action_move_down">Mover abajo</string>
+  <string name="too_many_in_feed" comment="too_many_in_feed Feed Tab">Demasiadas fuentes en tu feed. No se pueden agregar más de 20</string>
+  <string name="action_sort_feed">Ordenar feeds</string>
+  <string name="sort_feed_confirmation">¿Deseas ordenar los feeds alfabéticamente?</string>
+  <string name="saved_searches_feeds">Búsquedas guardadas &amp; Leeds</string>
+  <string name="saved_searches_add_feed">Búsquedas guardadas (Mantén presionado para añadir al Feed)</string>
+  <string name="pref_hide_feed">Ocultar pestaña de Feed</string>
+  <string name="pref_feed_position">Posición de la pestaña Feed</string>
+  <string name="pref_feed_position_summery">¿Quieres que la pestaña Feed sea la primera en Navegar? Esto la convertirá en la pestaña predeterminada al abrir Navegar. No recomendado si usas datos móviles o una red con límite</string>
+  <string name="feed">Feed</string>
+  <string name="feed_delete">¿Eliminar elemento del feed?</string>
+  <string name="feed_tab_empty">No tienes fuentes en tu feed. Ve a la esquina superior derecha para agregar una</string>
+  <string name="feed_add">¿Quieres añadir %1$s a tu feed?</string>
+  <string name="saved_searches" comment="saved_searches Saved Searches">Búsquedas guardadas</string>
+  <string name="save_search">¿Guardar la búsqueda actual?</string>
+  <string name="save_search_hint">Nombre de mi búsqueda</string>
+  <string name="save_search_failed_to_load">¡No se pudieron cargar las búsquedas guardadas!</string>
+  <string name="save_search_failed_to_load_message">Ocurrió un error al cargar tus búsquedas guardadas.</string>
+  <string name="save_search_delete">¿Eliminar esta búsqueda guardada?</string>
+  <string name="save_search_delete_message">¿Seguro que deseas eliminar tu búsqueda guardada: \'%1$s\'?</string>
+  <string name="save_search_invalid">Búsqueda guardada no válida: los filtros han cambiado</string>
+  <string name="save_search_invalid_name">Nombre de búsqueda guardada no válido</string>
+  <string name="no_source_categories" comment="no_source_categories Source Categories">No hay categorías de fuente disponibles</string>
+  <string name="invalid_category_name">Nombre de categoría inválido</string>
+  <string name="pref_source_related_mangas" comment="pref_source_related_mangas Browse settings">Sugerencias</string>
+  <string name="pref_source_related_mangas_summary">Mostrar sugerencias del sitio de origen mientras se ve la entrada</string>
+  <string name="related_mangas_website_suggestions">Sugerencias del sitio web</string>
+  <string name="related_mangas_more">Más como estos...</string>
+  <string name="saved_searches_delete">Búsquedas guardadas (Mantén para eliminar)</string>
+  <string name="pref_expand_related_animes">Expandir sugerencias</string>
+  <string name="pref_expand_related_animes_summary">Si está desactivado, las sugerencias no cargarán automáticamente &amp; mostrar expandido</string>
+  <string name="put_related_animes_in_overflow">Sugerencias al desbordar</string>
+  <string name="put_related_animes_in_overflow_summary">Ponga el botón Sugerencias en el menú de desbordamiento en lugar de en la página de entrada</string>
+  <string name="pref_show_home_on_related_animes">Inicio desde sugerencias</string>
+  <string name="pref_show_home_on_related_animes_summary">Muestra un icono mientras se navega por las Sugerencias para volver directamente a Inicio</string>
+  <string name="pref_source_related_animes">Sugerencias</string>
+  <string name="pref_source_related_animes_summary">Mostrar sugerencias del sitio de origen mientras se ve la entrada</string>
+  <string name="pref_source_navigation">Reemplazar el último botón</string>
+  <string name="pref_source_navigation_summery">Reemplaza el último botón con una vista de navegación personalizada que incluye tanto la última como la última navegación</string>
+</resources>

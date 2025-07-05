@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.BitmapRegionDecoder
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Rect
@@ -126,14 +127,16 @@ object ImageUtil {
     /**
      * Extract the 'side' part from [BufferedSource] and return it as [BufferedSource].
      */
-    fun splitInHalf(imageSource: BufferedSource, side: Side): BufferedSource {
-        val imageBitmap = BitmapFactory.decodeStream(imageSource.inputStream())
+    fun splitInHalf(imageSource: BufferedSource, side: Side, sidePadding: Int): BufferedSource {
+        val imageBytes = imageSource.peek().readByteArray()
+
+        val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         val height = imageBitmap.height
         val width = imageBitmap.width
 
-        val singlePage = Rect(0, 0, width / 2, height)
+        val singlePage = Rect(0, 0, width / 2 + sidePadding, height)
 
-        val half = createBitmap(width / 2, height)
+        val half = createBitmap(width / 2 + sidePadding, height)
         val part = when (side) {
             Side.RIGHT -> Rect(width - width / 2, 0, width, height)
             Side.LEFT -> Rect(0, 0, width / 2, height)
@@ -198,22 +201,74 @@ object ImageUtil {
         LEFT,
     }
 
+    // SY -->
+    /**
+     * Split the image into left and right parts, then merge them into a
+     * new image with added center padding scaled relative to the height of the display view
+     * to compensate for scaling.
+     */
+
+    @Suppress("MagicNumber")
+    fun addHorizontalCenterMargin(
+        imageSource: BufferedSource,
+        viewHeight: Int,
+        backgroundContext: Context,
+    ): BufferedSource {
+        val imageBitmap = ImageDecoder.newInstance(imageSource.inputStream())?.decode()!!
+        val height = imageBitmap.height
+        val width = imageBitmap.width
+
+        val centerPadding = 96 / (max(1, viewHeight) / height).coerceAtLeast(1)
+
+        val leftSourcePart = Rect(0, 0, width / 2, height)
+        val rightSourcePart = Rect(width / 2, 0, width, height)
+        val leftTargetPart = Rect(0, 0, width / 2, height)
+        val rightTargetPart = Rect(width / 2 + centerPadding, 0, width + centerPadding, height)
+
+        val bgColor = chooseBackground(backgroundContext, imageSource)
+        bgColor.setBounds(width / 2, 0, width / 2 + centerPadding, height)
+        val result = createBitmap(width + centerPadding, height)
+
+        result.applyCanvas {
+            drawBitmap(imageBitmap, leftSourcePart, leftTargetPart, null)
+            drawBitmap(imageBitmap, rightSourcePart, rightTargetPart, null)
+            bgColor.draw(this)
+        }
+
+        val output = Buffer()
+        result.compress(Bitmap.CompressFormat.JPEG, 100, output.outputStream())
+        return output
+    }
+    // SY <--
+
     /**
      * Check whether the image is considered a tall image.
      *
      * @return true if the height:width ratio is greater than 3.
      */
-    private fun isTallImage(imageSource: BufferedSource): Boolean {
+    private fun isTallImage(
+        imageSource: BufferedSource,
+    ): Boolean {
         val options = extractImageOptions(imageSource)
+
         return (options.outHeight / options.outWidth) > 3
     }
 
     /**
      * Splits tall images to improve performance of reader
      */
-    fun splitTallImage(tmpDir: UniFile, imageFile: UniFile, filenamePrefix: String): Boolean {
+    @Suppress("ReturnCount")
+    fun splitTallImage(
+        tmpDir: UniFile,
+        imageFile: UniFile,
+        filenamePrefix: String,
+    ): Boolean {
         val imageSource = imageFile.openInputStream().use { Buffer().readFrom(it) }
-        if (isAnimatedAndSupported(imageSource) || !isTallImage(imageSource)) {
+        if (isAnimatedAndSupported(imageSource) ||
+            !isTallImage(
+                imageSource,
+            )
+        ) {
             return true
         }
 
@@ -237,12 +292,7 @@ object ImageUtil {
 
                 val splitFile = tmpDir.createFile(splitImageName)!!
 
-                val region = Rect(
-                    0,
-                    splitData.topOffset,
-                    splitData.splitWidth,
-                    splitData.bottomOffset,
-                )
+                val region = Rect(0, splitData.topOffset, splitData.splitWidth, splitData.bottomOffset)
 
                 splitFile.openOutputStream().use { outputStream ->
                     val splitBitmap = bitmapRegionDecoder.decodeRegion(region, options)
@@ -335,8 +385,12 @@ object ImageUtil {
     /**
      * Algorithm for determining what background to accompany a comic/manga page
      */
-    fun chooseBackground(context: Context, imageStream: InputStream): Drawable {
-        val decoder = ImageDecoder.newInstance(imageStream)
+    /**
+     * Algorithm for determining what background to accompany a comic/manga page
+     */
+    @Suppress("ReturnCount", "NestedBlockDepth", "CyclomaticComplexMethod", "LongMethod")
+    fun chooseBackground(context: Context, imageSource: BufferedSource): Drawable {
+        val decoder = ImageDecoder.newInstance(imageSource.inputStream())
         val image = decoder?.decode()
         decoder?.recycle()
 
@@ -374,34 +428,11 @@ object ImageUtil {
         val botRightIsDark = botRightPixel.isDark()
 
         var darkBG =
-            (
-                topLeftIsDark &&
-                    (
-                        botLeftIsDark ||
-                            botRightIsDark ||
-                            topRightIsDark ||
-                            midLeftIsDark ||
-                            topMidIsDark
-                        )
-                ) ||
-                (
-                    topRightIsDark &&
-                        (
-                            botRightIsDark ||
-                                botLeftIsDark ||
-                                midRightIsDark ||
-                                topMidIsDark
-                            )
-                    )
+            (topLeftIsDark && (botLeftIsDark || botRightIsDark || topRightIsDark || midLeftIsDark || topMidIsDark)) ||
+                (topRightIsDark && (botRightIsDark || botLeftIsDark || midRightIsDark || topMidIsDark))
 
-        val topAndBotPixels = listOf(
-            topLeftPixel,
-            topCenterPixel,
-            topRightPixel,
-            botRightPixel,
-            bottomCenterPixel,
-            botLeftPixel,
-        )
+        val topAndBotPixels =
+            listOf(topLeftPixel, topCenterPixel, topRightPixel, botRightPixel, bottomCenterPixel, botLeftPixel)
         val isNotWhiteAndCloseTo = topAndBotPixels.mapIndexed { index, color ->
             val other = topAndBotPixels[(index + 1) % topAndBotPixels.size]
             !color.isWhite() && color.isCloseTo(other)
@@ -550,10 +581,7 @@ object ImageUtil {
                 (
                     topCornersIsDark &&
                         topOffsetCornersIsDark &&
-                        (
-                            topMidIsDark ||
-                                overallBlackPixels > 9
-                            )
+                        (topMidIsDark || overallBlackPixels > 9)
                     ) -> {
                 intArrayOf(blackColor, blackColor, whiteColor, whiteColor)
             }
@@ -561,10 +589,7 @@ object ImageUtil {
                 (
                     botCornersIsDark &&
                         botOffsetCornersIsDark &&
-                        (
-                            bottomCenterPixel.isDark() ||
-                                overallBlackPixels > 9
-                            )
+                        (bottomCenterPixel.isDark() || overallBlackPixels > 9)
                     ) -> {
                 intArrayOf(whiteColor, whiteColor, blackColor, blackColor)
             }
@@ -591,6 +616,7 @@ object ImageUtil {
     /**
      * Used to check an image's dimensions without loading it in the memory.
      */
+    @Suppress("SwallowedException", "MagicNumber")
     private fun extractImageOptions(imageSource: BufferedSource): BitmapFactory.Options {
         val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeStream(imageSource.peek().inputStream(), null, options)
@@ -722,6 +748,53 @@ object ImageUtil {
 
         else -> false
     }
+
+    @Suppress("MagicNumber")
+    fun mergeBitmaps(
+        imageBitmap: Bitmap,
+        imageBitmap2: Bitmap,
+        isLTR: Boolean,
+        centerMargin: Int,
+        @ColorInt background: Int = Color.WHITE,
+        progressCallback: ((Int) -> Unit)? = null,
+    ): BufferedSource {
+        val height = imageBitmap.height
+        val width = imageBitmap.width
+        val height2 = imageBitmap2.height
+        val width2 = imageBitmap2.width
+
+        val maxHeight = max(height, height2)
+
+        val result = Bitmap.createBitmap(width + width2 + centerMargin, max(height, height2), Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+        canvas.drawColor(background)
+        val upperPart = Rect(
+            if (isLTR) 0 else width2 + centerMargin,
+            (maxHeight - height) / 2,
+            (if (isLTR) 0 else width2 + centerMargin) + width,
+            height + (maxHeight - height) / 2,
+        )
+
+        canvas.drawBitmap(imageBitmap, imageBitmap.rect, upperPart, null)
+        progressCallback?.invoke(98)
+        val bottomPart = Rect(
+            if (!isLTR) 0 else width + centerMargin,
+            (maxHeight - height2) / 2,
+            (if (!isLTR) 0 else width + centerMargin) + width2,
+            height2 + (maxHeight - height2) / 2,
+        )
+
+        canvas.drawBitmap(imageBitmap2, imageBitmap2.rect, bottomPart, null)
+        progressCallback?.invoke(99)
+
+        val output = Buffer()
+        result.compress(Bitmap.CompressFormat.JPEG, 100, output.outputStream())
+        progressCallback?.invoke(100)
+        return output
+    }
+
+    private val Bitmap.rect: Rect
+        get() = Rect(0, 0, width, height)
 }
 
 val getDisplayMaxHeightInPx: Int
