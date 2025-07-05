@@ -20,6 +20,7 @@ data class BackupAnime(
     @ProtoNumber(8) var status: Int = 0,
     // thumbnailUrl is called cover in 1.x
     @ProtoNumber(9) var thumbnailUrl: String? = null,
+    @ProtoNumber(110) var backgroundUrl: String? = null,
     // @ProtoNumber(10) val customCover: String = "", 1.x value, not used in 0.x
     // @ProtoNumber(11) val lastUpdate: Long = 0, 1.x value, not used in 0.x
     // @ProtoNumber(12) val lastInit: Long = 0, 1.x value, not used in 0.x
@@ -49,6 +50,7 @@ data class BackupAnime(
             genre = this@BackupAnime.genre,
             status = this@BackupAnime.status.toLong(),
             thumbnailUrl = this@BackupAnime.thumbnailUrl,
+            backgroundUrl = this@BackupAnime.backgroundUrl,
             favorite = this@BackupAnime.favorite,
             source = this@BackupAnime.source,
             dateAdded = this@BackupAnime.dateAdded,
