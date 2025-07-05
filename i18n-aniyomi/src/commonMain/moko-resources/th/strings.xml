@@ -14,4 +14,14 @@
     <string name="download_paused">หยุดชั่วคราว</string>
     <string name="download_notifier_download_paused_chapters">การดาวน์โหลดหยุดชั่วคราว</string>
     <string name="channel_new_chapters_episodes">อัปเดตตอน</string>
+    <string name="manga">รายการคลัง</string>
+    <string name="pref_category_delete_chapters">การลบตอน</string>
+    <string name="pref_remove_after_marked_as_read">หลังจากทําเครื่องหมายว่าอ่านแล้วด้วยตนเอง</string>
+    <string name="pref_remove_after_read">ลบอัตโนมัติหลังจากที่อ่านแล้ว</string>
+    <string name="pref_remove_bookmarked_chapters">อนุญาตให้ลบตอนที่บุ๊คมาร์คไว้</string>
+    <string name="download_ahead_info">ใช้ได้เฉพาะกับตอนปัจจุบัน + ตอนถัด ๆ ไปดาวน์โหลดไว้อยู่แล้ว</string>
+    <string name="pref_auto_update_manga_sync">อัปเดตความคืบหน้าหลังอ่าน</string>
+    <string name="pref_clear_chapter_cache">ล้างแคชตอน</string>
+    <string name="pref_incognito_mode_summary">หยุดประวัติการอ่านชั่วคราว</string>
+    <string name="download_insufficient_space">ไม่สามารถดาวน์โหลดตอนได้เนื่องจากพื้นที่จัดเก็บเหลือน้อย</string>
 </resources>
