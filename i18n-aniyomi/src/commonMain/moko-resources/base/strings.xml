@@ -548,7 +548,7 @@
     <string name="theme_mocha">Mocha</string>
     <string name="pref_behavior_episode">Episode behavior</string>
     <string name="pref_episode_swipe_end">Episode on swipe to right</string>
-    <string name="pref_episode_swipe_start">Episode on swipe to right</string>
+    <string name="pref_episode_swipe_start">Episode on swipe to left</string>
     <string name="pref_mark_duplicate_seen_episode_seen">Mark duplicate seen episode as seen</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">After watching an episode</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">After fetching new episode</string>
