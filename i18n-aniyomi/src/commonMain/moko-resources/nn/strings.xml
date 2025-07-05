@@ -12,4 +12,8 @@
     <string name="pref_remove_exclude_categories_manga">Utelatne kategoriar</string>
     <string name="snack_add_to_manga_library">Legg manga til i bibliotek?</string>
     <string name="download_error">Feil</string>
+    <string name="manga">Manga</string>
+    <string name="action_show_manga">Vis manga</string>
+    <string name="pref_category_delete_chapters">Slett kapittel</string>
+    <string name="manga_from_library">Manga frå biblioteket</string>
 </resources>
