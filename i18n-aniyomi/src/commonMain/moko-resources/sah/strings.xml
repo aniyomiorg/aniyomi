@@ -8,4 +8,16 @@
     <string name="snack_add_to_manga_library">Маанганы Бэбэлэтиэкэҕэ киллэрэбит дуу?</string>
     <string name="download_error">Сыыһааһын</string>
     <string name="download_paused">Тохтотулунна</string>
+    <string name="manga">Маанга</string>
+    <string name="pref_category_delete_chapters">Түһүмэхтэри соттор</string>
+    <string name="pref_remove_after_marked_as_read">Ааҕыллыбыт диэн суруллубутун кэннэ</string>
+    <string name="pref_remove_after_read">Ааҕы кэннэ</string>
+    <string name="pref_remove_bookmarked_chapters">Кыбытыылах түһүмэхтэри соттор</string>
+    <string name="pref_auto_update_manga_sync">Түһүмэх туругун ааҕы кэннэ саҥарт</string>
+    <string name="pref_clear_chapter_cache">Түһүмэх кээһин ыраастааһын</string>
+    <string name="clear_database_confirmation">Эрэллэххин дуо? Ааҕыллыбыт түһүмэхтэр уонна бэбэлэтиэкэҕэ суох маанга туруга сүтүө</string>
+    <string name="pref_incognito_mode_summary">Ааҕы остуоруйатын тохтотор</string>
+    <string name="manga_from_library">Бэбэлэтиэкэттэн маанга</string>
+    <string name="also_set_chapter_settings_for_library">Мин бэбэлэтиэкэбэр баар маангаларга туттуҥ</string>
+    <string name="dialog_with_checkbox_reset">Бу маанга бары түһүмэхтэрин түһэрии</string>
 </resources>
