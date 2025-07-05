@@ -77,6 +77,7 @@ import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils
 import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
+import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
@@ -314,6 +315,7 @@ class PlayerActivity : BaseActivity() {
 
         player.isExiting = true
         if (isFinishing) {
+            viewModel.deletePendingEpisodes()
             MPVLib.command(arrayOf("stop"))
         } else {
             viewModel.pause()
@@ -329,8 +331,8 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
-        if (isInPictureInPictureMode) {
-            finishAndRemoveTask()
+        if (isInPictureInPictureMode && powerManager.isInteractive) {
+            viewModel.deletePendingEpisodes()
         }
 
         super.onStop()
@@ -967,11 +969,6 @@ class PlayerActivity : BaseActivity() {
             viewModel.onSaveInstanceStateNonConfigurationChange()
         }
         super.onSaveInstanceState(outState)
-    }
-
-    override fun finishAndRemoveTask() {
-        viewModel.deletePendingEpisodes()
-        super.finishAndRemoveTask()
     }
 
     /**
