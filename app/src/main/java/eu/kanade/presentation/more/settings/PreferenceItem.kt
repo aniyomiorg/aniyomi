@@ -211,6 +211,8 @@ internal fun PreferenceItem(
                     },
                     singleLine = true,
                     canBeBlank = true,
+                    validate = item.validate,
+                    errorMessage = item.errorMessage,
                 )
             }
             is Preference.PreferenceItem.TrackerPreference -> {

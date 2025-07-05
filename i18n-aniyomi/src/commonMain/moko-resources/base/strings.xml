@@ -154,6 +154,7 @@
     <string name="pref_player_subtitle_summary">Preferred languages, whitelist, blacklist</string>
     <string name="pref_player_subtitle_lang">Preferred languages</string>
     <string name="pref_player_subtitle_lang_info">Subtitle language(s) to be selected by default on a video with multiple subtitles, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
+    <string name="pref_player_subtitle_invalid_lang">Invalid code: \"%s\"</string>
     <string name="pref_player_subtitle_whitelist">Whitelist</string>
     <string name="pref_player_subtitle_whitelist_info">Whitelist for subtitles. If a whitelist is defined, the first subtitle that contains a whitelisted word will be used. Multiple values can be delimited by a comma.</string>
     <string name="pref_player_subtitle_blacklist">Blacklist</string>

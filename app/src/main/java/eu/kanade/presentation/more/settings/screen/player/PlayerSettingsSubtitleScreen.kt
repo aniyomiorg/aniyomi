@@ -10,6 +10,8 @@ import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Locale
+import java.util.MissingResourceException
 
 object PlayerSettingsSubtitleScreen : SearchableSettings {
 
@@ -30,6 +32,42 @@ object PlayerSettingsSubtitleScreen : SearchableSettings {
                 preference = langPref,
                 dialogSubtitle = stringResource(AYMR.strings.pref_player_subtitle_lang_info),
                 title = stringResource(AYMR.strings.pref_player_subtitle_lang),
+                validate = { pref ->
+                    val langs = pref.split(",").filter(String::isNotEmpty).map(String::trim)
+                    langs.forEach {
+                        try {
+                            val locale = Locale(it)
+                            if (locale.isO3Language == locale.language &&
+                                locale.language == locale.getDisplayName(Locale.ENGLISH)
+                            ) {
+                                throw MissingResourceException("", "", "")
+                            }
+                        } catch (_: MissingResourceException) {
+                            return@EditTextInfoPreference false
+                        }
+                    }
+
+                    true
+                },
+                errorMessage = { pref ->
+                    val langs = pref.split(",").filter(String::isNotEmpty).map(String::trim)
+                    langs.forEach {
+                        try {
+                            val locale = Locale(it)
+                            if (locale.isO3Language == locale.language &&
+                                locale.language == locale.getDisplayName(Locale.ENGLISH)
+                            ) {
+                                throw MissingResourceException("", "", "")
+                            }
+                        } catch (_: MissingResourceException) {
+                            return@EditTextInfoPreference stringResource(
+                                AYMR.strings.pref_player_subtitle_invalid_lang,
+                                it,
+                            )
+                        }
+                    }
+                    ""
+                },
             ),
             Preference.PreferenceItem.EditTextInfoPreference(
                 preference = whitelist,
