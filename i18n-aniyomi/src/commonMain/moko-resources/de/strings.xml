@@ -354,5 +354,9 @@
     <string name="pref_hosters_show_empty">Leere Hoster anzeigen</string>
     <string name="pref_show_system_bar">System-Statusleiste mit den Bedienelementen anzeigen</string>
     <string name="pref_reduce_motion">Player-Animationen reduzieren</string>
-    <string name="pref_player_time_to_disappear">Player-Bedienelemente Einblendedauer</string>
+    <string name="pref_player_time_to_disappear">Einblendedauer Player-Bedienelemente</string>
+    <string name="pref_player_time_to_disappear_summary">%1$s ms</string>
+    <string name="pref_category_intro_skip">Intros überspringen</string>
+    <string name="pref_enable_intro_skip">Intros überspringen aktivieren</string>
+    <string name="pref_disable_aniskip_chapter">AniSkip deaktivieren, falls das Video schon Kapitel enthält</string>
 </resources>
