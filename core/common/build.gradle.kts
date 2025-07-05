@@ -50,7 +50,7 @@ dependencies {
     implementation(libs.bundles.js.engine)
 
     // FFmpeg-kit
-    implementation(libs.ffmpeg.kit)
+    implementation(aniyomilibs.ffmpeg.kit)
 
     // Tests
     testImplementation(libs.bundles.test)

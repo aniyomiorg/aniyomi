@@ -221,13 +221,13 @@ dependencies {
     implementation(androidx.appcompat)
     implementation(androidx.biometricktx)
     implementation(androidx.constraintlayout)
-    implementation(androidx.compose.constraintlayout)
+    implementation(aniyomilibs.compose.constraintlayout)
     implementation(androidx.corektx)
     implementation(androidx.splashscreen)
     implementation(androidx.recyclerview)
     implementation(androidx.viewpager)
     implementation(androidx.profileinstaller)
-    implementation(androidx.mediasession)
+    implementation(aniyomilibs.mediasession)
 
     implementation(androidx.bundles.lifecycle)
 
@@ -300,14 +300,14 @@ dependencies {
     testImplementation(kotlinx.coroutines.test)
 
     // mpv-android
-    implementation(libs.aniyomi.mpv)
+    implementation(aniyomilibs.aniyomi.mpv)
     // FFmpeg-kit
-    implementation(libs.ffmpeg.kit)
-    implementation(libs.arthenica.smartexceptions)
+    implementation(aniyomilibs.ffmpeg.kit)
+    implementation(aniyomilibs.arthenica.smartexceptions)
     // seeker seek bar
-    implementation(libs.seeker)
+    implementation(aniyomilibs.seeker)
     // true type parser
-    implementation(libs.truetypeparser)
+    implementation(aniyomilibs.truetypeparser)
 }
 
 androidComponents {
