@@ -427,4 +427,10 @@
     <string name="onboarding_storage_action_create_folder">Створіть папку Aniyomi за замовчуванням</string>
     <string name="download_speed_limit">Обмеження швидкості завантаження розділу</string>
     <string name="download_speed_limit_hint">Встановіть значення 0, щоб вимкнути обмеження швидкості.</string>
+    <string name="manga">Записи бібліотеки</string>
+    <string name="pref_remove_after_marked_as_read">Після того, як було відмічено прочитаним вручну</string>
+    <string name="pref_remove_after_read">Автоматично видаляти після прочитання</string>
+    <string name="download_ahead_info">Працює, якщо поточний розділ + наступний вже завантажені.</string>
+    <string name="pref_auto_update_manga_sync">Оновлювати прогрес після прочитання</string>
+    <string name="pref_incognito_mode_summary">Призупиняє історію читання</string>
 </resources>
