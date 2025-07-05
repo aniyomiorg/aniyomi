@@ -226,4 +226,16 @@
     <string name="resmush">resmush.it</string>
     <string name="bandwidth_data_saver_server">Serwer Proxy Bandwidth Hero</string>
     <string name="data_saver_server_summary">wpisz adres URL z serwera Bandwidth Hero Proxy</string>
+    <string name="manga">Biblioteka</string>
+    <string name="pref_update_only_completely_read">Posiada nieprzeczytane rozdziały</string>
+    <string name="pref_category_delete_chapters">Usuń rozdziały</string>
+    <string name="pref_remove_after_marked_as_read">Po ręcznym oznaczeniu jako przeczytane</string>
+    <string name="pref_remove_after_read">Usuwaj rozdziały automatycznie po przeczytaniu</string>
+    <string name="pref_remove_bookmarked_chapters">Usuwaj rozdziały dodane do zakładek</string>
+    <string name="download_ahead_info">Działa tylko, jeśli aktualny i następny rozdział są już pobrane.</string>
+    <string name="pref_auto_update_manga_sync">Aktualizuj postęp po przeczytaniu rozdziału</string>
+    <string name="pref_clear_chapter_cache">Wyczyść cache rozdziałów</string>
+    <string name="pref_incognito_mode_summary">Wstrzymuje zapisywanie do historii czytania</string>
+    <string name="download_insufficient_space">Nie udało się pobrać rozdziałów z powodu braku miejsca na urządzeniu</string>
+    <string name="download_queue_size_warning">Ostrzeżenie: Duże aktualizacje biblioteki mogą prowadzić do zwiększonego zużycia baterii oraz spowolnienia działania źródeł.</string>
 </resources>
