@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="pref_library_summary">Kategoritë, përditësimi global</string>
+    <string name="manga">Elementet e bibliotekës</string>
+    <string name="pref_update_only_completely_read">Me kapituj të palexuar</string>
+    <string name="pref_category_delete_chapters">Fshi kapitujt</string>
+    <string name="download_ahead_info">Punon vetëm në hyrjet në bibliotekë dhe nëse kapitulli aktual plus kapitulli tjetër janë shkarkuar tashmë</string>
+    <string name="pref_auto_update_manga_sync">Përditëso progresin pas leximit</string>
+    <string name="pref_clear_chapter_cache">Pastro memorien e kapitullit</string>
+    <string name="clear_database_confirmation">A je i sigurt? Kapitujt e lexuar dhe progresi i elementeve që nuk janë në bibliotekë do të humbasin</string>
+    <string name="pref_incognito_mode_summary">Ndalon leximin e historisë</string>
+    <string name="also_set_chapter_settings_for_library">Aplikoni gjithashtu për të gjitha elementet në bibliotekën time</string>
+    <string name="download_insufficient_space">Kapitujt nuk mund të shkarkoheshin për shkak të hapësirës së ulët të ruajtjes</string>
 </resources>
