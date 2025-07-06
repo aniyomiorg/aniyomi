@@ -311,7 +311,7 @@ private fun getPlayerIndex() = playerSettingScreens
         )
     }
 
-private fun getLocalizedBreadcrumb(nodes: List<String?>, isLtr: Boolean): String {
+private fun getLocalizedBreadcrumb(nodes: List<String>, isLtr: Boolean): String {
     return if (isLtr) {
         // This locale reads left to right.
         nodes.joinToString(" > ")
