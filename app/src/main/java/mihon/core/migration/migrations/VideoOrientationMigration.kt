@@ -12,7 +12,7 @@ import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
 
 class VideoOrientationMigration : Migration {
-    override val version = 131f
+    override val version = 127f
 
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<Application>() ?: return false
