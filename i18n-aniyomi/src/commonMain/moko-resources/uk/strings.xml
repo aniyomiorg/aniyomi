@@ -134,7 +134,7 @@
     <string name="pref_player_custom_button_startup">При запуску</string>
     <string name="pref_player_custom_button_id">(ID: %d)</string>
     <string name="pref_player_advanced">Просунутий</string>
-    <string name="pref_player_advanced_summary">Скрипти, mpv.conf, input.conf</string>
+    <string name="pref_player_advanced_summary">Файли користувача, mpv.conf, input.conf</string>
     <string name="pref_mpv_conf">Редагувати файл конфігурації MPV для подальших налаштувань плеєра</string>
     <string name="pref_reset_mpv_conf">Скинути конфігураційний файл MPV</string>
     <string name="pref_mpv_input">Відредагуйте вхідний файл MPV для конфігурації розкладки клавіатури</string>
@@ -395,7 +395,7 @@
     <string name="theme_cottoncandy">Бавовняні цукерки</string>
     <string name="theme_mocha">Моча</string>
     <string name="pref_episode_swipe_end">Проведіть пальцем праворуч</string>
-    <string name="pref_episode_swipe_start">Проведіть пальцем ліворуч</string>
+    <string name="pref_episode_swipe_start">Епізод при проведенні пальцем ліворуч</string>
     <string name="pref_category_hide_hidden">Сховати приховані категорії з екрану категорій</string>
     <string name="pref_update_anime_release_grace_period">Очікуваний пільговий період випуску аніме</string>
     <string name="data_saver_exclude">Виключити зі зберігача даних</string>
@@ -489,4 +489,7 @@
     <string name="pref_mark_duplicate_seen_episode_seen">Позначити дублікат переглянутого епізоду як переглянуте</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">Після перегляду епізоду</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">Після отримання нового епізоду</string>
+    <string name="pref_player_subtitle_invalid_lang">Недійсний код: \"%s\"</string>
+    <string name="pref_mpv_user_files">Використовувати MPV-файли користувача</string>
+    <string name="pref_mpv_user_files_summary">Використовувати файли з каталогу mpv-config</string>
 </resources>
