@@ -130,8 +130,6 @@
     <string name="pref_player_custom_button_delete_confirm">هل تريد حذف زر %s؟</string>
     <string name="pref_player_advanced">إعدادات متقدمة</string>
     <string name="pref_player_advanced_summary">البرامج النصية، mpv.conf، input.conf</string>
-    <string name="pref_mpv_scripts">تمكين سكربتات MPV</string>
-    <string name="pref_mpv_scripts_summary">يحتاج إلى إذن تخزين خارجي.</string>
     <string name="pref_mpv_conf">قم بتحرير ملف تكوين MPV لمزيد من إعدادات مشغل الوسائط</string>
     <string name="pref_reset_mpv_conf">إعادة تعيين ملف تكوين MPV</string>
     <string name="pref_mpv_input">تعديل ملف إدخال MPV لتكوين تعيين لوحة المفاتيح</string>

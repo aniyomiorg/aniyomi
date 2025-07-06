@@ -55,8 +55,6 @@
     <string name="pref_player_audio_channels_mono">모노</string>
     <string name="pref_player_audio_channels_stereo">스테레오</string>
     <string name="pref_player_audio_channels_reverse_stereo">스테레오(반대로)</string>
-    <string name="pref_mpv_scripts">MPV 스크립트 활성화</string>
-    <string name="pref_mpv_scripts_summary">외부 저장소 권한이 필요합니다.</string>
     <string name="pref_mpv_conf">추가 플레이어 설정을 위해 MPV 구성 파일 편집</string>
     <string name="pref_reset_mpv_conf">MPV 구성 파일 초기화</string>
     <string name="pref_mpv_input">키보드 매핑 구성을 위한 MPV 입력 파일 편집</string>

@@ -132,8 +132,6 @@
     <string name="pref_player_custom_button_id">(ID: %d)</string>
     <string name="pref_player_advanced">Avançado</string>
     <string name="pref_player_advanced_summary">Scripts, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Ativar scripts MPV</string>
-    <string name="pref_mpv_scripts_summary">Precisa de permissão de armazenamento externo.</string>
     <string name="pref_mpv_conf">Editar o arquivo de configuração do MPV para obter mais configurações do reprodutor</string>
     <string name="pref_reset_mpv_conf">Redefinir arquivo de configuração do MPV</string>
     <string name="pref_mpv_input">Edite o arquivo de entrada MPV para configuração de mapeamento de teclado</string>

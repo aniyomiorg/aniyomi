@@ -132,8 +132,6 @@
     <string name="pref_player_custom_button_id">(ID: %d)</string>
     <string name="pref_player_advanced">Lanjutan</string>
     <string name="pref_player_advanced_summary">Skrip, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Aktifkan skrip MPV</string>
-    <string name="pref_mpv_scripts_summary">Memerlukan izin penyimpanan eksternal.</string>
     <string name="pref_mpv_conf">ubah konfigurasi MPV file untuk lebih lanjut di pengaturan pemutaran</string>
     <string name="pref_reset_mpv_conf">Setel ulang file konfigurasi MPV</string>
     <string name="pref_mpv_input">Edit file input MPV untuk konfigurasi pemetaan keyboard</string>

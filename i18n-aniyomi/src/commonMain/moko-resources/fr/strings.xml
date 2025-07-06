@@ -77,8 +77,6 @@
     <string name="pref_player_audio_channels_mono">Mono</string>
     <string name="pref_player_audio_channels_stereo">Stéréo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Stéréo inversée</string>
-    <string name="pref_mpv_scripts">Activer les scripts MPV</string>
-    <string name="pref_mpv_scripts_summary">A besoin de permissions externes de stockage.</string>
     <string name="pref_mpv_conf">Modifier le fichier de configuration MPV pour d\'autres paramètres du lecteur</string>
     <string name="pref_reset_mpv_conf">Réinitialiser le fichier de configuration MPV</string>
     <string name="pref_mpv_input">Modifier le fichier d\'entrée MPV pour la configuration de l\'affectation du clavier</string>

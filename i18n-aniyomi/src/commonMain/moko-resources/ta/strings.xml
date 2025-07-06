@@ -101,8 +101,6 @@
     <string name="pref_player_audio_boost_cap">தொகுதி பூச்ட் தொப்பி</string>
     <string name="pref_player_advanced">மேம்பட்ட</string>
     <string name="pref_player_advanced_summary">ச்கிரிப்ட்கள், MPV.Conf, input.conf</string>
-    <string name="pref_mpv_scripts">MPV ச்கிரிப்ட்களை இயக்கவும்</string>
-    <string name="pref_mpv_scripts_summary">வெளிப்புற சேமிப்பக இசைவு தேவை.</string>
     <string name="pref_mpv_conf">மேலும் பிளேயர் அமைப்புகளுக்கு MPV உள்ளமைவு கோப்பைத் திருத்தவும்</string>
     <string name="pref_reset_mpv_conf">MPV உள்ளமைவு கோப்பை மீட்டமைக்கவும்</string>
     <string name="pref_mpv_input">விசைப்பலகை மேப்பிங் உள்ளமைவுக்கு MPV உள்ளீட்டு கோப்பைத் திருத்து</string>
