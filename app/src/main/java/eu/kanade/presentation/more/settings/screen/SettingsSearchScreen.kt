@@ -219,17 +219,13 @@ private fun SearchResult(
                             route = settingsData.route,
                             title = p.title,
                             breadcrumbs = getLocalizedBreadcrumb(
-                                nodes = {
-                                    val list = mutableListOf<String>()
+                                nodes = buildList {
                                     if (!isPlayer && settingsData.playerSettings) {
-                                        list.add(
-                                            AYMR.strings.label_player_settings.getString(context),
-                                        )
+                                        add(AYMR.strings.label_player_settings.getString(context))
                                     }
-                                    list.add(settingsData.title)
-                                    if (categoryTitle != null) list.add(categoryTitle)
-                                    list
-                                }(),
+                                    add(settingsData.title)
+                                    if (categoryTitle != null) add(categoryTitle)
+                                },
                                 isLtr = isLtr,
                             ),
                             highlightKey = p.title,
