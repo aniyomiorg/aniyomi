@@ -425,4 +425,12 @@
     <string name="onboarding_storage_action_create_folder">Crea una cartella default per Aniyomi</string>
     <string name="download_speed_limit">Limite velocità di download dei capitoli</string>
     <string name="download_speed_limit_hint">Imposta a 0 per disattivare il limite di velocità.</string>
+    <string name="action_display_unseen_badge">Episodi non visti</string>
+    <string name="manga">Manga</string>
+    <string name="action_show_manga">Mostra manga</string>
+    <string name="pref_category_delete_chapters">Elimina capitoli/episodi</string>
+    <string name="pref_remove_after_marked_as_read">Dopo averli contrassegnati manualmente come letti/visti</string>
+    <string name="pref_remove_after_read">Cancella automaticamente dopo la lettura/visione</string>
+    <string name="manga_from_library">Manga dalla libreria</string>
+    <string name="non_library_settings">Tutte le voci lette/viste</string>
 </resources>
