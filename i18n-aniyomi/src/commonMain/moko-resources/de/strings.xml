@@ -100,8 +100,6 @@
     <string name="pref_player_audio_boost_cap">Lautstärkenboostlimit</string>
     <string name="pref_player_advanced">Erweiterte Einstellungen</string>
     <string name="pref_player_advanced_summary">Skripte, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Aktiviere MPV-Skripte</string>
-    <string name="pref_mpv_scripts_summary">Benötigt externe Speicherberechtigung.</string>
     <string name="pref_mpv_conf">MPV-Konfigurationsdatei für weitere Player-Einstellungen bearbeiten</string>
     <string name="pref_reset_mpv_conf">MPV-Konfigurationsdatei zurücksetzen</string>
     <string name="pref_mpv_input">MPV-Eingabedatei für Tastaturbelegung bearbeiten</string>

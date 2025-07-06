@@ -135,8 +135,6 @@
     <string name="pref_player_custom_button_id">(ID: %d)</string>
     <string name="pref_player_advanced">Просунутий</string>
     <string name="pref_player_advanced_summary">Скрипти, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Увімкнути сценарії MPV</string>
-    <string name="pref_mpv_scripts_summary">Потрібен дозвіл на зовнішнє сховище.</string>
     <string name="pref_mpv_conf">Редагувати файл конфігурації MPV для подальших налаштувань плеєра</string>
     <string name="pref_reset_mpv_conf">Скинути конфігураційний файл MPV</string>
     <string name="pref_mpv_input">Відредагуйте вхідний файл MPV для конфігурації розкладки клавіатури</string>

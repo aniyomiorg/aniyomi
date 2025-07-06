@@ -53,8 +53,6 @@
     <string name="pref_player_audio_channels">Canais de Áudio</string>
     <string name="pref_player_audio_channels_stereo">Estéreo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Estéreo Invertido</string>
-    <string name="pref_mpv_scripts">Habilitar Scripts MPV</string>
-    <string name="pref_mpv_scripts_summary">Necessita de permissão de armazenamento externo.</string>
     <string name="pref_mpv_conf">Editar o ficheiro de configuração do MPV para obter mais definições do reprodutor</string>
     <string name="pref_reset_mpv_conf">Redefinir arquivo de configuração do MPV</string>
     <string name="pref_mpv_input">Editar o arquivo de entrada MPV para configuração de mapeamento de teclado</string>
