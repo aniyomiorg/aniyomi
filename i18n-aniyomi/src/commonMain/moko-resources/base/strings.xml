@@ -500,7 +500,9 @@
     <string name="download_error">Error</string>
     <string name="download_paused">Paused</string>
     <string name="show_episode_number">Episode number</string>
+    <string name="show_season_number">Season number</string>
     <string name="sort_by_episode_number">By episode number</string>
+    <string name="sort_by_season_number">By season number</string>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
     <string name="also_set_episode_settings_for_library">Also apply to all anime in my library</string>
@@ -536,6 +538,7 @@
     <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
     <string name="notification_episodes_multiple">Episodes %1$s</string>
     <string name="episode_settings">Episode settings</string>
+    <string name="season_settings">Season settings</string>
     <string name="pref_backup_flags">Backup options</string>
     <string name="label_manga_extensions">Manga Extensions</string>
     <string name="label_anime_extensions">Anime Extensions</string>

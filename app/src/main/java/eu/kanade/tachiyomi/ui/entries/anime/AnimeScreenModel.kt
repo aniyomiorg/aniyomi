@@ -1251,7 +1251,8 @@ class AnimeScreenModel(
         data class SetAnimeFetchInterval(val anime: Anime) : Dialog
         data class ShowQualities(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog
         data object ChangeAnimeSkipIntro : Dialog
-        data object SettingsSheet : Dialog
+        data object EpisodeSettingsSheet : Dialog
+        data object SeasonSettingsSheet : Dialog
         data object TrackSheet : Dialog
         data object FullCover : Dialog
     }
@@ -1265,7 +1266,13 @@ class AnimeScreenModel(
     }
 
     fun showSettingsDialog() {
-        updateSuccessState { it.copy(dialog = Dialog.SettingsSheet) }
+        updateSuccessState {
+            when (it.anime.fetchType) {
+                FetchType.Unknown -> it
+                FetchType.Seasons -> it.copy(dialog = Dialog.SeasonSettingsSheet)
+                FetchType.Episodes -> it.copy(dialog = Dialog.EpisodeSettingsSheet)
+            }
+        }
     }
 
     fun showTrackDialog() {

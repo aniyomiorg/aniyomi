@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -263,7 +264,7 @@ class AnimeScreen(
                     onPopScreen = { navigator.replace(AnimeScreen(dialog.newAnime.id)) },
                 )
             }
-            AnimeScreenModel.Dialog.SettingsSheet -> EpisodeSettingsDialog(
+            AnimeScreenModel.Dialog.EpisodeSettingsSheet -> EpisodeSettingsDialog(
                 onDismissRequest = onDismissRequest,
                 anime = successState.anime,
                 onDownloadFilterChanged = screenModel::setDownloadedFilter,
@@ -273,6 +274,9 @@ class AnimeScreen(
                 onDisplayModeChanged = screenModel::setDisplayMode,
                 onSetAsDefault = screenModel::setCurrentSettingsAsDefault,
             )
+            AnimeScreenModel.Dialog.SeasonSettingsSheet -> {
+                Text("UwU")
+            }
             AnimeScreenModel.Dialog.TrackSheet -> {
                 NavigatorAdaptiveSheet(
                     screen = AnimeTrackInfoDialogHomeScreen(

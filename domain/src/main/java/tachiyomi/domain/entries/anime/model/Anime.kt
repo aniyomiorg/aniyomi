@@ -91,6 +91,10 @@ data class Anime(
         return episodeFlags and EPISODE_SORT_DIR_MASK == EPISODE_SORT_DESC
     }
 
+    fun seasonSortDescending(): Boolean {
+        return seasonFlags and SEASON_SORT_DIR_MASK == SEASON_SORT_DESC
+    }
+
     private fun Long.removeHexZeros(zeros: Int): Long {
         val hex = 16.0
         return this.div(hex.pow(zeros)).toLong()
@@ -125,6 +129,55 @@ data class Anime(
         const val EPISODE_DISPLAY_NAME = 0x00000000L
         const val EPISODE_DISPLAY_NUMBER = 0x00100000L
         const val EPISODE_DISPLAY_MASK = 0x00100000L
+
+        const val SEASON_SORT_DESC = 0x00000000L
+        const val SEASON_SORT_ASC = 0x00000001L
+        const val SEASON_SORT_DIR_MASK = 0x00000001L
+
+        const val SEASONS_SHOW_DOWNLOADED = 0x00000002L
+        const val SEASONS_SHOW_NOT_DOWNLOADED = 0x00000004L
+        const val SEASONS_DOWNLOADED_MASK = 0x00000006L
+
+        const val SEASONS_SHOW_UNSEEN = 0x00000008L
+        const val SEASONS_SHOW_SEEN = 0x00000010L
+        const val SEASONS_UNSEEN_MASK = 0x00000018L
+
+        const val SEASONS_SHOW_STARTED = 0x00000020L
+        const val SEASONS_SHOW_NOT_STARTED = 0x00000040L
+        const val SEASONS_STARTED_MASK = 0x00000060L
+
+        const val SEASONS_SHOW_BOOKMARKED = 0x00000080L
+        const val SEASONS_SHOW_NOT_BOOKMARKED = 0x00000100L
+        const val SEASONS_BOOKMARKED_MASK = 0x00000180L
+
+        const val SEASONS_SHOW_COMPLETED = 0x00000200L
+        const val SEASONS_SHOW_NOT_COMPLETED = 0x00000400L
+        const val SEASONS_COMPLETED_MASK = 0x00000600L
+
+        const val SEASONS_SORT_SOURCE = 0x00000000L
+        const val SEASONS_SORT_SEASON = 0x00000800L
+        const val SEASONS_SORT_UPLOAD = 0x00001000L
+        const val SEASONS_SORT_ALPHABET = 0x00001800L
+        const val SEASONS_SORT_COUNT = 0x00002000L
+        const val SEASONS_SORT_LAST_SEEN = 0x00002800L
+        const val SEASONS_SORT_FETCHED = 0x00003000L
+        const val SEASONS_SORT_MASK = 0x00003800L
+
+        const val SEASONS_GRID_DISPLAY_MODE_BIT_OFFSET = 14
+        const val SEASONS_GRID_DISPLAY_MODE_MASK = 0x0000C000L
+
+        const val SEASONS_GRID_DISPLAY_SIZE_BIT_OFFSET = 16
+        const val SEASONS_GRID_DISPLAY_SIZE_MASK = 0x000F0000L
+
+        const val SEASONS_OVERLAY_DOWNLOADED_MASK = 0x00100000L
+        const val SEASONS_OVERLAY_UNSEEN_MASK = 0x00200000L
+        const val SEASONS_OVERLAY_LOCAL_MASK = 0x00400000L
+        const val SEASONS_OVERLAY_LANG_MASK = 0x00800000L
+        const val SEASONS_OVERLAY_CONT_MASK = 0x01000000L
+
+        const val SEASONS_DISPLAY_MODE_SOURCE = 0x00000000L
+        const val SEASONS_DISPLAY_MODE_NUMBER = 0x02000000L
+        const val SEASONS_DISPLAY_MODE_MASK = 0x02000000L
 
         const val ANIME_INTRO_MASK = 0x0000000000000FFL
         const val ANIME_AIRING_EPISODE_MASK = 0x000000000FFFF00L
