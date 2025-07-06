@@ -132,8 +132,6 @@
     <string name="pref_player_custom_button_id">(Код: %d)</string>
     <string name="pref_player_advanced">Расширенные</string>
     <string name="pref_player_advanced_summary">Скрипты, mvp.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Включить скрипты MVP</string>
-    <string name="pref_mpv_scripts_summary">Необходимо разрешение на внешнее хранение.</string>
     <string name="pref_mpv_conf">Редактировать файл конфигурации MPV для дальнейших настроек проигрывателя</string>
     <string name="pref_reset_mpv_conf">Сброс файла конфигурации MPV</string>
     <string name="pref_mpv_input">Редактировать входной файл MPV для настройки отображения клавиатуры</string>

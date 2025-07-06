@@ -57,8 +57,6 @@
     <string name="pref_player_audio_channels_mono">單聲道</string>
     <string name="pref_player_audio_channels_stereo">立體聲</string>
     <string name="pref_player_audio_channels_reverse_stereo">反向立體聲</string>
-    <string name="pref_mpv_scripts">啟用 MPV 腳本</string>
-    <string name="pref_mpv_scripts_summary">需要外部儲存權限。</string>
     <string name="pref_mpv_conf">編輯 MPV 設定檔以進一步設定播放器</string>
     <string name="pref_reset_mpv_conf">重置 MPV 設定檔</string>
     <string name="pref_mpv_input">編輯 MPV 輸入文件以進行鍵盤映射配置</string>

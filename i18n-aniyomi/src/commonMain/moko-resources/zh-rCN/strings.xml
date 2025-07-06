@@ -132,8 +132,6 @@
     <string name="pref_player_custom_button_id">(ID: %d)</string>
     <string name="pref_player_advanced">高级</string>
     <string name="pref_player_advanced_summary">脚本、mpv.conf、input.conf</string>
-    <string name="pref_mpv_scripts">开启 MPV 脚本</string>
-    <string name="pref_mpv_scripts_summary">需要内部存储权限。</string>
     <string name="pref_mpv_conf">编辑 MPV 配置文件以进一步调节播放器相关设置</string>
     <string name="pref_reset_mpv_conf">重置 MPV 设置</string>
     <string name="pref_mpv_input">为键盘映射配置编辑 MPV 输入文档</string>

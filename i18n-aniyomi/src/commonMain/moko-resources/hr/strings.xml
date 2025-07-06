@@ -132,8 +132,6 @@
     <string name="pref_player_custom_button_id">(ID: %d)</string>
     <string name="pref_player_advanced">Napredno</string>
     <string name="pref_player_advanced_summary">Skripta, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Omogući MPV skripta</string>
-    <string name="pref_mpv_scripts_summary">Potrebna je dozvola za eksterno spremanje.</string>
     <string name="pref_mpv_conf">Uredi MPV konfiguracijsku datoteku za daljnje postavke playera</string>
     <string name="pref_reset_mpv_conf">Obnovi MPV konfiguracijsku datoteku</string>
     <string name="pref_mpv_input">Uredi MPV ulaznu datoteku za konfiguraciju mapiranja tipkovnice</string>
