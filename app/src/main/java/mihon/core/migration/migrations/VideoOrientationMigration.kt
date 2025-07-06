@@ -12,7 +12,7 @@ import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
 
 class VideoOrientationMigration : Migration {
-    override val version = 127f
+    override val version = 131f
 
     override suspend fun invoke(migrationContext: MigrationContext): Boolean {
         val context = migrationContext.get<Application>() ?: return false
@@ -20,10 +20,18 @@ class VideoOrientationMigration : Migration {
         val preferenceStore = migrationContext.get<PreferenceStore>() ?: return false
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val oldPref = prefs.getInt(
-            playerPreferences.defaultPlayerOrientationType().key(),
-            10,
-        )
+        val oldPref = try {
+            prefs.getInt(
+                playerPreferences.defaultPlayerOrientationType().key(),
+                10,
+            )
+        } catch (_: ClassCastException) {
+            prefs.edit(commit = true) {
+                remove(playerPreferences.defaultPlayerOrientationType().key())
+            }
+            return true
+        }
+
 
         val newPref = when (oldPref) {
             ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR -> PlayerOrientation.Free
