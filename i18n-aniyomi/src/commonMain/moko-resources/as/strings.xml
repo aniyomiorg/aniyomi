@@ -132,8 +132,6 @@
     <string name="pref_player_custom_button_id">(আইডি: %d)</string>
     <string name="pref_player_advanced">উন্নত</string>
     <string name="pref_player_advanced_summary">স্ক্ৰিপ্ট, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">MPV স্ক্ৰিপ্ট সক্ৰিয় কৰক</string>
-    <string name="pref_mpv_scripts_summary">বাহ্যিক সঞ্চয় অনুমতিৰ প্ৰয়োজন।</string>
     <string name="pref_mpv_conf">অধিক প্লেয়াৰ ছেটিংছৰ বাবে MPV কনফিগাৰেচন ফাইল সম্পাদনা কৰক</string>
     <string name="pref_reset_mpv_conf">MPV কনফিগাৰেচন ফাইল ৰিছেট কৰক</string>
     <string name="pref_mpv_input">কীবোর্ড মেপিং কনফিগাৰেচন কাৰণে MPV ইনপুট ফাইল সম্পাদনা কৰক</string>
