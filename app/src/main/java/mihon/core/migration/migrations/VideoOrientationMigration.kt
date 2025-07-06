@@ -32,7 +32,6 @@ class VideoOrientationMigration : Migration {
             return true
         }
 
-
         val newPref = when (oldPref) {
             ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR -> PlayerOrientation.Free
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> PlayerOrientation.Portrait
