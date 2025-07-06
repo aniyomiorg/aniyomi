@@ -15,9 +15,9 @@
     <string name="pref_preserve_watching_position">İzlenen bölümlerde izleme konumunu koru</string>
     <string name="pref_category_player_orientation">Yön</string>
     <string name="rotation_video">Video</string>
-    <string name="rotation_reverse_landscape">Ters yatay</string>
-    <string name="rotation_sensor_portrait">Dikey sensör</string>
-    <string name="rotation_sensor_landscape">Yatay sensör</string>
+    <string name="rotation_reverse_landscape">Ters manzara</string>
+    <string name="rotation_sensor_portrait">Sensör portre</string>
+    <string name="rotation_sensor_landscape">Sensör manzara</string>
     <string name="pref_category_controls">Kontroller</string>
     <string name="pref_controls_allow_gestures_in_panels">Panellerde hareketle izin ver</string>
     <string name="pref_controls_show_loading">Yüklenme çemberini göster</string>
@@ -134,7 +134,7 @@
     <string name="pref_player_custom_button_startup">Başlangıçta</string>
     <string name="pref_player_custom_button_id">(ID: %d)</string>
     <string name="pref_player_advanced">Gelişmiş</string>
-    <string name="pref_player_advanced_summary">Kodlar, mpv.conf, input.conf</string>
+    <string name="pref_player_advanced_summary">Kullanıcı dosyaları, mpv.conf, input.conf</string>
     <string name="pref_mpv_conf">Daha fazla oynatıcı ayarı için MPV yapılandırma dosyasını düzenleyin</string>
     <string name="pref_reset_mpv_conf">MPV yapılandırma dosyasını sıfırla</string>
     <string name="pref_mpv_input">Tuş atamaları için MPV giriş dosyasını düzenle</string>
@@ -245,7 +245,7 @@
     <string name="manga_categories">Manga kategorileri</string>
     <string name="general_categories">Kategoriler</string>
     <string name="anime_categories">Anime Kategorileri</string>
-    <string name="entries">Kütüphane girdileri</string>
+    <string name="entries">Kitaplık girdileri</string>
     <string name="chapters_episodes">Manga ve Anime bölümleri</string>
     <string name="episodes">Bölümler</string>
     <string name="backup_settings_warning">Uyarı: Ayarları yedeklemek izleyici şifrelerinizi de saklayacaktır. Bu yedekleme dosyasını asla paylaşmayın!</string>
@@ -297,8 +297,8 @@
     <string name="action_display_local_badge_anime">Yerel anime</string>
     <string name="pref_search_pinned_manga_sources_only">Genel aramada yalnızca sabitlenmiş manga kaynaklarını ara</string>
     <string name="pref_search_pinned_anime_sources_only">Genel aramada yalnızca sabitlenmiş anime kaynaklarını ara</string>
-    <string name="pref_hide_in_manga_library_items">Zaten kütüphanede bulunan manga girdilerini gizle</string>
-    <string name="pref_hide_in_anime_library_items">Zaten kütüphanede bulunan anime girdilerini gizle</string>
+    <string name="pref_hide_in_manga_library_items">Zaten kitaplıkta bulunan manga girdilerini gizle</string>
+    <string name="pref_hide_in_anime_library_items">Zaten kitaplukta bulunan anime girdilerini gizle</string>
     <string name="action_order_by_episode_number">Bölüm numarasına göre</string>
     <string name="action_start_download_externally">Harici indirme yöneticisi kullan</string>
     <string name="action_start_download_internally">Dahili indirme yöneticisi kullan</string>
@@ -319,8 +319,8 @@
     <string name="pref_download_new_episodes">Yeni bölümleri indir</string>
     <string name="pref_download_new_unseen_episodes_only">Birden fazla olan izlenmiş bölümlerin indirilmesini atla</string>
     <string name="auto_download_while_watching">İzlerken otomatik olarak indir</string>
-    <string name="download_ahead_info_anime">Yalnızca kütüphanedeki girdilerde ve mevcut bölüm ile bir sonraki bölüm zaten indirilmişse çalışır</string>
-    <string name="pref_track_on_add_library">Kütüphaneye eklerken izleyici menüsünü açın</string>
+    <string name="download_ahead_info_anime">Yalnızca kitaplıktaki girdilerde ve mevcut bölüm ile bir sonraki bölüm zaten indirilmişse çalışır</string>
+    <string name="pref_track_on_add_library">Kitaplığa eklerken izleyici menüsünü aç</string>
     <string name="pref_show_next_episode_airing_time">Sıradaki bölümün yayınlanma tarihini göster</string>
     <string name="pref_backup_flags_summary">Yedekleme dosyasına hangi bilgiler dahil edilecek</string>
     <string name="pref_anime_storage_usage">Anime Depolama kullanımı</string>
@@ -328,7 +328,7 @@
     <string name="used_cache_both">Anime tarafından kullanılan: %1$s, manga tarafından kullanılan: %2$s</string>
     <string name="pref_clear_manga_database">Manga veritabanını temizle</string>
     <string name="pref_clear_anime_database">Anime veritabanını temizle</string>
-    <string name="pref_clear_manga_database_summary">Kütüphanenize kaydedilmeyen manga girdilerinin geçmiş bilgisini sil</string>
+    <string name="pref_clear_manga_database_summary">Kitaplığınıza kaydedilmeyen manga girdilerinin geçmiş bilgilerini sil</string>
     <string name="pref_clear_anime_database_summary">Kütüphanenize kaydedilmeyen anime girdilerinin geçmiş bilgisini sil</string>
     <string name="anime_from_library">Kütüphaneden anime</string>
     <string name="downloaded_episodes">İndirilen bölümler</string>
@@ -383,8 +383,8 @@
     <string name="notification_episodes_multiple">%1$s bölüm</string>
     <string name="episode_settings">Bölüm ayarları</string>
     <string name="pref_backup_flags">Yedekleme seçenekleri</string>
-    <string name="label_manga_extensions">Manga Eklentileri</string>
-    <string name="label_anime_extensions">Anime Eklentileri</string>
+    <string name="label_manga_extensions">Manga Uzantıları</string>
+    <string name="label_anime_extensions">Anime Uzantıları</string>
     <string name="label_migration_manga">Manga\'yı Taşı</string>
     <string name="label_migration_anime">Anime\'yi Taşı</string>
     <string name="settings">Ayarlar</string>
@@ -394,7 +394,7 @@
     <string name="theme_cottoncandy">Pamuk şekeri</string>
     <string name="theme_mocha">Mocha</string>
     <string name="pref_episode_swipe_end">Sağa kaydırma işlevi</string>
-    <string name="pref_episode_swipe_start">Sola kaydırma işlevi</string>
+    <string name="pref_episode_swipe_start">Anime bölümünü sola kaydırma</string>
     <string name="pref_category_hide_hidden">Gizli kategorileri kategoriler menüsünde ve depolama ekranında gizle</string>
     <string name="pref_update_anime_release_grace_period">Animenin tahmini çıkış tarihi</string>
     <string name="data_saver_exclude">Veri tasarrufundan hariç tut</string>
@@ -419,8 +419,8 @@
     <string name="data_saver_server_summary">Buraya Bandwidth Hero ara sunucusu bağlantısını koyun</string>
     <string name="download_slots_info">Aynı anda indirmeler yalnızca tarifesiz veya kendinde barındırılan kaynaklardan yapılacaktır</string>
     <string name="unseen">İzlenmemiş</string>
-    <string name="label_manga_extension_repos">Manga eklenti depoları</string>
-    <string name="label_anime_extension_repos">Anime eklenti depoları</string>
+    <string name="label_manga_extension_repos">Manga uzantı depoları</string>
+    <string name="label_anime_extension_repos">Anime uzantı depoları</string>
     <string name="onboarding_storage_action_create_folder">Varsayılan Aniyomi klasörünü oluştur</string>
     <string name="download_speed_limit">Bölüm indirme hızı sınırı</string>
     <string name="download_speed_limit_hint">Hız sınırını devre dışı bırakmak için 0 olarak ayarlayın.</string>
@@ -442,10 +442,10 @@
     <string name="pref_auto_update_manga_on_mark_read">Okundu/izlendi olarak işaretlenince ilerlemeyi güncelle</string>
     <string name="pref_clear_chapter_cache">Manga ve anime bölümleri önbelleğini temizle</string>
     <string name="pref_auto_clear_chapter_cache">Uygulama başlatıldığına manga ve anime bölümleri önbelleğini temizle</string>
-    <string name="clear_database_confirmation">Emin misiniz? Tamamlanmış manga ve anime bölümleri ile kütüphanede olmayan girdilerin ilerlemeleri kaybolacaktır</string>
+    <string name="clear_database_confirmation">Emin misiniz? Tamamlanmış manga ve anime bölümleri ile kitaplıkta olmayan girdilerin ilerlemeleri kaybolacaktır</string>
     <string name="pref_incognito_mode_summary">Geçmişi duraklatır</string>
-    <string name="manga_from_library">Kütüphanedeki mangalar</string>
-    <string name="also_set_chapter_settings_for_library">Kütüphanemde bulununan tüm mangalara uygula</string>
+    <string name="manga_from_library">Kitaplıktaki mangalar</string>
+    <string name="also_set_chapter_settings_for_library">Kitaplığımda bulununan tüm mangalara uygula</string>
     <string name="dialog_with_checkbox_reset">Bu manga için tüm bölümleri sıfırla</string>
     <string name="download_insufficient_space">Düşük depolama alanı nedeniyle indirilemedi</string>
     <string name="download_queue_size_warning">Uyarı: büyük toplu indirmeler, kaynakların daha yavaş çalışmasına ve/veya Aniyomi uygulamasını engellemesine neden olabilir. Daha fazla bilgi için dokunun.</string>
@@ -489,4 +489,7 @@
     <string name="pref_mark_duplicate_seen_episode_seen">Yinelenen izlenmiş bölümü izlendi olarak işaretle</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">Bir bölüm izledikten sonra</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">Yeni bir bölüm geldiğinde</string>
+    <string name="pref_player_subtitle_invalid_lang">Geçersiz kod: \"%s\"</string>
+    <string name="pref_mpv_user_files">Kullanıcı MPV dosyalarını kullan</string>
+    <string name="pref_mpv_user_files_summary">mpv-config dosya konumundaki dosyaları kullan</string>
 </resources>
