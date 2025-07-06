@@ -328,9 +328,9 @@
     <string name="used_cache_both">Anime tarafından kullanılan: %1$s, manga tarafından kullanılan: %2$s</string>
     <string name="pref_clear_manga_database">Manga veritabanını temizle</string>
     <string name="pref_clear_anime_database">Anime veritabanını temizle</string>
-    <string name="pref_clear_manga_database_summary">Kitaplığınıza kaydedilmeyen manga girdilerinin geçmiş bilgilerini sil</string>
-    <string name="pref_clear_anime_database_summary">Kütüphanenize kaydedilmeyen anime girdilerinin geçmiş bilgisini sil</string>
-    <string name="anime_from_library">Kütüphaneden anime</string>
+    <string name="pref_clear_manga_database_summary">Kitaplığınıza kaydedilmemiş manga girdilerinin geçmiş bilgilerini sil</string>
+    <string name="pref_clear_anime_database_summary">Kitaplığınıza kaydedilmemiş anime girdilerinin geçmiş bilgilerini sil</string>
+    <string name="anime_from_library">Kitaplıktaki animeler</string>
     <string name="downloaded_episodes">İndirilen bölümler</string>
     <string name="local_manga_source">Yerel manga kaynağı</string>
     <string name="local_anime_source">Yerel anime kaynağı</string>
@@ -339,8 +339,8 @@
     <string name="unknown_studio">Bilinmeyen stüdyo</string>
     <string name="delete_confirmation">\"%s\" ögesini silmek istediğinize emin misiniz?</string>
     <string name="delete_downloads_for_anime">İndirilen bölümler silinsin mi?</string>
-    <string name="snack_add_to_manga_library">Mangayı kütüphaneye ekle?</string>
-    <string name="snack_add_to_anime_library">Animeyi kütüphaneye ekle?</string>
+    <string name="snack_add_to_manga_library">Mangayı kitaplığa ekle?</string>
+    <string name="snack_add_to_anime_library">Animeyi kitaplığa ekle?</string>
     <string name="display_mode_episode">Bölüm %1$s</string>
     <string name="episode_downloading_progress">İndiriliyor (%d%%)</string>
     <string name="download_error">Hata</string>
@@ -349,7 +349,7 @@
     <string name="sort_by_episode_number">Bölüm sayısına göre</string>
     <string name="download_unseen">İzlenmeyen</string>
     <string name="confirm_delete_episodes">Seçilen bölümleri silmek istediğinize emin misiniz?</string>
-    <string name="also_set_episode_settings_for_library">Kütüphanemdeki tüm animelere uygula</string>
+    <string name="also_set_episode_settings_for_library">Kitaplığımdaki tüm animelere uygula</string>
     <string name="no_episodes_error">Hiç bölüm bulunamadı</string>
     <string name="watching">İzleniyor</string>
     <string name="currently_reading">Şu anda okunuyor</string>
