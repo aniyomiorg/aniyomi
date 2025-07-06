@@ -305,7 +305,7 @@
     <string name="pref_auto_update_manga_on_mark_read">Mise à jour de la progression quand marqué comme lu/vu</string>
     <string name="pref_clear_chapter_cache">Effacer le cache des chapitres et des épisodes</string>
     <string name="pref_auto_clear_chapter_cache">Vider le cache de chapitre/épisode au lancement de l\'application</string>
-    <string name="clear_database_confirmation">Êtes-vous sûr(e)? Les épisodes et chapitres lus et la progression des entrées hors dans la bibliothèque seront perdues</string>
+    <string name="clear_database_confirmation">Êtes-vous sûr(e)? Les épisodes et chapitres lus et la progression des entrées hors de la bibliothèque seront perdues</string>
     <string name="pref_incognito_mode_summary">Suspend l\'historique de lecture</string>
     <string name="manga_from_library">Manga de la bibliothèque</string>
     <string name="also_set_chapter_settings_for_library">S\'applique également à toutes les manga de ma bibliothèque</string>
