@@ -287,4 +287,11 @@
     <string name="onboarding_storage_action_create_folder">Créer le dossier par défaut d\'Aniyomi</string>
     <string name="download_speed_limit">Limite de vitesse de téléchargement</string>
     <string name="download_speed_limit_hint">Mettre à 0 pour désactiver la limite.</string>
+    <string name="action_display_unseen_badge">Épisodes non vus</string>
+    <string name="manga">Entrées de la bibliothèque</string>
+    <string name="pref_behavior">Comportement du chapitre</string>
+    <string name="action_add_repo_message">Ajouter un répertoire additionnel à Mihon. L\'URL devrait se terminer par « index.min.json ».</string>
+    <string name="download_ahead_info">Fonctionne seulement si le chapitre actuel et le suivant sont déjà téléchargés.</string>
+    <string name="non_library_settings">Toutes les entrées lues/regardées</string>
+    <string name="action_sort_last_manga_update">Dernière verification de mise à jour</string>
 </resources>
