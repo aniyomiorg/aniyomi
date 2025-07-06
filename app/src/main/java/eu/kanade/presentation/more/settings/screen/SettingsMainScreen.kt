@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.outlined.Sync
+import androidx.compose.material.icons.outlined.VideoSettings
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
@@ -44,6 +45,7 @@ import eu.kanade.presentation.more.settings.screen.about.AboutScreen
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.util.LocalBackPress
 import eu.kanade.presentation.util.Screen
+import eu.kanade.tachiyomi.ui.setting.PlayerSettingsScreen
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
@@ -191,6 +193,12 @@ object SettingsMainScreen : Screen() {
             subtitleRes = MR.strings.pref_reader_summary,
             icon = Icons.AutoMirrored.Outlined.ChromeReaderMode,
             screen = SettingsReaderScreen,
+        ),
+        Item(
+            titleRes = AYMR.strings.label_player,
+            subtitleRes = AYMR.strings.pref_player_settings_summary,
+            icon = Icons.Outlined.VideoSettings,
+            screen = PlayerSettingsScreen(mainSettings = true),
         ),
         Item(
             titleRes = MR.strings.pref_category_downloads,

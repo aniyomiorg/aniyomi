@@ -51,7 +51,7 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
-object PlayerSettingsMainScreen : Screen() {
+class PlayerSettingsMainScreen(private val mainSettings: Boolean) : Screen() {
     @Composable
     override fun Content() {
         Content(twoPane = false)
@@ -84,7 +84,13 @@ object PlayerSettingsMainScreen : Screen() {
             topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState),
             topBar = { scrollBehavior ->
                 AppBar(
-                    title = stringResource(AYMR.strings.label_player_settings),
+                    title = stringResource(
+                        if (mainSettings) {
+                            AYMR.strings.label_player
+                        } else {
+                            AYMR.strings.label_player_settings
+                        },
+                    ),
                     navigateUp = backPress::invoke,
                     actions = {
                         AppBarActions(

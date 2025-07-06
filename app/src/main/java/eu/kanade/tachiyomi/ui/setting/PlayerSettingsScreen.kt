@@ -20,13 +20,13 @@ import eu.kanade.presentation.util.Screen
 import eu.kanade.presentation.util.isTabletUi
 import tachiyomi.presentation.core.components.TwoPanelBox
 
-object PlayerSettingsScreen : Screen() {
+class PlayerSettingsScreen(private val mainSettings: Boolean) : Screen() {
     @Composable
     override fun Content() {
         val parentNavigator = LocalNavigator.currentOrThrow
         if (!isTabletUi()) {
             Navigator(
-                screen = PlayerSettingsMainScreen,
+                screen = PlayerSettingsMainScreen(mainSettings),
                 content = {
                     val pop: () -> Unit = {
                         if (it.canPop) {
@@ -51,7 +51,7 @@ object PlayerSettingsScreen : Screen() {
                         .consumeWindowInsets(insets),
                     startContent = {
                         CompositionLocalProvider(LocalBackPress provides parentNavigator::pop) {
-                            PlayerSettingsMainScreen.Content(twoPane = true)
+                            PlayerSettingsMainScreen(mainSettings).Content(twoPane = true)
                         }
                     },
                     endContent = { DefaultNavigatorScreenTransition(navigator = it) },

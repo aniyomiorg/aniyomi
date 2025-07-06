@@ -39,7 +39,9 @@
 
     <!-- Player settings -->
     <string name="label_player_settings">Player settings</string>
+    <string name="label_player">Player</string>
     <string name="action_search_player_settings">Search player settings</string>
+    <string name="pref_player_settings_summary">Internal player, gestures, decoders, subtitles</string>
 
     <!-- Player settings - internal player -->
     <string name="pref_player_internal">Internal player</string>
