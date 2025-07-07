@@ -62,7 +62,7 @@
     <string name="enable_auto_play">A reprodução automática está ativada</string>
     <string name="disable_auto_play">A reprodução automática está desativada</string>
     <string name="player_aniskip_dontskip">Não saltar</string>
-    <string name="player_aniskip_dontskip_toast">Saltar em %d segundos</string>
+    <string name="player_aniskip_dontskip_toast">Saltar %s em %d segundos</string>
     <string name="player_aniskip_skip">%s saltado</string>
     <string name="no_next_episode">Próximo episódio não encontrado!</string>
     <string name="player_hwdec_mode">Definir o modo de descodificação de hardware padrão</string>
@@ -260,4 +260,10 @@
     <string name="onboarding_storage_action_create_folder">Criar a pasta padrão para Aniyomi</string>
     <string name="download_speed_limit">Limite de velocidade de download</string>
     <string name="download_speed_limit_hint">Defina como 0 para desativar o limite de velocidade.</string>
+    <string name="action_display_show_continue_reading_button">Botão de continuar a ver/ler</string>
+    <string name="pref_remove_after_read">Eliminar automaticamente depois de ler/ver</string>
+    <string name="pref_auto_update_manga_sync">Progresso da atualização depois de ler/ver</string>
+    <string name="pref_category_delete_chapters">Eliminar capítulos/episódios</string>
+    <string name="pref_remove_after_marked_as_read">Depois de marcado manualmente como lido/visto</string>
+    <string name="pref_remove_bookmarked_chapters">Permitir a eliminação de capítulos/episódios nos marcadores</string>
 </resources>
