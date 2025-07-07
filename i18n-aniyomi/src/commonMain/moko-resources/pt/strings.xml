@@ -262,8 +262,11 @@
     <string name="download_speed_limit_hint">Defina como 0 para desativar o limite de velocidade.</string>
     <string name="action_display_show_continue_reading_button">Botão de continuar a ver/ler</string>
     <string name="pref_remove_after_read">Eliminar automaticamente depois de ler/ver</string>
-    <string name="pref_auto_update_manga_sync">Progresso da atualização depois de ler/ver</string>
+    <string name="pref_auto_update_manga_sync">Atualizar progresso depois de ler/ver</string>
     <string name="pref_category_delete_chapters">Eliminar capítulos/episódios</string>
     <string name="pref_remove_after_marked_as_read">Depois de marcado manualmente como lido/visto</string>
     <string name="pref_remove_bookmarked_chapters">Permitir a eliminação de capítulos/episódios nos marcadores</string>
+    <string name="pref_auto_update_manga_on_mark_read">Atualizar progresso quando marcado como lido/visto</string>
+    <string name="pref_clear_chapter_cache">Limpar cache do capítulo e episódio</string>
+    <string name="pref_auto_clear_chapter_cache">Limpar a cache do episódio/capítulo ao iniciar a aplicação</string>
 </resources>
