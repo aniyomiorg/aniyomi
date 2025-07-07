@@ -433,4 +433,17 @@
     <string name="pref_remove_after_read">Cancella automaticamente dopo la lettura/visione</string>
     <string name="manga_from_library">Manga dalla libreria</string>
     <string name="non_library_settings">Tutte le voci lette/viste</string>
+    <string name="pref_behavior">Comportamento del capitolo</string>
+    <string name="action_add_repo_message">Aggiungi altre repository a %s. Dovrebbe essere un URL che finisce con \"index.min.json\".</string>
+    <string name="download_ahead_info">Funziona solo se il capitolo/episodio corrente e il successivo sono già stati scaricati.</string>
+    <string name="action_sort_last_manga_update">Ultimo aggiornamento manga</string>
+    <string name="action_display_show_continue_reading_button">Pulsante Continua a guardare/leggere</string>
+    <string name="pref_update_only_completely_read">Salta le voci con episodi non visti o capitoli non letti</string>
+    <string name="pref_remove_bookmarked_chapters">Consenti l\'eliminazione dei capitoli/episodi con segnalibro</string>
+    <string name="pref_auto_update_manga_sync">Aggiorna il tracking dopo la lettura/visione</string>
+    <string name="pref_auto_update_manga_on_mark_read">Aggiorna l\'avanzamento quando viene contrassegnato come letto/visto</string>
+    <string name="pref_clear_chapter_cache">Cancella cache capitoli e episodi</string>
+    <string name="pref_auto_clear_chapter_cache">Cancella la cache capitoli/episodi all\'avvio dell\'app</string>
+    <string name="clear_database_confirmation">Sei sicuro? Gli episodi e i capitoli completati e il progresso delle voci non presenti in libreria andranno persi</string>
+    <string name="pref_incognito_mode_summary">Sospendi la tua cronologia</string>
 </resources>
