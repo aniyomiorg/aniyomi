@@ -652,7 +652,7 @@ fun AnimeScreenLargeImpl(
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
 
-    val seasons = remember(state) { state.seasons }
+    val seasons = remember(state) { state.processedSeasons }
     val episodes = remember(state) { state.processedEpisodes }
     val listItem = remember(state) { state.episodeListItems }
 

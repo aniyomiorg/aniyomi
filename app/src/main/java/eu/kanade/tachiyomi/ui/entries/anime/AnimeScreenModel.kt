@@ -96,6 +96,8 @@ import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.items.episode.service.calculateEpisodeGap
 import tachiyomi.domain.items.episode.service.getEpisodeSort
 import tachiyomi.domain.items.season.interactor.SetAnimeDefaultSeasonFlags
+import tachiyomi.domain.items.season.service.getSeasonSortComparator
+import tachiyomi.domain.items.season.service.seasonSortAlphabetically
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
@@ -1614,6 +1616,10 @@ class AnimeScreenModel(
                 val bookmarkedFilter = anime.bookmarkedFilter
                 val completedFilter = anime.seasonCompletedFilter
 
+                val comparator = getSeasonSortComparator(anime)
+                    .let { if (anime.seasonSortDescending()) it.reversed() else it }
+                    .thenComparator(seasonSortAlphabetically)
+
                 return asSequence()
                     .filter { (season) -> applyFilter(unseenFilter) { !season.seen } }
                     .filter { (season) -> applyFilter(startedFilter) { season.hasStarted } }
@@ -1622,6 +1628,7 @@ class AnimeScreenModel(
                     }
                     .filter { (season) -> applyFilter(bookmarkedFilter) { season.hasBookmarks } }
                     .filter { applyFilter(downloadedFilter) { it.downloadCount > 0 || it.seasonAnime.anime.isLocal() } }
+                    .sortedWith(compareBy(comparator) { it.seasonAnime })
                     .map {
                         val itemAnime = it.seasonAnime.anime
                         AnimeSeasonItem(
