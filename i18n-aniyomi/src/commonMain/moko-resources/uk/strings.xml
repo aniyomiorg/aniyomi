@@ -492,4 +492,6 @@
     <string name="pref_player_subtitle_invalid_lang">Недійсний код: \"%s\"</string>
     <string name="pref_mpv_user_files">Використовувати MPV-файли користувача</string>
     <string name="pref_mpv_user_files_summary">Використовувати файли з каталогу mpv-config</string>
+    <string name="label_player">Гравець</string>
+    <string name="pref_player_settings_summary">Вбудований програвач, жести, декодери, субтитри</string>
 </resources>
