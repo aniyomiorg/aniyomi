@@ -313,4 +313,15 @@
     <string name="download_insufficient_space">Impossible de télécharger les chapitres, l\'espace de stockage est insuffisant</string>
     <string name="download_queue_size_warning">Attention : les téléchargements massifs peuvent entraîner un ralentissement des sources ou le blocage de Aniyomi. Appuyez pour en savoir plus.</string>
     <string name="pref_invalidate_download_cache_summary">Forcer l\'application à revérifier les chapitres et épisodes téléchargés</string>
+    <string name="label_player">Lecteur</string>
+    <string name="pref_player_settings_summary">Lecteur interne, gestes, décodeurs, sous-titres</string>
+    <string name="rotation_video">Vidéo</string>
+    <string name="pref_category_controls">Contrôles</string>
+    <string name="pref_controls_allow_gestures_in_panels">Autoriser les gestes dans les panneaux</string>
+    <string name="pref_controls_show_loading">Afficher le cercle de chargement</string>
+    <string name="pref_controls_show_chapter_indicator">Afficher l’indicateur du chapitre actuel</string>
+    <string name="pref_controls_show_chapter_indicator_info">N’apparaît que si la vidéo a des chapitres</string>
+    <string name="pref_controls_display_volume_percentage">Afficher le volume en pourcentage</string>
+    <string name="pref_hosters">Hébergeurs</string>
+    <string name="pref_hosters_show_failure">Afficher les hébergeurs erronés</string>
 </resources>
