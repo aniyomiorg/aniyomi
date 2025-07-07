@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -55,6 +56,7 @@ import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
 import aniyomi.domain.anime.SeasonAnime
+import aniyomi.domain.anime.SeasonDisplayMode
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.entries.anime.model.episodesFiltered
@@ -64,6 +66,7 @@ import eu.kanade.presentation.entries.EntryScreenItem
 import eu.kanade.presentation.entries.anime.components.AnimeActionRow
 import eu.kanade.presentation.entries.anime.components.AnimeEpisodeListItem
 import eu.kanade.presentation.entries.anime.components.AnimeInfoBox
+import eu.kanade.presentation.entries.anime.components.AnimeSeasonListItem
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescription
 import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
@@ -71,10 +74,6 @@ import eu.kanade.presentation.entries.components.EntryBottomActionMenu
 import eu.kanade.presentation.entries.components.EntryToolbar
 import eu.kanade.presentation.entries.components.ItemHeader
 import eu.kanade.presentation.entries.components.MissingItemCountListItem
-import eu.kanade.presentation.library.components.DownloadsBadge
-import eu.kanade.presentation.library.components.EntryComfortableGridItem
-import eu.kanade.presentation.library.components.LanguageBadge
-import eu.kanade.presentation.library.components.UnviewedBadge
 import eu.kanade.presentation.util.formatEpisodeNumber
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.FetchType
@@ -88,7 +87,6 @@ import eu.kanade.tachiyomi.ui.entries.anime.EpisodeList
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.service.missingEntriesCount
 import tachiyomi.domain.library.service.LibraryPreferences
@@ -317,12 +315,16 @@ private fun AnimeScreenSmallImpl(
 ) {
     val density = LocalDensity.current
     val offsetGridPaddingPx = with(density) { GRID_PADDING.roundToPx() }
+    val gridSize = remember(state.anime) { state.anime.seasonDisplayGridSize }
 
     val itemListState = rememberLazyGridState()
 
-    val seasons = remember(state) { state.seasons }
+    val seasons = remember(state) { state.processedSeasons }
     val episodes = remember(state) { state.processedEpisodes }
     val listItem = remember(state) { state.episodeListItems }
+
+    var containerHeight by remember { mutableIntStateOf(0) }
+    var toolbarHeight by remember { mutableIntStateOf(0) }
 
     val isAnySelected by remember {
         derivedStateOf {
@@ -376,6 +378,7 @@ private fun AnimeScreenSmallImpl(
                 titleAlphaProvider = { titleAlpha },
                 backgroundAlphaProvider = { backgroundAlpha },
                 isManga = false,
+                modifier = Modifier.onSizeChanged { toolbarHeight = it.height },
             )
         },
         bottomBar = {
@@ -436,12 +439,14 @@ private fun AnimeScreenSmallImpl(
             indicatorPadding = PaddingValues(top = topPadding),
         ) {
             val layoutDirection = LocalLayoutDirection.current
-
             FastScrollLazyVerticalGrid(
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .onGloballyPositioned { layoutCoordinates ->
+                        containerHeight = layoutCoordinates.size.height
+                    },
                 state = itemListState,
-                // TODO(seasons): Get from options
-                columns = GridCells.Fixed(3),
+                columns = if (gridSize == 0) GridCells.Adaptive(128.dp) else GridCells.Fixed(gridSize),
                 contentPadding = PaddingValues(
                     start = GRID_PADDING + contentPadding.calculateStartPadding(layoutDirection),
                     end = GRID_PADDING + contentPadding.calculateEndPadding(layoutDirection),
@@ -529,7 +534,9 @@ private fun AnimeScreenSmallImpl(
                 when (state.anime.fetchType) {
                     FetchType.Seasons -> {
                         sharedSeasons(
+                            anime = state.anime,
                             seasons = seasons,
+                            containerHeight = containerHeight - toolbarHeight,
                             onSeasonClicked = onSeasonClicked,
                             onClickContinueWatching = onClickContinueWatching,
                         )
@@ -658,6 +665,10 @@ fun AnimeScreenLargeImpl(
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableIntStateOf(0) }
     val offsetGridPaddingPx = with(density) { GRID_PADDING.roundToPx() }
+    val gridSize = remember(state.anime) { state.anime.seasonDisplayGridSize }
+
+    var containerHeight by remember { mutableIntStateOf(0) }
+    var headerHeight by remember { mutableIntStateOf(0) }
 
     val itemListState = rememberLazyGridState()
 
@@ -798,10 +809,13 @@ fun AnimeScreenLargeImpl(
                 },
                 endContent = {
                     FastScrollLazyVerticalGrid(
-                        modifier = Modifier.fillMaxHeight(),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .onGloballyPositioned { layoutCoordinates ->
+                                containerHeight = layoutCoordinates.size.height
+                            },
                         state = itemListState,
-                        // TODO(seasons): Get from options
-                        columns = GridCells.Fixed(3),
+                        columns = if (gridSize == 0) GridCells.Adaptive(128.dp) else GridCells.Fixed(gridSize),
                         contentPadding = PaddingValues(
                             start = GRID_PADDING,
                             end = GRID_PADDING,
@@ -812,6 +826,7 @@ fun AnimeScreenLargeImpl(
                         item(
                             key = EntryScreenItem.ITEM_HEADER,
                             contentType = EntryScreenItem.ITEM_HEADER,
+                            span = { GridItemSpan(maxLineSpan) },
                         ) {
                             val missingEpisodesCount = remember(episodes) {
                                 episodes.map { it.episode.episodeNumber }.missingEntriesCount()
@@ -830,14 +845,18 @@ fun AnimeScreenLargeImpl(
                                 onClick = onFilterButtonClicked,
                                 isManga = false,
                                 fetchType = state.anime.fetchType,
-                                modifier = Modifier.ignorePadding(offsetGridPaddingPx),
+                                modifier = Modifier
+                                    .ignorePadding(offsetGridPaddingPx)
+                                    .onSizeChanged { headerHeight = it.height },
                             )
                         }
 
                         when (state.anime.fetchType) {
                             FetchType.Seasons -> {
                                 sharedSeasons(
+                                    anime = state.anime,
                                     seasons = seasons,
+                                    containerHeight = containerHeight - headerHeight,
                                     onSeasonClicked = onSeasonClicked,
                                     onClickContinueWatching = onClickContinueWatching,
                                 )
@@ -946,45 +965,23 @@ private fun SharedAnimeBottomActionMenu(
 }
 
 private fun LazyGridScope.sharedSeasons(
+    anime: Anime,
     seasons: List<AnimeSeasonItem>,
+    containerHeight: Int,
     onSeasonClicked: (SeasonAnime) -> Unit,
     onClickContinueWatching: ((SeasonAnime) -> Unit)?,
 ) {
     items(
         items = seasons,
         key = { season -> season.seasonAnime.anime },
+        span = { GridItemSpan(if (anime.seasonDisplayGridMode == SeasonDisplayMode.List) maxLineSpan else 1) },
     ) { item ->
-        val anime = item.seasonAnime.anime
-        EntryComfortableGridItem(
-            isSelected = false,
-            title = anime.title,
-            coverData = AnimeCover(
-                animeId = anime.id,
-                sourceId = anime.source,
-                isAnimeFavorite = anime.favorite,
-                url = anime.thumbnailUrl,
-                lastModified = anime.coverLastModified,
-            ),
-            coverBadgeStart = {
-                DownloadsBadge(count = item.downloadCount)
-                UnviewedBadge(count = item.unseenCount)
-            },
-            coverBadgeEnd = {
-                LanguageBadge(
-                    isLocal = item.isLocal,
-                    sourceLanguage = item.sourceLanguage,
-                )
-            },
-            onLongClick = { onSeasonClicked(item.seasonAnime) },
-            onClick = { onSeasonClicked(item.seasonAnime) },
-            onClickContinueViewing = if (anime.fetchType == FetchType.Episodes &&
-                onClickContinueWatching != null &&
-                item.seasonAnime.unseenCount > 0
-            ) {
-                { onClickContinueWatching(item.seasonAnime) }
-            } else {
-                null
-            },
+        AnimeSeasonListItem(
+            anime = anime,
+            item = item,
+            containerHeight = containerHeight,
+            onSeasonClicked = onSeasonClicked,
+            onClickContinueWatching = onClickContinueWatching,
         )
     }
 }

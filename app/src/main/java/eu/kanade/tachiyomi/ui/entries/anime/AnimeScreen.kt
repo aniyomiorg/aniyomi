@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,6 +32,7 @@ import eu.kanade.presentation.entries.anime.AnimeScreen
 import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
 import eu.kanade.presentation.entries.anime.EpisodeSettingsDialog
+import eu.kanade.presentation.entries.anime.SeasonSettingsDialog
 import eu.kanade.presentation.entries.anime.components.AnimeCoverDialog
 import eu.kanade.presentation.entries.components.DeleteItemsDialog
 import eu.kanade.presentation.entries.components.SetIntervalDialog
@@ -191,7 +191,8 @@ class AnimeScreen(
             onMigrateClicked = {
                 navigator.push(MigrateAnimeSearchScreen(successState.anime.id))
             }.takeIf { successState.anime.favorite },
-            changeAnimeSkipIntro = screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite },
+            changeAnimeSkipIntro = screenModel::showAnimeSkipIntroDialog
+                .takeIf { successState.anime.favorite && successState.anime.fetchType == FetchType.Episodes },
             onMultiBookmarkClicked = screenModel::bookmarkEpisodes,
             onMultiMarkAsSeenClicked = screenModel::markEpisodesSeen,
             onMarkPreviousAsSeenClicked = screenModel::markPreviousEpisodeSeen,
@@ -274,9 +275,25 @@ class AnimeScreen(
                 onDisplayModeChanged = screenModel::setDisplayMode,
                 onSetAsDefault = screenModel::setCurrentSettingsAsDefault,
             )
-            AnimeScreenModel.Dialog.SeasonSettingsSheet -> {
-                Text("UwU")
-            }
+            AnimeScreenModel.Dialog.SeasonSettingsSheet -> SeasonSettingsDialog(
+                onDismissRequest = onDismissRequest,
+                anime = successState.anime,
+                onDownloadFilterChanged = screenModel::setSeasonDownloadedFilter,
+                onUnseenFilterChanged = screenModel::setSeasonUnseenFilter,
+                onStartedFilterChanged = screenModel::setSeasonStartedFilter,
+                onBookmarkedFilterChanged = screenModel::setSeasonBookmarkedFilter,
+                onCompletedFilterChanged = screenModel::setSeasonCompletedFilter,
+                onSortModeChanged = screenModel::setSeasonSorting,
+                onDisplayGridModeChanged = screenModel::setSeasonDisplayGridMode,
+                onDisplayGridSizeChanged = screenModel::setSeasonDisplayGridSize,
+                onOverlayDownloadedChanged = screenModel::setSeasonDownloadOverlay,
+                onOverlayUnseenChanged = screenModel::setSeasonUnseenOverlay,
+                onOverlayLocalChanged = screenModel::setSeasonLocalOverlay,
+                onOverlayLangChanged = screenModel::setSeasonLangOverlay,
+                onOverlayContinueChanged = screenModel::setSeasonContinueOverlay,
+                onDisplayModeChanged = screenModel::setSeasonDisplayMode,
+                onSetAsDefault = screenModel::setSeasonCurrentSettingsAsDefault,
+            )
             AnimeScreenModel.Dialog.TrackSheet -> {
                 NavigatorAdaptiveSheet(
                     screen = AnimeTrackInfoDialogHomeScreen(

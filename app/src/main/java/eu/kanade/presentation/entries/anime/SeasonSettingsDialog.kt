@@ -1,6 +1,5 @@
 package eu.kanade.presentation.entries.anime
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
@@ -17,23 +16,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import aniyomi.domain.anime.SeasonDisplayMode
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.entries.anime.model.downloadedFilter
+import eu.kanade.domain.entries.anime.model.seasonDownloadedFilter
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
-import eu.kanade.presentation.library.anime.displayModes
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.LabeledCheckbox
 import tachiyomi.presentation.core.components.RadioItem
 import tachiyomi.presentation.core.components.SettingsChipRow
+import tachiyomi.presentation.core.components.SettingsItemsPaddings
 import tachiyomi.presentation.core.components.SliderItem
 import tachiyomi.presentation.core.components.SortItem
 import tachiyomi.presentation.core.components.TriStateItem
@@ -45,11 +42,28 @@ import uy.kohesive.injekt.api.get
 fun SeasonSettingsDialog(
     onDismissRequest: () -> Unit,
     anime: Anime? = null,
+
+    // Filter page
     onDownloadFilterChanged: (TriState) -> Unit,
     onUnseenFilterChanged: (TriState) -> Unit,
+    onStartedFilterChanged: (TriState) -> Unit,
     onBookmarkedFilterChanged: (TriState) -> Unit,
+    onCompletedFilterChanged: (TriState) -> Unit,
+
+    // Sort page
     onSortModeChanged: (Long) -> Unit,
+
+    // Display page
+    onDisplayGridModeChanged: (SeasonDisplayMode) -> Unit,
+    onDisplayGridSizeChanged: (Int) -> Unit,
+    onOverlayDownloadedChanged: (Boolean) -> Unit,
+    onOverlayUnseenChanged: (Boolean) -> Unit,
+    onOverlayLocalChanged: (Boolean) -> Unit,
+    onOverlayLangChanged: (Boolean) -> Unit,
+    onOverlayContinueChanged: (Boolean) -> Unit,
     onDisplayModeChanged: (Long) -> Unit,
+
+    // Overflow action
     onSetAsDefault: (applyToExistingAnime: Boolean) -> Unit,
 ) {
     var showSetAsDefaultDialog by rememberSaveable { mutableStateOf(false) }
@@ -88,25 +102,44 @@ fun SeasonSettingsDialog(
             when (page) {
                 0 -> {
                     SeasonFilterPage(
-                        downloadFilter = anime?.downloadedFilter ?: TriState.DISABLED,
+                        downloadFilter = anime?.seasonDownloadedFilter ?: TriState.DISABLED,
                         onDownloadFilterChanged = onDownloadFilterChanged
                             .takeUnless { downloadedOnly },
-                        unseenFilter = anime?.unseenFilter ?: TriState.DISABLED,
+                        unseenFilter = anime?.seasonUnseenFilter ?: TriState.DISABLED,
                         onUnseenFilterChanged = onUnseenFilterChanged,
-                        bookmarkedFilter = anime?.bookmarkedFilter ?: TriState.DISABLED,
+                        startedFilter = anime?.seasonStartedFilter ?: TriState.DISABLED,
+                        onStartedFilterChanged = onStartedFilterChanged,
+                        bookmarkedFilter = anime?.seasonBookmarkedFilter ?: TriState.DISABLED,
                         onBookmarkedFilterChanged = onBookmarkedFilterChanged,
+                        completedFilter = anime?.seasonCompletedFilter ?: TriState.DISABLED,
+                        onCompletedFilterChanged = onCompletedFilterChanged,
                     )
                 }
                 1 -> {
                     SeasonSortPage(
-                        sortingMode = anime?.sorting ?: 0,
-                        sortDescending = anime?.sortDescending() ?: false,
+                        sortingMode = anime?.seasonSorting ?: 0,
+                        sortDescending = anime?.seasonSortDescending() ?: false,
                         onItemSelected = onSortModeChanged,
                     )
                 }
                 2 -> {
                     SeasonDisplayPage(
-
+                        displayGridMode = anime?.seasonDisplayGridMode ?: SeasonDisplayMode.CompactGrid,
+                        displayGridModeChange = onDisplayGridModeChanged,
+                        displayGridModeSize = anime?.seasonDisplayGridSize ?: 0,
+                        displayGridModeSizeChange = onDisplayGridSizeChanged,
+                        overlayDownloaded = anime?.seasonDownloadedOverlay ?: false,
+                        overlayDownloadedChange = onOverlayDownloadedChanged,
+                        overlayUnseen = anime?.seasonUnseenOverlay ?: true,
+                        overlayUnseenChange = onOverlayUnseenChanged,
+                        overlayLocal = anime?.seasonLocalOverlay ?: true,
+                        overlayLocalChange = onOverlayLocalChanged,
+                        overlayLang = anime?.seasonLangOverlay ?: false,
+                        overlayLangChange = onOverlayLangChanged,
+                        overlayContinue = anime?.seasonContinueOverlay ?: true,
+                        overlayContinueChange = onOverlayContinueChanged,
+                        displayMode = anime?.seasonDisplayMode ?: 0L,
+                        displayModeChange = onDisplayModeChanged,
                     )
                 }
             }
@@ -121,7 +154,7 @@ private fun ColumnScope.SeasonFilterPage(
     unseenFilter: TriState,
     onUnseenFilterChanged: (TriState) -> Unit,
     startedFilter: TriState,
-    onStartedFilterChange: (TriState) -> Unit,
+    onStartedFilterChanged: (TriState) -> Unit,
     bookmarkedFilter: TriState,
     onBookmarkedFilterChanged: (TriState) -> Unit,
     completedFilter: TriState,
@@ -140,7 +173,7 @@ private fun ColumnScope.SeasonFilterPage(
     TriStateItem(
         label = stringResource(MR.strings.label_started),
         state = startedFilter,
-        onClick = onStartedFilterChange,
+        onClick = onStartedFilterChanged,
     )
     TriStateItem(
         label = stringResource(MR.strings.action_filter_bookmarked),
@@ -160,20 +193,14 @@ private fun ColumnScope.SeasonSortPage(
     sortDescending: Boolean,
     onItemSelected: (Long) -> Unit,
 ) {
-    /*
-    1. By source
-    2. By season number
-    3. By upload date
-    4. Alphabetically
-    5. total count
-    6. last seen
-    7. fetched at
-     */
     listOf(
-        MR.strings.sort_by_source to Anime.EPISODE_SORTING_SOURCE,
-        AYMR.strings.sort_by_season_number to Anime.EPISODE_SORTING_NUMBER,
-        MR.strings.sort_by_upload_date to Anime.EPISODE_SORTING_UPLOAD_DATE,
-        MR.strings.action_sort_alpha to Anime.EPISODE_SORTING_ALPHABET,
+        MR.strings.sort_by_source to Anime.SEASON_SORT_SOURCE,
+        AYMR.strings.sort_by_season_number to Anime.SEASON_SORT_SEASON,
+        MR.strings.sort_by_upload_date to Anime.SEASON_SORT_UPLOAD,
+        MR.strings.action_sort_alpha to Anime.SEASON_SORT_ALPHABET,
+        AYMR.strings.action_sort_unseen_count to Anime.SEASON_SORT_COUNT,
+        AYMR.strings.action_sort_last_seen to Anime.SEASON_SORT_LAST_SEEN,
+        AYMR.strings.action_sort_episode_fetch_date to Anime.SEASON_SORT_FETCHED,
     ).map { (titleRes, mode) ->
         SortItem(
             label = stringResource(titleRes),
@@ -192,10 +219,10 @@ private val displayModes = listOf(
 
 @Composable
 private fun ColumnScope.SeasonDisplayPage(
-    displayGridMode: Long,
-    displayGridModeChange: (Long) -> Unit,
-    displayGridModeCount: Long,
-    displayGridModeCountChange: (Long) -> Unit,
+    displayGridMode: SeasonDisplayMode,
+    displayGridModeChange: (SeasonDisplayMode) -> Unit,
+    displayGridModeSize: Int,
+    displayGridModeSizeChange: (Int) -> Unit,
     overlayDownloaded: Boolean,
     overlayDownloadedChange: (Boolean) -> Unit,
     overlayUnseen: Boolean,
@@ -209,41 +236,40 @@ private fun ColumnScope.SeasonDisplayPage(
     displayMode: Long,
     displayModeChange: (Long) -> Unit,
 ) {
-    val displayModeValue = SeasonDisplayMode.fromLong(displayGridMode)
     SettingsChipRow(MR.strings.action_display_mode) {
         displayModes.map { (titleRes, mode) ->
             FilterChip(
-                selected = displayModeValue == mode,
-                onClick = { displayGridModeChange(SeasonDisplayMode.toLong(mode)) },
+                selected = displayGridMode == mode,
+                onClick = { displayGridModeChange(mode) },
                 label = { Text(stringResource(titleRes)) },
             )
         }
     }
 
-    if (displayModeValue == SeasonDisplayMode.List) {
+    if (displayGridMode == SeasonDisplayMode.List) {
         SliderItem(
-            value = displayGridModeCount.toInt(),
+            value = displayGridModeSize,
             valueRange = 0..10,
             label = stringResource(AYMR.strings.pref_library_rows),
-            valueText = if (displayGridModeCount > 0) {
-                displayGridModeCount.toString()
+            valueText = if (displayGridModeSize > 0) {
+                displayGridModeSize.toString()
             } else {
                 stringResource(MR.strings.label_auto)
             },
-            onChange = { displayGridModeCountChange(it.toLong()) },
+            onChange = { displayGridModeSizeChange(it) },
             pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         )
     } else {
         SliderItem(
-            value = displayGridModeCount.toInt(),
+            value = displayGridModeSize,
             valueRange = 0..10,
             label = stringResource(MR.strings.pref_library_columns),
-            valueText = if (displayGridModeCount > 0) {
-                displayGridModeCount.toString()
+            valueText = if (displayGridModeSize > 0) {
+                displayGridModeSize.toString()
             } else {
                 stringResource(MR.strings.label_auto)
             },
-            onChange = { displayGridModeCountChange(it.toLong()) },
+            onChange = { displayGridModeSizeChange(it) },
             pillColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         )
     }
@@ -253,32 +279,47 @@ private fun ColumnScope.SeasonDisplayPage(
         label = stringResource(AYMR.strings.action_display_download_badge_anime),
         checked = overlayDownloaded,
         onCheckedChange = overlayDownloadedChange,
+        modifier = Modifier.padding(
+            horizontal = SettingsItemsPaddings.Horizontal,
+        ),
     )
     LabeledCheckbox(
         label = stringResource(AYMR.strings.action_display_unseen_badge),
         checked = overlayUnseen,
         onCheckedChange = overlayUnseenChange,
+        modifier = Modifier.padding(
+            horizontal = SettingsItemsPaddings.Horizontal,
+        ),
     )
     LabeledCheckbox(
         label = stringResource(MR.strings.action_display_local_badge),
         checked = overlayLocal,
         onCheckedChange = overlayLocalChange,
+        modifier = Modifier.padding(
+            horizontal = SettingsItemsPaddings.Horizontal,
+        ),
     )
     LabeledCheckbox(
         label = stringResource(MR.strings.action_display_language_badge),
         checked = overlayLang,
         onCheckedChange = overlayLangChange,
+        modifier = Modifier.padding(
+            horizontal = SettingsItemsPaddings.Horizontal,
+        ),
     )
     LabeledCheckbox(
-        label = stringResource(AYMR.strings.action_display_show_continue_reading_button),
+        label = stringResource(AYMR.strings.action_display_show_continue_watching_button),
         checked = overlayContinue,
         onCheckedChange = overlayContinueChange,
+        modifier = Modifier.padding(
+            horizontal = SettingsItemsPaddings.Horizontal,
+        ),
     )
 
-    HeadingItem(MR.strings.tabs_header)
+    HeadingItem(AYMR.strings.action_display_grid_mode)
     listOf(
-        MR.strings.show_title to Anime.EPISODE_DISPLAY_NAME,
-        AYMR.strings.show_season_number to Anime.EPISODE_DISPLAY_NUMBER,
+        MR.strings.show_title to Anime.SEASON_DISPLAY_MODE_SOURCE,
+        AYMR.strings.show_season_number to Anime.SEASON_DISPLAY_MODE_NUMBER,
     ).map { (titleRes, mode) ->
         RadioItem(
             label = stringResource(titleRes),

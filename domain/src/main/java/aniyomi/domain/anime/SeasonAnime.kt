@@ -13,6 +13,9 @@ data class SeasonAnime(
 ) {
     val id: Long = anime.id
 
+    val seen
+        get() = totalCount == seenCount
+
     val unseenCount
         get() = totalCount - seenCount
 

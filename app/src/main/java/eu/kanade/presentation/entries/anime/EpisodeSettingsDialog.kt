@@ -181,7 +181,15 @@ internal fun SetAsDefaultDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         title = {
-            Text(text = if (isEpisode) stringResource(AYMR.strings.episode_settings) else stringResource(AYMR.strings.season_settings))
+            Text(
+                text = if (isEpisode) {
+                    stringResource(
+                        AYMR.strings.episode_settings,
+                    )
+                } else {
+                    stringResource(AYMR.strings.season_settings)
+                },
+            )
         },
         text = {
             Column(

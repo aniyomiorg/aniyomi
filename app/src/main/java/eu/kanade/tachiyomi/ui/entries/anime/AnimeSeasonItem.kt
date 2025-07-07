@@ -8,4 +8,5 @@ data class AnimeSeasonItem(
     val unseenCount: Long = -1L,
     val isLocal: Boolean = false,
     val sourceLanguage: String = "",
+    val showContinueOverlay: Boolean = false,
 )

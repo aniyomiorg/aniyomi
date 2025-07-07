@@ -18,6 +18,17 @@ val Anime.downloadedFilter: TriState
             else -> TriState.DISABLED
         }
     }
+
+val Anime.seasonDownloadedFilter: TriState
+    get() {
+        if (Injekt.get<BasePreferences>().downloadedOnly().get()) return TriState.ENABLED_IS
+        return when (seasonDownloadedFilterRaw) {
+            Anime.SEASON_SHOW_DOWNLOADED -> TriState.ENABLED_IS
+            Anime.SEASON_SHOW_NOT_DOWNLOADED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
+        }
+    }
+
 fun Anime.episodesFiltered(): Boolean {
     return unseenFilter != TriState.DISABLED ||
         downloadedFilter != TriState.DISABLED ||
@@ -73,7 +84,7 @@ fun SAnime.toDomainAnime(sourceId: Long): Anime {
         status = status.toLong(),
         thumbnailUrl = thumbnail_url,
         updateStrategy = update_strategy,
-        fetchType =  fetch_type,
+        fetchType = fetch_type,
         seasonNumber = season_number,
         initialized = initialized,
         source = sourceId,

@@ -447,6 +447,8 @@
     <string name="action_screen_fit">Screen fit mode</string>
     <string name="action_show_anime">Show anime</string>
     <string name="action_display_download_badge_anime">Downloaded episodes</string>
+    <string name="action_display_show_continue_watching_button">Continue watching button</string>
+    <string name="action_display_grid_mode">Grid display mode</string>
     <string name="action_display_local_badge_manga">Local manga</string>
     <string name="action_display_local_badge_anime">Local anime</string>
     <string name="pref_search_pinned_manga_sources_only">Only search pinned manga sources in global search</string>
@@ -496,6 +498,7 @@
     <string name="snack_add_to_manga_library">Add manga to library?</string>
     <string name="snack_add_to_anime_library">Add anime to library?</string>
     <string name="display_mode_episode">Episode %1$s</string>
+    <string name="display_mode_season">Season %1$s</string>
     <string name="episode_downloading_progress">Downloading (%d%%)</string>
     <string name="download_error">Error</string>
     <string name="download_paused">Paused</string>
@@ -525,6 +528,7 @@
     <string name="notification_new_episodes">New episodes found</string>
     <string name="information_no_recent_anime">Nothing watched recently</string>
     <string name="episode_settings_updated">Updated default episode settings</string>
+    <string name="season_settings_updated">Updated default season settings</string>
     <string name="download_notifier_download_paused_chapters">Chapter download paused</string>
     <string name="download_notifier_download_paused_episodes">Episode download paused</string>
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
