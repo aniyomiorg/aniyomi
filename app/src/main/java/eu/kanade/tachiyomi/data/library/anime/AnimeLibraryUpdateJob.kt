@@ -22,6 +22,7 @@ import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
@@ -51,6 +52,7 @@ import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
+import tachiyomi.domain.items.season.interactor.GetAnimeSeasonsByParentId
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
@@ -87,6 +89,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get()
     private val animeFetchInterval: AnimeFetchInterval = Injekt.get()
     private val filterEpisodesForDownload: FilterEpisodesForDownload = Injekt.get()
+    private val getAnimeSeasonsByParentId: GetAnimeSeasonsByParentId = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
 
@@ -176,11 +179,31 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                 .distinctBy { it.anime.id }
         }
 
+        val includeSeasons = libraryPreferences.updateSeasonOnLibraryUpdate().get()
+        val lastToUpdateWithSeasons = listToUpdate.flatMap { libAnime ->
+            when (libAnime.anime.fetchType) {
+                FetchType.Unknown -> emptyList()
+                FetchType.Seasons -> {
+                    if (includeSeasons) {
+                        val seasons = getAnimeSeasonsByParentId.await(libAnime.anime.id)
+                        seasons
+                            .filter { s ->
+                                s.anime.fetchType == FetchType.Episodes && !s.anime.favorite
+                            }
+                            .map { it.toLibraryAnime() }
+                    } else {
+                        emptyList()
+                    }
+                }
+                FetchType.Episodes -> listOf(libAnime)
+            }
+        }
+
         val restrictions = libraryPreferences.autoUpdateItemRestrictions().get()
         val skippedUpdates = mutableListOf<Pair<Anime, String?>>()
         val (_, fetchWindowUpperBound) = animeFetchInterval.getWindow(ZonedDateTime.now())
 
-        animeToUpdate = listToUpdate
+        animeToUpdate = lastToUpdateWithSeasons
             .filter {
                 when {
                     it.anime.updateStrategy != AnimeUpdateStrategy.ALWAYS_UPDATE -> {
@@ -262,7 +285,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                 ensureActive()
 
                                 // Don't continue to update if anime is not in library
-                                if (getAnime.await(anime.id)?.favorite != true) {
+                                if (anime.parentId == null && getAnime.await(anime.id)?.favorite != true) {
                                     return@forEach
                                 }
 
@@ -352,7 +375,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
 
         // Get anime from database to account for if it was removed during the update and
         // to get latest data so it doesn't get overwritten later on
-        val dbAnime = getAnime.await(anime.id)?.takeIf { it.favorite } ?: return emptyList()
+        val dbAnime = getAnime.await(anime.id)?.takeIf { it.parentId != null || it.favorite } ?: return emptyList()
 
         return syncEpisodesWithSource.await(episodes, dbAnime, source, false, fetchWindow)
     }

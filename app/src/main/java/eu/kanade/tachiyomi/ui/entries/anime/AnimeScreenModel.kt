@@ -30,6 +30,7 @@ import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.util.formattedMessage
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.UnmeteredSource
 import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -53,6 +54,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -625,6 +627,34 @@ class AnimeScreenModel(
         }
     }
 
+    private suspend fun CoroutineScope.fetchEpisodesFromSource(
+        anime: Anime,
+        source: AnimeSource,
+        manualFetch: Boolean = false,
+    ): Result<Unit> {
+        return runCatching {
+            if (anime.fetchType == FetchType.Seasons) throw NoEpisodesException()
+            val episodes = source.getEpisodeList(anime.toSAnime())
+
+            delay(3.seconds)
+
+            if (episodes.isNotEmpty()) {
+                updateFetchMode(anime, FetchType.Episodes)
+            }
+
+            val newEpisodes = syncEpisodesWithSource.await(
+                episodes,
+                anime,
+                source,
+                manualFetch,
+            )
+
+            if (manualFetch) {
+                downloadNewEpisodes(newEpisodes)
+            }
+        }
+    }
+
     /**
      * Requests an updated list of episodes and seasons from the source.
      */
@@ -633,27 +663,7 @@ class AnimeScreenModel(
 
         val fetchFromSourceTasks = listOf(
             async(Dispatchers.IO) {
-                runCatching {
-                    if (state.anime.fetchType == FetchType.Seasons) throw NoEpisodesException()
-                    val episodes = state.source.getEpisodeList(state.anime.toSAnime())
-
-                    delay(3.seconds)
-
-                    if (episodes.isNotEmpty()) {
-                        updateFetchMode(state.anime, FetchType.Episodes)
-                    }
-
-                    val newEpisodes = syncEpisodesWithSource.await(
-                        episodes,
-                        state.anime,
-                        state.source,
-                        manualFetch,
-                    )
-
-                    if (manualFetch) {
-                        downloadNewEpisodes(newEpisodes)
-                    }
-                }
+                fetchEpisodesFromSource(state.anime, state.source, manualFetch)
             },
             async(Dispatchers.IO) {
                 runCatching {
@@ -666,11 +676,15 @@ class AnimeScreenModel(
                         updateFetchMode(state.anime, FetchType.Seasons)
                     }
 
-                    syncSeasonsWithSource.await(
+                    val newSeasons = syncSeasonsWithSource.await(
                         seasons,
                         state.anime,
                         state.source,
                     )
+
+                    if (libraryPreferences.updateSeasonOnRefresh().get()) {
+                        fetchEpisodesFromSeasons(newSeasons, manualFetch)
+                    }
                 }
             },
         ).awaitAll()
@@ -725,6 +739,34 @@ class AnimeScreenModel(
 
         if (isEpisodeError || isSeasonError) {
             updateSuccessState { it.copy(anime = newAnime, isRefreshingData = false) }
+        }
+    }
+
+    /**
+     * Fetch episodes from all seasons of an anime.
+     */
+    private suspend fun CoroutineScope.fetchEpisodesFromSeasons(seasons: List<Anime>, manualFetch: Boolean) {
+        val state = successState ?: return
+
+        val fetch: suspend (Anime) -> Unit = { s ->
+            // Only fetch seasons with `Episodes` fetch type and only for non completed, unless they
+            // haven't been fetched at all.
+            if (s.fetchType === FetchType.Episodes && (s.lastUpdate == 0L || s.status.toInt() != SAnime.COMPLETED)) {
+                fetchEpisodesFromSource(s, state.source, manualFetch)
+            }
+        }
+
+        if (state.source is UnmeteredSource) {
+            seasons.map { s ->
+                async(Dispatchers.IO) {
+                    fetch(s)
+                }
+            }.awaitAll()
+        } else {
+            seasons.forEach { s ->
+                ensureActive()
+                fetch(s)
+            }
         }
     }
 

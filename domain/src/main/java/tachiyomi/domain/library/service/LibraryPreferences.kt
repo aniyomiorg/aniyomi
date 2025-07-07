@@ -328,6 +328,14 @@ class LibraryPreferences(
         seasonDisplayMode().set(anime.seasonDisplayMode)
     }
 
+    // Season behavior
+
+    fun updateSeasonOnRefresh() =
+        preferenceStore.getBoolean("pref_update_season_on_refresh", false)
+
+    fun updateSeasonOnLibraryUpdate() =
+        preferenceStore.getBoolean("pref_update_season_on_library_update", false)
+
     // region Item behavior
 
     fun swipeEpisodeStartAction() =

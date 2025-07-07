@@ -17,7 +17,7 @@ class SyncSeasonsWithSource(
         rawSourceSeasons: List<SAnime>,
         anime: Anime,
         source: AnimeSource,
-    ) {
+    ): List<Anime> {
         if (rawSourceSeasons.isEmpty() && !source.isLocal()) {
             throw NoSeasonsException()
         }
@@ -32,5 +32,7 @@ class SyncSeasonsWithSource(
         // TODO(seasons): add more checks here
         val seasonUpdates = sourceSeasons.map { it.toAnimeUpdate() }
         updateAnime.awaitAll(seasonUpdates)
+
+        return sourceSeasons
     }
 }

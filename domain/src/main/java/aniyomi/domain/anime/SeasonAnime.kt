@@ -1,6 +1,7 @@
 package aniyomi.domain.anime
 
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.library.anime.LibraryAnime
 
 data class SeasonAnime(
     val anime: Anime,
@@ -23,4 +24,17 @@ data class SeasonAnime(
         get() = bookmarkCount > 0
 
     val hasStarted = seenCount > 0
+
+    fun toLibraryAnime(): LibraryAnime {
+        return LibraryAnime(
+            anime = anime,
+            category = -1L,
+            totalCount = totalCount,
+            seenCount = seenCount,
+            bookmarkCount = bookmarkCount,
+            latestUpload = latestUpload,
+            episodeFetchedAt = fetchedAt,
+            lastSeen = lastSeen,
+        )
+    }
 }

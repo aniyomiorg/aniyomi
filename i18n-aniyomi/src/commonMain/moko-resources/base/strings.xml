@@ -560,6 +560,9 @@
     <string name="pref_mark_duplicate_seen_episode_seen">Mark duplicate seen episode as seen</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">After watching an episode</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">After fetching new episode</string>
+    <string name="pref_library_season">Season</string>
+    <string name="pref_update_seasons_refresh">Update seasons with episodes on refresh</string>
+    <string name="pref_update_seasons_update">Update seasons with episodes on library update</string>
     <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
     <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
     <string name="data_saver_exclude">Exclude from data saver</string>
