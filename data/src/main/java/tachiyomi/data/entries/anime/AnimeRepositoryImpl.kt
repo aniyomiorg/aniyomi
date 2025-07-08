@@ -162,6 +162,22 @@ class AnimeRepositoryImpl(
         }
     }
 
+    override suspend fun removeParentIdByIds(animeIds: List<Long>) {
+        try {
+            handler.await { animesQueries.removeParentIdByIds(animeIds) }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+        }
+    }
+
+    override suspend fun deleteAnimeNotInLibraryBySourceIds(animeIds: List<Long>) {
+        try {
+            handler.await { animesQueries.deleteAnimesNotInLibraryBySourceIds(animeIds) }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+        }
+    }
+
     private suspend fun partialUpdateAnime(vararg animeUpdates: AnimeUpdate) {
         handler.await(inTransaction = true) {
             animeUpdates.forEach { value ->

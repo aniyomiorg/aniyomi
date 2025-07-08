@@ -149,6 +149,11 @@ FROM animes
 WHERE favorite = 0
 GROUP BY source;
 
+removeParentIdByIds:
+UPDATE animes
+SET parent_id = NULL
+WHERE _id IN :animeIds;
+
 deleteAnimesNotInLibraryBySourceIds:
 DELETE FROM animes
 WHERE favorite = 0 AND source IN :sourceIds;

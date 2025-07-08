@@ -169,6 +169,7 @@ import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
 import tachiyomi.domain.items.season.interactor.GetAnimeSeasonsByParentId
 import tachiyomi.domain.items.season.interactor.SetAnimeDefaultSeasonFlags
+import tachiyomi.domain.items.season.interactor.ShouldUpdateDbSeason
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import tachiyomi.domain.release.service.ReleaseService
 import tachiyomi.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAnime
@@ -248,7 +249,8 @@ class DomainModule : InjektModule {
         addFactory { NetworkToLocalAnime(get()) }
         addFactory { UpdateAnime(get(), get()) }
         addFactory { SetAnimeCategories(get()) }
-        addFactory { SyncSeasonsWithSource(get(), get()) }
+        addFactory { ShouldUpdateDbSeason() }
+        addFactory { SyncSeasonsWithSource(get(), get(), get(), get(), get()) }
 
         addSingletonFactory<MangaRepository> { MangaRepositoryImpl(get()) }
         addFactory { GetDuplicateLibraryManga(get()) }

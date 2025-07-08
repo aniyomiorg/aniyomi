@@ -43,4 +43,8 @@ interface AnimeRepository {
     suspend fun getAnimeSeasonsById(parentId: Long): List<SeasonAnime>
 
     fun getAnimeSeasonsByIdAsFlow(parentId: Long): Flow<List<SeasonAnime>>
+
+    suspend fun removeParentIdByIds(animeIds: List<Long>)
+
+    suspend fun deleteAnimeNotInLibraryBySourceIds(animeIds: List<Long>)
 }
