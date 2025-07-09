@@ -361,4 +361,11 @@
     <string name="pref_player_audio_boost_cap">Limite de l’amplification du volume</string>
     <string name="pref_player_custom_button">Boutons personnalisés</string>
     <string name="pref_player_custom_button_summary">Exécuter du code lua avec des boutons personnalisés</string>
+    <string name="pref_player_custom_button_header">Modifier les boutons personnalisés</string>
+    <string name="pref_player_custom_button_guide">Guide des boutons personnalisés</string>
+    <string name="pref_player_custom_button_empty">Vous n\'avez pas de boutons personnalisés. Appuyez sur le bouton plus pour en créer un.</string>
+    <string name="pref_player_custom_button_add">Ajouter un bouton</string>
+    <string name="pref_player_custom_button_edit">Modifier le bouton</string>
+    <string name="pref_player_custom_button_title">Titre</string>
+    <string name="pref_player_custom_button_error_exists">Le bouton existe déjà</string>
 </resources>
