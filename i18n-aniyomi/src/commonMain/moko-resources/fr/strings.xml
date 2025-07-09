@@ -367,5 +367,26 @@
     <string name="pref_player_custom_button_add">Ajouter un bouton</string>
     <string name="pref_player_custom_button_edit">Modifier le bouton</string>
     <string name="pref_player_custom_button_title">Titre</string>
-    <string name="pref_player_custom_button_error_exists">Le bouton existe déjà</string>
+    <string name="pref_player_custom_button_error_exists">Le bouton existe déjà !</string>
+    <string name="pref_player_custom_button_content">Code lua</string>
+    <string name="pref_player_custom_button_content_long">Code lua (après appuie long)</string>
+    <string name="pref_player_custom_button_optional">(optionnel)</string>
+    <string name="pref_player_custom_button_delete">Bouton supprimer</string>
+    <string name="pref_player_custom_button_delete_confirm">Voulez-vous supprimer le bouton %s ?</string>
+    <string name="pref_player_custom_button_startup">Au démarrage</string>
+    <string name="pref_player_custom_button_id">(ID: %d)</string>
+    <string name="pref_player_editor">Éditeur de scripts</string>
+    <string name="pref_player_editor_summary">Éditer et créer de nouveaux scripts et options de script</string>
+    <string name="pref_player_editor_script">Scripts</string>
+    <string name="pref_player_editor_script_opts">Options de script</string>
+    <string name="pref_player_no_items">Le dossier ne contient aucun élément. Appuyez sur le bouton plus pour ajouter un fichier.</string>
+    <string name="editor_unsaved_progress">Vous avez des changements non sauvegardés. Voulez-vous quand même revenir en arrière ?</string>
+    <string name="editor_save_error">Impossible de sauvegarder le fichier</string>
+    <string name="editor_save_success">Fichier sauvegardé</string>
+    <string name="editor_action_rename">Renommer le fichier</string>
+    <string name="editor_action_delete">Supprimer le fichier</string>
+    <string name="editor_file_already_exists">Le fichier existe déjà</string>
+    <string name="editor_invalid_filename">Nom de fichier invalide</string>
+    <string name="editor_create_file">Créer un fichier</string>
+    <string name="editor_edit_file">Renommer le fichier</string>
 </resources>
