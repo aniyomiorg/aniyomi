@@ -388,5 +388,26 @@
     <string name="editor_file_already_exists">Le fichier existe déjà</string>
     <string name="editor_invalid_filename">Nom de fichier invalide</string>
     <string name="editor_create_file">Créer un fichier</string>
-    <string name="editor_edit_file">Renommer le fichier</string>
+    <string name="editor_edit_file">Modifier le nom du fichier</string>
+    <string name="editor_filename">Nom du fichier</string>
+    <string name="editor_create_error">Impossible de créer le fichier</string>
+    <string name="editor_rename_error">Impossible de renommer le fichier</string>
+    <string name="editor_delete_error">Impossible de supprimer le fichier</string>
+    <string name="editor_delete_file">Supprimer le fichier</string>
+    <string name="editor_delete_file_confirmation">Voulez-vous supprimer le fichier « %s » ?</string>
+    <string name="pref_player_advanced">Avancé</string>
+    <string name="pref_player_advanced_summary">Fichiers utilisateur, mpv.conf, input.conf</string>
+    <string name="pref_mpv_user_files">Utiliser les fichiers MPV de l\'utilisateur</string>
+    <string name="pref_mpv_user_files_summary">Utiliser les fichiers dans le dossier mpv-config</string>
+    <string name="player_skip_action">Passer %1$s</string>
+    <string name="player_intro_skipped">%1$s passé</string>
+    <string name="player_chapter_type_opening">Introduction</string>
+    <string name="player_chapter_type_ending">Fin</string>
+    <string name="player_chapter_type_recap">Récapitulatif</string>
+    <string name="player_chapter_type_mixedop">Introduction mixte</string>
+    <string name="toast_sleep_timer_ended">Minuterie de mise en veille terminée</string>
+    <string name="player_generic_unit_ms">ms</string>
+    <string name="numeric_chooser_value_too_big">Valeur trop grande</string>
+    <string name="numeric_chooser_value_too_small">Valeur trop petite</string>
+    <string name="no_prev_episode">Épisode précédant introuvable</string>
 </resources>
