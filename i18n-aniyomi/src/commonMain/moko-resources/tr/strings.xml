@@ -97,7 +97,7 @@
     <string name="pref_use_yuv420p_title">YUV420P piksel biçimi kullan</string>
     <string name="pref_use_yuv420p_subtitle">Bazı video kodeklerinde siyah ekran sorunlarını düzeltebilir ve ayrıca kaliteden kısarak performansı geliştirebilir</string>
     <string name="pref_player_subtitle">Alt yazılar</string>
-    <string name="pref_player_subtitle_summary">Tercih edilen dil, beyaz liste, kara liste</string>
+    <string name="pref_player_subtitle_summary">Tercih edilen diller, beyaz liste, kara liste</string>
     <string name="pref_player_subtitle_lang">Tercih edilen diller</string>
     <string name="pref_player_subtitle_lang_info">Birden fazla alt yazı içeren videolarda varsayılan olarak seçilecek alt yazı dilleri, iki -ya da üç- harfli dil kodları kullanılabilir. Birden fazla değer virgülle ayrılabilir.</string>
     <string name="pref_player_subtitle_whitelist">Beyaz liste</string>
@@ -139,8 +139,8 @@
     <string name="pref_reset_mpv_conf">MPV yapılandırma dosyasını sıfırla</string>
     <string name="pref_mpv_input">Tuş atamaları için MPV giriş dosyasını düzenle</string>
     <string name="video_fit_screen">Ekrana sığdır</string>
-    <string name="video_crop_screen">Ekrana göre kırpılmış</string>
-    <string name="video_stretch_screen">Ekrana göre uzatıldı</string>
+    <string name="video_crop_screen">Ekrana göre kırp</string>
+    <string name="video_stretch_screen">Ekrana göre uzat</string>
     <string name="toast_sleep_timer_ended">Uyku zamanlayıcısı doldu</string>
     <string name="player_generic_unit_ms">ms</string>
     <string name="numeric_chooser_value_too_big">Değer çok büyük</string>
