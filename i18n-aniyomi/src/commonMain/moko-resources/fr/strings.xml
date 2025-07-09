@@ -484,5 +484,14 @@
     <string name="player_sheets_subtitles_footer_secondary_sid_no_styles">Les sous-titres secondaires n\'auront pas de style ASS/SSA.</string>
     <string name="player_sheets_chapters_title">Chapitres</string>
     <string name="pref_library_rows">Taille de la liste</string>
-    <string name="custom_button_settings">Bouton personnalisés</string>
+    <string name="custom_button_settings">Boutons personnalisés</string>
+    <string name="type">Type</string>
+    <string name="confirm_tracker_update_anime">Mettre à jour les traqueurs à l\'épisode %d ?</string>
+    <string name="trackers_updated_summary_manga">Traqueurs mis à jour au chapitre %d</string>
+    <string name="trackers_updated_summary_anime">Traqueurs mis à jour à l\'épisode %d</string>
+    <string name="pref_download_new_unseen_episodes_only">Passer le téléchargement des épisodes en double déjà vus</string>
+    <string name="pref_behavior_episode">Comportement de l\'épisode</string>
+    <string name="pref_mark_duplicate_seen_episode_seen">Marquer les épisode en double déjà vus comme vus</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_existing">Après avoir vu un épisode</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_new">Après avoir récupéré un nouvel épisode</string>
 </resources>
