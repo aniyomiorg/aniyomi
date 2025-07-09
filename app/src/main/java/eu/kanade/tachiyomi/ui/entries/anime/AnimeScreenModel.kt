@@ -221,7 +221,15 @@ class AnimeScreenModel(
         observeDownloads()
 
         screenModelScope.launchIO {
-            val anime = getAnimeAndEpisodesAndSeasons.awaitAnime(animeId)
+            val oldAnime = getAnimeAndEpisodesAndSeasons.awaitAnime(animeId)
+
+            // TODO(16): Remove checks
+            val source = sourceManager.getOrStub(oldAnime.source)
+            val anime = if (source.javaClass.declaredMethods.any { it.name == "getSeasonList" }) {
+                oldAnime
+            } else {
+                oldAnime.copy(fetchType = FetchType.Episodes)
+            }
 
             val episodes = if (anime.fetchType == FetchType.Seasons) {
                 emptyList()
@@ -250,7 +258,7 @@ class AnimeScreenModel(
             mutableState.update {
                 State.Success(
                     anime = anime,
-                    source = sourceManager.getOrStub(anime.source),
+                    source = source,
                     isFromSource = isFromSource,
                     episodes = episodes,
                     seasons = seasons,

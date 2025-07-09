@@ -246,7 +246,7 @@ class DomainModule : InjektModule {
         addFactory { SetAnimeDefaultEpisodeFlags(get(), get(), get()) }
         addFactory { SetAnimeDefaultSeasonFlags(get(), get(), get()) }
         addFactory { SetAnimeViewerFlags(get()) }
-        addFactory { NetworkToLocalAnime(get()) }
+        addFactory { NetworkToLocalAnime(get(), get()) }
         addFactory { UpdateAnime(get(), get()) }
         addFactory { SetAnimeCategories(get()) }
         addFactory { ShouldUpdateDbSeason() }
