@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
-import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.domain.source.anime.repository.AnimeSourcePagingSourceType
 import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
@@ -54,20 +53,6 @@ class AnimeSourceRepositoryImpl(
             }
     }
 
-    override fun getSourcesWithNonLibraryAnime(): Flow<List<AnimeSourceWithCount>> {
-        val sourceIdWithNonLibraryAnime =
-            handler.subscribeToList { animesQueries.getSourceIdsWithNonLibraryAnime() }
-        return sourceIdWithNonLibraryAnime.map { sourceId ->
-            sourceId.map { (sourceId, count) ->
-                val source = sourceManager.getOrStub(sourceId)
-                val domainSource = mapSourceToDomainSource(source).copy(
-                    isStub = source is StubAnimeSource,
-                )
-                AnimeSourceWithCount(domainSource, count)
-            }
-        }
-    }
-
     override fun searchAnime(
         sourceId: Long,
         query: String,
@@ -86,12 +71,12 @@ class AnimeSourceRepositoryImpl(
         val source = sourceManager.get(sourceId) as AnimeCatalogueSource
         return AnimeSourceLatestPagingSource(source)
     }
-
-    private fun mapSourceToDomainSource(source: AnimeSource): DomainSource = DomainSource(
-        id = source.id,
-        lang = source.lang,
-        name = source.name,
-        supportsLatest = false,
-        isStub = false,
-    )
 }
+
+fun mapSourceToDomainSource(source: AnimeSource): DomainSource = DomainSource(
+    id = source.id,
+    lang = source.lang,
+    name = source.name,
+    supportsLatest = false,
+    isStub = false,
+)

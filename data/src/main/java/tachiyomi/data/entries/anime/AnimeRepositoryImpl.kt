@@ -12,6 +12,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.source.anime.model.DeletableAnime
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -170,12 +171,14 @@ class AnimeRepositoryImpl(
         }
     }
 
-    override suspend fun deleteAnimeNotInLibraryBySourceIds(animeIds: List<Long>) {
-        try {
-            handler.await { animesQueries.deleteAnimesNotInLibraryBySourceIds(animeIds) }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
+    override fun getDeletableParentAnime(): Flow<List<DeletableAnime>> {
+        return handler.subscribeToList {
+            animedeletableViewQueries.getDeletableParentAnime(AnimeMapper::mapDeletableAnime)
         }
+    }
+
+    override suspend fun getChildrenByParentId(parentId: Long): List<Anime> {
+        return handler.awaitList { animesQueries.getChildrenByParentId(parentId, AnimeMapper::mapAnime) }
     }
 
     private suspend fun partialUpdateAnime(vararg animeUpdates: AnimeUpdate) {

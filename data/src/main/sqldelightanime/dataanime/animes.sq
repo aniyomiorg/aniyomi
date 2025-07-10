@@ -143,20 +143,19 @@ UPDATE animes
 SET is_syncing = 0
 WHERE is_syncing = 1;
 
-getSourceIdsWithNonLibraryAnime:
-SELECT source, COUNT(*) AS anime_count
-FROM animes
-WHERE favorite = 0
-GROUP BY source;
-
 removeParentIdByIds:
 UPDATE animes
 SET parent_id = NULL
 WHERE _id IN :animeIds;
 
-deleteAnimesNotInLibraryBySourceIds:
+getChildrenByParentId:
+SELECT *
+FROM animes
+WHERE parent_id = :parentId;
+
+deleteAnimesNotInLibraryByAnimeIds:
 DELETE FROM animes
-WHERE favorite = 0 AND source IN :sourceIds;
+WHERE favorite = 0 AND _id IN :animeIds;
 
 insert:
 INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id, season_flags, season_number, season_source_order)

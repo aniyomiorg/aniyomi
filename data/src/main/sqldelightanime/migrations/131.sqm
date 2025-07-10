@@ -173,3 +173,14 @@ ON SA._id = ESSA.anime_id
 LEFT JOIN animehistorystatsView AS AHSSA
 ON SA._id = AHSSA.anime_id
 WHERE SA.parent_id IS NOT NULL;
+
+-- Create view for getting deletable anime
+DROP VIEW IF EXISTS animedeletableView;
+CREATE VIEW animedeletableView AS
+SELECT
+    A._id,
+    A.source,
+    A.fetch_type
+FROM animes AS A
+WHERE A.favorite = 0
+AND A.parent_id IS NULL;
