@@ -60,6 +60,7 @@ import aniyomi.domain.anime.SeasonDisplayMode
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.entries.anime.model.episodesFiltered
+import eu.kanade.domain.entries.anime.model.seasonsFiltered
 import eu.kanade.presentation.components.relativeDateTimeText
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.entries.EntryScreenItem
@@ -322,6 +323,13 @@ private fun AnimeScreenSmallImpl(
     val seasons = remember(state) { state.processedSeasons }
     val episodes = remember(state) { state.processedEpisodes }
     val listItem = remember(state) { state.episodeListItems }
+    val hasFilters = remember(state) {
+        when (state.anime.fetchType) {
+            FetchType.Seasons -> state.anime.seasonsFiltered()
+            FetchType.Episodes -> state.anime.episodesFiltered()
+            FetchType.Unknown -> false
+        }
+    }
 
     var containerHeight by remember { mutableIntStateOf(0) }
     var toolbarHeight by remember { mutableIntStateOf(0) }
@@ -361,7 +369,7 @@ private fun AnimeScreenSmallImpl(
             )
             EntryToolbar(
                 title = state.anime.title,
-                hasFilters = state.anime.episodesFiltered(),
+                hasFilters = hasFilters,
                 navigateUp = navigateUp,
                 onClickFilter = onFilterClicked,
                 onClickShare = onShareClicked,
@@ -671,6 +679,13 @@ fun AnimeScreenLargeImpl(
     var headerHeight by remember { mutableIntStateOf(0) }
 
     val itemListState = rememberLazyGridState()
+    val hasFilters = remember(state) {
+        when (state.anime.fetchType) {
+            FetchType.Seasons -> state.anime.seasonsFiltered()
+            FetchType.Episodes -> state.anime.episodesFiltered()
+            FetchType.Unknown -> false
+        }
+    }
 
     BackHandler(onBack = {
         if (isAnySelected) {
@@ -688,7 +703,7 @@ fun AnimeScreenLargeImpl(
             EntryToolbar(
                 modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                 title = state.anime.title,
-                hasFilters = state.anime.episodesFiltered(),
+                hasFilters = hasFilters,
                 navigateUp = navigateUp,
                 onClickFilter = onFilterButtonClicked,
                 onClickShare = onShareClicked,

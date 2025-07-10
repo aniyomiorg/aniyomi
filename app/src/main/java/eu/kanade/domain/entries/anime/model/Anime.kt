@@ -35,6 +35,14 @@ fun Anime.episodesFiltered(): Boolean {
         bookmarkedFilter != TriState.DISABLED
 }
 
+fun Anime.seasonsFiltered(): Boolean {
+    return seasonDownloadedFilter != TriState.DISABLED ||
+        seasonUnseenFilter != TriState.DISABLED ||
+        seasonStartedFilter != TriState.DISABLED ||
+        seasonBookmarkedFilter != TriState.DISABLED ||
+        seasonCompletedFilter != TriState.DISABLED
+}
+
 fun Anime.toSAnime(): SAnime = SAnime.create().also {
     it.url = url
     it.title = title
