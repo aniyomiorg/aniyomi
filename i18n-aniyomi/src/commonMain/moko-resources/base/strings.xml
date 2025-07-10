@@ -515,6 +515,8 @@
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
     <string name="also_set_episode_settings_for_library">Also apply to all anime in my library</string>
     <string name="no_episodes_error">No episodes found</string>
+    <string name="no_seasons_error">No seasons found</string>
+    <string name="no_entries_error">No entries found</string>
     <string name="watching">Watching</string>
     <string name="currently_reading">Currently reading</string>
     <string name="currently_watching">Currently watching</string>

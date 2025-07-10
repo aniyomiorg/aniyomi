@@ -53,7 +53,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -85,8 +84,8 @@ import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.interactor.SetAnimeSeasonFlags
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.model.NoSeasonsException
-import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.items.episode.interactor.GetEpisodesByAnimeId
@@ -112,7 +111,6 @@ import java.util.Calendar
 import kotlin.collections.filter
 import kotlin.collections.forEach
 import kotlin.math.floor
-import kotlin.time.Duration.Companion.seconds
 
 class AnimeScreenModel(
     private val context: Context,
@@ -302,7 +300,8 @@ class AnimeScreenModel(
                 FetchType.Unknown -> {}
             }
 
-            val update = anime.toAnimeUpdate().copy(
+            val update = AnimeUpdate(
+                id = anime.id,
                 fetchType = fetchType,
             )
 
@@ -644,8 +643,6 @@ class AnimeScreenModel(
             if (anime.fetchType == FetchType.Seasons) throw NoEpisodesException()
             val episodes = source.getEpisodeList(anime.toSAnime())
 
-            delay(3.seconds)
-
             if (episodes.isNotEmpty()) {
                 updateFetchMode(anime, FetchType.Episodes)
             }
@@ -678,8 +675,6 @@ class AnimeScreenModel(
                     if (state.anime.fetchType == FetchType.Episodes) throw NoSeasonsException()
                     val seasons = state.source.getSeasonList(state.anime.toSAnime())
 
-                    delay(3.seconds)
-
                     if (seasons.isNotEmpty()) {
                         updateFetchMode(state.anime, FetchType.Seasons)
                     }
@@ -703,7 +698,6 @@ class AnimeScreenModel(
         val isEpisodeError = newAnime.fetchType == FetchType.Episodes && episodeError != null
         val isSeasonError = newAnime.fetchType == FetchType.Seasons && seasonError != null
 
-        // TODO(seasons): string resources
         val message = with(context) {
             when {
                 newAnime.fetchType == FetchType.Unknown && episodeError != null && seasonError != null -> {
@@ -716,12 +710,12 @@ class AnimeScreenModel(
                             logcat(LogPriority.ERROR, seasonError)
                             seasonError.formattedMessage
                         }
-                        else -> "Unable to retrieve seasons or episodes"
+                        else -> stringResource(AYMR.strings.no_entries_error)
                     }
                 }
                 isSeasonError -> {
                     if (seasonError is NoSeasonsException) {
-                        "No seasons"
+                        stringResource(AYMR.strings.no_seasons_error)
                     } else {
                         logcat(LogPriority.ERROR, seasonError)
                         seasonError.formattedMessage

@@ -132,7 +132,7 @@ android {
                 "META-INF/**/*.properties",
                 "META-INF/**/LICENSE.txt",
                 "META-INF/*.properties",
-                // "META-INF/*.version",
+                "META-INF/*.version",
                 "META-INF/DEPENDENCIES",
                 "META-INF/LICENSE",
                 "META-INF/NOTICE",
@@ -323,7 +323,7 @@ androidComponents {
     onVariants(selector().withFlavor("default" to "standard")) {
         // Only excluding in standard flavor because this breaks
         // Layout Inspector's Compose tree
-        // it.packaging.resources.excludes.add("META-INF/*.version")
+        it.packaging.resources.excludes.add("META-INF/*.version")
     }
 }
 
