@@ -52,6 +52,7 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.mi.data.AnimeDatabase
+import tachiyomi.source.local.entries.anime.LocalAnimeFetchTypeManager
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
@@ -214,6 +215,7 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { LocalAnimeSourceFileSystem(get()) }
         addSingletonFactory { LocalAnimeCoverManager(app, get()) }
+        addSingletonFactory { LocalAnimeFetchTypeManager(app, get()) }
 
         addSingletonFactory { StorageManager(app, get()) }
 
