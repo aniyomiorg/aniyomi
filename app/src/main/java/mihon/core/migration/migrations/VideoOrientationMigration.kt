@@ -20,10 +20,17 @@ class VideoOrientationMigration : Migration {
         val preferenceStore = migrationContext.get<PreferenceStore>() ?: return false
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val oldPref = prefs.getInt(
-            playerPreferences.defaultPlayerOrientationType().key(),
-            10,
-        )
+        val oldPref = try {
+            prefs.getInt(
+                playerPreferences.defaultPlayerOrientationType().key(),
+                10,
+            )
+        } catch (_: ClassCastException) {
+            prefs.edit(commit = true) {
+                remove(playerPreferences.defaultPlayerOrientationType().key())
+            }
+            return true
+        }
 
         val newPref = when (oldPref) {
             ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR -> PlayerOrientation.Free
