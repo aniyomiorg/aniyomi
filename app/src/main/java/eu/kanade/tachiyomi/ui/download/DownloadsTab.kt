@@ -167,7 +167,7 @@ data object DownloadsTab : Tab {
             floatingActionButton = {
                 AnimatedVisibility(
                     visible = when (state.currentPage) {
-                        0 -> false
+                        0 -> animeDownloadList.isNotEmpty()
                         1 -> mangaDownloadList.isNotEmpty()
                         else -> false
                     },
@@ -180,9 +180,9 @@ data object DownloadsTab : Tab {
                         text = {
                             val id = when (state.currentPage) {
                                 0 -> if (animeIsRunning) {
-                                    MR.strings.action_pause
+                                    AYMR.strings.action_stop
                                 } else {
-                                    MR.strings.action_resume
+                                    AYMR.strings.action_continue
                                 }
                                 1 -> if (mangaIsRunning) {
                                     MR.strings.action_pause
