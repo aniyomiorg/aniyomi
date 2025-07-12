@@ -82,6 +82,7 @@ import kotlinx.coroutines.flow.update
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.collectAsState
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -554,6 +555,7 @@ fun PlayerControls(
         val speed by viewModel.playbackSpeed.collectAsState()
         val sleepTimerTimeRemaining by viewModel.remainingTime.collectAsState()
         val showSubtitles by subtitlePreferences.screenshotSubtitles().collectAsState()
+        val currentSource by viewModel.currentSource.collectAsState()
         val showFailedHosters by playerPreferences.showFailedHosters().collectAsState()
         val emptyHosters by playerPreferences.showEmptyHosters().collectAsState()
 
@@ -592,10 +594,11 @@ fun PlayerControls(
             onStartSleepTimer = viewModel::startTimer,
             buttons = customButtons.getButtons().toImmutableList(),
 
+            isLocalSource = currentSource?.id == LocalAnimeSource.ID,
             showSubtitles = showSubtitles,
             onToggleShowSubtitles = { subtitlePreferences.screenshotSubtitles().set(it) },
             cachePath = viewModel.cachePath,
-            onSetAsCover = viewModel::setAsCover,
+            onSetAsArt = viewModel::setAsArt,
             onShare = { viewModel.shareImage(it, viewModel.pos.value.toInt()) },
             onSave = { viewModel.saveImage(it, viewModel.pos.value.toInt()) },
             takeScreenshot = viewModel::takeScreenshot,
@@ -626,6 +629,7 @@ fun PlayerControls(
             dateRelativeTime = viewModel.relativeTime,
             dateFormat = viewModel.dateFormat,
             onBookmarkClicked = viewModel::bookmarkEpisode,
+            onFillermarkClicked = viewModel::fillermarkEpisode,
             onEpisodeClicked = {
                 viewModel.showDialog(Dialogs.None)
                 activity.changeEpisode(it)

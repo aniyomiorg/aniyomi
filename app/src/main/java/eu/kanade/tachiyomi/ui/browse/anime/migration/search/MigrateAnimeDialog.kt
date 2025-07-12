@@ -21,11 +21,13 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.model.StateScreenModel
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
+import eu.kanade.domain.entries.anime.model.hasCustomBackground
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SEpisode
+import eu.kanade.tachiyomi.data.cache.AnimeBackgroundCache
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
@@ -159,6 +161,7 @@ internal class MigrateAnimeDialogScreenModel(
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
+    private val backgroundCache: AnimeBackgroundCache = Injekt.get(),
     private val preferenceStore: PreferenceStore = Injekt.get(),
 ) : StateScreenModel<MigrateAnimeDialogScreenModel.State>(State()) {
 
@@ -213,6 +216,7 @@ internal class MigrateAnimeDialogScreenModel(
         val migrateEpisodes = AnimeMigrationFlags.hasEpisodes(flags)
         val migrateCategories = AnimeMigrationFlags.hasCategories(flags)
         val migrateCustomCover = AnimeMigrationFlags.hasCustomCover(flags)
+        val migrateCustomBackground = AnimeMigrationFlags.hasCustomBackground(flags)
         val deleteDownloaded = AnimeMigrationFlags.hasDeleteDownloaded(flags)
 
         try {
@@ -293,6 +297,14 @@ internal class MigrateAnimeDialogScreenModel(
             coverCache.setCustomCoverToCache(
                 newAnime,
                 coverCache.getCustomCoverFile(oldAnime.id).inputStream(),
+            )
+        }
+
+        // Update custom background (recheck if custom background exists)
+        if (migrateCustomBackground && oldAnime.hasCustomBackground()) {
+            backgroundCache.setCustomBackgroundToCache(
+                newAnime,
+                backgroundCache.getCustomBackgroundFile(oldAnime.id).inputStream(),
             )
         }
 

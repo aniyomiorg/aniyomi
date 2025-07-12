@@ -130,6 +130,7 @@ class SyncEpisodesWithSource(
                         name = episode.name,
                         episodeNumber = episode.episodeNumber,
                         scanlator = episode.scanlator,
+                        summary = episode.summary,
                         sourceOrder = episode.sourceOrder,
                     )
                     if (episode.dateUpload != 0L) {

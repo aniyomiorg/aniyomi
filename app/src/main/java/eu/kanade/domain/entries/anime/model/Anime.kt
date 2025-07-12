@@ -2,6 +2,7 @@ package eu.kanade.domain.entries.anime.model
 
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.data.cache.AnimeBackgroundCache
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import tachiyomi.core.common.preference.TriState
 import tachiyomi.domain.entries.anime.model.Anime
@@ -33,6 +34,7 @@ fun Anime.toSAnime(): SAnime = SAnime.create().also {
     it.genre = genre.orEmpty().joinToString()
     it.status = status.toInt()
     it.thumbnail_url = thumbnailUrl
+    it.background_url = backgroundUrl
     it.initialized = initialized
 }
 
@@ -46,12 +48,14 @@ fun Anime.copyFrom(other: SAnime): Anime {
         genre
     }
     val thumbnailUrl = other.thumbnail_url ?: thumbnailUrl
+    val backgroundUrl = other.background_url ?: backgroundUrl
     return this.copy(
         author = author,
         artist = artist,
         description = description,
         genre = genres,
         thumbnailUrl = thumbnailUrl,
+        backgroundUrl = backgroundUrl,
         status = other.status.toLong(),
         updateStrategy = other.update_strategy,
         initialized = other.initialized && initialized,
@@ -68,6 +72,7 @@ fun SAnime.toDomainAnime(sourceId: Long): Anime {
         genre = getGenres(),
         status = status.toLong(),
         thumbnailUrl = thumbnail_url,
+        backgroundUrl = background_url,
         updateStrategy = update_strategy,
         initialized = initialized,
         source = sourceId,
@@ -76,4 +81,8 @@ fun SAnime.toDomainAnime(sourceId: Long): Anime {
 
 fun Anime.hasCustomCover(coverCache: AnimeCoverCache = Injekt.get()): Boolean {
     return coverCache.getCustomCoverFile(id).exists()
+}
+
+fun Anime.hasCustomBackground(backgroundCache: AnimeBackgroundCache = Injekt.get()): Boolean {
+    return backgroundCache.getCustomBackgroundFile(id).exists()
 }

@@ -187,6 +187,9 @@ class LibraryPreferences(
     fun filterChapterByBookmarked() =
         preferenceStore.getLong("default_chapter_filter_by_bookmarked", Manga.SHOW_ALL)
 
+    fun filterEpisodeByFillermarked() =
+        preferenceStore.getLong("default_episode_filter_by_fillermarked", Anime.SHOW_ALL)
+
     // and upload date
     fun sortEpisodeBySourceOrNumber() = preferenceStore.getLong(
         "default_episode_sort_by_source_or_number",
@@ -218,10 +221,21 @@ class LibraryPreferences(
         Manga.CHAPTER_SORT_DESC,
     )
 
+    fun showEpisodeThumbnailPreviews() = preferenceStore.getLong(
+        "default_episode_show_thumbnail_previews",
+        Anime.EPISODE_SHOW_PREVIEWS,
+    )
+
+    fun showEpisodeSummaries() = preferenceStore.getLong(
+        "default_episode_show_summaries",
+        Anime.EPISODE_SHOW_SUMMARIES,
+    )
+
     fun setEpisodeSettingsDefault(anime: Anime) {
         filterEpisodeBySeen().set(anime.unseenFilterRaw)
         filterEpisodeByDownloaded().set(anime.downloadedFilterRaw)
         filterEpisodeByBookmarked().set(anime.bookmarkedFilterRaw)
+        filterEpisodeByFillermarked().set(anime.fillermarkedFilterRaw)
         sortEpisodeBySourceOrNumber().set(anime.sorting)
         displayEpisodeByNameOrNumber().set(anime.displayMode)
         sortEpisodeByAscendingOrDescending().set(
@@ -267,6 +281,7 @@ class LibraryPreferences(
     enum class EpisodeSwipeAction {
         ToggleSeen,
         ToggleBookmark,
+        ToggleFillermark,
         Download,
         Disabled,
     }

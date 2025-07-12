@@ -5,6 +5,7 @@ data class Episode(
     val animeId: Long,
     val seen: Boolean,
     val bookmark: Boolean,
+    val fillermark: Boolean,
     val lastSecondSeen: Long,
     val totalSeconds: Long,
     val dateFetch: Long,
@@ -14,6 +15,8 @@ data class Episode(
     val dateUpload: Long,
     val episodeNumber: Double,
     val scanlator: String?,
+    val summary: String?,
+    val previewUrl: String?,
     val lastModifiedAt: Long,
     val version: Long,
 ) {
@@ -26,7 +29,10 @@ data class Episode(
             url = other.url,
             dateUpload = other.dateUpload,
             episodeNumber = other.episodeNumber,
+            fillermark = other.fillermark,
             scanlator = other.scanlator?.ifBlank { null },
+            summary = other.summary?.ifBlank { null },
+            previewUrl = other.previewUrl?.ifBlank { null },
         )
     }
 
@@ -36,6 +42,7 @@ data class Episode(
             animeId = -1,
             seen = false,
             bookmark = false,
+            fillermark = false,
             lastSecondSeen = 0,
             totalSeconds = 0,
             dateFetch = 0,
@@ -45,6 +52,8 @@ data class Episode(
             dateUpload = -1,
             episodeNumber = -1.0,
             scanlator = null,
+            summary = null,
+            previewUrl = null,
             lastModifiedAt = 0,
             version = 1,
         )

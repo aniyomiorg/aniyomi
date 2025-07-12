@@ -57,6 +57,8 @@ class AndroidAnimeSourceManager(
                                 context,
                                 Injekt.get(),
                                 Injekt.get(),
+                                Injekt.get(),
+                                Injekt.get(),
                             ),
                         ),
                     )

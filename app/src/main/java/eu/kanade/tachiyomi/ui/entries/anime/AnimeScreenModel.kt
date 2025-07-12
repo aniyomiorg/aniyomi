@@ -599,6 +599,9 @@ class AnimeScreenModel(
             LibraryPreferences.EpisodeSwipeAction.ToggleBookmark -> {
                 bookmarkEpisodes(listOf(episode), !episode.bookmark)
             }
+            LibraryPreferences.EpisodeSwipeAction.ToggleFillermark -> {
+                fillermarkEpisodes(listOf(episode), !episode.fillermark)
+            }
             LibraryPreferences.EpisodeSwipeAction.Download -> {
                 val downloadAction: EpisodeDownloadAction = when (episodeItem.downloadState) {
                     AnimeDownload.State.ERROR,
@@ -826,6 +829,20 @@ class AnimeScreenModel(
     }
 
     /**
+     * Fillermarks the given list of episodes.
+     * @param episodes the list of episodes to fillermark.
+     */
+    fun fillermarkEpisodes(episodes: List<Episode>, fillermarked: Boolean) {
+        screenModelScope.launchIO {
+            episodes
+                .filterNot { it.fillermark == fillermarked }
+                .map { EpisodeUpdate(id = it.id, fillermark = fillermarked) }
+                .let { updateEpisode.awaitAll(it) }
+        }
+        toggleAllSelection(false)
+    }
+
+    /**
      * Deletes the given list of episode.
      *
      * @param episodes the list of episodes to delete.
@@ -911,6 +928,24 @@ class AnimeScreenModel(
     }
 
     /**
+     * Sets the fillermark filter and requests an UI update.
+     * @param state whether to display only fillermarked episodes or all episodes.
+     */
+    fun setFillermarkedFilter(state: TriState) {
+        val anime = successState?.anime ?: return
+
+        val flag = when (state) {
+            TriState.DISABLED -> Anime.SHOW_ALL
+            TriState.ENABLED_IS -> Anime.EPISODE_SHOW_FILLERMARKED
+            TriState.ENABLED_NOT -> Anime.EPISODE_SHOW_NOT_FILLERMARKED
+        }
+
+        screenModelScope.launchNonCancellable {
+            setAnimeEpisodeFlags.awaitSetFillermarkFilter(anime, flag)
+        }
+    }
+
+    /**
      * Sets the active display mode.
      * @param mode the mode to set.
      */
@@ -931,6 +966,30 @@ class AnimeScreenModel(
 
         screenModelScope.launchNonCancellable {
             setAnimeEpisodeFlags.awaitSetSortingModeOrFlipOrder(anime, sort)
+        }
+    }
+
+    /**
+     * Sets whether previews are to be shown or not.
+     * @param flag to show previews.
+     */
+    fun showEpisodePreviews(flag: Long) {
+        val anime = successState?.anime ?: return
+
+        screenModelScope.launchNonCancellable {
+            setAnimeEpisodeFlags.awaitShowEpisodePreviews(anime, flag)
+        }
+    }
+
+    /**
+     * Sets whether summaries are to be shown or not.
+     * @param flag to show summaries.
+     */
+    fun showEpisodeSummaries(flag: Long) {
+        val anime = successState?.anime ?: return
+
+        screenModelScope.launchNonCancellable {
+            setAnimeEpisodeFlags.awaitShowEpisodeSummaries(anime, flag)
         }
     }
 
@@ -1107,7 +1166,7 @@ class AnimeScreenModel(
         data object ChangeAnimeSkipIntro : Dialog
         data object SettingsSheet : Dialog
         data object TrackSheet : Dialog
-        data object FullCover : Dialog
+        data object FullImages : Dialog
     }
 
     fun dismissDialog() {
@@ -1126,8 +1185,8 @@ class AnimeScreenModel(
         updateSuccessState { it.copy(dialog = Dialog.TrackSheet) }
     }
 
-    fun showCoverDialog() {
-        updateSuccessState { it.copy(dialog = Dialog.FullCover) }
+    fun showImagesDialog() {
+        updateSuccessState { it.copy(dialog = Dialog.FullImages) }
     }
 
     fun showMigrateDialog(duplicate: Anime) {
@@ -1206,6 +1265,11 @@ class AnimeScreenModel(
                 get() = nextAiringEpisode.second.times(1000L).minus(
                     Calendar.getInstance().timeInMillis,
                 )
+            val showPreviews: Boolean
+                get() = anime.showPreviews()
+
+            val showSummaries: Boolean
+                get() = anime.showSummaries()
 
             /**
              * Applies the view filters to the list of episodes obtained from the database.
@@ -1216,9 +1280,11 @@ class AnimeScreenModel(
                 val unseenFilter = anime.unseenFilter
                 val downloadedFilter = anime.downloadedFilter
                 val bookmarkedFilter = anime.bookmarkedFilter
+                val fillermarkedFilter = anime.fillermarkedFilter
                 return asSequence()
                     .filter { (episode) -> applyFilter(unseenFilter) { !episode.seen } }
                     .filter { (episode) -> applyFilter(bookmarkedFilter) { episode.bookmark } }
+                    .filter { (episode) -> applyFilter(fillermarkedFilter) { episode.fillermark } }
                     .filter { applyFilter(downloadedFilter) { it.isDownloaded || isLocalAnime } }
                     .sortedWith { (episode1), (episode2) ->
                         getEpisodeSort(anime).invoke(
