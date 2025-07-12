@@ -416,4 +416,6 @@
     <string name="action_display_unseen_badge">الحلقات التي لم يتم مشاهدتها</string>
     <string name="pref_category_delete_chapters">حذف الفصول/الحلقات</string>
     <string name="pref_remove_after_read">بعد قراءته/مشاهدته قم بحذفه تلقائيا</string>
+    <string name="action_sort_last_manga_update">آخر تحديث للمنغا</string>
+    <string name="action_show_manga">اظهار المنغا</string>
 </resources>
