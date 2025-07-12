@@ -17,6 +17,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.more.settings.PreferenceItem
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
@@ -71,6 +72,7 @@ object SettingsLibraryScreen : SearchableSettings {
                 libraryPreferences,
             ),
             getGlobalUpdateGroup(allCategories, allAnimeCategories, libraryPreferences),
+            getSeasonBehaviorGroup(libraryPreferences),
             getAnimeBehaviorGroup(libraryPreferences),
             getBehaviorGroup(libraryPreferences),
         )
@@ -292,6 +294,25 @@ object SettingsLibraryScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     preference = libraryPreferences.newShowUpdatesCount(),
                     title = stringResource(AYMR.strings.pref_library_update_show_tab_badge),
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getSeasonBehaviorGroup(
+        libraryPreferences: LibraryPreferences,
+    ): Preference.PreferenceGroup {
+        return Preference.PreferenceGroup(
+            title = stringResource(AYMR.strings.pref_library_season),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    preference = libraryPreferences.updateSeasonOnRefresh(),
+                    title = stringResource(AYMR.strings.pref_update_seasons_refresh),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    preference = libraryPreferences.updateSeasonOnLibraryUpdate(),
+                    title = stringResource(AYMR.strings.pref_update_seasons_update),
                 ),
             ),
         )

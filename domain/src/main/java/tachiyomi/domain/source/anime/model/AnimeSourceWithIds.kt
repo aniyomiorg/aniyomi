@@ -1,9 +1,12 @@
 package tachiyomi.domain.source.anime.model
 
-data class AnimeSourceWithCount(
+data class AnimeSourceWithIds(
     val source: AnimeSource,
-    val count: Long,
+    val ids: List<Long>,
+    val orphaned: List<Long>,
 ) {
+    val count: Long
+        get() = ids.size.toLong()
 
     val id: Long
         get() = source.id

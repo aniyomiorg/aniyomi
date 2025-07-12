@@ -8,6 +8,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.MigrateAnimeSearchScreen
 import eu.kanade.presentation.util.Screen
+import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.season.MigrateSeasonSelectScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 
 class MigrateAnimeSearchScreen(private val animeId: Long) : Screen() {
@@ -58,6 +59,7 @@ class MigrateAnimeSearchScreen(private val animeId: Long) : Screen() {
                     onClickTitle = {
                         navigator.push(AnimeScreen(dialog.anime.id, true))
                     },
+                    onClickSeasons = { navigator.push(MigrateSeasonSelectScreen(dialogState.anime!!, dialog.anime)) },
                     onPopScreen = {
                         if (navigator.lastItem is AnimeScreen) {
                             val lastItem = navigator.lastItem

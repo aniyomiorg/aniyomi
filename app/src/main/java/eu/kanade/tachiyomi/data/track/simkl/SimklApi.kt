@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.track.simkl
 
 import android.net.Uri
-import android.util.Log
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -175,8 +174,6 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                     .parseAs<List<SimklSyncWatched>>()
                     .firstOrNull() ?: return@withIOContext null
             }
-
-            Log.i("SOMETHING-IDK", foundAnime.toString())
 
             if (foundAnime.result != true) return@withIOContext null
             val lastWatched = foundAnime.lastWatched ?: return@withIOContext null

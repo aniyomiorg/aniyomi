@@ -1,0 +1,10 @@
+CREATE VIEW episodestatsView AS
+SELECT
+    episodes.anime_id,
+    count(*) AS total,
+    sum(seen) AS seenCount,
+    coalesce(max(episodes.date_upload), 0) AS latestUpload,
+    coalesce(max(episodes.date_fetch), 0) AS fetchedAt,
+    sum(episodes.bookmark) AS bookmarkCount
+FROM episodes
+GROUP BY episodes.anime_id;

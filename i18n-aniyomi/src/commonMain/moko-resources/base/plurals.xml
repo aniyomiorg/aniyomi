@@ -28,6 +28,14 @@
         <item quantity="one">%1$s episode</item>
         <item quantity="other">%1$s episodes</item>
     </plurals>
+    <plurals name="anime_num_seasons">
+        <item quantity="one">%d season</item>
+        <item quantity="other">%d seasons</item>
+    </plurals>
+    <plurals name="anime_num_entries">
+        <item quantity="one">%d entry</item>
+        <item quantity="other">%d entries</item>
+    </plurals>
     <plurals name="download_amount_anime">
         <item quantity="one">Next episode</item>
         <item quantity="other">Next %d episodes</item>

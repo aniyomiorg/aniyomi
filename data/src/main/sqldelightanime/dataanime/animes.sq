@@ -1,4 +1,5 @@
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy;
+import eu.kanade.tachiyomi.animesource.model.FetchType;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
@@ -27,7 +28,12 @@ CREATE TABLE animes(
     last_modified_at INTEGER NOT NULL DEFAULT 0,
     favorite_modified_at INTEGER,
     version INTEGER NOT NULL DEFAULT 0,
-    is_syncing INTEGER NOT NULL DEFAULT 0
+    is_syncing INTEGER NOT NULL DEFAULT 0,
+    fetch_type INTEGER AS FetchType NOT NULL DEFAULT 0,
+    parent_id INTEGER,
+    season_flags INTEGER NOT NULL,
+    season_number REAL NOT NULL,
+    season_source_order INTEGER NOT NULL
 );
 
 CREATE INDEX animelib_favorite_index ON animes(favorite) WHERE favorite = 1;
@@ -137,19 +143,23 @@ UPDATE animes
 SET is_syncing = 0
 WHERE is_syncing = 1;
 
-getSourceIdsWithNonLibraryAnime:
-SELECT source, COUNT(*) AS anime_count
-FROM animes
-WHERE favorite = 0
-GROUP BY source;
+removeParentIdByIds:
+UPDATE animes
+SET parent_id = NULL
+WHERE _id IN :animeIds;
 
-deleteAnimesNotInLibraryBySourceIds:
+getChildrenByParentId:
+SELECT *
+FROM animes
+WHERE parent_id = :parentId;
+
+deleteAnimesNotInLibraryByAnimeIds:
 DELETE FROM animes
-WHERE favorite = 0 AND source IN :sourceIds;
+WHERE favorite = 0 AND _id IN :animeIds;
 
 insert:
-INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version)
-VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :dateAdded, :updateStrategy, :calculateInterval, 0, :version);
+INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id, season_flags, season_number, season_source_order)
+VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType, :parentId, :seasonFlags, :seasonNumber, :seasonSourceOrder);
 
 update:
 UPDATE animes SET
@@ -173,7 +183,12 @@ UPDATE animes SET
     update_strategy = coalesce(:updateStrategy, update_strategy),
     calculate_interval = coalesce(:calculateInterval, calculate_interval),
     version = coalesce(:version, version),
-    is_syncing = coalesce(:isSyncing, is_syncing)
+    is_syncing = coalesce(:isSyncing, is_syncing),
+    fetch_type = coalesce(:fetchType, fetch_type),
+    parent_id = coalesce(:parentId, parent_id),
+    season_flags = coalesce(:seasonFlags, season_flags),
+    season_number = coalesce(:seasonNumber, season_number),
+    season_source_order = coalesce(:seasonSourceOrder, season_source_order)
 WHERE _id = :animeId;
 
 selectLastInsertedRowId:

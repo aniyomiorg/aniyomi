@@ -24,6 +24,10 @@ interface SAnime : Serializable {
 
     var update_strategy: AnimeUpdateStrategy
 
+    var fetch_type: FetchType
+
+    var season_number: Double
+
     var initialized: Boolean
 
     fun getGenres(): List<String>? {
@@ -41,6 +45,8 @@ interface SAnime : Serializable {
         it.status = status
         it.thumbnail_url = thumbnail_url
         it.update_strategy = update_strategy
+        it.fetch_type = fetch_type
+        it.season_number = season_number
         it.initialized = initialized
     }
 
