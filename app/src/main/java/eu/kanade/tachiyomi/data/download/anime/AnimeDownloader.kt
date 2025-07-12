@@ -246,7 +246,8 @@ class AnimeDownloader(
             downloadEpisode(download)
 
             // Remove successful download from queue
-            if (download.status == AnimeDownload.State.DOWNLOADED) {
+            if (download.status == AnimeDownload.State.DOWNLOADED ||
+                download.status == AnimeDownload.State.ERROR) {
                 removeFromQueue(download)
             }
         } catch (e: Throwable) {

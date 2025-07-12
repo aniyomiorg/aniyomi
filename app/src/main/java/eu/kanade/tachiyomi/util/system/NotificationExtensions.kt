@@ -36,7 +36,10 @@ fun Context.notify(id: Int, notification: Notification) {
         return
     }
 
-    NotificationManagerCompat.from(this).notify(id, notification)
+    NotificationManagerCompat.from(this).run {
+        cancel(id)
+        notify(id, notification)
+    }
 }
 
 fun Context.notify(notificationWithIdAndTags: List<NotificationWithIdAndTag>) {
