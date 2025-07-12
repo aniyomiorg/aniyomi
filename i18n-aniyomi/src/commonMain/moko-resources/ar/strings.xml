@@ -130,8 +130,6 @@
     <string name="pref_player_custom_button_delete_confirm">هل تريد حذف زر %s؟</string>
     <string name="pref_player_advanced">إعدادات متقدمة</string>
     <string name="pref_player_advanced_summary">البرامج النصية، mpv.conf، input.conf</string>
-    <string name="pref_mpv_scripts">تمكين سكربتات MPV</string>
-    <string name="pref_mpv_scripts_summary">يحتاج إلى إذن تخزين خارجي.</string>
     <string name="pref_mpv_conf">قم بتحرير ملف تكوين MPV لمزيد من إعدادات مشغل الوسائط</string>
     <string name="pref_reset_mpv_conf">إعادة تعيين ملف تكوين MPV</string>
     <string name="pref_mpv_input">تعديل ملف إدخال MPV لتكوين تعيين لوحة المفاتيح</string>
@@ -414,4 +412,8 @@
     <string name="onboarding_storage_action_create_folder">إنشاء مجلد Aniyomi افتراضي</string>
     <string name="download_speed_limit">حد سرعة التنزيل</string>
     <string name="download_speed_limit_hint">اضبطه على 0 لتعطيل حد السرعة.</string>
+    <string name="manga">مانغا</string>
+    <string name="action_display_unseen_badge">الحلقات التي لم يتم مشاهدتها</string>
+    <string name="pref_category_delete_chapters">حذف الفصول/الحلقات</string>
+    <string name="pref_remove_after_read">بعد قراءته/مشاهدته قم بحذفه تلقائيا</string>
 </resources>

@@ -57,8 +57,6 @@
     <string name="pref_player_audio_channels_mono">Mono</string>
     <string name="pref_player_audio_channels_stereo">Stereo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Stereo đảo ngược</string>
-    <string name="pref_mpv_scripts">Kích hoạt script MPV</string>
-    <string name="pref_mpv_scripts_summary">Cần có quyền truy cập bộ nhớ ngoài.</string>
     <string name="pref_mpv_conf">Sửa file cấu hình MPV để cài đặt chi tiết trình phát</string>
     <string name="pref_reset_mpv_conf">Đặt lại file cấu hình MPV</string>
     <string name="pref_mpv_input">Sửa file MVP input để chỉnh sửa map bàn phím</string>
