@@ -463,5 +463,11 @@
     <string name="editor_rename_error">تعذرت إعادة تسمية الملف</string>
     <string name="editor_delete_error">غير قادر على حذف الملف</string>
     <string name="editor_delete_file">حذف الملف</string>
-    <string name="editor_delete_file_confirmation">هل ترغب في حذف ملف \"X32X\"؟?</string>
+    <string name="editor_delete_file_confirmation">هل ترغب في حذف ملف \"%s\"؟</string>
+    <string name="pref_mpv_user_files">استخدام ملفات MPV المستعمل</string>
+    <string name="pref_mpv_user_files_summary">استخدام الملفات في مجلد mpv-config</string>
+    <string name="player_skip_action">تخطّي %1$s</string>
+    <string name="player_chapter_type_opening">البداية</string>
+    <string name="player_chapter_type_ending">النهاية</string>
+    <string name="player_chapter_type_recap">إعادة</string>
 </resources>
