@@ -14,7 +14,7 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
 ### Fixed
 
 - Fix episode number parsing ([@Secozzi](https://github.com/Secozzi)) ([#2096](https://github.com/aniyomiorg/aniyomi/pull/2096))
-- Fix tracking menu not opening on add to library ([@Secozzi](https://github.com/Secozzi)) ([#2097](https://github.com/aniyomiorg/aniyomi/pull/2097))
+- Fix tracking menu not opening on add to library ([@Secozzi](https://github.com/Secozzi)) ([#2098](https://github.com/aniyomiorg/aniyomi/pull/2098))
 - Fix stop/continue anime download button ([@Secozzi](https://github.com/Secozzi)) ([#2099](https://github.com/aniyomiorg/aniyomi/pull/2099))
 
 ### Added
