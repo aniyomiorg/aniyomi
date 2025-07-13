@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -61,6 +62,7 @@ import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.IconButtonTokens
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 import tachiyomi.presentation.core.util.selectedBackground
 
 @Composable
@@ -124,7 +126,25 @@ fun AnimeEpisodeListItem(
                 )
                 .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            if (previewUrl.isNullOrBlank() && summary.isNullOrBlank()) {
+                SimpleEpisodeImpl(
+                    title = title,
+                    date = date,
+                    watchProgress = watchProgress,
+                    scanlator = scanlator,
+                    seen = seen,
+                    bookmark = bookmark,
+                    isAnyEpisodeSelected = isAnyEpisodeSelected,
+                    downloadIndicatorEnabled = downloadIndicatorEnabled,
+                    downloadStateProvider = downloadStateProvider,
+                    downloadProgressProvider = downloadProgressProvider,
+                    onDownloadClick = onDownloadClick,
+                    onBookmarkClick = onBookmarkClick,
+                )
+                return@Row
+            }
+
+            Column {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(2.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -197,6 +217,80 @@ fun AnimeEpisodeListItem(
             }
         }
     }
+}
+
+@Composable
+private fun RowScope.SimpleEpisodeImpl(
+    title: String,
+    date: String?,
+    watchProgress: String?,
+    scanlator: String?,
+    seen: Boolean,
+    bookmark: Boolean,
+    isAnyEpisodeSelected: Boolean,
+    downloadIndicatorEnabled: Boolean,
+    downloadStateProvider: () -> AnimeDownload.State,
+    downloadProgressProvider: () -> Int,
+    onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
+    onBookmarkClick: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.weight(1f),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = LocalContentColor.current.copy(alpha = if (seen) DISABLED_ALPHA else 1f),
+        )
+
+        Row {
+            val subtitleStyle = MaterialTheme.typography.bodySmall
+                .merge(
+                    color = LocalContentColor.current
+                        .copy(alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA),
+                )
+            ProvideTextStyle(value = subtitleStyle) {
+                if (date != null) {
+                    Text(
+                        text = date,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    if (watchProgress != null || scanlator != null) DotSeparatorText()
+                }
+                if (watchProgress != null) {
+                    Text(
+                        text = watchProgress,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
+                    )
+                    if (scanlator != null) DotSeparatorText()
+                }
+                if (scanlator != null) {
+                    Text(
+                        text = scanlator,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+        }
+    }
+
+    BookmarkDownloadIcons(
+        bookmark = bookmark,
+        onBookmarkClick = onBookmarkClick,
+        isAnyEpisodeSelected = isAnyEpisodeSelected,
+        downloadIndicatorEnabled = downloadIndicatorEnabled,
+        downloadStateProvider = downloadStateProvider,
+        downloadProgressProvider = downloadProgressProvider,
+        onDownloadClick = onDownloadClick,
+    )
 }
 
 private fun getSwipeAction(
@@ -423,6 +517,7 @@ private fun BookmarkDownloadIcons(
             imageVector = bookmarkIcon,
             contentDescription = stringResource(MR.strings.action_filter_bookmarked),
             modifier = Modifier
+                .secondaryItemAlpha()
                 .padding(start = 4.dp)
                 .then(
                     if (isAnyEpisodeSelected) {
