@@ -17,7 +17,6 @@ import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.automirrored.outlined.LabelOff
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkAdd
-import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.BookmarkRemove
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Done
@@ -47,6 +46,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.request.ImageRequest
@@ -127,10 +127,11 @@ fun AnimeEpisodeListItem(
                 .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
         ) {
             if (previewUrl.isNullOrBlank() && summary.isNullOrBlank()) {
-                SimpleEpisodeImpl(
+                SimpleEpisodeListItemImpl(
                     title = title,
                     date = date,
                     watchProgress = watchProgress,
+                    fillermark = fillermark,
                     scanlator = scanlator,
                     seen = seen,
                     bookmark = bookmark,
@@ -220,10 +221,11 @@ fun AnimeEpisodeListItem(
 }
 
 @Composable
-private fun RowScope.SimpleEpisodeImpl(
+private fun RowScope.SimpleEpisodeListItemImpl(
     title: String,
     date: String?,
     watchProgress: String?,
+    fillermark: Boolean,
     scanlator: String?,
     seen: Boolean,
     bookmark: Boolean,
@@ -237,7 +239,7 @@ private fun RowScope.SimpleEpisodeImpl(
 ) {
     Column(
         modifier = modifier.weight(1f),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(if (fillermark) 0.dp else 6.dp),
     ) {
         Text(
             text = title,
@@ -247,39 +249,13 @@ private fun RowScope.SimpleEpisodeImpl(
             color = LocalContentColor.current.copy(alpha = if (seen) DISABLED_ALPHA else 1f),
         )
 
-        Row {
-            val subtitleStyle = MaterialTheme.typography.bodySmall
-                .merge(
-                    color = LocalContentColor.current
-                        .copy(alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA),
-                )
-            ProvideTextStyle(value = subtitleStyle) {
-                if (date != null) {
-                    Text(
-                        text = date,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    if (watchProgress != null || scanlator != null) DotSeparatorText()
-                }
-                if (watchProgress != null) {
-                    Text(
-                        text = watchProgress,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
-                    )
-                    if (scanlator != null) DotSeparatorText()
-                }
-                if (scanlator != null) {
-                    Text(
-                        text = scanlator,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-            }
-        }
+        EpisodeInformation(
+            seen = seen,
+            date = date,
+            watchProgress = watchProgress,
+            fillermark = fillermark,
+            scanlator = scanlator,
+        )
     }
 
     BookmarkDownloadIcons(
@@ -456,23 +432,6 @@ private fun EpisodeInformation(
         val subtitleStyle = MaterialTheme.typography.bodySmall
             .merge(color = LocalContentColor.current.copy(alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA))
         ProvideTextStyle(value = subtitleStyle) {
-            if (date != null) {
-                Text(
-                    text = date,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                if (watchProgress != null || fillermark || scanlator != null) DotSeparatorText()
-            }
-            if (watchProgress != null) {
-                Text(
-                    text = watchProgress,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
-                )
-                if (fillermark || scanlator != null) DotSeparatorText()
-            }
             if (fillermark) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Label,
@@ -484,6 +443,23 @@ private fun EpisodeInformation(
                     text = stringResource(AYMR.strings.filler),
                     maxLines = 1,
                     color = MaterialTheme.colorScheme.tertiary.copy(alpha = subtitleStyle.alpha),
+                    modifier = Modifier.padding(end = 4.dp),
+                )
+            }
+            if (date != null) {
+                Text(
+                    text = date,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                if (watchProgress != null || scanlator != null) DotSeparatorText()
+            }
+            if (watchProgress != null) {
+                Text(
+                    text = watchProgress,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
                 )
                 if (scanlator != null) DotSeparatorText()
             }
@@ -508,32 +484,32 @@ private fun BookmarkDownloadIcons(
     downloadProgressProvider: () -> Int,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
 ) {
-    val bookmarkIcon = if (bookmark) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder
-    val bookmarkColor = if (bookmark) MaterialTheme.colorScheme.primary else LocalContentColor.current
     val bookmarkInteraction = remember { MutableInteractionSource() }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = bookmarkIcon,
-            contentDescription = stringResource(MR.strings.action_filter_bookmarked),
-            modifier = Modifier
-                .secondaryItemAlpha()
-                .padding(start = 4.dp)
-                .then(
-                    if (isAnyEpisodeSelected) {
-                        Modifier
-                    } else {
-                        Modifier.clickable(
-                            interactionSource = bookmarkInteraction,
-                            indication = ripple(
-                                bounded = false,
-                                radius = IconButtonTokens.StateLayerSize / 2,
-                            ),
-                        ) { onBookmarkClick(!bookmark) }
-                    },
-                ),
-            tint = bookmarkColor,
-        )
+        if (bookmark) {
+            Icon(
+                imageVector = Icons.Filled.Bookmark,
+                contentDescription = stringResource(MR.strings.action_filter_bookmarked),
+                modifier = Modifier
+                    .secondaryItemAlpha()
+                    .padding(start = 4.dp)
+                    .then(
+                        if (isAnyEpisodeSelected) {
+                            Modifier
+                        } else {
+                            Modifier.clickable(
+                                interactionSource = bookmarkInteraction,
+                                indication = ripple(
+                                    bounded = false,
+                                    radius = IconButtonTokens.StateLayerSize / 2,
+                                ),
+                            ) { onBookmarkClick(!bookmark) }
+                        },
+                    ),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
 
         EpisodeDownloadIndicator(
             enabled = downloadIndicatorEnabled,
@@ -544,4 +520,32 @@ private fun BookmarkDownloadIcons(
             onClick = { onDownloadClick?.invoke(it) },
         )
     }
+}
+
+@Preview
+@Composable
+fun AnimeEpisodeListItemPreview() {
+    AnimeEpisodeListItem(
+        title = "Ep. 1 - To You, 2000 Years in the Future: The Fall of Zhiganshina (1)",
+        date = "7/4/13",
+        watchProgress = null,
+        scanlator = null,
+        summary = "As Titans continue to rampage, the townspeople gather at the inner gate. But a new Titan breaks through and this one is unlike the others. Source: crunchyroll",
+        previewUrl = null,
+        seen = false,
+        bookmark = false,
+        fillermark = true,
+        selected = false,
+        isAnyEpisodeSelected = false,
+        downloadIndicatorEnabled = true,
+        downloadStateProvider = { AnimeDownload.State.NOT_DOWNLOADED },
+        downloadProgressProvider = { 0 },
+        episodeSwipeStartAction = LibraryPreferences.EpisodeSwipeAction.Disabled,
+        episodeSwipeEndAction = LibraryPreferences.EpisodeSwipeAction.Disabled,
+        onLongClick = {},
+        onClick = {},
+        onDownloadClick = {},
+        onEpisodeSwipe = {},
+        onBookmarkClick = {},
+    )
 }
