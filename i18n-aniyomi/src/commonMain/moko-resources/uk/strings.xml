@@ -494,4 +494,5 @@
     <string name="pref_mpv_user_files_summary">Використовувати файли з каталогу mpv-config</string>
     <string name="label_player">Гравець</string>
     <string name="pref_player_settings_summary">Вбудований програвач, жести, декодери, субтитри</string>
+    <string name="action_stop">СТІЙ</string>
 </resources>
