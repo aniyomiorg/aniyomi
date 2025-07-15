@@ -257,7 +257,7 @@
     <string name="theme_cottoncandy">Barbe à papa</string>
     <string name="theme_mocha">Mocha</string>
     <string name="pref_episode_swipe_end">Action balayée vers la droite</string>
-    <string name="pref_episode_swipe_start">Action balayée vers la gauche</string>
+    <string name="pref_episode_swipe_start">Episode lors du balayage vers la gauche</string>
     <string name="pref_category_hide_hidden">Masquer les catégories cachées de l\'écran des catégories et du stockage</string>
     <string name="pref_update_anime_release_grace_period">Délai de grâce prévu pour la sortie de l’anime</string>
     <string name="data_saver_exclude">Exclure de l’économiseur de données</string>
@@ -369,12 +369,12 @@
     <string name="pref_player_custom_button_title">Titre</string>
     <string name="pref_player_custom_button_error_exists">Le bouton existe déjà !</string>
     <string name="pref_player_custom_button_content">Code lua</string>
-    <string name="pref_player_custom_button_content_long">Code lua (après appuie long)</string>
+    <string name="pref_player_custom_button_content_long">Code Lua (après appuie long)</string>
     <string name="pref_player_custom_button_optional">(optionnel)</string>
     <string name="pref_player_custom_button_delete">Bouton supprimer</string>
     <string name="pref_player_custom_button_delete_confirm">Voulez-vous supprimer le bouton %s ?</string>
     <string name="pref_player_custom_button_startup">Au démarrage</string>
-    <string name="pref_player_custom_button_id">(ID: %d)</string>
+    <string name="pref_player_custom_button_id">(ID : %d)</string>
     <string name="pref_player_editor">Éditeur de scripts</string>
     <string name="pref_player_editor_summary">Éditer et créer de nouveaux scripts et options de script</string>
     <string name="pref_player_editor_script">Scripts</string>
@@ -451,7 +451,7 @@
     <string name="player_sheets_sub_position">Position</string>
     <string name="player_sheets_subtitles_border_style_outline_and_shadow">Contour et ombre</string>
     <string name="player_sheets_subtitles_border_style_opaque_box">Boîte opaque</string>
-    <string name="player_sheets_subtitles_border_style_background_box">Boîte à l\'arrière-plan</string>
+    <string name="player_sheets_subtitles_border_style_background_box">Boîte d\'arrière-plan</string>
     <string name="player_sheets_filters_title">Filtres</string>
     <string name="player_sheets_filters_brightness">Luminosité</string>
     <string name="player_sheets_filters_contrast">Contraste</string>
@@ -494,4 +494,6 @@
     <string name="pref_mark_duplicate_seen_episode_seen">Marquer les épisode en double déjà vus comme vus</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">Après avoir vu un épisode</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">Après avoir récupéré un nouvel épisode</string>
+    <string name="action_stop">Arrêter</string>
+    <string name="action_continue">Continuer</string>
 </resources>
