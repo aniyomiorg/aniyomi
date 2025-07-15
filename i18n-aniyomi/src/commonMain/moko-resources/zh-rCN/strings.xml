@@ -474,5 +474,22 @@
     <string name="pref_mpv_user_files">使用用户 MPV 文件</string>
     <string name="pref_mpv_user_files_summary">使用 mpv-config 目录中的文件</string>
     <string name="player_skip_action">跳过 %1$s</string>
-    <string name="player_intro_skipped">%1$s 已跳过</string>
+    <string name="player_intro_skipped">已跳过 %1$s</string>
+    <string name="player_chapter_type_opening">片头</string>
+    <string name="player_chapter_type_ending">片尾</string>
+    <string name="no_available_videos">没有可用的视频</string>
+    <string name="no_episode_loaded">未加载任何剧集</string>
+    <string name="player_sheets_track_delay">延迟</string>
+    <string name="player_sheets_track_palette">调色板</string>
+    <string name="player_hoster_tap_to_load">点击加载视频</string>
+    <string name="player_hoster_failed">无法加载视频</string>
+    <string name="player_sheets_qualities_title">画质</string>
+    <string name="player_sheets_chapters_title">章节</string>
+    <string name="type">类型</string>
+    <string name="pref_behavior_episode">剧集行为</string>
+    <string name="pref_mark_duplicate_seen_episode_seen">将重复的已看剧集标记为已看</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_existing">看完一集后</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_new">获取新剧集后</string>
+    <string name="pref_category_intro_skip">跳过片头/片尾</string>
+    <string name="pref_enable_intro_skip">启用跳过片头/片尾</string>
 </resources>
