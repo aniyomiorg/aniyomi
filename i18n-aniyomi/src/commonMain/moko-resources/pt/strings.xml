@@ -2,7 +2,7 @@
 <resources>
     <string name="confirm_exit">Pressione Voltar para sair</string>
     <string name="action_filter_started">Começar</string>
-    <string name="action_sort_airing_time">”No ar</string>
+    <string name="action_sort_airing_time">Horário de exibição</string>
     <string name="action_reorganize_by">Reordenar</string>
     <string name="relative_time_now">Novo</string>
     <string name="pref_library_summary">Categorias, atualização global, trocar de capítulo</string>
@@ -421,7 +421,7 @@
     <string name="action_add_repo_message">Adicione repositórios a %s. Deve ser uma URL que termine com \"index.min.json\".</string>
     <string name="download_ahead_info">Só funciona se o capítulo/episódio atual + o próximo já tiverem sido baixados.</string>
     <string name="pref_update_only_completely_read">Pular entradas com episódios não vistos/capítulos não lidos</string>
-    <string name="clear_database_confirmation">Tem certeza? Episódios e capítulos concluídos e o progresso de entradas que não fazem parte da biblioteca serão perdidos.</string>
+    <string name="clear_database_confirmation">Tem certeza? Episódios e capítulos concluídos e o progresso de entradas que não fazem parte da biblioteca serão perdidos</string>
     <string name="download_queue_size_warning">Aviso: downloads em massa podem fazer com que as fontes fiquem mais lentas e/ou bloqueiem o Aniyomi. Toque para saber mais.</string>
     <string name="pref_invalidate_download_cache_summary">Forçar o aplicativo a verificar novamente os capítulos e episódios baixados</string>
     <string name="pref_hosters_show_failure">Exibir hosters com falha</string>
