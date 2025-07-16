@@ -44,7 +44,7 @@
     <string name="pref_skip_length">Duração do toque duplo para ignorar</string>
     <string name="pref_skip_disable">Desativar</string>
     <string name="pref_player_smooth_seek">Ativar procura precisa</string>
-    <string name="pref_player_smooth_seek_summary">"Quando ativado, a procura não se concentrará nas  imagens chave, o que levará a uma procura mais lenta, mas precisa"</string>
+    <string name="pref_player_smooth_seek_summary">Quando ativado, a busca não será limitada aos quadros-chave, resultando em uma busca mais lenta, porém precisa</string>
     <string name="pref_gpu_next_title">Ativar renderização prévia</string>
     <string name="pref_gpu_next_subtitle">Nova renderização de vídeo em segundo-plano</string>
     <string name="pref_debanding_title">Remoção de faixas</string>
@@ -70,7 +70,7 @@
     <string name="pref_general_summary">Linguagem do aplicativo, notificações</string>
     <string name="theme_cloudflare">Cloudflare</string>
     <string name="theme_sapphire">Safira</string>
-    <string name="theme_doom">Vermelho</string>
+    <string name="theme_doom">Doom</string>
     <string name="theme_matrix">Matrix</string>
     <string name="pref_preserve_reading_position">Preservar a posição de leitura nos capítulos lidos</string>
     <string name="pref_download_slots">Máximo de downloads</string>
@@ -421,7 +421,7 @@
     <string name="action_add_repo_message">Adicione repositórios a %s. Deve ser uma URL que termine com \"index.min.json\".</string>
     <string name="download_ahead_info">Só funciona se o capítulo/episódio atual + o próximo já tiverem sido baixados.</string>
     <string name="pref_update_only_completely_read">Pular entradas com episódios não vistos/capítulos não lidos</string>
-    <string name="clear_database_confirmation">Tem certeza? Episódios e capítulos concluídos e o progresso de entradas que não fazem parte da biblioteca serão perdidos</string>
+    <string name="clear_database_confirmation">Tem certeza? Episódios completos, capítulos e progresso de entradas fora da biblioteca serão perdidos</string>
     <string name="download_queue_size_warning">Aviso: downloads em massa podem fazer com que as fontes fiquem mais lentas e/ou bloqueiem o Aniyomi. Toque para saber mais.</string>
     <string name="pref_invalidate_download_cache_summary">Forçar o aplicativo a verificar novamente os capítulos e episódios baixados</string>
     <string name="pref_hosters_show_failure">Exibir hosters com falha</string>
