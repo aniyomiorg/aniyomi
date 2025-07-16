@@ -47,7 +47,7 @@
     <string name="pref_player_smooth_seek_summary">"Quando ativado, a procura não se concentrará nas  imagens chave, o que levará a uma procura mais lenta, mas precisa"</string>
     <string name="pref_gpu_next_title">Ativar renderização prévia</string>
     <string name="pref_gpu_next_subtitle">Nova renderização de vídeo em segundo-plano</string>
-    <string name="pref_debanding_title">Debandar</string>
+    <string name="pref_debanding_title">Remoção de faixas</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_debanding_gpu">GPU</string>
     <string name="pref_player_audio_channels">Canais de Áudio</string>
@@ -416,4 +416,20 @@
     <string name="non_library_settings">Todas as entradas lidas/vistas</string>
     <string name="action_sort_last_manga_update">Última atualização da manga</string>
     <string name="action_show_manga">Mostrar manga</string>
+    <string name="action_stop">Parar</string>
+    <string name="action_continue">Continuar</string>
+    <string name="action_add_repo_message">Adicione repositórios a %s. Deve ser uma URL que termine com \"index.min.json\".</string>
+    <string name="download_ahead_info">Só funciona se o capítulo/episódio atual + o próximo já tiverem sido baixados.</string>
+    <string name="pref_update_only_completely_read">Pular entradas com episódios não vistos/capítulos não lidos</string>
+    <string name="clear_database_confirmation">Tem certeza? Episódios e capítulos concluídos e o progresso de entradas que não fazem parte da biblioteca serão perdidos.</string>
+    <string name="download_queue_size_warning">Aviso: downloads em massa podem fazer com que as fontes fiquem mais lentas e/ou bloqueiem o Aniyomi. Toque para saber mais.</string>
+    <string name="pref_invalidate_download_cache_summary">Forçar o aplicativo a verificar novamente os capítulos e episódios baixados</string>
+    <string name="pref_hosters_show_failure">Exibir hosters com falha</string>
+    <string name="pref_player_time_to_disappear">Tempo até ocultar controle do player</string>
+    <string name="pref_double_tap_info">Quando um gesto de toque é definido como Personalizado, ele pode ser vinculado por meio do arquivo input.conf. Os códigos de tecla são 0x10001 para esquerda, 0x10002 para centro e 0x10003 para direita.</string>
+    <string name="pref_media_info">Quando um controle de mídia é definido como Personalizado, ele pode ser vinculado por meio do arquivo input.conf. Os códigos de tecla são 0x10004 para anterior, 0x10005 para reproduzir/pausar e 0x10006 para próximo.</string>
+    <string name="pref_player_decoder_summary">Decodificação por hardware, Formato de pixel, Remoção de faixas</string>
+    <string name="pref_debanding_none">Nenhum</string>
+    <string name="pref_use_yuv420p_title">Usar o formato de pixel YUV420P</string>
+    <string name="pref_use_yuv420p_subtitle">Pode corrigir telas pretas em alguns codecs de vídeo e também melhorar o desempenho, com possível perda de qualidade.</string>
 </resources>
