@@ -432,5 +432,11 @@
     <string name="pref_debanding_none">Nenhum</string>
     <string name="pref_use_yuv420p_title">Usar o formato de pixel YUV420P</string>
     <string name="pref_use_yuv420p_subtitle">Pode corrigir telas pretas em alguns codecs de vídeo e também melhorar o desempenho, com possível perda de qualidade</string>
-    <string name="pref_player_subtitle_lang_info">Idioma(s) da legenda a ser selecionado por padrão em vídeos com múltiplas legendas. Códigos de idioma de duas ou três letras funcionam. Múltiplos valores podem ser separados por vírgula</string>
+    <string name="pref_player_subtitle_lang_info">Idioma(s) da legenda a ser selecionado por padrão em vídeos com múltiplas legendas. Códigos de idioma de duas ou três letras funcionam. Múltiplos valores podem ser separados por vírgula.</string>
+    <string name="pref_player_subtitle_whitelist_info">Filtro para legendas: se ativado, será usada a primeira legenda que contenha alguma palavra da lista autorizada. Você pode separar várias palavras com vírgulas.</string>
+    <string name="pref_player_subtitle_blacklist_info">Filtro negativo para legendas: se configurado, todas as legendas que contiverem alguma palavra da lista proibida serão excluídas. Você pode separar várias palavras com vírgulas.</string>
+    <string name="pref_player_audio_summary">Idiomas preferidos, correção de afinação, canais de áudio</string>
+    <string name="pref_player_audio_lang_info">Idioma(s) do áudio selecionado por padrão em vídeos com várias faixas de áudio. Use códigos de idioma de duas ou três letras. Vários valores podem ser separados por vírgula.</string>
+    <string name="pref_player_audio_pitch_correction">Ativar correção de afinação do áudio</string>
+    <string name="pref_player_audio_pitch_correction_summary">Impede que o áudio se torne agudo em velocidades mais rápidas e grave em velocidades mais lentas.</string>
 </resources>
