@@ -2,7 +2,7 @@
 <resources>
     <string name="confirm_exit">Pressione Voltar para sair</string>
     <string name="action_filter_started">Começar</string>
-    <string name="action_sort_airing_time">No ar</string>
+    <string name="action_sort_airing_time">”No ar</string>
     <string name="action_reorganize_by">Reordenar</string>
     <string name="relative_time_now">Novo</string>
     <string name="pref_library_summary">Categorias, atualização global, trocar de capítulo</string>
@@ -230,7 +230,7 @@
     <string name="theme_cottoncandy">Algodão doce</string>
     <string name="theme_mocha">Café</string>
     <string name="pref_episode_swipe_end">deslize para a direita</string>
-    <string name="pref_episode_swipe_start">Deslize para a esquerda</string>
+    <string name="pref_episode_swipe_start">Avançar para o episódio ao deslizar para a esquerda</string>
     <string name="pref_category_hide_hidden">Ocultar Categorias Ocultas das categorias e da tela de armazenamento</string>
     <string name="pref_update_anime_release_grace_period">Período de tempo previsto para lançamento</string>
     <string name="data_saver_exclude">Retirar da economia de dados</string>
@@ -438,5 +438,17 @@
     <string name="pref_player_audio_summary">Idiomas preferidos, correção de afinação, canais de áudio</string>
     <string name="pref_player_audio_lang_info">Idioma(s) do áudio selecionado por padrão em vídeos com várias faixas de áudio. Use códigos de idioma de duas ou três letras. Vários valores podem ser separados por vírgula.</string>
     <string name="pref_player_audio_pitch_correction">Ativar correção de afinação do áudio</string>
-    <string name="pref_player_audio_pitch_correction_summary">Impede que o áudio se torne agudo em velocidades mais rápidas e grave em velocidades mais lentas.</string>
+    <string name="pref_player_audio_pitch_correction_summary">Impede que o áudio se torne agudo em velocidades mais rápidas e grave em velocidades mais lentas</string>
+    <string name="pref_player_audio_channels_auto_safe">Auto-salvar</string>
+    <string name="pref_player_custom_button_summary">Execute código lua com botões personalizados</string>
+    <string name="player_sheets_sub_scale">Escala</string>
+    <string name="player_hoster_failed">Falha ao carregar vídeos</string>
+    <string name="player_sheets_tracks_off">Desativado</string>
+    <string name="timer_title">Temporizador de desligamento</string>
+    <string name="player_sheets_chapters_title">Capítulos</string>
+    <string name="pref_library_rows">Tamanho da lista</string>
+    <string name="custom_button_settings">Botões personalizados</string>
+    <string name="type">Tipo</string>
+    <string name="player_sheets_add_ext_audio">Adicionar faixas de áudio externas</string>
+    <string name="player_hoster_tap_to_load">Toque para carregar vídeos</string>
 </resources>
