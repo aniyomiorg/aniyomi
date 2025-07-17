@@ -265,5 +265,10 @@
     <string name="player_sheets_sub_delay_title">Opóźnienie napisów</string>
     <string name="player_sheets_sub_delay_speed">Prędkość</string>
     <string name="player_sheets_sub_delay_delay">Opóźnienie</string>
-    <string name="player_sheets_sub_delay_subtitle_type_primary">Podstawowy</string>
+    <string name="player_sheets_sub_delay_subtitle_type_primary">Główny</string>
+    <string name="player_sheets_sub_delay_subtitle_type_secondary">Dodatkowy</string>
+    <string name="player_sheets_sub_delay_subtitle_type_primary_and_secondary">Oba</string>
+    <string name="player_sheets_sub_delay_subtitle_voice_heard">Słyszany głos</string>
+    <string name="player_sheets_sub_delay_subtitle_text_seen">Widziany tekst</string>
+    <string name="player_sheets_sub_delay_audio_sound_heard">Słyszany dźwięk</string>
 </resources>
