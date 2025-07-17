@@ -320,6 +320,8 @@
     <string name="player_sheets_sub_color_blue">Sininen</string>
     <string name="player_sheets_subtitles_settings_title">Tekstitysasetukset</string>
     <string name="player_sheets_sub_typography_title">Typografia</string>
-    <string name="player_sheets_sub_typography_font">Kirjasimen koko</string>
+    <string name="player_sheets_sub_typography_font">Kirjasin</string>
     <string name="player_sheets_sub_typography_font_size">Kirjasimen koko</string>
+    <string name="player_sheets_sub_typography_border_style">Reunuksen tyyli</string>
+    <string name="player_sheets_sub_typography_border_size">Reunuksen koko</string>
 </resources>
