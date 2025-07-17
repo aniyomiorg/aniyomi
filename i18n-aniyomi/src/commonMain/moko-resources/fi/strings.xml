@@ -180,5 +180,20 @@
     <string name="pref_category_intro_skip">Esittelyn ohitus</string>
     <string name="pref_enable_intro_skip">Ota esittelyn ohitus käyttöön</string>
     <string name="pref_waiting_time_aniskip">Painikkeen aikakatkaisu</string>
-    <string name="pref_category_player_aniskip_info">AniSkip vaatii toimiakseen animeen seurannan MAL:lla tai Anilistilla.</string>
+    <string name="pref_category_player_aniskip_info">AniSkip vaatii toimiakseen animeen seurannan MAL:lla tai Anilistilla</string>
+    <string name="pref_disable_aniskip_chapter">Poista AniSkip käytöstä, jos videossa on jo lukuja</string>
+    <string name="pref_pip_episode_toasts">Näytä jaksojen aloitusnäytöt, kun vaihdat jaksoja PiP-tilassa</string>
+    <string name="pref_pip_on_exit">Vaihda automaattisesti PiP-tilaan soittimesta poistuttaessa</string>
+    <string name="pref_pip_replace_with_previous">Korvaa \"Ohita kymmenen sekuntia\" -vaihtoehdon edellisellä jaksolla</string>
+    <string name="pref_external_player_preference">Ulkoisen soittimen asetus</string>
+    <string name="pref_player_gestures">Eleet</string>
+    <string name="pref_player_gestures_summary">Haku, kaksoisnapautus, mediasäätimet</string>
+    <string name="pref_category_player_sliders">Liukusäätimet</string>
+    <string name="enable_volume_brightness_gestures">Ota äänenvoimakkuuden ja kirkkauden eleet käyttöön</string>
+    <string name="pref_controls_swap_vol_brightness">Vaihda äänenvoimakkuus ja kirkkauden liukusäätin</string>
+    <string name="pref_category_player_seeking">Etsitään</string>
+    <string name="enable_horizontal_seek_gesture">Ota vaakasuuntainen hakuele käyttöön</string>
+    <string name="pref_show_seekbar">Näytä hakupalkki haettaessa</string>
+    <string name="pref_skip_length">Kaksoisnapauta ohittaaksesi pituuden</string>
+    <string name="pref_player_smooth_seek_summary">Kun otettuna käyttöön, haku ei keskity avainruutuihin, mikä johtaa hitaampaan mutta tarkempaan hakuun.</string>
 </resources>
