@@ -494,4 +494,6 @@
     <string name="pref_mpv_user_files_summary">mpv-config dosya konumundaki dosyaları kullan</string>
     <string name="label_player">Oynatıcı</string>
     <string name="pref_player_settings_summary">Dahili oynatıcı, hareketler, çözümleyiciler, alt yazılar</string>
+    <string name="action_stop">Dur</string>
+    <string name="action_continue">Devam Et</string>
 </resources>
