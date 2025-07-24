@@ -414,4 +414,7 @@
     <string name="onboarding_storage_action_create_folder">Создать папку Aniyomi по умолчанию</string>
     <string name="download_speed_limit">Ограничение скорости загрузки</string>
     <string name="download_speed_limit_hint">Установите значение 0, чтобы отключить ограничение скорости.</string>
+    <string name="action_stop">Стоп</string>
+    <string name="action_continue">Продолжить</string>
+    <string name="manga">Манга</string>
 </resources>
