@@ -112,16 +112,18 @@ class BackupCreator(
             val backup = Backup(
                 backupManga = backupManga,
                 backupCategories = backupMangaCategories(options),
+                backupSources = backupMangaSources(backupManga),
+                backupPreferences = backupAppPreferences(options),
+                backupSourcePreferences = backupSourcePreferences(options),
+                backupMangaExtensionRepo = backupMangaExtensionRepos(options),
+
+                isLegacy = false,
                 backupAnime = backupAnime,
                 backupAnimeCategories = backupAnimeCategories(options),
-                backupSources = backupMangaSources(backupManga),
                 backupAnimeSources = backupAnimeSources(backupAnime),
-                backupPreferences = backupAppPreferences(options),
-                backupAnimeExtensionRepo = backupAnimeExtensionRepos(options),
-                backupMangaExtensionRepo = backupMangaExtensionRepos(options),
-                backupCustomButton = backupCustomButtons(options),
-                backupSourcePreferences = backupSourcePreferences(options),
                 backupExtensions = backupExtensions(options),
+                backupAnimeExtensionRepo = backupAnimeExtensionRepos(options),
+                backupCustomButton = backupCustomButtons(options),
             )
 
             val byteArray = parser.encodeToByteArray(Backup.serializer(), backup)
