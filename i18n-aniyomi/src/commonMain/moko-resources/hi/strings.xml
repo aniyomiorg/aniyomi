@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="confirm_exit">बाहर निकलने के लिए फिर से दबाएं</string>
-    <string name="pref_library_summary">श्रेणियाँ, वैश्विक अपडेट, अध्याय स्वाइप</string>
+    <string name="pref_library_summary">श्रेणियाँ, सब कुछ अपडेट करें, अध्याय स्वाइप</string>
     <string name="pref_library_update_show_tab_badge">अपडेट आइकन पर अपठित संख्या दिखाएं</string>
     <string name="action_hide">छुपाएँ</string>
     <string name="label_all">सभी</string>
@@ -46,4 +46,10 @@
     <string name="download_paused">रोके गए</string>
     <string name="download_notifier_download_paused_chapters">डाउनलोड रोक दिया है</string>
     <string name="channel_new_chapters_episodes">अध्याय अद्यतन</string>
+    <string name="action_filter_started">शुरू हो गया</string>
+    <string name="action_sort_airing_time">प्रसारण का समय</string>
+    <string name="action_display_unseen_badge">अनदेखे एपिसोड</string>
+    <string name="action_reorganize_by">पुनः क्रमित करें</string>
+    <string name="action_continue">जारी रखे</string>
+    <string name="manga">Manga</string>
 </resources>
