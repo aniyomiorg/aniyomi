@@ -529,7 +529,6 @@ private fun AnimeScreenSmallImpl(
                         onDownloadEpisode = onDownloadEpisode,
                         onEpisodeSelected = onEpisodeSelected,
                         onEpisodeSwipe = onEpisodeSwipe,
-                        onBookmarkClick = onMultiBookmarkClicked,
                     )
                 }
             }
@@ -813,7 +812,6 @@ fun AnimeScreenLargeImpl(
                                 onDownloadEpisode = onDownloadEpisode,
                                 onEpisodeSelected = onEpisodeSelected,
                                 onEpisodeSwipe = onEpisodeSwipe,
-                                onBookmarkClick = onMultiBookmarkClicked,
                             )
                         }
                     }
@@ -893,7 +891,6 @@ private fun LazyListScope.sharedEpisodeItems(
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onEpisodeSelected: (EpisodeList.Item, Boolean, Boolean, Boolean) -> Unit,
     onEpisodeSwipe: (EpisodeList.Item, LibraryPreferences.EpisodeSwipeAction) -> Unit,
-    onBookmarkClick: (List<Episode>, bookmarked: Boolean) -> Unit,
 ) {
     items(
         items = episodes,
@@ -963,9 +960,6 @@ private fun LazyListScope.sharedEpisodeItems(
                     },
                     onEpisodeSwipe = {
                         onEpisodeSwipe(episodeItem, it)
-                    },
-                    onBookmarkClick = {
-                        onBookmarkClick(listOf(episodeItem.episode), it)
                     },
                 )
             }

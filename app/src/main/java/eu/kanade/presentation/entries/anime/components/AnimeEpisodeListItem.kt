@@ -2,7 +2,6 @@ package eu.kanade.presentation.entries.anime.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +29,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +57,6 @@ import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
-import tachiyomi.presentation.core.components.material.IconButtonTokens
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
@@ -87,7 +84,6 @@ fun AnimeEpisodeListItem(
     onClick: () -> Unit,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
     onEpisodeSwipe: (LibraryPreferences.EpisodeSwipeAction) -> Unit,
-    onBookmarkClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val start = getSwipeAction(
@@ -135,12 +131,10 @@ fun AnimeEpisodeListItem(
                     scanlator = scanlator,
                     seen = seen,
                     bookmark = bookmark,
-                    isAnyEpisodeSelected = isAnyEpisodeSelected,
                     downloadIndicatorEnabled = downloadIndicatorEnabled,
                     downloadStateProvider = downloadStateProvider,
                     downloadProgressProvider = downloadProgressProvider,
                     onDownloadClick = onDownloadClick,
-                    onBookmarkClick = onBookmarkClick,
                 )
                 return@Row
             }
@@ -172,8 +166,6 @@ fun AnimeEpisodeListItem(
                             if (previewUrl == null) {
                                 BookmarkDownloadIcons(
                                     bookmark = bookmark,
-                                    onBookmarkClick = onBookmarkClick,
-                                    isAnyEpisodeSelected = isAnyEpisodeSelected,
                                     downloadIndicatorEnabled = downloadIndicatorEnabled,
                                     downloadStateProvider = downloadStateProvider,
                                     downloadProgressProvider = downloadProgressProvider,
@@ -206,8 +198,6 @@ fun AnimeEpisodeListItem(
                     if (previewUrl != null) {
                         BookmarkDownloadIcons(
                             bookmark = bookmark,
-                            onBookmarkClick = onBookmarkClick,
-                            isAnyEpisodeSelected = isAnyEpisodeSelected,
                             downloadIndicatorEnabled = downloadIndicatorEnabled,
                             downloadStateProvider = downloadStateProvider,
                             downloadProgressProvider = downloadProgressProvider,
@@ -229,12 +219,10 @@ private fun RowScope.SimpleEpisodeListItemImpl(
     scanlator: String?,
     seen: Boolean,
     bookmark: Boolean,
-    isAnyEpisodeSelected: Boolean,
     downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
-    onBookmarkClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -260,8 +248,6 @@ private fun RowScope.SimpleEpisodeListItemImpl(
 
     BookmarkDownloadIcons(
         bookmark = bookmark,
-        onBookmarkClick = onBookmarkClick,
-        isAnyEpisodeSelected = isAnyEpisodeSelected,
         downloadIndicatorEnabled = downloadIndicatorEnabled,
         downloadStateProvider = downloadStateProvider,
         downloadProgressProvider = downloadProgressProvider,
@@ -477,14 +463,11 @@ private fun EpisodeInformation(
 @Composable
 private fun BookmarkDownloadIcons(
     bookmark: Boolean,
-    onBookmarkClick: (Boolean) -> Unit,
-    isAnyEpisodeSelected: Boolean,
     downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
 ) {
-    val bookmarkInteraction = remember { MutableInteractionSource() }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (bookmark) {
@@ -493,20 +476,7 @@ private fun BookmarkDownloadIcons(
                 contentDescription = stringResource(MR.strings.action_filter_bookmarked),
                 modifier = Modifier
                     .secondaryItemAlpha()
-                    .padding(start = 4.dp)
-                    .then(
-                        if (isAnyEpisodeSelected) {
-                            Modifier
-                        } else {
-                            Modifier.clickable(
-                                interactionSource = bookmarkInteraction,
-                                indication = ripple(
-                                    bounded = false,
-                                    radius = IconButtonTokens.StateLayerSize / 2,
-                                ),
-                            ) { onBookmarkClick(!bookmark) }
-                        },
-                    ),
+                    .padding(start = 4.dp),
                 tint = MaterialTheme.colorScheme.primary,
             )
         }
@@ -546,6 +516,5 @@ fun AnimeEpisodeListItemPreview() {
         onClick = {},
         onDownloadClick = {},
         onEpisodeSwipe = {},
-        onBookmarkClick = {},
     )
 }
