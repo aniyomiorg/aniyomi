@@ -393,4 +393,9 @@
     <string name="onboarding_storage_action_create_folder">Crear carpeta de Aniyomi por defecto</string>
     <string name="download_speed_limit">Límite de velocidad de la descarga</string>
     <string name="download_speed_limit_hint">Establezca en 0 para desactivar el límite de velocidad de descarga.</string>
+    <string name="action_display_unseen_badge">Episodios sin ver</string>
+    <string name="action_stop">Parar</string>
+    <string name="action_continue">Continuar</string>
+    <string name="manga">Manga</string>
+    <string name="pref_behavior">Comportamiento del capítulo</string>
 </resources>
