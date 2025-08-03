@@ -493,4 +493,7 @@
     <string name="pref_mark_duplicate_seen_episode_seen">Segna come visto l\'episodio duplicato già visto</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">Dopo aver guardato un episodio</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">Dopo aver recuperato un nuovo episodio</string>
+    <string name="player_sheets_track_palette">Schema</string>
+    <string name="action_continue">Continua</string>
+    <string name="action_stop">Ferma</string>
 </resources>
