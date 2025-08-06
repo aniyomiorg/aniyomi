@@ -500,7 +500,8 @@ fun AnimeEpisodeListItemPreview() {
         date = "7/4/13",
         watchProgress = null,
         scanlator = null,
-        summary = "As Titans continue to rampage, the townspeople gather at the inner gate. But a new Titan breaks through and this one is unlike the others. Source: crunchyroll",
+        summary = "As Titans continue to rampage, the townspeople gather at the inner gate. But a new Titan breaks " +
+            "through and this one is unlike the others. Source: crunchyroll",
         previewUrl = null,
         seen = false,
         bookmark = false,
