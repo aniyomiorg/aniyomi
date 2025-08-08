@@ -87,7 +87,7 @@
     <string name="enable_auto_play">La lecture automatique est activée</string>
     <string name="disable_auto_play">La lecture automatique est désactivée</string>
     <string name="player_aniskip_dontskip">Ne pas passer</string>
-    <string name="player_aniskip_dontskip_toast">Passer dans %d secondes</string>
+    <string name="player_aniskip_dontskip_toast">Passage de %s dans %d secondes</string>
     <string name="player_aniskip_skip">%s passer</string>
     <string name="no_next_episode">L\'épisode suivant n\'a pas été trouvé !</string>
     <string name="player_hwdec_mode">Définir le mode de décodage matériel par défaut</string>
@@ -216,7 +216,7 @@
     <string name="no_episodes_error">Aucun épisode trouvé</string>
     <string name="watching">En lecture</string>
     <string name="currently_reading">Lecture en cours</string>
-    <string name="currently_watching">Lecture en cours</string>
+    <string name="currently_watching">Vissionage en cours</string>
     <string name="plan_to_watch">À regarder</string>
     <string name="not_interesting">Pas intéressant</string>
     <string name="want_to_read">Envie de le lire</string>
@@ -305,7 +305,7 @@
     <string name="pref_auto_update_manga_on_mark_read">Mise à jour de la progression quand marqué comme lu/vu</string>
     <string name="pref_clear_chapter_cache">Effacer le cache des chapitres et des épisodes</string>
     <string name="pref_auto_clear_chapter_cache">Vider le cache de chapitre/épisode au lancement de l\'application</string>
-    <string name="clear_database_confirmation">Êtes-vous sûr(e)? Les épisodes et chapitres lus et la progression des entrées hors de la bibliothèque seront perdues</string>
+    <string name="clear_database_confirmation">Êtes-vous sûr(e) ? Les épisodes et chapitres lus et la progression des entrées hors de la bibliothèque seront perdues</string>
     <string name="pref_incognito_mode_summary">Suspend l\'historique de lecture</string>
     <string name="manga_from_library">Manga de la bibliothèque</string>
     <string name="also_set_chapter_settings_for_library">S\'applique également à toutes les manga de ma bibliothèque</string>
@@ -331,7 +331,7 @@
     <string name="pref_player_time_to_disappear_summary">%1$s ms</string>
     <string name="pref_panel_opacity">Opacité du panneau</string>
     <string name="pref_category_intro_skip">Passer l’introduction</string>
-    <string name="pref_enable_intro_skip">Activer « passer l’intro »</string>
+    <string name="pref_enable_intro_skip">Activer le saut de l’intro</string>
     <string name="pref_disable_aniskip_chapter">Désactiver AniSkip si la vidéo contient déjà des chapitres</string>
     <string name="pref_category_player_sliders">Curseurs</string>
     <string name="pref_controls_swap_vol_brightness">Échanger les curseurs de volume et de luminosité</string>
@@ -376,7 +376,7 @@
     <string name="pref_player_custom_button_startup">Au démarrage</string>
     <string name="pref_player_custom_button_id">(ID : %d)</string>
     <string name="pref_player_editor">Éditeur de scripts</string>
-    <string name="pref_player_editor_summary">Éditer et créer de nouveaux scripts et options de script</string>
+    <string name="pref_player_editor_summary">Modifier et créer de nouveaux scripts et options de script</string>
     <string name="pref_player_editor_script">Scripts</string>
     <string name="pref_player_editor_script_opts">Options de script</string>
     <string name="pref_player_no_items">Le dossier ne contient aucun élément. Appuyez sur le bouton plus pour ajouter un fichier.</string>
