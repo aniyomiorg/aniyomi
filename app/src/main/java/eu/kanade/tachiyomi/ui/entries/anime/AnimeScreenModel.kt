@@ -1657,7 +1657,7 @@ class AnimeScreenModel(
                 val unseenFilter = anime.seasonUnseenFilter
                 val downloadedFilter = anime.seasonDownloadedFilter
                 val startedFilter = anime.seasonStartedFilter
-                val bookmarkedFilter = anime.bookmarkedFilter
+                val bookmarkedFilter = anime.seasonBookmarkedFilter
                 val completedFilter = anime.seasonCompletedFilter
 
                 val comparator = getSeasonSortComparator(anime)
