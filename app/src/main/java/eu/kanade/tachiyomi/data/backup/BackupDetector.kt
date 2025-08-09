@@ -19,7 +19,7 @@ object BackupDetector {
     ) {
         @Serializable
         data class DetectAnimeSource(
-            @ProtoNumber(1) val name: String,
+            @ProtoNumber(1) val name: String = "",
             @ProtoNumber(2) val sourceId: Long,
         )
     }
