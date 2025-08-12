@@ -21,7 +21,7 @@
         <item quantity="other">Missing %1$s items</item>
     </plurals>
     <plurals name="next_unseen_episodes">
-        <item quantity="one">Next unseen episodes</item>
+        <item quantity="one">Next unseen episode</item>
         <item quantity="other">Next %d unseen episodes</item>
     </plurals>
     <plurals name="anime_num_episodes">
