@@ -39,12 +39,14 @@ data class BackupAnime(
     @ProtoNumber(106) var lastModifiedAt: Long = 0,
     @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
     @ProtoNumber(109) var version: Long = 0,
-    @ProtoNumber(110) var fetchType: FetchType = FetchType.Episodes,
-    @ProtoNumber(111) var parentId: Long? = null,
-    @ProtoNumber(112) var id: Long, // Used to associate seasons with parents. Do not use for anything else.
-    @ProtoNumber(113) var seasonFlags: Long = 0,
-    @ProtoNumber(114) var seasonNumber: Double = 0.0,
-    @ProtoNumber(115) var seasonSourceOrder: Long = 0,
+
+    // Aniyomi specific values
+    @ProtoNumber(501) var fetchType: FetchType = FetchType.Episodes,
+    @ProtoNumber(502) var parentId: Long? = null,
+    @ProtoNumber(503) var id: Long, // Used to associate seasons with parents. Do not use for anything else.
+    @ProtoNumber(504) var seasonFlags: Long = 0,
+    @ProtoNumber(505) var seasonNumber: Double = 0.0,
+    @ProtoNumber(506) var seasonSourceOrder: Long = 0,
 ) {
     fun getAnimeImpl(): Anime {
         return Anime.create().copy(
