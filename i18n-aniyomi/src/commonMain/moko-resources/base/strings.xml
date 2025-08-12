@@ -7,6 +7,8 @@
     <string name="action_display_unseen_badge">Unseen episodes</string>
     <string name="action_reorganize_by">Reorder</string>
     <string name="relative_time_now">Now</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_continue">Continue</string>
 
     <!-- Changed from mihon -->
     <string name="manga">Manga</string>

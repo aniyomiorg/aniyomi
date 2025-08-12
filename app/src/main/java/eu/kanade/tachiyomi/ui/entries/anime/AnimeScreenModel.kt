@@ -183,7 +183,7 @@ class AnimeScreenModel(
     private val updateFetchTypeMutex = Mutex()
 
     internal val autoOpenTrack: Boolean
-        get() = successState?.trackingAvailable == true && trackPreferences.trackOnAddingToLibrary().get()
+        get() = successState?.hasLoggedInTrackers == true && trackPreferences.trackOnAddingToLibrary().get()
 
     /**
      * Helper function to update the UI state only if it's currently in success state
