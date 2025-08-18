@@ -340,4 +340,16 @@
     <string name="pref_player_audio">Dźwięk</string>
     <string name="pref_player_audio_summary">Preferowane języki, korekcja wysokości dźwięku, kanały dźwiękowe</string>
     <string name="pref_player_audio_lang">Preferowane języki</string>
+    <string name="pref_player_audio_channels">Kanały audio</string>
+    <string name="pref_player_audio_channels_mono">Mono</string>
+    <string name="pref_player_audio_channels_stereo">Stereo</string>
+    <string name="pref_player_custom_button_add">Dodaj przycisk</string>
+    <string name="pref_player_custom_button_edit">Zmień przycisk</string>
+    <string name="pref_player_custom_button_title">Tytuł</string>
+    <string name="pref_player_custom_button_error_exists">Przycisk już istnieje!</string>
+    <string name="pref_player_custom_button_optional">(opcjonalne)</string>
+    <string name="pref_player_custom_button_delete">Usuń przycisk</string>
+    <string name="pref_player_custom_button_delete_confirm">Czy chcesz usunąć przycisk %s?</string>
+    <string name="pref_player_custom_button_startup">Po włączeniu</string>
+    <string name="pref_player_custom_button_id">(ID: %d)</string>
 </resources>
