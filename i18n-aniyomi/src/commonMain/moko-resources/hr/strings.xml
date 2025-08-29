@@ -389,11 +389,11 @@
     <string name="pref_episode_swipe_start">Epizoda pri povlačenju prema lijevo</string>
     <string name="pref_category_hide_hidden">Sakrij skrivene kategorije s ekrana kategorija</string>
     <string name="pref_update_anime_release_grace_period">Očekivano razdoblje odgode izdavanje animea</string>
-    <string name="data_saver_exclude">Isključi iz spremača podataka</string>
-    <string name="data_saver_stop_exclude">Prestani isključivati iz spremača podataka</string>
-    <string name="data_saver">Spremač podataka</string>
+    <string name="data_saver_exclude">Isključi iz uštede podataka</string>
+    <string name="data_saver_stop_exclude">Prestani isključivati iz uštede podataka</string>
+    <string name="data_saver">Uštede podataka</string>
     <string name="data_saver_summary">Komprimiraj slike prije preuzimanja ili učitavanja u čitač</string>
-    <string name="data_saver_downloader">Koristi spremač podataka u programu za preuzimanje</string>
+    <string name="data_saver_downloader">Koristi uštedu podataka u programu za preuzimanje</string>
     <string name="data_saver_ignore_jpeg">Zanemari Jpeg slike</string>
     <string name="data_saver_ignore_gif">Zanemari Gif animacije</string>
     <string name="data_saver_image_quality">Kvaliteta slike</string>
@@ -495,4 +495,5 @@
     <string name="player_sheets_qualities_title">Kvalitete</string>
     <string name="player_sheets_chapters_title">Poglavlja</string>
     <string name="type">Vrsta</string>
+    <string name="select_hoster_from_empty_list">Usluga hostinga odabrana iz praznog popisa</string>
 </resources>
