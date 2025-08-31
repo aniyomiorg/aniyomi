@@ -398,4 +398,5 @@
     <string name="action_continue">Continuar</string>
     <string name="manga">Manga</string>
     <string name="pref_behavior">Comportamiento del capítulo</string>
+    <string name="action_add_repo_message">Español «index.min.json»</string>
 </resources>
