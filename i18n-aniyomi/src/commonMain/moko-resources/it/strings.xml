@@ -495,5 +495,5 @@
     <string name="pref_mark_duplicate_seen_episode_seen_new">Dopo aver recuperato un nuovo episodio</string>
     <string name="player_sheets_track_palette">Schema</string>
     <string name="action_continue">Continua</string>
-    <string name="action_stop">Ferma</string>
+    <string name="action_stop">Interrompi</string>
 </resources>
