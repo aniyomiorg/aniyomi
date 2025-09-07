@@ -5,7 +5,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 data class LibraryAnime(
     val anime: Anime,
     val category: Long,
-    val totalEpisodes: Long,
+    val totalCount: Long,
     val seenCount: Long,
     val bookmarkCount: Long,
     val latestUpload: Long,
@@ -15,7 +15,7 @@ data class LibraryAnime(
     val id: Long = anime.id
 
     val unseenCount
-        get() = totalEpisodes - seenCount
+        get() = totalCount - seenCount
 
     val hasBookmarks
         get() = bookmarkCount > 0

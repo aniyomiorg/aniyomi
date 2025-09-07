@@ -1,7 +1,9 @@
 package tachiyomi.domain.entries.anime.model
 
 import androidx.compose.runtime.Immutable
+import aniyomi.domain.anime.SeasonDisplayMode
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import tachiyomi.core.common.preference.TriState
 import java.io.Serializable
@@ -33,6 +35,11 @@ data class Anime(
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
     val version: Long,
+    val fetchType: FetchType,
+    val parentId: Long?,
+    val seasonFlags: Long,
+    val seasonNumber: Double,
+    val seasonSourceOrder: Long,
 ) : Serializable {
 
     val expectedNextUpdate: Instant?
@@ -85,6 +92,82 @@ data class Anime(
         return episodeFlags and EPISODE_SORT_DIR_MASK == EPISODE_SORT_DESC
     }
 
+    val seasonDownloadedFilterRaw: Long
+        get() = seasonFlags and SEASON_DOWNLOADED_MASK
+
+    val seasonUnseenFilterRaw: Long
+        get() = seasonFlags and SEASON_UNSEEN_MASK
+
+    val seasonStartedFilterRaw: Long
+        get() = seasonFlags and SEASON_STARTED_MASK
+
+    val seasonBookmarkedFilterRaw: Long
+        get() = seasonFlags and SEASON_BOOKMARKED_MASK
+
+    val seasonCompletedFilterRaw: Long
+        get() = seasonFlags and SEASON_COMPLETED_MASK
+
+    val seasonUnseenFilter: TriState
+        get() = when (seasonUnseenFilterRaw) {
+            SEASON_SHOW_UNSEEN -> TriState.ENABLED_IS
+            SEASON_SHOW_SEEN -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
+        }
+
+    val seasonStartedFilter: TriState
+        get() = when (seasonStartedFilterRaw) {
+            SEASON_SHOW_STARTED -> TriState.ENABLED_IS
+            SEASON_SHOW_NOT_STARTED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
+        }
+
+    val seasonBookmarkedFilter: TriState
+        get() = when (seasonBookmarkedFilterRaw) {
+            SEASON_SHOW_BOOKMARKED -> TriState.ENABLED_IS
+            SEASON_SHOW_NOT_BOOKMARKED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
+        }
+
+    val seasonCompletedFilter: TriState
+        get() = when (seasonCompletedFilterRaw) {
+            SEASON_SHOW_COMPLETED -> TriState.ENABLED_IS
+            SEASON_SHOW_NOT_COMPLETED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
+        }
+
+    val seasonSorting: Long
+        get() = seasonFlags and SEASON_SORT_MASK
+
+    fun seasonSortDescending(): Boolean {
+        return seasonFlags and SEASON_SORT_DIR_MASK == SEASON_SORT_DESC
+    }
+
+    val seasonDisplayGridMode: SeasonDisplayMode
+        get() = SeasonDisplayMode.fromLong(
+            (seasonFlags and SEASON_GRID_DISPLAY_MODE_MASK) shr SEASON_GRID_DISPLAY_MODE_BIT_OFFSET,
+        )
+
+    val seasonDisplayGridSize: Int
+        get() = ((seasonFlags and SEASON_GRID_DISPLAY_SIZE_MASK) shr SEASON_GRID_DISPLAY_SIZE_BIT_OFFSET).toInt()
+
+    val seasonDownloadedOverlay: Boolean
+        get() = (seasonFlags and SEASON_OVERLAY_DOWNLOADED_MASK) == SEASON_OVERLAY_DOWNLOADED_MASK
+
+    val seasonUnseenOverlay: Boolean
+        get() = (seasonFlags and SEASON_OVERLAY_UNSEEN_MASK) == SEASON_OVERLAY_UNSEEN_MASK
+
+    val seasonLocalOverlay: Boolean
+        get() = (seasonFlags and SEASON_OVERLAY_LOCAL_MASK) == SEASON_OVERLAY_LOCAL_MASK
+
+    val seasonLangOverlay: Boolean
+        get() = (seasonFlags and SEASON_OVERLAY_LANG_MASK) == SEASON_OVERLAY_LANG_MASK
+
+    val seasonContinueOverlay: Boolean
+        get() = (seasonFlags and SEASON_OVERLAY_CONT_MASK) == SEASON_OVERLAY_CONT_MASK
+
+    val seasonDisplayMode: Long
+        get() = seasonFlags and SEASON_DISPLAY_MODE_MASK
+
     private fun Long.removeHexZeros(zeros: Int): Long {
         val hex = 16.0
         return this.div(hex.pow(zeros)).toLong()
@@ -120,6 +203,55 @@ data class Anime(
         const val EPISODE_DISPLAY_NUMBER = 0x00100000L
         const val EPISODE_DISPLAY_MASK = 0x00100000L
 
+        const val SEASON_SORT_DESC = 0x00000000L
+        const val SEASON_SORT_ASC = 0x00000001L
+        const val SEASON_SORT_DIR_MASK = 0x00000001L
+
+        const val SEASON_SHOW_DOWNLOADED = 0x00000002L
+        const val SEASON_SHOW_NOT_DOWNLOADED = 0x00000004L
+        const val SEASON_DOWNLOADED_MASK = 0x00000006L
+
+        const val SEASON_SHOW_UNSEEN = 0x00000008L
+        const val SEASON_SHOW_SEEN = 0x00000010L
+        const val SEASON_UNSEEN_MASK = 0x00000018L
+
+        const val SEASON_SHOW_STARTED = 0x00000020L
+        const val SEASON_SHOW_NOT_STARTED = 0x00000040L
+        const val SEASON_STARTED_MASK = 0x00000060L
+
+        const val SEASON_SHOW_BOOKMARKED = 0x00000080L
+        const val SEASON_SHOW_NOT_BOOKMARKED = 0x00000100L
+        const val SEASON_BOOKMARKED_MASK = 0x00000180L
+
+        const val SEASON_SHOW_COMPLETED = 0x00000200L
+        const val SEASON_SHOW_NOT_COMPLETED = 0x00000400L
+        const val SEASON_COMPLETED_MASK = 0x00000600L
+
+        const val SEASON_SORT_SOURCE = 0x00000000L
+        const val SEASON_SORT_SEASON = 0x00000800L
+        const val SEASON_SORT_UPLOAD = 0x00001000L
+        const val SEASON_SORT_ALPHABET = 0x00001800L
+        const val SEASON_SORT_COUNT = 0x00002000L
+        const val SEASON_SORT_LAST_SEEN = 0x00002800L
+        const val SEASON_SORT_FETCHED = 0x00003000L
+        const val SEASON_SORT_MASK = 0x00003800L
+
+        const val SEASON_GRID_DISPLAY_MODE_BIT_OFFSET = 14
+        const val SEASON_GRID_DISPLAY_MODE_MASK = 0x0000C000L
+
+        const val SEASON_GRID_DISPLAY_SIZE_BIT_OFFSET = 16
+        const val SEASON_GRID_DISPLAY_SIZE_MASK = 0x000F0000L
+
+        const val SEASON_OVERLAY_DOWNLOADED_MASK = 0x00100000L
+        const val SEASON_OVERLAY_UNSEEN_MASK = 0x00200000L
+        const val SEASON_OVERLAY_LOCAL_MASK = 0x00400000L
+        const val SEASON_OVERLAY_LANG_MASK = 0x00800000L
+        const val SEASON_OVERLAY_CONT_MASK = 0x01000000L
+
+        const val SEASON_DISPLAY_MODE_SOURCE = 0x00000000L
+        const val SEASON_DISPLAY_MODE_NUMBER = 0x02000000L
+        const val SEASON_DISPLAY_MODE_MASK = 0x02000000L
+
         const val ANIME_INTRO_MASK = 0x0000000000000FFL
         const val ANIME_AIRING_EPISODE_MASK = 0x000000000FFFF00L
         const val ANIME_AIRING_TIME_MASK = 0x0FFFFFFFF000000L
@@ -149,6 +281,11 @@ data class Anime(
             lastModifiedAt = 0L,
             favoriteModifiedAt = null,
             version = 0L,
+            fetchType = FetchType.Unknown,
+            parentId = null,
+            seasonFlags = 0L,
+            seasonNumber = -1.0,
+            seasonSourceOrder = 0L,
         )
     }
 }

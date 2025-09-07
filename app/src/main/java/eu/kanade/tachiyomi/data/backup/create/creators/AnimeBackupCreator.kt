@@ -92,4 +92,10 @@ private fun Anime.toBackupAnime() =
         lastModifiedAt = this.lastModifiedAt,
         favoriteModifiedAt = this.favoriteModifiedAt,
         version = this.version,
+        fetchType = this.fetchType,
+        parentId = this.parentId,
+        id = this.id,
+        seasonFlags = this.seasonFlags,
+        seasonNumber = this.seasonNumber,
+        seasonSourceOrder = this.seasonSourceOrder,
     )
