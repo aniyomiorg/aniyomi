@@ -10,4 +10,7 @@
     <string name="download_ahead_info">നിലവിലെ അദ്ധ്യായം/എപ്പിസോഡ് + അടുത്തത് ഡൗൺലോഡ് ചെയ്‌തിട്ടുണ്ടെങ്കിൽ മാത്രമേ പ്രവർത്തിക്കൂ.</string>
     <string name="non_library_settings">വായിച്ച/കണ്ട എല്ലാ എൻട്രികളും</string>
     <string name="action_sort_last_manga_update">അവസാന മാംഗ അപ്‌ഡേറ്റ്</string>
+    <string name="manga">മാംഗ</string>
+    <string name="action_show_manga">മാംഗയെ കാണിക്കൂ</string>
+    <string name="action_display_show_continue_reading_button">കാണുന്നത്/വായന തുടരുക ബട്ടൺ</string>
 </resources>
