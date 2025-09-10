@@ -40,7 +40,7 @@ object AnimeUpdateStrategyColumnAdapter : ColumnAdapter<AnimeUpdateStrategy, Lon
 
 object FetchTypeColumnAdapter : ColumnAdapter<FetchType, Long> {
     override fun decode(databaseValue: Long): FetchType =
-        FetchType.entries.getOrElse(databaseValue.toInt()) { FetchType.Unknown }
+        FetchType.entries.getOrElse(databaseValue.toInt()) { FetchType.Episodes }
 
     override fun encode(value: FetchType): Long = value.ordinal.toLong()
 }

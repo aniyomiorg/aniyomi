@@ -281,7 +281,7 @@ data class Anime(
             lastModifiedAt = 0L,
             favoriteModifiedAt = null,
             version = 0L,
-            fetchType = FetchType.Unknown,
+            fetchType = FetchType.Episodes,
             parentId = null,
             seasonFlags = 0L,
             seasonNumber = -1.0,

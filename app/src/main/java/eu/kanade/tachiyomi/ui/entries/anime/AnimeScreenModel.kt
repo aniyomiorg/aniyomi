@@ -62,8 +62,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import logcat.LogPriority
 import mihon.domain.items.episode.interactor.FilterEpisodesForDownload
 import tachiyomi.core.common.i18n.stringResource
@@ -84,7 +82,6 @@ import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.interactor.SetAnimeSeasonFlags
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.entries.anime.model.NoSeasonsException
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.applyFilter
@@ -180,8 +177,6 @@ class AnimeScreenModel(
 
     internal var isFromChangeCategory: Boolean = false
 
-    private val updateFetchTypeMutex = Mutex()
-
     internal val autoOpenTrack: Boolean
         get() = successState?.hasLoggedInTrackers == true && trackPreferences.trackOnAddingToLibrary().get()
 
@@ -249,8 +244,8 @@ class AnimeScreenModel(
             }
 
             val needRefreshInfo = !anime.initialized
-            val needRefreshEpisode = episodes.isEmpty() && anime.fetchType != FetchType.Seasons
-            val needRefreshSeason = seasons.isEmpty() && anime.fetchType != FetchType.Episodes
+            val needRefreshEpisode = episodes.isEmpty() && anime.fetchType == FetchType.Episodes
+            val needRefreshSeason = seasons.isEmpty() && anime.fetchType == FetchType.Seasons
 
             // Show what we have earlier
             mutableState.update {
@@ -278,38 +273,6 @@ class AnimeScreenModel(
 
             // Initial loading finished
             updateSuccessState { it.copy(isRefreshingData = false) }
-        }
-    }
-
-    /**
-     * Update the fetch type of an anime. If the fetch type is the same as the one
-     * in the database, we don't need to update again. If they differ, an exception
-     * is thrown so it doesn't continue syncing.
-     */
-    private suspend fun updateFetchMode(anime: Anime, fetchType: FetchType) {
-        updateFetchTypeMutex.withLock {
-            val anime = animeRepository.getAnimeById(anime.id)
-            if (fetchType == anime.fetchType) return@withLock
-            when (anime.fetchType) {
-                FetchType.Seasons -> {
-                    throw NoEpisodesException()
-                }
-                FetchType.Episodes -> {
-                    throw NoSeasonsException()
-                }
-                FetchType.Unknown -> {}
-            }
-
-            val update = AnimeUpdate(
-                id = anime.id,
-                fetchType = fetchType,
-            )
-
-            updateAnime.await(update)
-
-            updateSuccessState {
-                it.copy(anime = anime.copy(fetchType = fetchType))
-            }
         }
     }
 
@@ -634,113 +597,88 @@ class AnimeScreenModel(
         }
     }
 
-    private suspend fun CoroutineScope.fetchEpisodesFromSource(
+    private suspend fun fetchEpisodesFromSource(manualFetch: Boolean = false) {
+        val state = successState ?: return
+        try {
+            withIOContext {
+                updateEpisodesFromSource(state.anime, state.source, manualFetch)
+            }
+        } catch (e: Throwable) {
+            val message = if (e is NoEpisodesException) {
+                context.stringResource(AYMR.strings.no_episodes_error)
+            } else {
+                logcat(LogPriority.ERROR, e)
+                with(context) { e.formattedMessage }
+            }
+
+            screenModelScope.launch {
+                snackbarHostState.showSnackbar(message = message)
+            }
+            val newAnime = animeRepository.getAnimeById(animeId)
+            updateSuccessState { it.copy(anime = newAnime, isRefreshingData = false) }
+        }
+    }
+
+    private suspend fun updateEpisodesFromSource(
         anime: Anime,
         source: AnimeSource,
         manualFetch: Boolean = false,
-    ): Result<Unit> {
-        return runCatching {
-            if (anime.fetchType == FetchType.Seasons) throw NoEpisodesException()
-            val episodes = source.getEpisodeList(anime.toSAnime())
+    ) {
+        val episodes = source.getEpisodeList(anime.toSAnime())
 
-            if (episodes.isNotEmpty()) {
-                updateFetchMode(anime, FetchType.Episodes)
+        val newEpisodes = syncEpisodesWithSource.await(
+            episodes,
+            anime,
+            source,
+            manualFetch,
+        )
+
+        if (manualFetch) {
+            downloadNewEpisodes(newEpisodes)
+        }
+    }
+
+    private suspend fun fetchSeasonsFromSource(manualFetch: Boolean = false) {
+        val state = successState ?: return
+        try {
+            withIOContext {
+                val seasons = state.source.getSeasonList(state.anime.toSAnime())
+
+                val newSeasons = syncSeasonsWithSource.await(
+                    seasons,
+                    state.anime,
+                    state.source,
+                )
+
+                if (libraryPreferences.updateSeasonOnRefresh().get()) {
+                    fetchEpisodesFromSeasons(newSeasons, manualFetch)
+                }
+            }
+        } catch (e: Throwable) {
+            val message = if (e is NoSeasonsException) {
+                context.stringResource(AYMR.strings.no_seasons_error)
+            } else {
+                logcat(LogPriority.ERROR, e)
+                with(context) { e.formattedMessage }
             }
 
-            val newEpisodes = syncEpisodesWithSource.await(
-                episodes,
-                anime,
-                source,
-                manualFetch,
-            )
-
-            if (manualFetch) {
-                downloadNewEpisodes(newEpisodes)
+            screenModelScope.launch {
+                snackbarHostState.showSnackbar(message = message)
             }
+            val newAnime = animeRepository.getAnimeById(animeId)
+            updateSuccessState { it.copy(anime = newAnime, isRefreshingData = false) }
         }
     }
 
     /**
      * Requests an updated list of episodes and seasons from the source.
      */
-    private suspend fun CoroutineScope.fetchEpisodesAndSeasonsFromSource(manualFetch: Boolean = false) {
+    private suspend fun fetchEpisodesAndSeasonsFromSource(manualFetch: Boolean = false) {
         val state = successState ?: return
 
-        val fetchFromSourceTasks = listOf(
-            async(Dispatchers.IO) {
-                fetchEpisodesFromSource(state.anime, state.source, manualFetch)
-            },
-            async(Dispatchers.IO) {
-                runCatching {
-                    if (state.anime.fetchType == FetchType.Episodes) throw NoSeasonsException()
-                    val seasons = state.source.getSeasonList(state.anime.toSAnime())
-
-                    if (seasons.isNotEmpty()) {
-                        updateFetchMode(state.anime, FetchType.Seasons)
-                    }
-
-                    val newSeasons = syncSeasonsWithSource.await(
-                        seasons,
-                        state.anime,
-                        state.source,
-                    )
-
-                    if (libraryPreferences.updateSeasonOnRefresh().get()) {
-                        fetchEpisodesFromSeasons(newSeasons, manualFetch)
-                    }
-                }
-            },
-        ).awaitAll()
-
-        val newAnime = animeRepository.getAnimeById(animeId)
-        val (episodeError, seasonError) = fetchFromSourceTasks.map { it.exceptionOrNull() }
-
-        val isEpisodeError = newAnime.fetchType == FetchType.Episodes && episodeError != null
-        val isSeasonError = newAnime.fetchType == FetchType.Seasons && seasonError != null
-
-        val message = with(context) {
-            when {
-                newAnime.fetchType == FetchType.Unknown && episodeError != null && seasonError != null -> {
-                    when {
-                        episodeError !is NoEpisodesException -> {
-                            logcat(LogPriority.ERROR, episodeError)
-                            episodeError.formattedMessage
-                        }
-                        seasonError !is NoSeasonsException -> {
-                            logcat(LogPriority.ERROR, seasonError)
-                            seasonError.formattedMessage
-                        }
-                        else -> stringResource(AYMR.strings.no_entries_error)
-                    }
-                }
-                isSeasonError -> {
-                    if (seasonError is NoSeasonsException) {
-                        stringResource(AYMR.strings.no_seasons_error)
-                    } else {
-                        logcat(LogPriority.ERROR, seasonError)
-                        seasonError.formattedMessage
-                    }
-                }
-                isEpisodeError -> {
-                    if (episodeError is NoEpisodesException) {
-                        stringResource(AYMR.strings.no_episodes_error)
-                    } else {
-                        logcat(LogPriority.ERROR, episodeError)
-                        episodeError.formattedMessage
-                    }
-                }
-                else -> null
-            }
-        }
-
-        message?.let {
-            screenModelScope.launch {
-                snackbarHostState.showSnackbar(message = message)
-            }
-        }
-
-        if (isEpisodeError || isSeasonError) {
-            updateSuccessState { it.copy(anime = newAnime, isRefreshingData = false) }
+        when (state.anime.fetchType) {
+            FetchType.Seasons -> fetchSeasonsFromSource(manualFetch)
+            FetchType.Episodes -> fetchEpisodesFromSource(manualFetch)
         }
     }
 
@@ -754,7 +692,11 @@ class AnimeScreenModel(
             // Only fetch seasons with `Episodes` fetch type and only for non completed, unless they
             // haven't been fetched at all.
             if (s.fetchType === FetchType.Episodes && (s.lastUpdate == 0L || s.status.toInt() != SAnime.COMPLETED)) {
-                fetchEpisodesFromSource(s, state.source, manualFetch)
+                try {
+                    updateEpisodesFromSource(s, state.source, manualFetch)
+                } catch (e: Throwable) {
+                    logcat(LogPriority.ERROR, e)
+                }
             }
         }
 
@@ -1535,7 +1477,6 @@ class AnimeScreenModel(
     fun showSettingsDialog() {
         updateSuccessState {
             when (it.anime.fetchType) {
-                FetchType.Unknown -> it
                 FetchType.Seasons -> it.copy(dialog = Dialog.SeasonSettingsSheet)
                 FetchType.Episodes -> it.copy(dialog = Dialog.EpisodeSettingsSheet)
             }

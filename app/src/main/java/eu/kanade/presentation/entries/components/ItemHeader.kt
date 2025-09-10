@@ -48,7 +48,6 @@ fun ItemHeader(
                     MR.plurals.manga_num_chapters
                 } else {
                     when (fetchType) {
-                        FetchType.Unknown -> AYMR.plurals.anime_num_entries
                         FetchType.Seasons -> AYMR.plurals.anime_num_seasons
                         FetchType.Episodes -> AYMR.plurals.anime_num_episodes
                     }
