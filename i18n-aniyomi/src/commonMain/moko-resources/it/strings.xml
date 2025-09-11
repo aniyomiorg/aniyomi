@@ -496,4 +496,19 @@
     <string name="player_sheets_track_palette">Schema</string>
     <string name="action_continue">Continua</string>
     <string name="action_stop">Interrompi</string>
+    <string name="sort_by_season_number">Per numero di stagione</string>
+    <string name="no_seasons_error">Nessuna stagione trovata</string>
+    <string name="no_entries_error">Nessuna voce entrata</string>
+    <string name="season_settings_updated">Impostazioni predefinite della stagione aggiornate</string>
+    <string name="season_settings">Impostazioni stagione</string>
+    <string name="pref_library_season">Stagione</string>
+    <string name="pref_update_seasons_refresh">Aggiorna le stagioni con gli episodi al refresh</string>
+    <string name="label_cant_migrate_episode">Impossibile migrare l’episodio alla stagione, seleziona una stagione per continuare</string>
+    <string name="label_cant_migrate_season">Impossibile migrare la stagione a episodio</string>
+    <string name="label_show_seasons">Mostra stagioni</string>
+    <string name="action_display_show_continue_watching_button">Pulsante continua a guardare</string>
+    <string name="action_display_grid_mode">Modalità di visualizzazione a griglia</string>
+    <string name="display_mode_season">Stagione %1$s</string>
+    <string name="show_season_number">Numero stagione</string>
+    <string name="pref_update_seasons_update">Aggiorna le stagioni con gli episodi all’aggiornamento della libreria</string>
 </resources>
