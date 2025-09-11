@@ -1298,7 +1298,9 @@ class PlayerViewModel @JvmOverloads constructor(
         getHosterVideoLinksJob = viewModelScope.launchIO {
             _hosterState.update { _ ->
                 hosterList.map { hoster ->
-                    if (hoster.videoList == null) {
+                    if (hoster.lazy) {
+                        HosterState.Idle(hoster.hosterName)
+                    } else if (hoster.videoList == null) {
                         HosterState.Loading(hoster.hosterName)
                     } else {
                         val videoList = hoster.videoList!!
@@ -1473,7 +1475,11 @@ class PlayerViewModel @JvmOverloads constructor(
                 _hosterState.updateAt(index, HosterState.Loading(hosterName))
 
                 viewModelScope.launchIO {
-                    val hosterState = EpisodeLoader.loadHosterVideos(currentSource.value!!, hosterList.value[index])
+                    val hosterState = EpisodeLoader.loadHosterVideos(
+                        source = currentSource.value!!,
+                        hoster = hosterList.value[index],
+                        force = true,
+                    )
                     _hosterState.updateAt(index, hosterState)
                 }
             }

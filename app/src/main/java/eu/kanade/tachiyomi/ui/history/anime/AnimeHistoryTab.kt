@@ -20,6 +20,7 @@ import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.HistoryDeleteDialog
 import eu.kanade.presentation.history.anime.AnimeHistoryScreen
+import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.season.MigrateSeasonSelectScreen
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialog
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeDialogScreenModel
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -140,6 +141,9 @@ fun Screen.animeHistoryTab(
                         screenModel = MigrateAnimeDialogScreenModel(),
                         onDismissRequest = onDismissRequest,
                         onClickTitle = { navigator.push(AnimeScreen(dialog.oldAnime.id)) },
+                        onClickSeasons = {
+                            navigator.push(MigrateSeasonSelectScreen(dialog.oldAnime, dialog.newAnime))
+                        },
                         onPopScreen = { navigator.replace(AnimeScreen(dialog.oldAnime.id)) },
                     )
                 }

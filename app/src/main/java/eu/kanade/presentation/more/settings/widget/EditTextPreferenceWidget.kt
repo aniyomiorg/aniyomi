@@ -38,6 +38,8 @@ fun EditTextPreferenceWidget(
     singleLine: Boolean = true,
     canBeBlank: Boolean = false,
     formatSubtitle: Boolean = true,
+    validate: (String) -> Boolean = { true },
+    errorMessage: @Composable ((String) -> String)? = null,
 ) {
     var isDialogShown by remember { mutableStateOf(false) }
 
@@ -69,7 +71,7 @@ fun EditTextPreferenceWidget(
                     value = textFieldValue,
                     onValueChange = { textFieldValue = it },
                     trailingIcon = {
-                        if (textFieldValue.text.isBlank() && !canBeBlank) {
+                        if ((textFieldValue.text.isBlank() && !canBeBlank) || !validate(textFieldValue.text)) {
                             Icon(imageVector = Icons.Filled.Error, contentDescription = null)
                         } else {
                             IconButton(onClick = { textFieldValue = TextFieldValue("") }) {
@@ -77,7 +79,12 @@ fun EditTextPreferenceWidget(
                             }
                         }
                     },
-                    isError = textFieldValue.text.isBlank() && !canBeBlank,
+                    supportingText = {
+                        if (!validate(textFieldValue.text) && errorMessage != null) {
+                            Text(errorMessage(textFieldValue.text))
+                        }
+                    },
+                    isError = (textFieldValue.text.isBlank() && !canBeBlank) || !validate(textFieldValue.text),
                     singleLine = singleLine,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -87,7 +94,10 @@ fun EditTextPreferenceWidget(
             ),
             confirmButton = {
                 TextButton(
-                    enabled = textFieldValue.text != value && (textFieldValue.text.isNotBlank() || canBeBlank),
+                    enabled =
+                    textFieldValue.text != value &&
+                        (textFieldValue.text.isNotBlank() || canBeBlank) &&
+                        validate(textFieldValue.text),
                     onClick = {
                         scope.launch {
                             if (onConfirm(textFieldValue.text)) {

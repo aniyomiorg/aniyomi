@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.anime.migration
 import dev.icerock.moko.resources.StringResource
 import eu.kanade.domain.entries.anime.model.hasCustomBackground
 import eu.kanade.domain.entries.anime.model.hasCustomCover
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.data.cache.AnimeBackgroundCache
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
@@ -62,7 +63,10 @@ object AnimeMigrationFlags {
     /** Returns information about applicable flags with default selections. */
     fun getFlags(anime: Anime?, defaultSelectedBitMap: Int): List<AnimeMigrationFlag> {
         val flags = mutableListOf<AnimeMigrationFlag>()
-        flags += AnimeMigrationFlag.create(EPISODES, defaultSelectedBitMap, AYMR.strings.episodes)
+
+        if (anime?.fetchType == FetchType.Episodes) {
+            flags += AnimeMigrationFlag.create(EPISODES, defaultSelectedBitMap, AYMR.strings.episodes)
+        }
         flags += AnimeMigrationFlag.create(CATEGORIES, defaultSelectedBitMap, MR.strings.categories)
 
         if (anime != null) {

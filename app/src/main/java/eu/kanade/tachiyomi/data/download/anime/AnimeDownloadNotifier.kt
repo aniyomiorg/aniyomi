@@ -83,7 +83,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 // Pause action
                 addAction(
                     R.drawable.ic_pause_24dp,
-                    context.stringResource(MR.strings.action_pause),
+                    context.stringResource(AYMR.strings.action_stop),
                     NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context),
                 )
                 addAction(

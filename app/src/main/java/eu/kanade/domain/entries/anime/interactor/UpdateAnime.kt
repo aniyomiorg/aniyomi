@@ -113,15 +113,15 @@ class UpdateAnime(
         return animeRepository.updateAnime(AnimeUpdate(id = animeId, lastUpdate = Instant.now().toEpochMilli()))
     }
 
-    suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
+    suspend fun awaitUpdateCoverLastModified(animeId: Long): Boolean {
         return animeRepository.updateAnime(
-            AnimeUpdate(id = mangaId, coverLastModified = Instant.now().toEpochMilli()),
+            AnimeUpdate(id = animeId, coverLastModified = Instant.now().toEpochMilli()),
         )
     }
 
-    suspend fun awaitUpdateBackgroundLastModified(mangaId: Long): Boolean {
+    suspend fun awaitUpdateBackgroundLastModified(animeId: Long): Boolean {
         return animeRepository.updateAnime(
-            AnimeUpdate(id = mangaId, backgroundLastModified = Instant.now().toEpochMilli()),
+            AnimeUpdate(id = animeId, backgroundLastModified = Instant.now().toEpochMilli()),
         )
     }
 

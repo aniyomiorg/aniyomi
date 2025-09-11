@@ -7,6 +7,8 @@
     <string name="action_display_unseen_badge">Unseen episodes</string>
     <string name="action_reorganize_by">Reorder</string>
     <string name="relative_time_now">Now</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_continue">Continue</string>
 
     <!-- Changed from mihon -->
     <string name="manga">Manga</string>
@@ -39,7 +41,9 @@
 
     <!-- Player settings -->
     <string name="label_player_settings">Player settings</string>
+    <string name="label_player">Player</string>
     <string name="action_search_player_settings">Search player settings</string>
+    <string name="pref_player_settings_summary">Internal player, gestures, decoders, subtitles</string>
 
     <!-- Player settings - internal player -->
     <string name="pref_player_internal">Internal player</string>
@@ -154,6 +158,7 @@
     <string name="pref_player_subtitle_summary">Preferred languages, whitelist, blacklist</string>
     <string name="pref_player_subtitle_lang">Preferred languages</string>
     <string name="pref_player_subtitle_lang_info">Subtitle language(s) to be selected by default on a video with multiple subtitles, Two- or three-letter languages codes work. Multiple values can be delimited by a comma.</string>
+    <string name="pref_player_subtitle_invalid_lang">Invalid code: \"%s\"</string>
     <string name="pref_player_subtitle_whitelist">Whitelist</string>
     <string name="pref_player_subtitle_whitelist_info">Whitelist for subtitles. If a whitelist is defined, the first subtitle that contains a whitelisted word will be used. Multiple values can be delimited by a comma.</string>
     <string name="pref_player_subtitle_blacklist">Blacklist</string>
@@ -216,9 +221,9 @@
 
     <!-- Player settings - Advanced -->
     <string name="pref_player_advanced">Advanced</string>
-    <string name="pref_player_advanced_summary">Scripts, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Enable MPV scripts</string>
-    <string name="pref_mpv_scripts_summary">Needs external storage permission.</string>
+    <string name="pref_player_advanced_summary">User files, mpv.conf, input.conf</string>
+    <string name="pref_mpv_user_files">Use user MPV files</string>
+    <string name="pref_mpv_user_files_summary">Use files in mpv-config directory</string>
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
     <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
     <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
@@ -245,7 +250,6 @@
     <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
     <string name="toast_sleep_timer_ended">Sleep timer ended</string>
     <string name="player_generic_unit_ms">ms</string>
-    <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
     <string name="numeric_chooser_value_too_big">Value too big</string>
     <string name="numeric_chooser_value_too_small">Value too small</string>
     <string name="enable_auto_play">Auto-play is on</string>
@@ -307,9 +311,6 @@
     <string name="player_sheets_sub_typography_border_style">Border style</string>
     <string name="player_sheets_sub_typography_border_size">Border size</string>
     <string name="player_sheets_subtitles_shadow_offset">Shadow offset</string>
-    <string name="player_sheets_subtitles_border_style_outline_and_shadow">Outline and shadow</string>
-    <string name="player_sheets_subtitles_border_style_opaque_box">Opaque box</string>
-    <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
 
     <!-- Sheets - Miscellaneous -->
     <string name="player_sheets_sub_misc_title">Miscellaneous</string>
@@ -351,7 +352,6 @@
     <string name="player_sheets_stats_page_chip">Page %d</string>
     <string name="player_sheets_custom_buttons_title">Custom buttons</string>
     <string name="player_seek_n_seconds">%d seconds</string>
-    <string name="player_speed" translatable="false">%.2fx</string>
     <string name="player_gesture_seek_indicator" translatable="false">%c%s\n[%s]</string>
     <string name="timer_title">Sleep Timer</string>
     <string name="timer_remaining">%s remaining</string>
@@ -394,6 +394,11 @@
     <string name="confirm_tracker_update_anime">Update trackers to episode %d?</string>
     <string name="trackers_updated_summary_manga">Trackers updated to chapter %d</string>
     <string name="trackers_updated_summary_anime">Trackers updated to episode %d</string>
+
+    <!-- Migrate dialog -->
+    <string name="label_cant_migrate_episode">Unable to migrate episode to season, select season to continue</string>
+    <string name="label_cant_migrate_season">Unable to migrate season to episode</string>
+    <string name="label_show_seasons">Show seasons</string>
 
     <!-- Other -->
     <string name="download_notifier_download_finish">Download completed</string>
@@ -451,6 +456,8 @@
     <string name="action_screen_fit">Screen fit mode</string>
     <string name="action_show_anime">Show anime</string>
     <string name="action_display_download_badge_anime">Downloaded episodes</string>
+    <string name="action_display_show_continue_watching_button">Continue watching button</string>
+    <string name="action_display_grid_mode">Grid display mode</string>
     <string name="action_display_local_badge_manga">Local manga</string>
     <string name="action_display_local_badge_anime">Local anime</string>
     <string name="pref_search_pinned_manga_sources_only">Only search pinned manga sources in global search</string>
@@ -500,15 +507,19 @@
     <string name="snack_add_to_manga_library">Add manga to library?</string>
     <string name="snack_add_to_anime_library">Add anime to library?</string>
     <string name="display_mode_episode">Episode %1$s</string>
+    <string name="display_mode_season">Season %1$s</string>
     <string name="episode_downloading_progress">Downloading (%d%%)</string>
     <string name="download_error">Error</string>
     <string name="download_paused">Paused</string>
     <string name="show_episode_number">Episode number</string>
+    <string name="show_season_number">Season number</string>
     <string name="sort_by_episode_number">By episode number</string>
+    <string name="sort_by_season_number">By season number</string>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
     <string name="also_set_episode_settings_for_library">Also apply to all anime in my library</string>
     <string name="no_episodes_error">No episodes found</string>
+    <string name="no_seasons_error">No seasons found</string>
     <string name="watching">Watching</string>
     <string name="currently_reading">Currently reading</string>
     <string name="currently_watching">Currently watching</string>
@@ -527,6 +538,7 @@
     <string name="notification_new_episodes">New episodes found</string>
     <string name="information_no_recent_anime">Nothing watched recently</string>
     <string name="episode_settings_updated">Updated default episode settings</string>
+    <string name="season_settings_updated">Updated default season settings</string>
     <string name="download_notifier_download_paused_chapters">Chapter download paused</string>
     <string name="download_notifier_download_paused_episodes">Episode download paused</string>
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
@@ -540,6 +552,7 @@
     <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
     <string name="notification_episodes_multiple">Episodes %1$s</string>
     <string name="episode_settings">Episode settings</string>
+    <string name="season_settings">Season settings</string>
     <string name="pref_backup_flags">Backup options</string>
     <string name="label_manga_extensions">Manga Extensions</string>
     <string name="label_anime_extensions">Anime Extensions</string>
@@ -553,10 +566,13 @@
     <string name="theme_mocha">Mocha</string>
     <string name="pref_behavior_episode">Episode behavior</string>
     <string name="pref_episode_swipe_end">Episode on swipe to right</string>
-    <string name="pref_episode_swipe_start">Episode on swipe to right</string>
+    <string name="pref_episode_swipe_start">Episode on swipe to left</string>
     <string name="pref_mark_duplicate_seen_episode_seen">Mark duplicate seen episode as seen</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">After watching an episode</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">After fetching new episode</string>
+    <string name="pref_library_season">Season</string>
+    <string name="pref_update_seasons_refresh">Update seasons with episodes on refresh</string>
+    <string name="pref_update_seasons_update">Update seasons with episodes on library update</string>
     <string name="pref_category_hide_hidden">Hide hidden categories from categories and storage screen</string>
     <string name="pref_update_anime_release_grace_period">Expected anime release grace period</string>
     <string name="data_saver_exclude">Exclude from data saver</string>

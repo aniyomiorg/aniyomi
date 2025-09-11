@@ -469,7 +469,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param video the chapter whose page list has to be fetched
      */
     protected open fun videoUrlRequest(video: Video): Request {
-        return GET(video.videoPageUrl, headers)
+        return GET(video.url, headers)
     }
 
     /**

@@ -1,29 +1,63 @@
 CREATE VIEW animelibView AS
 SELECT
     M.*,
-    coalesce(C.total, 0) AS totalCount,
-    coalesce(C.seenCount, 0) AS seenCount,
-    coalesce(C.latestUpload, 0) AS latestUpload,
-    coalesce(C.fetchedAt, 0) AS episodeFetchedAt,
-    coalesce(C.lastSeen, 0) AS lastSeen,
-    coalesce(C.bookmarkCount, 0) AS bookmarkCount,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.total, 0)
+        WHEN 0 THEN (SELECT count(*) FROM animes WHERE parent_id = M._id)
+    END AS totalCount,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.seenCount, 0)
+        WHEN 0 THEN (
+            SELECT count(*)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = M._id
+              AND season.fetch_type = 1
+              AND coalesce(season_stats.total, 0) = coalesce(season_stats.seenCount, 0)
+        )
+    END AS seenCount,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.latestUpload, 0)
+        WHEN 0 THEN (
+            SELECT coalesce(max(season_stats.latestUpload), 0)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = M._id
+        )
+    END AS latestUpload,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.fetchedAt, 0)
+        WHEN 0 THEN (
+            SELECT coalesce(max(season_stats.fetchedAt), 0)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = M._id
+        )
+    END AS episodeFetchedAt,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(AHS.lastSeen, 0)
+        WHEN 0 THEN (
+            SELECT coalesce(max(child_history.lastSeen), 0)
+            FROM animes season
+            LEFT JOIN animehistorystatsView child_history ON season._id = child_history.anime_id
+            WHERE season.parent_id = M._id
+        )
+    END AS lastSeen,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.bookmarkCount, 0)
+        WHEN 0 THEN (
+            SELECT coalesce(sum(season_stats.bookmarkCount), 0)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = M._id
+        )
+    END AS bookmarkCount,
     coalesce(MC.category_id, 0) AS category
 FROM animes M
-LEFT JOIN(
-    SELECT
-        episodes.anime_id,
-        count(*) AS total,
-        sum(seen) AS seenCount,
-        coalesce(max(episodes.date_upload), 0) AS latestUpload,
-        coalesce(max(animehistory.last_seen), 0) AS lastSeen,
-        coalesce(max(episodes.date_fetch), 0) AS fetchedAt,
-        sum(episodes.bookmark) AS bookmarkCount
-    FROM episodes
-    LEFT JOIN animehistory
-    ON episodes._id = animehistory.episode_id
-    GROUP BY episodes.anime_id
-) AS C
-ON M._id = C.anime_id
+LEFT JOIN episodestatsView AS ES
+ON M._id = ES.anime_id
+LEFT JOIN animehistorystatsView AS AHS
+ON M._id = AHS.anime_id
 LEFT JOIN animes_categories AS MC
 ON MC.anime_id = M._id
 WHERE M.favorite = 1;

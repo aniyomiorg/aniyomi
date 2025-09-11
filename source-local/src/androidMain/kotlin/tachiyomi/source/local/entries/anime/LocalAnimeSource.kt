@@ -49,6 +49,7 @@ actual class LocalAnimeSource(
     private val coverManager: LocalAnimeCoverManager,
     private val backgroundManager: LocalAnimeBackgroundManager,
     private val thumbnailManager: LocalEpisodeThumbnailManager,
+    private val fetchTypeManager: LocalAnimeFetchTypeManager,
 ) : AnimeCatalogueSource, UnmeteredSource {
 
     private val json: Json by injectLazy()
@@ -127,25 +128,30 @@ actual class LocalAnimeSource(
         val animes = animeDirs
             .map { animeDir ->
                 async {
-                    SAnime.create().apply {
-                        title = animeDir.name.orEmpty()
-                        url = animeDir.name.orEmpty()
-
-                        // Try to find the cover
-                        coverManager.find(animeDir.name.orEmpty())?.let {
-                            thumbnail_url = it.uri.toString()
-                        }
-
-                        // Try to find the background
-                        backgroundManager.find(animeDir.name.orEmpty())?.let {
-                            background_url = it.uri.toString()
-                        }
-                    }
+                    getSAnime(animeDir.name)
                 }
             }
             .awaitAll()
 
         AnimesPage(animes.toList(), false)
+    }
+
+    private fun getSAnime(animeDir: String?): SAnime {
+        return SAnime.create().apply {
+            title = animeDir.orEmpty().substringAfterLast(File.separator)
+            url = animeDir.orEmpty()
+            fetch_type = fetchTypeManager.find(animeDir.orEmpty())
+
+            // Try to find the cover
+            coverManager.find(animeDir.orEmpty())?.let {
+                thumbnail_url = it.uri.toString()
+            }
+
+            // Try to find the background
+            backgroundManager.find(animeDir.orEmpty())?.let {
+                background_url = it.uri.toString()
+            }
+        }
     }
 
     // Old fetch functions
@@ -193,15 +199,37 @@ actual class LocalAnimeSource(
         return@withIOContext anime
     }
 
+    // Seasons
+    override suspend fun getSeasonList(anime: SAnime): List<SAnime> = withIOContext {
+        val animeDirs = fileSystem.getFilesInAnimeDirectory(anime.url)
+            // Filter out files that are hidden and is not a folder
+            .filter { it.isDirectory && !it.name.orEmpty().startsWith('.') }
+            .distinctBy { it.name }
+
+        animeDirs
+            .map { animeDir ->
+                async {
+                    val url = animeDir.name?.let { season ->
+                        buildString {
+                            append(anime.url)
+                            append(File.separator)
+                            append(season)
+                        }
+                    }
+                    getSAnime(url)
+                }
+            }
+            .awaitAll()
+            .toList()
+    }
+
     // Episodes
     override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> = withIOContext {
         val episodesData = fileSystem.getFilesInAnimeDirectory(anime.url)
             .firstOrNull {
                 it.extension == "json" && it.nameWithoutExtension == "episodes"
             }?.let { file ->
-                runCatching {
-                    json.decodeFromStream<List<EpisodeDetails>>(file.openInputStream())
-                }.getOrNull()
+                json.decodeFromStream<List<EpisodeDetails>>(file.openInputStream())
             }
 
         val episodes = fileSystem.getFilesInAnimeDirectory(anime.url)

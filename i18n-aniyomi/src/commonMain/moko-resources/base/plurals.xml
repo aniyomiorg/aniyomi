@@ -21,12 +21,20 @@
         <item quantity="other">Missing %1$s items</item>
     </plurals>
     <plurals name="next_unseen_episodes">
-        <item quantity="one">Next unseen episodes</item>
+        <item quantity="one">Next unseen episode</item>
         <item quantity="other">Next %d unseen episodes</item>
     </plurals>
     <plurals name="anime_num_episodes">
         <item quantity="one">%1$s episode</item>
         <item quantity="other">%1$s episodes</item>
+    </plurals>
+    <plurals name="anime_num_seasons">
+        <item quantity="one">%d season</item>
+        <item quantity="other">%d seasons</item>
+    </plurals>
+    <plurals name="anime_num_entries">
+        <item quantity="one">%d entry</item>
+        <item quantity="other">%d entries</item>
     </plurals>
     <plurals name="download_amount_anime">
         <item quantity="one">Next episode</item>

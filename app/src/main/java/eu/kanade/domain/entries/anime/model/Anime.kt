@@ -19,10 +19,29 @@ val Anime.downloadedFilter: TriState
             else -> TriState.DISABLED
         }
     }
+
+val Anime.seasonDownloadedFilter: TriState
+    get() {
+        if (Injekt.get<BasePreferences>().downloadedOnly().get()) return TriState.ENABLED_IS
+        return when (seasonDownloadedFilterRaw) {
+            Anime.SEASON_SHOW_DOWNLOADED -> TriState.ENABLED_IS
+            Anime.SEASON_SHOW_NOT_DOWNLOADED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
+        }
+    }
+
 fun Anime.episodesFiltered(): Boolean {
     return unseenFilter != TriState.DISABLED ||
         downloadedFilter != TriState.DISABLED ||
         bookmarkedFilter != TriState.DISABLED
+}
+
+fun Anime.seasonsFiltered(): Boolean {
+    return seasonDownloadedFilter != TriState.DISABLED ||
+        seasonUnseenFilter != TriState.DISABLED ||
+        seasonStartedFilter != TriState.DISABLED ||
+        seasonBookmarkedFilter != TriState.DISABLED ||
+        seasonCompletedFilter != TriState.DISABLED
 }
 
 fun Anime.toSAnime(): SAnime = SAnime.create().also {
@@ -35,6 +54,8 @@ fun Anime.toSAnime(): SAnime = SAnime.create().also {
     it.status = status.toInt()
     it.thumbnail_url = thumbnailUrl
     it.background_url = backgroundUrl
+    it.fetch_type = fetchType
+    it.season_number = seasonNumber
     it.initialized = initialized
 }
 
@@ -58,6 +79,8 @@ fun Anime.copyFrom(other: SAnime): Anime {
         backgroundUrl = backgroundUrl,
         status = other.status.toLong(),
         updateStrategy = other.update_strategy,
+        fetchType = other.fetch_type,
+        seasonNumber = other.season_number,
         initialized = other.initialized && initialized,
     )
 }
@@ -74,6 +97,8 @@ fun SAnime.toDomainAnime(sourceId: Long): Anime {
         thumbnailUrl = thumbnail_url,
         backgroundUrl = background_url,
         updateStrategy = update_strategy,
+        fetchType = fetch_type,
+        seasonNumber = season_number,
         initialized = initialized,
         source = sourceId,
     )

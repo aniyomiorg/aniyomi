@@ -293,7 +293,7 @@ class AnimeLibraryScreenModel(
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
                 AnimeLibrarySort.Type.TotalEpisodes -> {
-                    i1.libraryAnime.totalEpisodes.compareTo(i2.libraryAnime.totalEpisodes)
+                    i1.libraryAnime.totalCount.compareTo(i2.libraryAnime.totalCount)
                 }
                 AnimeLibrarySort.Type.LatestEpisode -> {
                     i1.libraryAnime.latestUpload.compareTo(i2.libraryAnime.latestUpload)
@@ -310,13 +310,14 @@ class AnimeLibraryScreenModel(
                     item1Score.compareTo(item2Score)
                 }
                 AnimeLibrarySort.Type.AiringTime -> when {
+                    i1.libraryAnime.unseenCount != i2.libraryAnime.unseenCount ->
+                        i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
+                    i1.libraryAnime.anime.nextEpisodeAiringAt == i2.libraryAnime.anime.nextEpisodeAiringAt -> 0
                     i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (this.isAscending) 1 else -1
                     i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (this.isAscending) -1 else 1
-                    i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount ->
-                        i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(
-                            i2.libraryAnime.anime.nextEpisodeAiringAt,
-                        )
-                    else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
+                    else -> i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(
+                        i2.libraryAnime.anime.nextEpisodeAiringAt,
+                    )
                 }
                 AnimeLibrarySort.Type.Random -> {
                     error("Why Are We Still Here? Just To Suffer?")

@@ -1,8 +1,11 @@
 package tachiyomi.data.entries.anime
 
+import aniyomi.domain.anime.SeasonAnime
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
+import eu.kanade.tachiyomi.animesource.model.FetchType
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.source.anime.model.DeletableAnime
 
 object AnimeMapper {
     fun mapAnime(
@@ -33,6 +36,11 @@ object AnimeMapper {
         version: Long,
         @Suppress("UNUSED_PARAMETER")
         isSyncing: Long,
+        fetchType: FetchType,
+        parentId: Long?,
+        seasonFlags: Long,
+        seasonNumber: Double,
+        seasonSourceOrder: Long,
     ): Anime = Anime(
         id = id,
         source = source,
@@ -59,6 +67,11 @@ object AnimeMapper {
         lastModifiedAt = lastModifiedAt,
         favoriteModifiedAt = favoriteModifiedAt,
         version = version,
+        fetchType = fetchType,
+        parentId = parentId,
+        seasonFlags = seasonFlags,
+        seasonNumber = seasonNumber,
+        seasonSourceOrder = seasonSourceOrder,
     )
 
     fun mapLibraryAnime(
@@ -88,6 +101,11 @@ object AnimeMapper {
         favoriteModifiedAt: Long?,
         version: Long,
         isSyncing: Long,
+        fetchType: FetchType,
+        parentId: Long?,
+        seasonFlags: Long,
+        seasonNumber: Double,
+        seasonSourceOrder: Long,
         totalCount: Long,
         seenCount: Double,
         latestUpload: Long,
@@ -123,13 +141,108 @@ object AnimeMapper {
             favoriteModifiedAt,
             version,
             isSyncing,
+            fetchType,
+            parentId,
+            seasonFlags,
+            seasonNumber,
+            seasonSourceOrder,
         ),
         category = category,
-        totalEpisodes = totalCount,
+        totalCount = totalCount,
         seenCount = seenCount.toLong(),
         bookmarkCount = bookmarkCount.toLong(),
         latestUpload = latestUpload,
         episodeFetchedAt = episodeFetchedAt,
         lastSeen = lastSeen,
+    )
+
+    fun mapSeasonAnime(
+        id: Long,
+        source: Long,
+        url: String,
+        artist: String?,
+        author: String?,
+        description: String?,
+        genre: List<String>?,
+        title: String,
+        status: Long,
+        thumbnailUrl: String?,
+        backgroundUrl: String?,
+        favorite: Boolean,
+        lastUpdate: Long?,
+        nextUpdate: Long?,
+        initialized: Boolean,
+        viewerFlags: Long,
+        chapterFlags: Long,
+        coverLastModified: Long,
+        backgroundLastModified: Long,
+        dateAdded: Long,
+        updateStrategy: AnimeUpdateStrategy,
+        calculateInterval: Long,
+        lastModifiedAt: Long,
+        favoriteModifiedAt: Long?,
+        version: Long,
+        isSyncing: Long,
+        fetchType: FetchType,
+        parentId: Long?,
+        seasonFlags: Long,
+        seasonNumber: Double,
+        seasonSourceOrder: Long,
+        totalCount: Long,
+        seenCount: Double,
+        latestUpload: Long,
+        fetchedAt: Long,
+        lastSeen: Long,
+        bookmarkCount: Double,
+    ): SeasonAnime = SeasonAnime(
+        anime = mapAnime(
+            id,
+            source,
+            url,
+            artist,
+            author,
+            description,
+            genre,
+            title,
+            status,
+            thumbnailUrl,
+            backgroundUrl,
+            favorite,
+            lastUpdate,
+            nextUpdate,
+            initialized,
+            viewerFlags,
+            chapterFlags,
+            coverLastModified,
+            backgroundLastModified,
+            dateAdded,
+            updateStrategy,
+            calculateInterval,
+            lastModifiedAt,
+            favoriteModifiedAt,
+            version,
+            isSyncing,
+            fetchType,
+            parentId,
+            seasonFlags,
+            seasonNumber,
+            seasonSourceOrder,
+        ),
+        totalCount = totalCount,
+        seenCount = seenCount.toLong(),
+        bookmarkCount = bookmarkCount.toLong(),
+        latestUpload = latestUpload,
+        fetchedAt = fetchedAt,
+        lastSeen = lastSeen,
+    )
+
+    fun mapDeletableAnime(
+        id: Long,
+        source: Long,
+        fetchType: FetchType,
+    ): DeletableAnime = DeletableAnime(
+        animeId = id,
+        sourceId = source,
+        fetchType = fetchType,
     )
 }

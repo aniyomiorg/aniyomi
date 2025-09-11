@@ -468,7 +468,6 @@ private fun BookmarkDownloadIcons(
     downloadProgressProvider: () -> Int,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
 ) {
-
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (bookmark) {
             Icon(
