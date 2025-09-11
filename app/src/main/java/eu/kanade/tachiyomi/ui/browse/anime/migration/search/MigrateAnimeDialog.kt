@@ -80,11 +80,7 @@ internal fun MigrateAnimeDialog(
 
     val flags = remember { AnimeMigrationFlags.getFlags(oldAnime, screenModel.migrateFlags.get()) }
     val selectedFlags = remember { flags.map { it.isDefaultSelected }.toMutableStateList() }
-    val canMigrate = remember {
-        oldAnime.fetchType == newAnime.fetchType ||
-            oldAnime.fetchType == FetchType.Unknown ||
-            newAnime.fetchType == FetchType.Unknown
-    }
+    val canMigrate = remember { oldAnime.fetchType == newAnime.fetchType }
 
     if (state.isMigrating) {
         LoadingScreen(

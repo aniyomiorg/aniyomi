@@ -289,6 +289,7 @@ private class ClearAnimeDatabaseScreenModel : StateScreenModel<ClearAnimeDatabas
 
         val animeIds = selected.flatMap { it.ids }
         val orphaned = selected.flatMap { it.orphaned }
+            .filterNot { it in animeIds }
 
         database.animesQueries.deleteAnimesNotInLibraryByAnimeIds(animeIds)
         database.animesQueries.removeParentIdByIds(orphaned)

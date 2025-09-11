@@ -15,7 +15,7 @@ actual class LocalAnimeFetchTypeManager(
         return when {
             files.any { ArchiveAnime.isSupported(it) } -> FetchType.Episodes
             files.any { it.isDirectory } -> FetchType.Seasons
-            else -> FetchType.Unknown
+            else -> FetchType.Episodes
         }
     }
 }
