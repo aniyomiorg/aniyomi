@@ -112,6 +112,7 @@ object AnimeMapper {
         episodeFetchedAt: Long,
         lastSeen: Long,
         bookmarkCount: Double,
+        fillermarkCount: Double,
         category: Long,
     ): LibraryAnime = LibraryAnime(
         anime = mapAnime(
@@ -151,6 +152,7 @@ object AnimeMapper {
         totalCount = totalCount,
         seenCount = seenCount.toLong(),
         bookmarkCount = bookmarkCount.toLong(),
+        fillermarkCount = fillermarkCount.toLong(),
         latestUpload = latestUpload,
         episodeFetchedAt = episodeFetchedAt,
         lastSeen = lastSeen,
@@ -194,6 +196,7 @@ object AnimeMapper {
         fetchedAt: Long,
         lastSeen: Long,
         bookmarkCount: Double,
+        fillermarkCount: Double,
     ): SeasonAnime = SeasonAnime(
         anime = mapAnime(
             id,
@@ -231,6 +234,7 @@ object AnimeMapper {
         totalCount = totalCount,
         seenCount = seenCount.toLong(),
         bookmarkCount = bookmarkCount.toLong(),
+        fillermarkCount = fillermarkCount.toLong(),
         latestUpload = latestUpload,
         fetchedAt = fetchedAt,
         lastSeen = lastSeen,

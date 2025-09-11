@@ -266,11 +266,14 @@ class LibraryPreferences(
     fun filterSeasonByStarted() =
         preferenceStore.getLong("default_season_filter_by_started", Anime.SHOW_ALL)
 
+    fun filterSeasonByCompleted() =
+        preferenceStore.getLong("default_season_filter_by_completed", Anime.SHOW_ALL)
+
     fun filterSeasonByBookmarked() =
         preferenceStore.getLong("default_season_filter_by_bookmarked", Anime.SHOW_ALL)
 
-    fun filterSeasonByCompleted() =
-        preferenceStore.getLong("default_season_filter_by_completed", Anime.SHOW_ALL)
+    fun filterSeasonByFillermarked() =
+        preferenceStore.getLong("default_season_filter_by_fillermarked", Anime.SHOW_ALL)
 
     fun sortSeasonBySourceOrNumber() = preferenceStore.getLong(
         "default_season_sort_by_source_or_number",
@@ -326,8 +329,9 @@ class LibraryPreferences(
         filterSeasonByDownload().set(anime.seasonUnseenFilterRaw)
         filterSeasonByUnseen().set(anime.seasonUnseenFilterRaw)
         filterSeasonByStarted().set(anime.seasonStartedFilterRaw)
-        filterSeasonByBookmarked().set(anime.seasonBookmarkedFilterRaw)
         filterSeasonByCompleted().set(anime.seasonCompletedFilterRaw)
+        filterSeasonByBookmarked().set(anime.seasonBookmarkedFilterRaw)
+        filterSeasonByFillermarked().set(anime.seasonFillermarkedFilterRaw)
         sortSeasonBySourceOrNumber().set(anime.seasonSorting)
         sortSeasonByAscendingOrDescending().set(
             if (anime.seasonSortDescending()) Anime.SEASON_SORT_DESC else Anime.SEASON_SORT_ASC,

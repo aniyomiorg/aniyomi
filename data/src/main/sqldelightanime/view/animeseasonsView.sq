@@ -51,7 +51,16 @@ SELECT
             LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
             WHERE season.parent_id = M._id
         )
-    END AS bookmarkCount
+    END AS bookmarkCount,
+    CASE M.fetch_type
+            WHEN 1 THEN coalesce(ES.fillermarkCount, 0)
+            WHEN 0 THEN (
+                SELECT coalesce(sum(season_stats.fillermarkCount), 0)
+                FROM animes season
+                LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+                WHERE season.parent_id = M._id
+            )
+        END AS fillermarkCount
 FROM animes AS M
 LEFT JOIN episodestatsView AS ES
 ON M._id = ES.anime_id

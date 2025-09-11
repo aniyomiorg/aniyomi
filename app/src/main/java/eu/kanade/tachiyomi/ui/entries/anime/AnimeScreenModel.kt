@@ -1222,6 +1222,24 @@ class AnimeScreenModel(
     }
 
     /**
+     * Sets the season fillermarked filter and requests an UI update.
+     * @param state whether to display only fillermarked seasons or all seasons.
+     */
+    fun setSeasonFillermarkedFilter(state: TriState) {
+        val anime = successState?.anime ?: return
+
+        val flag = when (state) {
+            TriState.DISABLED -> Anime.SHOW_ALL
+            TriState.ENABLED_IS -> Anime.SEASON_SHOW_FILLERMARKED
+            TriState.ENABLED_NOT -> Anime.SEASON_SHOW_NOT_FILLERMARKED
+        }
+
+        screenModelScope.launchNonCancellable {
+            setAnimeSeasonFlags.awaitSetFillermarkedFilter(anime, flag)
+        }
+    }
+
+    /**
      * Sets the season completed filter and requests an UI update.
      * @param state whether to display only completed seasons or all seasons.
      */
@@ -1664,8 +1682,9 @@ class AnimeScreenModel(
                 val unseenFilter = anime.seasonUnseenFilter
                 val downloadedFilter = anime.seasonDownloadedFilter
                 val startedFilter = anime.seasonStartedFilter
-                val bookmarkedFilter = anime.seasonBookmarkedFilter
                 val completedFilter = anime.seasonCompletedFilter
+                val bookmarkedFilter = anime.seasonBookmarkedFilter
+                val fillermarkedFilter = anime.seasonFillermarkedFilter
 
                 val comparator = getSeasonSortComparator(anime)
                     .let { if (anime.seasonSortDescending()) it.reversed() else it }
@@ -1678,6 +1697,7 @@ class AnimeScreenModel(
                         applyFilter(completedFilter) { season.anime.status.toInt() == SAnime.COMPLETED }
                     }
                     .filter { (season) -> applyFilter(bookmarkedFilter) { season.hasBookmarks } }
+                    .filter { (season) -> applyFilter(fillermarkedFilter) { season.hasFillermarks } }
                     .filter { applyFilter(downloadedFilter) { it.downloadCount > 0 || it.seasonAnime.anime.isLocal() } }
                     .sortedWith(compareBy(comparator) { it.seasonAnime })
                     .map {

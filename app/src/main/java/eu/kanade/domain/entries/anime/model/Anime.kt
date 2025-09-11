@@ -40,8 +40,9 @@ fun Anime.seasonsFiltered(): Boolean {
     return seasonDownloadedFilter != TriState.DISABLED ||
         seasonUnseenFilter != TriState.DISABLED ||
         seasonStartedFilter != TriState.DISABLED ||
+        seasonCompletedFilter != TriState.DISABLED ||
         seasonBookmarkedFilter != TriState.DISABLED ||
-        seasonCompletedFilter != TriState.DISABLED
+        seasonFillermarkedFilter != TriState.DISABLED
 }
 
 fun Anime.toSAnime(): SAnime = SAnime.create().also {
