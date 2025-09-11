@@ -298,7 +298,7 @@
     <string name="pref_search_pinned_manga_sources_only">Genel aramada yalnızca sabitlenmiş manga kaynaklarını ara</string>
     <string name="pref_search_pinned_anime_sources_only">Genel aramada yalnızca sabitlenmiş anime kaynaklarını ara</string>
     <string name="pref_hide_in_manga_library_items">Zaten kitaplıkta bulunan manga girdilerini gizle</string>
-    <string name="pref_hide_in_anime_library_items">Zaten kitaplukta bulunan anime girdilerini gizle</string>
+    <string name="pref_hide_in_anime_library_items">Zaten kitaplıkta bulunan anime girdilerini gizle</string>
     <string name="action_order_by_episode_number">Bölüm numarasına göre</string>
     <string name="action_start_download_externally">Harici indirme yöneticisi kullan</string>
     <string name="action_start_download_internally">Dahili indirme yöneticisi kullan</string>
@@ -496,4 +496,19 @@
     <string name="pref_player_settings_summary">Dahili oynatıcı, hareketler, çözümleyiciler, alt yazılar</string>
     <string name="action_stop">Dur</string>
     <string name="action_continue">Devam Et</string>
+    <string name="label_cant_migrate_episode">Bölüm, sezona taşınamadı; devam etmek için sezon seçin</string>
+    <string name="label_cant_migrate_season">Sezon, bölüme taşınamadı</string>
+    <string name="label_show_seasons">Sezonları göster</string>
+    <string name="action_display_show_continue_watching_button">İzlemeye devam et butonu</string>
+    <string name="action_display_grid_mode">Izgara görünüm modu</string>
+    <string name="display_mode_season">Sezon %1$s</string>
+    <string name="show_season_number">Sezon numarası</string>
+    <string name="sort_by_season_number">Sezon numarasına göre</string>
+    <string name="no_seasons_error">Sezon bulunamadı</string>
+    <string name="no_entries_error">Girdi bulunamadı</string>
+    <string name="season_settings_updated">Varsayılan sezon ayarı güncellendi</string>
+    <string name="season_settings">Sezon ayarları</string>
+    <string name="pref_library_season">Sezon</string>
+    <string name="pref_update_seasons_refresh">Yenileme sırasında sezonları bölümlerle güncelle</string>
+    <string name="pref_update_seasons_update">Kitaplık güncellemesi sırasında sezonları bölümlerle güncelle</string>
 </resources>
