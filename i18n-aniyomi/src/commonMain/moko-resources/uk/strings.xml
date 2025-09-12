@@ -505,7 +505,6 @@
     <string name="show_season_number">Номер сезону</string>
     <string name="sort_by_season_number">За номером сезону</string>
     <string name="no_seasons_error">Сезонів не знайдено</string>
-    <string name="no_entries_error">Записів не знайдено</string>
     <string name="season_settings_updated">Оновлені налаштування сезону за замовчуванням</string>
     <string name="season_settings">Налаштування сезону</string>
     <string name="pref_library_season">Сезон</string>
