@@ -132,8 +132,6 @@
     <string name="pref_player_custom_button_id">(Код: %d)</string>
     <string name="pref_player_advanced">Расширенные</string>
     <string name="pref_player_advanced_summary">Скрипты, mvp.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Включить скрипты MVP</string>
-    <string name="pref_mpv_scripts_summary">Необходимо разрешение на внешнее хранение.</string>
     <string name="pref_mpv_conf">Редактировать файл конфигурации MPV для дальнейших настроек проигрывателя</string>
     <string name="pref_reset_mpv_conf">Сброс файла конфигурации MPV</string>
     <string name="pref_mpv_input">Редактировать входной файл MPV для настройки отображения клавиатуры</string>
@@ -416,4 +414,7 @@
     <string name="onboarding_storage_action_create_folder">Создать папку Aniyomi по умолчанию</string>
     <string name="download_speed_limit">Ограничение скорости загрузки</string>
     <string name="download_speed_limit_hint">Установите значение 0, чтобы отключить ограничение скорости.</string>
+    <string name="action_stop">Стоп</string>
+    <string name="action_continue">Продолжить</string>
+    <string name="manga">Манга</string>
 </resources>
