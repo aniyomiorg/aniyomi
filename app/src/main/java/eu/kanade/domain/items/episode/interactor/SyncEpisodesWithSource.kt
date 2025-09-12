@@ -138,6 +138,16 @@ class SyncEpisodesWithSource(
                             dateUpload = sourceEpisode.dateUpload,
                         )
                     }
+                    if (!toChangeEpisode.fillermark) {
+                        toChangeEpisode = toChangeEpisode.copy(
+                            fillermark = sourceEpisode.fillermark,
+                        )
+                    }
+                    if (toChangeEpisode.previewUrl.isNullOrBlank()) {
+                        toChangeEpisode = toChangeEpisode.copy(
+                            previewUrl = sourceEpisode.previewUrl,
+                        )
+                    }
                     updatedEpisodes.add(toChangeEpisode)
                 }
             }

@@ -277,7 +277,7 @@ actual class LocalAnimeSource(
             }
 
         // Generate the cover from the first episode found if not available
-        if (anime.thumbnail_url == null) {
+        if (anime.thumbnail_url == null || coverManager.find(anime.url) == null) {
             try {
                 episodes.lastOrNull()?.let { episode ->
                     val tempFileSuffix = anime.title + DEFAULT_COVER_NAME
@@ -290,7 +290,7 @@ actual class LocalAnimeSource(
         }
 
         // Generate the background from the first episode found if not available
-        if (anime.background_url == null) {
+        if (anime.background_url == null || backgroundManager.find(anime.url) == null) {
             try {
                 episodes.lastOrNull()?.let { episode ->
                     val tempFileSuffix = anime.title + DEFAULT_BACKGROUND_NAME
