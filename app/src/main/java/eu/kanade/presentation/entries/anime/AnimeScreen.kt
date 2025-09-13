@@ -550,6 +550,7 @@ private fun AnimeScreenSmallImpl(
                             containerHeight = containerHeight - toolbarHeight,
                             onSeasonClicked = onSeasonClicked,
                             onClickContinueWatching = onClickContinueWatching,
+                            listItemModifier = Modifier.ignorePadding(offsetGridPaddingPx),
                         )
                     }
                     FetchType.Episodes -> {
@@ -595,7 +596,7 @@ private fun AnimeScreenSmallImpl(
                             onDownloadEpisode = onDownloadEpisode,
                             onEpisodeSelected = onEpisodeSelected,
                             onEpisodeSwipe = onEpisodeSwipe,
-                            modifier = Modifier.ignorePadding(offsetGridPaddingPx),
+                            itemModifier = Modifier.ignorePadding(offsetGridPaddingPx),
                         )
                     }
                 }
@@ -878,6 +879,7 @@ fun AnimeScreenLargeImpl(
                                     containerHeight = containerHeight - headerHeight,
                                     onSeasonClicked = onSeasonClicked,
                                     onClickContinueWatching = onClickContinueWatching,
+                                    listItemModifier = Modifier.ignorePadding(offsetGridPaddingPx),
                                 )
                             }
                             FetchType.Episodes -> {
@@ -922,7 +924,7 @@ fun AnimeScreenLargeImpl(
                                     onDownloadEpisode = onDownloadEpisode,
                                     onEpisodeSelected = onEpisodeSelected,
                                     onEpisodeSwipe = onEpisodeSwipe,
-                                    modifier = Modifier.ignorePadding(offsetGridPaddingPx),
+                                    itemModifier = Modifier.ignorePadding(offsetGridPaddingPx),
                                 )
                             }
                         }
@@ -997,6 +999,7 @@ private fun LazyGridScope.sharedSeasons(
     containerHeight: Int,
     onSeasonClicked: (SeasonAnime) -> Unit,
     onClickContinueWatching: ((SeasonAnime) -> Unit)?,
+    listItemModifier: Modifier = Modifier,
 ) {
     items(
         items = seasons,
@@ -1009,6 +1012,7 @@ private fun LazyGridScope.sharedSeasons(
             containerHeight = containerHeight,
             onSeasonClicked = onSeasonClicked,
             onClickContinueWatching = onClickContinueWatching,
+            listItemModifier = listItemModifier,
         )
     }
 }
@@ -1025,7 +1029,7 @@ private fun LazyGridScope.sharedEpisodeItems(
     onDownloadEpisode: ((List<EpisodeList.Item>, EpisodeDownloadAction) -> Unit)?,
     onEpisodeSelected: (EpisodeList.Item, Boolean, Boolean, Boolean) -> Unit,
     onEpisodeSwipe: (EpisodeList.Item, LibraryPreferences.EpisodeSwipeAction) -> Unit,
-    modifier: Modifier = Modifier,
+    itemModifier: Modifier = Modifier,
 ) {
     items(
         items = episodes,
@@ -1044,7 +1048,7 @@ private fun LazyGridScope.sharedEpisodeItems(
             is EpisodeList.MissingCount -> {
                 MissingItemCountListItem(
                     count = episodeItem.count,
-                    modifier = modifier,
+                    modifier = itemModifier,
                 )
             }
             is EpisodeList.Item -> {
@@ -1100,7 +1104,7 @@ private fun LazyGridScope.sharedEpisodeItems(
                     onEpisodeSwipe = {
                         onEpisodeSwipe(episodeItem, it)
                     },
-                    modifier = modifier,
+                    modifier = itemModifier,
                 )
             }
         }

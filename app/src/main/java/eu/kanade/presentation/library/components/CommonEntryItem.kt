@@ -343,9 +343,10 @@ fun EntryListItem(
     entries: Int = 0,
     containerHeight: Int = 0,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 3.dp),
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .selectedBackground(isSelected)
             .height(
                 when (entries) {

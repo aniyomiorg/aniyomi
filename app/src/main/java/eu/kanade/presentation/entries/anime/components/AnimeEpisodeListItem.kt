@@ -106,7 +106,7 @@ fun AnimeEpisodeListItem(
     )
 
     SwipeableActionsBox(
-        modifier = Modifier.clipToBounds(),
+        modifier = modifier.clipToBounds(),
         startActions = listOfNotNull(start),
         endActions = listOfNotNull(end),
         swipeThreshold = swipeActionThreshold,
@@ -114,7 +114,7 @@ fun AnimeEpisodeListItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier
+            modifier = Modifier
                 .selectedBackground(selected)
                 .combinedClickable(
                     onClick = onClick,
@@ -394,7 +394,7 @@ private fun EpisodeSummary(
             color = LocalContentColor.current.copy(
                 alpha = if (seen) DISABLED_ALPHA else SECONDARY_ALPHA,
             ),
-            modifier = Modifier
+            modifier = Modifier.padding(bottom = 4.dp, start = 4.dp, end = 4.dp)
                 .then(
                     if (isAnyEpisodeSelected) {
                         Modifier
