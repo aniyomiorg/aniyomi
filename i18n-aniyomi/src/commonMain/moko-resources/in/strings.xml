@@ -496,4 +496,18 @@
     <string name="pref_mark_duplicate_seen_episode_seen">Tandai episode yang sudah ditonton sebagai sudah ditonton</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">Setelah menonton episode</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">Setelah mengambil episode baru</string>
+    <string name="label_cant_migrate_episode">Tidak dapat memigrasikan episode ke musim, pilih musim untuk melanjutkan</string>
+    <string name="label_cant_migrate_season">Tidak dapat memigrasikan musim ke episode</string>
+    <string name="label_show_seasons">Tunjukkan musim</string>
+    <string name="action_display_show_continue_watching_button">Lanjutkan menonton tombol</string>
+    <string name="action_display_grid_mode">Mode tampilan kisi</string>
+    <string name="display_mode_season">Musim %1$s</string>
+    <string name="show_season_number">Nomor musim</string>
+    <string name="sort_by_season_number">Dengan nomor musim</string>
+    <string name="no_seasons_error">Tidak ada musim yang ditemukan</string>
+    <string name="season_settings_updated">Pengaturan musim default yang diperbarui</string>
+    <string name="season_settings">Pengaturan musim</string>
+    <string name="pref_library_season">Musim</string>
+    <string name="pref_update_seasons_refresh">Perbarui musim dengan episode tentang penyegaran</string>
+    <string name="pref_update_seasons_update">Perbarui Musim dengan Episode tentang Pembaruan Perpustakaan</string>
 </resources>
