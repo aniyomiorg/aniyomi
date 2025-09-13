@@ -230,6 +230,20 @@ class AnimeUpdatesScreenModel(
     }
 
     /**
+     * Fillermarks the given list of episodes.
+     * @param updates the list of episodes to fillermark.
+     */
+    fun fillermarkUpdates(updates: List<AnimeUpdatesItem>, fillermark: Boolean) {
+        screenModelScope.launchIO {
+            updates
+                .filterNot { it.update.fillermark == fillermark }
+                .map { EpisodeUpdate(id = it.update.episodeId, fillermark = fillermark) }
+                .let { updateEpisode.awaitAll(it) }
+        }
+        toggleAllSelection(false)
+    }
+
+    /**
      * Downloads the given list of episodes with the manager.
      * @param updatesItem the list of episodes to download.
      */

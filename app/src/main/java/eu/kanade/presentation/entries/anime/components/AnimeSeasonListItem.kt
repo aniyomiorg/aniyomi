@@ -1,8 +1,7 @@
 package eu.kanade.presentation.entries.anime.components
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Modifier
 import aniyomi.domain.anime.SeasonAnime
 import aniyomi.domain.anime.SeasonDisplayMode
 import eu.kanade.presentation.library.components.DownloadsBadge
@@ -25,6 +24,7 @@ fun AnimeSeasonListItem(
     containerHeight: Int,
     onSeasonClicked: (SeasonAnime) -> Unit,
     onClickContinueWatching: ((SeasonAnime) -> Unit)?,
+    listItemModifier: Modifier = Modifier,
 ) {
     val itemAnime = item.seasonAnime.anime
     val title = if (anime.seasonDisplayMode == Anime.SEASON_DISPLAY_MODE_NUMBER) {
@@ -122,7 +122,7 @@ fun AnimeSeasonListItem(
                 },
                 entries = anime.seasonDisplayGridSize,
                 containerHeight = containerHeight,
-                contentPadding = PaddingValues(horizontal = 3.dp, vertical = 3.dp),
+                modifier = listItemModifier,
             )
         }
     }

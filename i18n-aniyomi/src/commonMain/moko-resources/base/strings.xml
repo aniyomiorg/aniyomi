@@ -531,8 +531,8 @@
     <string name="dialog_with_checkbox_remove_description_anime">This will remove the watch date of this episode. Are you sure?</string>
     <string name="dialog_with_checkbox_reset_anime">Reset all episodes for this anime</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
-    <string name="episode_progress">Progress: %1$s/%2$s</string>
-    <string name="episode_progress_no_total">Progress: %1$s</string>
+    <string name="episode_progress">%1$s/%2$s</string>
+    <string name="episode_progress_no_total">%1$s</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="video_list_empty_error">No video found</string>
     <string name="notification_new_episodes">New episodes found</string>
@@ -600,4 +600,21 @@
     <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
     <string name="download_speed_limit">Chapter download speed limit</string>
     <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
+    <string name="filler">Filler</string>
+    <string name="action_filter_fillermarked">Fillermarked</string>
+    <string name="action_edit_background">Edit background</string>
+    <string name="custom_background">Custom background</string>
+    <string name="background_saved">Background saved</string>
+    <string name="error_saving_background">Error saving background</string>
+    <string name="error_sharing_background">Error sharing background</string>
+    <string name="set_as_background">Set as background</string>
+    <string name="set_as_thumbnail">Set as thumbnail</string>
+    <string name="background_updated">Background updated</string>
+    <string name="thumbnail_updated">Thumbnail updated</string>
+    <string name="notification_background_update_failed">Failed to update background</string>
+    <string name="action_fillermark_episode">Fillermark episode</string>
+    <string name="action_remove_fillermark_episode">Unfillermark episode</string>
+    <string name="pref_download_fillermarked_items">Allow downloading of fillermarked episodes</string>
+    <string name="show_episode_previews">Episode thumbnails</string>
+    <string name="show_episode_summaries">Episode summaries</string>
 </resources>

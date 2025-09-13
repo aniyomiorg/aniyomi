@@ -20,9 +20,12 @@ class SetAnimeDefaultEpisodeFlags(
                     unseenFilter = filterEpisodeBySeen().get(),
                     downloadedFilter = filterEpisodeByDownloaded().get(),
                     bookmarkedFilter = filterEpisodeByBookmarked().get(),
+                    fillermarkedFilter = filterEpisodeByFillermarked().get(),
                     sortingMode = sortEpisodeBySourceOrNumber().get(),
                     sortingDirection = sortEpisodeByAscendingOrDescending().get(),
                     displayMode = displayEpisodeByNameOrNumber().get(),
+                    showPreviews = showEpisodeThumbnailPreviews().get(),
+                    showSummaries = showEpisodeSummaries().get(),
                 )
             }
         }

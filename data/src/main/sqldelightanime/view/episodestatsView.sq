@@ -5,6 +5,7 @@ SELECT
     sum(seen) AS seenCount,
     coalesce(max(episodes.date_upload), 0) AS latestUpload,
     coalesce(max(episodes.date_fetch), 0) AS fetchedAt,
-    sum(episodes.bookmark) AS bookmarkCount
+    sum(episodes.bookmark) AS bookmarkCount,
+    sum(episodes.fillermark) AS fillermarkCount
 FROM episodes
 GROUP BY episodes.anime_id;

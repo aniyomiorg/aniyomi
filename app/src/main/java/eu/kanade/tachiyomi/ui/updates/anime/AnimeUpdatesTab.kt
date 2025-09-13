@@ -80,6 +80,7 @@ fun Screen.animeUpdatesTab(
                 onUpdateLibrary = screenModel::updateLibrary,
                 onDownloadEpisode = screenModel::downloadEpisodes,
                 onMultiBookmarkClicked = screenModel::bookmarkUpdates,
+                onMultiFillermarkClicked = screenModel::fillermarkUpdates,
                 onMultiMarkAsSeenClicked = screenModel::markUpdatesSeen,
                 onMultiDeleteClicked = screenModel::showConfirmDeleteEpisodes,
                 onUpdateSelected = screenModel::toggleSelection,
