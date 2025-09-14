@@ -218,7 +218,11 @@ class AnimeScreenModel(
 
             // TODO(16): Remove checks
             val source = sourceManager.getOrStub(oldAnime.source)
-            val anime = if (source.javaClass.declaredMethods.any { it.name == "getSeasonList" }) {
+            val anime = if (source.javaClass.declaredMethods.any {
+                    it.name in
+                        listOf("getSeasonList", "seasonListRequest", "seasonListParse")
+                }
+            ) {
                 oldAnime
             } else {
                 oldAnime.copy(fetchType = FetchType.Episodes)
