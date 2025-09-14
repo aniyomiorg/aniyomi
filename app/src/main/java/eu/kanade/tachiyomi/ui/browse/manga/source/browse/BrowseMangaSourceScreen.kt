@@ -30,7 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
@@ -38,7 +38,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.core.util.ifMangaSourcesLoaded
-import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
+import eu.kanade.presentation.browse.RemoveEntryDialog
 import eu.kanade.presentation.browse.manga.BrowseSourceContent
 import eu.kanade.presentation.browse.manga.MissingSourceScreen
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceToolbar
@@ -133,9 +133,7 @@ data class BrowseMangaSourceScreen(
                 Column(
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.surface)
-                        .onGloballyPositioned { layoutCoordinates ->
-                            topBarHeight = layoutCoordinates.size.height
-                        },
+                        .onSizeChanged { topBarHeight = it.height },
                 ) {
                     BrowseMangaSourceToolbar(
                         searchQuery = state.toolbarQuery,
