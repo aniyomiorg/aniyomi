@@ -35,7 +35,9 @@ class NetworkToLocalAnime(
     private suspend fun insertAnime(anime: Anime): Long? {
         // TODO(16): Remove check
         val source = sourceManager.getOrStub(anime.source)
-        val isNewExtLib = source.javaClass.declaredMethods.any { it.name == "getSeasonList" }
+        val isNewExtLib = source.javaClass.declaredMethods.any {
+            it.name in listOf("getSeasonList", "seasonListRequest", "seasonListParse")
+        }
         val toInsert = if (isNewExtLib) {
             anime
         } else {
