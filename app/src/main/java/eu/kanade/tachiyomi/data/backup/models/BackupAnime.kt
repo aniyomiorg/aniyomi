@@ -42,12 +42,13 @@ data class BackupAnime(
 
     // Aniyomi specific values
     @ProtoNumber(500) var backgroundUrl: String? = null,
-    @ProtoNumber(501) var fetchType: FetchType = FetchType.Episodes,
+    // @ProtoNumber(501) Broken, do not use
     @ProtoNumber(502) var parentId: Long? = null,
     @ProtoNumber(503) var id: Long? = null, // Used to associate seasons with parents. Do not use for anything else.
     @ProtoNumber(504) var seasonFlags: Long = 0,
     @ProtoNumber(505) var seasonNumber: Double = -1.0,
     @ProtoNumber(506) var seasonSourceOrder: Long = 0,
+    @ProtoNumber(507) var fetchType: FetchType = FetchType.Episodes,
 ) {
     fun getAnimeImpl(): Anime {
         return Anime.create().copy(
