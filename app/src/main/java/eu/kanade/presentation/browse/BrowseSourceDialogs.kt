@@ -1,4 +1,4 @@
-package eu.kanade.presentation.browse.anime.components
+package eu.kanade.presentation.browse
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

@@ -1,0 +1,251 @@
+import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy;
+import kotlin.Boolean;
+import kotlin.String;
+import kotlin.collections.List;
+
+ALTER TABLE episodes
+RENAME TO episodes_tmp;
+
+CREATE TABLE episodes(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    anime_id INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    name TEXT NOT NULL,
+    scanlator TEXT,
+    summary TEXT,
+    preview_url TEXT,
+    seen INTEGER AS Boolean NOT NULL,
+    bookmark INTEGER AS Boolean NOT NULL,
+    fillermark INTEGER AS Boolean NOT NULL,
+    last_second_seen INTEGER NOT NULL,
+    total_seconds INTEGER NOT NULL,
+    episode_number REAL NOT NULL,
+    source_order INTEGER NOT NULL,
+    date_fetch INTEGER NOT NULL,
+    date_upload INTEGER NOT NULL,
+    last_modified_at INTEGER NOT NULL DEFAULT 0,
+    version INTEGER NOT NULL DEFAULT 0,
+    is_syncing INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY(anime_id) REFERENCES animes (_id)
+    ON DELETE CASCADE
+);
+
+INSERT INTO episodes(_id, anime_id, url, name, scanlator, seen, bookmark, fillermark, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at, version, is_syncing)
+SELECT _id, anime_id, url, name, scanlator, seen, bookmark, 0, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at, version, is_syncing
+FROM episodes_tmp;
+
+DROP TABLE episodes_tmp;
+
+
+ALTER TABLE animes
+RENAME TO animes_tmp;
+
+CREATE TABLE animes(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    source INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    artist TEXT,
+    author TEXT,
+    description TEXT,
+    genre TEXT AS List<String>,
+    title TEXT NOT NULL,
+    status INTEGER NOT NULL,
+    thumbnail_url TEXT,
+    background_url TEXT,
+    favorite INTEGER AS Boolean NOT NULL,
+    last_update INTEGER,
+    next_update INTEGER,
+    initialized INTEGER AS Boolean NOT NULL,
+    viewer INTEGER NOT NULL,
+    episode_flags INTEGER NOT NULL,
+    cover_last_modified INTEGER NOT NULL,
+    background_last_modified INTEGER NOT NULL,
+    date_added INTEGER NOT NULL,
+    update_strategy INTEGER AS AnimeUpdateStrategy NOT NULL DEFAULT 0,
+    calculate_interval INTEGER DEFAULT 0 NOT NULL,
+    last_modified_at INTEGER NOT NULL DEFAULT 0,
+    favorite_modified_at INTEGER,
+    version INTEGER NOT NULL DEFAULT 0,
+    is_syncing INTEGER NOT NULL DEFAULT 0,
+    fetch_type INTEGER NOT NULL DEFAULT 1,
+    parent_id INTEGER,
+    season_flags INTEGER NOT NULL DEFAULT 0,
+    season_number REAL NOT NULL DEFAULT -1.0,
+    season_source_order INTEGER NOT NULL DEFAULT 0
+);
+
+INSERT INTO animes(_id, source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, background_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, favorite_modified_at, version, is_syncing, fetch_type, parent_id, season_flags, season_number, season_source_order)
+SELECT _id, source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, 0, date_added, update_strategy, calculate_interval, last_modified_at, favorite_modified_at, version, is_syncing, fetch_type, parent_id, season_flags, season_number, season_source_order
+FROM animes_tmp;
+
+DROP TABLE animes_tmp;
+
+
+DROP VIEW IF EXISTS animeupdatesView;
+
+CREATE VIEW animeupdatesView AS
+SELECT
+    animes._id AS animeId,
+    animes.title AS animeTitle,
+    episodes._id AS episodeId,
+    episodes.name AS episodeName,
+    episodes.scanlator,
+    episodes.seen,
+    episodes.bookmark,
+    episodes.fillermark,
+    episodes.last_second_seen,
+    episodes.total_seconds AS totalSeconds,
+    animes.source,
+    animes.favorite,
+    animes.thumbnail_url AS thumbnailUrl,
+    animes.cover_last_modified AS coverLastModified,
+    episodes.date_upload AS dateUpload,
+    episodes.date_fetch AS datefetch
+FROM animes JOIN episodes
+ON animes._id = episodes.anime_id
+WHERE favorite = 1
+AND date_fetch > date_added
+ORDER BY date_fetch DESC;
+
+DROP VIEW IF EXISTS episodestatsView;
+CREATE VIEW episodestatsView AS
+SELECT
+    e.anime_id,
+    count(*) AS total,
+    sum(seen) AS seenCount,
+    coalesce(max(e.date_upload), 0) AS latestUpload,
+    coalesce(max(e.date_fetch), 0) AS fetchedAt,
+    sum(e.bookmark) AS bookmarkCount,
+    sum(e.fillermark) AS fillermarkCount
+FROM episodes e
+GROUP BY e.anime_id;
+
+DROP VIEW IF EXISTS animeseasonstatsView;
+CREATE VIEW animeseasonstatsView AS
+SELECT
+    season.parent_id,
+    count(*) AS child_count,
+    sum(CASE WHEN season.fetch_type = 1 AND
+                 coalesce(ES.total, 0) = coalesce(ES.seenCount, 0)
+            THEN 1 ELSE 0 END) AS fully_seen_seasons,
+    max(coalesce(ES.latestUpload, 0)) AS max_latest_upload,
+    max(coalesce(ES.fetchedAt, 0)) AS max_fetched_at,
+    max(coalesce(AHS.lastSeen, 0)) AS max_last_seen,
+    sum(coalesce(ES.bookmarkCount, 0)) AS total_bookmarks,
+    sum(coalesce(ES.fillermarkCount, 0)) AS total_fillermarks
+FROM animes season
+LEFT JOIN episodestatsView ES ON season._id = ES.anime_id
+LEFT JOIN animehistorystatsView AHS ON season._id = AHS.anime_id
+WHERE season.parent_id IS NOT NULL
+GROUP BY season.parent_id;
+
+DROP VIEW IF EXISTS animelibView;
+CREATE VIEW animelibView AS
+SELECT
+    M.*,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.total, 0)
+        WHEN 0 THEN coalesce(ASS.child_count, 0)
+    END AS totalCount,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.seenCount, 0)
+        WHEN 0 THEN coalesce(ASS.fully_seen_seasons, 0)
+    END AS seenCount,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.latestUpload, 0)
+        WHEN 0 THEN coalesce(ASS.max_latest_upload, 0)
+    END AS latestUpload,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.fetchedAt, 0)
+        WHEN 0 THEN coalesce(ASS.max_fetched_at, 0)
+    END AS episodeFetchedAt,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(AHS.lastSeen, 0)
+        WHEN 0 THEN coalesce(ASS.max_last_seen, 0)
+    END AS lastSeen,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.bookmarkCount, 0)
+        WHEN 0 THEN coalesce(ASS.total_bookmarks, 0)
+    END AS bookmarkCount,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.fillermarkCount, 0)
+        WHEN 0 THEN coalesce(ASS.total_fillermarks, 0)
+    END AS fillermarkCount,
+    coalesce(MC.category_id, 0) AS category
+FROM animes M
+LEFT JOIN episodestatsView AS ES ON M._id = ES.anime_id
+LEFT JOIN animehistorystatsView AS AHS ON M._id = AHS.anime_id
+LEFT JOIN animes_categories AS MC ON MC.anime_id = M._id
+LEFT JOIN animeseasonstatsView AS ASS ON M._id = ASS.parent_id
+WHERE M.favorite = 1;
+
+DROP VIEW IF EXISTS animeseasonsView;
+CREATE VIEW animeseasonsView AS
+SELECT
+    SA.*,
+    CASE SA.fetch_type
+        WHEN 1 THEN coalesce(ESSA.total, 0)
+        WHEN 0 THEN (SELECT count(*) FROM animes WHERE parent_id = SA._id)
+    END AS totalCount,
+    CASE SA.fetch_type
+        WHEN 1 THEN coalesce(ESSA.seenCount, 0)
+        WHEN 0 THEN (
+            SELECT count(*)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = SA._id
+              AND season.fetch_type = 1
+              AND coalesce(season_stats.total, 0) = coalesce(season_stats.seenCount, 0)
+        )
+    END AS seenCount,
+    CASE SA.fetch_type
+        WHEN 1 THEN coalesce(ESSA.latestUpload, 0)
+        WHEN 0 THEN (
+            SELECT coalesce(max(season_stats.latestUpload), 0)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = SA._id
+        )
+    END AS latestUpload,
+    CASE SA.fetch_type
+        WHEN 1 THEN coalesce(ESSA.fetchedAt, 0)
+        WHEN 0 THEN (
+            SELECT coalesce(max(season_stats.fetchedAt), 0)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = SA._id
+        )
+    END AS episodeFetchedAt,
+    CASE SA.fetch_type
+        WHEN 1 THEN coalesce(AHSSA.lastSeen, 0)
+        WHEN 0 THEN (
+            SELECT coalesce(max(child_history.lastSeen), 0)
+            FROM animes season
+            LEFT JOIN animehistorystatsView child_history ON season._id = child_history.anime_id
+            WHERE season.parent_id = SA._id
+        )
+    END AS lastSeen,
+    CASE SA.fetch_type
+        WHEN 1 THEN coalesce(ESSA.bookmarkCount, 0)
+        WHEN 0 THEN (
+            SELECT sum(season_stats.bookmarkCount)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = SA._id
+        )
+    END AS bookmarkCount,
+    CASE SA.fetch_type
+        WHEN 1 THEN coalesce(ESSA.fillermarkCount, 0)
+        WHEN 0 THEN (
+            SELECT coalesce(sum(season_stats.fillermarkCount), 0)
+            FROM animes season
+            LEFT JOIN episodestatsView season_stats ON season._id = season_stats.anime_id
+            WHERE season.parent_id = SA._id
+        )
+    END AS fillermarkCount
+FROM animes AS SA
+LEFT JOIN episodestatsView AS ESSA
+ON SA._id = ESSA.anime_id
+LEFT JOIN animehistorystatsView AS AHSSA
+ON SA._id = AHSSA.anime_id
+WHERE SA.parent_id IS NOT NULL;

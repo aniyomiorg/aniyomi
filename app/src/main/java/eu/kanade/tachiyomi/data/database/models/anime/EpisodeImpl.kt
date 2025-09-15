@@ -14,9 +14,15 @@ class EpisodeImpl : Episode {
 
     override var scanlator: String? = null
 
+    override var summary: String? = null
+
+    override var preview_url: String? = null
+
     override var seen: Boolean = false
 
     override var bookmark: Boolean = false
+
+    override var fillermark: Boolean = false
 
     override var last_second_seen: Long = 0
 

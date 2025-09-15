@@ -1,4 +1,4 @@
-package eu.kanade.presentation.browse.manga.components
+package eu.kanade.presentation.browse
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

@@ -20,12 +20,16 @@ class SetAnimeSeasonFlags(
         return setFlag(anime, flag, Anime.SEASON_STARTED_MASK)
     }
 
+    suspend fun awaitSetCompletedFilter(anime: Anime, flag: Long): Boolean {
+        return setFlag(anime, flag, Anime.SEASON_COMPLETED_MASK)
+    }
+
     suspend fun awaitSetBookmarkedFilter(anime: Anime, flag: Long): Boolean {
         return setFlag(anime, flag, Anime.SEASON_BOOKMARKED_MASK)
     }
 
-    suspend fun awaitSetCompletedFilter(anime: Anime, flag: Long): Boolean {
-        return setFlag(anime, flag, Anime.SEASON_COMPLETED_MASK)
+    suspend fun awaitSetFillermarkedFilter(anime: Anime, flag: Long): Boolean {
+        return setFlag(anime, flag, Anime.SEASON_FILLERMARKED_MASK)
     }
 
     suspend fun awaitSetSortingModeOrFlipOrder(anime: Anime, flag: Long): Boolean {
@@ -102,8 +106,9 @@ class SetAnimeSeasonFlags(
         downloadFilter: Long,
         unseenFilter: Long,
         startedFilter: Long,
-        bookmarkedFilter: Long,
         completedFilter: Long,
+        bookmarkedFilter: Long,
+        fillermarkedFilter: Long,
         sortingMode: Long,
         sortingDirection: Long,
         displayGridMode: SeasonDisplayMode,
@@ -121,8 +126,9 @@ class SetAnimeSeasonFlags(
                 seasonFlags = 0L.setFlag(downloadFilter, Anime.SEASON_DOWNLOADED_MASK)
                     .setFlag(unseenFilter, Anime.SEASON_UNSEEN_MASK)
                     .setFlag(startedFilter, Anime.SEASON_STARTED_MASK)
-                    .setFlag(bookmarkedFilter, Anime.SEASON_BOOKMARKED_MASK)
                     .setFlag(completedFilter, Anime.SEASON_COMPLETED_MASK)
+                    .setFlag(bookmarkedFilter, Anime.SEASON_BOOKMARKED_MASK)
+                    .setFlag(fillermarkedFilter, Anime.SEASON_FILLERMARKED_MASK)
                     .setFlag(sortingMode, Anime.SEASON_SORT_MASK)
                     .setFlag(sortingDirection, Anime.SEASON_SORT_DIR_MASK)
                     .setFlag(

@@ -8,6 +8,7 @@ data class LibraryAnime(
     val totalCount: Long,
     val seenCount: Long,
     val bookmarkCount: Long,
+    val fillermarkCount: Long,
     val latestUpload: Long,
     val episodeFetchedAt: Long,
     val lastSeen: Long,

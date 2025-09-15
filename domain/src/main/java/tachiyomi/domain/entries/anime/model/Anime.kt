@@ -22,6 +22,7 @@ data class Anime(
     val viewerFlags: Long,
     val episodeFlags: Long,
     val coverLastModified: Long,
+    val backgroundLastModified: Long,
     val url: String,
     val title: String,
     val artist: String?,
@@ -30,6 +31,7 @@ data class Anime(
     val genre: List<String>?,
     val status: Long,
     val thumbnailUrl: String?,
+    val backgroundUrl: String?,
     val updateStrategy: AnimeUpdateStrategy,
     val initialized: Boolean,
     val lastModifiedAt: Long,
@@ -62,6 +64,9 @@ data class Anime(
     val bookmarkedFilterRaw: Long
         get() = episodeFlags and EPISODE_BOOKMARKED_MASK
 
+    val fillermarkedFilterRaw: Long
+        get() = episodeFlags and EPISODE_FILLERMARKED_MASK
+
     val skipIntroLength: Int
         get() = (viewerFlags and ANIME_INTRO_MASK).toInt()
 
@@ -88,8 +93,23 @@ data class Anime(
             else -> TriState.DISABLED
         }
 
+    val fillermarkedFilter: TriState
+        get() = when (fillermarkedFilterRaw) {
+            EPISODE_SHOW_FILLERMARKED -> TriState.ENABLED_IS
+            EPISODE_SHOW_NOT_FILLERMARKED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
+        }
+
     fun sortDescending(): Boolean {
         return episodeFlags and EPISODE_SORT_DIR_MASK == EPISODE_SORT_DESC
+    }
+
+    fun showPreviews(): Boolean {
+        return episodeFlags and EPISODE_PREVIEWS_MASK == EPISODE_SHOW_PREVIEWS
+    }
+
+    fun showSummaries(): Boolean {
+        return episodeFlags and EPISODE_SUMMARIES_MASK == EPISODE_SHOW_SUMMARIES
     }
 
     val seasonDownloadedFilterRaw: Long
@@ -101,11 +121,14 @@ data class Anime(
     val seasonStartedFilterRaw: Long
         get() = seasonFlags and SEASON_STARTED_MASK
 
+    val seasonCompletedFilterRaw: Long
+        get() = seasonFlags and SEASON_COMPLETED_MASK
+
     val seasonBookmarkedFilterRaw: Long
         get() = seasonFlags and SEASON_BOOKMARKED_MASK
 
-    val seasonCompletedFilterRaw: Long
-        get() = seasonFlags and SEASON_COMPLETED_MASK
+    val seasonFillermarkedFilterRaw: Long
+        get() = seasonFlags and SEASON_FILLERMARKED_MASK
 
     val seasonUnseenFilter: TriState
         get() = when (seasonUnseenFilterRaw) {
@@ -121,6 +144,13 @@ data class Anime(
             else -> TriState.DISABLED
         }
 
+    val seasonCompletedFilter: TriState
+        get() = when (seasonCompletedFilterRaw) {
+            SEASON_SHOW_COMPLETED -> TriState.ENABLED_IS
+            SEASON_SHOW_NOT_COMPLETED -> TriState.ENABLED_NOT
+            else -> TriState.DISABLED
+        }
+
     val seasonBookmarkedFilter: TriState
         get() = when (seasonBookmarkedFilterRaw) {
             SEASON_SHOW_BOOKMARKED -> TriState.ENABLED_IS
@@ -128,10 +158,10 @@ data class Anime(
             else -> TriState.DISABLED
         }
 
-    val seasonCompletedFilter: TriState
-        get() = when (seasonCompletedFilterRaw) {
-            SEASON_SHOW_COMPLETED -> TriState.ENABLED_IS
-            SEASON_SHOW_NOT_COMPLETED -> TriState.ENABLED_NOT
+    val seasonFillermarkedFilter: TriState
+        get() = when (seasonFillermarkedFilterRaw) {
+            SEASON_SHOW_FILLERMARKED -> TriState.ENABLED_IS
+            SEASON_SHOW_NOT_FILLERMARKED -> TriState.ENABLED_NOT
             else -> TriState.DISABLED
         }
 
@@ -193,11 +223,23 @@ data class Anime(
         const val EPISODE_SHOW_NOT_BOOKMARKED = 0x00000040L
         const val EPISODE_BOOKMARKED_MASK = 0x00000060L
 
+        const val EPISODE_SHOW_FILLERMARKED = 0x00000080L
+        const val EPISODE_SHOW_NOT_FILLERMARKED = 0x00000100L
+        const val EPISODE_FILLERMARKED_MASK = 0x00000180L
+
         const val EPISODE_SORTING_SOURCE = 0x00000000L
-        const val EPISODE_SORTING_NUMBER = 0x00000100L
-        const val EPISODE_SORTING_UPLOAD_DATE = 0x00000200L
-        const val EPISODE_SORTING_ALPHABET = 0x00000300L
-        const val EPISODE_SORTING_MASK = 0x00000300L
+        const val EPISODE_SORTING_NUMBER = 0x00000200L
+        const val EPISODE_SORTING_UPLOAD_DATE = 0x00000400L
+        const val EPISODE_SORTING_ALPHABET = 0x00000600L
+        const val EPISODE_SORTING_MASK = 0x00000600L
+
+        const val EPISODE_SHOW_PREVIEWS = 0x00000000L
+        const val EPISODE_SHOW_NOT_PREVIEWS = 0x00000800L
+        const val EPISODE_PREVIEWS_MASK = 0x00000800L
+
+        const val EPISODE_SHOW_SUMMARIES = 0x00000000L
+        const val EPISODE_SHOW_NOT_SUMMARIES = 0x00001000L
+        const val EPISODE_SUMMARIES_MASK = 0x00001000L
 
         const val EPISODE_DISPLAY_NAME = 0x00000000L
         const val EPISODE_DISPLAY_NUMBER = 0x00100000L
@@ -219,38 +261,42 @@ data class Anime(
         const val SEASON_SHOW_NOT_STARTED = 0x00000040L
         const val SEASON_STARTED_MASK = 0x00000060L
 
-        const val SEASON_SHOW_BOOKMARKED = 0x00000080L
-        const val SEASON_SHOW_NOT_BOOKMARKED = 0x00000100L
-        const val SEASON_BOOKMARKED_MASK = 0x00000180L
+        const val SEASON_SHOW_COMPLETED = 0x00000080L
+        const val SEASON_SHOW_NOT_COMPLETED = 0x00000100L
+        const val SEASON_COMPLETED_MASK = 0x00000180L
 
-        const val SEASON_SHOW_COMPLETED = 0x00000200L
-        const val SEASON_SHOW_NOT_COMPLETED = 0x00000400L
-        const val SEASON_COMPLETED_MASK = 0x00000600L
+        const val SEASON_SHOW_BOOKMARKED = 0x00000200L
+        const val SEASON_SHOW_NOT_BOOKMARKED = 0x00000400L
+        const val SEASON_BOOKMARKED_MASK = 0x00000600L
+
+        const val SEASON_SHOW_FILLERMARKED = 0x00000800L
+        const val SEASON_SHOW_NOT_FILLERMARKED = 0x00001000L
+        const val SEASON_FILLERMARKED_MASK = 0x00001800L
 
         const val SEASON_SORT_SOURCE = 0x00000000L
-        const val SEASON_SORT_SEASON = 0x00000800L
-        const val SEASON_SORT_UPLOAD = 0x00001000L
-        const val SEASON_SORT_ALPHABET = 0x00001800L
-        const val SEASON_SORT_COUNT = 0x00002000L
-        const val SEASON_SORT_LAST_SEEN = 0x00002800L
-        const val SEASON_SORT_FETCHED = 0x00003000L
-        const val SEASON_SORT_MASK = 0x00003800L
+        const val SEASON_SORT_SEASON = 0x00002000L
+        const val SEASON_SORT_UPLOAD = 0x00004000L
+        const val SEASON_SORT_ALPHABET = 0x00006000L
+        const val SEASON_SORT_COUNT = 0x00008000L
+        const val SEASON_SORT_LAST_SEEN = 0x0000A000L
+        const val SEASON_SORT_FETCHED = 0x0000C000L
+        const val SEASON_SORT_MASK = 0x0000E000L
 
-        const val SEASON_GRID_DISPLAY_MODE_BIT_OFFSET = 14
-        const val SEASON_GRID_DISPLAY_MODE_MASK = 0x0000C000L
+        const val SEASON_GRID_DISPLAY_MODE_BIT_OFFSET = 16
+        const val SEASON_GRID_DISPLAY_MODE_MASK = 0x00030000L
 
-        const val SEASON_GRID_DISPLAY_SIZE_BIT_OFFSET = 16
-        const val SEASON_GRID_DISPLAY_SIZE_MASK = 0x000F0000L
+        const val SEASON_GRID_DISPLAY_SIZE_BIT_OFFSET = 18
+        const val SEASON_GRID_DISPLAY_SIZE_MASK = 0x003C0000L
 
-        const val SEASON_OVERLAY_DOWNLOADED_MASK = 0x00100000L
-        const val SEASON_OVERLAY_UNSEEN_MASK = 0x00200000L
-        const val SEASON_OVERLAY_LOCAL_MASK = 0x00400000L
-        const val SEASON_OVERLAY_LANG_MASK = 0x00800000L
-        const val SEASON_OVERLAY_CONT_MASK = 0x01000000L
+        const val SEASON_OVERLAY_DOWNLOADED_MASK = 0x00400000L
+        const val SEASON_OVERLAY_UNSEEN_MASK = 0x00800000L
+        const val SEASON_OVERLAY_LOCAL_MASK = 0x01000000L
+        const val SEASON_OVERLAY_LANG_MASK = 0x02000000L
+        const val SEASON_OVERLAY_CONT_MASK = 0x04000000L
 
         const val SEASON_DISPLAY_MODE_SOURCE = 0x00000000L
-        const val SEASON_DISPLAY_MODE_NUMBER = 0x02000000L
-        const val SEASON_DISPLAY_MODE_MASK = 0x02000000L
+        const val SEASON_DISPLAY_MODE_NUMBER = 0x08000000L
+        const val SEASON_DISPLAY_MODE_MASK = 0x08000000L
 
         const val ANIME_INTRO_MASK = 0x0000000000000FFL
         const val ANIME_AIRING_EPISODE_MASK = 0x000000000FFFF00L
@@ -270,12 +316,14 @@ data class Anime(
             viewerFlags = 0L,
             episodeFlags = 0L,
             coverLastModified = 0L,
+            backgroundLastModified = 0L,
             artist = null,
             author = null,
             description = null,
             genre = null,
             status = 0L,
             thumbnailUrl = null,
+            backgroundUrl = null,
             updateStrategy = AnimeUpdateStrategy.ALWAYS_UPDATE,
             initialized = false,
             lastModifiedAt = 0L,

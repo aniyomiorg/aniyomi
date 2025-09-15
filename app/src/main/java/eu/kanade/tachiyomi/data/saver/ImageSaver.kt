@@ -26,6 +26,8 @@ import java.io.File
 import java.io.InputStream
 import java.time.Instant
 
+typealias ImageBackground = Image.Cover
+
 class ImageSaver(
     val context: Context,
 ) {

@@ -1,18 +1,17 @@
 package eu.kanade.presentation.browse.manga.components
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import eu.kanade.presentation.browse.BrowseSourceLoadingItem
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.library.components.CommonEntryItemDefaults
 import eu.kanade.presentation.library.components.EntryListItem
@@ -30,34 +29,38 @@ fun BrowseMangaSourceList(
     onMangaClick: (Manga) -> Unit,
     onMangaLongClick: (Manga) -> Unit,
 ) {
-    var containerHeight by remember { mutableIntStateOf(0) }
-    LazyColumn(
-        contentPadding = contentPadding + PaddingValues(vertical = 8.dp),
-        modifier = Modifier
-            .onGloballyPositioned { layoutCoordinates ->
-                containerHeight = layoutCoordinates.size.height - topBarHeight
-            },
-    ) {
-        item {
-            if (mangaList.loadState.prepend is LoadState.Loading) {
-                BrowseSourceLoadingItem()
+    val sourceListState = rememberLazyListState()
+    BoxWithConstraints {
+        val density = LocalDensity.current
+        val containerHeightPx = with(density) { this@BoxWithConstraints.maxHeight.roundToPx() }
+
+        LazyColumn(
+            state = sourceListState,
+            contentPadding = contentPadding + PaddingValues(vertical = 8.dp),
+        ) {
+            item {
+                if (mangaList.loadState.prepend is LoadState.Loading) {
+                    BrowseSourceLoadingItem()
+                }
             }
-        }
 
-        items(count = mangaList.itemCount) { index ->
-            val manga by mangaList[index]?.collectAsState() ?: return@items
-            BrowseMangaSourceListItem(
-                manga = manga,
-                onClick = { onMangaClick(manga) },
-                onLongClick = { onMangaLongClick(manga) },
-                entries = entries,
-                containerHeight = containerHeight,
-            )
-        }
+            items(count = mangaList.itemCount) { index ->
+                val manga by mangaList[index]?.collectAsState() ?: return@items
+                BrowseMangaSourceListItem(
+                    manga = manga,
+                    onClick = { onMangaClick(manga) },
+                    onLongClick = { onMangaLongClick(manga) },
+                    entries = entries,
+                    containerHeight = containerHeightPx - topBarHeight,
+                )
+            }
 
-        item {
-            if (mangaList.loadState.refresh is LoadState.Loading || mangaList.loadState.append is LoadState.Loading) {
-                BrowseSourceLoadingItem()
+            item {
+                if (mangaList.loadState.refresh is LoadState.Loading ||
+                    mangaList.loadState.append is LoadState.Loading
+                ) {
+                    BrowseSourceLoadingItem()
+                }
             }
         }
     }

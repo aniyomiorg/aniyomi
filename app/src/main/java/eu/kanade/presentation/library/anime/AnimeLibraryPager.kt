@@ -1,6 +1,7 @@
 package eu.kanade.presentation.library.anime
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,13 +13,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.presentation.library.components.GlobalSearchItem
@@ -44,78 +43,80 @@ fun AnimeLibraryPager(
     onLongClickAnime: (LibraryAnime) -> Unit,
     onClickContinueWatching: ((LibraryAnime) -> Unit)?,
 ) {
-    var containerHeight by remember { mutableIntStateOf(0) }
-    HorizontalPager(
-        modifier = Modifier
-            .fillMaxSize()
-            .onGloballyPositioned { layoutCoordinates ->
-                containerHeight = layoutCoordinates.size.height
-            },
-        state = state,
-        verticalAlignment = Alignment.Top,
-    ) { page ->
-        if (page !in ((state.currentPage - 1)..(state.currentPage + 1))) {
-            // To make sure only one offscreen page is being composed
-            return@HorizontalPager
-        }
-        val library = getLibraryForPage(page)
+    BoxWithConstraints {
+        val density = LocalDensity.current
+        val containerHeightPx = with(density) { this@BoxWithConstraints.maxHeight.roundToPx() }
 
-        if (library.isEmpty()) {
-            LibraryPagerEmptyScreen(
-                searchQuery = searchQuery,
-                hasActiveFilters = hasActiveFilters,
-                contentPadding = contentPadding,
-                onGlobalSearchClicked = onGlobalSearchClicked,
-            )
-            return@HorizontalPager
-        }
-
-        val displayMode by getDisplayMode(page)
-        val configuration = LocalConfiguration.current
-        val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val columns by remember(isLandscape) { getColumnsForOrientation(isLandscape) }
-
-        when (displayMode) {
-            LibraryDisplayMode.List -> {
-                AnimeLibraryList(
-                    items = library,
-                    entries = columns,
-                    containerHeight = containerHeight,
-                    contentPadding = contentPadding,
-                    selection = selectedAnime,
-                    onClick = onClickAnime,
-                    onClickContinueWatching = onClickContinueWatching,
-                    onLongClick = onLongClickAnime,
-                    searchQuery = searchQuery,
-                    onGlobalSearchClicked = onGlobalSearchClicked,
-                )
+        HorizontalPager(
+            modifier = Modifier.fillMaxSize(),
+            state = state,
+            verticalAlignment = Alignment.Top,
+        ) { page ->
+            if (page !in ((state.currentPage - 1)..(state.currentPage + 1))) {
+                // To make sure only one offscreen page is being composed
+                return@HorizontalPager
             }
-            LibraryDisplayMode.CompactGrid, LibraryDisplayMode.CoverOnlyGrid -> {
-                AnimeLibraryCompactGrid(
-                    items = library,
-                    showTitle = displayMode is LibraryDisplayMode.CompactGrid,
-                    columns = columns,
-                    contentPadding = contentPadding,
-                    selection = selectedAnime,
-                    onClick = onClickAnime,
-                    onClickContinueWatching = onClickContinueWatching,
-                    onLongClick = onLongClickAnime,
+            val library = getLibraryForPage(page)
+
+            if (library.isEmpty()) {
+                LibraryPagerEmptyScreen(
                     searchQuery = searchQuery,
+                    hasActiveFilters = hasActiveFilters,
+                    contentPadding = contentPadding,
                     onGlobalSearchClicked = onGlobalSearchClicked,
                 )
+                return@HorizontalPager
             }
-            LibraryDisplayMode.ComfortableGrid -> {
-                AnimeLibraryComfortableGrid(
-                    items = library,
-                    columns = columns,
-                    contentPadding = contentPadding,
-                    selection = selectedAnime,
-                    onClick = onClickAnime,
-                    onLongClick = onLongClickAnime,
-                    onClickContinueWatching = onClickContinueWatching,
-                    searchQuery = searchQuery,
-                    onGlobalSearchClicked = onGlobalSearchClicked,
-                )
+
+            val displayMode by getDisplayMode(page)
+            val configuration = LocalConfiguration.current
+            val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            val columns by remember(isLandscape) { getColumnsForOrientation(isLandscape) }
+
+            when (displayMode) {
+                LibraryDisplayMode.List -> {
+                    AnimeLibraryList(
+                        items = library,
+                        entries = columns,
+                        containerHeight = containerHeightPx,
+                        contentPadding = contentPadding,
+                        selection = selectedAnime,
+                        onClick = onClickAnime,
+                        onClickContinueWatching = onClickContinueWatching,
+                        onLongClick = onLongClickAnime,
+                        searchQuery = searchQuery,
+                        onGlobalSearchClicked = onGlobalSearchClicked,
+                    )
+                }
+
+                LibraryDisplayMode.CompactGrid, LibraryDisplayMode.CoverOnlyGrid -> {
+                    AnimeLibraryCompactGrid(
+                        items = library,
+                        showTitle = displayMode is LibraryDisplayMode.CompactGrid,
+                        columns = columns,
+                        contentPadding = contentPadding,
+                        selection = selectedAnime,
+                        onClick = onClickAnime,
+                        onClickContinueWatching = onClickContinueWatching,
+                        onLongClick = onLongClickAnime,
+                        searchQuery = searchQuery,
+                        onGlobalSearchClicked = onGlobalSearchClicked,
+                    )
+                }
+
+                LibraryDisplayMode.ComfortableGrid -> {
+                    AnimeLibraryComfortableGrid(
+                        items = library,
+                        columns = columns,
+                        contentPadding = contentPadding,
+                        selection = selectedAnime,
+                        onClick = onClickAnime,
+                        onLongClick = onLongClickAnime,
+                        onClickContinueWatching = onClickContinueWatching,
+                        searchQuery = searchQuery,
+                        onGlobalSearchClicked = onGlobalSearchClicked,
+                    )
+                }
             }
         }
     }

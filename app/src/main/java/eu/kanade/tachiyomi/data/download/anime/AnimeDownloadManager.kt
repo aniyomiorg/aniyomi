@@ -143,7 +143,8 @@ class AnimeDownloadManager(
         alt: Boolean = false,
         video: Video? = null,
     ) {
-        downloader.queueEpisodes(anime, episodes, autoStart, alt, video)
+        val filteredEpisodes = getEpisodesToDownload(episodes)
+        downloader.queueEpisodes(anime, filteredEpisodes, autoStart, alt, video)
     }
 
     /**
@@ -423,6 +424,14 @@ class AnimeDownloadManager(
             filteredCategoryAnime.filterNot { it.bookmark }
         } else {
             filteredCategoryAnime
+        }
+    }
+
+    private fun getEpisodesToDownload(episodes: List<Episode>): List<Episode> {
+        return if (!downloadPreferences.downloadFillermarkedItems().get()) {
+            episodes.filterNot { it.fillermark }
+        } else {
+            episodes
         }
     }
 

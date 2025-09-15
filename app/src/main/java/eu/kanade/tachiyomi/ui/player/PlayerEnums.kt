@@ -24,12 +24,18 @@ import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 
 /**
- * Results of the set as cover feature.
+ * Results of the set as art feature.
  */
-enum class SetAsCover {
+enum class SetAsArt {
     Success,
     AddToLibraryFirst,
     Error,
+}
+
+enum class ArtType {
+    Cover,
+    Background,
+    Thumbnail,
 }
 
 enum class PlayerOrientation(val titleRes: StringResource) {

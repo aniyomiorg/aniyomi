@@ -5,6 +5,7 @@ data class EpisodeUpdate(
     val animeId: Long? = null,
     val seen: Boolean? = null,
     val bookmark: Boolean? = null,
+    val fillermark: Boolean? = null,
     val lastSecondSeen: Long? = null,
     val totalSeconds: Long? = null,
     val dateFetch: Long? = null,
@@ -14,6 +15,8 @@ data class EpisodeUpdate(
     val dateUpload: Long? = null,
     val episodeNumber: Double? = null,
     val scanlator: String? = null,
+    val summary: String? = null,
+    val previewUrl: String? = null,
     val version: Long? = null,
 )
 
@@ -23,6 +26,7 @@ fun Episode.toEpisodeUpdate(): EpisodeUpdate {
         animeId,
         seen,
         bookmark,
+        fillermark,
         lastSecondSeen,
         totalSeconds,
         dateFetch,
@@ -32,6 +36,8 @@ fun Episode.toEpisodeUpdate(): EpisodeUpdate {
         dateUpload,
         episodeNumber,
         scanlator,
+        summary,
+        previewUrl,
         version,
     )
 }

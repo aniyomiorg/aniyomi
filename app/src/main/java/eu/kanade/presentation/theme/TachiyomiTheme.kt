@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.AppTheme
@@ -84,14 +85,14 @@ private fun getThemeColorScheme(
     )
 }
 
-private const val RIPPLE_DRAGGED_ALPHA = .5f
-private const val RIPPLE_FOCUSED_ALPHA = .6f
-private const val RIPPLE_HOVERED_ALPHA = .4f
-private const val RIPPLE_PRESSED_ALPHA = .6f
+private const val RIPPLE_DRAGGED_ALPHA = .1f
+private const val RIPPLE_FOCUSED_ALPHA = .1f
+private const val RIPPLE_HOVERED_ALPHA = .1f
+private const val RIPPLE_PRESSED_ALPHA = .1f
 
 val playerRippleConfiguration
     @Composable get() = RippleConfiguration(
-        color = MaterialTheme.colorScheme.primaryContainer,
+        color = if (isSystemInDarkTheme()) Color.White else Color.Black,
         rippleAlpha = RippleAlpha(
             draggedAlpha = RIPPLE_DRAGGED_ALPHA,
             focusedAlpha = RIPPLE_FOCUSED_ALPHA,

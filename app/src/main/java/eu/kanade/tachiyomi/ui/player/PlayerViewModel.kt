@@ -78,7 +78,9 @@ import eu.kanade.tachiyomi.ui.player.utils.AniSkipApi
 import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
 import eu.kanade.tachiyomi.ui.player.utils.TrackSelect
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
+import eu.kanade.tachiyomi.util.editBackground
 import eu.kanade.tachiyomi.util.editCover
+import eu.kanade.tachiyomi.util.editThumbnail
 import eu.kanade.tachiyomi.util.episode.filterDownloadedEpisodes
 import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
@@ -105,7 +107,6 @@ import logcat.LogPriority
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
-import tachiyomi.core.common.util.lang.toLong
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
@@ -1092,7 +1093,11 @@ class PlayerViewModel @JvmOverloads constructor(
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_BOOKMARKED &&
                 !it.bookmark ||
                 anime.bookmarkedFilterRaw == Anime.EPISODE_SHOW_NOT_BOOKMARKED &&
-                it.bookmark
+                it.bookmark ||
+                anime.fillermarkedFilterRaw == Anime.EPISODE_SHOW_FILLERMARKED &&
+                !it.fillermark ||
+                anime.fillermarkedFilterRaw == Anime.EPISODE_SHOW_NOT_FILLERMARKED &&
+                it.fillermark
         }.toMutableList()
 
         if (episodesForPlayer.all { it.id != episodeId }) {
@@ -1656,6 +1661,7 @@ class PlayerViewModel @JvmOverloads constructor(
                     id = episode.id!!,
                     seen = episode.seen,
                     bookmark = episode.bookmark,
+                    fillermark = episode.fillermark,
                     lastSecondSeen = episode.last_second_seen,
                     totalSeconds = episode.total_seconds,
                 ),
@@ -1685,6 +1691,20 @@ class PlayerViewModel @JvmOverloads constructor(
                 EpisodeUpdate(
                     id = episodeId!!,
                     bookmark = bookmarked,
+                ),
+            )
+        }
+    }
+
+    /**
+     * Fillermarks the currently active episode.
+     */
+    fun fillermarkEpisode(episodeId: Long?, fillermarked: Boolean) {
+        viewModelScope.launchNonCancellable {
+            updateEpisode.await(
+                EpisodeUpdate(
+                    id = episodeId!!,
+                    fillermark = fillermarked,
                 ),
             )
         }
@@ -1773,23 +1793,29 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     /**
-     * Sets the screenshot as cover and notifies the UI of the result.
+     * Sets the screenshot as art and notifies the UI of the result.
      */
-    fun setAsCover(imageStream: () -> InputStream) {
+    fun setAsArt(artType: ArtType, imageStream: () -> InputStream) {
         val anime = currentAnime.value ?: return
+        val episode = currentEpisode.value ?: return
 
         viewModelScope.launchNonCancellable {
             val result = try {
-                anime.editCover(Injekt.get(), imageStream())
+                when (artType) {
+                    ArtType.Cover -> anime.editCover(Injekt.get(), imageStream())
+                    ArtType.Background -> anime.editBackground(Injekt.get(), imageStream())
+                    ArtType.Thumbnail -> episode.editThumbnail(anime, Injekt.get(), imageStream())
+                }
+
                 if (anime.isLocal() || anime.favorite) {
-                    SetAsCover.Success
+                    SetAsArt.Success
                 } else {
-                    SetAsCover.AddToLibraryFirst
+                    SetAsArt.AddToLibraryFirst
                 }
             } catch (e: Exception) {
-                SetAsCover.Error
+                SetAsArt.Error
             }
-            eventChannel.send(Event.SetCoverResult(result))
+            eventChannel.send(Event.SetArtResult(result, artType))
         }
     }
 
@@ -2014,7 +2040,7 @@ class PlayerViewModel @JvmOverloads constructor(
     }
 
     sealed class Event {
-        data class SetCoverResult(val result: SetAsCover) : Event()
+        data class SetArtResult(val result: SetAsArt, val artType: ArtType) : Event()
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val seconds: String) : Event()
     }

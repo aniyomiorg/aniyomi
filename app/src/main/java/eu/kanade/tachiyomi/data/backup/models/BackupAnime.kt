@@ -41,6 +41,7 @@ data class BackupAnime(
     @ProtoNumber(109) var version: Long = 0,
 
     // Aniyomi specific values
+    @ProtoNumber(500) var backgroundUrl: String? = null,
     @ProtoNumber(501) var fetchType: FetchType = FetchType.Episodes,
     @ProtoNumber(502) var parentId: Long? = null,
     @ProtoNumber(503) var id: Long? = null, // Used to associate seasons with parents. Do not use for anything else.
@@ -58,6 +59,7 @@ data class BackupAnime(
             genre = this@BackupAnime.genre,
             status = this@BackupAnime.status.toLong(),
             thumbnailUrl = this@BackupAnime.thumbnailUrl,
+            backgroundUrl = this@BackupAnime.backgroundUrl,
             favorite = this@BackupAnime.favorite,
             source = this@BackupAnime.source,
             dateAdded = this@BackupAnime.dateAdded,

@@ -23,12 +23,14 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Label
+import androidx.compose.material.icons.automirrored.outlined.LabelOff
 import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material.icons.outlined.BookmarkRemove
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.DoneAll
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Input
+import androidx.compose.material.icons.outlined.NewLabel
 import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.RemoveDone
 import androidx.compose.material3.Icon
@@ -73,6 +75,8 @@ fun EntryBottomActionMenu(
     modifier: Modifier = Modifier,
     onBookmarkClicked: (() -> Unit)? = null,
     onRemoveBookmarkClicked: (() -> Unit)? = null,
+    onFillermarkClicked: (() -> Unit)? = null,
+    onRemoveFillermarkClicked: (() -> Unit)? = null,
     onMarkAsViewedClicked: (() -> Unit)? = null,
     onMarkAsUnviewedClicked: (() -> Unit)? = null,
     onMarkPreviousAsViewedClicked: (() -> Unit)? = null,
@@ -97,11 +101,15 @@ fun EntryBottomActionMenu(
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
         ) {
             val haptic = LocalHapticFeedback.current
-            val confirm = remember { mutableStateListOf(false, false, false, false, false, false, false, false, false) }
+            val confirm =
+                remember {
+                    mutableStateListOf(false, false, false, false, false, false, false, false, false, false, false)
+                }
+            val confirmRange = 0..<11
             var resetJob: Job? = remember { null }
             val onLongClickItem: (Int) -> Unit = { toConfirmIndex ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                (0..<9).forEach { i -> confirm[i] = i == toConfirmIndex }
+                (confirmRange).forEach { i -> confirm[i] = i == toConfirmIndex }
                 resetJob?.cancel()
                 resetJob = scope.launch {
                     delay(1.seconds)
@@ -141,13 +149,31 @@ fun EntryBottomActionMenu(
                         onClick = onRemoveBookmarkClicked,
                     )
                 }
+                if (onFillermarkClicked != null) {
+                    Button(
+                        title = stringResource(AYMR.strings.action_fillermark_episode),
+                        icon = Icons.Outlined.NewLabel,
+                        toConfirm = confirm[2],
+                        onLongClick = { onLongClickItem(2) },
+                        onClick = onFillermarkClicked,
+                    )
+                }
+                if (onRemoveFillermarkClicked != null) {
+                    Button(
+                        title = stringResource(AYMR.strings.action_remove_fillermark_episode),
+                        icon = Icons.AutoMirrored.Outlined.LabelOff,
+                        toConfirm = confirm[3],
+                        onLongClick = { onLongClickItem(3) },
+                        onClick = onRemoveFillermarkClicked,
+                    )
+                }
                 if (onMarkAsViewedClicked != null) {
                     val viewed = if (isManga) MR.strings.action_mark_as_read else AYMR.strings.action_mark_as_seen
                     Button(
                         title = stringResource(viewed),
                         icon = Icons.Outlined.DoneAll,
-                        toConfirm = confirm[2],
-                        onLongClick = { onLongClickItem(2) },
+                        toConfirm = confirm[4],
+                        onLongClick = { onLongClickItem(4) },
                         onClick = onMarkAsViewedClicked,
                     )
                 }
@@ -156,8 +182,8 @@ fun EntryBottomActionMenu(
                     Button(
                         title = stringResource(unviewed),
                         icon = Icons.Outlined.RemoveDone,
-                        toConfirm = confirm[3],
-                        onLongClick = { onLongClickItem(3) },
+                        toConfirm = confirm[5],
+                        onLongClick = { onLongClickItem(5) },
                         onClick = onMarkAsUnviewedClicked,
                     )
                 }
@@ -170,8 +196,8 @@ fun EntryBottomActionMenu(
                     Button(
                         title = stringResource(previousUnviewed),
                         icon = ImageVector.vectorResource(R.drawable.ic_done_prev_24dp),
-                        toConfirm = confirm[4],
-                        onLongClick = { onLongClickItem(4) },
+                        toConfirm = confirm[6],
+                        onLongClick = { onLongClickItem(6) },
                         onClick = onMarkPreviousAsViewedClicked,
                     )
                 }
@@ -179,8 +205,8 @@ fun EntryBottomActionMenu(
                     Button(
                         title = stringResource(MR.strings.action_download),
                         icon = Icons.Outlined.Download,
-                        toConfirm = confirm[5],
-                        onLongClick = { onLongClickItem(5) },
+                        toConfirm = confirm[7],
+                        onLongClick = { onLongClickItem(7) },
                         onClick = onDownloadClicked,
                     )
                 }
@@ -188,8 +214,8 @@ fun EntryBottomActionMenu(
                     Button(
                         title = stringResource(MR.strings.action_delete),
                         icon = Icons.Outlined.Delete,
-                        toConfirm = confirm[6],
-                        onLongClick = { onLongClickItem(6) },
+                        toConfirm = confirm[8],
+                        onLongClick = { onLongClickItem(8) },
                         onClick = onDeleteClicked,
                     )
                 }
@@ -197,8 +223,8 @@ fun EntryBottomActionMenu(
                     Button(
                         title = stringResource(AYMR.strings.action_play_externally),
                         icon = Icons.Outlined.OpenInNew,
-                        toConfirm = confirm[7],
-                        onLongClick = { onLongClickItem(7) },
+                        toConfirm = confirm[9],
+                        onLongClick = { onLongClickItem(9) },
                         onClick = onExternalClicked,
                     )
                 }
@@ -206,8 +232,8 @@ fun EntryBottomActionMenu(
                     Button(
                         title = stringResource(AYMR.strings.action_play_internally),
                         icon = Icons.Outlined.Input,
-                        toConfirm = confirm[8],
-                        onLongClick = { onLongClickItem(8) },
+                        toConfirm = confirm[10],
+                        onLongClick = { onLongClickItem(10) },
                         onClick = onInternalClicked,
                     )
                 }

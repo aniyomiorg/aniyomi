@@ -8,7 +8,8 @@ SELECT
     max(coalesce(ES.latestUpload, 0)) AS max_latest_upload,
     max(coalesce(ES.fetchedAt, 0)) AS max_fetched_at,
     max(coalesce(AHS.lastSeen, 0)) AS max_last_seen,
-    sum(coalesce(ES.bookmarkCount, 0)) AS total_bookmarks
+    sum(coalesce(ES.bookmarkCount, 0)) AS total_bookmarks,
+    sum(coalesce(ES.fillermarkCount, 0)) AS total_fillermarks
 FROM animes season
 LEFT JOIN episodestatsView ES ON season._id = ES.anime_id
 LEFT JOIN animehistorystatsView AHS ON season._id = AHS.anime_id

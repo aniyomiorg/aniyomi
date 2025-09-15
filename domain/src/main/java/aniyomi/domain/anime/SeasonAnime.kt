@@ -8,6 +8,7 @@ data class SeasonAnime(
     val totalCount: Long,
     val seenCount: Long,
     val bookmarkCount: Long,
+    val fillermarkCount: Long,
     val latestUpload: Long,
     val fetchedAt: Long,
     val lastSeen: Long,
@@ -20,10 +21,13 @@ data class SeasonAnime(
     val unseenCount
         get() = totalCount - seenCount
 
+    val hasStarted = seenCount > 0
+
     val hasBookmarks
         get() = bookmarkCount > 0
 
-    val hasStarted = seenCount > 0
+    val hasFillermarks
+        get() = fillermarkCount > 0
 
     fun toLibraryAnime(): LibraryAnime {
         return LibraryAnime(
@@ -32,6 +36,7 @@ data class SeasonAnime(
             totalCount = totalCount,
             seenCount = seenCount,
             bookmarkCount = bookmarkCount,
+            fillermarkCount = fillermarkCount,
             latestUpload = latestUpload,
             episodeFetchedAt = fetchedAt,
             lastSeen = lastSeen,

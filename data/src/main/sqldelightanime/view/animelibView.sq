@@ -25,6 +25,10 @@ SELECT
         WHEN 1 THEN coalesce(ES.bookmarkCount, 0)
         WHEN 0 THEN coalesce(ASS.total_bookmarks, 0)
     END AS bookmarkCount,
+    CASE M.fetch_type
+        WHEN 1 THEN coalesce(ES.fillermarkCount, 0)
+        WHEN 0 THEN coalesce(ASS.total_fillermarks, 0)
+    END AS fillermarkCount,
     coalesce(MC.category_id, 0) AS category
 FROM animes M
 LEFT JOIN episodestatsView AS ES ON M._id = ES.anime_id
