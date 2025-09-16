@@ -242,6 +242,8 @@ class LibraryPreferences(
         sortEpisodeByAscendingOrDescending().set(
             if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC,
         )
+        showEpisodeThumbnailPreviews().set(anime.showPreviewsRaw)
+        showEpisodeSummaries().set(anime.showSummariesRaw)
     }
 
     fun setChapterSettingsDefault(manga: Manga) {
