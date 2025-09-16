@@ -225,8 +225,8 @@
     <string name="dialog_with_checkbox_remove_description_anime">Ceci supprimera la date de visionnage de cet épisode. Êtes-vous sûr·e ?</string>
     <string name="dialog_with_checkbox_reset_anime">Réinitialiser tous les épisodes de cet animé</string>
     <string name="share_screenshot_info">%1$s : %2$s, %3$s</string>
-    <string name="episode_progress">Progression : %1$s/%2$s</string>
-    <string name="episode_progress_no_total">Progression : %1$s</string>
+    <string name="episode_progress">Progression : %1$s/%2$s</string>
+    <string name="episode_progress_no_total">Progression : %1$s</string>
     <string name="recent_anime_time">Ép. %1$s - %2$s</string>
     <string name="video_list_empty_error">Aucune vidéo trouvée</string>
     <string name="notification_new_episodes">Nouveaux épisodes trouvés</string>
