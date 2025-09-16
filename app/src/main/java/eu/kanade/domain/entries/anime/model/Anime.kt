@@ -33,7 +33,8 @@ val Anime.seasonDownloadedFilter: TriState
 fun Anime.episodesFiltered(): Boolean {
     return unseenFilter != TriState.DISABLED ||
         downloadedFilter != TriState.DISABLED ||
-        bookmarkedFilter != TriState.DISABLED
+        bookmarkedFilter != TriState.DISABLED ||
+        fillermarkedFilter != TriState.DISABLED
 }
 
 fun Anime.seasonsFiltered(): Boolean {
