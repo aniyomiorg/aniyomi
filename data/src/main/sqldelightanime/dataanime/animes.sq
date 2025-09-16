@@ -15,7 +15,6 @@ CREATE TABLE animes(
     title TEXT NOT NULL,
     status INTEGER NOT NULL,
     thumbnail_url TEXT,
-    background_url TEXT,
     favorite INTEGER AS Boolean NOT NULL,
     last_update INTEGER,
     next_update INTEGER,
@@ -23,7 +22,6 @@ CREATE TABLE animes(
     viewer INTEGER NOT NULL,
     episode_flags INTEGER NOT NULL,
     cover_last_modified INTEGER NOT NULL,
-    background_last_modified INTEGER NOT NULL,
     date_added INTEGER NOT NULL,
     update_strategy INTEGER AS AnimeUpdateStrategy NOT NULL DEFAULT 0,
     calculate_interval INTEGER DEFAULT 0 NOT NULL,
@@ -35,7 +33,9 @@ CREATE TABLE animes(
     parent_id INTEGER,
     season_flags INTEGER NOT NULL,
     season_number REAL NOT NULL,
-    season_source_order INTEGER NOT NULL
+    season_source_order INTEGER NOT NULL,
+    background_url TEXT,
+    background_last_modified INTEGER NOT NULL
 );
 
 CREATE INDEX animelib_favorite_index ON animes(favorite) WHERE favorite = 1;
@@ -162,8 +162,8 @@ DELETE FROM animes
 WHERE favorite = 0 AND _id IN :animeIds;
 
 insert:
-INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, background_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, background_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id, season_flags, season_number, season_source_order)
-VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :backgroundUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified, :backgroundLastModified,:dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType, :parentId, :seasonFlags, :seasonNumber, :seasonSourceOrder);
+INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id, season_flags, season_number, season_source_order, background_url, background_last_modified)
+VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified,:dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType, :parentId, :seasonFlags, :seasonNumber, :seasonSourceOrder, :backgroundUrl, :backgroundLastModified);
 
 update:
 UPDATE animes SET
@@ -176,7 +176,6 @@ UPDATE animes SET
     title = coalesce(:title, title),
     status = coalesce(:status, status),
     thumbnail_url = coalesce(:thumbnailUrl, thumbnail_url),
-    background_url = coalesce(:backgroundUrl, background_url),
     favorite = coalesce(:favorite, favorite),
     last_update = coalesce(:lastUpdate, last_update),
     next_update = coalesce(:nextUpdate, next_update),
@@ -184,7 +183,6 @@ UPDATE animes SET
     viewer = coalesce(:viewer, viewer),
     episode_flags = coalesce(:episodeFlags, episode_flags),
     cover_last_modified = coalesce(:coverLastModified, cover_last_modified),
-    background_last_modified = coalesce(:backgroundLastModified, background_last_modified),
     date_added = coalesce(:dateAdded, date_added),
     update_strategy = coalesce(:updateStrategy, update_strategy),
     calculate_interval = coalesce(:calculateInterval, calculate_interval),
@@ -194,7 +192,9 @@ UPDATE animes SET
     parent_id = coalesce(:parentId, parent_id),
     season_flags = coalesce(:seasonFlags, season_flags),
     season_number = coalesce(:seasonNumber, season_number),
-    season_source_order = coalesce(:seasonSourceOrder, season_source_order)
+    season_source_order = coalesce(:seasonSourceOrder, season_source_order),
+    background_url = coalesce(:backgroundUrl, background_url),
+    background_last_modified = coalesce(:backgroundLastModified, background_last_modified)
 WHERE _id = :animeId;
 
 selectLastInsertedRowId:

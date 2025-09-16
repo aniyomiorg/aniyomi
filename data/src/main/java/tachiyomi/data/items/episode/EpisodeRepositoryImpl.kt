@@ -21,11 +21,8 @@ class EpisodeRepositoryImpl(
                         episode.url,
                         episode.name,
                         episode.scanlator,
-                        episode.summary,
-                        episode.previewUrl,
                         episode.seen,
                         episode.bookmark,
-                        episode.fillermark,
                         episode.lastSecondSeen,
                         episode.totalSeconds,
                         episode.episodeNumber,
@@ -33,6 +30,9 @@ class EpisodeRepositoryImpl(
                         episode.dateFetch,
                         episode.dateUpload,
                         episode.version,
+                        episode.summary,
+                        episode.previewUrl,
+                        episode.fillermark,
                     )
                     val lastInsertId = episodesQueries.selectLastInsertedRowId().executeAsOne()
                     episode.copy(id = lastInsertId)
@@ -60,11 +60,8 @@ class EpisodeRepositoryImpl(
                     url = episodeUpdate.url,
                     name = episodeUpdate.name,
                     scanlator = episodeUpdate.scanlator,
-                    summary = episodeUpdate.summary,
-                    previewUrl = episodeUpdate.previewUrl,
                     seen = episodeUpdate.seen,
                     bookmark = episodeUpdate.bookmark,
-                    fillermark = episodeUpdate.fillermark,
                     lastSecondSeen = episodeUpdate.lastSecondSeen,
                     totalSeconds = episodeUpdate.totalSeconds,
                     episodeNumber = episodeUpdate.episodeNumber,
@@ -74,6 +71,9 @@ class EpisodeRepositoryImpl(
                     episodeId = episodeUpdate.id,
                     version = episodeUpdate.version,
                     isSyncing = 0,
+                    summary = episodeUpdate.summary,
+                    previewUrl = episodeUpdate.previewUrl,
+                    fillermark = episodeUpdate.fillermark,
                 )
             }
         }
@@ -129,11 +129,8 @@ class EpisodeRepositoryImpl(
         url: String,
         name: String,
         scanlator: String?,
-        summary: String?,
-        previewUrl: String?,
         seen: Boolean,
         bookmark: Boolean,
-        fillermark: Boolean,
         lastSecondSeen: Long,
         totalSeconds: Long,
         episodeNumber: Double,
@@ -144,6 +141,9 @@ class EpisodeRepositoryImpl(
         version: Long,
         @Suppress("UNUSED_PARAMETER")
         isSyncing: Long,
+        summary: String?,
+        previewUrl: String?,
+        fillermark: Boolean,
     ): Episode = Episode(
         id = id,
         animeId = animeId,
