@@ -60,11 +60,8 @@ val backupEpisodeMapper = {
         url: String,
         name: String,
         scanlator: String?,
-        summary: String?,
-        previewUrl: String?,
         seen: Boolean,
         bookmark: Boolean,
-        fillermark: Boolean,
         lastSecondSeen: Long,
         totalSeconds: Long,
         episodeNumber: Double,
@@ -74,6 +71,9 @@ val backupEpisodeMapper = {
         lastModifiedAt: Long,
         version: Long,
         _: Long,
+        summary: String?,
+        previewUrl: String?,
+        fillermark: Boolean,
     ->
     BackupEpisode(
         url = url,
