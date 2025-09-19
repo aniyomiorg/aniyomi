@@ -362,8 +362,8 @@
     <string name="dialog_with_checkbox_remove_description_anime">Bu, bölümün izlenme tarihini kaldırır. Emin misiniz?</string>
     <string name="dialog_with_checkbox_reset_anime">Bu anime için tüm bölümleri sıfırla</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
-    <string name="episode_progress">İlerleme: %1$s/%2$s</string>
-    <string name="episode_progress_no_total">İlerleme: %1$s</string>
+    <string name="episode_progress">%1$s/%2$s</string>
+    <string name="episode_progress_no_total">%1$s</string>
     <string name="recent_anime_time">Bölüm %1$s - %2$s</string>
     <string name="video_list_empty_error">Video bulunamadı</string>
     <string name="notification_new_episodes">Yeni bölümler bulundu</string>
@@ -510,4 +510,21 @@
     <string name="pref_library_season">Sezon</string>
     <string name="pref_update_seasons_refresh">Yenileme sırasında sezonları bölümlerle güncelle</string>
     <string name="pref_update_seasons_update">Kitaplık güncellemesi sırasında sezonları bölümlerle güncelle</string>
+    <string name="filler">Hikâye Dışı</string>
+    <string name="action_filter_fillermarked">Hikâye dışı işaretlendi</string>
+    <string name="action_edit_background">Arka planı düzenle</string>
+    <string name="custom_background">Özel arka planlar</string>
+    <string name="background_saved">Arka plan kaydedildi</string>
+    <string name="error_saving_background">Arka plan kaydedilemedi</string>
+    <string name="error_sharing_background">Arka plan paylaşılamadı</string>
+    <string name="set_as_background">Arka plan olarak ayarla</string>
+    <string name="set_as_thumbnail">Küçük resim olarak ayarla</string>
+    <string name="background_updated">Arka plan güncellendi</string>
+    <string name="thumbnail_updated">Küçük resim güncellendi</string>
+    <string name="notification_background_update_failed">Arka plan güncellenemedi</string>
+    <string name="action_fillermark_episode">Hikâye dışı işaretle</string>
+    <string name="action_remove_fillermark_episode">Hikâye dışı işaretini kaldır</string>
+    <string name="pref_download_fillermarked_items">Hikâye dışı olarak işaretlenmiş bölümlerin indirilmesine izin ver</string>
+    <string name="show_episode_previews">Bölüm küçük resimleri</string>
+    <string name="show_episode_summaries">Bölüm özetleri</string>
 </resources>
