@@ -116,8 +116,6 @@
     <string name="pref_player_audio_boost_cap">Ограничење појачавања звука</string>
     <string name="pref_player_advanced">Напредно</string>
     <string name="pref_player_advanced_summary">Скрипте, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Омогући MPV скрипте</string>
-    <string name="pref_mpv_scripts_summary">Потребна је дозвола за спољашње складиште.</string>
     <string name="pref_mpv_conf">Уреди MPV конфигурациони фајл за додатна подешавања плејера</string>
     <string name="pref_reset_mpv_conf">Ресетуј MPV конфигурациони фајл</string>
     <string name="pref_mpv_input">Уреди MPV уносни фајл за конфигурацију мапирања тастатуре</string>
