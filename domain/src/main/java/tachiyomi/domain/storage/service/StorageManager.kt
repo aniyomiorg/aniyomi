@@ -93,6 +93,11 @@ class StorageManager(
     fun getMPVConfigDirectory(): UniFile? {
         return baseDir?.createDirectory(MPV_CONFIG_PATH)
     }
+
+    // TachiyomiAT
+    fun getTranslationsDirectory(): UniFile? {
+        return baseDir?.createDirectory(TRANSLATION_PATH)
+    }
 }
 
 private const val AUTOMATIC_BACKUPS_PATH = "autobackup"
@@ -104,3 +109,5 @@ private const val FONTS_PATH = "fonts"
 const val SCRIPTS_PATH = "scripts"
 const val SCRIPT_OPTS_PATH = "script-opts"
 private const val SHADERS_PATH = "shaders"
+// TachiyomiAT
+private const val TRANSLATION_PATH = "translations"

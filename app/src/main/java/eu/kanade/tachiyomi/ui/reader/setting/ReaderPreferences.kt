@@ -13,6 +13,9 @@ class ReaderPreferences(
 
     // region General
 
+    // TachiyomiAT
+    fun showTranslations() = preferenceStore.getBoolean("show_translations", true)
+
     fun pageTransitions() = preferenceStore.getBoolean("pref_enable_transitions_key", true)
 
     fun flashOnPageChange() = preferenceStore.getBoolean("pref_reader_flash", false)
