@@ -120,7 +120,6 @@ class MyAnimeList(id: Long) :
     }
 
     private suspend fun add(track: AnimeTrack): AnimeTrack {
-        track.score = 0.0
         return api.updateItem(track)
     }
 
