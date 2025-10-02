@@ -20,4 +20,26 @@
     <string name="download_paused">Ditangguh</string>
     <string name="download_notifier_download_paused_chapters">Muat turun dihentikan sebentar</string>
     <string name="channel_new_chapters_episodes">Pengemaskinian bab</string>
+    <string name="manga">Komik</string>
+    <string name="action_add_repo_message">Tambahkan repo pada %s. Ini mestilah URL yang berakhir dengan \"index.min.json\".</string>
+    <string name="download_ahead_info">Hanya berfungsi jika bab/episod semasa + yang seterusnya telah dimuat turun.</string>
+    <string name="action_sort_last_manga_update">Kemas kini komik terakhir</string>
+    <string name="action_show_manga">Tunjukkan komik</string>
+    <string name="action_display_show_continue_reading_button">Butang teruskan menonton/membaca</string>
+    <string name="pref_update_only_completely_read">Langkau penyertaan dengan episod yang tidak dilihat/bab yang belum dibaca</string>
+    <string name="pref_category_delete_chapters">Padamkan bab/episod</string>
+    <string name="pref_remove_after_marked_as_read">Selepas ditanda secara manual sebagai dibaca/dilihat</string>
+    <string name="pref_remove_after_read">Selepas ditanda secara manual sebagai dibaca/dilihat</string>
+    <string name="pref_remove_bookmarked_chapters">Benarkan pemadaman bab/episod yang ditanda halaman</string>
+    <string name="pref_auto_update_manga_sync">Kemas kini kemajuan selepas membaca/menonton</string>
+    <string name="pref_clear_chapter_cache">Kosongkan cache bab dan episod</string>
+    <string name="pref_auto_clear_chapter_cache">Kosongkan cache episod/bab semasa pelancaran apl</string>
+    <string name="clear_database_confirmation">Adakah anda pasti? Episod dan bab yang lengkap serta kemajuan entri bukan perpustakaan akan hilang</string>
+    <string name="pref_incognito_mode_summary">Menjeda sejarah anda</string>
+    <string name="manga_from_library">Komik dari perpustakaan</string>
+    <string name="also_set_chapter_settings_for_library">Juga digunakan untuk semua komik di perpustakaan saya</string>
+    <string name="dialog_with_checkbox_reset">Tetapkan semula semua bab untuk komik ini</string>
+    <string name="download_insufficient_space">Tidak dapat memuat turun kerana ruang storan yang rendah</string>
+    <string name="download_queue_size_warning">Amaran: muat turun pukal yang besar boleh menyebabkan sumber menjadi lebih perlahan dan/atau menyekat Aniyomi. Ketik untuk mengetahui lebih lanjut.</string>
+    <string name="pref_invalidate_download_cache_summary">Paksa apl menyemak semula bab dan episod yang dimuat turun</string>
 </resources>
