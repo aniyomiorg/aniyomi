@@ -15,7 +15,6 @@ import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.data.track.myanimelist.dto.MALOAuth
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
@@ -120,8 +119,6 @@ class MyAnimeList(id: Long) :
     }
 
     private suspend fun add(track: AnimeTrack): AnimeTrack {
-        track.status = WATCHING
-        track.score = 0.0
         return api.updateItem(track)
     }
 
