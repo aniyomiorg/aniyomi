@@ -436,4 +436,19 @@
     <string name="manga_from_library">Mangás da biblioteca</string>
     <string name="also_set_chapter_settings_for_library">Aplicar também a todos os mangás da minha biblioteca</string>
     <string name="dialog_with_checkbox_reset">Redefinir todos os capítulos deste item</string>
+    <string name="action_stop">Parar</string>
+    <string name="action_continue">Continuar</string>
+    <string name="manga">Mangá</string>
+    <string name="download_insufficient_space">O download não pôde ser feito devido à pouco espaço de armazenamento</string>
+    <string name="label_player">Reprodutor</string>
+    <string name="pref_category_intro_skip">Pular introdução</string>
+    <string name="editor_unsaved_progress">Você tem alterações não salvas. Você quer mesmo voltar?</string>
+    <string name="editor_save_success">Arquivo salvo</string>
+    <string name="editor_action_rename">Renomear arquivo</string>
+    <string name="editor_action_delete">Deletar arquivo</string>
+    <string name="editor_file_already_exists">Arquivo já existente</string>
+    <string name="editor_invalid_filename">Nome de arquivo inválido</string>
+    <string name="editor_create_file">Criar arquivo</string>
+    <string name="editor_edit_file">Editar nome do arquivo</string>
+    <string name="editor_filename">Nome do arquivo</string>
 </resources>
