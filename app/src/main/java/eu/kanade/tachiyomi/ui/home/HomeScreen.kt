@@ -28,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -58,8 +57,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import soup.compose.material.motion.animation.materialFadeThroughIn
 import soup.compose.material.motion.animation.materialFadeThroughOut
+import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.NavigationBar
 import tachiyomi.presentation.core.components.material.NavigationRail
 import tachiyomi.presentation.core.components.material.Scaffold
@@ -70,7 +71,7 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 object HomeScreen : Screen() {
-
+    private fun readResolve(): Any = HomeScreen
     private val librarySearchEvent = Channel<String>()
     private val openTabEvent = Channel<Tab>()
     private val showBottomNavEvent = Channel<Boolean>()
@@ -271,9 +272,9 @@ object HomeScreen : Screen() {
                         separatedMode.set(newValue)
 
                         val message = if (newValue) {
-                            context.stringResource(tachiyomi.i18n.aniyomi.AYMR.strings.toast_separated_mode_enabled)
+                            context.stringResource(AYMR.strings.toast_separated_mode_enabled)
                         } else {
-                            context.stringResource(tachiyomi.i18n.aniyomi.AYMR.strings.toast_separated_mode_disabled)
+                            context.stringResource(AYMR.strings.toast_separated_mode_disabled)
                         }
                         context.toast(message)
                     }
