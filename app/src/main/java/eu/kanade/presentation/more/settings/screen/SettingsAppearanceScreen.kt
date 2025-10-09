@@ -149,6 +149,11 @@ object SettingsAppearanceScreen : SearchableSettings {
                     title = "Navigation Style",
                     onValueChanged = { true },
                 ),
+                Preference.PreferenceItem.SwitchPreference(
+                    preference = uiPreferences.separatedMode(),
+                    title = stringResource(AYMR.strings.pref_separated_mode),
+                    subtitle = stringResource(AYMR.strings.pref_separated_mode_summary),
+                ),
                 Preference.PreferenceItem.ListPreference(
                     preference = uiPreferences.dateFormat(),
                     entries = DateFormats

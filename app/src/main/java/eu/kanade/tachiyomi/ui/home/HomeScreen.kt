@@ -6,6 +6,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -26,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,6 +50,7 @@ import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.more.MoreTab
 import eu.kanade.tachiyomi.ui.updates.UpdatesTab
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -81,7 +85,12 @@ object HomeScreen : Screen() {
     @Composable
     override fun Content() {
         val navStyle by uiPreferences.navStyle().collectAsState()
+        val separatedMode by uiPreferences.separatedMode().collectAsState()
+        val selectedSeparatedMode by uiPreferences.selectedSeparatedMode().collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+
+        val filteredTabs = navStyle.getFilteredTabs(separatedMode, selectedSeparatedMode)
+
         TabNavigator(
             tab = defaultTab,
             key = TAB_NAVIGATOR_KEY,
@@ -92,7 +101,7 @@ object HomeScreen : Screen() {
                     startBar = {
                         if (isTabletUi()) {
                             NavigationRail {
-                                navStyle.tabs.fastForEach {
+                                filteredTabs.fastForEach {
                                     NavigationRailItem(it)
                                 }
                             }
@@ -109,7 +118,7 @@ object HomeScreen : Screen() {
                                 exit = shrinkVertically(),
                             ) {
                                 NavigationBar {
-                                    navStyle.tabs.fastForEach {
+                                    filteredTabs.fastForEach {
                                         NavigationBarItem(it)
                                     }
                                 }
@@ -198,15 +207,36 @@ object HomeScreen : Screen() {
                     }
                 }
             }
+
+            // Observe separated mode changes and switch tabs automatically
+            LaunchedEffect(separatedMode, selectedSeparatedMode) {
+                if (separatedMode) {
+                    when (selectedSeparatedMode) {
+                        eu.kanade.domain.ui.SeparatedMode.ANIME -> {
+                            if (tabNavigator.current == MangaLibraryTab) {
+                                tabNavigator.current = AnimeLibraryTab
+                            }
+                        }
+                        eu.kanade.domain.ui.SeparatedMode.MANGA -> {
+                            if (tabNavigator.current == AnimeLibraryTab) {
+                                tabNavigator.current = MangaLibraryTab
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun RowScope.NavigationBarItem(tab: eu.kanade.presentation.util.Tab) {
         val tabNavigator = LocalTabNavigator.current
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
+        val context = androidx.compose.ui.platform.LocalContext.current
         val selected = tabNavigator.current::class == tab::class
+
         NavigationBarItem(
             selected = selected,
             onClick = {
@@ -226,6 +256,29 @@ object HomeScreen : Screen() {
                 )
             },
             alwaysShowLabel = true,
+            modifier = Modifier.combinedClickable(
+                onClick = {
+                    if (!selected) {
+                        tabNavigator.current = tab
+                    } else {
+                        scope.launch { tab.onReselect(navigator) }
+                    }
+                },
+                onLongClick = {
+                    if (tab == AnimeLibraryTab || tab == MangaLibraryTab) {
+                        val separatedMode = uiPreferences.separatedMode()
+                        val newValue = !separatedMode.get()
+                        separatedMode.set(newValue)
+
+                        val message = if (newValue) {
+                            context.stringResource(tachiyomi.i18n.aniyomi.AYMR.strings.toast_separated_mode_enabled)
+                        } else {
+                            context.stringResource(tachiyomi.i18n.aniyomi.AYMR.strings.toast_separated_mode_disabled)
+                        }
+                        context.toast(message)
+                    }
+                },
+            ),
         )
     }
 

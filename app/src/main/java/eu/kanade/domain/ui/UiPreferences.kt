@@ -40,10 +40,19 @@ class UiPreferences(
 
     fun navStyle() = preferenceStore.getEnum("bottom_rail_nav_style", NavStyle.MOVE_HISTORY_TO_MORE)
 
+    fun separatedMode() = preferenceStore.getBoolean("separated_mode", false)
+
+    fun selectedSeparatedMode() = preferenceStore.getEnum("selected_separated_mode", SeparatedMode.ANIME)
+
     companion object {
         fun dateFormat(format: String): DateTimeFormatter = when (format) {
             "" -> DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
             else -> DateTimeFormatter.ofPattern(format, Locale.getDefault())
         }
     }
+}
+
+enum class SeparatedMode {
+    ANIME,
+    MANGA,
 }

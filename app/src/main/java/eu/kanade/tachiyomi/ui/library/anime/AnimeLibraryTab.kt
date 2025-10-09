@@ -29,6 +29,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.entries.components.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
@@ -45,6 +46,7 @@ import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -63,6 +65,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.presentation.core.util.collectAsState
 import tachiyomi.source.local.entries.anime.isLocal
 import uy.kohesive.injekt.injectLazy
 
@@ -99,6 +102,9 @@ data object AnimeLibraryTab : Tab {
         val screenModel = rememberScreenModel { AnimeLibraryScreenModel() }
         val settingsScreenModel = rememberScreenModel { AnimeLibrarySettingsScreenModel() }
         val state by screenModel.state.collectAsState()
+
+        val uiPreferences: UiPreferences by injectLazy()
+        val separatedMode by uiPreferences.separatedMode().collectAsState()
 
         val snackbarHostState = remember { SnackbarHostState() }
 
@@ -160,6 +166,37 @@ data object AnimeLibraryTab : Tab {
                     searchQuery = state.searchQuery,
                     onSearchQueryChange = screenModel::search,
                     scrollBehavior = scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
+                    navigateUp = null,
+                    onClickTitle = {
+                        if (separatedMode) {
+                            // Switch to the other mode only if already in separated mode
+                            uiPreferences.selectedSeparatedMode().set(
+                                eu.kanade.domain.ui.SeparatedMode.MANGA
+                            )
+                        }
+                        // Do nothing if not in separated mode - only long click can toggle separated mode
+                    },
+                    onLongClickTitle = {
+                        val newValue = !separatedMode
+                        uiPreferences.separatedMode().set(newValue)
+
+                        // If activating separated mode, set current mode to ANIME
+                        if (newValue) {
+                            uiPreferences.selectedSeparatedMode().set(
+                                eu.kanade.domain.ui.SeparatedMode.ANIME
+                            )
+                        }
+
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+
+                        val message = if (newValue) {
+                            context.stringResource(AYMR.strings.toast_separated_mode_enabled)
+                        } else {
+                            context.stringResource(AYMR.strings.toast_separated_mode_disabled)
+                        }
+                        context.toast(message)
+                    },
+                    isSeparatedMode = separatedMode,
                 )
             },
             bottomBar = {

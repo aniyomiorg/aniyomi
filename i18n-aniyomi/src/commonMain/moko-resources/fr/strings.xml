@@ -125,6 +125,10 @@
     <string name="label_watched_duration">Durée de visionnage</string>
     <string name="label_watched_episodes">Visionné</string>
     <string name="pref_start_screen">Menu au démarrage</string>
+    <string name="pref_separated_mode">Séparer Anime/Manga</string>
+    <string name="pref_separated_mode_summary">Afficher des sections séparées pour les animes et les mangas dans la bibliothèque et les mises à jour. Une fois activé, vous pouvez basculer entre anime et manga en appuyant sur le titre dans la barre supérieure.</string>
+    <string name="toast_separated_mode_enabled">Mode séparé activé</string>
+    <string name="toast_separated_mode_disabled">Mode séparé désactivé</string>
     <string name="pref_library_manga_columns">Nombre de mangas par lignes</string>
     <string name="pref_library_anime_columns">Nombre d\'animés par lignes</string>
     <string name="pref_bottom_nav_no_history">Déplacer l\'historique vers l\'onglet Plus</string>

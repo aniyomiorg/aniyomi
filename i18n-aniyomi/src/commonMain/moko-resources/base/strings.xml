@@ -422,6 +422,10 @@
     <string name="label_watched_duration">Watched duration</string>
     <string name="label_watched_episodes">Watched</string>
     <string name="pref_start_screen">Start Screen</string>
+    <string name="pref_separated_mode">Separate Anime/Manga</string>
+    <string name="pref_separated_mode_summary">Show separate sections for anime and manga in the library and updates. Once enabled, you can switch between anime and manga by tapping on the title in the top bar.</string>
+    <string name="toast_separated_mode_enabled">Separated mode enabled</string>
+    <string name="toast_separated_mode_disabled">Separated mode disabled</string>
     <string name="pref_library_manga_columns">Manga items per row</string>
     <string name="pref_library_anime_columns">Anime items per row</string>
     <string name="pref_bottom_nav_no_history">Move History to the More tab</string>

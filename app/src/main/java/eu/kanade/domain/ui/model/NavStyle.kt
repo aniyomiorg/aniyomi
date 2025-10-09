@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.domain.ui.SeparatedMode
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
@@ -48,4 +49,15 @@ enum class NavStyle(
                 MoreTab,
             ).apply { remove(this@NavStyle.moreTab) }
         }
+
+    fun getFilteredTabs(separatedMode: Boolean, selectedMode: SeparatedMode): List<Tab> {
+        if (!separatedMode) return tabs
+
+        return tabs.filter { tab ->
+            when (selectedMode) {
+                SeparatedMode.ANIME -> tab != MangaLibraryTab
+                SeparatedMode.MANGA -> tab != AnimeLibraryTab
+            }
+        }
+    }
 }

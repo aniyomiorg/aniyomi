@@ -13,6 +13,8 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import eu.kanade.domain.ui.SeparatedMode
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
@@ -26,13 +28,16 @@ import eu.kanade.tachiyomi.ui.browse.manga.extension.mangaExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.migrateMangaSourceTab
 import eu.kanade.tachiyomi.ui.browse.manga.source.mangaSourcesTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.collectAsState as collectAsStateUtil
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 data object BrowseTab : Tab {
 
@@ -74,7 +79,11 @@ data object BrowseTab : Tab {
         val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
         val animeExtensionsState by animeExtensionsScreenModel.state.collectAsState()
 
-        val tabs = persistentListOf(
+        val uiPreferences = Injekt.get<UiPreferences>()
+        val separatedMode by uiPreferences.separatedMode().collectAsStateUtil()
+        val selectedSeparatedMode by uiPreferences.selectedSeparatedMode().collectAsStateUtil()
+
+        val allTabs = listOf(
             animeSourcesTab(),
             mangaSourcesTab(),
             animeExtensionsTab(animeExtensionsScreenModel),
@@ -83,11 +92,28 @@ data object BrowseTab : Tab {
             migrateMangaSourceTab(),
         )
 
-        val state = rememberPagerState { tabs.size }
+        val filteredTabs = if (separatedMode) {
+            when (selectedSeparatedMode) {
+                SeparatedMode.ANIME -> listOf(
+                    allTabs[0], // animeSourcesTab
+                    allTabs[2], // animeExtensionsTab
+                    allTabs[4], // migrateAnimeSourceTab
+                )
+                SeparatedMode.MANGA -> listOf(
+                    allTabs[1], // mangaSourcesTab
+                    allTabs[3], // mangaExtensionsTab
+                    allTabs[5], // migrateMangaSourceTab
+                )
+            }
+        } else {
+            allTabs
+        }.toImmutableList()
+
+        val state = rememberPagerState { filteredTabs.size }
 
         TabbedScreen(
             titleRes = MR.strings.browse,
-            tabs = tabs,
+            tabs = filteredTabs,
             state = state,
             mangaSearchQuery = mangaExtensionsState.searchQuery,
             onChangeMangaSearchQuery = mangaExtensionsScreenModel::search,
