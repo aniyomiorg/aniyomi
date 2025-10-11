@@ -398,5 +398,20 @@
     <string name="action_continue">Continuar</string>
     <string name="manga">Manga</string>
     <string name="pref_behavior">Comportamiento del capítulo</string>
-    <string name="action_add_repo_message">Español «index.min.json»</string>
+    <string name="action_add_repo_message">Añade más repositorios a %s; la dirección URL debería de terminar en \"index.min.json\".</string>
+    <string name="download_ahead_info">Solo funciona si el capítulo/episodio actual y el siguiente ya están descargados.</string>
+    <string name="non_library_settings">Todas las entradas leídas/miradas</string>
+    <string name="action_sort_last_manga_update">Última actualización del manga</string>
+    <string name="action_show_manga">Mostrar manga</string>
+    <string name="action_display_show_continue_reading_button">Botón de continuar viendo/leyendo</string>
+    <string name="pref_update_only_completely_read">Saltar entradas con episodio(s) no visto(s)/capítulo(s) no leído(s)</string>
+    <string name="pref_category_delete_chapters">Borrar capítulos</string>
+    <string name="pref_remove_after_marked_as_read">Tras haberlos marcado manualmente como leídos/vistos</string>
+    <string name="pref_remove_after_read">Después de leer/ver borrar automáticamente</string>
+    <string name="pref_remove_bookmarked_chapters">Permitir el borrado de capítulos/episodios marcados como favoritos</string>
+    <string name="pref_auto_update_manga_sync">Actualizar progreso al terminar de leer/ver</string>
+    <string name="pref_auto_update_manga_on_mark_read">Actualizar el progreso cuando se marca como leído/visto</string>
+    <string name="pref_clear_chapter_cache">Vaciar la caché de los capítulos y episodios</string>
+    <string name="pref_auto_clear_chapter_cache">Limpiar la caché del capítulo/episodio al abrir la app</string>
+    <string name="clear_database_confirmation">¿Estás seguro? Episodios y capítulos completados y progreso que no esté en la biblioteca se perderá</string>
 </resources>
