@@ -147,6 +147,11 @@ class ReaderViewModel @JvmOverloads constructor(
 
     private var chapterToDownload: MangaDownload? = null
 
+    private val unfilteredChapterList by lazy {
+        val manga = manga!!
+        runBlocking { getChaptersByMangaId.await(manga.id, applyScanlatorFilter = false) }
+    }
+
     /**
      * Chapter list for the active manga. It's retrieved lazily and should be accessed for the first
      * time in a background thread to avoid blocking the UI.
@@ -560,15 +565,14 @@ class ReaderViewModel @JvmOverloads constructor(
             .contains(LibraryPreferences.MARK_DUPLICATE_CHAPTER_READ_EXISTING)
         if (!markDuplicateAsRead) return
 
-        val duplicateUnreadChapters = chapterList
-            .mapNotNull {
-                val chapter = it.chapter
+        val duplicateUnreadChapters = unfilteredChapterList
+            .mapNotNull { chapter ->
                 if (
                     !chapter.read &&
                     chapter.isRecognizedNumber &&
-                    chapter.chapter_number == readerChapter.chapter.chapter_number
+                    chapter.chapterNumber.toFloat() == readerChapter.chapter.chapter_number
                 ) {
-                    ChapterUpdate(id = chapter.id!!, read = true)
+                    ChapterUpdate(id = chapter.id, read = true)
                 } else {
                     null
                 }
