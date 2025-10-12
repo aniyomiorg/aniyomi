@@ -293,6 +293,7 @@ class AnimeRestorer(
                 dateAdded = anime.dateAdded,
                 updateStrategy = anime.updateStrategy,
                 version = anime.version,
+                notes = anime.notes,
                 fetchType = anime.fetchType,
                 parentId = anime.parentId,
                 seasonFlags = anime.seasonFlags,
