@@ -7,7 +7,10 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.concurrent.RejectedExecutionException
-import java.util.concurrent.atomic.AtomicInteger
+import kotlin.concurrent.atomics.AtomicInt
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
+import kotlin.concurrent.atomics.decrementAndFetch
+import kotlin.concurrent.atomics.incrementAndFetch
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -128,6 +131,7 @@ private suspend fun CoroutineDispatcher.acquireTransactionThread(
 /**
  * A [CoroutineContext.Element] that indicates there is an on-going database transaction.
  */
+@OptIn(ExperimentalAtomicApi::class)
 private class AnimeTransactionElement(
     private val transactionThreadControlJob: Job,
     val transactionDispatcher: ContinuationInterceptor,
@@ -144,14 +148,14 @@ private class AnimeTransactionElement(
      * when [release] is invoked then the transaction job is cancelled and the transaction thread
      * is released.
      */
-    private val referenceCount = AtomicInteger(0)
+    private val referenceCount = AtomicInt(0)
 
     fun acquire() {
-        referenceCount.incrementAndGet()
+        referenceCount.incrementAndFetch()
     }
 
     fun release() {
-        val count = referenceCount.decrementAndGet()
+        val count = referenceCount.decrementAndFetch()
         if (count < 0) {
             throw IllegalStateException("Transaction was never started or was already released")
         } else if (count == 0) {

@@ -38,8 +38,11 @@ import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.atomic.AtomicInteger
+import kotlin.concurrent.atomics.AtomicInt
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
+import kotlin.concurrent.atomics.fetchAndIncrement
 
+@OptIn(ExperimentalAtomicApi::class)
 class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
 
@@ -104,7 +107,7 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
 
     private suspend fun updateMetadata() {
         val semaphore = Semaphore(5)
-        val progressCount = AtomicInteger(0)
+        val progressCount = AtomicInt(0)
         val currentlyUpdatingAnime = CopyOnWriteArrayList<Anime>()
 
         coroutineScope {
@@ -151,7 +154,7 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
 
     private suspend fun withUpdateNotification(
         updatingAnime: CopyOnWriteArrayList<Anime>,
-        completed: AtomicInteger,
+        completed: AtomicInt,
         anime: Anime,
         block: suspend () -> Unit,
     ) = coroutineScope {
@@ -160,7 +163,7 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
         updatingAnime.add(anime)
         notifier.showProgressNotification(
             updatingAnime,
-            completed.get(),
+            completed.load(),
             animeToUpdate.size,
         )
 
@@ -169,10 +172,10 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
         ensureActive()
 
         updatingAnime.remove(anime)
-        completed.getAndIncrement()
+        completed.fetchAndIncrement()
         notifier.showProgressNotification(
             updatingAnime,
-            completed.get(),
+            completed.load(),
             animeToUpdate.size,
         )
     }
