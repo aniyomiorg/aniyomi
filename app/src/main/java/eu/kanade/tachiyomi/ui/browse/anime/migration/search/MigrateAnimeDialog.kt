@@ -267,6 +267,7 @@ internal class MigrateAnimeDialogScreenModel(
         val migrateCustomCover = AnimeMigrationFlags.hasCustomCover(flags)
         val migrateCustomBackground = AnimeMigrationFlags.hasCustomBackground(flags)
         val deleteDownloaded = AnimeMigrationFlags.hasDeleteDownloaded(flags)
+        val migrateNotes = AnimeMigrationFlags.hasNotes(flags)
 
         try {
             syncEpisodesWithSource.await(sourceEpisodes, newAnime, newSource)
@@ -364,6 +365,7 @@ internal class MigrateAnimeDialogScreenModel(
                 episodeFlags = oldAnime.episodeFlags,
                 viewerFlags = oldAnime.viewerFlags,
                 dateAdded = if (replace) oldAnime.dateAdded else Instant.now().toEpochMilli(),
+                notes = if (migrateNotes) oldAnime.notes else null,
             ),
         )
     }

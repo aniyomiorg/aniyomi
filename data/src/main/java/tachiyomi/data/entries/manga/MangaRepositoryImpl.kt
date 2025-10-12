@@ -171,6 +171,7 @@ class MangaRepositoryImpl(
                     updateStrategy = value.updateStrategy?.let(MangaUpdateStrategyColumnAdapter::encode),
                     version = value.version,
                     isSyncing = 0,
+                    notes = value.notes,
                 )
             }
         }

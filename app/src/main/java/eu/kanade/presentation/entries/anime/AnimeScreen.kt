@@ -140,6 +140,7 @@ fun AnimeScreen(
     onEditCategoryClicked: (() -> Unit)?,
     onEditFetchIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    onEditNotesClicked: () -> Unit,
     changeAnimeSkipIntro: (() -> Unit)?,
 
     // For bottom action menu
@@ -201,6 +202,7 @@ fun AnimeScreen(
             onEditCategoryClicked = onEditCategoryClicked,
             onEditIntervalClicked = onEditFetchIntervalClicked,
             onMigrateClicked = onMigrateClicked,
+            onEditNotesClicked = onEditNotesClicked,
             changeAnimeSkipIntro = changeAnimeSkipIntro,
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiFillermarkClicked = onMultiFillermarkClicked,
@@ -244,6 +246,7 @@ fun AnimeScreen(
             onEditIntervalClicked = onEditFetchIntervalClicked,
             changeAnimeSkipIntro = changeAnimeSkipIntro,
             onMigrateClicked = onMigrateClicked,
+            onEditNotesClicked = onEditNotesClicked,
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiFillermarkClicked = onMultiFillermarkClicked,
             onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
@@ -296,6 +299,7 @@ private fun AnimeScreenSmallImpl(
     onEditCategoryClicked: (() -> Unit)?,
     onEditIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    onEditNotesClicked: () -> Unit,
     changeAnimeSkipIntro: (() -> Unit)?,
     onSettingsClicked: (() -> Unit)?,
 
@@ -382,6 +386,7 @@ private fun AnimeScreenSmallImpl(
                     onClickEditCategory = onEditCategoryClicked,
                     onClickRefresh = onRefresh,
                     onClickMigrate = onMigrateClicked,
+                    onClickEditNotes = onEditNotesClicked,
                     onClickSettings = onSettingsClicked,
                     changeAnimeSkipIntro = changeAnimeSkipIntro,
                     actionModeCounter = selectedEpisodeCount,
@@ -509,8 +514,10 @@ private fun AnimeScreenSmallImpl(
                             defaultExpandState = state.isFromSource,
                             description = state.anime.description,
                             tagsProvider = { state.anime.genre },
+                            notes = state.anime.notes,
                             onTagSearch = onTagSearch,
                             onCopyTagToClipboard = onCopyTagToClipboard,
+                            onEditNotes = onEditNotesClicked,
                             modifier = Modifier.ignorePadding(offsetGridPaddingPx),
                         )
                     }
@@ -641,6 +648,7 @@ fun AnimeScreenLargeImpl(
     onEditCategoryClicked: (() -> Unit)?,
     onEditIntervalClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    onEditNotesClicked: () -> Unit,
     changeAnimeSkipIntro: (() -> Unit)?,
     onSettingsClicked: (() -> Unit)?,
 
@@ -716,6 +724,7 @@ fun AnimeScreenLargeImpl(
                     onClickEditCategory = onEditCategoryClicked,
                     onClickRefresh = onRefresh,
                     onClickMigrate = onMigrateClicked,
+                    onClickEditNotes = onEditNotesClicked,
                     onCancelActionMode = { onAllEpisodeSelected(false) },
                     onClickSettings = onSettingsClicked,
                     changeAnimeSkipIntro = changeAnimeSkipIntro,
@@ -823,8 +832,10 @@ fun AnimeScreenLargeImpl(
                                 defaultExpandState = true,
                                 description = state.anime.description,
                                 tagsProvider = { state.anime.genre },
+                                notes = state.anime.notes,
                                 onTagSearch = onTagSearch,
                                 onCopyTagToClipboard = onCopyTagToClipboard,
+                                onEditNotes = onEditNotesClicked,
                             )
                         }
                     },

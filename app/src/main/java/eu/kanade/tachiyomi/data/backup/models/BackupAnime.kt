@@ -37,8 +37,10 @@ data class BackupAnime(
     @ProtoNumber(104) var history: List<BackupAnimeHistory> = emptyList(),
     @ProtoNumber(105) var updateStrategy: AnimeUpdateStrategy = AnimeUpdateStrategy.ALWAYS_UPDATE,
     @ProtoNumber(106) var lastModifiedAt: Long = 0,
+    // Mihon values start here
     @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
     @ProtoNumber(109) var version: Long = 0,
+    @ProtoNumber(110) var notes: String = "",
 
     // Aniyomi specific values
     @ProtoNumber(500) var backgroundUrl: String? = null,
@@ -70,6 +72,7 @@ data class BackupAnime(
             lastModifiedAt = this@BackupAnime.lastModifiedAt,
             favoriteModifiedAt = this@BackupAnime.favoriteModifiedAt,
             version = this@BackupAnime.version,
+            notes = this@BackupAnime.notes,
             fetchType = this@BackupAnime.fetchType,
             parentId = this@BackupAnime.parentId,
             seasonFlags = this@BackupAnime.seasonFlags,

@@ -35,6 +35,7 @@ object AnimeMigrationFlags {
     private const val CUSTOM_BACKGROUND = 0b00100
     private const val CUSTOM_COVER = 0b01000
     private const val DELETE_DOWNLOADED = 0b10000
+    private const val NOTES = 0b100000
 
     private val coverCache: AnimeCoverCache by injectLazy()
     private val backgroundCache: AnimeBackgroundCache by injectLazy()
@@ -58,6 +59,10 @@ object AnimeMigrationFlags {
 
     fun hasDeleteDownloaded(value: Int): Boolean {
         return value and DELETE_DOWNLOADED != 0
+    }
+
+    fun hasNotes(value: Int): Boolean {
+        return value and NOTES != 0
     }
 
     /** Returns information about applicable flags with default selections. */
@@ -90,6 +95,9 @@ object AnimeMigrationFlags {
                     defaultSelectedBitMap,
                     MR.strings.delete_downloaded,
                 )
+            }
+            if (anime.notes.isNotBlank()) {
+                flags += AnimeMigrationFlag.create(NOTES, defaultSelectedBitMap, MR.strings.action_notes)
             }
         }
         return flags

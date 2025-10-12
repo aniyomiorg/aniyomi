@@ -243,8 +243,10 @@ fun ExpandableAnimeDescription(
     defaultExpandState: Boolean,
     description: String?,
     tagsProvider: () -> List<String>?,
+    notes: String,
     onTagSearch: (String) -> Unit,
     onCopyTagToClipboard: (tag: String) -> Unit,
+    onEditNotes: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -264,6 +266,8 @@ fun ExpandableAnimeDescription(
             expandedDescription = desc,
             shrunkDescription = trimmedDescription,
             expanded = expanded,
+            notes = notes,
+            onEditNotesClicked = onEditNotes,
             modifier = Modifier
                 .padding(top = 8.dp)
                 .padding(horizontal = 16.dp)
@@ -568,7 +572,9 @@ private fun ColumnScope.AnimeContentInfo(
 private fun AnimeSummary(
     expandedDescription: String,
     shrunkDescription: String,
+    notes: String,
     expanded: Boolean,
+    onEditNotesClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val animProgress by animateFloatAsState(if (expanded) 1f else 0f)
@@ -577,25 +583,41 @@ private fun AnimeSummary(
         contents = listOf(
             {
                 Text(
-                    text = "\n\n", // Shows at least 3 lines
+                    // Shows at least 3 lines if no notes
+                    // when there are notes show 6
+                    text = if (notes.isBlank()) "\n\n" else "\n\n\n\n\n",
                     style = MaterialTheme.typography.bodyMedium,
                 )
             },
             {
-                Text(
-                    text = expandedDescription,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            },
-            {
-                SelectionContainer {
+                Column {
+                    AnimeNotesSection(
+                        content = notes,
+                        expanded = true,
+                        onEditNotes = onEditNotesClicked,
+                        )
                     Text(
-                        text = if (expanded) expandedDescription else shrunkDescription,
-                        maxLines = Int.MAX_VALUE,
+                        text = expandedDescription,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.secondaryItemAlpha(),
                     )
+                }
+            },
+            {
+                Column {
+                    AnimeNotesSection(
+                        content = notes,
+                        expanded = expanded,
+                        onEditNotes = onEditNotesClicked,
+                        )
+                    SelectionContainer {
+                        Text(
+                            text = if (expanded) expandedDescription else shrunkDescription,
+                            maxLines = Int.MAX_VALUE,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.secondaryItemAlpha(),
+                            )
+                    }
                 }
             },
             {

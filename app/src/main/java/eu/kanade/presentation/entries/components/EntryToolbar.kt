@@ -38,6 +38,7 @@ fun EntryToolbar(
     onClickEditCategory: (() -> Unit)?,
     onClickRefresh: () -> Unit,
     onClickMigrate: (() -> Unit)?,
+    onClickEditNotes: () -> Unit,
     onClickSettings: (() -> Unit)?,
     // Anime only
     changeAnimeSkipIntro: (() -> Unit)?,
@@ -153,6 +154,12 @@ fun EntryToolbar(
                             ),
                         )
                     }
+                    add(
+                        AppBar.OverflowAction(
+                            title = stringResource(MR.strings.action_notes),
+                            onClick = onClickEditNotes,
+                            ),
+                        )
                     if (onClickSettings != null) {
                         add(
                             AppBar.OverflowAction(

@@ -144,6 +144,7 @@ class AnimeRestorer(
                 updateStrategy = anime.updateStrategy.let(AnimeUpdateStrategyColumnAdapter::encode),
                 version = anime.version,
                 isSyncing = 1,
+                notes = anime.notes,
                 fetchType = anime.fetchType.let(FetchTypeColumnAdapter::encode),
                 parentId = anime.parentId,
                 seasonFlags = anime.seasonFlags,

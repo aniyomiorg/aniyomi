@@ -53,6 +53,7 @@ import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchSc
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
+import eu.kanade.tachiyomi.ui.entries.anime.notes.AnimeNotesScreen
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
@@ -193,6 +194,7 @@ class AnimeScreen(
             onMigrateClicked = {
                 navigator.push(MigrateAnimeSearchScreen(successState.anime.id))
             }.takeIf { successState.anime.favorite },
+            onEditNotesClicked = { navigator.push(AnimeNotesScreen(anime = successState.anime)) },
             changeAnimeSkipIntro = screenModel::showAnimeSkipIntroDialog
                 .takeIf { successState.anime.favorite && successState.anime.fetchType == FetchType.Episodes },
             onMultiBookmarkClicked = screenModel::bookmarkEpisodes,

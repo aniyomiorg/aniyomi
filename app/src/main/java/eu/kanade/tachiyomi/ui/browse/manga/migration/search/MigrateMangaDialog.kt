@@ -214,6 +214,7 @@ internal class MigrateMangaDialogScreenModel(
         val migrateCategories = MangaMigrationFlags.hasCategories(flags)
         val migrateCustomCover = MangaMigrationFlags.hasCustomCover(flags)
         val deleteDownloaded = MangaMigrationFlags.hasDeleteDownloaded(flags)
+        val migrateNotes = MangaMigrationFlags.hasNotes(flags)
 
         try {
             syncChaptersWithSource.await(sourceChapters, newManga, newSource)
@@ -303,6 +304,7 @@ internal class MigrateMangaDialogScreenModel(
                 chapterFlags = oldManga.chapterFlags,
                 viewerFlags = oldManga.viewerFlags,
                 dateAdded = if (replace) oldManga.dateAdded else Instant.now().toEpochMilli(),
+                notes = if (migrateNotes) oldManga.notes else null,
             ),
         )
     }

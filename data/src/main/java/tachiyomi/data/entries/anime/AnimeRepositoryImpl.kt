@@ -211,6 +211,7 @@ class AnimeRepositoryImpl(
                     updateStrategy = value.updateStrategy?.let(AnimeUpdateStrategyColumnAdapter::encode),
                     version = value.version,
                     isSyncing = 0,
+                    notes = value.notes,
                     fetchType = value.fetchType?.let(FetchTypeColumnAdapter::encode),
                     parentId = value.parentId,
                     seasonFlags = value.seasonFlags,
