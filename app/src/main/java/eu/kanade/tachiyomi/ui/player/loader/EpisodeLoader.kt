@@ -64,11 +64,11 @@ class EpisodeLoader {
          */
         private suspend fun getHostersOnHttp(episode: Episode, source: AnimeHttpSource): List<Hoster> {
             // TODO(1.6): Remove else block when dropping support for ext lib <1.6
-            return if (source.javaClass.declaredMethods.any {
-                    it.name in
-                        listOf("getHosterList", "hosterListRequest", "hosterListParse")
+            return if (source.javaClass.classes.any { clazz ->
+                clazz.declaredMethods.any {
+                    it.name in listOf("getHosterList", "hosterListRequest", "hosterListParse")
                 }
-            ) {
+            }) {
                 source.getHosterList(episode.toSEpisode())
                     .let { source.run { it.sortHosters() } }
             } else {
