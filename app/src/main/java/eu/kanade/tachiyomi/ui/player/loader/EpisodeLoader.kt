@@ -56,6 +56,23 @@ class EpisodeLoader {
             )
         }
 
+        private fun checkHasHosters(source: AnimeHttpSource): Boolean {
+            var current: Class<in AnimeHttpSource> = source.javaClass
+            while (true) {
+                if (current == AnimeHttpSource::class.java) {
+                    return false
+                }
+                if (current.declaredMethods.any {
+                        it.name in
+                            listOf("getHosterList", "hosterListRequest", "hosterListParse")
+                    }
+                ) {
+                    return true
+                }
+                current = current.superclass ?: return false
+            }
+        }
+
         /**
          * Returns a list of hosters when the [episode] is online.
          *
@@ -64,11 +81,7 @@ class EpisodeLoader {
          */
         private suspend fun getHostersOnHttp(episode: Episode, source: AnimeHttpSource): List<Hoster> {
             // TODO(1.6): Remove else block when dropping support for ext lib <1.6
-            return if (source.javaClass.declaredMethods.any {
-                    it.name in
-                        listOf("getHosterList", "hosterListRequest", "hosterListParse")
-                }
-            ) {
+            return if (checkHasHosters(source)) {
                 source.getHosterList(episode.toSEpisode())
                     .let { source.run { it.sortHosters() } }
             } else {
