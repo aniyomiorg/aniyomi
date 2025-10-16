@@ -363,4 +363,11 @@
     <string name="pref_mark_duplicate_seen_episode_seen_new">Nach dem Abrufen einer neuen Episode</string>
     <string name="pref_panel_opacity">Deckkraft des Panels</string>
     <string name="pref_controls_swap_vol_brightness">Lautstärke- und Helligkeitsregler tauschen</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_continue">Fortfahren</string>
+    <string name="pref_category_player_sliders">Schieberegler</string>
+    <string name="pref_show_seekbar">Suchleiste beim Suchen anzeigen</string>
+    <string name="pref_player_subtitle_invalid_lang">Ungültiger Code: \"%s\"</string>
+    <string name="pref_player_audio_channels_auto_safe">Auto-Speichern</string>
+    <string name="pref_player_custom_button">Benutzerdefinierte Schaltflächen</string>
 </resources>
