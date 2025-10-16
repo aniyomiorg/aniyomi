@@ -10,6 +10,11 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
 - `Fixed` - for any bug fixes.
 - `Other` - for technical stuff.
 
+## [v.0.18.2.0] - TBA
+### Fixed
+
+- Fix seasons and hosters not being called properly ([@hollow](https://github.com/hollowshiroyuki)) ([#2195](https://github.com/aniyomiorg/aniyomi/pull/2195))
+
 ## [v0.18.1.0] - 2025-10-02
 ### Fixed
 
