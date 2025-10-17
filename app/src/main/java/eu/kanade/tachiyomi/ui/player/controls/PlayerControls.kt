@@ -530,6 +530,8 @@ fun PlayerControls(
                     BottomLeftPlayerControls(
                         playbackSpeed,
                         currentChapter = currentChapter?.toSegment(),
+                        areGesturesLocked=viewModel.areGesturesLocked.collectAsState(),
+                        onToggleGestureLock =viewModel::toggleGesturesLock ,
                         onLockControls = viewModel::lockControls,
                         onCycleRotation = viewModel::cycleScreenRotations,
                         onPlaybackSpeedChange = {
