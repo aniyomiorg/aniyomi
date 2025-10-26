@@ -220,8 +220,8 @@ fun GestureHandler(
                 var originalMPVVolume = currentMPVVolume
                 var originalBrightness = currentBrightness
                 val brightnessGestureSens = 0.001f
-                val volumeGestureSens = 0.03f
-                val mpvVolumeGestureSens = 0.02f
+                val volumeGestureSens = 0.001f * viewModel.maxVolume
+                val mpvVolumeGestureSens = 0.001f * volumeBoostingCap
                 val isIncreasingVolumeBoost: (Float) -> Boolean = {
                     volumeBoostingCap > 0 &&
                         currentVolume == viewModel.maxVolume &&
