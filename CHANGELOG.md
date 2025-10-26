@@ -10,6 +10,15 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
 - `Fixed` - for any bug fixes.
 - `Other` - for technical stuff.
 
+## [v0.18.1.1] - 2025-10-26
+### Fixed
+
+- Fix source Seasons/Hosters feature detection ([@hollowshiroyuki](https://github.com/hollowshiroyuki)) ([#2195](https://github.com/aniyomiorg/aniyomi/pull/2195))
+
+### Improved
+
+- Make volume gesture the same sensitivity as brightness ([@jmir1](https://github.com/jmir1))
+
 ## [v0.18.1.0] - 2025-10-02
 ### Fixed
 
