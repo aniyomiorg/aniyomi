@@ -116,8 +116,6 @@
     <string name="pref_player_audio_boost_cap">Volume boost cap</string>
     <string name="pref_player_advanced">Karagdagan</string>
     <string name="pref_player_advanced_summary">Mga script, mpv.conf, input.conf</string>
-    <string name="pref_mpv_scripts">Paganahin ang mga script ng MPV</string>
-    <string name="pref_mpv_scripts_summary">Kinakailangan ng permiso sa external storage.</string>
     <string name="pref_mpv_conf">I-edit ang MPV configuration file para sa karagdagang mga setting ng player</string>
     <string name="pref_reset_mpv_conf">Ibalik sa dati ang MPV configuration file</string>
     <string name="pref_mpv_input">I-edit ang MPV input file para sa keyboard mapping configuration</string>
@@ -165,7 +163,6 @@
     <string name="player_sheets_sub_typography_border_style">Estilo ng border</string>
     <string name="player_sheets_sub_typography_border_size">Laki ng border</string>
     <string name="player_sheets_subtitles_shadow_offset">Shadow offset</string>
-    <string name="player_sheets_subtitles_border_style_outline_and_shadow">Outline at shadow</string>
     <string name="player_sheets_subtitles_border_style_opaque_box">Opaque na kahon</string>
     <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
     <string name="player_sheets_sub_misc_title">At iba pa</string>
