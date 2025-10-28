@@ -451,4 +451,5 @@
     <string name="editor_create_file">Criar arquivo</string>
     <string name="editor_edit_file">Editar nome do arquivo</string>
     <string name="editor_filename">Nome do arquivo</string>
+    <string name="action_display_unseen_badge">Episódios não vistos</string>
 </resources>
