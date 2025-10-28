@@ -10,6 +10,11 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
 - `Fixed` - for any bug fixes.
 - `Other` - for technical stuff.
 
+## [v0.18.1.2] - 2025-10-28
+### Fixed
+
+- Fix Hosters feature detection (again) ([@hollowshiroyuki](https://github.com/hollowshiroyuki)) ([#2195](https://github.com/aniyomiorg/aniyomi/pull/2216))
+
 ## [v0.18.1.1] - 2025-10-26
 ### Fixed
 
