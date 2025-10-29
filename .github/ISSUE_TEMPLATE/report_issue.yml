@@ -52,7 +52,7 @@ body:
       label: Aniyomi version
       description: You can find your Aniyomi version in **More → About**.
       placeholder: |
-        Example: "0.18.0.1"
+        Example: "0.18.1.2"
     validations:
       required: true
 
@@ -97,7 +97,7 @@ body:
           required: true
         - label: I have gone through the [FAQ](https://aniyomi.org/docs/faq/general) and [troubleshooting guide](https://aniyomi.org/docs/guides/troubleshooting/).
           required: true
-        - label: I have updated the app to version **[0.18.0.1](https://github.com/aniyomiorg/aniyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.18.1.2](https://github.com/aniyomiorg/aniyomi/releases/latest)**.
           required: true
         - label: I have filled out all of the requested information in this form, including specific version numbers.
           required: true

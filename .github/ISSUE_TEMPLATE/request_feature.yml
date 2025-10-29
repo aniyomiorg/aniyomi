@@ -32,7 +32,7 @@ body:
           required: true
         - label: If this is a request regarding an extension, I should be opening an issue in the extension's repository.
           required: true
-        - label: I have updated the app to version **[0.18.0.1](https://github.com/aniyomiorg/aniyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.18.1.2](https://github.com/aniyomiorg/aniyomi/releases/latest)**.
           required: true
         - label: I will fill out all of the requested information in this form.
           required: true
