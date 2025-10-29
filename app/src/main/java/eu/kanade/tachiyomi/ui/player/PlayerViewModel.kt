@@ -259,7 +259,7 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _areControlsLocked = MutableStateFlow(false)
     val areControlsLocked = _areControlsLocked.asStateFlow()
 
-    val _areGesturesLocked = MutableStateFlow<Boolean>(false)
+    private val _areGesturesLocked = MutableStateFlow<Boolean>(false)
     val areGesturesLocked = _areGesturesLocked.asStateFlow()
 
     val playerUpdate = MutableStateFlow<PlayerUpdates>(PlayerUpdates.None)

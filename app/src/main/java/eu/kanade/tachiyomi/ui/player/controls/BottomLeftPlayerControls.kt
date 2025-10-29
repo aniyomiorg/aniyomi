@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import dev.vivvvek.seeker.Segment
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import eu.kanade.tachiyomi.ui.player.controls.components.CurrentChapter
@@ -42,8 +43,6 @@ import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.tachiyomi.R
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BottomLeftPlayerControls(
@@ -64,7 +63,13 @@ fun BottomLeftPlayerControls(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         ControlsButton(
-            if(areGesturesLocked.value) ImageVector.vectorResource(id = R.drawable.gesture_lock) else Icons.Default.Gesture,
+            if (areGesturesLocked.value) {
+                ImageVector.vectorResource(
+                    id = R.drawable.gesture_lock,
+                )
+            } else {
+                Icons.Default.Gesture
+            },
             onClick = onToggleGestureLock,
         )
         ControlsButton(

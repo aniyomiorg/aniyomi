@@ -246,7 +246,7 @@ fun GestureHandler(
                         originalBrightness = currentBrightness
                     },
                 ) { change, amount ->
-                    if(areGesturesLocked)return@detectVerticalDragGestures
+                    if (areGesturesLocked)return@detectVerticalDragGestures
                     val changeVolume: () -> Unit = {
                         if (isIncreasingVolumeBoost(amount) || isDecreasingVolumeBoost(amount)) {
                             if (mpvVolumeStartingY == 0f) {
