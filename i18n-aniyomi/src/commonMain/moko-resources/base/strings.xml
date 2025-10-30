@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Generic strings -->
-    <string name="confirm_exit">Press back again to exit</string>
+    <string name="confirm_exit">Enable Horizontal Seek</string>
     <string name="action_filter_started">Started</string>
     <string name="action_sort_airing_time">Airing time</string>
     <string name="action_display_unseen_badge">Unseen episodes</string>
@@ -9,7 +9,6 @@
     <string name="relative_time_now">Now</string>
     <string name="action_stop">Stop</string>
     <string name="action_continue">Continue</string>
-
     <!-- Changed from mihon -->
     <string name="manga">Manga</string>
     <string name="pref_library_summary">Categories, global update, chapter/episode swipe</string>
@@ -38,13 +37,11 @@
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
     <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
     <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
-
     <!-- Player settings -->
     <string name="label_player_settings">Player settings</string>
     <string name="label_player">Player</string>
     <string name="action_search_player_settings">Search player settings</string>
     <string name="pref_player_settings_summary">Internal player, gestures, decoders, subtitles</string>
-
     <!-- Player settings - internal player -->
     <string name="pref_player_internal">Internal player</string>
     <string name="pref_player_internal_summary">Progress, controls, orientation</string>
@@ -102,7 +99,6 @@
     <string name="pref_category_external_player">External player</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
-
     <!-- Player Settings - Gestures -->
     <string name="pref_player_gestures">Gestures</string>
     <string name="pref_player_gestures_summary">Seeking, double tap, media controls</string>
@@ -139,7 +135,6 @@
     <string name="pref_media_playpause">Play/Pause</string>
     <string name="pref_media_next">Next</string>
     <string name="pref_media_info">When a media control is set to "Custom", it can be bound through input.conf. The key codes are 0x10004 for previous, 0x10005 for play/pause, and 0x10006 for next.</string>
-
     <!-- Player Settings - Decoder -->
     <string name="pref_player_decoder">Decoder</string>
     <string name="pref_player_decoder_summary">Hardware decoding, pixel format, debanding</string>
@@ -153,7 +148,6 @@
     <string name="pref_debanding_yuv420p">YUV420P</string>
     <string name="pref_use_yuv420p_title">Use YUV420P pixel format</string>
     <string name="pref_use_yuv420p_subtitle">May fix black screens on some video codecs, can also improve performance at the cost of quality</string>
-
     <!-- Player settings - Subtitles -->
     <string name="pref_player_subtitle">Subtitles</string>
     <string name="pref_player_subtitle_summary">Preferred languages, whitelist, blacklist</string>
@@ -164,7 +158,6 @@
     <string name="pref_player_subtitle_whitelist_info">Whitelist for subtitles. If a whitelist is defined, the first subtitle that contains a whitelisted word will be used. Multiple values can be delimited by a comma.</string>
     <string name="pref_player_subtitle_blacklist">Blacklist</string>
     <string name="pref_player_subtitle_blacklist_info">Blacklist for subtitles. If a blacklist is defined, all subtitles that contains a blacklisted word will be filtered out. Multiple values can be delimited by a comma.</string>
-
     <!-- Player settings - Audio -->
     <string name="pref_player_audio">Audio</string>
     <string name="pref_player_audio_summary">Preferred languages, pitch correction, audio channels</string>
@@ -179,7 +172,6 @@
     <string name="pref_player_audio_channels_stereo">Stereo</string>
     <string name="pref_player_audio_channels_reverse_stereo">Reverse stereo</string>
     <string name="pref_player_audio_boost_cap">Volume boost cap</string>
-
     <!-- Player settings - Custom Buttons -->
     <string name="pref_player_custom_button">Custom buttons</string>
     <string name="pref_player_custom_button_summary">Execute lua code with custom buttons</string>
@@ -197,7 +189,6 @@
     <string name="pref_player_custom_button_delete_confirm">Do you wish to delete the button "%s"?</string>
     <string name="pref_player_custom_button_startup">On startup</string>
     <string name="pref_player_custom_button_id">(ID: %d)</string>
-
     <!-- Player settings - Script editor -->
     <string name="pref_player_editor">Script editor</string>
     <string name="pref_player_editor_summary">Edit and create new scripts and script options</string>
@@ -219,7 +210,6 @@
     <string name="editor_delete_error">Unable to delete file</string>
     <string name="editor_delete_file">Delete file</string>
     <string name="editor_delete_file_confirmation">Do you wish to delete the file \"%s\"?</string>
-
     <!-- Player settings - Advanced -->
     <string name="pref_player_advanced">Advanced</string>
     <string name="pref_player_advanced_summary">User files, mpv.conf, input.conf</string>
@@ -228,7 +218,6 @@
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
     <string name="pref_reset_mpv_conf">Reset MPV configuration file</string>
     <string name="pref_mpv_input">Edit MPV input file for keyboard mapping configuration</string>
-
     <!-- Player -->
 
     <!-- Player - skip intro button -->
@@ -238,15 +227,12 @@
     <string name="player_chapter_type_ending">Ending</string>
     <string name="player_chapter_type_recap">Recap</string>
     <string name="player_chapter_type_mixedop">Mixed opening</string>
-
     <!-- Player - Bottom left -->
     <string name="player_speed" translatable="false">%.2fx</string>
-
     <!-- Player - Bottom right -->
     <string name="video_fit_screen">Fit to screen</string>
     <string name="video_crop_screen">Cropped to screen</string>
     <string name="video_stretch_screen">Stretched to screen</string>
-
     <!-- Other -->
     <string name="mpv_media_title">%1$s - E%2$s - %3$s</string>
     <string name="toast_sleep_timer_ended">Sleep timer ended</string>
@@ -258,7 +244,6 @@
     <string name="player_aniskip_dontskip">Don\'t skip</string>
     <string name="player_aniskip_dontskip_toast">Skipping %s in %d seconds</string>
     <string name="player_aniskip_skip">%s skipped</string>
-
     <!-- Errors -->
     <string name="no_next_episode">Next Episode not found!</string>
     <string name="no_prev_episode">Previous Episode not found!</string>
@@ -266,7 +251,6 @@
     <string name="no_hosters">Hoster list is empty</string>
     <string name="no_episode_loaded">No episode loaded</string>
     <string name="select_hoster_from_empty_list">Hoster selected from empty list</string>
-
     <!-- Sheets -->
     <string name="player_sheets_delay_set_as_default">Set as default</string>
     <string name="player_sheets_track_title_w_lang" translatable="false">#%d: %s (%s)</string>
@@ -274,12 +258,10 @@
     <string name="player_sheets_track_lang_wo_title" translatable="false">#%d: %s</string>
     <string name="player_sheets_track_delay">Delay</string>
     <string name="player_sheets_track_palette">Palette</string>
-
     <!-- Sheets - Audio delay -->
     <string name="player_sheets_audio_delay_title">Audio delay</string>
     <string name="player_sheets_audio_delay_audio_sound_heard">Sound heard</string>
     <string name="player_sheets_audio_delay_sound_sound_spotted">Sound spotted</string>
-
     <!-- Sheets - Sub delay -->
     <string name="player_sheets_sub_delay_title">Subtitle delay</string>
     <string name="player_sheets_sub_delay_speed">Speed</string>
@@ -291,7 +273,6 @@
     <string name="player_sheets_sub_delay_subtitle_text_seen">Text seen</string>
     <string name="player_sheets_sub_delay_audio_sound_heard">Sound heard</string>
     <string name="player_sheets_sub_delay_sound_sound_spotted">Sound spotted</string>
-
     <!-- Sheets - Subtitle colors -->
     <string name="player_sheets_sub_colors_title">Colors</string>
     <string name="player_sheets_subtitles_color_text">Text</string>
@@ -301,10 +282,8 @@
     <string name="player_sheets_sub_color_green">Green</string>
     <string name="player_sheets_sub_color_blue">Blue</string>
     <string name="player_sheets_sub_color_alpha">Alpha</string>
-
     <!-- Sheets - Subtitle settings -->
     <string name="player_sheets_subtitles_settings_title">Subtitles settings</string>
-
     <!-- Sheets - Subtitle Typography settings -->
     <string name="player_sheets_sub_typography_title">Typography</string>
     <string name="player_sheets_sub_typography_font">Font</string>
@@ -312,18 +291,15 @@
     <string name="player_sheets_sub_typography_border_style">Border style</string>
     <string name="player_sheets_sub_typography_border_size">Border size</string>
     <string name="player_sheets_subtitles_shadow_offset">Shadow offset</string>
-
     <!-- Sheets - Miscellaneous -->
     <string name="player_sheets_sub_misc_title">Miscellaneous</string>
     <string name="player_sheets_sub_override_ass">Override ASS/SSA subtitles</string>
     <string name="player_sheets_sub_scale">Scale</string>
     <string name="player_sheets_sub_position">Position</string>
-
     <!-- Sheets - Subtitles -->
     <string name="player_sheets_subtitles_border_style_outline_and_shadow">Outline and shadow</string>
     <string name="player_sheets_subtitles_border_style_opaque_box">Opaque box</string>
     <string name="player_sheets_subtitles_border_style_background_box">Background box</string>
-
     <!-- Sheets - Video filters -->
     <string name="player_sheets_filters_title">Filters</string>
     <string name="player_sheets_filters_brightness">Brightness</string>
@@ -332,18 +308,14 @@
     <string name="player_sheets_filters_Saturation">Saturation</string>
     <string name="player_sheets_filters_hue">Hue</string>
     <string name="player_sheets_filters_warning">Some filters may not work on your current video driver</string>
-
     <!-- Sheets - Audio tracks -->
     <string name="player_sheets_add_ext_audio">Add external audio tracks</string>
-
     <!-- Sheets - Quality list -->
     <string name="player_hoster_tap_to_load">Tap to load videos</string>
     <string name="player_hoster_failed">Failed to load videos</string>
     <string name="player_sheets_qualities_title">Qualities</string>
-
     <!-- Sheets - Decoders -->
     <string name="player_sheets_decoder_formatted">%s (%s)</string>
-
     <!-- Sheets - More Sheet -->
     <string name="player_sheets_more_title">More</string>
     <string name="player_hwdec_mode">Hardware decoding mode</string>
@@ -359,23 +331,18 @@
     <string name="timer_picker_enter_timer">Enter duration</string>
     <string name="timer_picker_pick_time">Pick duration</string>
     <string name="timer_cancel_timer">Cancel current timer</string>
-
     <!-- Sheets - Playback Speed -->
     <string name="player_sheets_speed_slider_label">Speed</string>
     <string name="player_sheets_speed_make_default">Make default speed</string>
     <string name="pref_audio_pitch_correction_title">Enable audio pitch correction</string>
     <string name="pref_audio_pitch_correction_summary">Prevents the audio from becoming high-pitched at faster speeds and low-pitched at slower speeds</string>
-
     <!-- Sheets - Subtitle tracks -->
     <string name="player_sheets_add_ext_sub">Add external subtitles</string>
     <string name="player_sheets_subtitles_footer_secondary_sid_no_styles">Secondary subtitles will have no ASS/SSA Styling.</string>
-
     <!-- Sheets - screenshot -->
     <string name="screenshot_show_subs">Include Subtitles</string>
-
     <!-- Sheets - Chapters -->
     <string name="player_sheets_chapters_title">Chapters</string>
-
     <!-- Subsections -->
     <string name="pref_general_summary">App language, notifications</string>
     <string name="theme_cloudflare">Cloudflare</string>
@@ -383,7 +350,6 @@
     <string name="theme_doom">Doom</string>
     <string name="theme_matrix">Matrix</string>
     <string name="pref_library_rows">List size</string>
-
     <!-- Reader section -->
     <string name="pref_preserve_reading_position">Preserve reading position on read chapters</string>
     <string name="pref_download_slots">Maximum downloads</string>
@@ -395,12 +361,10 @@
     <string name="confirm_tracker_update_anime">Update trackers to episode %d?</string>
     <string name="trackers_updated_summary_manga">Trackers updated to chapter %d</string>
     <string name="trackers_updated_summary_anime">Trackers updated to episode %d</string>
-
     <!-- Migrate dialog -->
     <string name="label_cant_migrate_episode">Unable to migrate episode to season, select season to continue</string>
     <string name="label_cant_migrate_season">Unable to migrate season to episode</string>
     <string name="label_show_seasons">Show seasons</string>
-
     <!-- Other -->
     <string name="download_notifier_download_finish">Download completed</string>
     <string name="action_hide">Hide</string>
