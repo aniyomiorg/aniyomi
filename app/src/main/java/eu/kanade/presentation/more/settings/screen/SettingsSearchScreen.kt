@@ -32,6 +32,7 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -233,7 +234,6 @@ private fun SearchResult(
             }
             .take(10) // Just take top 10 result for quicker result
             .toList()
-            .distinctBy { "${it.route::class.java.name}-${it.title}-${it.breadcrumbs}" }
     }
 
     Crossfade(
@@ -254,9 +254,7 @@ private fun SearchResult(
                 ) {
                     items(
                         items = it,
-                        key = { i ->
-                            "${i.route::class.java.name}-${i.title.ifEmpty { "_" }}-${i.breadcrumbs.ifEmpty { "_" }}"
-                        },
+                        key = { i -> i.hashCode() },
                     ) { item ->
                         Column(
                             modifier = Modifier
