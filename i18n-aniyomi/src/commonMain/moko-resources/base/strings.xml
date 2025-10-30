@@ -111,6 +111,7 @@
     <string name="pref_controls_swap_vol_brightness">Swap volume and brightness slider</string>
     <string name="pref_category_player_seeking">Seeking</string>
     <string name="enable_horizontal_seek_gesture">Enable Horizontal Seek Gesture</string>
+    <string name="enable_horizontal_seek_gesture_summary">When enabled, seeking with a horizontal swipe will be available</string>
     <string name="pref_show_seekbar">Show seekbar when seeking</string>
     <string name="pref_default_intro_length">Default skip intro length</string>
     <string name="pref_intro_length">Skip intro length</string>
