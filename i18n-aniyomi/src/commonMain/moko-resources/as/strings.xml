@@ -146,7 +146,7 @@
     <string name="enable_auto_play">স্বয়ংক্ৰিয় চলন সক্ৰিয়</string>
     <string name="disable_auto_play">স্বয়ংক্ৰিয় চলন অক্ষম</string>
     <string name="player_aniskip_dontskip">এৰি নিদিব</string>
-    <string name="player_aniskip_dontskip_toast">%d ছেকেণ্ডত %s এৰি দিয়া হ’ব</string>
+    <string name="player_aniskip_dontskip_toast">%s ৰ %d ছেকেণ্ডত এৰি দিয়া হ’ব</string>
     <string name="player_aniskip_skip">%s এৰি দিয়া হৈছে</string>
     <string name="no_next_episode">পৰৱৰ্তী পৰ্ব পোৱা নগ’ল!</string>
     <string name="no_prev_episode">আগৰ পৰ্ব পোৱা নগ’ল!</string>
