@@ -89,6 +89,8 @@ fun GestureHandler(
     val position by viewModel.pos.collectAsState()
     val controlsShown by viewModel.controlsShown.collectAsState()
     val areControlsLocked by viewModel.areControlsLocked.collectAsState()
+    val areGesturesLocked by viewModel.areGesturesLocked.collectAsState()
+
     val seekAmount by viewModel.doubleTapSeekAmount.collectAsState()
     val isSeekingForwards by viewModel.isSeekingForwards.collectAsState()
     var isDoubleTapSeeking by remember { mutableStateOf(false) }
@@ -168,7 +170,7 @@ fun GestureHandler(
                         interactionSource.emit(PressInteraction.Release(press))
                     },
                     onLongPress = {
-                        if (areControlsLocked) return@detectTapGestures
+                        if (areControlsLocked || areGesturesLocked) return@detectTapGestures
                         if (!isLongPressing) {
                             haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                             isLongPressing = true
@@ -179,7 +181,7 @@ fun GestureHandler(
                 )
             }
             .pointerInput(areControlsLocked) {
-                if (!seekGesture || areControlsLocked) return@pointerInput
+                if (!seekGesture || areControlsLocked || areGesturesLocked) return@pointerInput
                 var startingPosition = position.toInt()
                 var startingX = 0f
                 var wasPlayerAlreadyPause = false
@@ -244,6 +246,7 @@ fun GestureHandler(
                         originalBrightness = currentBrightness
                     },
                 ) { change, amount ->
+                    if (areGesturesLocked)return@detectVerticalDragGestures
                     val changeVolume: () -> Unit = {
                         if (isIncreasingVolumeBoost(amount) || isDecreasingVolumeBoost(amount)) {
                             if (mpvVolumeStartingY == 0f) {

@@ -8,7 +8,7 @@ build
 .idea/*
 !.idea/icon.png
 /captures
-
+app/release
 # Configuration files
 local.properties
 
