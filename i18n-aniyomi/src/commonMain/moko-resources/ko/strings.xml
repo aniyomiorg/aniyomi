@@ -64,7 +64,7 @@
     <string name="enable_auto_play">자동 재생 사용 중</string>
     <string name="disable_auto_play">자동 재생이 사용 중지됨</string>
     <string name="player_aniskip_dontskip">건너뛰지 않기</string>
-    <string name="player_aniskip_dontskip_toast">%d초 후에 건너뛰기</string>
+    <string name="player_aniskip_dontskip_toast">%s을 %d초 후에 건너뛰기</string>
     <string name="player_aniskip_skip">%s 건너뜀</string>
     <string name="no_next_episode">다음 에피소드를 찾을 수 없습니다!</string>
     <string name="player_hwdec_mode">기본 하드웨어 디코딩 모드 설정</string>
