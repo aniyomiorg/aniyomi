@@ -110,7 +110,7 @@
     <string name="enable_auto_play">Automatische Wiedergabe ist an</string>
     <string name="disable_auto_play">Automatische Wiedergabe ist aus</string>
     <string name="player_aniskip_dontskip">Nicht überspringen</string>
-    <string name="player_aniskip_dontskip_toast">Wird in %d Sekunden übersprungen</string>
+    <string name="player_aniskip_dontskip_toast">%s wird in %d Sekunden übersprungen</string>
     <string name="player_aniskip_skip">%s übersprungen</string>
     <string name="no_next_episode">Nächste Folge nicht gefunden!</string>
     <string name="player_hwdec_mode">Standard Hardware-Dekodierung wählen</string>
