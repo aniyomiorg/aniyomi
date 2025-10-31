@@ -16,6 +16,10 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
 
 - Added a description for the horizontal seek gesture setting ([@kenkoro](https://github.com/kenkoro)) ([#2224](https://github.com/aniyomiorg/aniyomi/pull/2224))
 
+### Fixed
+
+- Swapped keyEvent listeners for left and right keyboard arrow keys as they were swapped in the code causing the opposite of the desired behavior([@JDKamalakar](https://github.com/JDKamalakar)) ([#1947](https://github.com/aniyomiorg/aniyomi/issues/1947))
+
 ## [v0.18.1.2] - 2025-10-28
 ### Fixed
 
