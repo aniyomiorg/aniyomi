@@ -67,7 +67,7 @@
     <string name="enable_auto_play">自動播放已開啟</string>
     <string name="disable_auto_play">自動播放已關閉</string>
     <string name="player_aniskip_dontskip">不要跳過</string>
-    <string name="player_aniskip_dontskip_toast">%d 秒後跳過</string>
+    <string name="player_aniskip_dontskip_toast">跳過 %s 在 %d 秒後</string>
     <string name="player_aniskip_skip">%s 已跳過</string>
     <string name="no_next_episode">未找到下一集！</string>
     <string name="player_hwdec_mode">硬體解碼模式</string>

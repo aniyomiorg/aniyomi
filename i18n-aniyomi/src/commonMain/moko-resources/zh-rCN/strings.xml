@@ -146,7 +146,7 @@
     <string name="enable_auto_play">自动连播已开启</string>
     <string name="disable_auto_play">自动连播已关闭</string>
     <string name="player_aniskip_dontskip">不跳过</string>
-    <string name="player_aniskip_dontskip_toast">将在 %d 秒内跳过 %s</string>
+    <string name="player_aniskip_dontskip_toast">%s 将在 %d 秒内跳过</string>
     <string name="player_aniskip_skip">已跳过 %s</string>
     <string name="no_next_episode">没有下一集！</string>
     <string name="no_prev_episode">未找到上一集！</string>

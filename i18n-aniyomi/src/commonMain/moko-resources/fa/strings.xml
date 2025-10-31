@@ -46,7 +46,7 @@
     <string name="enable_auto_play">پخش خودکار فعال است</string>
     <string name="disable_auto_play">پخش خودکار فعال نیست</string>
     <string name="player_aniskip_dontskip">گذر نکن</string>
-    <string name="player_aniskip_dontskip_toast">گذر در %d ثانیه</string>
+    <string name="player_aniskip_dontskip_toast">گذر از %s در %d ثانیه</string>
     <string name="player_aniskip_skip">%s گذشت شد</string>
     <string name="no_next_episode">قسمت‌ بعدی پیدا نشد!</string>
     <string name="player_hwdec_mode">تنظیم حالت پیشفرض رمزگشایی سخت افزاری</string>
