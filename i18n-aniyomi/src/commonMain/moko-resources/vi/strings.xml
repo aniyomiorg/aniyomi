@@ -67,7 +67,7 @@
     <string name="enable_auto_play">Tự động phát đang bật</string>
     <string name="disable_auto_play">Tự động phát đang tắt</string>
     <string name="player_aniskip_dontskip">Không skip</string>
-    <string name="player_aniskip_dontskip_toast">Skip sau %d giây</string>
+    <string name="player_aniskip_dontskip_toast">Skip %s sau %d giây</string>
     <string name="player_aniskip_skip">bỏ qua %s giây</string>
     <string name="no_next_episode">Không tìm thấy tập tiếp theo!</string>
     <string name="player_hwdec_mode">Chế độ giải mã phần cứng</string>

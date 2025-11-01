@@ -49,7 +49,7 @@
     <string name="enable_auto_play">נגינה אוטומטית מופעלת</string>
     <string name="disable_auto_play">נגינה אוטומטית כבויה</string>
     <string name="player_aniskip_dontskip">אל תדלג</string>
-    <string name="player_aniskip_dontskip_toast">דלג בעוד %d שניות</string>
+    <string name="player_aniskip_dontskip_toast">דלג %s בעוד %d שניות</string>
     <string name="player_aniskip_skip">%s דולג</string>
     <string name="no_next_episode">הפרק הבא לא נמצא!</string>
     <string name="player_hwdec_mode">הגדר מצב פענוח חומרה ברירת מחדל</string>

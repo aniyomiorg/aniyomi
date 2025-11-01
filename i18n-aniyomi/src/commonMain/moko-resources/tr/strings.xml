@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="confirm_exit">Çıkmak için tekrar geriye basın</string>
+    <string name="confirm_exit">Yatay Kaydırmayı Etkinleştir</string>
     <string name="action_filter_started">Başlandı</string>
     <string name="action_sort_airing_time">Yayınlama tarihi</string>
     <string name="action_reorganize_by">Yeniden sırala</string>

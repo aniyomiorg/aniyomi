@@ -58,7 +58,7 @@
     <string name="enable_auto_play">Reproducció automàtica activada</string>
     <string name="disable_auto_play">Reproducció automàtica desactivada</string>
     <string name="player_aniskip_dontskip">No saltar</string>
-    <string name="player_aniskip_dontskip_toast">Salta en %d segons</string>
+    <string name="player_aniskip_dontskip_toast">Salta %s en %d segons</string>
     <string name="player_aniskip_skip">%s saltats</string>
     <string name="no_next_episode">No s\'ha trobat el següent episodi!</string>
     <string name="player_hwdec_mode">Establir per defecte el mode decodificació per hardware</string>
