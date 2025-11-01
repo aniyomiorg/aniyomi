@@ -527,4 +527,5 @@
     <string name="pref_download_fillermarked_items">Hikâye dışı olarak işaretlenmiş bölümlerin indirilmesine izin ver</string>
     <string name="show_episode_previews">Bölüm küçük resimleri</string>
     <string name="show_episode_summaries">Bölüm özetleri</string>
+    <string name="enable_horizontal_seek_gesture_summary">Geri almak veya ilerletmek için sola veya sağa kaydır</string>
 </resources>
