@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="confirm_exit">Натисніть \"назад\" ще раз, аби вийти</string>
+    <string name="confirm_exit">Увімкнути горизонтальний пошук</string>
     <string name="action_filter_started">Розпочато</string>
     <string name="action_sort_airing_time">Час виходу</string>
     <string name="action_reorganize_by">Змінити порядок</string>
