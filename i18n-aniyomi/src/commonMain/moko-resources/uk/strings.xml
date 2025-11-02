@@ -527,4 +527,5 @@
     <string name="pref_download_fillermarked_items">Дозволити завантаження епізодів із позначкою «філлер»</string>
     <string name="show_episode_previews">Мініатюри епізодів</string>
     <string name="show_episode_summaries">Короткий зміст епізодів</string>
+    <string name="enable_horizontal_seek_gesture_summary">Проведіть пальцем ліворуч або праворуч, щоб перемотати назад або вперед</string>
 </resources>
