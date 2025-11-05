@@ -95,17 +95,18 @@ class ChapterLoader(
                 downloadManager,
                 downloadProvider,
             )
-            source is LocalMangaSource -> source.getFormat(chapter.chapter).let { format ->
+            source is LocalMangaSource -> { // Use a regular block
+                val format = source.getFormat(chapter.chapter)
                 when (format) {
                     is Format.Directory -> DirectoryPageLoader(format.file)
-                    is Format.Archive -> ArchivePageLoader(format.file.archiveReader(context))
+                    is Format.Archive -> ArchivePageLoader(format.file.archiveReader(context), emptyMap())
                     is Format.Epub -> EpubPageLoader(format.file.epubReader(context))
+                    // Add an else branch if Format is not a sealed class/interface and the when is not exhaustive
+                    // else -> // handle other format cases or throw an error
                 }
             }
             source is HttpSource -> HttpPageLoader(chapter, source)
-            source is StubMangaSource -> error(
-                context.stringResource(MR.strings.source_not_installed, source.toString()),
-            )
+            source is StubMangaSource -> error(context.stringResource(MR.strings.source_not_installed, source.toString()))
             else -> error(context.stringResource(MR.strings.loader_not_implemented_error))
         }
     }

@@ -32,6 +32,8 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.anime.AndroidAnimeSourceManager
 import eu.kanade.tachiyomi.source.manga.AndroidMangaSourceManager
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
+import eu.kanade.translation.TranslationManager
+import eu.kanade.translation.data.TranslationProvider
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -205,6 +207,10 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { AnimeDownloadProvider(app) }
         addSingletonFactory { AnimeDownloadManager(app) }
         addSingletonFactory { AnimeDownloadCache(app) }
+
+        // TachiyomiAT
+        addSingletonFactory { TranslationProvider(app) }
+        addSingletonFactory { TranslationManager(app) }
 
         addSingletonFactory { TrackerManager(app) }
         addSingletonFactory { DelayedAnimeTrackingStore(app) }

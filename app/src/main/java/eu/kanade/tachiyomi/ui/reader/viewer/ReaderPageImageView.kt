@@ -71,7 +71,12 @@ open class ReaderPageImageView @JvmOverloads constructor(
     var onImageLoaded: (() -> Unit)? = null
     var onImageLoadError: (() -> Unit)? = null
     var onScaleChanged: ((newScale: Float) -> Unit)? = null
+
+    // TachiyomiAT
+    var onCenterChanged: ((newCenter: PointF) -> Unit)? = null
+
     var onViewClicked: (() -> Unit)? = null
+
 
     /**
      * For automatic background. Will be set as background color when [onImageLoaded] is called.
@@ -92,6 +97,12 @@ open class ReaderPageImageView @JvmOverloads constructor(
     @CallSuper
     open fun onScaleChanged(newScale: Float) {
         onScaleChanged?.invoke(newScale)
+    }
+
+    // TachiyomiAT
+    @CallSuper
+    open fun onCenterChanged(newCenter: PointF?) {
+        if (newCenter != null) onCenterChanged?.invoke(newCenter)
     }
 
     @CallSuper
@@ -264,7 +275,8 @@ open class ReaderPageImageView @JvmOverloads constructor(
                     }
 
                     override fun onCenterChanged(newCenter: PointF?, origin: Int) {
-                        // Not used
+                        // TachiyomiAT
+                        this@ReaderPageImageView.onCenterChanged(newCenter)
                     }
                 },
             )
