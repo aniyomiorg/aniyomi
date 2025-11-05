@@ -23,13 +23,18 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Gesture
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.ScreenRotation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import dev.vivvvek.seeker.Segment
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.Sheets
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import eu.kanade.tachiyomi.ui.player.controls.components.CurrentChapter
@@ -43,6 +48,8 @@ import uy.kohesive.injekt.api.get
 fun BottomLeftPlayerControls(
     playbackSpeed: Float,
     currentChapter: Segment?,
+    areGesturesLocked: State<Boolean>,
+    onToggleGestureLock: () -> Unit,
     onLockControls: () -> Unit,
     onCycleRotation: () -> Unit,
     onPlaybackSpeedChange: (Float) -> Unit,
@@ -55,6 +62,16 @@ fun BottomLeftPlayerControls(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        ControlsButton(
+            if (areGesturesLocked.value) {
+                ImageVector.vectorResource(
+                    id = R.drawable.gesture_lock,
+                )
+            } else {
+                Icons.Default.Gesture
+            },
+            onClick = onToggleGestureLock,
+        )
         ControlsButton(
             Icons.Default.LockOpen,
             onClick = onLockControls,
