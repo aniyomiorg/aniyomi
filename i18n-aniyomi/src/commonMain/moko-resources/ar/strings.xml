@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="confirm_exit">اضغط مرة أخرى للخروج</string>
+    <string name="confirm_exit">تمكين البحث الأفقي</string>
     <string name="action_filter_started">بدأت</string>
     <string name="action_sort_airing_time">وقت البث</string>
     <string name="action_reorganize_by">اعد الترتيب</string>
@@ -129,7 +129,7 @@
     <string name="pref_player_custom_button_delete">زر الحذف</string>
     <string name="pref_player_custom_button_delete_confirm">هل تريد حذف زر %s؟</string>
     <string name="pref_player_advanced">إعدادات متقدمة</string>
-    <string name="pref_player_advanced_summary">البرامج النصية، mpv.conf، input.conf</string>
+    <string name="pref_player_advanced_summary">ملفات مستخدم، mpv.conf، input.conf</string>
     <string name="pref_mpv_conf">قم بتحرير ملف تكوين MPV لمزيد من إعدادات مشغل الوسائط</string>
     <string name="pref_reset_mpv_conf">إعادة تعيين ملف تكوين MPV</string>
     <string name="pref_mpv_input">تعديل ملف إدخال MPV لتكوين تعيين لوحة المفاتيح</string>
@@ -350,8 +350,8 @@
     <string name="dialog_with_checkbox_remove_description_anime">سيؤدي ذلك إلى إزالة تاريخ مشاهدة هذه الحلقة. هل أنت متأكد؟</string>
     <string name="dialog_with_checkbox_reset_anime">أعد تعيين جميع الحلقات لهذا الأنمي</string>
     <string name="share_screenshot_info">%1$s: %2$s، %3$s</string>
-    <string name="episode_progress">التقدم: %1$s/%2$s</string>
-    <string name="episode_progress_no_total">التقدم: %1$s</string>
+    <string name="episode_progress">%1$s/%2$s</string>
+    <string name="episode_progress_no_total">%1$s</string>
     <string name="recent_anime_time">الحلقة. %1$s - %2$s</string>
     <string name="video_list_empty_error">لا يوجد فيديو</string>
     <string name="notification_new_episodes">تم العثور على حلقات جديدة</string>
@@ -382,7 +382,7 @@
     <string name="theme_cottoncandy">حلوى القطن</string>
     <string name="theme_mocha">موكا</string>
     <string name="pref_episode_swipe_end">مرر لليمين للإجراء الأيمن</string>
-    <string name="pref_episode_swipe_start">مرر لليسار للإجراء الأيسر</string>
+    <string name="pref_episode_swipe_start">الحلقة على التمرير إلى اليسار</string>
     <string name="pref_category_hide_hidden">إخفاء الفئات المخفية من شاشة الفئات</string>
     <string name="pref_update_anime_release_grace_period">فترة السماح المتوقعة لإصدار الأنمي</string>
     <string name="data_saver_exclude">تعطيل توفير البيانات</string>
@@ -417,7 +417,7 @@
     <string name="pref_category_delete_chapters">حذف الفصول/الحلقات</string>
     <string name="pref_remove_after_read">بعد قراءته/مشاهدته قم بحذفه تلقائيا</string>
     <string name="action_sort_last_manga_update">آخر تحديث للمنغا</string>
-    <string name="action_show_manga">اظهار المنغا</string>
+    <string name="action_show_manga">اظهار المانغا</string>
     <string name="action_display_show_continue_reading_button">متابعة القراءة/المشاهدة</string>
     <string name="pref_update_only_completely_read">تخطي الفصول والحلقات غير المرئية</string>
     <string name="action_add_repo_message">إضافة مستودعات إضافية إلى %s . يجب أن يكون هذا الرابط ينتهي بـ \"index.min.json\".</string>
@@ -470,4 +470,50 @@
     <string name="player_chapter_type_opening">البداية</string>
     <string name="player_chapter_type_ending">النهاية</string>
     <string name="player_chapter_type_recap">إعادة</string>
+    <string name="action_stop">توقف</string>
+    <string name="action_continue">استمر</string>
+    <string name="pref_behavior">سلوك الفصل</string>
+    <string name="pref_remove_bookmarked_chapters">السماح بحذف الفصول/الحلقات المُضافة إلى الإشارات المرجعية</string>
+    <string name="pref_incognito_mode_summary">استئناف سجلك</string>
+    <string name="label_player">مشغل</string>
+    <string name="pref_player_settings_summary">مشغل داخلي، إيماءات،فك تشفيرات، ترجمة</string>
+    <string name="enable_horizontal_seek_gesture_summary">مرر لليسار أو اليمين للرجوع للخلف أو التقديم السريع</string>
+    <string name="player_intro_skipped">تم تخطي %1$s</string>
+    <string name="player_chapter_type_mixedop">افتتاح مختلط</string>
+    <string name="no_available_videos">لا يوجد فديوهات متوفرة</string>
+    <string name="no_hosters">قائمة المضيف فارغة</string>
+    <string name="no_episode_loaded">لم يتم تحميل أي حلقة</string>
+    <string name="select_hoster_from_empty_list">تم اختيار المضيف من القائمة الفارغة</string>
+    <string name="player_sheets_track_delay">تأخير</string>
+    <string name="player_sheets_track_palette">لوحة الألوان</string>
+    <string name="player_hoster_tap_to_load">اضغط لتحميل الفديوهات</string>
+    <string name="player_hoster_failed">فشل تحميل فديوهات</string>
+    <string name="player_sheets_qualities_title">الجودات</string>
+    <string name="player_sheets_chapters_title">الفصول</string>
+    <string name="pref_library_rows">حجم القائمة</string>
+    <string name="custom_button_settings">ازرار مخصصة</string>
+    <string name="type">نوع</string>
+    <string name="label_cant_migrate_episode">غير قادر على نقل الحلقة إلى الموسم، حدد الموسم للمتابعة</string>
+    <string name="label_cant_migrate_season">غير قادر على نقل الموسم إلى الحلقة</string>
+    <string name="label_show_seasons">عرض مواسم</string>
+    <string name="action_display_show_continue_watching_button">زر استمرار مشاهدة</string>
+    <string name="action_display_grid_mode">وضع عرض الشبكة</string>
+    <string name="display_mode_season">الموسم %1$s</string>
+    <string name="show_season_number">رقم موسم</string>
+    <string name="sort_by_season_number">حسب رقم الموسم</string>
+    <string name="no_seasons_error">لم يتم العثور على المواسم</string>
+    <string name="season_settings_updated">تم تحديث إعدادات الموسم الافتراضية</string>
+    <string name="season_settings">إعدادات الموسم</string>
+    <string name="pref_behavior_episode">سلوك الحلقة</string>
+    <string name="pref_mark_duplicate_seen_episode_seen">وضع علامة على الحلقة المكررة التي تمت مشاهدتها على أنها تمت مشاهدتها</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_existing">بعد مشاهدة حلقة</string>
+    <string name="pref_mark_duplicate_seen_episode_seen_new">بعد جلب الحلقة الجديدة</string>
+    <string name="pref_library_season">موسم</string>
+    <string name="pref_update_seasons_refresh">تحديث المواسم مع الحلقات عند التحديث</string>
+    <string name="pref_update_seasons_update">تحديث المواسم مع الحلقات عند تحديث المكتبة</string>
+    <string name="filler">حشو</string>
+    <string name="action_edit_background">تعديل خلفية</string>
+    <string name="custom_background">خلفية مخصصة</string>
+    <string name="background_saved">تم حفظ خلفية</string>
+    <string name="error_saving_background">خطأ عند حفظ خلفية</string>
 </resources>
