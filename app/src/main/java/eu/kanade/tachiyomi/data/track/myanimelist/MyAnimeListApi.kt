@@ -102,7 +102,6 @@ class MyAnimeListApi(
             val url = "$BASE_API_URL/anime".toUri().buildUpon()
                 // MAL API throws a 400 when the query is over 64 characters...
                 .appendQueryParameter("q", query.take(64))
-                .appendQueryParameter("q", query)
                 .appendQueryParameter("nsfw", "true")
                 .build()
             with(json) {
@@ -304,7 +303,7 @@ class MyAnimeListApi(
 
     suspend fun findListItemsAnime(query: String, offset: Int = 0): List<AnimeTrackSearch> {
         return withIOContext {
-            val myListSearchResult = getListPage(offset)
+            val myListSearchResult = getListPage(offset, "animelist")
 
             val matches = myListSearchResult.data
                 .filter { it.node.title.contains(query, ignoreCase = true) }
@@ -320,9 +319,9 @@ class MyAnimeListApi(
         }
     }
 
-    private suspend fun getListPage(offset: Int): MALUserSearchResult {
+    private suspend fun getListPage(offset: Int, listType: String = "mangalist"): MALUserSearchResult {
         return withIOContext {
-            val urlBuilder = "$BASE_API_URL/users/@me/mangalist".toUri().buildUpon()
+            val urlBuilder = "$BASE_API_URL/users/@me/$listType".toUri().buildUpon()
                 .appendQueryParameter("fields", "list_status{start_date,finish_date}")
                 .appendQueryParameter("limit", LIST_PAGINATION_AMOUNT.toString())
             if (offset > 0) {
