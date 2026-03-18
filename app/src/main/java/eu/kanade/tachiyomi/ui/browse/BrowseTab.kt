@@ -21,10 +21,6 @@ import eu.kanade.tachiyomi.ui.browse.anime.extension.animeExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.migrateAnimeSourceTab
 import eu.kanade.tachiyomi.ui.browse.anime.source.animeSourcesTab
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
-import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsScreenModel
-import eu.kanade.tachiyomi.ui.browse.manga.extension.mangaExtensionsTab
-import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.migrateMangaSourceTab
-import eu.kanade.tachiyomi.ui.browse.manga.source.mangaSourcesTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.channels.BufferOverflow
@@ -48,7 +44,6 @@ data object BrowseTab : Tab {
             )
         }
 
-    // TODO: Find a way to let it open Global Anime/Manga Search depending on what Tab(e.g. Anime/Manga Source Tab) is open
     override suspend fun onReselect(navigator: Navigator) {
         navigator.push(GlobalAnimeSearchScreen())
     }
@@ -56,31 +51,24 @@ data object BrowseTab : Tab {
     private val switchToTabNumberChannel = Channel<Int>(1, BufferOverflow.DROP_OLDEST)
 
     fun showExtension() {
-        switchToTabNumberChannel.trySend(3) // Manga extensions: tab no. 3
+        switchToTabNumberChannel.trySend(1) // Anime extensions: tab no. 1
     }
 
     fun showAnimeExtension() {
-        switchToTabNumberChannel.trySend(2) // Anime extensions: tab no. 2
+        switchToTabNumberChannel.trySend(1) // Anime extensions: tab no. 1
     }
 
     @Composable
     override fun Content() {
         val context = LocalContext.current
 
-        // Hoisted for extensions tab's search bar
-        val mangaExtensionsScreenModel = rememberScreenModel { MangaExtensionsScreenModel() }
-        val mangaExtensionsState by mangaExtensionsScreenModel.state.collectAsState()
-
         val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
         val animeExtensionsState by animeExtensionsScreenModel.state.collectAsState()
 
         val tabs = persistentListOf(
             animeSourcesTab(),
-            mangaSourcesTab(),
             animeExtensionsTab(animeExtensionsScreenModel),
-            mangaExtensionsTab(mangaExtensionsScreenModel),
             migrateAnimeSourceTab(),
-            migrateMangaSourceTab(),
         )
 
         val state = rememberPagerState { tabs.size }
@@ -89,8 +77,6 @@ data object BrowseTab : Tab {
             titleRes = MR.strings.browse,
             tabs = tabs,
             state = state,
-            mangaSearchQuery = mangaExtensionsState.searchQuery,
-            onChangeMangaSearchQuery = mangaExtensionsScreenModel::search,
             animeSearchQuery = animeExtensionsState.searchQuery,
             onChangeAnimeSearchQuery = animeExtensionsScreenModel::search,
             scrollable = true,

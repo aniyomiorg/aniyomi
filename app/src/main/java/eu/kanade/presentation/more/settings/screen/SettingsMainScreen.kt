@@ -189,12 +189,6 @@ object SettingsMainScreen : Screen() {
             screen = SettingsLibraryScreen,
         ),
         Item(
-            titleRes = MR.strings.pref_category_reader,
-            subtitleRes = MR.strings.pref_reader_summary,
-            icon = Icons.AutoMirrored.Outlined.ChromeReaderMode,
-            screen = SettingsReaderScreen,
-        ),
-        Item(
             titleRes = AYMR.strings.label_player,
             subtitleRes = AYMR.strings.pref_player_settings_summary,
             icon = Icons.Outlined.VideoSettings,

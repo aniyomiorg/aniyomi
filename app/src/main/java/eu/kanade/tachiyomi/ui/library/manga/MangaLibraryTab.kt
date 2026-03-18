@@ -71,7 +71,7 @@ data object MangaLibraryTab : Tab {
     override val options: TabOptions
         @Composable
         get() {
-            val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
+            val fromMore = currentNavigationStyle() == NavStyle.MOVE_HISTORY_TO_MORE
             val title = AYMR.strings.label_manga_library
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_enter)
@@ -110,7 +110,7 @@ data object MangaLibraryTab : Tab {
             started
         }
 
-        val fromMore = currentNavigationStyle() == NavStyle.MOVE_MANGA_TO_MORE
+        val fromMore = currentNavigationStyle() == NavStyle.MOVE_HISTORY_TO_MORE
 
         val navigateUp: (() -> Unit)? = if (fromMore) {
             {

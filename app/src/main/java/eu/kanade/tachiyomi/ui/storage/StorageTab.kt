@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.storage
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
@@ -14,7 +13,6 @@ import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.storage.anime.animeStorageTab
-import eu.kanade.tachiyomi.ui.storage.manga.mangaStorageTab
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
@@ -39,14 +37,11 @@ data object StorageTab : Tab {
 
         val tabs = persistentListOf(
             animeStorageTab(),
-            mangaStorageTab(),
         )
-        val state = rememberPagerState { tabs.size }
 
         TabbedScreen(
             titleRes = AYMR.strings.label_storage,
             tabs = tabs,
-            state = state,
         )
 
         LaunchedEffect(Unit) {

@@ -19,8 +19,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.anime.AnimeHistoryScreenModel
 import eu.kanade.tachiyomi.ui.history.anime.animeHistoryTab
 import eu.kanade.tachiyomi.ui.history.anime.resumeLastEpisodeSeenEvent
-import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
-import eu.kanade.tachiyomi.ui.history.manga.mangaHistoryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
@@ -35,7 +33,7 @@ data object HistoriesTab : Tab {
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_history_enter)
             val index: UShort = when (currentNavigationStyle()) {
                 NavStyle.MOVE_HISTORY_TO_MORE -> 5u
-                NavStyle.MOVE_BROWSE_TO_MORE -> 3u
+                NavStyle.MOVE_BROWSE_TO_MORE -> 2u
                 else -> 2u
             }
             return TabOptions(
@@ -53,9 +51,6 @@ data object HistoriesTab : Tab {
     override fun Content() {
         val context = LocalContext.current
         val fromMore = currentNavigationStyle() == NavStyle.MOVE_HISTORY_TO_MORE
-        // Hoisted for history tab's search bar
-        val mangaHistoryScreenModel = rememberScreenModel { MangaHistoryScreenModel() }
-        val mangaSearchQuery by mangaHistoryScreenModel.query.collectAsState()
 
         val animeHistoryScreenModel = rememberScreenModel { AnimeHistoryScreenModel() }
         val animeSearchQuery by animeHistoryScreenModel.query.collectAsState()
@@ -64,10 +59,7 @@ data object HistoriesTab : Tab {
             titleRes = MR.strings.label_recent_manga,
             tabs = persistentListOf(
                 animeHistoryTab(context, fromMore),
-                mangaHistoryTab(context, fromMore),
             ),
-            mangaSearchQuery = mangaSearchQuery,
-            onChangeMangaSearchQuery = mangaHistoryScreenModel::search,
             animeSearchQuery = animeSearchQuery,
             onChangeAnimeSearchQuery = animeHistoryScreenModel::search,
         )
@@ -77,6 +69,3 @@ data object HistoriesTab : Tab {
         }
     }
 }
-
-private const val TAB_ANIME = 0
-private const val TAB_MANGA = 1

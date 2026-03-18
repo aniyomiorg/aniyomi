@@ -35,7 +35,7 @@
     <string name="also_set_chapter_settings_for_library">Also apply to all manga in my library</string>
     <string name="dialog_with_checkbox_reset">Reset all chapters for this manga</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking WatchAnime. Tap to learn more.</string>
     <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
     <!-- Player settings -->
     <string name="label_player_settings">Player settings</string>
@@ -562,7 +562,7 @@
     <string name="unseen">Unseen</string>
     <string name="label_manga_extension_repos">Manga extension repos</string>
     <string name="label_anime_extension_repos">Anime extension repos</string>
-    <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
+    <string name="onboarding_storage_action_create_folder">Create default WatchAnime folder</string>
     <string name="download_speed_limit">Chapter download speed limit</string>
     <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
     <string name="filler">Filler</string>

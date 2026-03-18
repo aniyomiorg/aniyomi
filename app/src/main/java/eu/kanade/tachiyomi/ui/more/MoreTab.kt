@@ -22,7 +22,6 @@ import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.setting.PlayerSettingsScreen
@@ -33,7 +32,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
@@ -86,7 +84,6 @@ data object MoreTab : Tab {
 }
 
 private class MoreScreenModel(
-    private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val animeDownloadManager: AnimeDownloadManager = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
 ) : ScreenModel {
@@ -100,33 +97,18 @@ private class MoreScreenModel(
     val downloadQueueState: StateFlow<DownloadQueueState> = _downloadQueueState.asStateFlow()
 
     init {
-        // Handle running/paused status change and queue progress updating
         screenModelScope.launchIO {
-            combine(
-                downloadManager.isDownloaderRunning,
-                downloadManager.queueState,
-            ) { isRunningManga, mangaDownloadQueue -> Pair(isRunningManga, mangaDownloadQueue.size) }
-                .collectLatest { (isDownloadingManga, mangaDownloadQueueSize) ->
-                    combine(
-                        animeDownloadManager.isDownloaderRunning,
-                        animeDownloadManager.queueState,
-                    ) { isRunningAnime, animeDownloadQueue ->
-                        Pair(
-                            isRunningAnime,
-                            animeDownloadQueue.size,
-                        )
+            animeDownloadManager.isDownloaderRunning.collectLatest { isRunning ->
+                animeDownloadManager.queueState.collectLatest { queue ->
+                    val downloadQueueSize = queue.size
+                    val pendingDownloadExists = downloadQueueSize != 0
+                    _downloadQueueState.value = when {
+                        !pendingDownloadExists -> DownloadQueueState.Stopped
+                        !isRunning -> DownloadQueueState.Paused(downloadQueueSize)
+                        else -> DownloadQueueState.Downloading(downloadQueueSize)
                     }
-                        .collectLatest { (isDownloadingAnime, animeDownloadQueueSize) ->
-                            val isDownloading = isDownloadingAnime || isDownloadingManga
-                            val downloadQueueSize = mangaDownloadQueueSize + animeDownloadQueueSize
-                            val pendingDownloadExists = downloadQueueSize != 0
-                            _downloadQueueState.value = when {
-                                !pendingDownloadExists -> DownloadQueueState.Stopped
-                                !isDownloading -> DownloadQueueState.Paused(downloadQueueSize)
-                                else -> DownloadQueueState.Downloading(downloadQueueSize)
-                            }
-                        }
                 }
+            }
         }
     }
 }
