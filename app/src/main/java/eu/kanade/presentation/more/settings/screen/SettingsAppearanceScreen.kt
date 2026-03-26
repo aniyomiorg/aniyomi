@@ -20,6 +20,7 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.appearance.AppLanguageScreen
 import eu.kanade.presentation.more.settings.widget.AppThemeModePreferenceWidget
 import eu.kanade.presentation.more.settings.widget.AppThemePreferenceWidget
+import eu.kanade.presentation.more.settings.widget.ThemeDarkAmoledPreferenceWidget
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableMap
@@ -85,15 +86,18 @@ object SettingsAppearanceScreen : SearchableSettings {
                         )
                     }
                 },
-                Preference.PreferenceItem.SwitchPreference(
-                    preference = amoledPref,
+                Preference.PreferenceItem.CustomPreference(
                     title = stringResource(MR.strings.pref_dark_theme_pure_black),
-                    enabled = themeMode != ThemeMode.LIGHT,
-                    onValueChanged = {
-                        (context as? Activity)?.let { ActivityCompat.recreate(it) }
-                        true
-                    },
-                ),
+                ) {
+                    ThemeDarkAmoledPreferenceWidget(
+                        value = amoled,
+                        themeMode = themeMode,
+                        onValueChange = {
+                            amoledPref.set(it)
+                            (context as? Activity)?.let(ActivityCompat::recreate)
+                        },
+                    )
+                },
             ),
         )
     }

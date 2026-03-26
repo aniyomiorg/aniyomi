@@ -8,6 +8,8 @@ enum class ThemeMode {
     SYSTEM,
 }
 
+fun ThemeMode.supportsAmoled(): Boolean = this != ThemeMode.LIGHT
+
 fun setAppCompatDelegateThemeMode(themeMode: ThemeMode) {
     AppCompatDelegate.setDefaultNightMode(
         when (themeMode) {
