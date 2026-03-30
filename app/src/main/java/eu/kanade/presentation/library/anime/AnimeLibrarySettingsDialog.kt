@@ -186,6 +186,7 @@ private fun ColumnScope.SortPage(
             trackerMeanPair,
             AYMR.strings.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
             MR.strings.action_sort_random to AnimeLibrarySort.Type.Random,
+            MR.strings.action_sort_custom to AnimeLibrarySort.Type.Custom,
         )
     }
 

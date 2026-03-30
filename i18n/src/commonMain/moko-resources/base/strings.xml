@@ -74,6 +74,7 @@
     <string name="action_sort_date_added">Date added</string>
     <string name="action_sort_tracker_score">Tracker score</string>
     <string name="action_sort_random">Random</string>
+    <string name="action_sort_custom">Custom</string>
     <string name="action_search">Search</string>
     <string name="action_search_hint">Search…</string>
     <string name="action_search_settings">Search settings</string>
