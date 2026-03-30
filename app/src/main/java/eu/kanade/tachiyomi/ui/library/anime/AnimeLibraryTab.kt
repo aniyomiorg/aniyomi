@@ -171,7 +171,9 @@ data object AnimeLibraryTab : Tab {
                     onDownloadClicked = screenModel::runDownloadActionSelection
                         .takeIf { state.selection.fastAll { !it.anime.isLocal() } },
                     onDeleteClicked = screenModel::openDeleteAnimeDialog,
-                    onCreateCategoryClicked = null,
+                    onCreateCategoryClicked = screenModel::createCategoryFromSelection,
+                    onMoveUpClicked = screenModel::moveSelectionUp,
+                    onMoveDownClicked = screenModel::moveSelectionDown,
                     isManga = false,
                 )
             },
@@ -196,13 +198,9 @@ data object AnimeLibraryTab : Tab {
                 else -> {
                     AnimeLibraryContent(
                         categories = state.categories,
-                        searchQuery = state.searchQuery,
                         selection = state.selection,
                         contentPadding = contentPadding,
                         currentPage = { screenModel.activeCategoryIndex },
-                        hasActiveFilters = state.hasActiveFilters,
-                        showPageTabs = state.showCategoryTabs || !state.searchQuery.isNullOrEmpty(),
-                        onChangeCurrentPage = { screenModel.activeCategoryIndex = it },
                         onAnimeClicked = { navigator.push(AnimeScreen(it)) },
                         onContinueWatchingClicked = { it: LibraryAnime ->
                             scope.launchIO {
@@ -217,18 +215,9 @@ data object AnimeLibraryTab : Tab {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         },
                         onRefresh = onClickRefresh,
-                        onGlobalSearchClicked = {
-                            navigator.push(
-                                GlobalAnimeSearchScreen(screenModel.state.value.searchQuery ?: ""),
-                            )
-                        },
-                        getNumberOfAnimeForCategory = { state.getAnimeCountForCategory(it) },
-                        getDisplayMode = { screenModel.getDisplayMode() },
-                        getColumnsForOrientation = {
-                            screenModel.getColumnsPreferenceForCurrentOrientation(
-                                it,
-                            )
-                        },
+                        onCurrentCategoryChanged = { screenModel.currentCategoryId = it },
+                        onEnterCategory = { screenModel.onEnterCategory(it) },
+                        columns = screenModel.getColumnsPreferenceForCurrentOrientation(true).value.coerceAtLeast(2),
                     ) { state.getAnimelibItemsByPage(it) }
                 }
             }
@@ -276,10 +265,11 @@ data object AnimeLibraryTab : Tab {
             null -> {}
         }
 
-        BackHandler(enabled = state.selectionMode || state.searchQuery != null) {
+        BackHandler(enabled = state.selectionMode || state.searchQuery != null || screenModel.isInNestedCategory) {
             when {
                 state.selectionMode -> screenModel.clearSelection()
                 state.searchQuery != null -> screenModel.search(null)
+                screenModel.isInNestedCategory -> screenModel.goBackToParent()
             }
         }
 

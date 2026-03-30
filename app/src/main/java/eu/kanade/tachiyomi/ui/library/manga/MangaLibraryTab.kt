@@ -179,7 +179,9 @@ data object MangaLibraryTab : Tab {
                     onDownloadClicked = screenModel::runDownloadActionSelection
                         .takeIf { state.selection.fastAll { !it.manga.isLocal() } },
                     onDeleteClicked = screenModel::openDeleteMangaDialog,
-                    onCreateCategoryClicked = null,
+                    onCreateCategoryClicked = screenModel::createCategoryFromSelection,
+                    onMoveUpClicked = screenModel::moveSelectionUp,
+                    onMoveDownClicked = screenModel::moveSelectionDown,
                     isManga = true,
                 )
             },
@@ -204,13 +206,9 @@ data object MangaLibraryTab : Tab {
                 else -> {
                     MangaLibraryContent(
                         categories = state.categories,
-                        searchQuery = state.searchQuery,
                         selection = state.selection,
                         contentPadding = contentPadding,
                         currentPage = { screenModel.activeCategoryIndex },
-                        hasActiveFilters = state.hasActiveFilters,
-                        showPageTabs = state.showCategoryTabs || !state.searchQuery.isNullOrEmpty(),
-                        onChangeCurrentPage = { screenModel.activeCategoryIndex = it },
                         onMangaClicked = { navigator.push(MangaScreen(it)) },
                         onContinueReadingClicked = { it: LibraryManga ->
                             scope.launchIO {
@@ -237,18 +235,9 @@ data object MangaLibraryTab : Tab {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         },
                         onRefresh = onClickRefresh,
-                        onGlobalSearchClicked = {
-                            navigator.push(
-                                GlobalMangaSearchScreen(screenModel.state.value.searchQuery ?: ""),
-                            )
-                        },
-                        getNumberOfMangaForCategory = { state.getMangaCountForCategory(it) },
-                        getDisplayMode = { screenModel.getDisplayMode() },
-                        getColumnsForOrientation = {
-                            screenModel.getColumnsPreferenceForCurrentOrientation(
-                                it,
-                            )
-                        },
+                        onCurrentCategoryChanged = { screenModel.currentCategoryId = it },
+                        onEnterCategory = { screenModel.onEnterCategory(it) },
+                        columns = screenModel.getColumnsPreferenceForCurrentOrientation(true).value.coerceAtLeast(2),
                     ) { state.getLibraryItemsByPage(it) }
                 }
             }
@@ -297,10 +286,11 @@ data object MangaLibraryTab : Tab {
             null -> {}
         }
 
-        BackHandler(enabled = state.selectionMode || state.searchQuery != null) {
+        BackHandler(enabled = state.selectionMode || state.searchQuery != null || screenModel.isInNestedCategory) {
             when {
                 state.selectionMode -> screenModel.clearSelection()
                 state.searchQuery != null -> screenModel.search(null)
+                screenModel.isInNestedCategory -> screenModel.goBackToParent()
             }
         }
 
