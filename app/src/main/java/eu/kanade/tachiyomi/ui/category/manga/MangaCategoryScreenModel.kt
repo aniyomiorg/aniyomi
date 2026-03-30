@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import tachiyomi.domain.category.manga.interactor.CreateMangaCategoryWithName
 import tachiyomi.domain.category.manga.interactor.DeleteMangaCategory
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
@@ -40,6 +42,7 @@ class MangaCategoryScreenModel(
 
     private val _events: Channel<MangaCategoryEvent> = Channel()
     val events = _events.receiveAsFlow()
+    private val reorderMutex = Mutex()
 
     init {
         screenModelScope.launch {
@@ -119,38 +122,42 @@ class MangaCategoryScreenModel(
 
     fun moveUp(category: Category) {
         screenModelScope.launch {
-            val currentState = mutableState.value
-            if (currentState !is MangaCategoryScreenState.Success) return@launch
+            reorderMutex.withLock {
+                val currentState = mutableState.value
+                if (currentState !is MangaCategoryScreenState.Success) return@withLock
 
-            val siblings = currentState.categories.filter { it.parentId == category.parentId }
-            val sortedSiblings = siblings.sortedBy { it.order }
-            val index = sortedSiblings.indexOfFirst { it.id == category.id }
-            if (index > 0) {
-                val prevCategory = sortedSiblings[index - 1]
-                val updates = listOf(
-                    CategoryUpdate(id = category.id, order = prevCategory.order),
-                    CategoryUpdate(id = prevCategory.id, order = category.order),
-                )
-                categoryRepository.updatePartialMangaCategories(updates)
+                val siblings = currentState.categories.filter { it.parentId == category.parentId }
+                val sortedSiblings = siblings.sortedWith(compareBy({ it.order }, { it.id }))
+                val index = sortedSiblings.indexOfFirst { it.id == category.id }
+                if (index > 0) {
+                    val prevCategory = sortedSiblings[index - 1]
+                    val updates = listOf(
+                        CategoryUpdate(id = category.id, order = prevCategory.order),
+                        CategoryUpdate(id = prevCategory.id, order = category.order),
+                    )
+                    categoryRepository.updatePartialMangaCategories(updates)
+                }
             }
         }
     }
 
     fun moveDown(category: Category) {
         screenModelScope.launch {
-            val currentState = mutableState.value
-            if (currentState !is MangaCategoryScreenState.Success) return@launch
+            reorderMutex.withLock {
+                val currentState = mutableState.value
+                if (currentState !is MangaCategoryScreenState.Success) return@withLock
 
-            val siblings = currentState.categories.filter { it.parentId == category.parentId }
-            val sortedSiblings = siblings.sortedBy { it.order }
-            val index = sortedSiblings.indexOfFirst { it.id == category.id }
-            if (index >= 0 && index < sortedSiblings.size - 1) {
-                val nextCategory = sortedSiblings[index + 1]
-                val updates = listOf(
-                    CategoryUpdate(id = category.id, order = nextCategory.order),
-                    CategoryUpdate(id = nextCategory.id, order = category.order),
-                )
-                categoryRepository.updatePartialMangaCategories(updates)
+                val siblings = currentState.categories.filter { it.parentId == category.parentId }
+                val sortedSiblings = siblings.sortedWith(compareBy({ it.order }, { it.id }))
+                val index = sortedSiblings.indexOfFirst { it.id == category.id }
+                if (index >= 0 && index < sortedSiblings.size - 1) {
+                    val nextCategory = sortedSiblings[index + 1]
+                    val updates = listOf(
+                        CategoryUpdate(id = category.id, order = nextCategory.order),
+                        CategoryUpdate(id = nextCategory.id, order = category.order),
+                    )
+                    categoryRepository.updatePartialMangaCategories(updates)
+                }
             }
         }
     }
@@ -162,17 +169,14 @@ class MangaCategoryScreenModel(
                 if (currentState !is MangaCategoryScreenState.Success) return@launch
 
                 val siblings = currentState.categories.filter { it.parentId == category.parentId }
-                val sortedSiblings = siblings.sortedBy { it.order }
+                val sortedSiblings = siblings.sortedWith(compareBy({ it.order }, { it.id }))
                 val index = sortedSiblings.indexOfFirst { it.id == category.id }
                 val maxOrder = sortedSiblings.filterNot { it.id == category.id }
                     .maxOfOrNull { it.order } ?: 0
 
-                categoryRepository.updatePartialMangaCategory(
-                    CategoryUpdate(
-                        id = category.id,
-                        parentId = null,
-                        order = maxOrder + 1,
-                    ),
+                categoryRepository.clearMangaCategoryParentId(
+                    categoryId = category.id,
+                    order = maxOrder + 1,
                 )
             }
         }
@@ -185,22 +189,6 @@ class MangaCategoryScreenModel(
                     id = categoryId,
                     thumbnailUrl = thumbnailUrl,
                 ),
-            )
-            refreshCategories()
-        }
-    }
-
-    private suspend fun refreshCategories() {
-        val categories = if (libraryPreferences.hideHiddenCategoriesSettings().get()) {
-            getVisibleCategories.await()
-        } else {
-            getAllCategories.await()
-        }
-        mutableState.update {
-            MangaCategoryScreenState.Success(
-                categories = categories
-                    .filterNot(Category::isSystemCategory)
-                    .toImmutableList(),
             )
         }
     }

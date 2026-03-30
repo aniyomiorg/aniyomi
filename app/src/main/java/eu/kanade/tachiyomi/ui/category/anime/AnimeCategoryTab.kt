@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastMap
 import cafe.adriel.voyager.core.model.rememberScreenModel
+
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -27,6 +28,7 @@ import eu.kanade.presentation.components.TabContent
 import kotlinx.collections.immutable.toImmutableList
 import tachiyomi.domain.category.model.Category
 import tachiyomi.i18n.aniyomi.AYMR
+import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
@@ -56,9 +58,9 @@ fun Screen.animeCategoryTab(): TabContent {
                     if (navigationStack.size > 1) {
                         Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                             IconButton(onClick = { navigationStack = navigationStack.dropLast(1) }) {
-                                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(MR.strings.action_back))
                             }
-                            Text(text = "Subcategories")
+                            Text(text = stringResource(MR.strings.label_subcategories))
                         }
                     }
 
@@ -75,13 +77,13 @@ fun Screen.animeCategoryTab(): TabContent {
                         onEditThumbnail = { thumbnailDialogCategory = it },
                         canMoveUp = { category ->
                             val siblings = allCategories.filter { it.parentId == category.parentId }
-                            val sortedSiblings = siblings.sortedBy { it.order }
+                            val sortedSiblings = siblings.sortedWith(compareBy({ it.order }, { it.id }))
                             val index = sortedSiblings.indexOfFirst { it.id == category.id }
                             index > 0
                         },
                         canMoveDown = { category ->
                             val siblings = allCategories.filter { it.parentId == category.parentId }
-                            val sortedSiblings = siblings.sortedBy { it.order }
+                            val sortedSiblings = siblings.sortedWith(compareBy({ it.order }, { it.id }))
                             val index = sortedSiblings.indexOfFirst { it.id == category.id }
                             index >= 0 && index < sortedSiblings.size - 1
                         },

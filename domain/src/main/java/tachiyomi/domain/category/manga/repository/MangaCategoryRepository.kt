@@ -42,6 +42,8 @@ interface MangaCategoryRepository {
 
     suspend fun deleteMangaCategory(categoryId: Long)
 
+    suspend fun clearMangaCategoryParentId(categoryId: Long, order: Long)
+
     suspend fun getEntriesInCategory(categoryId: Long): List<Pair<Long, Long>>
 
     suspend fun updateSortOrder(mangaId: Long, categoryId: Long, sortOrder: Long)

@@ -107,6 +107,15 @@ class MangaCategoryRepositoryImpl(
         }
     }
 
+    override suspend fun clearMangaCategoryParentId(categoryId: Long, order: Long) {
+        handler.await {
+            categoriesQueries.clearParentId(
+                categoryId = categoryId,
+                order = order,
+            )
+        }
+    }
+
     override suspend fun getChildMangaCategories(parentId: Long): List<Category> {
         return handler.awaitList { categoriesQueries.getChildCategories(parentId, ::mapCategory) }
     }

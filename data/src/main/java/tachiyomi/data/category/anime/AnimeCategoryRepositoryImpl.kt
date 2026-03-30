@@ -107,6 +107,15 @@ class AnimeCategoryRepositoryImpl(
         }
     }
 
+    override suspend fun clearAnimeCategoryParentId(categoryId: Long, order: Long) {
+        handler.await {
+            categoriesQueries.clearParentId(
+                categoryId = categoryId,
+                order = order,
+            )
+        }
+    }
+
     override suspend fun getChildAnimeCategories(parentId: Long): List<Category> {
         return handler.awaitList { categoriesQueries.getChildCategories(parentId, ::mapCategory) }
     }

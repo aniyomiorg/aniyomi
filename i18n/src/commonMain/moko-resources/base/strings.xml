@@ -107,6 +107,9 @@
     <string name="action_edit_thumbnail">Edit thumbnail</string>
     <string name="action_set_thumbnail_url">Set thumbnail URL</string>
     <string name="action_clear_thumbnail">Clear thumbnail</string>
+    <string name="action_use_default_thumbnail">Use default (first entry thumbnail)</string>
+    <string name="action_back">Back</string>
+    <string name="action_open_subcategory">Open subcategory</string>
     <string name="thumbnail_url_dialog_title">Thumbnail URL</string>
     <string name="thumbnail_url_hint">Enter image URL</string>
     <string name="delete_category_confirmation">Do you wish to delete the category \"%s\"?</string>
@@ -954,6 +957,8 @@
     <string name="getting_started_guide">Getting started guide</string>
     <string name="information_empty_category">You have no categories. Tap the plus button to create one for organizing your library.</string>
     <string name="information_empty_category_dialog">You don\'t have any categories yet.</string>
+    <string name="information_empty">Empty</string>
+    <string name="label_subcategories">Subcategories</string>
     <string name="information_cloudflare_bypass_failure">Failed to bypass Cloudflare</string>
     <string name="information_cloudflare_help">Tap here for help with Cloudflare</string>
     <string name="information_required_plain">*required</string>

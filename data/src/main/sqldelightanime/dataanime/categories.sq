@@ -104,6 +104,12 @@ flags = coalesce(?, flags);
 selectLastInsertedRowId:
 SELECT last_insert_rowid();
 
+clearParentId:
+UPDATE categories
+SET parent_id = NULL,
+    sort = :order
+WHERE _id = :categoryId;
+
 getChildCategories:
 SELECT
 _id AS id,

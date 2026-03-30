@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
@@ -112,7 +113,7 @@ fun CategoryRenameDialog(
     category: String,
 ) {
     var name by remember { mutableStateOf(category) }
-    var valueHasChanged by remember { mutableStateOf(false) }
+    val valueHasChanged = name != category
 
     val focusRequester = remember { FocusRequester() }
     val nameAlreadyExists = remember(name) { categories.contains(name) }
@@ -142,10 +143,7 @@ fun CategoryRenameDialog(
             OutlinedTextField(
                 modifier = Modifier.focusRequester(focusRequester),
                 value = name,
-                onValueChange = {
-                    valueHasChanged = name != it
-                    name = it
-                },
+                onValueChange = { name = it },
                 label = { Text(text = stringResource(MR.strings.name)) },
                 supportingText = {
                     val msgRes = if (valueHasChanged && nameAlreadyExists) {
@@ -270,7 +268,7 @@ fun ChangeCategoryDialog(
                     }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(MR.strings.action_back),
                         )
                     }
                 }
@@ -283,7 +281,7 @@ fun ChangeCategoryDialog(
             ) {
                 val currentLevelSelection = selection.filter { it.value.parentId == currentParentId }
                 if (currentLevelSelection.isEmpty()) {
-                    Text(text = "Empty", modifier = Modifier.padding(16.dp))
+                    Text(text = stringResource(MR.strings.information_empty), modifier = Modifier.padding(16.dp))
                 }
                 currentLevelSelection.forEach { checkbox ->
                     val onChange: (CheckboxState<Category>) -> Unit = {
@@ -330,9 +328,10 @@ fun ChangeCategoryDialog(
                         )
 
                         if (hasChildren) {
-                            TextButton(onClick = { navigationStack = navigationStack + checkbox.value.id }) {
-                                Text("Open >")
-                            }
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                contentDescription = stringResource(MR.strings.action_open_subcategory),
+                            )
                         }
                     }
                 }
@@ -363,16 +362,8 @@ fun ThumbnailUrlDialog(
             }
         },
         dismissButton = {
-            Row {
-                TextButton(onClick = {
-                    onConfirm(null)
-                    onDismissRequest()
-                }) {
-                    Text(text = stringResource(MR.strings.action_clear_thumbnail))
-                }
-                TextButton(onClick = onDismissRequest) {
-                    Text(text = stringResource(MR.strings.action_cancel))
-                }
+            TextButton(onClick = onDismissRequest) {
+                Text(text = stringResource(MR.strings.action_cancel))
             }
         },
         title = {
@@ -391,7 +382,7 @@ fun ThumbnailUrlDialog(
                         checked = useDefault,
                         onCheckedChange = { useDefault = it },
                     )
-                    Text(text = "Use default (first entry thumbnail)")
+                    Text(text = stringResource(MR.strings.action_use_default_thumbnail))
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -416,6 +407,15 @@ fun ThumbnailUrlDialog(
                             .fillMaxWidth()
                             .padding(top = 8.dp),
                     )
+                    TextButton(
+                        onClick = {
+                            url = ""
+                            useDefault = false
+                        },
+                        modifier = Modifier.padding(top = 4.dp),
+                    ) {
+                        Text(text = stringResource(MR.strings.action_clear_thumbnail))
+                    }
                 }
             }
         },

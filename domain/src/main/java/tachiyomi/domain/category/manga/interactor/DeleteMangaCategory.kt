@@ -1,6 +1,7 @@
 package tachiyomi.domain.category.manga.interactor
 
 import logcat.LogPriority
+import tachiyomi.core.common.util.lang.compareBy
 import tachiyomi.core.common.util.lang.withNonCancellableContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
@@ -36,12 +37,15 @@ class DeleteMangaCategory(
         }
 
         val remainingCategories = categoryRepository.getAllMangaCategories()
-        val updates = remainingCategories.mapIndexed { index, category ->
-            CategoryUpdate(
-                id = category.id,
-                order = index.toLong(),
-            )
-        }
+        val updates = remainingCategories
+            .groupBy { it.parentId }
+            .flatMap { (_, siblings) ->
+                siblings
+                    .sortedWith(compareBy({ it.order }, { it.id }))
+                    .mapIndexed { index, category ->
+                        CategoryUpdate(id = category.id, order = index.toLong())
+                    }
+            }
 
         val defaultCategory = libraryPreferences.defaultMangaCategory().get()
         if (categoryIdsToDelete.any { it.toInt() == defaultCategory }) {

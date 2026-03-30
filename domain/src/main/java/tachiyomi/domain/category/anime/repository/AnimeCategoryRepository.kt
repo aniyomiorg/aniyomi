@@ -42,6 +42,8 @@ interface AnimeCategoryRepository {
 
     suspend fun deleteAnimeCategory(categoryId: Long)
 
+    suspend fun clearAnimeCategoryParentId(categoryId: Long, order: Long)
+
     suspend fun getEntriesInCategory(categoryId: Long): List<Pair<Long, Long>>
 
     suspend fun updateSortOrder(animeId: Long, categoryId: Long, sortOrder: Long)
