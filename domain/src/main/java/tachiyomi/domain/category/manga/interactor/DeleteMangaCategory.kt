@@ -19,21 +19,21 @@ class DeleteMangaCategory(
 
     suspend fun await(categoryId: Long) = withNonCancellableContext {
         val allCategories = categoryRepository.getAllMangaCategories()
-        
+
         fun getAllChildIds(parentId: Long): List<Long> {
             val children = allCategories.filter { it.parentId == parentId }
             return children.flatMap { child ->
                 listOf(child.id) + getAllChildIds(child.id)
             }
         }
-        
+
         val categoryIdsToDelete = listOf(categoryId).plus(getAllChildIds(categoryId)).toSet()
-        
+
         val allLibraryManga = mangaRepository.getLibraryManga()
         val mangaIdsInCategories = allLibraryManga
             .filter { it.category in categoryIdsToDelete }
             .map { it.id }
-        
+
         if (mangaIdsInCategories.isNotEmpty()) {
             val updates = mangaIdsInCategories.map { id ->
                 MangaUpdate(id = id, favorite = false)
@@ -44,7 +44,7 @@ class DeleteMangaCategory(
                 logcat(LogPriority.ERROR, e)
             }
         }
-        
+
         for (id in categoryIdsToDelete) {
             try {
                 categoryRepository.deleteMangaCategory(id)

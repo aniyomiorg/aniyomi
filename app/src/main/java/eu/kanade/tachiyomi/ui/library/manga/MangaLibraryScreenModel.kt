@@ -112,13 +112,13 @@ class MangaLibraryScreenModel(
 
     private var parentCategoryIds: MutableList<Long?> = mutableListOf(null)
     private val refreshTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-    
+
     fun onEnterCategory(categoryId: Long) {
         parentCategoryIds.add(currentCategoryId)
         currentCategoryId = categoryId
         isInNestedCategory = true
     }
-    
+
     fun goBackToParent(): Boolean {
         if (parentCategoryIds.size > 1) {
             parentCategoryIds.removeLast()
@@ -128,7 +128,7 @@ class MangaLibraryScreenModel(
         }
         return false
     }
-    
+
     private fun triggerRefresh() {
         refreshTrigger.tryEmit(Unit)
     }
@@ -602,7 +602,7 @@ class MangaLibraryScreenModel(
     fun createCategoryFromSelection() {
         val selection = state.value.selection
         if (selection.isEmpty()) return
-        
+
         val firstManga = selection.first().manga
         val categoryName = firstManga.title
         val parentId = currentCategoryId
@@ -610,7 +610,9 @@ class MangaLibraryScreenModel(
         screenModelScope.launchIO {
             val result = createMangaCategoryWithName.await(categoryName, parentId)
             if (result is CreateMangaCategoryWithName.Result.Success) {
-                val newCategoryId = state.value.categories.find { it.name == categoryName && it.parentId == parentId }?.id
+                val newCategoryId = state.value.categories.find {
+                    it.name == categoryName && it.parentId == parentId
+                }?.id
                 if (newCategoryId != null) {
                     val mangaList = selection.map { it.manga }
                     mangaList.forEach { manga ->
@@ -629,7 +631,7 @@ class MangaLibraryScreenModel(
         val selection = state.value.selection
         if (selection.isEmpty()) return
         val categoryId = currentCategoryId ?: return
-        
+
         screenModelScope.launchIO {
             selection.forEach { libraryManga ->
                 reorderMangaEntry.moveUp(libraryManga.manga.id, categoryId)
@@ -641,7 +643,7 @@ class MangaLibraryScreenModel(
         val selection = state.value.selection
         if (selection.isEmpty()) return
         val categoryId = currentCategoryId ?: return
-        
+
         screenModelScope.launchIO {
             selection.forEach { libraryManga ->
                 reorderMangaEntry.moveDown(libraryManga.manga.id, categoryId)

@@ -2,11 +2,10 @@ package eu.kanade.presentation.library.anime
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import eu.kanade.core.preference.PreferenceMutableState
-import eu.kanade.presentation.library.components.LibraryTabs
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -92,7 +90,7 @@ fun AnimeLibraryContent(
         }
 
         val childCategories = categories.filter { it.parentId == currentCategory?.id }
-        
+
         val entries = if (currentCategory != null) {
             val pageIndex = categories.indexOf(currentCategory)
             if (pageIndex != -1) getAnimeLibraryForPage(pageIndex) else emptyList()
@@ -101,7 +99,9 @@ fun AnimeLibraryContent(
             if (defaultCategory != null && defaultCategory.parentId == null) {
                 val pageIndex = categories.indexOf(defaultCategory)
                 if (pageIndex != -1) getAnimeLibraryForPage(pageIndex) else emptyList()
-            } else emptyList()
+            } else {
+                emptyList()
+            }
         }
 
         val gridItems = remember(childCategories, entries) {
@@ -115,7 +115,7 @@ fun AnimeLibraryContent(
                         sourceId = it.source,
                         isAnimeFavorite = it.favorite,
                         url = it.thumbnailUrl,
-                        lastModified = it.coverLastModified
+                        lastModified = it.coverLastModified,
                     )
                 }
                 CategoryGridItem.Group(cat, cover)

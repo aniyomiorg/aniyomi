@@ -115,13 +115,13 @@ class AnimeLibraryScreenModel(
 
     private var parentCategoryIds: MutableList<Long?> = mutableListOf(null)
     private val refreshTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-    
+
     fun onEnterCategory(categoryId: Long) {
         parentCategoryIds.add(currentCategoryId)
         currentCategoryId = categoryId
         isInNestedCategory = true
     }
-    
+
     fun goBackToParent(): Boolean {
         if (parentCategoryIds.size > 1) {
             parentCategoryIds.removeLast()
@@ -131,7 +131,7 @@ class AnimeLibraryScreenModel(
         }
         return false
     }
-    
+
     private fun triggerRefresh() {
         refreshTrigger.tryEmit(Unit)
     }
@@ -617,7 +617,7 @@ class AnimeLibraryScreenModel(
     fun createCategoryFromSelection() {
         val selection = state.value.selection
         if (selection.isEmpty()) return
-        
+
         val firstAnime = selection.first().anime
         val categoryName = firstAnime.title
         val parentId = currentCategoryId
@@ -625,7 +625,9 @@ class AnimeLibraryScreenModel(
         screenModelScope.launchIO {
             val result = createAnimeCategoryWithName.await(categoryName, parentId)
             if (result is CreateAnimeCategoryWithName.Result.Success) {
-                val newCategoryId = state.value.categories.find { it.name == categoryName && it.parentId == parentId }?.id
+                val newCategoryId = state.value.categories.find {
+                    it.name == categoryName && it.parentId == parentId
+                }?.id
                 if (newCategoryId != null) {
                     val animeList = selection.map { it.anime }
                     animeList.forEach { anime ->
@@ -644,7 +646,7 @@ class AnimeLibraryScreenModel(
         val selection = state.value.selection
         if (selection.isEmpty()) return
         val categoryId = currentCategoryId ?: return
-        
+
         screenModelScope.launchIO {
             selection.forEach { libraryAnime ->
                 reorderAnimeEntry.moveUp(libraryAnime.anime.id, categoryId)
@@ -656,7 +658,7 @@ class AnimeLibraryScreenModel(
         val selection = state.value.selection
         if (selection.isEmpty()) return
         val categoryId = currentCategoryId ?: return
-        
+
         screenModelScope.launchIO {
             selection.forEach { libraryAnime ->
                 reorderAnimeEntry.moveDown(libraryAnime.anime.id, categoryId)

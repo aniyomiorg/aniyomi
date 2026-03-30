@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -48,17 +47,17 @@ fun MangaCategoryGridScreen(
         modifier = Modifier.fillMaxSize(),
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(
             items = items,
-            key = { it.hashCode() }
+            key = { it.hashCode() },
         ) { item ->
             when (item) {
                 is MangaCategoryGridItem.Group -> {
                     Column(
                         modifier = Modifier.clickable { onGroupClick(item.category) },
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         if (item.coverManga != null) {
                             EntryCompactGridItem(
@@ -69,26 +68,26 @@ fun MangaCategoryGridScreen(
                                 coverBadgeEnd = {},
                                 onLongClick = { },
                                 onClick = { onGroupClick(item.category) },
-                                onClickContinueViewing = null
+                                onClickContinueViewing = null,
                             )
                         } else {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(32.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Folder,
                                     contentDescription = "Folder",
                                     tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier.fillMaxSize(),
                                 )
                             }
                             Text(
                                 text = item.category.name,
                                 style = MaterialTheme.typography.bodyMedium,
-                                maxLines = 2
+                                maxLines = 2,
                             )
                         }
                     }
@@ -109,9 +108,13 @@ fun MangaCategoryGridScreen(
                         coverBadgeEnd = {},
                         onLongClick = { onLongClickManga(item.libraryItem.libraryManga) },
                         onClick = { onClickManga(item.libraryItem.libraryManga) },
-                        onClickContinueViewing = if (onClickContinueReading != null && item.libraryItem.unreadCount > 0) {
+                        onClickContinueViewing = if (onClickContinueReading != null &&
+                            item.libraryItem.unreadCount > 0
+                        ) {
                             { onClickContinueReading(item.libraryItem.libraryManga) }
-                        } else null
+                        } else {
+                            null
+                        },
                     )
                 }
             }

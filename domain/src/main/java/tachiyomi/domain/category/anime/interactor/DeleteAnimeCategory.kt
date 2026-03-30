@@ -19,21 +19,21 @@ class DeleteAnimeCategory(
 
     suspend fun await(categoryId: Long) = withNonCancellableContext {
         val allCategories = categoryRepository.getAllAnimeCategories()
-        
+
         fun getAllChildIds(parentId: Long): List<Long> {
             val children = allCategories.filter { it.parentId == parentId }
             return children.flatMap { child ->
                 listOf(child.id) + getAllChildIds(child.id)
             }
         }
-        
+
         val categoryIdsToDelete = listOf(categoryId).plus(getAllChildIds(categoryId)).toSet()
-        
+
         val allLibraryAnime = animeRepository.getLibraryAnime()
         val animeIdsInCategories = allLibraryAnime
             .filter { it.category in categoryIdsToDelete }
             .map { it.id }
-        
+
         if (animeIdsInCategories.isNotEmpty()) {
             val updates = animeIdsInCategories.map { id ->
                 AnimeUpdate(id = id, favorite = false)
@@ -44,7 +44,7 @@ class DeleteAnimeCategory(
                 logcat(LogPriority.ERROR, e)
             }
         }
-        
+
         for (id in categoryIdsToDelete) {
             try {
                 categoryRepository.deleteAnimeCategory(id)

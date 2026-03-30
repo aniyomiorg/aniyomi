@@ -265,12 +265,12 @@ fun ChangeCategoryDialog(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (navigationStack.size > 1) {
-                    IconButton(onClick = { 
+                    IconButton(onClick = {
                         navigationStack = navigationStack.dropLast(1)
                     }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
-                            contentDescription = "Back"
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
                         )
                     }
                 }
@@ -298,7 +298,15 @@ fun ChangeCategoryDialog(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { if (hasChildren) navigationStack = navigationStack + checkbox.value.id else onChange(checkbox) },
+                            .clickable {
+                                if (hasChildren) {
+                                    navigationStack = navigationStack + checkbox.value.id
+                                } else {
+                                    onChange(
+                                        checkbox,
+                                    )
+                                }
+                            },
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         when (checkbox) {
@@ -320,7 +328,7 @@ fun ChangeCategoryDialog(
                             text = checkbox.value.visualName,
                             modifier = Modifier.padding(horizontal = MaterialTheme.padding.medium).weight(1f),
                         )
-                        
+
                         if (hasChildren) {
                             TextButton(onClick = { navigationStack = navigationStack + checkbox.value.id }) {
                                 Text("Open >")

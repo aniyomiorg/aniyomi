@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
@@ -74,9 +73,21 @@ fun MangaCategoryScreen(
                     onRename = { onClickRename(category) },
                     onHide = { onClickHide(category) },
                     onDelete = { onClickDelete(category) },
-                    onMoveUp = if (canMoveUp(category)) {{ onMoveUp(category) }} else null,
-                    onMoveDown = if (canMoveDown(category)) {{ onMoveDown(category) }} else null,
-                    onMoveToParent = if (canMoveToParent(category)) {{ onMoveToParent(category) }} else null,
+                    onMoveUp = if (canMoveUp(category)) {
+                        { onMoveUp(category) }
+                    } else {
+                        null
+                    },
+                    onMoveDown = if (canMoveDown(category)) {
+                        { onMoveDown(category) }
+                    } else {
+                        null
+                    },
+                    onMoveToParent = if (canMoveToParent(category)) {
+                        { onMoveToParent(category) }
+                    } else {
+                        null
+                    },
                     onEditThumbnail = { onEditThumbnail(category) },
                 )
             }
