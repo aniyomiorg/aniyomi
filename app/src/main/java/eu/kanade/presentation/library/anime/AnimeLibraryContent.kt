@@ -65,7 +65,12 @@ fun AnimeLibraryContent(
         val currentCategory = navigationStack.last()
 
         LaunchedEffect(currentCategory) {
-            onCurrentCategoryChanged(currentCategory?.id)
+            val categoryId = if (currentCategory != null) {
+                currentCategory.id
+            } else {
+                categories.find { it.id == 0L }?.id
+            }
+            onCurrentCategoryChanged(categoryId)
         }
 
         val scope = rememberCoroutineScope()

@@ -86,7 +86,7 @@ data class MangaLibrarySort(
             )
         }
         val directions by lazy { setOf(Direction.Ascending, Direction.Descending) }
-        val default = MangaLibrarySort(Type.Alphabetical, Direction.Ascending)
+        val default = MangaLibrarySort(Type.Custom, Direction.Ascending)
 
         fun valueOf(flag: Long?): MangaLibrarySort {
             if (flag == null) return default

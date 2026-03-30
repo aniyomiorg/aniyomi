@@ -29,6 +29,12 @@ import tachiyomi.domain.library.anime.LibraryAnime
 sealed interface CategoryGridItem {
     data class Group(val category: Category, val coverAnime: AnimeCover?) : CategoryGridItem
     data class Entry(val libraryItem: AnimeLibraryItem) : CategoryGridItem
+
+    val stableKey: Any
+        get() = when (this) {
+            is Group -> "cat_${category.id}"
+            is Entry -> "anime_${libraryItem.libraryAnime.id}"
+        }
 }
 
 @Composable
@@ -51,7 +57,7 @@ fun AnimeCategoryGridScreen(
     ) {
         items(
             items = items,
-            key = { it.hashCode() },
+            key = { it.stableKey },
         ) { item ->
             when (item) {
                 is CategoryGridItem.Group -> {

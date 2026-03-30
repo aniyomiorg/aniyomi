@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.common.preference.CheckboxState
 import tachiyomi.core.common.preference.TriState
@@ -360,10 +361,8 @@ class AnimeLibraryScreenModel(
             }
         }
 
-        val currentCategory = currentCategoryId?.let { catId -> this.keys.find { it.id == catId } }
-        val sortToUse = currentCategory?.sort ?: return this
-
-        return mapValues { (_, value) ->
+        return mapValues { (category, value) ->
+            val sortToUse = category.sort
             if (sortToUse.type == AnimeLibrarySort.Type.Random) {
                 return@mapValues value.shuffled(Random(libraryPreferences.randomAnimeSortSeed().get()))
             }
@@ -414,8 +413,12 @@ class AnimeLibraryScreenModel(
      * Get the categories and all its anime from the database.
      */
     private fun getLibraryFlow(): Flow<AnimeLibraryMap> {
+        val animelibAnimeFlow = refreshTrigger
+            .onStart { emit(Unit) }
+            .flatMapLatest { getLibraryAnime.subscribe() }
+
         val animelibAnimesFlow = combine(
-            getLibraryAnime.subscribe(),
+            animelibAnimeFlow,
             getAnimelibItemPreferencesFlow(),
             downloadCache.changes,
         ) { animelibAnimeList, prefs, _ ->
@@ -643,26 +646,24 @@ class AnimeLibraryScreenModel(
     }
 
     fun moveSelectionUp() {
-        val selection = state.value.selection
-        if (selection.isEmpty()) return
+        val item = state.value.selection.firstOrNull() ?: return
         val categoryId = currentCategoryId ?: return
 
         screenModelScope.launchIO {
-            selection.forEach { libraryAnime ->
-                reorderAnimeEntry.moveUp(libraryAnime.anime.id, categoryId)
-            }
+            reorderAnimeEntry.moveUp(item.anime.id, categoryId)
+            clearSelection()
+            triggerRefresh()
         }
     }
 
     fun moveSelectionDown() {
-        val selection = state.value.selection
-        if (selection.isEmpty()) return
+        val item = state.value.selection.firstOrNull() ?: return
         val categoryId = currentCategoryId ?: return
 
         screenModelScope.launchIO {
-            selection.forEach { libraryAnime ->
-                reorderAnimeEntry.moveDown(libraryAnime.anime.id, categoryId)
-            }
+            reorderAnimeEntry.moveDown(item.anime.id, categoryId)
+            clearSelection()
+            triggerRefresh()
         }
     }
 

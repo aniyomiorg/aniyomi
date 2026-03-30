@@ -88,7 +88,7 @@ data class AnimeLibrarySort(
             )
         }
         val directions by lazy { setOf(Direction.Ascending, Direction.Descending) }
-        val default = AnimeLibrarySort(Type.Alphabetical, Direction.Ascending)
+        val default = AnimeLibrarySort(Type.Custom, Direction.Ascending)
 
         fun valueOf(flag: Long?): AnimeLibrarySort {
             if (flag == null) return default

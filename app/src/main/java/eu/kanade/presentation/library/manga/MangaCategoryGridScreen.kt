@@ -29,6 +29,12 @@ import tachiyomi.domain.library.manga.LibraryManga
 sealed interface MangaCategoryGridItem {
     data class Group(val category: Category, val coverManga: MangaCover?) : MangaCategoryGridItem
     data class Entry(val libraryItem: MangaLibraryItem) : MangaCategoryGridItem
+
+    val stableKey: Any
+        get() = when (this) {
+            is Group -> "cat_${category.id}"
+            is Entry -> "manga_${libraryItem.libraryManga.id}"
+        }
 }
 
 @Composable
@@ -51,7 +57,7 @@ fun MangaCategoryGridScreen(
     ) {
         items(
             items = items,
-            key = { it.hashCode() },
+            key = { it.stableKey },
         ) { item ->
             when (item) {
                 is MangaCategoryGridItem.Group -> {

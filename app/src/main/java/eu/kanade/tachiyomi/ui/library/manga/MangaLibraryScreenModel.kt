@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.common.preference.CheckboxState
 import tachiyomi.core.common.preference.TriState
@@ -347,10 +348,8 @@ class MangaLibraryScreenModel(
             }
         }
 
-        val currentCategory = currentCategoryId?.let { catId -> this.keys.find { it.id == catId } }
-        val sortToUse = currentCategory?.sort ?: return this
-
-        return mapValues { (_, value) ->
+        return mapValues { (category, value) ->
+            val sortToUse = category.sort
             if (sortToUse.type == MangaLibrarySort.Type.Random) {
                 return@mapValues value.shuffled(Random(libraryPreferences.randomMangaSortSeed().get()))
             }
@@ -400,8 +399,12 @@ class MangaLibraryScreenModel(
      * Get the categories and all its manga from the database.
      */
     private fun getLibraryFlow(): Flow<MangaLibraryMap> {
+        val libraryMangaFlow = refreshTrigger
+            .onStart { emit(Unit) }
+            .flatMapLatest { getLibraryManga.subscribe() }
+
         val libraryMangasFlow = combine(
-            getLibraryManga.subscribe(),
+            libraryMangaFlow,
             getLibraryItemPreferencesFlow(),
             downloadCache.changes,
         ) { libraryMangaList, prefs, _ ->
@@ -628,26 +631,24 @@ class MangaLibraryScreenModel(
     }
 
     fun moveSelectionUp() {
-        val selection = state.value.selection
-        if (selection.isEmpty()) return
+        val item = state.value.selection.firstOrNull() ?: return
         val categoryId = currentCategoryId ?: return
 
         screenModelScope.launchIO {
-            selection.forEach { libraryManga ->
-                reorderMangaEntry.moveUp(libraryManga.manga.id, categoryId)
-            }
+            reorderMangaEntry.moveUp(item.manga.id, categoryId)
+            clearSelection()
+            triggerRefresh()
         }
     }
 
     fun moveSelectionDown() {
-        val selection = state.value.selection
-        if (selection.isEmpty()) return
+        val item = state.value.selection.firstOrNull() ?: return
         val categoryId = currentCategoryId ?: return
 
         screenModelScope.launchIO {
-            selection.forEach { libraryManga ->
-                reorderMangaEntry.moveDown(libraryManga.manga.id, categoryId)
-            }
+            reorderMangaEntry.moveDown(item.manga.id, categoryId)
+            clearSelection()
+            triggerRefresh()
         }
     }
 

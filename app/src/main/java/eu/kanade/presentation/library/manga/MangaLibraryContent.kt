@@ -49,8 +49,6 @@ fun MangaLibraryContent(
     onGlobalSearchClicked: () -> Unit,
     onCurrentCategoryChanged: (Long?) -> Unit,
     onEnterCategory: ((Long) -> Unit)? = null,
-    onMoveMangaUp: ((LibraryManga) -> Unit)? = null,
-    onMoveMangaDown: ((LibraryManga) -> Unit)? = null,
     getNumberOfMangaForCategory: (Category) -> Int?,
     getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
@@ -67,7 +65,12 @@ fun MangaLibraryContent(
         val currentCategory = navigationStack.last()
 
         LaunchedEffect(currentCategory) {
-            onCurrentCategoryChanged(currentCategory?.id)
+            val categoryId = if (currentCategory != null) {
+                currentCategory.id
+            } else {
+                categories.find { it.id == 0L }?.id
+            }
+            onCurrentCategoryChanged(categoryId)
         }
 
         val scope = rememberCoroutineScope()
