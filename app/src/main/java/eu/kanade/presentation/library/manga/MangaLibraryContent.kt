@@ -1,16 +1,11 @@
-package eu.kanade.presentation.library.manga
+﻿package eu.kanade.presentation.library.manga
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,10 +13,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import eu.kanade.core.preference.PreferenceMutableState
+import eu.kanade.presentation.library.components.LibraryTabs
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -47,8 +42,6 @@ fun MangaLibraryContent(
     onToggleRangeSelection: (LibraryManga) -> Unit,
     onRefresh: (Category?) -> Boolean,
     onGlobalSearchClicked: () -> Unit,
-    onCurrentCategoryChanged: (Long?) -> Unit,
-    onEnterCategory: ((Long) -> Unit)? = null,
     getNumberOfMangaForCategory: (Category) -> Int?,
     getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
@@ -61,32 +54,27 @@ fun MangaLibraryContent(
             end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
         ),
     ) {
-        var navigationStack by remember { mutableStateOf(listOf<Category?>(null)) }
-        val currentCategory = navigationStack.last()
-
-        LaunchedEffect(currentCategory) {
-            val categoryId = if (currentCategory != null) {
-                currentCategory.id
-            } else {
-                categories.find { it.id == 0L }?.id
-            }
-            onCurrentCategoryChanged(categoryId)
-        }
+        val coercedCurrentPage = remember { currentPage().coerceAtMost(categories.lastIndex) }
+        val pagerState = rememberPagerState(coercedCurrentPage) { categories.size }
 
         val scope = rememberCoroutineScope()
-        var isRefreshing by remember(currentCategory) { mutableStateOf(false) }
+        var isRefreshing by remember(pagerState.currentPage) { mutableStateOf(false) }
 
-        if (navigationStack.size > 1) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { navigationStack = navigationStack.dropLast(1) }) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+        if (showPageTabs && categories.size > 1) {
+            LaunchedEffect(categories) {
+                if (categories.size <= pagerState.currentPage) {
+                    pagerState.scrollToPage(categories.size - 1)
                 }
-                Text(text = currentCategory?.name ?: "")
             }
+            LibraryTabs(
+                categories = categories,
+                pagerState = pagerState,
+                getNumberOfItemsForCategory = getNumberOfMangaForCategory,
+            ) { scope.launch { pagerState.animateScrollToPage(it) } }
         }
 
         val notSelectionMode = selection.isEmpty()
-        val onClickMangaInternal = { manga: LibraryManga ->
+        val onClickManga = { manga: LibraryManga ->
             if (notSelectionMode) {
                 onMangaClicked(manga.manga.id)
             } else {
@@ -94,50 +82,13 @@ fun MangaLibraryContent(
             }
         }
 
-        val childCategories = categories.filter { it.parentId == currentCategory?.id }
-
-        val entries = if (currentCategory != null) {
-            val pageIndex = categories.indexOf(currentCategory)
-            if (pageIndex != -1) getLibraryForPage(pageIndex) else emptyList()
-        } else {
-            val defaultCategory = categories.find { it.id == 0L }
-            if (defaultCategory != null && defaultCategory.parentId == null) {
-                val pageIndex = categories.indexOf(defaultCategory)
-                if (pageIndex != -1) getLibraryForPage(pageIndex) else emptyList()
-            } else {
-                emptyList()
-            }
-        }
-
-        val gridItems = remember(childCategories, entries) {
-            val groups = childCategories.map { cat ->
-                val pageIndex = categories.indexOf(cat)
-                val itemsForCat = if (pageIndex != -1) getLibraryForPage(pageIndex) else emptyList()
-                val firstManga = itemsForCat.firstOrNull()?.libraryManga
-                val cover = firstManga?.let { lm ->
-                    val it = lm.manga
-                    tachiyomi.domain.entries.manga.model.MangaCover(
-                        mangaId = it.id,
-                        sourceId = it.source,
-                        isMangaFavorite = it.favorite,
-                        url = it.thumbnailUrl,
-                        lastModified = it.coverLastModified,
-                    )
-                }
-                MangaCategoryGridItem.Group(cat, cover)
-            }
-            val entryItems = entries.map { MangaCategoryGridItem.Entry(it) }
-            groups + entryItems
-        }
-
-        val columns by remember { getColumnsForOrientation(true) } // Simplified assuming compact grid
-
         PullRefresh(
             refreshing = isRefreshing,
             onRefresh = {
-                val started = onRefresh(currentCategory)
+                val started = onRefresh(categories[currentPage()])
                 if (!started) return@PullRefresh
                 scope.launch {
+                    // Fake refresh status but hide it after a second as it's a long running task
                     isRefreshing = true
                     delay(1.seconds)
                     isRefreshing = false
@@ -145,19 +96,24 @@ fun MangaLibraryContent(
             },
             enabled = notSelectionMode,
         ) {
-            MangaCategoryGridScreen(
-                items = gridItems,
-                columns = columns.takeIf { it > 0 } ?: 2,
+            MangaLibraryPager(
+                state = pagerState,
                 contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
-                selection = selection,
-                onGroupClick = { clickedCategory ->
-                    navigationStack = navigationStack + clickedCategory
-                    onEnterCategory?.invoke(clickedCategory.id)
-                },
-                onClickManga = onClickMangaInternal,
+                hasActiveFilters = hasActiveFilters,
+                selectedManga = selection,
+                searchQuery = searchQuery,
+                onGlobalSearchClicked = onGlobalSearchClicked,
+                getDisplayMode = getDisplayMode,
+                getColumnsForOrientation = getColumnsForOrientation,
+                getLibraryForPage = getLibraryForPage,
+                onClickManga = onClickManga,
                 onLongClickManga = onToggleRangeSelection,
                 onClickContinueReading = onContinueReadingClicked,
             )
+        }
+
+        LaunchedEffect(pagerState.currentPage) {
+            onChangeCurrentPage(pagerState.currentPage)
         }
     }
 }

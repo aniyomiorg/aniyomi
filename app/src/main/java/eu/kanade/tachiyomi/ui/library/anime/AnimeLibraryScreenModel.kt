@@ -1,8 +1,7 @@
-package eu.kanade.tachiyomi.ui.library.anime
+﻿package eu.kanade.tachiyomi.ui.library.anime
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastDistinctBy
@@ -37,7 +36,6 @@ import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -48,7 +46,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.common.preference.CheckboxState
 import tachiyomi.core.common.preference.TriState
@@ -56,9 +53,7 @@ import tachiyomi.core.common.util.lang.compareToWithCollator
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.withIOContext
-import tachiyomi.domain.category.anime.interactor.CreateAnimeCategoryWithName
 import tachiyomi.domain.category.anime.interactor.GetVisibleAnimeCategories
-import tachiyomi.domain.category.anime.interactor.ReorderAnimeEntry
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
@@ -95,8 +90,6 @@ class AnimeLibraryScreenModel(
     private val setSeenStatus: SetSeenStatus = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
-    private val createAnimeCategoryWithName: CreateAnimeCategoryWithName = Injekt.get(),
-    private val reorderAnimeEntry: ReorderAnimeEntry = Injekt.get(),
     private val preferences: BasePreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
@@ -110,32 +103,6 @@ class AnimeLibraryScreenModel(
     var activeCategoryIndex: Int by libraryPreferences.lastUsedAnimeCategory().asState(
         screenModelScope,
     )
-
-    var currentCategoryId: Long? by mutableStateOf(null)
-    var isInNestedCategory: Boolean by mutableStateOf(false)
-
-    private var parentCategoryIds: MutableList<Long?> = mutableListOf(null)
-    private val refreshTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-
-    fun onEnterCategory(categoryId: Long) {
-        parentCategoryIds.add(currentCategoryId)
-        currentCategoryId = categoryId
-        isInNestedCategory = true
-    }
-
-    fun goBackToParent(): Boolean {
-        if (parentCategoryIds.size > 1) {
-            parentCategoryIds.removeLast()
-            currentCategoryId = parentCategoryIds.lastOrNull()
-            isInNestedCategory = parentCategoryIds.size > 1
-            return true
-        }
-        return false
-    }
-
-    private fun triggerRefresh() {
-        refreshTrigger.tryEmit(Unit)
-    }
 
     init {
         screenModelScope.launchIO {
@@ -352,23 +319,22 @@ class AnimeLibraryScreenModel(
                         i2.libraryAnime.anime.nextEpisodeAiringAt,
                     )
                 }
-                AnimeLibrarySort.Type.Random -> {
-                    error("Why Are We Still Here? Just To Suffer?")
-                }
                 AnimeLibrarySort.Type.Custom -> {
                     i1.libraryAnime.sortOrder.compareTo(i2.libraryAnime.sortOrder)
+                }
+                AnimeLibrarySort.Type.Random -> {
+                    error("Why Are We Still Here? Just To Suffer?")
                 }
             }
         }
 
-        return mapValues { (category, value) ->
-            val sortToUse = category.sort
-            if (sortToUse.type == AnimeLibrarySort.Type.Random) {
+        return mapValues { (key, value) ->
+            if (key.sort.type == AnimeLibrarySort.Type.Random) {
                 return@mapValues value.shuffled(Random(libraryPreferences.randomAnimeSortSeed().get()))
             }
 
-            val comparator = sortToUse.comparator()
-                .let { if (sortToUse.isAscending) it else it.reversed() }
+            val comparator = key.sort.comparator()
+                .let { if (key.sort.isAscending) it else it.reversed() }
                 .thenComparator(sortAlphabetically)
 
             value.sortedWith(comparator)
@@ -413,12 +379,8 @@ class AnimeLibraryScreenModel(
      * Get the categories and all its anime from the database.
      */
     private fun getLibraryFlow(): Flow<AnimeLibraryMap> {
-        val animelibAnimeFlow = refreshTrigger
-            .onStart { emit(Unit) }
-            .flatMapLatest { getLibraryAnime.subscribe() }
-
         val animelibAnimesFlow = combine(
-            animelibAnimeFlow,
+            getLibraryAnime.subscribe(),
             getAnimelibItemPreferencesFlow(),
             downloadCache.changes,
         ) { animelibAnimeList, prefs, _ ->
@@ -614,56 +576,6 @@ class AnimeLibraryScreenModel(
 
                 setAnimeCategories.await(anime.id, categoryIds)
             }
-        }
-    }
-
-    fun createCategoryFromSelection() {
-        val selection = state.value.selection
-        if (selection.isEmpty()) return
-
-        val firstAnime = selection.first().anime
-        val categoryName = firstAnime.title
-        val parentId = currentCategoryId
-
-        screenModelScope.launchIO {
-            val result = createAnimeCategoryWithName.await(categoryName, parentId)
-            if (result is CreateAnimeCategoryWithName.Result.Success) {
-                val newCategoryId = state.value.categories.find {
-                    it.name == categoryName && it.parentId == parentId
-                }?.id
-                if (newCategoryId != null) {
-                    val animeList = selection.map { it.anime }
-                    animeList.forEach { anime ->
-                        val currentCats = getCategories.await(anime.id).map { it.id }
-                        val filteredCats = currentCats.filter { it != currentCategoryId }
-                        setAnimeCategories.await(anime.id, filteredCats + newCategoryId)
-                    }
-                }
-            }
-            clearSelection()
-            triggerRefresh()
-        }
-    }
-
-    fun moveSelectionUp() {
-        val item = state.value.selection.firstOrNull() ?: return
-        val categoryId = currentCategoryId ?: return
-
-        screenModelScope.launchIO {
-            reorderAnimeEntry.moveUp(item.anime.id, categoryId)
-            clearSelection()
-            triggerRefresh()
-        }
-    }
-
-    fun moveSelectionDown() {
-        val item = state.value.selection.firstOrNull() ?: return
-        val categoryId = currentCategoryId ?: return
-
-        screenModelScope.launchIO {
-            reorderAnimeEntry.moveDown(item.anime.id, categoryId)
-            clearSelection()
-            triggerRefresh()
         }
     }
 

@@ -1,8 +1,7 @@
-package eu.kanade.tachiyomi.ui.library.manga
+﻿package eu.kanade.tachiyomi.ui.library.manga
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastDistinctBy
@@ -35,7 +34,6 @@ import kotlinx.collections.immutable.mutate
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -46,7 +44,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import tachiyomi.core.common.preference.CheckboxState
 import tachiyomi.core.common.preference.TriState
@@ -54,9 +51,7 @@ import tachiyomi.core.common.util.lang.compareToWithCollator
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
 import tachiyomi.core.common.util.lang.withIOContext
-import tachiyomi.domain.category.manga.interactor.CreateMangaCategoryWithName
 import tachiyomi.domain.category.manga.interactor.GetVisibleMangaCategories
-import tachiyomi.domain.category.manga.interactor.ReorderMangaEntry
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.applyFilter
@@ -93,8 +88,6 @@ class MangaLibraryScreenModel(
     private val setReadStatus: SetReadStatus = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
-    private val createMangaCategoryWithName: CreateMangaCategoryWithName = Injekt.get(),
-    private val reorderMangaEntry: ReorderMangaEntry = Injekt.get(),
     private val preferences: BasePreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: MangaCoverCache = Injekt.get(),
@@ -107,32 +100,6 @@ class MangaLibraryScreenModel(
     var activeCategoryIndex: Int by libraryPreferences.lastUsedMangaCategory().asState(
         screenModelScope,
     )
-
-    var currentCategoryId: Long? by mutableStateOf(null)
-    var isInNestedCategory: Boolean by mutableStateOf(false)
-
-    private var parentCategoryIds: MutableList<Long?> = mutableListOf(null)
-    private val refreshTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-
-    fun onEnterCategory(categoryId: Long) {
-        parentCategoryIds.add(currentCategoryId)
-        currentCategoryId = categoryId
-        isInNestedCategory = true
-    }
-
-    fun goBackToParent(): Boolean {
-        if (parentCategoryIds.size > 1) {
-            parentCategoryIds.removeLast()
-            currentCategoryId = parentCategoryIds.lastOrNull()
-            isInNestedCategory = parentCategoryIds.size > 1
-            return true
-        }
-        return false
-    }
-
-    private fun triggerRefresh() {
-        refreshTrigger.tryEmit(Unit)
-    }
 
     init {
         screenModelScope.launchIO {
@@ -339,23 +306,22 @@ class MangaLibraryScreenModel(
                     val item2Score = trackerScores[i2.libraryManga.id] ?: defaultTrackerScoreSortValue
                     item1Score.compareTo(item2Score)
                 }
-                MangaLibrarySort.Type.Random -> {
-                    error("Why Are We Still Here? Just To Suffer?")
-                }
                 MangaLibrarySort.Type.Custom -> {
                     i1.libraryManga.sortOrder.compareTo(i2.libraryManga.sortOrder)
+                }
+                MangaLibrarySort.Type.Random -> {
+                    error("Why Are We Still Here? Just To Suffer?")
                 }
             }
         }
 
-        return mapValues { (category, value) ->
-            val sortToUse = category.sort
-            if (sortToUse.type == MangaLibrarySort.Type.Random) {
+        return mapValues { (key, value) ->
+            if (key.sort.type == MangaLibrarySort.Type.Random) {
                 return@mapValues value.shuffled(Random(libraryPreferences.randomMangaSortSeed().get()))
             }
 
-            val comparator = sortToUse.comparator()
-                .let { if (sortToUse.isAscending) it else it.reversed() }
+            val comparator = key.sort.comparator()
+                .let { if (key.sort.isAscending) it else it.reversed() }
                 .thenComparator(sortAlphabetically)
 
             value.sortedWith(comparator)
@@ -399,12 +365,8 @@ class MangaLibraryScreenModel(
      * Get the categories and all its manga from the database.
      */
     private fun getLibraryFlow(): Flow<MangaLibraryMap> {
-        val libraryMangaFlow = refreshTrigger
-            .onStart { emit(Unit) }
-            .flatMapLatest { getLibraryManga.subscribe() }
-
         val libraryMangasFlow = combine(
-            libraryMangaFlow,
+            getLibraryManga.subscribe(),
             getLibraryItemPreferencesFlow(),
             downloadCache.changes,
         ) { libraryMangaList, prefs, _ ->
@@ -599,56 +561,6 @@ class MangaLibraryScreenModel(
 
                 setMangaCategories.await(manga.id, categoryIds)
             }
-        }
-    }
-
-    fun createCategoryFromSelection() {
-        val selection = state.value.selection
-        if (selection.isEmpty()) return
-
-        val firstManga = selection.first().manga
-        val categoryName = firstManga.title
-        val parentId = currentCategoryId
-
-        screenModelScope.launchIO {
-            val result = createMangaCategoryWithName.await(categoryName, parentId)
-            if (result is CreateMangaCategoryWithName.Result.Success) {
-                val newCategoryId = state.value.categories.find {
-                    it.name == categoryName && it.parentId == parentId
-                }?.id
-                if (newCategoryId != null) {
-                    val mangaList = selection.map { it.manga }
-                    mangaList.forEach { manga ->
-                        val currentCats = getCategories.await(manga.id).map { it.id }
-                        val filteredCats = currentCats.filter { it != currentCategoryId }
-                        setMangaCategories.await(manga.id, filteredCats + newCategoryId)
-                    }
-                }
-            }
-            clearSelection()
-            triggerRefresh()
-        }
-    }
-
-    fun moveSelectionUp() {
-        val item = state.value.selection.firstOrNull() ?: return
-        val categoryId = currentCategoryId ?: return
-
-        screenModelScope.launchIO {
-            reorderMangaEntry.moveUp(item.manga.id, categoryId)
-            clearSelection()
-            triggerRefresh()
-        }
-    }
-
-    fun moveSelectionDown() {
-        val item = state.value.selection.firstOrNull() ?: return
-        val categoryId = currentCategoryId ?: return
-
-        screenModelScope.launchIO {
-            reorderMangaEntry.moveDown(item.manga.id, categoryId)
-            clearSelection()
-            triggerRefresh()
         }
     }
 

@@ -6,13 +6,10 @@ import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
 import tachiyomi.domain.category.model.CategoryUpdate
 import tachiyomi.domain.download.service.DownloadPreferences
-import tachiyomi.domain.entries.manga.model.MangaUpdate
-import tachiyomi.domain.entries.manga.repository.MangaRepository
 import tachiyomi.domain.library.service.LibraryPreferences
 
 class DeleteMangaCategory(
     private val categoryRepository: MangaCategoryRepository,
-    private val mangaRepository: MangaRepository,
     private val libraryPreferences: LibraryPreferences,
     private val downloadPreferences: DownloadPreferences,
 ) {
@@ -28,22 +25,6 @@ class DeleteMangaCategory(
         }
 
         val categoryIdsToDelete = listOf(categoryId).plus(getAllChildIds(categoryId)).toSet()
-
-        val allLibraryManga = mangaRepository.getLibraryManga()
-        val mangaIdsInCategories = allLibraryManga
-            .filter { it.category in categoryIdsToDelete }
-            .map { it.id }
-
-        if (mangaIdsInCategories.isNotEmpty()) {
-            val updates = mangaIdsInCategories.map { id ->
-                MangaUpdate(id = id, favorite = false)
-            }
-            try {
-                mangaRepository.updateAllManga(updates)
-            } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e)
-            }
-        }
 
         for (id in categoryIdsToDelete) {
             try {

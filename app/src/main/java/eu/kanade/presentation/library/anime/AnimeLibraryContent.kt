@@ -1,16 +1,11 @@
-package eu.kanade.presentation.library.anime
+﻿package eu.kanade.presentation.library.anime
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,10 +13,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import eu.kanade.core.preference.PreferenceMutableState
+import eu.kanade.presentation.library.components.LibraryTabs
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -47,8 +42,6 @@ fun AnimeLibraryContent(
     onToggleRangeSelection: (LibraryAnime) -> Unit,
     onRefresh: (Category?) -> Boolean,
     onGlobalSearchClicked: () -> Unit,
-    onCurrentCategoryChanged: (Long?) -> Unit,
-    onEnterCategory: ((Long) -> Unit)? = null,
     getNumberOfAnimeForCategory: (Category) -> Int?,
     getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
@@ -61,32 +54,27 @@ fun AnimeLibraryContent(
             end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
         ),
     ) {
-        var navigationStack by remember { mutableStateOf(listOf<Category?>(null)) }
-        val currentCategory = navigationStack.last()
-
-        LaunchedEffect(currentCategory) {
-            val categoryId = if (currentCategory != null) {
-                currentCategory.id
-            } else {
-                categories.find { it.id == 0L }?.id
-            }
-            onCurrentCategoryChanged(categoryId)
-        }
+        val coercedCurrentPage = remember { currentPage().coerceAtMost(categories.lastIndex) }
+        val pagerState = rememberPagerState(coercedCurrentPage) { categories.size }
 
         val scope = rememberCoroutineScope()
-        var isRefreshing by remember(currentCategory) { mutableStateOf(false) }
+        var isRefreshing by remember(pagerState.currentPage) { mutableStateOf(false) }
 
-        if (navigationStack.size > 1) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { navigationStack = navigationStack.dropLast(1) }) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+        if (showPageTabs && categories.size > 1) {
+            LaunchedEffect(categories) {
+                if (categories.size <= pagerState.currentPage) {
+                    pagerState.scrollToPage(categories.size - 1)
                 }
-                Text(text = currentCategory?.name ?: "")
             }
+            LibraryTabs(
+                categories = categories,
+                pagerState = pagerState,
+                getNumberOfItemsForCategory = getNumberOfAnimeForCategory,
+            ) { scope.launch { pagerState.animateScrollToPage(it) } }
         }
 
         val notSelectionMode = selection.isEmpty()
-        val onClickAnimeInternal = { anime: LibraryAnime ->
+        val onClickAnime = { anime: LibraryAnime ->
             if (notSelectionMode) {
                 onAnimeClicked(anime.anime.id)
             } else {
@@ -94,49 +82,13 @@ fun AnimeLibraryContent(
             }
         }
 
-        val childCategories = categories.filter { it.parentId == currentCategory?.id }
-
-        val entries = if (currentCategory != null) {
-            val pageIndex = categories.indexOf(currentCategory)
-            if (pageIndex != -1) getAnimeLibraryForPage(pageIndex) else emptyList()
-        } else {
-            val defaultCategory = categories.find { it.id == 0L }
-            if (defaultCategory != null && defaultCategory.parentId == null) {
-                val pageIndex = categories.indexOf(defaultCategory)
-                if (pageIndex != -1) getAnimeLibraryForPage(pageIndex) else emptyList()
-            } else {
-                emptyList()
-            }
-        }
-
-        val gridItems = remember(childCategories, entries) {
-            val groups = childCategories.map { cat ->
-                val pageIndex = categories.indexOf(cat)
-                val itemsForCat = if (pageIndex != -1) getAnimeLibraryForPage(pageIndex) else emptyList()
-                val firstAnime = itemsForCat.firstOrNull()?.libraryAnime?.anime
-                val cover = firstAnime?.let {
-                    tachiyomi.domain.entries.anime.model.AnimeCover(
-                        animeId = it.id,
-                        sourceId = it.source,
-                        isAnimeFavorite = it.favorite,
-                        url = it.thumbnailUrl,
-                        lastModified = it.coverLastModified,
-                    )
-                }
-                CategoryGridItem.Group(cat, cover)
-            }
-            val entryItems = entries.map { CategoryGridItem.Entry(it) }
-            groups + entryItems
-        }
-
-        val columns by remember { getColumnsForOrientation(true) } // Simplified assuming compact grid
-
         PullRefresh(
             refreshing = isRefreshing,
             onRefresh = {
-                val started = onRefresh(currentCategory)
+                val started = onRefresh(categories[currentPage()])
                 if (!started) return@PullRefresh
                 scope.launch {
+                    // Fake refresh status but hide it after a second as it's a long running task
                     isRefreshing = true
                     delay(1.seconds)
                     isRefreshing = false
@@ -144,19 +96,24 @@ fun AnimeLibraryContent(
             },
             enabled = notSelectionMode,
         ) {
-            AnimeCategoryGridScreen(
-                items = gridItems,
-                columns = columns.takeIf { it > 0 } ?: 2,
+            AnimeLibraryPager(
+                state = pagerState,
                 contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
-                selection = selection,
-                onGroupClick = { clickedCategory ->
-                    navigationStack = navigationStack + clickedCategory
-                    onEnterCategory?.invoke(clickedCategory.id)
-                },
-                onClickAnime = onClickAnimeInternal,
+                hasActiveFilters = hasActiveFilters,
+                selectedAnime = selection,
+                searchQuery = searchQuery,
+                onGlobalSearchClicked = onGlobalSearchClicked,
+                getDisplayMode = getDisplayMode,
+                getColumnsForOrientation = getColumnsForOrientation,
+                getLibraryForPage = getAnimeLibraryForPage,
+                onClickAnime = onClickAnime,
                 onLongClickAnime = onToggleRangeSelection,
                 onClickContinueWatching = onContinueWatchingClicked,
             )
+        }
+
+        LaunchedEffect(pagerState.currentPage) {
+            onChangeCurrentPage(pagerState.currentPage)
         }
     }
 }

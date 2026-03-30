@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.library.anime
+﻿package eu.kanade.tachiyomi.ui.library.anime
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
@@ -119,8 +119,6 @@ data object AnimeLibraryTab : Tab {
 
         val defaultTitle = stringResource(AYMR.strings.label_anime_library)
 
-        val animeColumns = screenModel.getColumnsPreferenceForCurrentOrientation(true)
-
         Scaffold(
             topBar = { scrollBehavior ->
                 val title = state.getToolbarTitle(
@@ -162,22 +160,17 @@ data object AnimeLibraryTab : Tab {
                     searchQuery = state.searchQuery,
                     onSearchQueryChange = screenModel::search,
                     scrollBehavior = scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
-                    columnCount = animeColumns.value,
-                    onColumnCountChange = { animeColumns.value = it },
                 )
             },
             bottomBar = {
                 LibraryBottomActionMenu(
                     visible = state.selectionMode,
                     onChangeCategoryClicked = screenModel::openChangeCategoryDialog,
-                    onCreateCategoryClicked = { screenModel.createCategoryFromSelection() },
                     onMarkAsViewedClicked = { screenModel.markSeenSelection(true) },
                     onMarkAsUnviewedClicked = { screenModel.markSeenSelection(false) },
                     onDownloadClicked = screenModel::runDownloadActionSelection
                         .takeIf { state.selection.fastAll { !it.anime.isLocal() } },
                     onDeleteClicked = screenModel::openDeleteAnimeDialog,
-                    onMoveUpClicked = { screenModel.moveSelectionUp() },
-                    onMoveDownClicked = { screenModel.moveSelectionDown() },
                     isManga = false,
                 )
             },
@@ -228,8 +221,6 @@ data object AnimeLibraryTab : Tab {
                                 GlobalAnimeSearchScreen(screenModel.state.value.searchQuery ?: ""),
                             )
                         },
-                        onCurrentCategoryChanged = { screenModel.currentCategoryId = it },
-                        onEnterCategory = { screenModel.onEnterCategory(it) },
                         getNumberOfAnimeForCategory = { state.getAnimeCountForCategory(it) },
                         getDisplayMode = { screenModel.getDisplayMode() },
                         getColumnsForOrientation = {
@@ -284,11 +275,10 @@ data object AnimeLibraryTab : Tab {
             null -> {}
         }
 
-        BackHandler(enabled = state.selectionMode || state.searchQuery != null || screenModel.isInNestedCategory) {
+        BackHandler(enabled = state.selectionMode || state.searchQuery != null) {
             when {
                 state.selectionMode -> screenModel.clearSelection()
                 state.searchQuery != null -> screenModel.search(null)
-                screenModel.isInNestedCategory -> screenModel.goBackToParent()
             }
         }
 
