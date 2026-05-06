@@ -611,6 +611,7 @@ class AnimeDownloader(
             "-map 0:v", audioMaps, "-map 0:a?", subtitleMaps, "-map 0:s? -map 0:t?",
             "-f matroska -c:a copy -c:v copy -c:s copy",
             subtitleMetadata, audioMetadata,
+            "-avoid_negative_ts make_zero",
             "\"$ffmpegFilename\" -y",
         )
             .filter(String::isNotBlank)
