@@ -37,6 +37,7 @@ fun AnimeLibraryPager(
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
     getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
+    getLandscapeThumbnails: () -> PreferenceMutableState<Boolean>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getLibraryForPage: (Int) -> List<AnimeLibraryItem>,
     onClickAnime: (LibraryAnime) -> Unit,
@@ -69,6 +70,7 @@ fun AnimeLibraryPager(
             }
 
             val displayMode by getDisplayMode(page)
+            val landscapeThumbnails by getLandscapeThumbnails()
             val configuration = LocalConfiguration.current
             val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
             val columns by remember(isLandscape) { getColumnsForOrientation(isLandscape) }
@@ -94,6 +96,7 @@ fun AnimeLibraryPager(
                         items = library,
                         showTitle = displayMode is LibraryDisplayMode.CompactGrid,
                         columns = columns,
+                        useLandscapeThumbnails = landscapeThumbnails,
                         contentPadding = contentPadding,
                         selection = selectedAnime,
                         onClick = onClickAnime,
@@ -108,6 +111,7 @@ fun AnimeLibraryPager(
                     AnimeLibraryComfortableGrid(
                         items = library,
                         columns = columns,
+                        useLandscapeThumbnails = landscapeThumbnails,
                         contentPadding = contentPadding,
                         selection = selectedAnime,
                         onClick = onClickAnime,

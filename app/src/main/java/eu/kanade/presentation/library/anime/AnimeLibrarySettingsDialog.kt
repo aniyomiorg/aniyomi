@@ -284,6 +284,11 @@ private fun ColumnScope.DisplayPage(
         )
     }
 
+    CheckboxItem(
+        label = stringResource(AYMR.strings.action_display_landscape_thumbnails_anime),
+        pref = screenModel.libraryPreferences.animeLandscapeThumbnails(),
+    )
+
     HeadingItem(MR.strings.overlay_header)
     CheckboxItem(
         label = stringResource(AYMR.strings.action_display_download_badge_anime),

@@ -44,6 +44,7 @@ fun AnimeLibraryContent(
     onGlobalSearchClicked: () -> Unit,
     getNumberOfAnimeForCategory: (Category) -> Int?,
     getDisplayMode: (Int) -> PreferenceMutableState<LibraryDisplayMode>,
+    getLandscapeThumbnails: () -> PreferenceMutableState<Boolean>,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getAnimeLibraryForPage: (Int) -> List<AnimeLibraryItem>,
 ) {
@@ -104,6 +105,7 @@ fun AnimeLibraryContent(
                 searchQuery = searchQuery,
                 onGlobalSearchClicked = onGlobalSearchClicked,
                 getDisplayMode = getDisplayMode,
+                getLandscapeThumbnails = getLandscapeThumbnails,
                 getColumnsForOrientation = getColumnsForOrientation,
                 getLibraryForPage = getAnimeLibraryForPage,
                 onClickAnime = onClickAnime,

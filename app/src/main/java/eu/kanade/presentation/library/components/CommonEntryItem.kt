@@ -76,6 +76,7 @@ fun EntryCompactGridItem(
     onLongClick: () -> Unit,
     isSelected: Boolean = false,
     title: String? = null,
+    useLandscapeThumbnails: Boolean = false,
     onClickContinueViewing: (() -> Unit)? = null,
     coverAlpha: Float = 1f,
     coverBadgeStart: @Composable (RowScope.() -> Unit)? = null,
@@ -87,13 +88,16 @@ fun EntryCompactGridItem(
         onLongClick = onLongClick,
     ) {
         EntryGridCover(
+            useLandscapeThumbnails = useLandscapeThumbnails,
             cover = {
-                ItemCover.Book(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .alpha(if (isSelected) GRID_SELECTED_COVER_ALPHA else coverAlpha),
-                    data = coverData,
-                )
+                val coverModifier = Modifier
+                    .fillMaxWidth()
+                    .alpha(if (isSelected) GRID_SELECTED_COVER_ALPHA else coverAlpha)
+                if (useLandscapeThumbnails) {
+                    ItemCover.Thumb(modifier = coverModifier, data = coverData)
+                } else {
+                    ItemCover.Book(modifier = coverModifier, data = coverData)
+                }
             },
             badgesStart = coverBadgeStart,
             badgesEnd = coverBadgeEnd,
@@ -183,6 +187,7 @@ fun EntryComfortableGridItem(
     titleMaxLines: Int = 2,
     coverData: EntryCoverModel,
     coverAlpha: Float = 1f,
+    useLandscapeThumbnails: Boolean = false,
     coverBadgeStart: (@Composable RowScope.() -> Unit)? = null,
     coverBadgeEnd: (@Composable RowScope.() -> Unit)? = null,
     onClickContinueViewing: (() -> Unit)? = null,
@@ -194,13 +199,16 @@ fun EntryComfortableGridItem(
     ) {
         Column {
             EntryGridCover(
+                useLandscapeThumbnails = useLandscapeThumbnails,
                 cover = {
-                    ItemCover.Book(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .alpha(if (isSelected) GRID_SELECTED_COVER_ALPHA else coverAlpha),
-                        data = coverData,
-                    )
+                    val coverModifier = Modifier
+                        .fillMaxWidth()
+                        .alpha(if (isSelected) GRID_SELECTED_COVER_ALPHA else coverAlpha)
+                    if (useLandscapeThumbnails) {
+                        ItemCover.Thumb(modifier = coverModifier, data = coverData)
+                    } else {
+                        ItemCover.Book(modifier = coverModifier, data = coverData)
+                    }
                 },
                 badgesStart = coverBadgeStart,
                 badgesEnd = coverBadgeEnd,
@@ -234,6 +242,7 @@ fun EntryComfortableGridItem(
 @Composable
 private fun EntryGridCover(
     modifier: Modifier = Modifier,
+    useLandscapeThumbnails: Boolean = false,
     cover: @Composable BoxScope.() -> Unit = {},
     badgesStart: (@Composable RowScope.() -> Unit)? = null,
     badgesEnd: (@Composable RowScope.() -> Unit)? = null,
@@ -242,7 +251,7 @@ private fun EntryGridCover(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(ItemCover.Book.ratio),
+            .aspectRatio(if (useLandscapeThumbnails) ItemCover.Thumb.ratio else ItemCover.Book.ratio),
     ) {
         cover()
         content?.invoke(this)

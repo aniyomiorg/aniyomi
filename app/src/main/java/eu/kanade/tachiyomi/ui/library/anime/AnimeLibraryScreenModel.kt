@@ -580,6 +580,10 @@ class AnimeLibraryScreenModel(
         return libraryPreferences.displayMode().asState(screenModelScope)
     }
 
+    fun getLandscapeThumbnails(): PreferenceMutableState<Boolean> {
+        return libraryPreferences.animeLandscapeThumbnails().asState(screenModelScope)
+    }
+
     fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
         return (
             if (isLandscape) {

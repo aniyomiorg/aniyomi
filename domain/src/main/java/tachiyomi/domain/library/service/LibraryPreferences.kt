@@ -105,6 +105,8 @@ class LibraryPreferences(
     fun animeLandscapeColumns() = preferenceStore.getInt("pref_animelib_columns_landscape_key", 0)
     fun mangaLandscapeColumns() = preferenceStore.getInt("pref_library_columns_landscape_key", 0)
 
+    fun animeLandscapeThumbnails() = preferenceStore.getBoolean("pref_animelib_landscape_thumbnails", false)
+
     // Mixture Filter
 
     fun filterDownloadedAnime() =

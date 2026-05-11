@@ -223,6 +223,7 @@ data object AnimeLibraryTab : Tab {
                         },
                         getNumberOfAnimeForCategory = { state.getAnimeCountForCategory(it) },
                         getDisplayMode = { screenModel.getDisplayMode() },
+                        getLandscapeThumbnails = { screenModel.getLandscapeThumbnails() },
                         getColumnsForOrientation = {
                             screenModel.getColumnsPreferenceForCurrentOrientation(
                                 it,

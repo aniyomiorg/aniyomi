@@ -423,6 +423,7 @@
     <string name="action_display_download_badge_anime">Downloaded episodes</string>
     <string name="action_display_show_continue_watching_button">Continue watching button</string>
     <string name="action_display_grid_mode">Grid display mode</string>
+    <string name="action_display_landscape_thumbnails_anime">Landscape thumbnails</string>
     <string name="action_display_local_badge_manga">Local manga</string>
     <string name="action_display_local_badge_anime">Local anime</string>
     <string name="pref_search_pinned_manga_sources_only">Only search pinned manga sources in global search</string>

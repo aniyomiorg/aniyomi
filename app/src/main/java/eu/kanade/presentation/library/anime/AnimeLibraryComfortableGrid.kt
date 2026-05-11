@@ -20,6 +20,7 @@ import tachiyomi.domain.library.anime.LibraryAnime
 internal fun AnimeLibraryComfortableGrid(
     items: List<AnimeLibraryItem>,
     columns: Int,
+    useLandscapeThumbnails: Boolean,
     contentPadding: PaddingValues,
     selection: List<LibraryAnime>,
     onClick: (LibraryAnime) -> Unit,
@@ -43,6 +44,7 @@ internal fun AnimeLibraryComfortableGrid(
             EntryComfortableGridItem(
                 isSelected = selection.fastAny { it.id == libraryItem.libraryAnime.id },
                 title = anime.title,
+                useLandscapeThumbnails = useLandscapeThumbnails,
                 coverData = AnimeCover(
                     animeId = anime.id,
                     sourceId = anime.source,

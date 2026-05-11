@@ -21,6 +21,7 @@ fun AnimeLibraryCompactGrid(
     items: List<AnimeLibraryItem>,
     showTitle: Boolean,
     columns: Int,
+    useLandscapeThumbnails: Boolean,
     contentPadding: PaddingValues,
     selection: List<LibraryAnime>,
     onClick: (LibraryAnime) -> Unit,
@@ -44,6 +45,7 @@ fun AnimeLibraryCompactGrid(
             EntryCompactGridItem(
                 isSelected = selection.fastAny { it.id == libraryItem.libraryAnime.id },
                 title = anime.title.takeIf { showTitle },
+                useLandscapeThumbnails = useLandscapeThumbnails,
                 coverData = AnimeCover(
                     animeId = anime.id,
                     sourceId = anime.source,
