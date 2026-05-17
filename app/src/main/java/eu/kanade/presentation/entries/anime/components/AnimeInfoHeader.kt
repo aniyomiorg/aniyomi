@@ -79,6 +79,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.components.DotSeparatorText
+import eu.kanade.presentation.entries.components.EntryDescriptionMarkdown
 import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -255,14 +256,8 @@ fun ExpandableAnimeDescription(
             description.takeIf { !it.isNullOrBlank() } ?: stringResource(
                 MR.strings.description_placeholder,
             )
-        val trimmedDescription = remember(desc) {
-            desc
-                .replace(whitespaceLineRegex, "\n")
-                .trimEnd()
-        }
         AnimeSummary(
-            expandedDescription = desc,
-            shrunkDescription = trimmedDescription,
+            description = desc,
             expanded = expanded,
             modifier = Modifier
                 .padding(top = 8.dp)
@@ -566,8 +561,7 @@ private fun ColumnScope.AnimeContentInfo(
 
 @Composable
 private fun AnimeSummary(
-    expandedDescription: String,
-    shrunkDescription: String,
+    description: String,
     expanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -582,18 +576,14 @@ private fun AnimeSummary(
                 )
             },
             {
-                Text(
-                    text = expandedDescription,
-                    style = MaterialTheme.typography.bodyMedium,
+                EntryDescriptionMarkdown(
+                    description = description,
                 )
             },
             {
                 SelectionContainer {
-                    Text(
-                        text = if (expanded) expandedDescription else shrunkDescription,
-                        maxLines = Int.MAX_VALUE,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
+                    EntryDescriptionMarkdown(
+                        description = description,
                         modifier = Modifier.secondaryItemAlpha(),
                     )
                 }
