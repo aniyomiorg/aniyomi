@@ -76,6 +76,7 @@ class PlayerSettingsMainScreen(private val mainSettings: Boolean) : Screen() {
     @Composable
     fun Content(twoPane: Boolean) {
         val navigator = LocalNavigator.currentOrThrow
+        val items = remember { buildItems() }
         val backPress = LocalBackPress.currentOrThrow
         val containerColor = if (twoPane) getPalerSurface() else MaterialTheme.colorScheme.surface
         val topBarState = rememberTopAppBarState()
@@ -179,7 +180,7 @@ class PlayerSettingsMainScreen(private val mainSettings: Boolean) : Screen() {
         val screen: VoyagerScreen,
     )
 
-    private val items = listOf(
+    private fun buildItems() = listOf(
         Item(
             titleRes = AYMR.strings.pref_player_internal,
             subtitleRes = AYMR.strings.pref_player_internal_summary,

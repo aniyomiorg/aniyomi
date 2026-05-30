@@ -900,24 +900,24 @@ class PlayerViewModel @JvmOverloads constructor(
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
     }
 
-    private val doubleTapToSeekDuration = gesturePreferences.skipLengthPreference().get()
-    private val preciseSeek = gesturePreferences.playerSmoothSeek().get()
-    private val showSeekBar = gesturePreferences.showSeekBar().get()
+    private fun getDoubleTapToSeekDuration() = gesturePreferences.skipLengthPreference().get()
+    private fun getPreciseSeek() = gesturePreferences.playerSmoothSeek().get()
+    private fun getShowSeekBar() = gesturePreferences.showSeekBar().get()
 
     private fun seekToWithText(seekValue: Int, text: String?) {
         _isSeekingForwards.value = seekValue > 0
         _doubleTapSeekAmount.value = seekValue - pos.value.toInt()
         _seekText.update { _ -> text }
-        seekTo(seekValue, preciseSeek)
-        if (showSeekBar) showSeekBar()
+        seekTo(seekValue, getPreciseSeek())
+        if (getShowSeekBar()) showSeekBar()
     }
 
     private fun seekByWithText(value: Int, text: String?) {
         _doubleTapSeekAmount.update { if (value < 0 && it < 0 || pos.value + value > duration.value) 0 else it + value }
         _seekText.update { text }
         _isSeekingForwards.value = value > 0
-        seekBy(value, preciseSeek)
-        if (showSeekBar) showSeekBar()
+        seekBy(value, getPreciseSeek())
+        if (getShowSeekBar()) showSeekBar()
     }
 
     fun updateSeekAmount(amount: Int) {
@@ -930,20 +930,20 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun leftSeek() {
         if (pos.value > 0) {
-            _doubleTapSeekAmount.value -= doubleTapToSeekDuration
+            _doubleTapSeekAmount.value -= getDoubleTapToSeekDuration()
         }
         _isSeekingForwards.value = false
-        seekBy(-doubleTapToSeekDuration, preciseSeek)
-        if (showSeekBar) showSeekBar()
+        seekBy(-getDoubleTapToSeekDuration(), getPreciseSeek())
+        if (getShowSeekBar()) showSeekBar()
     }
 
     fun rightSeek() {
         if (pos.value < duration.value) {
-            _doubleTapSeekAmount.value += doubleTapToSeekDuration
+            _doubleTapSeekAmount.value += getDoubleTapToSeekDuration()
         }
         _isSeekingForwards.value = true
-        seekBy(doubleTapToSeekDuration, preciseSeek)
-        if (showSeekBar) showSeekBar()
+        seekBy(getDoubleTapToSeekDuration(), getPreciseSeek())
+        if (getShowSeekBar()) showSeekBar()
     }
 
     fun resetHosterState() {
