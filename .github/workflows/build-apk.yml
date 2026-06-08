@@ -2,7 +2,9 @@ name: Build APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - feature/first-change
   workflow_dispatch:
 
 jobs:
@@ -28,5 +30,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: app-debug-${{ github.ref_name }}
           path: app/build/outputs/apk/debug/*.apk
