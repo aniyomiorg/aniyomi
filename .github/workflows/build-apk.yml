@@ -20,7 +20,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
@@ -28,9 +27,8 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Upload APK
+      - name: Upload APK (separated by branch)
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.ref_name == 'main' && 'app-debug-main' || 'app-debug-feature-first-change' }}
+          name: app-debug-${{ github.ref_name }}
           path: app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
