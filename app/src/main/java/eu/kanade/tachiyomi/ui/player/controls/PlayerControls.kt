@@ -32,6 +32,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -69,6 +70,7 @@ import eu.kanade.tachiyomi.ui.player.controls.components.BrightnessSlider
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import eu.kanade.tachiyomi.ui.player.controls.components.SeekbarWithTimers
 import eu.kanade.tachiyomi.ui.player.controls.components.TextPlayerUpdate
+import eu.kanade.tachiyomi.ui.player.controls.components.ThumbnailPreview
 import eu.kanade.tachiyomi.ui.player.controls.components.VolumeSlider
 import eu.kanade.tachiyomi.ui.player.controls.components.sheets.toFixed
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
@@ -174,6 +176,7 @@ fun PlayerControls(
                 val unlockControlsButton = createRef()
                 val (bottomRightControls, bottomLeftControls) = createRefs()
                 val centerControls = createRef()
+                val thumbnail = createRef()
                 val seekbar = createRef()
                 val (playerUpdates) = createRefs()
 
@@ -358,6 +361,7 @@ fun PlayerControls(
                         exit = fadeOut(playerControlsExitAnimationSpec()),
                     )
                 }
+
                 AnimatedVisibility(
                     visible = (controlsShown || seekBarShown) && !areControlsLocked,
                     enter = if (!reduceMotion) {
@@ -400,6 +404,7 @@ fun PlayerControls(
                         chapters = chapters.map { it.toSegment() }.toImmutableList(),
                     )
                 }
+
                 val mediaTitle by viewModel.mediaTitle.collectAsState()
                 val animeTitle by viewModel.animeTitle.collectAsState()
                 AnimatedVisibility(
@@ -544,6 +549,17 @@ fun PlayerControls(
                         onOpenSheet = viewModel::showSheet,
                     )
                 }
+
+                val thumbnailImage by viewModel.thumbnailImage.collectAsState()
+                ThumbnailPreview(
+                    visible = isSeeking,
+                    image = thumbnailImage,
+                    positionMs = seekPosition.toLong(),
+                    durationMs = duration.toLong(),
+                    modifier = Modifier.fillMaxWidth().constrainAs(thumbnail) {
+                        bottom.linkTo(seekbar.top, spacing.medium)
+                    },
+                )
             }
         }
 

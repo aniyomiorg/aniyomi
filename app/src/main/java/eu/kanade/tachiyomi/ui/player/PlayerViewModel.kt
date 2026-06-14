@@ -25,12 +25,15 @@ package eu.kanade.tachiyomi.ui.player
 import android.app.Application
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
 import android.media.AudioManager
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -52,13 +55,13 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.ChapterType
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SerializableHoster.Companion.toHosterList
+import eu.kanade.tachiyomi.animesource.model.ThumbnailInfo
 import eu.kanade.tachiyomi.animesource.model.TimeStamp
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.data.database.models.anime.isRecognizedNumber
 import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
-import eu.kanade.tachiyomi.data.database.models.manga.isRecognizedNumber
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.saver.Image
@@ -245,6 +248,15 @@ class PlayerViewModel @JvmOverloads constructor(
 
     private val _isSeeking = MutableStateFlow(false)
     val isSeeking = _isSeeking.asStateFlow()
+
+    private val _thumbnailImage = MutableStateFlow<ImageBitmap?>(null)
+    val thumbnailImage = _thumbnailImage.asStateFlow()
+
+    private val thumbnailInfo = MutableStateFlow<ThumbnailInfo?>(null)
+    private val thumbnailTileCache =
+        object : LinkedHashMap<Int, Bitmap>(4, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Int, Bitmap>?) = size > 3
+        }
 
     val duration = MutableStateFlow(0f)
 
@@ -556,10 +568,20 @@ class PlayerViewModel @JvmOverloads constructor(
 
     fun updateSeekPos(pos: Float) {
         _seekPosition.update { _ -> pos }
+
+        val info = thumbnailInfo.value?.tileInfo?.lastOrNull { it.timeMs <= pos * 1000L }
+        if (info != null) {
+            val tileBitmap = thumbnailTileCache[info.imageIndex]!!
+            val thumbnail = Bitmap.createBitmap(tileBitmap, info.x, info.y, info.width, info.height)
+            _thumbnailImage.update { _ -> thumbnail.asImageBitmap() }
+        }
     }
 
     fun updateIsSeeking(value: Boolean) {
         _isSeeking.update { _ -> value }
+        if (!value) {
+            _thumbnailImage.update { _ -> null }
+        }
     }
 
     fun updateReadAhead(value: Long) {
@@ -1449,6 +1471,10 @@ class PlayerViewModel @JvmOverloads constructor(
 
         qualityIndex = Pair(hosterIndex, videoIndex)
 
+        viewModelScope.launchIO {
+            loadThumbnails(resolvedVideo, source)
+        }
+
         activity.setVideo(resolvedVideo)
         return true
     }
@@ -1498,6 +1524,28 @@ class PlayerViewModel @JvmOverloads constructor(
                 }
             }
             is HosterState.Loading, is HosterState.Error -> {}
+        }
+    }
+
+    suspend fun loadThumbnails(video: Video, source: AnimeSource?) {
+        if (source is AnimeHttpSource) {
+            val thumbInfo = source.getVideoThumbnails(video)
+            if (thumbInfo != null) {
+                thumbnailInfo.update { _ ->
+                    ThumbnailInfo(
+                        tileInfo = thumbInfo.tileInfo.sortedBy { it.timeMs },
+                        imageTileUrls = thumbInfo.imageTileUrls,
+                    )
+                }
+
+                // Preload first 2 tilemaps
+                thumbInfo.imageTileUrls.take(2).forEachIndexed { index, tileUrl ->
+                    val bitmap = source.getImageTile(tileUrl)
+                    if (bitmap != null) {
+                        thumbnailTileCache[index] = bitmap
+                    }
+                }
+            }
         }
     }
 
