@@ -64,7 +64,9 @@ data class IndexedSegment(
 
 @Composable
 fun SeekbarWithTimers(
-    position: Float,
+    playerPosition: Float,
+    seekPosition: Float,
+    isSeeking: Boolean,
     duration: Float,
     readAheadValue: Float,
     onValueChange: (Float) -> Unit,
@@ -75,6 +77,7 @@ fun SeekbarWithTimers(
     chapters: ImmutableList<Segment>,
     modifier: Modifier = Modifier,
 ) {
+    val position = if (isSeeking) seekPosition else playerPosition
     val clickEvent = LocalPlayerButtonsClickEvent.current
     Row(
         modifier = modifier.height(48.dp),
@@ -93,8 +96,12 @@ fun SeekbarWithTimers(
         Seeker(
             value = position.coerceIn(0f, duration),
             range = 0f..duration,
-            onValueChange = onValueChange,
-            onValueChangeFinished = onValueChangeFinished,
+            onValueChange = {
+                onValueChange(it)
+            },
+            onValueChangeFinished = {
+                onValueChangeFinished()
+            },
             readAheadValue = readAheadValue,
             segments = chapters
                 .filter { it.start in 0f..duration }
@@ -154,6 +161,8 @@ fun VideoTimer(
 private fun PreviewSeekBar() {
     SeekbarWithTimers(
         5f,
+        5f,
+        false,
         20f,
         4f,
         {},

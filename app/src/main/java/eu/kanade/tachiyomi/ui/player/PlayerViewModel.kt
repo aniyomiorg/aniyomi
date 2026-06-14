@@ -240,6 +240,12 @@ class PlayerViewModel @JvmOverloads constructor(
     private val _pos = MutableStateFlow(0f)
     val pos = _pos.asStateFlow()
 
+    private val _seekPosition = MutableStateFlow(0f)
+    val seekPosition = _seekPosition.asStateFlow()
+
+    private val _isSeeking = MutableStateFlow(false)
+    val isSeeking = _isSeeking.asStateFlow()
+
     val duration = MutableStateFlow(0f)
 
     private val _readAhead = MutableStateFlow(0f)
@@ -546,6 +552,14 @@ class PlayerViewModel @JvmOverloads constructor(
     fun updatePlayBackPos(pos: Float) {
         onSecondReached(pos.toInt(), duration.value.toInt())
         _pos.update { pos }
+    }
+
+    fun updateSeekPos(pos: Float) {
+        _seekPosition.update { _ -> pos }
+    }
+
+    fun updateIsSeeking(value: Boolean) {
+        _isSeeking.update { _ -> value }
     }
 
     fun updateReadAhead(value: Long) {

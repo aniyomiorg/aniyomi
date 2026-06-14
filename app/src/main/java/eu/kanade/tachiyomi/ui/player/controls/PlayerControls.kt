@@ -109,6 +109,8 @@ fun PlayerControls(
     val isLoadingEpisode by viewModel.isLoadingEpisode.collectAsState()
     val duration by viewModel.duration.collectAsState()
     val position by viewModel.pos.collectAsState()
+    val seekPosition by viewModel.seekPosition.collectAsState()
+    val isSeeking by viewModel.isSeeking.collectAsState()
     val paused by viewModel.paused.collectAsState()
     val gestureSeekAmount by viewModel.gestureSeekAmount.collectAsState()
     val doubleTapSeekAmount by viewModel.doubleTapSeekAmount.collectAsState()
@@ -118,7 +120,6 @@ fun PlayerControls(
     val currentBrightness by viewModel.currentBrightness.collectAsState()
 
     val playerTimeToDisappear by playerPreferences.playerTimeToDisappear().collectAsState()
-    var isSeeking by remember { mutableStateOf(false) }
     var resetControls by remember { mutableStateOf(true) }
 
     val customButtons by viewModel.customButtons.collectAsState()
@@ -379,15 +380,20 @@ fun PlayerControls(
                     val readAhead by viewModel.readAhead.collectAsState()
                     val preciseSeeking by gesturePreferences.playerSmoothSeek().collectAsState()
                     SeekbarWithTimers(
-                        position = position,
+                        playerPosition = position,
+                        seekPosition = seekPosition,
+                        isSeeking = isSeeking,
                         duration = duration,
                         readAheadValue = readAhead,
                         onValueChange = {
-                            isSeeking = true
-                            viewModel.updatePlayBackPos(it)
-                            viewModel.seekTo(it.toInt(), preciseSeeking)
+                            viewModel.updateSeekPos(it)
+                            viewModel.updateIsSeeking(true)
                         },
-                        onValueChangeFinished = { isSeeking = false },
+                        onValueChangeFinished = {
+                            viewModel.updatePlayBackPos(seekPosition)
+                            viewModel.updateIsSeeking(false)
+                            viewModel.seekTo(seekPosition.toInt(), preciseSeeking)
+                        },
                         timersInverted = Pair(false, invertDuration),
                         durationTimerOnCLick = { playerPreferences.invertDuration().set(!invertDuration) },
                         positionTimerOnClick = {},
