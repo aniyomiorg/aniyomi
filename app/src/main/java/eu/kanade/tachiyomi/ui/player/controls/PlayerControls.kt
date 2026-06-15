@@ -118,7 +118,7 @@ fun PlayerControls(
     val doubleTapSeekAmount by viewModel.doubleTapSeekAmount.collectAsState()
     val seekText by viewModel.seekText.collectAsState()
     val currentChapter by viewModel.currentChapter.collectAsState()
-    val chapters by viewModel.chapters.collectAsState()
+    val indexedChapters by viewModel.chapters.collectAsState()
     val currentBrightness by viewModel.currentBrightness.collectAsState()
 
     val playerTimeToDisappear by playerPreferences.playerTimeToDisappear().collectAsState()
@@ -126,6 +126,10 @@ fun PlayerControls(
 
     val customButtons by viewModel.customButtons.collectAsState()
     val customButton by viewModel.primaryButton.collectAsState()
+
+    val chapters = remember(indexedChapters) {
+        indexedChapters.map { it.toSegment() }.toImmutableList()
+    }
 
     LaunchedEffect(
         controlsShown,
@@ -401,7 +405,7 @@ fun PlayerControls(
                         timersInverted = Pair(false, invertDuration),
                         durationTimerOnCLick = { playerPreferences.invertDuration().set(!invertDuration) },
                         positionTimerOnClick = {},
-                        chapters = chapters.map { it.toSegment() }.toImmutableList(),
+                        chapters = chapters,
                     )
                 }
 
@@ -554,8 +558,9 @@ fun PlayerControls(
                 ThumbnailPreview(
                     visible = isSeeking,
                     image = thumbnailImage,
-                    positionMs = seekPosition.toLong(),
-                    durationMs = duration.toLong(),
+                    positionS = seekPosition.toLong(),
+                    durationS = duration.toLong(),
+                    chapters = chapters,
                     modifier = Modifier.fillMaxWidth().constrainAs(thumbnail) {
                         bottom.linkTo(seekbar.top, spacing.medium)
                     },
@@ -602,7 +607,7 @@ fun PlayerControls(
             displayHosters = Pair(showFailedHosters, emptyHosters),
 
             chapter = currentChapter?.toSegment(),
-            chapters = chapters.map { it.toSegment() }.toImmutableList(),
+            chapters = chapters,
             onSeekToChapter = {
                 viewModel.selectChapter(it)
                 viewModel.dismissSheet()
