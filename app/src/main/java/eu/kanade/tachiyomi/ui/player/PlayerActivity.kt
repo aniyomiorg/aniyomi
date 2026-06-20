@@ -57,6 +57,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.media.AudioAttributesCompat
 import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
+import aniyomi.core.common.torrent.TorrentPreferences
 import aniyomi.core.common.torrent.TorrentServerApi
 import aniyomi.core.common.torrent.TorrentServerUtils
 import com.hippo.unifile.UniFile
@@ -127,6 +128,7 @@ class PlayerActivity : BaseActivity() {
     private val storageManager: StorageManager = Injekt.get()
     private val torrentServerApi: TorrentServerApi = Injekt.get()
     private val torrentServerUtils: TorrentServerUtils = Injekt.get()
+    private val torrentPreferences: TorrentPreferences = Injekt.get()
 
     private var audioFocusRequest: AudioFocusRequestCompat? = null
     private var restoreAudioFocus: () -> Unit = {}
@@ -1080,9 +1082,12 @@ class PlayerActivity : BaseActivity() {
             "$option=\"$value\""
         }
 
-        if (video.videoUrl.startsWith(torrentServerApi.hostUrl) ||
-            video.videoUrl.startsWith("magnet") ||
-            video.videoUrl.endsWith("torrent")
+        if (torrentPreferences.torrServerEnable().get() &&
+            (
+                video.videoUrl.startsWith(torrentServerApi.hostUrl) ||
+                    video.videoUrl.startsWith("magnet") ||
+                    video.videoUrl.endsWith("torrent")
+                )
         ) {
             launchIO {
                 TorrentServerService.start()

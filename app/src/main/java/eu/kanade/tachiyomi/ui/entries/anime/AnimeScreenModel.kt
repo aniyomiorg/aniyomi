@@ -7,6 +7,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import aniyomi.core.common.torrent.TorrentPreferences
 import aniyomi.core.common.torrent.TorrentServerUtils
 import aniyomi.domain.anime.SeasonAnime
 import aniyomi.domain.anime.SeasonDisplayMode
@@ -120,6 +121,7 @@ class AnimeScreenModel(
     private val trackPreferences: TrackPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
+    private val torrentPreferences: TorrentPreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
     private val trackEpisode: TrackEpisode = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
@@ -666,8 +668,12 @@ class AnimeScreenModel(
         }
     }
 
+    fun isTorrentEnabled(): Boolean {
+        return torrentPreferences.torrServerEnable().get()
+    }
+
     private suspend fun startTorrentServer(source: AnimeSource?) {
-        if (source.isSourceForTorrents()) {
+        if (isTorrentEnabled() && source.isSourceForTorrents()) {
             TorrentServerService.start()
             TorrentServerService.wait(10)
             torrentServerUtils.setTrackersList()

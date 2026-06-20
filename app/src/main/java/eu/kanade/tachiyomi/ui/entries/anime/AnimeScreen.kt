@@ -135,7 +135,7 @@ class AnimeScreen(
             navigateUp = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {
-                    if (successState.source.isSourceForTorrents()) {
+                    if (screenModel.isTorrentEnabled() && successState.source.isSourceForTorrents()) {
                         TorrentServerService.start()
                     }
                     val extPlayer = screenModel.alwaysUseExternalPlayer != alt

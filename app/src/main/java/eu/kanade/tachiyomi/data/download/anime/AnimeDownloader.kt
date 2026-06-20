@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.net.toUri
+import aniyomi.core.common.torrent.TorrentPreferences
 import aniyomi.core.common.torrent.TorrentServerApi
 import aniyomi.core.common.torrent.TorrentServerUtils
 import com.arthenica.ffmpegkit.FFmpegKit
@@ -84,6 +85,7 @@ class AnimeDownloader(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val torrentServerApi: TorrentServerApi = Injekt.get(),
     private val torrentServerUtils: TorrentServerUtils = Injekt.get(),
+    private val torrentPreferences: TorrentPreferences = Injekt.get(),
 ) {
     /**
      * Store for persisting downloads across restarts.
@@ -480,7 +482,7 @@ class AnimeDownloader(
             tmpDir.findFile("$filename.tmp")?.delete()
             val videoFile = tmpDir.createFile("$filename.tmp")!!
             try {
-                if (isTorrent(download.video)) {
+                if (torrentPreferences.torrServerEnable().get() && isTorrent(download.video)) {
                     torrentDownload(download, tmpDir, videoFile, filename)
                 } else {
                     ffmpegDownload(download, tmpDir, videoFile, filename)

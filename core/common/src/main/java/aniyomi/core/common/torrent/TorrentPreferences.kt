@@ -6,6 +6,9 @@ import tachiyomi.core.common.preference.getEnum
 class TorrentPreferences(
     private val preferenceStore: PreferenceStore,
 ) {
+    fun torrServerEnable() = preferenceStore.getBoolean("pref_torrserver_enable", false)
+    fun torrServerShownNotice() = preferenceStore.getBoolean("pref_torrserver_shownotice", false)
+
     fun torrServerPort() = preferenceStore.getString("pref_torrserver_port", "8090")
     fun torrServerTrackers() = preferenceStore.getString(
         "pref_torrserver_tackers",

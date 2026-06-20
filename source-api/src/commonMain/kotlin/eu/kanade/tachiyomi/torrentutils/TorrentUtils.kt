@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.torrentutils
 
+import aniyomi.core.common.torrent.DisabledTorrServerException
 import aniyomi.core.common.torrent.TorrentServerApi
 import eu.kanade.tachiyomi.torrentutils.model.DeadTorrentException
 import eu.kanade.tachiyomi.torrentutils.model.TorrentFile
@@ -27,6 +28,8 @@ object TorrentUtils {
             )
         } catch (_: SocketTimeoutException) {
             throw DeadTorrentException()
+        } catch (_: Exception) {
+            throw DisabledTorrServerException()
         }
     }
 }
