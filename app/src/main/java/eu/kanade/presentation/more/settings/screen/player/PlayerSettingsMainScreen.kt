@@ -49,6 +49,8 @@ import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.icons.CustomIcons
+import tachiyomi.presentation.core.icons.Magnet
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
 class PlayerSettingsMainScreen(private val mainSettings: Boolean) : Screen() {
@@ -221,6 +223,12 @@ class PlayerSettingsMainScreen(private val mainSettings: Boolean) : Screen() {
             subtitleRes = AYMR.strings.pref_player_editor_summary,
             icon = Icons.Outlined.EditNote,
             screen = PlayerSettingsEditorScreen,
+        ),
+        Item(
+            titleRes = AYMR.strings.pref_player_torrents,
+            subtitleRes = AYMR.strings.pref_player_torrents_summary,
+            icon = CustomIcons.Magnet,
+            screen = PlayerSettingsTorrentScreen,
         ),
         Item(
             titleRes = AYMR.strings.pref_player_advanced,
