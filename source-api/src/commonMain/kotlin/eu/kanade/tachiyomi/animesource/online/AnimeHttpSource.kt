@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.animesource.online
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
@@ -428,8 +429,17 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         return null
     }
 
+    /**
+     * Return bitmap for the image tiles.
+     *
+     * @since extensions-lib 17
+     * @param url the url for the image tiles
+     * @return the image bitmap
+     */
     open suspend fun getImageTile(url: String): Bitmap? {
-        return null
+        return client.newCall(GET(url, headers)).execute().body.byteStream().use {
+            BitmapFactory.decodeStream(it)
+        }
     }
 
     /**
