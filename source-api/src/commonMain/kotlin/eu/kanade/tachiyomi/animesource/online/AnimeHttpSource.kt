@@ -4,6 +4,7 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.Hoster
+import eu.kanade.tachiyomi.animesource.model.HttpServer
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -67,6 +68,16 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      */
     open val client: OkHttpClient
         get() = network.client
+
+    /**
+     * Enable the use of a local http server.
+     *
+     * Extensions are responsible for starting the server, but the app
+     * will handle closing.
+     *
+     * @since extensions-lib 17
+     */
+    open val server: HttpServer? = null
 
     /**
      * Generates a unique ID for the source based on the provided [name], [lang] and

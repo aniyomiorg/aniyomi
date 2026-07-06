@@ -305,6 +305,7 @@ class PlayerActivity : BaseActivity() {
         MPVLib.removeLogObserver(playerObserver)
         MPVLib.removeObserver(playerObserver)
         player.destroy()
+        viewModel.stopHttpServer()
 
         super.onDestroy()
     }

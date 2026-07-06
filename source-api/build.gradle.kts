@@ -15,6 +15,7 @@ kotlin {
                 api(libs.injekt)
                 api(libs.rxjava)
                 api(libs.jsoup)
+                api(aniyomilibs.nanohttpd)
 
                 implementation(project.dependencies.platform(compose.bom))
                 implementation(compose.runtime)
