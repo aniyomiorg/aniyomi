@@ -6,6 +6,7 @@ ffmpeg-kit = "1.18"
 media = "1.7.0"
 nanohttpd = "2.3.1"
 seeker = "1.2.2"
+torrserver = "0.1.0"
 truetypeparser = "2.1.4"
 
 [libraries]
@@ -16,4 +17,5 @@ ffmpeg-kit = { module = "com.github.jmir1:ffmpeg-kit", version.ref = "ffmpeg-kit
 mediasession = { module = "androidx.media:media", version.ref = "media" }
 nanohttpd = { module = "org.nanohttpd:nanohttpd", version.ref = "nanohttpd" }
 seeker = { module = "io.github.2307vivek:seeker", version.ref = "seeker" }
+torrserver = { module = "io.github.secozzi:torrserver", version.ref = "torrserver" }
 truetypeparser = { module = "io.github.yubyf:truetypeparser-light", version.ref = "truetypeparser" }

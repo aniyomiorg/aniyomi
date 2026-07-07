@@ -210,6 +210,27 @@
     <string name="editor_delete_error">Unable to delete file</string>
     <string name="editor_delete_file">Delete file</string>
     <string name="editor_delete_file_confirmation">Do you wish to delete the file \"%s\"?</string>
+    <!-- Player settings - Torrents -->
+    <string name="pref_player_torrents">Torrent</string>
+    <string name="pref_player_torrents_summary">TorrServer options</string>
+    <string name="pref_player_torrents_enable">Enable TorrServer</string>
+    <string name="pref_player_torrents_notice">Legal Notice</string>
+    <string name="pref_player_torrents_notice_text">TorrServer relies on peer to peer file sharing to access content. By doing so, you also upload files to others. Any content you share is your sole responsibility.</string>
+    <string name="pref_player_torrents_notice_footer">No further notices will be issued.</string>
+    <string name="pref_player_torrents_port">TorrServer port</string>
+    <string name="pref_player_torrents_port_summary">Enter 0 to let system choose a port</string>
+    <string name="pref_player_torrents_port_error">Port must be a number between 0 and 65535</string>
+    <string name="pref_player_torrents_trackers">Torrent trackers</string>
+    <string name="pref_player_torrents_trackers_reset">Reset default torrent trackers string</string>
+    <string name="pref_player_torrents_proxy_mode">Proxy mode</string>
+    <string name="pref_player_torrents_proxy_mode_none">None</string>
+    <string name="pref_player_torrents_proxy_mode_tracker">Tracker</string>
+    <string name="pref_player_torrents_proxy_mode_peers">Peers</string>
+    <string name="pref_player_torrents_proxy_mode_full">Full</string>
+    <string name="pref_player_torrents_proxy_url">Proxy url</string>
+    <string name="pref_player_torrents_proxy_url_dialog">Supports http, https, socks4, socks4a, socks5, socks5h</string>
+    <string name="pref_player_torrents_proxy_url_invalid_uri">Invalid uri</string>
+    <string name="pref_player_torrents_proxy_url_invalid_protocol">Unsupported protocol: \"%s\"</string>
     <!-- Player settings - Advanced -->
     <string name="pref_player_advanced">Advanced</string>
     <string name="pref_player_advanced_summary">User files, mpv.conf, input.conf</string>
@@ -365,6 +386,10 @@
     <string name="label_cant_migrate_episode">Unable to migrate episode to season, select season to continue</string>
     <string name="label_cant_migrate_season">Unable to migrate season to episode</string>
     <string name="label_show_seasons">Show seasons</string>
+    <!-- Torrent Service -->
+    <string name="torrserver_disabled">TorrServer is not running</string>
+    <string name="torrentserver_is_running">Torrent Server is running</string>
+    <string name="pref_category_torrentserver">Torrent Server Preferences</string>
     <!-- Other -->
     <string name="download_notifier_download_finish">Download completed</string>
     <string name="action_hide">Hide</string>

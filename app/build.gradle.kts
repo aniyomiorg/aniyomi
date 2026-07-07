@@ -114,6 +114,7 @@ android {
                 "libffmpegkit_abidetect",
                 "libffmpegkit",
                 "libimagedecoder",
+                "liblibrary",
                 "libmpv",
                 "libplayer",
                 "libpostproc",
@@ -121,6 +122,7 @@ android {
                 "libsqlite3x",
                 "libswresample",
                 "libswscale",
+                "libtorrserver",
                 "libxml2",
             )
                 .map { "**/$it.so" }
@@ -224,6 +226,7 @@ dependencies {
     implementation(androidx.constraintlayout)
     implementation(aniyomilibs.compose.constraintlayout)
     implementation(androidx.corektx)
+    implementation(androidx.localbroadcastmanager)
     implementation(androidx.splashscreen)
     implementation(androidx.recyclerview)
     implementation(androidx.viewpager)
@@ -305,6 +308,8 @@ dependencies {
     // FFmpeg-kit
     implementation(aniyomilibs.ffmpeg.kit)
     implementation(aniyomilibs.arthenica.smartexceptions)
+    // TorrServer
+    implementation(aniyomilibs.torrserver)
     // seeker seek bar
     implementation(aniyomilibs.seeker)
     // true type parser
