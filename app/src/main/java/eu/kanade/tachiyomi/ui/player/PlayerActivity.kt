@@ -57,6 +57,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.media.AudioAttributesCompat
 import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
+import aniyomi.core.common.torrent.TorrentPreferences
+import aniyomi.core.common.torrent.TorrentServerApi
+import aniyomi.core.common.torrent.TorrentServerUtils
 import com.hippo.unifile.UniFile
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.animesource.model.ChapterType
@@ -66,6 +69,7 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.torrent.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerLayoutBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
@@ -122,6 +126,9 @@ class PlayerActivity : BaseActivity() {
     private val advancedPlayerPreferences: AdvancedPlayerPreferences = Injekt.get()
     private val networkPreferences: NetworkPreferences = Injekt.get()
     private val storageManager: StorageManager = Injekt.get()
+    private val torrentServerApi: TorrentServerApi = Injekt.get()
+    private val torrentServerUtils: TorrentServerUtils = Injekt.get()
+    private val torrentPreferences: TorrentPreferences = Injekt.get()
 
     private var audioFocusRequest: AudioFocusRequestCompat? = null
     private var restoreAudioFocus: () -> Unit = {}
@@ -1075,15 +1082,28 @@ class PlayerActivity : BaseActivity() {
             "$option=\"$value\""
         }
 
-        MPVLib.command(
-            arrayOf(
-                "loadfile",
-                parseVideoUrl(video.videoUrl),
-                "replace",
-                "0",
-                videoOptions,
-            ),
-        )
+        if (torrentPreferences.torrServerEnable().get() &&
+            (
+                video.videoUrl.startsWith(torrentServerApi.hostUrl) ||
+                    video.videoUrl.startsWith("magnet") ||
+                    video.videoUrl.endsWith("torrent")
+                )
+        ) {
+            launchIO {
+                TorrentServerService.start()
+                torrentLinkHandler(video.videoUrl, video.videoTitle, videoOptions)
+            }
+        } else {
+            MPVLib.command(
+                arrayOf(
+                    "loadfile",
+                    parseVideoUrl(video.videoUrl),
+                    "replace",
+                    "0",
+                    videoOptions,
+                ),
+            )
+        }
     }
 
     /**
@@ -1098,6 +1118,52 @@ class PlayerActivity : BaseActivity() {
         }
         logcat(LogPriority.ERROR, error)
         finish()
+    }
+
+    private suspend fun torrentLinkHandler(videoUrl: String, title: String, videoOptions: String) {
+        var index = 0
+
+        // check if link is from localSource
+        if (videoUrl.startsWith("content://")) {
+            val videoInputStream = applicationContext.contentResolver.openInputStream(videoUrl.toUri())
+            val torrent = torrentServerApi.uploadTorrent(videoInputStream!!, title, false)
+            val torrentUrl = torrentServerUtils.getTorrentPlayLink(torrent, 0)
+
+            MPVLib.command(
+                arrayOf(
+                    "loadfile",
+                    torrentUrl,
+                    "replace",
+                    "0",
+                    videoOptions,
+                ),
+            )
+            return
+        }
+
+        // check if link is from magnet, in that check if index is present
+        if (videoUrl.startsWith("magnet")) {
+            if (videoUrl.contains("index=")) {
+                index = try {
+                    videoUrl.substringAfter("index=").substringBefore("&").toInt()
+                } catch (_: NumberFormatException) {
+                    0
+                }
+            }
+        }
+
+        val currentTorrent = torrentServerApi.addTorrent(videoUrl, title, "", "", false)
+        val videoTorrentUrl = torrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+
+        MPVLib.command(
+            arrayOf(
+                "loadfile",
+                videoTorrentUrl,
+                "replace",
+                "0",
+                videoOptions,
+            ),
+        )
     }
 
     fun parseVideoUrl(videoUrl: String?): String? {

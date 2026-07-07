@@ -7,6 +7,8 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import aniyomi.core.common.torrent.TorrentPreferences
+import aniyomi.core.common.torrent.TorrentServerUtils
 import aniyomi.domain.anime.SeasonAnime
 import aniyomi.domain.anime.SeasonDisplayMode
 import cafe.adriel.voyager.core.model.StateScreenModel
@@ -37,9 +39,11 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
+import eu.kanade.tachiyomi.data.torrent.service.TorrentServerService
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTracker
 import eu.kanade.tachiyomi.data.track.TrackerManager
 import eu.kanade.tachiyomi.network.HttpException
+import eu.kanade.tachiyomi.source.anime.isSourceForTorrents
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -117,6 +121,7 @@ class AnimeScreenModel(
     private val trackPreferences: TrackPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
+    private val torrentPreferences: TorrentPreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
     private val trackEpisode: TrackEpisode = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
@@ -140,6 +145,7 @@ class AnimeScreenModel(
     private val animeRepository: AnimeRepository = Injekt.get(),
     private val getEpisodesByAnimeId: GetEpisodesByAnimeId = Injekt.get(),
     private val filterEpisodesForDownload: FilterEpisodesForDownload = Injekt.get(),
+    private val torrentServerUtils: TorrentServerUtils = Injekt.get(),
     internal val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
 ) : StateScreenModel<AnimeScreenModel.State>(State.Loading) {
@@ -289,6 +295,7 @@ class AnimeScreenModel(
         val state = successState ?: return
         try {
             withIOContext {
+                startTorrentServer(state.source)
                 val networkAnime = state.source.getAnimeDetails(state.anime.toSAnime())
                 updateAnime.awaitUpdateFromSource(state.anime, networkAnime, manualFetch)
             }
@@ -661,11 +668,25 @@ class AnimeScreenModel(
         }
     }
 
+    fun isTorrentEnabled(): Boolean {
+        return torrentPreferences.torrServerEnable().get()
+    }
+
+    private suspend fun startTorrentServer(source: AnimeSource?) {
+        if (isTorrentEnabled() && source.isSourceForTorrents()) {
+            TorrentServerService.start()
+            TorrentServerService.wait(10)
+            torrentServerUtils.setTrackersList()
+        }
+    }
+
     /**
      * Requests an updated list of episodes and seasons from the source.
      */
     private suspend fun fetchEpisodesAndSeasonsFromSource(manualFetch: Boolean = false) {
         val state = successState ?: return
+
+        startTorrentServer(state.source)
 
         when (state.anime.fetchType) {
             FetchType.Seasons -> fetchSeasonsFromSource(manualFetch)
