@@ -1316,6 +1316,7 @@ class PlayerActivity : BaseActivity() {
         // called and we need to call onFinishLoadingTracks() manually
         if (audioTracks == null && subtitleTracks == null) {
             viewModel.onFinishLoadingTracks()
+            setupJimakuSubtitles()
             return
         }
 
@@ -1327,6 +1328,29 @@ class PlayerActivity : BaseActivity() {
         }
 
         viewModel.isLoadingTracks.update { _ -> false }
+
+        setupJimakuSubtitles()
+    }
+
+    /**
+     * Silently fetches subtitle tracks from jimaku.cc in the background and adds
+     * them as extra selectable subtitle tracks once they arrive. Never blocks
+     * playback and never surfaces errors to the user; if AniList tracking isn't
+     * enabled or nothing is found, this is a no-op.
+     */
+    private fun setupJimakuSubtitles() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val jimakuSubs = try {
+                viewModel.jimakuSubtitles()
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { "Jimaku: failed to load subtitles" }
+                return@launch
+            }
+            if (player.isExiting) return@launch
+            jimakuSubs.forEach { sub ->
+                executeMPVCommand(arrayOf("sub-add", sub.url, "auto", sub.label))
+            }
+        }
     }
 
     private fun setupChapters() {

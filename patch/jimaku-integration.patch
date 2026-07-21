@@ -1,0 +1,89 @@
+diff --git a/app/src/main/java/eu/kanade/tachiyomi/ui/player/PlayerActivity.kt b/app/src/main/java/eu/kanade/tachiyomi/ui/player/PlayerActivity.kt
+index 2ad9e52..912e139 100644
+--- a/app/src/main/java/eu/kanade/tachiyomi/ui/player/PlayerActivity.kt
++++ b/app/src/main/java/eu/kanade/tachiyomi/ui/player/PlayerActivity.kt
+@@ -1316,6 +1316,7 @@ class PlayerActivity : BaseActivity() {
+         // called and we need to call onFinishLoadingTracks() manually
+         if (audioTracks == null && subtitleTracks == null) {
+             viewModel.onFinishLoadingTracks()
++            setupJimakuSubtitles()
+             return
+         }
+ 
+@@ -1327,6 +1328,29 @@ class PlayerActivity : BaseActivity() {
+         }
+ 
+         viewModel.isLoadingTracks.update { _ -> false }
++
++        setupJimakuSubtitles()
++    }
++
++    /**
++     * Silently fetches subtitle tracks from jimaku.cc in the background and adds
++     * them as extra selectable subtitle tracks once they arrive. Never blocks
++     * playback and never surfaces errors to the user; if AniList tracking isn't
++     * enabled or nothing is found, this is a no-op.
++     */
++    private fun setupJimakuSubtitles() {
++        lifecycleScope.launch(Dispatchers.IO) {
++            val jimakuSubs = try {
++                viewModel.jimakuSubtitles()
++            } catch (e: Exception) {
++                logcat(LogPriority.ERROR, e) { "Jimaku: failed to load subtitles" }
++                return@launch
++            }
++            if (player.isExiting) return@launch
++            jimakuSubs.forEach { sub ->
++                executeMPVCommand(arrayOf("sub-add", sub.url, "auto", sub.label))
++            }
++        }
+     }
+ 
+     private fun setupChapters() {
+diff --git a/app/src/main/java/eu/kanade/tachiyomi/ui/player/PlayerViewModel.kt b/app/src/main/java/eu/kanade/tachiyomi/ui/player/PlayerViewModel.kt
+index 9cb2dc5..54e8852 100644
+--- a/app/src/main/java/eu/kanade/tachiyomi/ui/player/PlayerViewModel.kt
++++ b/app/src/main/java/eu/kanade/tachiyomi/ui/player/PlayerViewModel.kt
+@@ -80,6 +80,8 @@ import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
+ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+ import eu.kanade.tachiyomi.ui.player.utils.AniSkipApi
+ import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
++import eu.kanade.tachiyomi.ui.player.utils.JimakuApi
++import eu.kanade.tachiyomi.ui.player.utils.JimakuSubtitle
+ import eu.kanade.tachiyomi.ui.player.utils.TrackSelect
+ import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
+ import eu.kanade.tachiyomi.util.editBackground
+@@ -2052,6 +2054,33 @@ class PlayerViewModel @JvmOverloads constructor(
+         return null
+     }
+ 
++    /**
++     * Fetches subtitle tracks from jimaku.cc for the currently playing episode.
++     * Just works if AniList tracking is enabled for this anime; returns an empty
++     * list otherwise (or on any failure), so this is always a silent, best-effort
++     * enhancement on top of whatever the source itself provides.
++     */
++    suspend fun jimakuSubtitles(): List<JimakuSubtitle> {
++        val animeId = currentAnime.value?.id ?: return emptyList()
++        val episodeNumber = currentEpisode.value?.episode_number?.toInt() ?: return emptyList()
++        val trackerManager = Injekt.get<TrackerManager>()
++
++        val tracks = getTracks.await(animeId)
++        if (tracks.isEmpty()) {
++            logcat { "Jimaku: No tracks found for anime $animeId" }
++            return emptyList()
++        }
++
++        val anilistId = tracks.firstNotNullOfOrNull { track ->
++            when (trackerManager.get(track.trackerId)) {
++                is Anilist -> track.remoteId
++                else -> null
++            }
++        } ?: return emptyList()
++
++        return JimakuApi().getSubtitles(anilistId, episodeNumber)
++    }
++
+     val introSkipEnabled = playerPreferences.enableSkipIntro().get()
+     private val autoSkip = playerPreferences.autoSkipIntro().get()
+     private val netflixStyle = playerPreferences.enableNetflixStyleIntroSkip().get()

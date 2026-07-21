@@ -80,6 +80,8 @@ import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.utils.AniSkipApi
 import eu.kanade.tachiyomi.ui.player.utils.ChapterUtils.Companion.getStringRes
+import eu.kanade.tachiyomi.ui.player.utils.JimakuApi
+import eu.kanade.tachiyomi.ui.player.utils.JimakuSubtitle
 import eu.kanade.tachiyomi.ui.player.utils.TrackSelect
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.editBackground
@@ -2050,6 +2052,33 @@ class PlayerViewModel @JvmOverloads constructor(
             }
         }
         return null
+    }
+
+    /**
+     * Fetches subtitle tracks from jimaku.cc for the currently playing episode.
+     * Just works if AniList tracking is enabled for this anime; returns an empty
+     * list otherwise (or on any failure), so this is always a silent, best-effort
+     * enhancement on top of whatever the source itself provides.
+     */
+    suspend fun jimakuSubtitles(): List<JimakuSubtitle> {
+        val animeId = currentAnime.value?.id ?: return emptyList()
+        val episodeNumber = currentEpisode.value?.episode_number?.toInt() ?: return emptyList()
+        val trackerManager = Injekt.get<TrackerManager>()
+
+        val tracks = getTracks.await(animeId)
+        if (tracks.isEmpty()) {
+            logcat { "Jimaku: No tracks found for anime $animeId" }
+            return emptyList()
+        }
+
+        val anilistId = tracks.firstNotNullOfOrNull { track ->
+            when (trackerManager.get(track.trackerId)) {
+                is Anilist -> track.remoteId
+                else -> null
+            }
+        } ?: return emptyList()
+
+        return JimakuApi().getSubtitles(anilistId, episodeNumber)
     }
 
     val introSkipEnabled = playerPreferences.enableSkipIntro().get()
