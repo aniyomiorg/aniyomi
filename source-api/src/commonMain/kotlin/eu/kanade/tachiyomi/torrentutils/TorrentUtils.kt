@@ -48,7 +48,7 @@ object TorrentUtils {
     // function so that extensions targetting other forks where getTorrentInfo was not a suspend function can still
     // work.
     @JvmName("getTorrentInfo")
-    fun _getTorrentInfoBlockingShim(
+    fun blockingShim_getTorrentInfo(
         url: String,
         title: String,
     ): TorrentInfo {
