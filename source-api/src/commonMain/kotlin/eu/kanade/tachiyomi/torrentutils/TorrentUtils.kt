@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.network.get
 import eu.kanade.tachiyomi.torrentutils.model.DeadTorrentException
 import eu.kanade.tachiyomi.torrentutils.model.TorrentFile
 import eu.kanade.tachiyomi.torrentutils.model.TorrentInfo
+import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.injectLazy
 import java.net.SocketTimeoutException
 
@@ -38,6 +39,20 @@ object TorrentUtils {
                 TorrentHelpers.parseTorrentDetailsFromTorrentFileContent(network.client.get(url).body.byteStream())
             }
             return torrentToTorrentInfo(torrent, title)
+    }
+
+    // A suspend function has a different signature in the JVM than a regular function (an additional Continuation
+    // parameter is added by the Kotlin compiler). We add another overload of getTorrentInfo that is not a suspend
+    // function so that extensions targetting other forks where getTorrentInfo was not a suspend function can still
+    // work.
+    @JvmName("getTorrentInfo")
+    fun _getTorrentInfoBlockingShim(
+        url: String,
+        title: String,
+    ): TorrentInfo {
+        return runBlocking {
+            getTorrentInfo(url, title)
+        }
     }
 
     private fun torrentToTorrentInfo(torrent: Torrent, overrideTitle: String?): TorrentInfo {
