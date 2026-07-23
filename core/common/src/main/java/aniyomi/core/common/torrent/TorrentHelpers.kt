@@ -12,7 +12,7 @@ import java.security.MessageDigest
 
 
 object TorrentHelpers {
-    fun parseTorrentFromFile(torrentFileContent: InputStream): Torrent {
+    fun parseTorrentDetailsFromTorrentFileContent(torrentFileContent: InputStream): Torrent {
         try {
             val parsed = BencodeParser.parse(torrentFileContent) as BencodeValue.Dictionary
             val infoDictionary = parsed.getByString("info") as BencodeValue.Dictionary

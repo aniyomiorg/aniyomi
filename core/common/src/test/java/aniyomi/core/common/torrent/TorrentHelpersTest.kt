@@ -11,12 +11,12 @@ import java.io.InputStream
 
 class TorrentHelpersTest {
     @TestFactory
-    fun test_parseTorrentFromFile(): Collection<DynamicTest> {
+    fun test_parseTorrentDetailsFromTorrentFileContent(): Collection<DynamicTest> {
         data class TestCase(val inputFile: String, val expected: Torrent)
 
         val testBody = { t: TestCase ->
             val inputStream = getTestResource(t.inputFile)
-            val actual = TorrentHelpers.parseTorrentFromFile(inputStream)
+            val actual = TorrentHelpers.parseTorrentDetailsFromTorrentFileContent(inputStream)
             assertEquals(t.expected, actual)
         }
 
