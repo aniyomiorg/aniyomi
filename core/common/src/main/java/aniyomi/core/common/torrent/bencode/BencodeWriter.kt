@@ -59,7 +59,11 @@ class BencodeWriter private constructor(val output: OutputStream) {
     private fun writeNumberHelper(n: Long) {
         val encoder = Charsets.UTF_8.newEncoder()
         val str = n.toString(10)
-        val bytes = encoder.encode(CharBuffer.wrap(str)).array()
-        output.write(bytes)
+
+        val buffer = encoder.encode(CharBuffer.wrap(str))
+        val array = ByteArray(buffer.remaining())
+        buffer.get(array)
+
+        output.write(array)
     }
 }

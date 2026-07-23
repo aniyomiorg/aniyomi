@@ -13,7 +13,12 @@ sealed interface BencodeValue {
         companion object {
             fun fromUTF8String(s: String): ByteString {
                 val encoder = Charsets.UTF_8.newEncoder()
-                return ByteString(encoder.encode(CharBuffer.wrap(s)).array())
+
+                val buffer = encoder.encode(CharBuffer.wrap(s))
+                val array = ByteArray(buffer.remaining())
+                buffer.get(array)
+
+                return ByteString(array)
             }
         }
 
