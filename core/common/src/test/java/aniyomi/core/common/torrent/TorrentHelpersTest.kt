@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.io.InputStream
 
-
 class TorrentHelpersTest {
     @TestFactory
     fun test_parseTorrentDetailsFromTorrentFileContent(): Collection<DynamicTest> {
@@ -28,11 +27,11 @@ class TorrentHelpersTest {
                     "104701de4b710ee9720ee249bf220384659e8c38",
                     18,
                     listOf<String>(
-                        "udp://tracker.opentrackr.org:1337/announce"
+                        "udp://tracker.opentrackr.org:1337/announce",
                     ),
                     listOf<FileStats>(
-                        FileStats(null, "test-torrent-file", 18)
-                    )
+                        FileStats(null, "test-torrent-file", 18),
+                    ),
                 ),
             ),
             TestCase(
@@ -47,14 +46,14 @@ class TorrentHelpersTest {
                         "https://tracker.tamersunion.org:443/announce",
                         "http://tracker.ipv6tracker.org:80/announce",
                         "udp://opentracker.io:6969/announce",
-                        "udp://tracker.torrent.eu.org:451/announce"
+                        "udp://tracker.torrent.eu.org:451/announce",
                     ),
                     listOf<FileStats>(
                         FileStats(1, "3/3.1", 4),
                         FileStats(2, "2", 2),
                         FileStats(3, "1", 2),
-                        FileStats(4, "3/3.2", 4)
-                    )
+                        FileStats(4, "3/3.2", 4),
+                    ),
                 ),
             ),
         )

@@ -10,7 +10,6 @@ import java.io.OutputStream
 import java.security.DigestOutputStream
 import java.security.MessageDigest
 
-
 object TorrentHelpers {
     fun parseTorrentDetailsFromTorrentFileContent(torrentFileContent: InputStream): Torrent {
         try {
@@ -44,13 +43,15 @@ object TorrentHelpers {
                     val fileStats = filesEntry.value.mapIndexed { i, file ->
                         val fileAsDict = file as BencodeValue.Dictionary
                         val fileSize = (fileAsDict.getByString("length") as BencodeValue.Integer).value
-                        val filePath = (fileAsDict.getByString("path") as BencodeValue.List).value.joinToString("/") { (it as BencodeValue.ByteString).toUTF8String() }
+                        val filePath = (fileAsDict.getByString("path") as BencodeValue.List).value.joinToString("/") {
+                            (it as BencodeValue.ByteString).toUTF8String()
+                        }
 
                         totalSizeAcc += fileSize
                         FileStats(
                             i + 1, // ids start at 1
                             filePath,
-                            fileSize
+                            fileSize,
                         )
                     }
                     totalSizeAcc to fileStats
@@ -62,7 +63,7 @@ object TorrentHelpers {
                 hash,
                 torrentSize,
                 trackers,
-                fileStats
+                fileStats,
             )
         } catch (e: ClassCastException) {
             throw RuntimeException("Invalid torrent file", e)
@@ -91,5 +92,4 @@ object TorrentHelpers {
         }
         return sb.toString()
     }
-
 }

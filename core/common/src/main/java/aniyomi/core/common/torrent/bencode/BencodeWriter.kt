@@ -2,7 +2,6 @@ package aniyomi.core.common.torrent.bencode
 
 import aniyomi.core.common.torrent.bencode.BencodeValue.ByteString
 import java.io.OutputStream
-import java.nio.ByteBuffer
 import java.nio.CharBuffer
 
 class BencodeWriter private constructor(val output: OutputStream) {

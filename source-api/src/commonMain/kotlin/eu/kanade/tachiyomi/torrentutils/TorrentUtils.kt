@@ -4,9 +4,7 @@ import aniyomi.core.common.torrent.DisabledTorrServerException
 import aniyomi.core.common.torrent.TorrentHelpers
 import aniyomi.core.common.torrent.TorrentServerApi
 import aniyomi.core.common.torrent.model.Torrent
-import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.get
 import eu.kanade.tachiyomi.torrentutils.model.DeadTorrentException
 import eu.kanade.tachiyomi.torrentutils.model.TorrentFile
@@ -23,24 +21,24 @@ object TorrentUtils {
         url: String,
         title: String,
     ): TorrentInfo {
-            val torrent: Torrent = if (url.startsWith("magnet")) {
-                // Magnet links need to be added to the torrent server to retrieve their
-                // information
-                try {
-                    torrentServerApi.addTorrent(url, title, "", "", false)
-                } catch (_: SocketTimeoutException) {
-                    throw DeadTorrentException()
-                } catch (_: Exception) {
-                    throw DisabledTorrServerException()
-                }
-            } else {
-                // For torrent files we can parse the information out of the file itself
-                // without starting the torrent server
-                network.client.get(url).use { response ->
-                    TorrentHelpers.parseTorrentDetailsFromTorrentFileContent(response.body.byteStream())
-                }
+        val torrent: Torrent = if (url.startsWith("magnet")) {
+            // Magnet links need to be added to the torrent server to retrieve their
+            // information
+            try {
+                torrentServerApi.addTorrent(url, title, "", "", false)
+            } catch (_: SocketTimeoutException) {
+                throw DeadTorrentException()
+            } catch (_: Exception) {
+                throw DisabledTorrServerException()
             }
-            return torrentToTorrentInfo(torrent, title)
+        } else {
+            // For torrent files we can parse the information out of the file itself
+            // without starting the torrent server
+            network.client.get(url).use { response ->
+                TorrentHelpers.parseTorrentDetailsFromTorrentFileContent(response.body.byteStream())
+            }
+        }
+        return torrentToTorrentInfo(torrent, title)
     }
 
     // A suspend function has a different signature in the JVM than a regular function (an additional Continuation

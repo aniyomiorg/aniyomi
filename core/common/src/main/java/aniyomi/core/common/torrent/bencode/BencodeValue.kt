@@ -1,7 +1,6 @@
 package aniyomi.core.common.torrent.bencode
 
 import okio.ByteString.Companion.encode
-import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
 import java.util.SortedMap
@@ -50,7 +49,6 @@ sealed interface BencodeValue {
 
             return this.value.size - other.value.size
         }
-
     }
 
     data class List(val value: kotlin.collections.List<BencodeValue>) : BencodeValue

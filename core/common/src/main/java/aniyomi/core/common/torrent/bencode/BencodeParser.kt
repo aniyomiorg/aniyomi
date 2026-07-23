@@ -4,7 +4,6 @@ import java.io.EOFException
 import java.io.InputStream
 import java.util.TreeMap
 
-
 class BencodeParser private constructor(val input: InputStream) {
     companion object {
         fun parse(input: InputStream): BencodeValue {
