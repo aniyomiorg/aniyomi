@@ -36,7 +36,9 @@ object TorrentUtils {
             } else {
                 // For torrent files we can parse the information out of the file itself
                 // without starting the torrent server
-                TorrentHelpers.parseTorrentDetailsFromTorrentFileContent(network.client.get(url).body.byteStream())
+                network.client.get(url).use { response ->
+                    TorrentHelpers.parseTorrentDetailsFromTorrentFileContent(response.body.byteStream())
+                }
             }
             return torrentToTorrentInfo(torrent, title)
     }
