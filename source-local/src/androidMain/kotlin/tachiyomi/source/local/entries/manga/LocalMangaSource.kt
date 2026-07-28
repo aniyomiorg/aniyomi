@@ -36,6 +36,8 @@ import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
+import tachiyomi.source.local.entries.utils.LocalCacheManager
+import tachiyomi.source.local.entries.utils.UniFileLite
 import tachiyomi.source.local.filter.manga.MangaOrderBy
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
 import tachiyomi.source.local.io.ArchiveManga
@@ -75,6 +77,9 @@ actual class LocalMangaSource(
 
     override val supportsLatest: Boolean = true
 
+    private val localCacheManager: LocalCacheManager =
+        LocalCacheManager(context, fileSystem.getBaseDirectory(), "manga")
+
     // Browse related
     override suspend fun getPopularManga(page: Int) = getSearchManga(page, "", PopularFilters)
 
@@ -87,15 +92,47 @@ actual class LocalMangaSource(
             0L
         }
 
-        var mangaDirs = fileSystem.getFilesInBaseDirectory()
+        if (page == 1) {
+            localCacheManager.loadAndVerifyCache()
+        }
+
+        val mangarDir = getMangaDir(lastModifiedLimit, query, filters)
+
+        val mangaDirPage = mangarDir
+            .drop((page - 1) * PAGE_SIZE)
+            .take(PAGE_SIZE)
+
+        val mangas = mangaDirPage
+            .map { mangaDir ->
+                async {
+                    SManga.create().apply {
+                        title = mangaDir.name
+                        url = mangaDir.name
+                        coverManager.find(mangaDir.name)?.let {
+                            thumbnail_url = it.uri.toString()
+                        }
+                    }
+                }
+            }
+            .awaitAll()
+
+        MangasPage(mangas, hasNextPage = mangarDir.size > page * PAGE_SIZE)
+    }
+
+    private suspend fun getMangaDir(
+        lastModifiedLimit: Long,
+        query: String,
+        filters: FilterList,
+    ): List<UniFileLite> {
+        var mangaDirs = localCacheManager.getFilesInBaseDirectory()
             // Filter out files that are hidden and is not a folder
-            .filter { it.isDirectory && !it.name.orEmpty().startsWith('.') }
+            .filter { it.isDirectory && !it.name.startsWith('.') }
             .distinctBy { it.name }
             .filter {
                 if (lastModifiedLimit == 0L && query.isBlank()) {
                     true
                 } else if (lastModifiedLimit == 0L) {
-                    it.name.orEmpty().contains(query, ignoreCase = true)
+                    it.name.contains(query, ignoreCase = true)
                 } else {
                     it.lastModified() >= lastModifiedLimit
                 }
@@ -105,16 +142,17 @@ actual class LocalMangaSource(
             when (filter) {
                 is MangaOrderBy.Popular -> {
                     mangaDirs = if (filter.state!!.ascending) {
-                        mangaDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty() })
+                        mangaDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                     } else {
-                        mangaDirs.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty() })
+                        mangaDirs.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name })
                     }
                 }
+
                 is MangaOrderBy.Latest -> {
                     mangaDirs = if (filter.state!!.ascending) {
-                        mangaDirs.sortedBy(UniFile::lastModified)
+                        mangaDirs.sortedBy(UniFileLite::lastModified)
                     } else {
-                        mangaDirs.sortedByDescending(UniFile::lastModified)
+                        mangaDirs.sortedByDescending(UniFileLite::lastModified)
                     }
                 }
                 else -> {
@@ -122,24 +160,7 @@ actual class LocalMangaSource(
                 }
             }
         }
-
-        val mangas = mangaDirs
-            .map { mangaDir ->
-                async {
-                    SManga.create().apply {
-                        title = mangaDir.name.orEmpty()
-                        url = mangaDir.name.orEmpty()
-
-                        // Try to find the cover
-                        coverManager.find(mangaDir.name.orEmpty())?.let {
-                            thumbnail_url = it.uri.toString()
-                        }
-                    }
-                }
-            }
-            .awaitAll()
-
-        MangasPage(mangas, false)
+        return mangaDirs
     }
 
     // Manga details related
@@ -376,8 +397,8 @@ actual class LocalMangaSource(
 
     companion object {
         const val ID = 0L
+        const val PAGE_SIZE = 15
         const val HELP_URL = "https://aniyomi.org/help/guides/local-manga/"
-
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
     }
 }

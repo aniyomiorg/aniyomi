@@ -1,7 +1,6 @@
 package tachiyomi.source.local.entries.anime
 
 import android.content.Context
-import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.UnmeteredSource
@@ -29,6 +28,8 @@ import tachiyomi.core.metadata.tachiyomi.EpisodeDetails
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import tachiyomi.i18n.aniyomi.AYMR
+import tachiyomi.source.local.entries.utils.LocalCacheManager
+import tachiyomi.source.local.entries.utils.UniFileLite
 import tachiyomi.source.local.filter.anime.AnimeOrderBy
 import tachiyomi.source.local.image.anime.LocalAnimeBackgroundManager
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
@@ -70,6 +71,9 @@ actual class LocalAnimeSource(
 
     override val supportsLatest = true
 
+    private val localCacheManager: LocalCacheManager =
+        LocalCacheManager(context, fileSystem.getBaseDirectory(), "anime")
+
     // Browse related
     override suspend fun getPopularAnime(page: Int) = getSearchAnime(page, "", PopularFilters)
 
@@ -86,7 +90,32 @@ actual class LocalAnimeSource(
             0L
         }
 
-        var animeDirs = fileSystem.getFilesInBaseDirectory()
+        if (page == 1) {
+            localCacheManager.loadAndVerifyCache()
+        }
+
+        val animeDir = getAnimeDir(lastModifiedLimit, query, filters)
+        val animeDirPage = animeDir
+            .drop((page - 1) * PAGE_SIZE)
+            .take(PAGE_SIZE)
+
+        val animes = animeDirPage
+            .map { animeDir ->
+                async {
+                    getSAnime(animeDir.name)
+                }
+            }
+            .awaitAll()
+
+        AnimesPage(animes, hasNextPage = animeDirPage.size > page * PAGE_SIZE)
+    }
+
+    private suspend fun getAnimeDir(
+        lastModifiedLimit: Long,
+        query: String,
+        filters: AnimeFilterList,
+    ): List<UniFileLite> {
+        var animeDirs = localCacheManager.getFilesInBaseDirectory()
             // Filter out files that are hidden and is not a folder
             .filter { it.isDirectory && !it.name.orEmpty().startsWith('.') }
             .distinctBy { it.name }
@@ -94,7 +123,7 @@ actual class LocalAnimeSource(
                 if (lastModifiedLimit == 0L && query.isBlank()) {
                     true
                 } else if (lastModifiedLimit == 0L) {
-                    it.name.orEmpty().contains(query, ignoreCase = true)
+                    it.name.contains(query, ignoreCase = true)
                 } else {
                     it.lastModified() >= lastModifiedLimit
                 }
@@ -104,18 +133,18 @@ actual class LocalAnimeSource(
             when (filter) {
                 is AnimeOrderBy.Popular -> {
                     animeDirs = if (filter.state!!.ascending) {
-                        animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty() })
+                        animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                     } else {
                         animeDirs.sortedWith(
-                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name.orEmpty() },
+                            compareByDescending(String.CASE_INSENSITIVE_ORDER) { it.name },
                         )
                     }
                 }
                 is AnimeOrderBy.Latest -> {
                     animeDirs = if (filter.state!!.ascending) {
-                        animeDirs.sortedBy(UniFile::lastModified)
+                        animeDirs.sortedBy(UniFileLite::lastModified)
                     } else {
-                        animeDirs.sortedByDescending(UniFile::lastModified)
+                        animeDirs.sortedByDescending(UniFileLite::lastModified)
                     }
                 }
                 else -> {
@@ -123,17 +152,7 @@ actual class LocalAnimeSource(
                 }
             }
         }
-
-        // Transform animeDirs to list of SAnime
-        val animes = animeDirs
-            .map { animeDir ->
-                async {
-                    getSAnime(animeDir.name)
-                }
-            }
-            .awaitAll()
-
-        AnimesPage(animes.toList(), false)
+        return animeDirs
     }
 
     private fun getSAnime(animeDir: String?): SAnime {
@@ -353,8 +372,8 @@ actual class LocalAnimeSource(
 
     companion object {
         const val ID = 0L
+        const val PAGE_SIZE = 15
         const val HELP_URL = "https://aniyomi.org/help/guides/local-anime/"
-
         private const val DEFAULT_COVER_NAME = "cover.jpg"
         private const val DEFAULT_BACKGROUND_NAME = "background.jpg"
         private const val DEFAULT_THUMBNAIL_NAME = "thumbnail.jpg"
