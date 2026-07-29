@@ -13,7 +13,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.manga.MigrateMangaSourceScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.tachiyomi.ui.browse.BrowseTabSubtab
 import eu.kanade.tachiyomi.ui.browse.manga.migration.manga.MigrateMangaScreen
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
@@ -48,6 +47,5 @@ fun Screen.migrateMangaSourceTab(): TabContent {
                 onToggleSortingMode = screenModel::toggleSortingMode,
             )
         },
-        tabKey = BrowseTabSubtab.TAB_MANGA_MIGRATE,
     )
 }

@@ -15,7 +15,6 @@ import eu.kanade.presentation.browse.manga.MangaSourceOptionsDialog
 import eu.kanade.presentation.browse.manga.MangaSourcesScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.tachiyomi.ui.browse.BrowseTabSubtab
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
 import kotlinx.collections.immutable.persistentListOf
@@ -87,6 +86,5 @@ fun Screen.mangaSourcesTab(): TabContent {
                 }
             }
         },
-        tabKey = BrowseTabSubtab.TAB_MANGA_SOURCES,
     )
 }

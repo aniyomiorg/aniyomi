@@ -13,7 +13,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.MigrateAnimeSourceScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.tachiyomi.ui.browse.BrowseTabSubtab
 import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrateAnimeScreen
 import kotlinx.collections.immutable.persistentListOf
 import tachiyomi.i18n.MR
@@ -49,6 +48,5 @@ fun Screen.migrateAnimeSourceTab(): TabContent {
                 onToggleSortingMode = screenModel::toggleSortingMode,
             )
         },
-        tabKey = BrowseTabSubtab.TAB_ANIME_MIGRATE,
     )
 }

@@ -35,9 +35,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
-import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+
+private val uiPreferences: UiPreferences = Injekt.get()
 
 data object BrowseTab : Tab {
 
@@ -58,14 +59,19 @@ data object BrowseTab : Tab {
         navigator.push(GlobalAnimeSearchScreen())
     }
 
-    private val switchToTabChannel = Channel<BrowseTabSubtab>(1, BufferOverflow.DROP_OLDEST)
+    private enum class TabSelectors {
+        TAB_MANGA_EXTENSION,
+        TAB_ANIME_EXTENSION,
+    }
+
+    private val switchToTabChannel = Channel<TabSelectors>(1, BufferOverflow.DROP_OLDEST)
 
     fun showExtension() {
-        switchToTabChannel.trySend(BrowseTabSubtab.TAB_MANGA_EXTENSIONS)
+        switchToTabChannel.trySend(TabSelectors.TAB_MANGA_EXTENSION)
     }
 
     fun showAnimeExtension() {
-        switchToTabChannel.trySend(BrowseTabSubtab.TAB_ANIME_EXTENSIONS)
+        switchToTabChannel.trySend(TabSelectors.TAB_ANIME_EXTENSION)
     }
 
     @Composable
@@ -79,24 +85,38 @@ data object BrowseTab : Tab {
         val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
         val animeExtensionsState by animeExtensionsScreenModel.state.collectAsState()
 
-        val hideManga by Injekt.get<UiPreferences>().hideManga().collectAsState()
+        val (tabs, animeExtensionsIndex: Int, mangaExtensionsIndex: Int?) = run {
+            val hideManga = Injekt.get<UiPreferences>().hideManga().get()
 
-        val tabs = persistentListOf<TabContent>().builder().apply {
-            add(animeSourcesTab())
-            if (!hideManga) add(mangaSourcesTab())
-            add(animeExtensionsTab(animeExtensionsScreenModel))
-            if (!hideManga) add(mangaExtensionsTab(mangaExtensionsScreenModel))
-            add(migrateAnimeSourceTab())
-            if (!hideManga) add(migrateMangaSourceTab())
-        }.build()
+            var animeExtensionsIndex: Int
+            var mangaExtensionsIndex: Int? = null
+            val tabsListBuilder = persistentListOf<TabContent>().builder()
+
+            tabsListBuilder.add(animeSourcesTab())
+
+            if (!hideManga) {
+                tabsListBuilder.add(mangaSourcesTab())
+            }
+
+            tabsListBuilder.add(animeExtensionsTab(animeExtensionsScreenModel))
+            animeExtensionsIndex = tabsListBuilder.size - 1
+
+            if (!hideManga) {
+                tabsListBuilder.add(mangaExtensionsTab(mangaExtensionsScreenModel))
+                mangaExtensionsIndex = tabsListBuilder.size - 1
+            }
+
+            tabsListBuilder.add(migrateAnimeSourceTab())
+
+            if (!hideManga) {
+                tabsListBuilder.add(migrateMangaSourceTab())
+            }
+
+            Triple(tabsListBuilder.build(), animeExtensionsIndex, mangaExtensionsIndex)
+        }
 
         val state = rememberPagerState { tabs.size }
 
-        LaunchedEffect(tabs.size) {
-            if ((state.settledPage >= tabs.size || state.currentPage >= tabs.size) && !tabs.isEmpty()) {
-                state.scrollToPage(tabs.size - 1)
-            }
-        }
         TabbedScreen(
             titleRes = MR.strings.browse,
             tabs = tabs,
@@ -109,24 +129,13 @@ data object BrowseTab : Tab {
         )
         LaunchedEffect(Unit) {
             switchToTabChannel.receiveAsFlow()
-                .collectLatest { tabKeyToScrollTo ->
-                    var tabIndexToScrollTo: Int = tabs.indexOfFirst { it.tabKey == tabKeyToScrollTo }
-                    if (tabIndexToScrollTo < 0) {
-                        // If we didn't find the tab we were looking for, check for the corresponding anime/manga tab
-                        val fallbackTabKey: BrowseTabSubtab = when (tabKeyToScrollTo) {
-                            BrowseTabSubtab.TAB_MANGA_SOURCES -> BrowseTabSubtab.TAB_ANIME_SOURCES
-                            BrowseTabSubtab.TAB_MANGA_EXTENSIONS -> BrowseTabSubtab.TAB_ANIME_EXTENSIONS
-                            BrowseTabSubtab.TAB_MANGA_MIGRATE -> BrowseTabSubtab.TAB_ANIME_MIGRATE
-                            BrowseTabSubtab.TAB_ANIME_SOURCES -> BrowseTabSubtab.TAB_MANGA_SOURCES
-                            BrowseTabSubtab.TAB_ANIME_EXTENSIONS -> BrowseTabSubtab.TAB_MANGA_EXTENSIONS
-                            BrowseTabSubtab.TAB_ANIME_MIGRATE -> BrowseTabSubtab.TAB_MANGA_MIGRATE
-                        }
-                        tabIndexToScrollTo = tabs.indexOfFirst { it.tabKey == fallbackTabKey }
+                .collectLatest {
+                    val tabToScrollTo: Int = when (it) {
+                        TabSelectors.TAB_ANIME_EXTENSION -> animeExtensionsIndex
+                        // If we try to show the manga extensions tab when it is hidden, show anime extensions instead
+                        TabSelectors.TAB_MANGA_EXTENSION -> mangaExtensionsIndex ?: animeExtensionsIndex
                     }
-
-                    if (tabIndexToScrollTo >= 0) {
-                        state.scrollToPage(tabIndexToScrollTo)
-                    }
+                    state.scrollToPage(tabToScrollTo)
                 }
         }
 
