@@ -111,6 +111,7 @@ object SettingsAppearanceScreen : SearchableSettings {
         val formattedNow = remember(dateFormat) {
             UiPreferences.dateFormat(dateFormat).format(now)
         }
+        val hideManga by uiPreferences.hideManga().collectAsState()
 
         return Preference.PreferenceGroup(
             title = stringResource(MR.strings.pref_category_display),
@@ -141,12 +142,18 @@ object SettingsAppearanceScreen : SearchableSettings {
                         true
                     },
                 ),
+                Preference.PreferenceItem.SwitchPreference(
+                    preference = uiPreferences.hideManga(),
+                    title = "Hide Manga",
+                    subtitle = "Hide some UI elements related to manga",
+                ),
                 Preference.PreferenceItem.ListPreference(
-                    preference = uiPreferences.navStyle(),
+                    preference = uiPreferences.navStyle().underlyingPreference(),
                     entries = NavStyle.entries
                         .associateWith { stringResource(it.titleRes) }
                         .toImmutableMap(),
                     title = "Navigation Style",
+                    enabled = !hideManga,
                     onValueChanged = { true },
                 ),
                 Preference.PreferenceItem.ListPreference(
