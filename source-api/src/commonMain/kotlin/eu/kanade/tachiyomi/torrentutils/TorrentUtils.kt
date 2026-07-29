@@ -45,6 +45,11 @@ object TorrentUtils {
     // parameter is added by the Kotlin compiler). We add another overload of getTorrentInfo that is not a suspend
     // function so that extensions targetting other forks where getTorrentInfo was not a suspend function can still
     // work.
+    @Deprecated(
+        message = "This overload of getTorrentInfo exists only for binary compatibility with extensions targeting" +
+            " other forks where getTorrentInfo was not a suspend function",
+        level = DeprecationLevel.HIDDEN,
+    )
     @JvmName("getTorrentInfo")
     fun blockingShimForGetTorrentInfo(
         url: String,
