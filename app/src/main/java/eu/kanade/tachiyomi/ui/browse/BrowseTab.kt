@@ -35,10 +35,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-
-private val uiPreferences: UiPreferences = Injekt.get()
 
 data object BrowseTab : Tab {
 
@@ -85,9 +84,9 @@ data object BrowseTab : Tab {
         val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
         val animeExtensionsState by animeExtensionsScreenModel.state.collectAsState()
 
-        val (tabs, animeExtensionsIndex: Int, mangaExtensionsIndex: Int?) = run {
-            val hideManga = Injekt.get<UiPreferences>().hideManga().get()
+        val hideManga by Injekt.get<UiPreferences>().hideManga().collectAsState()
 
+        val (tabs, animeExtensionsIndex: Int, mangaExtensionsIndex: Int?) = run {
             var animeExtensionsIndex: Int
             var mangaExtensionsIndex: Int? = null
             val tabsListBuilder = persistentListOf<TabContent>().builder()
@@ -117,6 +116,11 @@ data object BrowseTab : Tab {
 
         val state = rememberPagerState { tabs.size }
 
+        LaunchedEffect(tabs.size) {
+            if ((state.settledPage >= tabs.size || state.currentPage >= tabs.size) && !tabs.isEmpty()) {
+                state.scrollToPage(tabs.size - 1)
+            }
+        }
         TabbedScreen(
             titleRes = MR.strings.browse,
             tabs = tabs,
