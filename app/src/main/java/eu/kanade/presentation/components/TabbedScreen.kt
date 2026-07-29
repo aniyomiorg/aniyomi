@@ -50,7 +50,7 @@ fun TabbedScreen(
     Scaffold(
         topBar = {
             if (titleRes != null) {
-                val tab = tabs.getOrElse(state.currentPage) { tabs.last() }
+                val tab = tabs[state.currentPage]
                 val searchEnabled = tab.searchEnabled
 
                 val actualQuery = when (state.currentPage % 2) {
@@ -113,7 +113,7 @@ fun TabbedScreen(
                 state = state,
                 verticalAlignment = Alignment.Top,
             ) { page ->
-                tabs.getOrElse(state.currentPage) { tabs.last() }.content(
+                tabs[page].content(
                     PaddingValues(bottom = contentPadding.calculateBottomPadding()),
                     snackbarHostState,
                 )
