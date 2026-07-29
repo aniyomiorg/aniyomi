@@ -42,7 +42,6 @@ fun TabbedScreen(
     scrollable: Boolean = false,
     animeSearchQuery: String? = null,
     onChangeAnimeSearchQuery: (String?) -> Unit = {},
-
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -112,6 +111,7 @@ fun TabbedScreen(
                 modifier = Modifier.fillMaxSize(),
                 state = state,
                 verticalAlignment = Alignment.Top,
+                key = { index -> tabs[index].tabKey ?: index },
             ) { page ->
                 tabs[page].content(
                     PaddingValues(bottom = contentPadding.calculateBottomPadding()),
@@ -131,6 +131,7 @@ data class TabContent(
     val numberTitle: Int = 0,
     val cancelAction: () -> Unit = {},
     val navigateUp: (() -> Unit)? = null,
+    val tabKey: Any? = null,
 )
 
 @Composable

@@ -15,6 +15,7 @@ import eu.kanade.presentation.browse.anime.AnimeSourceOptionsDialog
 import eu.kanade.presentation.browse.anime.AnimeSourcesScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.tachiyomi.ui.browse.BrowseTabSubtab
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import kotlinx.collections.immutable.persistentListOf
@@ -82,5 +83,6 @@ fun Screen.animeSourcesTab(): TabContent {
                 }
             }
         },
+        tabKey = BrowseTabSubtab.TAB_ANIME_SOURCES,
     )
 }

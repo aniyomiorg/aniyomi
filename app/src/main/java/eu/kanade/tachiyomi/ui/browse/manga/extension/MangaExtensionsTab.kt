@@ -17,6 +17,7 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.more.settings.screen.browse.MangaExtensionReposScreen
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
+import eu.kanade.tachiyomi.ui.browse.BrowseTabSubtab
 import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaExtensionDetailsScreen
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.isPackageInstalled
@@ -101,6 +102,7 @@ fun mangaExtensionsTab(
                 )
             }
         },
+        tabKey = BrowseTabSubtab.TAB_MANGA_EXTENSIONS,
     )
 }
 
