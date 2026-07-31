@@ -1,10 +1,13 @@
 package eu.kanade.presentation.more.settings.screen.player
 
 import android.os.Build
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
@@ -22,6 +25,7 @@ import eu.kanade.tachiyomi.ui.player.VLC_PLAYER
 import eu.kanade.tachiyomi.ui.player.WEB_VIDEO_CASTER
 import eu.kanade.tachiyomi.ui.player.X_PLAYER
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentMap
@@ -75,6 +79,7 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
             getDisplayGroup(playerPreferences = playerPreferences),
             getIntroSkipGroup(playerPreferences = playerPreferences),
             if (deviceSupportsPip) getPipGroup(playerPreferences = playerPreferences) else null,
+            getHttpServerGroup(playerPreferences = playerPreferences),
             getExternalPlayerGroup(
                 playerPreferences = playerPreferences,
                 basePreferences = basePreferences,
@@ -288,6 +293,43 @@ object PlayerSettingsPlayerScreen : SearchableSettings {
                     preference = pipReplaceWithPrevious,
                     title = stringResource(AYMR.strings.pref_pip_replace_with_previous),
                     enabled = isPipEnabled,
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getHttpServerGroup(
+        playerPreferences: PlayerPreferences,
+    ): Preference.PreferenceGroup {
+        val context = LocalContext.current
+        val httpServerPort = playerPreferences.httpServerPort()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(AYMR.strings.pref_http_server_name),
+            preferenceItems = persistentListOf(
+                Preference.PreferenceItem.EditTextInfoPreference(
+                    preference = httpServerPort,
+                    dialogSubtitle = null,
+                    title = stringResource(AYMR.strings.pref_http_server_port),
+                    validate = { pref ->
+                        val port = pref.toIntOrNull()
+                            ?: return@EditTextInfoPreference false
+
+                        if (port !in 1025..65535) {
+                            return@EditTextInfoPreference false
+                        }
+
+                        true
+                    },
+                    errorMessage = { _ ->
+                        stringResource(AYMR.strings.pref_http_server_port_error)
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChanged = {
+                        context.toast(MR.strings.requires_app_restart)
+                        true
+                    },
                 ),
             ),
         )

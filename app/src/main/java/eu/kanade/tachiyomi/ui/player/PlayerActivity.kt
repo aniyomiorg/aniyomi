@@ -73,6 +73,7 @@ import eu.kanade.tachiyomi.data.torrent.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerLayoutBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
+import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.controls.PlayerControls
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
@@ -86,6 +87,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -110,6 +112,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.time.Duration.Companion.seconds
 
 class PlayerActivity : BaseActivity() {
     private val viewModel by viewModels<PlayerViewModel>(factoryProducer = { PlayerViewModelProviderFactory(this) })
@@ -312,7 +315,6 @@ class PlayerActivity : BaseActivity() {
         MPVLib.removeLogObserver(playerObserver)
         MPVLib.removeObserver(playerObserver)
         player.destroy()
-        viewModel.stopHttpServer()
 
         super.onDestroy()
     }
@@ -1095,15 +1097,32 @@ class PlayerActivity : BaseActivity() {
                 torrentLinkHandler(video.videoUrl, video.videoTitle, videoOptions)
             }
         } else {
-            MPVLib.command(
-                arrayOf(
-                    "loadfile",
-                    parseVideoUrl(video.videoUrl),
-                    "replace",
-                    "0",
-                    videoOptions,
-                ),
-            )
+            launchIO {
+                val sourceId = viewModel.currentSource.value?.id
+                if (video.usesHttpServer && sourceId != null) {
+                    val success = MainActivity.startHttpServerService(
+                        context = applicationContext,
+                        sourceId = sourceId,
+                    )
+
+                    if (!success) {
+                        launchUI {
+                            toast(AYMR.strings.http_server_start_failure)
+                        }
+                        return@launchIO
+                    }
+                }
+
+                MPVLib.command(
+                    arrayOf(
+                        "loadfile",
+                        parseVideoUrl(video.videoUrl),
+                        "replace",
+                        "0",
+                        videoOptions,
+                    ),
+                )
+            }
         }
     }
 

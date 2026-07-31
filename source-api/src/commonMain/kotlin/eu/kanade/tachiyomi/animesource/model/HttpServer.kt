@@ -4,9 +4,9 @@ import fi.iki.elonen.NanoHTTPD
 import logcat.LogPriority
 import tachiyomi.core.common.util.system.logcat
 
-open class HttpServer : NanoHTTPD(0) {
+open class HttpServer : NanoHTTPD(port) {
     val url: String
-        get() = "http://localhost:$listeningPort"
+        get() = "http://localhost:$port"
 
     fun isRunning(): Boolean {
         return isRunning
@@ -27,5 +27,10 @@ open class HttpServer : NanoHTTPD(0) {
     override fun stop() {
         super.stop()
         isRunning = false
+    }
+
+    companion object {
+        @Volatile
+        var port: Int = 0
     }
 }

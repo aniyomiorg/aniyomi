@@ -76,6 +76,12 @@ object Notifications {
     const val ID_TORRENT_SERVER = -801
 
     /**
+     * Notification channel and ids used for http server
+     */
+    const val CHANNEL_HTTP_SERVER = "http_server_channel"
+    const val ID_HTTP_SERVER = -901
+
+    /**
      * Notification channel and ids used for app and extension updates.
      */
     private const val GROUP_APK_UPDATES = "group_apk_updates"
@@ -172,6 +178,10 @@ object Notifications {
                 },
                 buildNotificationChannel(CHANNEL_TORRENT_SERVER, IMPORTANCE_LOW) {
                     setName(context.stringResource(AYMR.strings.pref_category_torrentserver))
+                    setShowBadge(false)
+                },
+                buildNotificationChannel(CHANNEL_HTTP_SERVER, IMPORTANCE_LOW) {
+                    setName(context.stringResource(AYMR.strings.pref_http_server_name))
                     setShowBadge(false)
                 },
                 buildNotificationChannel(CHANNEL_APP_UPDATE, IMPORTANCE_DEFAULT) {

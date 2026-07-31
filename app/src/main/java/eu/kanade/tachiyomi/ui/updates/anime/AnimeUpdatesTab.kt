@@ -63,7 +63,7 @@ fun Screen.animeUpdatesTab(
         val playerPreferences: PlayerPreferences by injectLazy()
         val update = updateItem.update
         val extPlayer = playerPreferences.alwaysUseExternalPlayer().get() != altPlayer
-        MainActivity.startPlayerActivity(context, update.animeId, update.episodeId, extPlayer)
+        MainActivity.startPlayerActivity(context, update.animeId, update.episodeId, extPlayer, update.sourceId)
     }
 
     return TabContent(

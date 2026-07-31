@@ -518,7 +518,12 @@ private fun VideoList(
                     onExtDownloadClicked = { downloadEpisode(!useExternalDownloader) },
                     onCopyClicked = {
                         clipboardManager.setText(AnnotatedString(currentVideo.videoUrl))
-                        scope.launch { context.toast(copiedString) }
+                        scope.launch {
+                            if (currentVideo.usesHttpServer) {
+                                MainActivity.startHttpServerService(context, anime.source)
+                            }
+                            context.toast(copiedString)
+                        }
                     },
                     onExtPlayerClicked = {
                         scope.launch {
@@ -527,6 +532,7 @@ private fun VideoList(
                                 anime.id,
                                 episode.id,
                                 true,
+                                anime.source,
                                 currentVideo,
                             )
                         }
@@ -538,6 +544,7 @@ private fun VideoList(
                                 anime.id,
                                 episode.id,
                                 false,
+                                anime.source,
                                 currentVideo,
                                 selectedHosterVideoIndex.first,
                                 selectedHosterVideoIndex.second,

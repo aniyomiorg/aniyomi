@@ -41,6 +41,7 @@ data class Video(
     val ffmpegVideoArgs: List<Pair<String, String>> = emptyList(),
     val internalData: String = "",
     val initialized: Boolean = false,
+    val usesHttpServer: Boolean = false,
 ) {
 
     // TODO(1.6): Remove after ext lib bump
@@ -118,6 +119,7 @@ data class SerializableVideo(
     val ffmpegVideoArgs: List<Pair<String, String>> = emptyList(),
     val internalData: String = "",
     val initialized: Boolean = false,
+    val usesHttpServer: Boolean = false,
 ) {
 
     companion object {
@@ -139,6 +141,7 @@ data class SerializableVideo(
                         vid.ffmpegVideoArgs,
                         vid.internalData,
                         vid.initialized,
+                        vid.usesHttpServer,
                     )
                 },
             )
@@ -163,6 +166,7 @@ data class SerializableVideo(
                         sVid.ffmpegVideoArgs,
                         sVid.internalData,
                         sVid.initialized,
+                        sVid.usesHttpServer,
                     )
                 }
     }

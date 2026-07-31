@@ -78,6 +78,7 @@ import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
+import eu.kanade.tachiyomi.data.player.service.HttpServerService
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
 import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionApi
@@ -108,24 +109,30 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
 import logcat.LogPriority
 import mihon.core.migration.Migrator
 import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
+import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.release.interactor.GetApplicationRelease
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.util.collectAsState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : BaseActivity() {
 
@@ -593,12 +600,20 @@ class MainActivity : BaseActivity() {
             animeId: Long,
             episodeId: Long,
             extPlayer: Boolean,
+            sourceId: Long? = null,
             video: Video? = null,
             hosterIndex: Int = -1,
             videoIndex: Int = -1,
             hosterList: List<Hoster>? = null,
         ) {
             if (extPlayer) {
+                val sourceId = sourceId ?: (Injekt.get<GetAnime>().await(animeId)?.source ?: -1L)
+                val success = startHttpServerService(context, sourceId)
+                if (!success) {
+                    withUIContext { Injekt.get<Application>().toast(AYMR.strings.http_server_start_failure) }
+                    return
+                }
+
                 val intent = try {
                     ExternalIntents.newIntent(context, animeId, episodeId, video)
                 } catch (e: Exception) {
@@ -619,6 +634,24 @@ class MainActivity : BaseActivity() {
                     ),
                 )
             }
+        }
+
+        suspend fun startHttpServerService(
+            context: Context,
+            sourceId: Long,
+            timeout: Duration = 5.seconds,
+        ): Boolean {
+            HttpServerService.resetIsRunning()
+            context.startService(
+                Intent(context, HttpServerService::class.java)
+                    .putExtra(HttpServerService.EXTRA_SOURCE_ID, sourceId),
+            )
+
+            val ready = withTimeoutOrNull(timeout) {
+                HttpServerService.isRunning.first { it }
+            }
+
+            return ready == true
         }
     }
 }
