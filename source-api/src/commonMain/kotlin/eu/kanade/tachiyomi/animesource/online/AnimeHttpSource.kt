@@ -73,16 +73,6 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         get() = network.client
 
     /**
-     * Enable the use of a local http server.
-     *
-     * Extensions are responsible for starting the server, but the app
-     * will handle closing.
-     *
-     * @since extensions-lib 17
-     */
-    open val server: HttpServer? = null
-
-    /**
      * Generates a unique ID for the source based on the provided [name], [lang] and
      * [versionId]. It will use the first 16 characters (64 bits) of the MD5 of the string
      * `"${name.lowercase()}/$lang/$versionId"`.
@@ -427,6 +417,17 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      */
     open suspend fun resolveVideo(video: Video): Video? {
         return video
+    }
+
+    /**
+     * Enable the use of a local http server.
+     *
+     * Return an instance of HttpServer. The app will handle starting and closing of the server.
+     *
+     * @since extensions-lib 17
+     */
+    open fun createHttpServer(): HttpServer? {
+        return null
     }
 
     /**

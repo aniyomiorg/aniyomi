@@ -608,12 +608,13 @@ class MainActivity : BaseActivity() {
         ) {
             if (extPlayer) {
                 val sourceId = sourceId ?: (Injekt.get<GetAnime>().await(animeId)?.source ?: -1L)
-                val success = startHttpServerService(context, sourceId)
+                val (success, port) = startHttpServerService(context, sourceId)
                 if (!success) {
                     withUIContext { Injekt.get<Application>().toast(AYMR.strings.http_server_start_failure) }
                     return
                 }
 
+                val video = video?.copyHttpServer(port)
                 val intent = try {
                     ExternalIntents.newIntent(context, animeId, episodeId, video)
                 } catch (e: Exception) {
@@ -640,7 +641,7 @@ class MainActivity : BaseActivity() {
             context: Context,
             sourceId: Long,
             timeout: Duration = 5.seconds,
-        ): Boolean {
+        ): Pair<Boolean, Int> {
             HttpServerService.resetIsRunning()
             context.startService(
                 Intent(context, HttpServerService::class.java)
@@ -651,7 +652,7 @@ class MainActivity : BaseActivity() {
                 HttpServerService.isRunning.first { it }
             }
 
-            return ready == true
+            return Pair(ready == true, HttpServerService.port)
         }
     }
 }

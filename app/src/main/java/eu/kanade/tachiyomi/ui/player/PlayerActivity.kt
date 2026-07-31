@@ -1099,11 +1099,16 @@ class PlayerActivity : BaseActivity() {
         } else {
             launchIO {
                 val sourceId = viewModel.currentSource.value?.id
-                if (video.usesHttpServer && sourceId != null) {
-                    val success = MainActivity.startHttpServerService(
+                var videoUrl: String = video.videoUrl
+                if (video.usesHttpServer() && sourceId != null) {
+                    val (success, port) = MainActivity.startHttpServerService(
                         context = applicationContext,
                         sourceId = sourceId,
                     )
+
+                    val newVideo = video.copyHttpServer(port)
+                    videoUrl = newVideo.videoUrl
+                    viewModel.updateVideo(newVideo)
 
                     if (!success) {
                         launchUI {
@@ -1116,7 +1121,7 @@ class PlayerActivity : BaseActivity() {
                 MPVLib.command(
                     arrayOf(
                         "loadfile",
-                        parseVideoUrl(video.videoUrl),
+                        parseVideoUrl(videoUrl),
                         "replace",
                         "0",
                         videoOptions,

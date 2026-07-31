@@ -1520,6 +1520,10 @@ class PlayerViewModel @JvmOverloads constructor(
         return true
     }
 
+    fun updateVideo(video: Video) {
+        _currentVideo.update { _ -> video }
+    }
+
     fun onVideoClicked(hosterIndex: Int, videoIndex: Int) {
         val hosterState = _hosterState.value[hosterIndex] as? HosterState.Ready
         val video = hosterState?.videoList

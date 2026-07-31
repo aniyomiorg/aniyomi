@@ -90,16 +90,18 @@ class ExternalIntents {
             ?: HosterLoader.getBestVideo(source, hosters)
             ?: throw Exception("Video list is empty")
 
-        val videoUrl = getVideoUrl(source, context, video) ?: return null
+        var videoUrl = getVideoUrl(source, context, video) ?: return null
 
-        if (video.usesHttpServer) {
-            val success = MainActivity.startHttpServerService(context, source.id)
+        if (video.usesHttpServer()) {
+            val (success, port) = MainActivity.startHttpServerService(context, source.id)
             if (!success) {
                 launchUI {
                     context.toast(AYMR.strings.http_server_start_failure)
                 }
                 return null
             }
+
+            videoUrl = getVideoUrl(source, context, video.copyHttpServer(port)) ?: return null
         }
 
         val pkgName = playerPreferences.externalPlayerPreference().get()

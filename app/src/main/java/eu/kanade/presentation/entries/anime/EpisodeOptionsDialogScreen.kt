@@ -519,7 +519,7 @@ private fun VideoList(
                     onCopyClicked = {
                         clipboardManager.setText(AnnotatedString(currentVideo.videoUrl))
                         scope.launch {
-                            if (currentVideo.usesHttpServer) {
+                            if (currentVideo.usesHttpServer()) {
                                 MainActivity.startHttpServerService(context, anime.source)
                             }
                             context.toast(copiedString)

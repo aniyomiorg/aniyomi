@@ -42,7 +42,7 @@ class HttpServerService : Service() {
         }
 
         val sourceId = intent?.getLongExtra(EXTRA_SOURCE_ID, -1L) ?: -1L
-        val server = (sourceManager.get(sourceId) as? AnimeHttpSource)?.server
+        val server = (sourceManager.get(sourceId) as? AnimeHttpSource)?.createHttpServer()
 
         if (server == null) {
             stopSelf()
@@ -53,6 +53,7 @@ class HttpServerService : Service() {
 
         try {
             httpServer?.start()
+            port = httpServer?.listeningPort ?: 0
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e) { "Failed to start http server" }
             stopSelf()
@@ -114,5 +115,8 @@ class HttpServerService : Service() {
 
         private val _isRunning = MutableStateFlow(false)
         val isRunning = _isRunning.asStateFlow()
+
+        @Volatile
+        var port: Int = 0
     }
 }
