@@ -148,7 +148,6 @@ data class SerializableVideo(
     val ffmpegVideoArgs: List<Pair<String, String>> = emptyList(),
     val internalData: String = "",
     val initialized: Boolean = false,
-    val usesHttpServer: Boolean = false,
 ) {
 
     companion object {

@@ -392,8 +392,6 @@
     <string name="pref_category_torrentserver">Torrent Server Preferences</string>
     <!-- Http Server Service -->
     <string name="pref_http_server_name">Http server</string>
-    <string name="pref_http_server_port">Http server port</string>
-    <string name="pref_http_server_port_error">Port must be a number between 1025 and 65535</string>
     <string name="http_server_is_running">Http server is running</string>
     <string name="http_server_start_failure">Failed to start http server</string>
     <!-- Other -->

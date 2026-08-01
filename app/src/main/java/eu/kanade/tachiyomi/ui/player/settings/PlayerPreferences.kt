@@ -62,10 +62,6 @@ class PlayerPreferences(
     fun pipOnExit() = preferenceStore.getBoolean("pref_pip_on_exit", false)
     fun pipReplaceWithPrevious() = preferenceStore.getBoolean("pip_replace_with_previous", false)
 
-    // Http server
-
-    fun httpServerPort() = preferenceStore.getString("pref_http_server_port", "8091")
-
     // External player
 
     fun alwaysUseExternalPlayer() = preferenceStore.getBoolean(
