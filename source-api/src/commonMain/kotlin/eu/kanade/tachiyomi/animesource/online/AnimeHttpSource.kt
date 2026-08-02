@@ -132,6 +132,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param page the page number to retrieve.
      */
+    @Suppress("DEPRECATION")
     @Deprecated(
         "Use the suspend API instead",
         ReplaceWith("getPopularAnime"),
