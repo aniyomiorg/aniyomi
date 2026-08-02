@@ -53,5 +53,6 @@ fun Episode.toDomainEpisode(): DomainEpisode? {
         previewUrl = preview_url,
         lastModifiedAt = last_modified,
         version = version,
+        memo = memo,
     )
 }

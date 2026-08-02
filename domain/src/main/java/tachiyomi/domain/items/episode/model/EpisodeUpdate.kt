@@ -1,5 +1,7 @@
 package tachiyomi.domain.items.episode.model
 
+import kotlinx.serialization.json.JsonObject
+
 data class EpisodeUpdate(
     val id: Long,
     val animeId: Long? = null,
@@ -18,6 +20,7 @@ data class EpisodeUpdate(
     val summary: String? = null,
     val previewUrl: String? = null,
     val version: Long? = null,
+    val memo: JsonObject? = null,
 )
 
 fun Episode.toEpisodeUpdate(): EpisodeUpdate {
@@ -39,5 +42,6 @@ fun Episode.toEpisodeUpdate(): EpisodeUpdate {
         summary,
         previewUrl,
         version,
+        memo,
     )
 }

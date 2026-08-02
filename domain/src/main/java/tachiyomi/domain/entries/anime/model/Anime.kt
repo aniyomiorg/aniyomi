@@ -5,6 +5,8 @@ import aniyomi.domain.anime.SeasonDisplayMode
 import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import eu.kanade.tachiyomi.animesource.model.FetchType
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import kotlinx.serialization.json.JsonObject
+import mihon.core.common.extensions.EMPTY
 import tachiyomi.core.common.preference.TriState
 import java.io.Serializable
 import java.time.Instant
@@ -42,6 +44,7 @@ data class Anime(
     val seasonFlags: Long,
     val seasonNumber: Double,
     val seasonSourceOrder: Long,
+    val memo: JsonObject,
 ) : Serializable {
 
     val expectedNextUpdate: Instant?
@@ -340,6 +343,7 @@ data class Anime(
             seasonFlags = 0L,
             seasonNumber = -1.0,
             seasonSourceOrder = 0L,
+            memo = JsonObject.EMPTY,
         )
     }
 }

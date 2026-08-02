@@ -206,6 +206,7 @@ class UpdateAnimeFromRemote(
                 status = remoteAnime.status.toLong(),
                 updateStrategy = remoteAnime.update_strategy,
                 initialized = true,
+                memo = remoteAnime.memo,
             ),
         )
     }
