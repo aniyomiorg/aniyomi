@@ -4,14 +4,13 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.domain.entries.anime.model.toDomainAnime
-import eu.kanade.domain.entries.anime.model.toSAnime
-import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.online.ResolvableAnimeSource
 import eu.kanade.tachiyomi.animesource.online.UriType
 import kotlinx.coroutines.flow.update
+import mihon.domain.source.interactor.UpdateAnimeFromRemote
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.domain.entries.anime.interactor.GetAnimeByUrlAndSourceId
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
@@ -28,12 +27,12 @@ class DeepLinkAnimeScreenModel(
     private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
     private val getEpisodeByUrlAndAnimeId: GetEpisodeByUrlAndAnimeId = Injekt.get(),
     private val getAnimeByUrlAndSourceId: GetAnimeByUrlAndSourceId = Injekt.get(),
-    private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
+    private val updateAnimeFromRemote: UpdateAnimeFromRemote = Injekt.get(),
 ) : StateScreenModel<DeepLinkAnimeScreenModel.State>(State.Loading) {
 
     init {
         screenModelScope.launchIO {
-            val source = sourceManager.getCatalogueSources()
+            val source = sourceManager.getAll()
                 .filterIsInstance<ResolvableAnimeSource>()
                 .firstOrNull { it.getUriType(query) != UriType.Unknown }
 
@@ -64,13 +63,11 @@ class DeepLinkAnimeScreenModel(
     private suspend fun getEpisodeFromSEpisode(sEpisode: SEpisode, anime: Anime, source: AnimeSource): Episode? {
         val localEpisode = getEpisodeByUrlAndAnimeId.await(sEpisode.url, anime.id)
 
-        return if (localEpisode == null) {
-            val sourceEpisodes = source.getEpisodeList(anime.toSAnime())
-            val newEpisodes = syncEpisodesWithSource.await(sourceEpisodes, anime, source, false)
-            newEpisodes.find { it.url == sEpisode.url }
-        } else {
-            localEpisode
-        }
+        return localEpisode
+            ?: updateAnimeFromRemote.awaitEpisodesUpdate(anime, fetchEpisodes = true)
+                .getOrElse { return null }
+                .newEpisodes
+                .find { it.url == sEpisode.url }
     }
 
     private suspend fun getAnimeFromSAnime(sAnime: SAnime, sourceId: Long): Anime {

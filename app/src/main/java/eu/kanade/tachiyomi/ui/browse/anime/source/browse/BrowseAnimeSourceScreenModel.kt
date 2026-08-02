@@ -20,7 +20,6 @@ import eu.kanade.domain.source.anime.interactor.GetAnimeIncognitoState
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.presentation.util.ioCoroutineScope
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeBackgroundCache
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -82,22 +81,20 @@ class BrowseAnimeSourceScreenModel(
     val source = sourceManager.getOrStub(sourceId)
 
     init {
-        if (source is AnimeCatalogueSource) {
-            mutableState.update {
-                var query: String? = null
-                var listing = it.listing
+        mutableState.update {
+            var query: String? = null
+            var listing = it.listing
 
-                if (listing is Listing.Search) {
-                    query = listing.query
-                    listing = Listing.Search(query, source.getFilterList())
-                }
-
-                it.copy(
-                    listing = listing,
-                    filters = source.getFilterList(),
-                    toolbarQuery = query,
-                )
+            if (listing is Listing.Search) {
+                query = listing.query
+                listing = Listing.Search(query, source.getFilterList())
             }
+
+            it.copy(
+                listing = listing,
+                filters = source.getFilterList(),
+                toolbarQuery = query,
+            )
         }
 
         if (!getIncognitoState.await(source.id)) {
@@ -148,8 +145,6 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun resetFilters() {
-        if (source !is AnimeCatalogueSource) return
-
         mutableState.update { it.copy(filters = source.getFilterList()) }
     }
 
@@ -158,8 +153,6 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun setFilters(filters: AnimeFilterList) {
-        if (source !is AnimeCatalogueSource) return
-
         mutableState.update {
             it.copy(
                 filters = filters,
@@ -168,8 +161,6 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun search(query: String? = null, filters: AnimeFilterList? = null) {
-        if (source !is AnimeCatalogueSource) return
-
         val input = state.value.listing as? Listing.Search
             ?: Listing.Search(query = null, filters = source.getFilterList())
 
@@ -185,8 +176,6 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun searchGenre(genreName: String) {
-        if (source !is AnimeCatalogueSource) return
-
         val defaultFilters = source.getFilterList()
         var genreExists = false
 

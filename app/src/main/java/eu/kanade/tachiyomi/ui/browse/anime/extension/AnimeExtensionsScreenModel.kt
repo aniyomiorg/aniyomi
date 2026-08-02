@@ -70,7 +70,7 @@ class AnimeExtensionsScreenModel(
                                 it.name.contains(input, ignoreCase = true) ||
                                     it.id == input.toLongOrNull() ||
                                     if (it is AnimeHttpSource) {
-                                        it.baseUrl.contains(
+                                        it.getHomeUrl().contains(
                                             input,
                                             ignoreCase = true,
                                         )

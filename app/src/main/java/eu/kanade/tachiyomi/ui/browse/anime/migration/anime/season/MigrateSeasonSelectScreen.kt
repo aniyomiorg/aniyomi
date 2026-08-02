@@ -68,7 +68,7 @@ data class MigrateSeasonSelectScreen(
                     val source = screenModel.source as? AnimeHttpSource ?: return@BrowseAnimeSourceContent
                     navigator.push(
                         WebViewScreen(
-                            url = source.baseUrl,
+                            url = source.getHomeUrl(),
                             initialTitle = source.name,
                             sourceId = source.id,
                         ),

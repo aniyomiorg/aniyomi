@@ -10,14 +10,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
-import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.domain.entries.anime.model.copyFrom
-import eu.kanade.domain.entries.anime.model.toSAnime
-import eu.kanade.tachiyomi.data.cache.AnimeBackgroundCache
-import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.util.prepUpdateBackground
-import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.system.isRunning
 import eu.kanade.tachiyomi.util.system.workManager
 import kotlinx.coroutines.CancellationException
@@ -28,11 +21,11 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
+import mihon.domain.source.interactor.UpdateAnimeFromRemote
 import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
@@ -44,10 +37,8 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
     CoroutineWorker(context, workerParams) {
 
     private val sourceManager: AnimeSourceManager = Injekt.get()
-    private val coverCache: AnimeCoverCache = Injekt.get()
-    private val backgroundCache: AnimeBackgroundCache = Injekt.get()
     private val getLibraryAnime: GetLibraryAnime = Injekt.get()
-    private val updateAnime: UpdateAnime = Injekt.get()
+    private val updateAnimeFromRemote: UpdateAnimeFromRemote = Injekt.get()
 
     private val notifier = AnimeLibraryUpdateNotifier(context)
 
@@ -124,16 +115,11 @@ class AnimeMetadataUpdateJob(private val context: Context, workerParams: WorkerP
                                 ) {
                                     val source = sourceManager.get(anime.source) ?: return@withUpdateNotification
                                     try {
-                                        val networkAnime = source.getAnimeDetails(anime.toSAnime())
-                                        val updatedAnime = anime
-                                            .prepUpdateCover(coverCache, networkAnime, true)
-                                            .prepUpdateBackground(backgroundCache, networkAnime, true)
-                                            .copyFrom(networkAnime)
-                                        try {
-                                            updateAnime.await(updatedAnime.toAnimeUpdate())
-                                        } catch (e: Exception) {
-                                            logcat(LogPriority.ERROR) { "Anime doesn't exist anymore" }
-                                        }
+                                        updateAnimeFromRemote.awaitEpisodesUpdate(
+                                            source = source,
+                                            anime = anime,
+                                            fetchDetails = true,
+                                        ).getOrThrow()
                                     } catch (e: Throwable) {
                                         // Ignore errors and continue
                                         logcat(LogPriority.ERROR, e)

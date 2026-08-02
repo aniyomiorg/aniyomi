@@ -1,6 +1,5 @@
 package tachiyomi.data.source.anime
 
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -20,7 +19,7 @@ class AnimeSourceRepositoryImpl(
 ) : AnimeSourceRepository {
 
     override fun getAnimeSources(): Flow<List<DomainSource>> {
-        return sourceManager.catalogueSources.map { sources ->
+        return sourceManager.sources.map { sources ->
             sources.map {
                 mapSourceToDomainSource(it).copy(
                     supportsLatest = it.supportsLatest,
@@ -30,7 +29,7 @@ class AnimeSourceRepositoryImpl(
     }
 
     override fun getOnlineAnimeSources(): Flow<List<DomainSource>> {
-        return sourceManager.catalogueSources.map { sources ->
+        return sourceManager.sources.map { sources ->
             sources
                 .filterIsInstance<AnimeHttpSource>()
                 .map(::mapSourceToDomainSource)
@@ -40,7 +39,7 @@ class AnimeSourceRepositoryImpl(
     override fun getAnimeSourcesWithFavoriteCount(): Flow<List<Pair<DomainSource, Long>>> {
         return combine(
             handler.subscribeToList { animesQueries.getAnimeSourceIdWithFavoriteCount() },
-            sourceManager.catalogueSources,
+            sourceManager.sources,
         ) { sourceIdWithFavoriteCount, _ -> sourceIdWithFavoriteCount }
             .map {
                 it.map { (sourceId, count) ->
@@ -58,18 +57,15 @@ class AnimeSourceRepositoryImpl(
         query: String,
         filterList: AnimeFilterList,
     ): AnimeSourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as AnimeCatalogueSource
-        return AnimeSourceSearchPagingSource(source, query, filterList)
+        return AnimeSourceSearchPagingSource(sourceManager.getOrStub(sourceId), query, filterList)
     }
 
     override fun getPopularAnime(sourceId: Long): AnimeSourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as AnimeCatalogueSource
-        return AnimeSourcePopularPagingSource(source)
+        return AnimeSourcePopularPagingSource(sourceManager.getOrStub(sourceId))
     }
 
     override fun getLatestAnime(sourceId: Long): AnimeSourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as AnimeCatalogueSource
-        return AnimeSourceLatestPagingSource(source)
+        return AnimeSourceLatestPagingSource(sourceManager.getOrStub(sourceId))
     }
 }
 
