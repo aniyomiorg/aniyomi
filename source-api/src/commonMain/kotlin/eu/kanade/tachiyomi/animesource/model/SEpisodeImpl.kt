@@ -3,6 +3,7 @@
 package eu.kanade.tachiyomi.animesource.model
 
 import kotlinx.serialization.json.JsonObject
+import mihon.core.common.extensions.EMPTY
 
 class SEpisodeImpl : SEpisode {
 
@@ -22,5 +23,5 @@ class SEpisodeImpl : SEpisode {
 
     override var preview_url: String? = null
 
-    override var memo: JsonObject = JsonObject(emptyMap())
+    override var memo: JsonObject = JsonObject.EMPTY
 }

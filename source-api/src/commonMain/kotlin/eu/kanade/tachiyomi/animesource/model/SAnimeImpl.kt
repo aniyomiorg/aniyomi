@@ -3,6 +3,7 @@
 package eu.kanade.tachiyomi.animesource.model
 
 import kotlinx.serialization.json.JsonObject
+import mihon.core.common.extensions.EMPTY
 
 class SAnimeImpl : SAnime {
 
@@ -32,5 +33,5 @@ class SAnimeImpl : SAnime {
 
     override var season_number: Double = -1.0
 
-    override var memo: JsonObject = JsonObject(emptyMap())
+    override var memo: JsonObject = JsonObject.EMPTY
 }

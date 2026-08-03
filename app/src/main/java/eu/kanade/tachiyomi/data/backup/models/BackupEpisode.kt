@@ -35,7 +35,7 @@ class BackupEpisode(
     @ProtoNumber(502) var summary: String? = null,
     @ProtoNumber(503) var previewUrl: String? = null,
 
-    ) {
+) {
     fun toEpisodeImpl(): Episode {
         return Episode.create().copy(
             url = this@BackupEpisode.url,

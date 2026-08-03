@@ -65,6 +65,7 @@ interface SAnime : Serializable {
         it.fetch_type = fetch_type
         it.season_number = season_number
         it.initialized = initialized
+        it.memo = memo
     }
 
     companion object {

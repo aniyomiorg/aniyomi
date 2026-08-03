@@ -45,6 +45,7 @@ interface SEpisode : Serializable {
         scanlator = other.scanlator
         summary = other.summary
         preview_url = other.preview_url
+        memo = other.memo
     }
 
     companion object {

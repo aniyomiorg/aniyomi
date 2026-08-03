@@ -12,6 +12,7 @@ class ShouldUpdateDbEpisode {
             dbEpisode.sourceOrder != sourceEpisode.sourceOrder ||
             dbEpisode.summary != sourceEpisode.summary ||
             dbEpisode.fillermark != sourceEpisode.fillermark ||
-            dbEpisode.previewUrl != sourceEpisode.previewUrl
+            dbEpisode.previewUrl != sourceEpisode.previewUrl ||
+            dbEpisode.memo != sourceEpisode.memo
     }
 }
