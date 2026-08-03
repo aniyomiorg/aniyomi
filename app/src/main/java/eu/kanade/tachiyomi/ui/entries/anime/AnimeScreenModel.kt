@@ -256,7 +256,7 @@ class AnimeScreenModel(
             observeTrackers()
 
             // Fetch info-episodes when needed
-            if (screenModelScope.isActive) {
+            if ((needRefreshInfo || needRefreshEpisode || needRefreshSeason) && screenModelScope.isActive) {
                 fetchAllFromSource(
                     manualFetch = false,
                     fetchDetails = needRefreshInfo,
