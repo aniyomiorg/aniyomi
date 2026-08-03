@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.data.backup.models
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.protobuf.ProtoNumber
+import mihon.core.common.extensions.JsonObjectEmptyBytes
 import tachiyomi.data.MemoColumnAdapter
 import tachiyomi.domain.items.episode.model.Episode
 
@@ -27,14 +28,14 @@ class BackupEpisode(
     @ProtoNumber(10) var sourceOrder: Long = 0,
     @ProtoNumber(11) var lastModifiedAt: Long = 0,
     @ProtoNumber(12) var version: Long = 0,
-    @ProtoNumber(13) var memo: ByteArray = byteArrayOf(),
+    @ProtoNumber(13) var memo: ByteArray = JsonObjectEmptyBytes,
 
     // Aniyomi specific values
     @ProtoNumber(501) var fillermark: Boolean = false,
     @ProtoNumber(502) var summary: String? = null,
     @ProtoNumber(503) var previewUrl: String? = null,
 
-) {
+    ) {
     fun toEpisodeImpl(): Episode {
         return Episode.create().copy(
             url = this@BackupEpisode.url,
