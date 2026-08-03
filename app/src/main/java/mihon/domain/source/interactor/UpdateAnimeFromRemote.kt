@@ -61,6 +61,7 @@ class UpdateAnimeFromRemote(
     ): Result<RemoteAnimeEpisodeUpdate> {
         return try {
             val episodes = episodeRepository.getEpisodeByAnimeId(anime.id)
+                .sortedBy { it.sourceOrder }
             val update = withIOContext {
                 source.getAnimeEpisodeUpdate(
                     anime = anime.toSAnime(),
@@ -113,6 +114,7 @@ class UpdateAnimeFromRemote(
     ): Result<RemoteAnimeSeasonUpdate> {
         return try {
             val seasons = animeRepository.getAnimeSeasonsById(anime.id)
+                .sortedBy { it.anime.seasonSourceOrder }
             val update = withIOContext {
                 source.getAnimeSeasonUpdate(
                     anime = anime.toSAnime(),
