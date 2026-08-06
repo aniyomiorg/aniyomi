@@ -1,14 +1,17 @@
 package eu.kanade.tachiyomi.animesource
 
+import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
+import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.SAnimeEpisodeUpdate
+import eu.kanade.tachiyomi.animesource.model.SAnimeSeasonUpdate
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.util.awaitSingle
 import rx.Observable
 
 /**
- * A basic interface for creating a source. It could be an online source, a local source, etc.
+ * A basic interface for creating a source. It could be an online source, a local source, etc...
  */
 interface AnimeSource {
 
@@ -26,37 +29,86 @@ interface AnimeSource {
         get() = ""
 
     /**
-     * Get the updated details for a anime.
-     *
-     * @since extensions-lib 1.5
-     * @param anime the anime to update.
-     * @return the updated anime.
+     * Whether the source has support for latest updates.
      */
-    @Suppress("DEPRECATION")
-    suspend fun getAnimeDetails(anime: SAnime): SAnime {
-        return fetchAnimeDetails(anime).awaitSingle()
-    }
+    val supportsLatest: Boolean
 
     /**
-     * Get all the available episodes for a anime.
-     *
-     * @since extensions-lib 1.5
-     * @param anime the anime to update.
-     * @return the episodes for the anime.
+     * Returns the list of filters for the source.
      */
-    @Suppress("DEPRECATION")
-    suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
-        return fetchEpisodeList(anime).awaitSingle()
-    }
+    fun getFilterList(): AnimeFilterList = AnimeFilterList()
 
     /**
-     * Get all the available seasons for an anime
+     * Get a page with a list of anime.
      *
-     * @since extensions-lib 16
-     * @param anime the anime to fetch seasons for.
-     * @return the anime list for the anime.
+     * @since extensions-lib 17
+     * @param page the page number to retrieve.
      */
-    suspend fun getSeasonList(anime: SAnime): List<SAnime>
+    suspend fun getPopularAnime(page: Int): AnimesPage
+
+    /**
+     * Get a page with a list of latest anime updates.
+     *
+     * @since extensions-lib 17
+     * @param page the page number to retrieve.
+     */
+    suspend fun getLatestUpdates(page: Int): AnimesPage
+
+    /**
+     * Get a page with a list of anime.
+     *
+     * @since extensions-lib 17
+     * @param page the page number to retrieve.
+     * @param query the search query.
+     * @param filters the list of filters to apply.
+     */
+    suspend fun getSearchAnime(page: Int, query: String, filters: AnimeFilterList): AnimesPage
+
+    /**
+     * Fetches updated information for an anime.
+     *
+     * Depending on the provided flags or source availability, this may include
+     * updated anime metadata, available episodes, or both.
+     *
+     * If a value is not requested, the existing provided value can be returned as-is.
+     * The host app may apply any returned updates regardless of the flags,
+     * so care should be taken to only return accurate and intentional changes.
+     *
+     * @since extensions-lib 17
+     * @param anime The anime to fetch updates for.
+     * @param episodes Existing episodes of the anime.
+     * @param fetchDetails Whether to fetch updated anime details.
+     * @param fetchEpisodes Whether to fetch available episodes.
+     */
+    suspend fun getAnimeEpisodeUpdate(
+        anime: SAnime,
+        episodes: List<SEpisode>,
+        fetchDetails: Boolean,
+        fetchEpisodes: Boolean,
+    ): SAnimeEpisodeUpdate
+
+    /**
+     * Fetches updated information for an anime.
+     *
+     * Depending on the provided flags or source availability, this may include
+     * updated anime metadata, available seasons, or both.
+     *
+     * If a value is not requested, the existing provided value can be returned as-is.
+     * The host app may apply any returned updates regardless of the flags,
+     * so care should be taken to only return accurate and intentional changes.
+     *
+     * @since extensions-lib 17
+     * @param anime The anime to fetch updates for.
+     * @param seasons Existing seasons of the anime.
+     * @param fetchDetails Whether to fetch updated anime details.
+     * @param fetchSeasons Whether to fetch available seasons.
+     */
+    suspend fun getAnimeSeasonUpdate(
+        anime: SAnime,
+        seasons: List<SAnime>,
+        fetchDetails: Boolean,
+        fetchSeasons: Boolean,
+    ): SAnimeSeasonUpdate
 
     /**
      * Get the list of hoster for an episode. The first hoster in the list should
@@ -77,37 +129,39 @@ interface AnimeSource {
      */
     suspend fun getVideoList(hoster: Hoster): List<Video> = throw IllegalStateException("Not used")
 
-    /**
-     * Get the list of videos a episode has. Pages should be returned
-     * in the expected order; the index is ignored.
-     *
-     * @since extensions-lib 1.5
-     * @param episode the episode.
-     * @return the videos for the episode.
-     */
-    @Suppress("DEPRECATION")
-    suspend fun getVideoList(episode: SEpisode): List<Video> {
-        return fetchVideoList(episode).awaitSingle()
-    }
+    @Deprecated("Use the combined suspend API instead", ReplaceWith("getAnimeSeasonUpdate"))
+    suspend fun getSeasonList(anime: SAnime): List<SAnime> = throw UnsupportedOperationException()
+
+    @Deprecated("Use the hoster version instead")
+    suspend fun getVideoList(episode: SEpisode): List<Video> = throw UnsupportedOperationException()
 
     @Deprecated(
-        "Use the non-RxJava API instead",
-        ReplaceWith("getAnimeDetails"),
+        "Use the combined suspend API instead",
+        ReplaceWith("getAnimeEpisodeUpdate"),
     )
-    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> =
-        throw IllegalStateException("Not used")
+    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = throw UnsupportedOperationException()
+
+    @Deprecated(
+        "Use the combined suspend API instead",
+        ReplaceWith("getAnimeEpisodeUpdate"),
+    )
+    suspend fun getAnimeDetails(anime: SAnime): SAnime = throw UnsupportedOperationException()
+
+    @Deprecated(
+        "Use the combined suspend API instead",
+        ReplaceWith("getAnimeEpisodeUpdate"),
+    )
+    suspend fun getEpisodeList(anime: SAnime): List<SEpisode> = throw UnsupportedOperationException()
 
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getEpisodeList"),
     )
-    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> =
-        throw IllegalStateException("Not used")
+    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw UnsupportedOperationException()
 
     @Deprecated(
         "Use the non-RxJava API instead",
         ReplaceWith("getVideoList"),
     )
-    fun fetchVideoList(episode: SEpisode): Observable<List<Video>> =
-        throw IllegalStateException("Not used")
+    fun fetchVideoList(episode: SEpisode): Observable<List<Video>> = throw UnsupportedOperationException()
 }

@@ -4,11 +4,13 @@ import eu.kanade.tachiyomi.animesource.model.AnimeUpdateStrategy
 import eu.kanade.tachiyomi.animesource.model.FetchType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
+import mihon.core.common.extensions.JsonObjectEmptyBytes
+import tachiyomi.data.MemoColumnAdapter
 import tachiyomi.domain.entries.anime.model.Anime
 
 @Suppress("DEPRECATION")
 @Serializable
-data class BackupAnime(
+class BackupAnime(
     // in 1.x some of these values have different names
     @ProtoNumber(1) var source: Long,
     // url is called key in 1.x
@@ -39,6 +41,7 @@ data class BackupAnime(
     @ProtoNumber(106) var lastModifiedAt: Long = 0,
     @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
     @ProtoNumber(109) var version: Long = 0,
+    @ProtoNumber(112) var memo: ByteArray = JsonObjectEmptyBytes,
 
     // Aniyomi specific values
     @ProtoNumber(500) var backgroundUrl: String? = null,
@@ -75,6 +78,7 @@ data class BackupAnime(
             seasonFlags = this@BackupAnime.seasonFlags,
             seasonNumber = this@BackupAnime.seasonNumber,
             seasonSourceOrder = this@BackupAnime.seasonSourceOrder,
+            memo = MemoColumnAdapter.decode(this@BackupAnime.memo),
         )
     }
 }

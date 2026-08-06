@@ -46,7 +46,6 @@ import eu.kanade.presentation.category.components.ChangeCategoryDialog
 import eu.kanade.presentation.entries.anime.DuplicateAnimeDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.Screen
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.core.common.Constants
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeSourcePreferencesScreen
@@ -117,7 +116,7 @@ data class BrowseAnimeSourceScreen(
             val source = screenModel.source as? AnimeHttpSource ?: return@f
             navigator.push(
                 WebViewScreen(
-                    url = source.baseUrl,
+                    url = source.getHomeUrl(),
                     initialTitle = source.name,
                     sourceId = source.id,
                 ),
@@ -125,7 +124,7 @@ data class BrowseAnimeSourceScreen(
         }
 
         LaunchedEffect(screenModel.source) {
-            assistUrl = (screenModel.source as? AnimeHttpSource)?.baseUrl
+            assistUrl = (screenModel.source as? AnimeHttpSource)?.getHomeUrl()
         }
 
         var topBarHeight by remember { mutableIntStateOf(0) }
@@ -173,7 +172,7 @@ data class BrowseAnimeSourceScreen(
                                 Text(text = stringResource(MR.strings.popular))
                             },
                         )
-                        if ((screenModel.source as AnimeCatalogueSource).supportsLatest) {
+                        if (screenModel.source.supportsLatest) {
                             FilterChip(
                                 selected = state.listing == Listing.Latest,
                                 onClick = {

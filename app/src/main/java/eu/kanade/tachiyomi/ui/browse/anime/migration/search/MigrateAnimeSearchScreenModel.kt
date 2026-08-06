@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.anime.migration.search
 
 import cafe.adriel.voyager.core.model.screenModelScope
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSourceFilter
 import kotlinx.coroutines.flow.update
@@ -31,7 +31,7 @@ class MigrateAnimeSearchScreenModel(
         }
     }
 
-    override fun getEnabledSources(): List<AnimeCatalogueSource> {
+    override fun getEnabledSources(): List<AnimeSource> {
         return super.getEnabledSources()
             .filter { state.value.sourceFilter != AnimeSourceFilter.PinnedOnly || "${it.id}" in pinnedSources }
             .sortedWith(

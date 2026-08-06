@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import mihon.domain.source.interactor.UpdateAnimeFromRemote
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
@@ -43,6 +44,7 @@ class MigrateSeasonSelectScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
+    private val updateAnimeFromRemote: UpdateAnimeFromRemote = Injekt.get(),
 ) : StateScreenModel<MigrateSeasonSelectScreenModel.State>(State()) {
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(screenModelScope)
@@ -65,7 +67,13 @@ class MigrateSeasonSelectScreenModel(
                 config = PagingConfig(pageSize = 25),
                 pagingSourceFactory = {
                     SeasonListPagingSource {
-                        source.getSeasonList(anime.toSAnime())
+                        updateAnimeFromRemote.awaitSeasonsUpdate(
+                            anime = anime,
+                            fetchSeasons = true,
+                        )
+                            .getOrThrow()
+                            .newSeasons
+                            .map { it.toSAnime() }
                     }
                 },
             ).flow.map { pagingData ->

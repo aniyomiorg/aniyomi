@@ -33,7 +33,7 @@ class PreferenceBackupCreator(
     }
 
     fun createSource(includePrivatePreferences: Boolean): List<BackupSourcePreferences> {
-        val animePreferences = animeSourceManager.getCatalogueSources()
+        val animePreferences = animeSourceManager.getAll()
             .filterIsInstance<ConfigurableAnimeSource>()
             .map {
                 BackupSourcePreferences(

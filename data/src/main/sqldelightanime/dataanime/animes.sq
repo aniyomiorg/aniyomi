@@ -3,6 +3,7 @@ import eu.kanade.tachiyomi.animesource.model.FetchType;
 import kotlin.Boolean;
 import kotlin.String;
 import kotlin.collections.List;
+import kotlinx.serialization.json.JsonObject;
 
 CREATE TABLE animes(
     _id INTEGER NOT NULL PRIMARY KEY,
@@ -35,7 +36,8 @@ CREATE TABLE animes(
     season_number REAL NOT NULL,
     season_source_order INTEGER NOT NULL,
     background_url TEXT,
-    background_last_modified INTEGER NOT NULL
+    background_last_modified INTEGER NOT NULL,
+    memo BLOB AS JsonObject NOT NULL DEFAULT '{}'
 );
 
 CREATE INDEX animelib_favorite_index ON animes(favorite) WHERE favorite = 1;
@@ -162,8 +164,8 @@ DELETE FROM animes
 WHERE favorite = 0 AND _id IN :animeIds;
 
 insert:
-INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id, season_flags, season_number, season_source_order, background_url, background_last_modified)
-VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified,:dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType, :parentId, :seasonFlags, :seasonNumber, :seasonSourceOrder, :backgroundUrl, :backgroundLastModified);
+INSERT INTO animes(source, url, artist, author, description, genre, title, status, thumbnail_url, favorite, last_update, next_update, initialized, viewer, episode_flags, cover_last_modified, date_added, update_strategy, calculate_interval, last_modified_at, version, fetch_type, parent_id, season_flags, season_number, season_source_order, background_url, background_last_modified, memo)
+VALUES (:source, :url, :artist, :author, :description, :genre, :title, :status, :thumbnailUrl, :favorite, :lastUpdate, :nextUpdate, :initialized, :viewerFlags, :episodeFlags, :coverLastModified,:dateAdded, :updateStrategy, :calculateInterval, 0, :version, :fetchType, :parentId, :seasonFlags, :seasonNumber, :seasonSourceOrder, :backgroundUrl, :backgroundLastModified, :memo);
 
 update:
 UPDATE animes SET
@@ -194,7 +196,8 @@ UPDATE animes SET
     season_number = coalesce(:seasonNumber, season_number),
     season_source_order = coalesce(:seasonSourceOrder, season_source_order),
     background_url = coalesce(:backgroundUrl, background_url),
-    background_last_modified = coalesce(:backgroundLastModified, background_last_modified)
+    background_last_modified = coalesce(:backgroundLastModified, background_last_modified),
+    memo = coalesce(:memo, memo)
 WHERE _id = :animeId;
 
 selectLastInsertedRowId:

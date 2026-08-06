@@ -57,7 +57,6 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
-import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
@@ -124,7 +123,7 @@ object SettingsTrackingScreen : SearchableSettings {
             .filter { it is EnhancedAnimeTracker }
             .partition { service ->
                 val acceptedAnimeSources = (service as EnhancedAnimeTracker).getAcceptedSources()
-                animeSourceManager.getCatalogueSources().any { it::class.qualifiedName in acceptedAnimeSources }
+                animeSourceManager.getAll().any { it::class.qualifiedName in acceptedAnimeSources }
             }
 
         var enhancedTrackerInfo = stringResource(MR.strings.enhanced_tracking_info)

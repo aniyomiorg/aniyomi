@@ -1,7 +1,7 @@
 package tachiyomi.data.source.anime
 
 import androidx.paging.PagingState
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -10,7 +10,7 @@ import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.source.anime.repository.AnimeSourcePagingSourceType
 
 class AnimeSourceSearchPagingSource(
-    source: AnimeCatalogueSource,
+    source: AnimeSource,
     val query: String,
     val filters: AnimeFilterList,
 ) : AnimeSourcePagingSource(source) {
@@ -19,20 +19,20 @@ class AnimeSourceSearchPagingSource(
     }
 }
 
-class AnimeSourcePopularPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
+class AnimeSourcePopularPagingSource(source: AnimeSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
         return source.getPopularAnime(currentPage)
     }
 }
 
-class AnimeSourceLatestPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
+class AnimeSourceLatestPagingSource(source: AnimeSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
         return source.getLatestUpdates(currentPage)
     }
 }
 
 abstract class AnimeSourcePagingSource(
-    protected val source: AnimeCatalogueSource,
+    protected val source: AnimeSource,
 ) : AnimeSourcePagingSourceType() {
 
     abstract suspend fun requestNextPage(currentPage: Int): AnimesPage

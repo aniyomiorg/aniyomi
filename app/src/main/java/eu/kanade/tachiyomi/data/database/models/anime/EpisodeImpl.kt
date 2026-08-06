@@ -2,6 +2,9 @@
 
 package eu.kanade.tachiyomi.data.database.models.anime
 
+import kotlinx.serialization.json.JsonObject
+import mihon.core.common.extensions.EMPTY
+
 class EpisodeImpl : Episode {
 
     override var id: Long? = null
@@ -39,6 +42,8 @@ class EpisodeImpl : Episode {
     override var last_modified: Long = 0
 
     override var version: Long = 0
+
+    override var memo: JsonObject = JsonObject.EMPTY
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

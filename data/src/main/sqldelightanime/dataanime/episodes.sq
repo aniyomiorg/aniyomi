@@ -1,4 +1,5 @@
 import kotlin.Boolean;
+import kotlinx.serialization.json.JsonObject;
 
 CREATE TABLE episodes(
     _id INTEGER NOT NULL PRIMARY KEY,
@@ -20,6 +21,7 @@ CREATE TABLE episodes(
     summary TEXT,
     preview_url TEXT,
     fillermark INTEGER AS Boolean NOT NULL,
+    memo BLOB AS JsonObject NOT NULL DEFAULT '{}',
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE
 );
@@ -90,8 +92,8 @@ SET is_syncing = 0
 WHERE is_syncing = 1;
 
 insert:
-INSERT INTO episodes(anime_id, url, name, scanlator, seen, bookmark, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at, version, is_syncing, summary, preview_url, fillermark)
-VALUES (:animeId, :url, :name, :scanlator, :seen, :bookmark, :lastSecondSeen, :totalSeconds, :episodeNumber, :sourceOrder, :dateFetch, :dateUpload, 0, :version, 0, :summary, :previewUrl, :fillermark);
+INSERT INTO episodes(anime_id, url, name, scanlator, seen, bookmark, last_second_seen, total_seconds, episode_number, source_order, date_fetch, date_upload, last_modified_at, version, is_syncing, summary, preview_url, fillermark, memo)
+VALUES (:animeId, :url, :name, :scanlator, :seen, :bookmark, :lastSecondSeen, :totalSeconds, :episodeNumber, :sourceOrder, :dateFetch, :dateUpload, 0, :version, 0, :summary, :previewUrl, :fillermark, :memo);
 
 update:
 UPDATE episodes
@@ -111,7 +113,8 @@ SET anime_id = coalesce(:animeId, anime_id),
     is_syncing = coalesce(:isSyncing, is_syncing),
     summary = coalesce(:summary, summary),
     preview_url = coalesce(:previewUrl, preview_url),
-    fillermark = coalesce(:fillermark, fillermark)
+    fillermark = coalesce(:fillermark, fillermark),
+    memo = coalesce(:memo, memo)
 WHERE _id = :episodeId;
 
 selectLastInsertedRowId:

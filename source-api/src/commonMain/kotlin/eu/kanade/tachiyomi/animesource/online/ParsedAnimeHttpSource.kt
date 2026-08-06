@@ -14,6 +14,10 @@ import org.jsoup.nodes.Element
  * A simple implementation for sources from a website using Jsoup, an HTML parser.
  */
 @Suppress("unused")
+@Deprecated(
+    message = "In most cases sources only require a subset of the methods from this class. " +
+        "Source developers should make their own implementation according to their needs.",
+)
 abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
 
     /**
@@ -21,6 +25,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun popularAnimeParse(response: Response): AnimesPage {
         val document = response.asJsoup()
 
@@ -59,6 +66,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun searchAnimeParse(response: Response): AnimesPage {
         val document = response.asJsoup()
 
@@ -97,6 +107,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun latestUpdatesParse(response: Response): AnimesPage {
         val document = response.asJsoup()
 
@@ -135,6 +148,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun animeDetailsParse(response: Response): SAnime {
         return animeDetailsParse(response.asJsoup())
     }
@@ -151,6 +167,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun episodeListParse(response: Response): List<SEpisode> {
         val document = response.asJsoup()
         return document.select(episodeListSelector()).map { episodeFromElement(it) }
@@ -174,6 +193,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      * @since extensions-lib 16
      * @param response the response from the site.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun seasonListParse(response: Response): List<SAnime> {
         val document = response.asJsoup()
         return document.select(seasonListSelector()).map { seasonFromElement(it) }
@@ -201,6 +223,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      * @param response the response from the site.
      * @return the list of hosters.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun hosterListParse(response: Response): List<Hoster> {
         val document = response.asJsoup()
         return document.select(hosterListSelector()).map(::hosterFromElement)
@@ -226,6 +251,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun videoListParse(response: Response): List<Video> {
         val document = response.asJsoup()
         return document.select(videoListSelector()).map { videoFromElement(it) }
@@ -248,6 +276,9 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      *
      * @param response the response from the site.
      */
+    @Deprecated(
+        "The helper functions are inherently limiting and hides the underlying implementation. Source developers should make their own implementation according to their needs.",
+    )
     override fun videoUrlParse(response: Response): String {
         return videoUrlParse(response.asJsoup())
     }
