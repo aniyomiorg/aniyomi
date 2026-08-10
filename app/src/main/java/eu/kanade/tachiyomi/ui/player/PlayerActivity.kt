@@ -64,6 +64,7 @@ import com.hippo.unifile.UniFile
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.tachiyomi.animesource.model.ChapterType
 import eu.kanade.tachiyomi.animesource.model.Hoster
+import eu.kanade.tachiyomi.animesource.model.HttpServer
 import eu.kanade.tachiyomi.animesource.model.SerializableHoster.Companion.serialize
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -73,7 +74,6 @@ import eu.kanade.tachiyomi.data.torrent.service.TorrentServerService
 import eu.kanade.tachiyomi.databinding.PlayerLayoutBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
-import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.controls.PlayerControls
 import eu.kanade.tachiyomi.ui.player.settings.AdvancedPlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.AudioPreferences
@@ -87,7 +87,6 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -143,6 +142,7 @@ class PlayerActivity : BaseActivity() {
     }
 
     private var pipReceiver: BroadcastReceiver? = null
+    private var httpServer: HttpServer? = null
 
     private val noisyReceiver = object : BroadcastReceiver() {
         var initialized = false
@@ -296,6 +296,9 @@ class PlayerActivity : BaseActivity() {
 
     override fun onDestroy() {
         player.isExiting = true
+
+        httpServer?.stop()
+        httpServer = null
 
         audioFocusRequest?.let {
             AudioManagerCompat.abandonAudioFocusRequest(audioManager, it)
@@ -1061,6 +1064,8 @@ class PlayerActivity : BaseActivity() {
     fun setVideo(video: Video?, position: Long? = null) {
         if (player.isExiting) return
         if (video == null) return
+        httpServer?.stop()
+        httpServer = null
 
         setHttpOptions(video)
 
@@ -1098,24 +1103,24 @@ class PlayerActivity : BaseActivity() {
             }
         } else {
             launchIO {
-                val sourceId = viewModel.currentSource.value?.id
+                val httpSource = viewModel.currentSource.value as? AnimeHttpSource
                 var videoUrl: String = video.videoUrl
-                if (video.usesHttpServer() && sourceId != null) {
-                    val (success, port) = MainActivity.startHttpServerService(
-                        context = applicationContext,
-                        sourceId = sourceId,
-                    )
-
-                    val newVideo = video.copyHttpServer(port)
-                    videoUrl = newVideo.videoUrl
-                    viewModel.updateVideo(newVideo)
-
-                    if (!success) {
+                if (video.usesHttpServer() && httpSource != null) {
+                    val port = try {
+                        httpServer = httpSource.createHttpServer()
+                        httpServer?.start()
+                        httpServer?.listeningPort ?: 0
+                    } catch (e: Exception) {
+                        logcat(LogPriority.ERROR, e) { "Failed to start http server" }
                         launchUI {
                             toast(AYMR.strings.http_server_start_failure)
                         }
                         return@launchIO
                     }
+
+                    val newVideo = video.copyHttpServer(port)
+                    videoUrl = newVideo.videoUrl
+                    viewModel.updateVideo(newVideo)
                 }
 
                 MPVLib.command(
