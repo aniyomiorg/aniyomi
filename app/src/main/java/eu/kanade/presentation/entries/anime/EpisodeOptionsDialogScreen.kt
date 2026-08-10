@@ -234,18 +234,20 @@ class EpisodeOptionsDialogScreenModel(
                 }.awaitAll()
 
                 if (hasFoundPreferredVideo.compareAndSet(false, true)) {
-                    val hosterStateList = hosterState.value!!.getOrThrow()
-                    val (hosterIdx, videoIdx) = HosterLoader.selectBestVideo(hosterStateList)
-                    if (hosterIdx == -1) {
-                        _hosterState.update { _ ->
-                            Result.failure(NoSuchElementException("No available videos"))
+                    if (selectedHosterVideoIndex.value == Pair(-1, -1)) {
+                        val hosterStateList = hosterState.value!!.getOrThrow()
+                        val (hosterIdx, videoIdx) = HosterLoader.selectBestVideo(hosterStateList)
+                        if (hosterIdx == -1) {
+                            _hosterState.update { _ ->
+                                Result.failure(NoSuchElementException("No available videos"))
+                            }
+                            return@launchIO
                         }
-                        return@launchIO
+
+                        val video = (hosterStateList[hosterIdx] as HosterState.Ready).videoList[videoIdx]
+
+                        loadVideo(source, video, hosterIdx, videoIdx)
                     }
-
-                    val video = (hosterStateList[hosterIdx] as HosterState.Ready).videoList[videoIdx]
-
-                    loadVideo(source, video, hosterIdx, videoIdx)
                 }
             } catch (e: CancellationException) {
                 _hosterState.update { _ ->
