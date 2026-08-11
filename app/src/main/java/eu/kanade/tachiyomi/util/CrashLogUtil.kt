@@ -78,7 +78,7 @@ class CrashLogUtil(
                 """
                     - ${it.name}
                       Installed: ${it.versionName} / Available: ${availableExtension?.versionName ?: "?"}
-                      Obsolete: ${it.isObsolete}
+                      Orphaned: ${it.isObsolete}
                 """.trimIndent()
             }
 
