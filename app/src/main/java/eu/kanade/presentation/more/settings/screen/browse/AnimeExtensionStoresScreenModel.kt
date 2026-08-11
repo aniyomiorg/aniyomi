@@ -57,7 +57,7 @@ class AnimeExtensionStoresScreenModel(
      * @param baseUrl The baseUrl of the repo to create.
      */
     fun createRepo(baseUrl: String) {
-        screenModelScope.launch {
+        screenModelScope.launchIO {
             updateSuccessState {
                 it.copy(
                     dialog = when (it.dialog) {
