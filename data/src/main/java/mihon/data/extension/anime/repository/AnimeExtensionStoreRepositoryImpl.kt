@@ -30,6 +30,7 @@ class AnimeExtensionStoreRepositoryImpl(
                 contactWebsite = indexUrl,
                 contactDiscord = null,
                 isLegacy = false,
+                extensionListUrl = null,
             )
         }
     }
@@ -60,6 +61,7 @@ class AnimeExtensionStoreRepositoryImpl(
                 contactWebsite = store.contact.website,
                 contactDiscord = store.contact.discord,
                 isLegacy = store.isLegacy,
+                extensionListUrl = store.extensionListUrl,
             )
         }
     }
@@ -109,6 +111,7 @@ class AnimeExtensionStoreRepositoryImpl(
         contactWebsite: String,
         contactDiscord: String?,
         isLegacy: Boolean,
+        extensionListUrl: String?,
     ): AnimeExtensionStore = AnimeExtensionStore(
         indexUrl = indexUrl,
         name = name,
@@ -119,5 +122,6 @@ class AnimeExtensionStoreRepositoryImpl(
             discord = contactDiscord,
         ),
         isLegacy = isLegacy,
+        extensionListUrl = extensionListUrl,
     )
 }

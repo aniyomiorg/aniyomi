@@ -31,6 +31,7 @@ data class NetworkLegacyAnimeExtensionRepo(
                 discord = null,
             ),
             isLegacy = true,
+            extensionListUrl = null,
         )
     }
 }

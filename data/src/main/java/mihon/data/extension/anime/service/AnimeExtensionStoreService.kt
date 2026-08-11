@@ -12,6 +12,7 @@ import logcat.LogPriority
 import mihon.data.extension.anime.model.NetworkAnimeExtensionStore
 import mihon.data.extension.anime.model.NetworkLegacyAnimeExtension
 import mihon.data.extension.anime.model.NetworkLegacyAnimeExtensionRepo
+import mihon.data.extension.anime.model.toAvailableExtensions
 import mihon.domain.extension.anime.model.AnimeExtensionStore
 import okio.BufferedSource
 import okio.buffer
@@ -68,7 +69,19 @@ class AnimeExtensionStoreService(
 
     suspend fun getExtensions(store: AnimeExtensionStore): Result<List<AnimeExtension.Available>> {
         return try {
-            val extensions = if (!store.isLegacy) {
+            val extensions = if (store.extensionListUrl != null) {
+                val response = network.client.newCall(GET(store.extensionListUrl!!)).awaitSuccess()
+                response.body.source().decompressIfGzipped().use { source ->
+                    when (source.peek().readByte()) {
+                        // "{..."
+                        0x7B.toByte() -> json.decodeFromBufferedSource<NetworkAnimeExtensionStore.ExtensionList>(source)
+                        else -> protoBuf.decodeFromByteArray<NetworkAnimeExtensionStore.ExtensionList>(
+                            source.readByteArray(),
+                        )
+                    }
+                        .toAvailableExtensions(store)
+                }
+            } else if (!store.isLegacy) {
                 val response = network.client.newCall(GET(store.indexUrl)).awaitSuccess()
                 response.body.source().decompressIfGzipped().use { source ->
                     when (source.peek().readByte()) {
@@ -76,6 +89,7 @@ class AnimeExtensionStoreService(
                         0x7B.toByte() -> json.decodeFromBufferedSource<NetworkAnimeExtensionStore>(source)
                         else -> protoBuf.decodeFromByteArray<NetworkAnimeExtensionStore>(source.readByteArray())
                     }
+                        .extensionList!!
                         .toAvailableExtensions(store)
                 }
             } else {

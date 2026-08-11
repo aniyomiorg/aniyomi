@@ -7,10 +7,11 @@ CREATE TABLE extension_store(
     signing_key TEXT NOT NULL,
     contact_website TEXT NOT NULL,
     contact_discord TEXT,
-    is_legacy INTEGER AS Boolean NOT NULL
+    is_legacy INTEGER AS Boolean NOT NULL,
+    extension_list_url TEXT
 );
 
-INSERT INTO extension_store(index_url, name, badge_label, signing_key, contact_website, contact_discord, is_legacy)
-SELECT base_url || '/repo.json', name, coalesce(short_name, name), signing_key_fingerprint, website, NULL, 1 FROM extension_repos;
+INSERT INTO extension_store(index_url, name, badge_label, signing_key, contact_website, contact_discord, is_legacy, extension_list_url)
+SELECT base_url || '/repo.json', name, coalesce(short_name, name), signing_key_fingerprint, website, NULL, 1, NULL FROM extension_repos;
 
 DROP TABLE extension_repos;
