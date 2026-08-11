@@ -71,6 +71,7 @@ class SyncSeasonsWithSource(
                         title = season.title,
                         seasonNumber = season.seasonNumber,
                         seasonSourceOrder = season.seasonSourceOrder,
+                        memo = season.memo,
                     )
                     updatedSeasons.add(toChangeSeason)
                 }
