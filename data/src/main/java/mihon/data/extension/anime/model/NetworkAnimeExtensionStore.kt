@@ -34,7 +34,7 @@ data class NetworkAnimeExtensionStore(
         @ProtoNumber(4) val extensionLib: String,
         @ProtoNumber(5) val versionCode: Long,
         @ProtoNumber(6) val versionName: String,
-        @ProtoNumber(7) val contentWarning: ContentWarning = ContentWarning.SAFE,
+        @ProtoNumber(7) val contentWarning: ContentWarning,
         @ProtoNumber(8) val isTorrent: Boolean = false,
         @ProtoNumber(9) val sources: List<Source>,
     )
@@ -58,14 +58,18 @@ data class NetworkAnimeExtensionStore(
     @Suppress("Unused")
     enum class ContentWarning {
         @ProtoNumber(0)
+        @JsonNames("CONTENT_WARNING_UNSPECIFIED")
+        UNSPECIFIED,
+
+        @ProtoNumber(1)
         @JsonNames("CONTENT_WARNING_SAFE")
         SAFE,
 
-        @ProtoNumber(1)
+        @ProtoNumber(2)
         @JsonNames("CONTENT_WARNING_MIXED")
         MIXED,
 
-        @ProtoNumber(2)
+        @ProtoNumber(3)
         @JsonNames("CONTENT_WARNING_NSFW")
         NSFW,
     }
