@@ -34,7 +34,9 @@ data class NetworkAnimeExtensionStore(
         @ProtoNumber(4) val extensionLib: String,
         @ProtoNumber(5) val versionCode: Long,
         @ProtoNumber(6) val versionName: String,
-        @ProtoNumber(7) val sources: List<Source>,
+        @ProtoNumber(7) val contentWarning: ContentWarning = ContentWarning.SAFE,
+        @ProtoNumber(8) val isTorrent: Boolean = false,
+        @ProtoNumber(9) val sources: List<Source>,
     )
 
     @Serializable
@@ -50,28 +52,22 @@ data class NetworkAnimeExtensionStore(
         @ProtoNumber(3) val language: String,
         @ProtoNumber(4) val homeUrl: String = "",
         @ProtoNumber(5) val mirrorUrls: List<String> = emptyList(),
-        @ProtoNumber(6) val contentRating: ContentRating = ContentRating.SAFE,
-        @ProtoNumber(7) val isTorrent: Boolean = false,
-        @ProtoNumber(8) val message: String? = null,
+        @ProtoNumber(6) val message: String? = null,
     )
 
     @Suppress("Unused")
-    enum class ContentRating {
+    enum class ContentWarning {
         @ProtoNumber(0)
-        @JsonNames("CONTENT_RATING_SAFE")
+        @JsonNames("CONTENT_WARNING_SAFE")
         SAFE,
 
         @ProtoNumber(1)
-        @JsonNames("CONTENT_RATING_SUGGESTIVE")
-        SUGGESTIVE,
+        @JsonNames("CONTENT_WARNING_MIXED")
+        MIXED,
 
         @ProtoNumber(2)
-        @JsonNames("CONTENT_RATING_EROTICA")
-        EROTICA,
-
-        @ProtoNumber(3)
-        @JsonNames("CONTENT_RATING_PORNOGRAPHIC")
-        PORNOGRAPHIC,
+        @JsonNames("CONTENT_WARNING_NSFW")
+        NSFW,
     }
 
     override fun toExtensionStore(indexUrl: String): AnimeExtensionStore {
@@ -104,10 +100,8 @@ fun NetworkAnimeExtensionStore.ExtensionList.toAvailableExtensions(
             versionCode = extension.versionCode,
             versionName = extension.versionName,
             lang = if (lang.size == 1) lang.first() else "all",
-            isNsfw =
-            extension.sources.maxOfOrNull { it.contentRating } ==
-                NetworkAnimeExtensionStore.ContentRating.PORNOGRAPHIC,
-            isTorrent = extension.sources.any { it.isTorrent },
+            isNsfw = extension.contentWarning >= NetworkAnimeExtensionStore.ContentWarning.MIXED,
+            isTorrent = extension.isTorrent,
             sources = extension.sources.map { source ->
                 AnimeExtension.Available.AnimeSource(
                     id = source.id,
