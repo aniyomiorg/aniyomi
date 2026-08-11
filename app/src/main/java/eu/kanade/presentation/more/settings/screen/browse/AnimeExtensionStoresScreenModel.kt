@@ -6,7 +6,6 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import mihon.domain.extension.anime.interactor.AddAnimeExtensionStore
 import mihon.domain.extension.anime.interactor.GetAnimeExtensionStores
 import mihon.domain.extension.anime.interactor.RemoveAnimeExtensionStore
