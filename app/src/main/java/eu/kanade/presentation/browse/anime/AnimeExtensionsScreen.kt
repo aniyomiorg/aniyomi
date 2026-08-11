@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.GetApp
@@ -36,6 +38,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -62,6 +67,8 @@ import tachiyomi.presentation.core.components.material.PullRefresh
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.components.material.topSmallPaddingValues
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.icons.CustomIcons
+import tachiyomi.presentation.core.icons.Magnet
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
@@ -340,8 +347,32 @@ private fun AnimeExtensionItemContent(
     Column(
         modifier = modifier.padding(start = MaterialTheme.padding.medium),
     ) {
+        val text = buildAnnotatedString {
+            if (extension.isTorrent) {
+                appendInlineContent(TORRENT_ICON, "(Torrent)")
+                append(" ")
+            }
+            append(extension.name)
+        }
+
+        val inlineContent = mapOf(
+            Pair(
+                TORRENT_ICON,
+                InlineTextContent(
+                    Placeholder(
+                        width = MaterialTheme.typography.bodyMedium.fontSize,
+                        height = MaterialTheme.typography.bodyMedium.fontSize,
+                        placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
+                    ),
+                ) {
+                    Icon(CustomIcons.Magnet, "")
+                },
+            ),
+        )
+
         Text(
-            text = extension.name,
+            text = text,
+            inlineContent = inlineContent,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyMedium,
@@ -481,3 +512,5 @@ private fun AnimeExtensionItemActions(
         }
     }
 }
+
+private const val TORRENT_ICON = "torrentIcon"
