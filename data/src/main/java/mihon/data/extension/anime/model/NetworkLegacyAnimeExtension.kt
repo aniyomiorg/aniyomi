@@ -15,7 +15,6 @@ data class NetworkLegacyAnimeExtension(
     val code: Long,
     val version: String,
     val nsfw: Int,
-    val torrent: Boolean,
     val sources: List<Source>?,
 ) {
     @Serializable
@@ -37,7 +36,7 @@ data class NetworkLegacyAnimeExtension(
             versionName = version,
             lang = lang,
             isNsfw = nsfw == 1,
-            isTorrent = torrent,
+            isTorrent = false,
             sources = if (sources.isNullOrEmpty()) {
                 listOf(
                     AnimeExtension.Available.AnimeSource(
