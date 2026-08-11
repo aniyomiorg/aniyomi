@@ -12,7 +12,7 @@ import eu.kanade.presentation.more.settings.screen.browse.components.ExtensionRe
 import eu.kanade.presentation.more.settings.screen.browse.components.ExtensionRepoConflictDialog
 import eu.kanade.presentation.more.settings.screen.browse.components.ExtensionRepoCreateDialog
 import eu.kanade.presentation.more.settings.screen.browse.components.ExtensionRepoDeleteDialog
-import eu.kanade.presentation.more.settings.screen.browse.components.ExtensionReposScreen
+import eu.kanade.presentation.more.settings.screen.browse.components.manga.MangaExtensionReposScreen
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
@@ -43,7 +43,7 @@ class MangaExtensionReposScreen(
 
         val successState = state as RepoScreenState.Success
 
-        ExtensionReposScreen(
+        MangaExtensionReposScreen(
             state = successState,
             onClickCreate = { screenModel.showDialog(RepoDialog.Create) },
             onOpenWebsite = { context.openInBrowser(it.website) },

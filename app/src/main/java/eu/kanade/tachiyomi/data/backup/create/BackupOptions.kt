@@ -13,7 +13,7 @@ data class BackupOptions(
     val history: Boolean = true,
     val readEntries: Boolean = true,
     val appSettings: Boolean = true,
-    val extensionRepoSettings: Boolean = true,
+    val extensionStores: Boolean = true,
     val customButton: Boolean = true,
     val sourceSettings: Boolean = true,
     val privateSettings: Boolean = false,
@@ -28,7 +28,7 @@ data class BackupOptions(
         history,
         readEntries,
         appSettings,
-        extensionRepoSettings,
+        extensionStores,
         customButton,
         sourceSettings,
         privateSettings,
@@ -38,7 +38,7 @@ data class BackupOptions(
     fun canCreate() = libraryEntries ||
         categories ||
         appSettings ||
-        extensionRepoSettings ||
+        extensionStores ||
         customButton ||
         sourceSettings
 
@@ -87,9 +87,9 @@ data class BackupOptions(
                 setter = { options, enabled -> options.copy(appSettings = enabled) },
             ),
             Entry(
-                label = MR.strings.extensionRepo_settings,
-                getter = BackupOptions::extensionRepoSettings,
-                setter = { options, enabled -> options.copy(extensionRepoSettings = enabled) },
+                label = MR.strings.extensionStores,
+                getter = BackupOptions::extensionStores,
+                setter = { options, enabled -> options.copy(extensionStores = enabled) },
             ),
             Entry(
                 label = AYMR.strings.custom_button_settings,
@@ -125,7 +125,7 @@ data class BackupOptions(
             history = array[4],
             readEntries = array[5],
             appSettings = array[6],
-            extensionRepoSettings = array[7],
+            extensionStores = array[7],
             customButton = array[8],
             sourceSettings = array[9],
             privateSettings = array[10],

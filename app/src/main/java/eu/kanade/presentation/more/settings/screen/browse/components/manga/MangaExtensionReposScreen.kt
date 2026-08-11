@@ -1,6 +1,6 @@
 @file:JvmName("ExtensionReposScreenKt")
 
-package eu.kanade.presentation.more.settings.screen.browse.components
+package eu.kanade.presentation.more.settings.screen.browse.components.manga
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -25,7 +25,7 @@ import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.util.plus
 
 @Composable
-fun ExtensionReposScreen(
+fun MangaExtensionReposScreen(
     state: RepoScreenState.Success,
     onClickCreate: () -> Unit,
     onOpenWebsite: (ExtensionRepo) -> Unit,
@@ -65,7 +65,7 @@ fun ExtensionReposScreen(
             return@Scaffold
         }
 
-        ExtensionReposContent(
+        MangaExtensionReposContent(
             repos = state.repos,
             lazyListState = lazyListState,
             paddingValues = paddingValues + topSmallPaddingValues +

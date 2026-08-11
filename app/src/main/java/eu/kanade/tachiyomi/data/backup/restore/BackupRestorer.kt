@@ -9,11 +9,12 @@ import eu.kanade.tachiyomi.data.backup.models.BackupCategory
 import eu.kanade.tachiyomi.data.backup.models.BackupCustomButtons
 import eu.kanade.tachiyomi.data.backup.models.BackupExtension
 import eu.kanade.tachiyomi.data.backup.models.BackupExtensionRepos
+import eu.kanade.tachiyomi.data.backup.models.BackupExtensionStore
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSourcePreferences
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeCategoriesRestorer
-import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeExtensionRepoRestorer
+import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeExtensionStoreRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.AnimeRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.CustomButtonRestorer
 import eu.kanade.tachiyomi.data.backup.restore.restorers.ExtensionsRestorer
@@ -42,7 +43,7 @@ class BackupRestorer(
     private val animeCategoriesRestorer: AnimeCategoriesRestorer = AnimeCategoriesRestorer(),
     private val mangaCategoriesRestorer: MangaCategoriesRestorer = MangaCategoriesRestorer(),
     private val preferenceRestorer: PreferenceRestorer = PreferenceRestorer(context),
-    private val animeExtensionRepoRestorer: AnimeExtensionRepoRestorer = AnimeExtensionRepoRestorer(),
+    private val animeExtensionStoreRestorer: AnimeExtensionStoreRestorer = AnimeExtensionStoreRestorer(),
     private val mangaExtensionRepoRestorer: MangaExtensionRepoRestorer = MangaExtensionRepoRestorer(),
     private val customButtonRestorer: CustomButtonRestorer = CustomButtonRestorer(),
     private val animeRestorer: AnimeRestorer = AnimeRestorer(),
@@ -96,8 +97,8 @@ class BackupRestorer(
         if (options.appSettings) {
             restoreAmount += 1
         }
-        if (options.extensionRepoSettings) {
-            restoreAmount += backup.backupAnimeExtensionRepo.size + backup.backupMangaExtensionRepo.size
+        if (options.extensionStores) {
+            restoreAmount += backup.backupAnimeExtensionStores.size + backup.backupMangaExtensionRepo.size
         }
         if (options.customButtons) {
             restoreAmount += 1
@@ -126,8 +127,8 @@ class BackupRestorer(
                 restoreAnime(backup.backupAnime, if (options.categories) backup.backupAnimeCategories else emptyList())
                 restoreManga(backup.backupManga, if (options.categories) backup.backupCategories else emptyList())
             }
-            if (options.extensionRepoSettings) {
-                restoreExtensionRepos(backup.backupAnimeExtensionRepo, backup.backupMangaExtensionRepo)
+            if (options.extensionStores) {
+                restoreExtensionStores(backup.backupAnimeExtensionStores, backup.backupMangaExtensionRepo)
             }
             if (options.customButtons) {
                 restoreCustomButtons(backup.backupCustomButton)
@@ -230,23 +231,23 @@ class BackupRestorer(
         )
     }
 
-    private fun CoroutineScope.restoreExtensionRepos(
-        backupAnimeExtensionRepo: List<BackupExtensionRepos>,
+    private fun CoroutineScope.restoreExtensionStores(
+        backupAnimeExtensionStores: List<BackupExtensionStore>,
         backupMangaExtensionRepo: List<BackupExtensionRepos>,
     ) = launch {
-        backupAnimeExtensionRepo
+        backupAnimeExtensionStores
             .forEach {
                 ensureActive()
 
                 try {
-                    animeExtensionRepoRestorer(it)
+                    animeExtensionStoreRestorer(it)
                 } catch (e: Exception) {
                     errors.add(Date() to "Error Adding Anime Repo: ${it.name} : ${e.message}")
                 }
 
                 restoreProgress += 1
                 notifier.showRestoreProgress(
-                    context.stringResource(MR.strings.extensionRepo_settings),
+                    context.stringResource(MR.strings.extensionStores),
                     restoreProgress,
                     restoreAmount,
                     isSync,

@@ -17,7 +17,7 @@ data class LegacyBackup(
     @ProtoNumber(104) var backupPreferences: List<BackupPreference> = emptyList(),
     @ProtoNumber(105) var backupSourcePreferences: List<BackupSourcePreferences> = emptyList(),
     @ProtoNumber(106) var backupExtensions: List<BackupExtension> = emptyList(),
-    @ProtoNumber(107) var backupAnimeExtensionRepo: List<BackupExtensionRepos> = emptyList(),
+    @ProtoNumber(107) var backupAnimeExtensionStores: List<BackupExtensionStore> = emptyList(),
     @ProtoNumber(108) var backupMangaExtensionRepo: List<BackupExtensionRepos> = emptyList(),
     @ProtoNumber(109) var backupCustomButton: List<BackupCustomButtons> = emptyList(),
 ) {
@@ -35,7 +35,7 @@ data class LegacyBackup(
             backupAnimeCategories = backupAnimeCategories,
             backupAnimeSources = backupAnimeSources,
             backupExtensions = backupExtensions,
-            backupAnimeExtensionRepo = backupAnimeExtensionRepo,
+            backupAnimeExtensionStores = backupAnimeExtensionStores,
             backupCustomButton = backupCustomButton,
         )
     }
@@ -57,6 +57,6 @@ data class Backup(
     @ProtoNumber(502) var backupAnimeCategories: List<BackupCategory> = emptyList(),
     @ProtoNumber(503) var backupAnimeSources: List<BackupAnimeSource> = emptyList(),
     @ProtoNumber(504) var backupExtensions: List<BackupExtension> = emptyList(),
-    @ProtoNumber(505) var backupAnimeExtensionRepo: List<BackupExtensionRepos> = emptyList(),
+    @ProtoNumber(505) var backupAnimeExtensionStores: List<BackupExtensionStore> = emptyList(),
     @ProtoNumber(506) var backupCustomButton: List<BackupCustomButtons> = emptyList(),
 )

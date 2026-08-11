@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.extension.anime.model
 
 import android.graphics.drawable.Drawable
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import mihon.domain.extension.anime.model.AnimeExtensionStore
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 
 sealed class AnimeExtension {
@@ -30,7 +31,7 @@ sealed class AnimeExtension {
         val hasUpdate: Boolean = false,
         val isObsolete: Boolean = false,
         val isShared: Boolean,
-        val repoUrl: String? = null,
+        val store: AnimeExtensionStore? = null,
     ) : AnimeExtension()
 
     data class Available(
@@ -43,9 +44,9 @@ sealed class AnimeExtension {
         override val isNsfw: Boolean,
         override val isTorrent: Boolean,
         val sources: List<AnimeSource>,
-        val apkName: String,
+        val apkUrl: String,
         val iconUrl: String,
-        val repoUrl: String,
+        val store: AnimeExtensionStore,
     ) : AnimeExtension() {
 
         data class AnimeSource(

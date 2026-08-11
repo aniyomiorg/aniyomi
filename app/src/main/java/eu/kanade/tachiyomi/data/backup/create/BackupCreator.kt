@@ -7,7 +7,7 @@ import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.data.backup.BackupFileValidator
 import eu.kanade.tachiyomi.data.backup.create.creators.AnimeBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.AnimeCategoriesBackupCreator
-import eu.kanade.tachiyomi.data.backup.create.creators.AnimeExtensionRepoBackupCreator
+import eu.kanade.tachiyomi.data.backup.create.creators.AnimeExtensionStoresBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.AnimeSourcesBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.CustomButtonBackupCreator
 import eu.kanade.tachiyomi.data.backup.create.creators.ExtensionsBackupCreator
@@ -23,6 +23,7 @@ import eu.kanade.tachiyomi.data.backup.models.BackupCategory
 import eu.kanade.tachiyomi.data.backup.models.BackupCustomButtons
 import eu.kanade.tachiyomi.data.backup.models.BackupExtension
 import eu.kanade.tachiyomi.data.backup.models.BackupExtensionRepos
+import eu.kanade.tachiyomi.data.backup.models.BackupExtensionStore
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSource
@@ -66,7 +67,8 @@ class BackupCreator(
     private val animeBackupCreator: AnimeBackupCreator = AnimeBackupCreator(),
     private val mangaBackupCreator: MangaBackupCreator = MangaBackupCreator(),
     private val preferenceBackupCreator: PreferenceBackupCreator = PreferenceBackupCreator(),
-    private val animeExtensionRepoBackupCreator: AnimeExtensionRepoBackupCreator = AnimeExtensionRepoBackupCreator(),
+    private val animeExtensionStoresBackupCreator: AnimeExtensionStoresBackupCreator =
+        AnimeExtensionStoresBackupCreator(),
     private val mangaExtensionRepoBackupCreator: MangaExtensionRepoBackupCreator = MangaExtensionRepoBackupCreator(),
     private val customButtonBackupCreator: CustomButtonBackupCreator = CustomButtonBackupCreator(),
     private val animeSourcesBackupCreator: AnimeSourcesBackupCreator = AnimeSourcesBackupCreator(),
@@ -122,7 +124,7 @@ class BackupCreator(
                 backupAnimeCategories = backupAnimeCategories(options),
                 backupAnimeSources = backupAnimeSources(backupAnime),
                 backupExtensions = backupExtensions(options),
-                backupAnimeExtensionRepo = backupAnimeExtensionRepos(options),
+                backupAnimeExtensionStores = backupAnimeExtensionStores(options),
                 backupCustomButton = backupCustomButtons(options),
             )
 
@@ -193,14 +195,14 @@ class BackupCreator(
         return preferenceBackupCreator.createApp(includePrivatePreferences = options.privateSettings)
     }
 
-    private suspend fun backupAnimeExtensionRepos(options: BackupOptions): List<BackupExtensionRepos> {
-        if (!options.extensionRepoSettings) return emptyList()
+    private suspend fun backupAnimeExtensionStores(options: BackupOptions): List<BackupExtensionStore> {
+        if (!options.extensionStores) return emptyList()
 
-        return animeExtensionRepoBackupCreator()
+        return animeExtensionStoresBackupCreator()
     }
 
     private suspend fun backupMangaExtensionRepos(options: BackupOptions): List<BackupExtensionRepos> {
-        if (!options.extensionRepoSettings) return emptyList()
+        if (!options.extensionStores) return emptyList()
 
         return mangaExtensionRepoBackupCreator()
     }

@@ -1,4 +1,4 @@
-package eu.kanade.presentation.more.settings.screen.browse.components
+package eu.kanade.presentation.more.settings.screen.browse.components.manga
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,7 +29,7 @@ import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 
 @Composable
-fun ExtensionReposContent(
+fun MangaExtensionReposContent(
     repos: ImmutableSet<ExtensionRepo>,
     lazyListState: LazyListState,
     paddingValues: PaddingValues,

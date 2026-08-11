@@ -39,7 +39,12 @@ fun SwitchPreference(
 ) {
     Row(
         modifier = modifier
-            .toggleable(value, true, Role.Switch, onValueChange)
+            .toggleable(
+                value = value,
+                enabled = true,
+                role = Role.Switch,
+                onValueChange = onValueChange,
+            )
             .padding(horizontal = MaterialTheme.padding.large, vertical = MaterialTheme.padding.small)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

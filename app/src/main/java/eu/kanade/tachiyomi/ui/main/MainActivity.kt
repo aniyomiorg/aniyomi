@@ -65,7 +65,7 @@ import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.DownloadedOnlyBannerBackgroundColor
 import eu.kanade.presentation.components.IncognitoModeBannerBackgroundColor
 import eu.kanade.presentation.components.IndexingBannerBackgroundColor
-import eu.kanade.presentation.more.settings.screen.browse.AnimeExtensionReposScreen
+import eu.kanade.presentation.more.settings.screen.browse.AnimeExtensionStoresScreen
 import eu.kanade.presentation.more.settings.screen.browse.MangaExtensionReposScreen
 import eu.kanade.presentation.more.settings.screen.data.RestoreBackupScreen
 import eu.kanade.presentation.util.AssistContentScreen
@@ -547,10 +547,10 @@ class MainActivity : BaseActivity() {
                     navigator.push(RestoreBackupScreen(intent.data.toString()))
                 }
                 // Deep link to add anime extension repo
-                else if (intent.scheme == "aniyomi" && intent.data?.host == "add-repo") {
+                else if (intent.isAddAnimeExtensionStoreIntent()) {
                     intent.data?.getQueryParameter("url")?.let { repoUrl ->
                         navigator.popUntilRoot()
-                        navigator.push(AnimeExtensionReposScreen(repoUrl))
+                        navigator.push(AnimeExtensionStoresScreen(repoUrl))
                     }
                 } // Deep link to add extension repo
                 else if (intent.scheme == "tachiyomi" && intent.data?.host == "add-repo") {
@@ -581,6 +581,10 @@ class MainActivity : BaseActivity() {
         ExternalIntents.externalIntents.episodeId?.let {
             outState.putLong(SAVED_STATE_EPISODE_KEY, it)
         }
+    }
+
+    private fun Intent.isAddAnimeExtensionStoreIntent(): Boolean {
+        return scheme == "aniyomi" && (data?.host == "add-repo" || data?.host == "extension-store")
     }
 
     companion object {
