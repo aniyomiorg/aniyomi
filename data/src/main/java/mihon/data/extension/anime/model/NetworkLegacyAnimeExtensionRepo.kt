@@ -1,12 +1,15 @@
 package mihon.data.extension.anime.model
 
 import android.annotation.SuppressLint
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import mihon.domain.extension.anime.model.AnimeExtensionStore
 
 @SuppressLint("UnsafeOptInUsageError")
 @Serializable
 data class NetworkLegacyAnimeExtensionRepo(
+    @SerialName("index_v2")
+    val indexV2: String?,
     val meta: Meta,
 ) : BaseNetworkAnimeExtensionStore {
     @Serializable
