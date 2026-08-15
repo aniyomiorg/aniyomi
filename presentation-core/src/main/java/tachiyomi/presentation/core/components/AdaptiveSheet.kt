@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
@@ -33,6 +34,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -80,6 +83,7 @@ fun AdaptiveSheet(
                 onDismissRequest()
             }
         }
+        val contentFocusRequester = remember { FocusRequester() }
         Box(
             modifier = Modifier
                 .clickable(
@@ -101,7 +105,9 @@ fun AdaptiveSheet(
                     )
                     .systemBarsPadding()
                     .padding(vertical = 16.dp)
-                    .then(modifier),
+                    .then(modifier)
+                    .focusRequester(contentFocusRequester)
+                    .focusGroup(),
                 shape = MaterialTheme.shapes.extraLarge,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 content = {
@@ -112,6 +118,7 @@ fun AdaptiveSheet(
 
             LaunchedEffect(Unit) {
                 targetAlpha = 1f
+                contentFocusRequester.requestFocus()
             }
         }
     } else {

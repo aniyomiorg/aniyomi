@@ -1,10 +1,15 @@
 package tachiyomi.presentation.core.util
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +27,32 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
+
+private val TvFocusBorderWidth = 2.dp
+private val TvFocusBorderShape = RoundedCornerShape(8.dp)
+
+/**
+ * Draws a visible focus indicator on Android TV, driven by the [interactionSource] that's
+ * already passed to this element's own clickable/combinedClickable/selectable modifier.
+ *
+ * Do NOT add a second, independent `.focusable()` here: `clickable`/`combinedClickable`/
+ * `selectable` already register their own focus target, and Compose skips a focusable
+ * ancestor that has a focusable descendant (or vice versa) — stacking a second one makes
+ * the D-pad focus indicator invisible, or the element unreachable, depending on ordering.
+ * No-op outside TV (pass [enabled] = isTvUi()) so mobile/tablet layouts are unaffected.
+ */
+@Composable
+fun Modifier.tvFocusable(
+    interactionSource: InteractionSource,
+    enabled: Boolean,
+): Modifier {
+    if (!enabled) return this
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val focusColor = MaterialTheme.colorScheme.primary
+    return if (isFocused) this.border(TvFocusBorderWidth, focusColor, TvFocusBorderShape) else this
+}
 
 fun Modifier.selectedBackground(isSelected: Boolean): Modifier = if (isSelected) {
     composed {

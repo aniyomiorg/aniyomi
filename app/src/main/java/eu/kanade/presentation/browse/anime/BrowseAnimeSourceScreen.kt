@@ -13,6 +13,8 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -46,6 +48,7 @@ fun BrowseAnimeSourceContent(
     displayMode: LibraryDisplayMode,
     snackbarHostState: SnackbarHostState,
     contentPadding: PaddingValues,
+    gridFocusRequester: FocusRequester = FocusRequester(),
     onWebViewClick: () -> Unit,
     onHelpClick: () -> Unit,
     onLocalAnimeSourceHelpClick: () -> Unit,
@@ -121,6 +124,7 @@ fun BrowseAnimeSourceContent(
     when (displayMode) {
         LibraryDisplayMode.ComfortableGrid -> {
             BrowseAnimeSourceComfortableGrid(
+                modifier = Modifier.focusRequester(gridFocusRequester),
                 animeList = animeList,
                 columns = columns,
                 contentPadding = contentPadding,
@@ -130,6 +134,7 @@ fun BrowseAnimeSourceContent(
         }
         LibraryDisplayMode.List -> {
             BrowseAnimeSourceList(
+                modifier = Modifier.focusRequester(gridFocusRequester),
                 animeList = animeList,
                 entries = entries,
                 topBarHeight = topBarHeight,
@@ -140,6 +145,7 @@ fun BrowseAnimeSourceContent(
         }
         LibraryDisplayMode.CompactGrid, LibraryDisplayMode.CoverOnlyGrid -> {
             BrowseAnimeSourceCompactGrid(
+                modifier = Modifier.focusRequester(gridFocusRequester),
                 animeList = animeList,
                 columns = columns,
                 contentPadding = contentPadding,

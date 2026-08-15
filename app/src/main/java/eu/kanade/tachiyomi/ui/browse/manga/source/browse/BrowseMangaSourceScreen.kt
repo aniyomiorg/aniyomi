@@ -29,6 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
@@ -128,6 +130,9 @@ data class BrowseMangaSourceScreen(
         }
 
         var topBarHeight by remember { mutableIntStateOf(0) }
+        // D-pad down from the listing chips would otherwise keep cycling within this row
+        // instead of escaping into the grid/list below; wire an explicit target for it.
+        val gridFocusRequester = remember { FocusRequester() }
         Scaffold(
             topBar = {
                 Column(
@@ -151,6 +156,7 @@ data class BrowseMangaSourceScreen(
                     Row(
                         modifier = Modifier
                             .horizontalScroll(rememberScrollState())
+                            .focusProperties { down = gridFocusRequester }
                             .padding(horizontal = MaterialTheme.padding.small),
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                     ) {
@@ -223,6 +229,7 @@ data class BrowseMangaSourceScreen(
                 entries = screenModel.getColumnsPreferenceForCurrentOrientation(LocalConfiguration.current.orientation),
                 topBarHeight = topBarHeight,
                 displayMode = screenModel.displayMode,
+                gridFocusRequester = gridFocusRequester,
                 snackbarHostState = snackbarHostState,
                 contentPadding = paddingValues,
                 onWebViewClick = onWebViewClick,

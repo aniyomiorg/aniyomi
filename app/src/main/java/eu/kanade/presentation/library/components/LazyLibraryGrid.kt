@@ -1,5 +1,6 @@
 package eu.kanade.presentation.library.components
 
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -20,7 +21,7 @@ internal fun LazyLibraryGrid(
 ) {
     FastScrollLazyVerticalGrid(
         columns = if (columns == 0) GridCells.Adaptive(128.dp) else GridCells.Fixed(columns),
-        modifier = modifier,
+        modifier = modifier.focusGroup(),
         contentPadding = contentPadding + PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(CommonEntryItemDefaults.GridVerticalSpacer),
         horizontalArrangement = Arrangement.spacedBy(CommonEntryItemDefaults.GridHorizontalSpacer),

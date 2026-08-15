@@ -1,7 +1,9 @@
 package eu.kanade.presentation.entries.anime.components
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,6 +53,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.entries.components.ItemCover
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import me.saket.swipe.SwipeableActionsBox
 import tachiyomi.domain.library.service.LibraryPreferences
@@ -61,6 +64,7 @@ import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
 import tachiyomi.presentation.core.util.selectedBackground
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun AnimeEpisodeListItem(
@@ -86,6 +90,7 @@ fun AnimeEpisodeListItem(
     onEpisodeSwipe: (LibraryPreferences.EpisodeSwipeAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val isTv = isTvUi()
     val start = getSwipeAction(
         action = episodeSwipeStartAction,
         seen = seen,
@@ -105,21 +110,26 @@ fun AnimeEpisodeListItem(
         onSwipe = { onEpisodeSwipe(episodeSwipeEndAction) },
     )
 
+    // Swipe gestures have no D-pad equivalent; long-press (OK held) still opens selection mode.
     SwipeableActionsBox(
         modifier = modifier.clipToBounds(),
-        startActions = listOfNotNull(start),
-        endActions = listOfNotNull(end),
+        startActions = if (isTv) emptyList() else listOfNotNull(start),
+        endActions = if (isTv) emptyList() else listOfNotNull(end),
         swipeThreshold = swipeActionThreshold,
         backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.surfaceContainerLowest,
     ) {
+        val interactionSource = remember { MutableInteractionSource() }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .selectedBackground(selected)
                 .combinedClickable(
+                    interactionSource = interactionSource,
+                    indication = LocalIndication.current,
                     onClick = onClick,
                     onLongClick = onLongClick,
                 )
+                .tvFocusable(interactionSource, isTv)
                 .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
         ) {
             if (previewUrl.isNullOrBlank() && summary.isNullOrBlank()) {
