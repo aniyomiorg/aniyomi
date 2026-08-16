@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.animesource
 
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
+import eu.kanade.tachiyomi.animesource.model.AnimeRelation
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -55,6 +56,10 @@ interface AnimeCatalogueSource : AnimeSource {
         val asyncAnime = if (fetchDetails) async { getAnimeDetails(anime) } else null
         val asyncSeasons = if (fetchSeasons) async { getSeasonList(anime) } else null
         SAnimeSeasonUpdate(asyncAnime?.await() ?: anime, asyncSeasons?.await() ?: seasons)
+    }
+
+    override suspend fun getRelatedAnimeList(anime: SAnime): List<AnimeRelation> {
+        throw Exception("Stub!")
     }
 
     override suspend fun getHosterList(episode: SEpisode): List<Hoster> = getHosterList(episode)
