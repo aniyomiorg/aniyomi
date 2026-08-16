@@ -306,6 +306,10 @@ class AnimeScreenModel(
 
         startTorrentServer(state.source)
 
+        if (fetchDetails) {
+            syncRelatedAnime(forceRefresh = true)
+        }
+
         try {
             withUIContext {
                 when (state.anime.fetchType) {
