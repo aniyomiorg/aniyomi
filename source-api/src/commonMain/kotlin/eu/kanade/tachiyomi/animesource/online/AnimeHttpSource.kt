@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
-import eu.kanade.tachiyomi.animesource.model.AnimeRelation
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.HttpServer

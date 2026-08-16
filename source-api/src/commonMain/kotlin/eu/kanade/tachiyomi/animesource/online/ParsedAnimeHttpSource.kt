@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.animesource.online
 
-import eu.kanade.tachiyomi.animesource.model.AnimeRelation
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SAnime
