@@ -55,6 +55,7 @@ import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
+import eu.kanade.tachiyomi.util.system.isTvUiMode
 import me.saket.swipe.SwipeableActionsBox
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
@@ -91,6 +92,9 @@ fun AnimeEpisodeListItem(
     modifier: Modifier = Modifier,
 ) {
     val isTv = isTvUi()
+    // Swipe gestures should only be disabled on real TV hardware, not when the user
+    // manually forces TvUiMode.ALWAYS on a touch device — that would break swipe-to-mark.
+    val isTvHardware = LocalConfiguration.current.isTvUiMode()
     val start = getSwipeAction(
         action = episodeSwipeStartAction,
         seen = seen,
@@ -113,8 +117,8 @@ fun AnimeEpisodeListItem(
     // Swipe gestures have no D-pad equivalent; long-press (OK held) still opens selection mode.
     SwipeableActionsBox(
         modifier = modifier.clipToBounds(),
-        startActions = if (isTv) emptyList() else listOfNotNull(start),
-        endActions = if (isTv) emptyList() else listOfNotNull(end),
+        startActions = if (isTvHardware) emptyList() else listOfNotNull(start),
+        endActions = if (isTvHardware) emptyList() else listOfNotNull(end),
         swipeThreshold = swipeActionThreshold,
         backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.surfaceContainerLowest,
     ) {

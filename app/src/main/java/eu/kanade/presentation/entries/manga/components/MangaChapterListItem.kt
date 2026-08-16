@@ -35,12 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
+import eu.kanade.tachiyomi.util.system.isTvUiMode
 import me.saket.swipe.SwipeableActionsBox
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
@@ -71,6 +73,9 @@ fun MangaChapterListItem(
     modifier: Modifier = Modifier,
 ) {
     val isTv = isTvUi()
+    // Swipe gestures should only be disabled on real TV hardware, not when the user
+    // manually forces TvUiMode.ALWAYS on a touch device — that would break swipe-to-mark.
+    val isTvHardware = LocalConfiguration.current.isTvUiMode()
     val start = getSwipeAction(
         action = chapterSwipeStartAction,
         read = read,
@@ -91,8 +96,8 @@ fun MangaChapterListItem(
     // Swipe gestures have no D-pad equivalent; long-press (OK held) still opens selection mode.
     SwipeableActionsBox(
         modifier = Modifier.clipToBounds(),
-        startActions = if (isTv) emptyList() else listOfNotNull(start),
-        endActions = if (isTv) emptyList() else listOfNotNull(end),
+        startActions = if (isTvHardware) emptyList() else listOfNotNull(start),
+        endActions = if (isTvHardware) emptyList() else listOfNotNull(end),
         swipeThreshold = swipeActionThreshold,
         backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.surfaceContainerLowest,
     ) {

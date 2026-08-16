@@ -1,6 +1,7 @@
 package eu.kanade.presentation.more.settings.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -121,6 +122,7 @@ object SettingsMainScreen : Screen() {
                 }
 
                 LazyColumn(
+                    modifier = Modifier.focusGroup(),
                     state = state,
                     contentPadding = contentPadding,
                 ) {
