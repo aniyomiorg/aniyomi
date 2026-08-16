@@ -396,37 +396,6 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     protected open fun seasonListParse(response: Response): List<SAnime> = throw UnsupportedOperationException()
 
     /**
-     * Get anime related to [anime]. Calls [relatedAnimeListRequest] and hands the response to
-     * [relatedAnimeListParse]. Override directly if the relations need more than one request.
-     *
-     * Also set [supportsRelatedAnime] to `true`
-     *
-     * @since extensions-lib 17
-     */
-    override suspend fun getRelatedAnimeList(anime: SAnime): List<AnimeRelation> {
-        return client.newCall(relatedAnimeListRequest(anime))
-            .awaitSuccess()
-            .let { response -> relatedAnimeListParse(response) }
-    }
-
-    /**
-     * Returns the request for the related anime of [anime]. Defaults to the anime's url
-     *
-     * @since extensions-lib 17
-     */
-    protected open fun relatedAnimeListRequest(anime: SAnime): Request {
-        return GET(baseUrl + anime.url, headers)
-    }
-
-    /**
-     * Parses the response and returns the relation group
-     *
-     * @since extensions-lib 17
-     */
-    protected open fun relatedAnimeListParse(response: Response): List<AnimeRelation> =
-        throw UnsupportedOperationException()
-
-    /**
      * Get the list of hoster for an episode. The first hoster in the list should
      * be the preferred hoster.
      *

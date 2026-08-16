@@ -290,44 +290,4 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      * @param document the parsed document.
      */
     protected abstract fun videoUrlParse(document: Document): String
-
-    /**
-     * Parses the response and returns a single relation group built from
-     * [relatedAnimeListSelector], [relatedAnimeFromElement] and [relatedAnimeListName].
-     *
-     * @since extensions-lib 17
-     */
-    override fun relatedAnimeListParse(response: Response): List<AnimeRelation> {
-        val animes = response.asJsoup()
-            .select(relatedAnimeListSelector())
-            .map { relatedAnimeFromElement(it) }
-
-        return if (animes.isEmpty()) {
-            emptyList()
-        } else {
-            listOf(AnimeRelation(relatedAnimeListName(), animes))
-        }
-    }
-
-    /**
-     * Returns the Jsoup selector matching each related anime
-     *
-     * @since extensions-lib 17
-     */
-    protected open fun relatedAnimeListSelector(): String = throw UnsupportedOperationException()
-
-    /**
-     * Returns a related anime from the given [element]. Url, title and thumbnail
-     *
-     * @since extensions-lib 17
-     */
-    protected open fun relatedAnimeFromElement(element: Element): SAnime =
-        throw UnsupportedOperationException()
-
-    /**
-     * Label shown above the relation row
-     *
-     * @since extensions-lib 17
-     */
-    protected open fun relatedAnimeListName(): String = "Related"
 }
