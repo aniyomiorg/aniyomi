@@ -119,14 +119,13 @@ interface AnimeSource {
      * @since extensions-lib 17
      */
     val supportsRelatedAnime: Boolean
-        get() = false
 
     /**
      * Get anime related to [anime], grouped by relation label
      *
      * @since extensions-lib 17
      */
-    suspend fun getRelatedAnimeList(anime: SAnime): List<AnimeRelation> = emptyList()
+    suspend fun getRelatedAnimeList(anime: SAnime): List<AnimeRelation>
 
     /**
      * Get the list of hoster for an episode. The first hoster in the list should
