@@ -36,7 +36,6 @@ class AnimeRelationRepositoryImpl(
         }
     }
 
-
     override fun subscribeRelatedAnime(animeId: Long): Flow<List<AnimeRelationGroup>> {
         return handler
             .subscribeToList {

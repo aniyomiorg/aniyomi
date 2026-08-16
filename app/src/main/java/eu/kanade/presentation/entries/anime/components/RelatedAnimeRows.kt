@@ -31,8 +31,8 @@ import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.presentation.core.components.material.padding
 import kotlin.math.ceil
 
-private val RelatedItemWidth = 96.dp
-private const val MaxItemsPerRow = 3
+private val RELATED_ITEM_WIDTH = 96.dp
+private const val MAX_ITEMS_PER_ROW = 3
 
 @Composable
 fun RelatedAnimeRows(
@@ -44,7 +44,7 @@ fun RelatedAnimeRows(
 ) {
     if (relations.isEmpty()) return
 
-    val (smalls, multis) = relations.partition { it.anime.size <= MaxItemsPerRow }
+    val (smalls, multis) = relations.partition { it.anime.size <= MAX_ITEMS_PER_ROW }
 
     Column(modifier = modifier.padding(bottom = MaterialTheme.padding.medium)) {
         if (smalls.isNotEmpty()) {
@@ -57,7 +57,7 @@ fun RelatedAnimeRows(
                     ),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
             ) {
-                smalls.packRows(MaxItemsPerRow).forEach { rowRelations ->
+                smalls.packRows(MAX_ITEMS_PER_ROW).forEach { rowRelations ->
                     val startSlots = rowRelations.runningFold(0) { acc, relation ->
                         acc + relation.anime.size
                     }
@@ -72,7 +72,7 @@ fun RelatedAnimeRows(
                                 modifier = Modifier.weight(size.toFloat()),
                                 contentAlignment = when {
                                     startSlot == 0 -> Alignment.CenterStart
-                                    endSlot == MaxItemsPerRow - 1 -> Alignment.CenterEnd
+                                    endSlot == MAX_ITEMS_PER_ROW - 1 -> Alignment.CenterEnd
                                     else -> Alignment.Center
                                 },
                             ) {
@@ -90,7 +90,7 @@ fun RelatedAnimeRows(
                                         ),
                                     ) {
                                         relation.anime.forEach { anime ->
-                                            Box(modifier = Modifier.widthIn(max = RelatedItemWidth)) {
+                                            Box(modifier = Modifier.widthIn(max = RELATED_ITEM_WIDTH)) {
                                                 RelatedAnimeItem(
                                                     anime = anime,
                                                     displayMode = displayMode,
@@ -105,8 +105,8 @@ fun RelatedAnimeRows(
                         }
 
                         val filled = rowRelations.sumOf { it.anime.size }
-                        if (filled < MaxItemsPerRow) {
-                            Spacer(Modifier.weight((MaxItemsPerRow - filled).toFloat()))
+                        if (filled < MAX_ITEMS_PER_ROW) {
+                            Spacer(Modifier.weight((MAX_ITEMS_PER_ROW - filled).toFloat()))
                         }
                     }
                 }
@@ -129,7 +129,7 @@ fun RelatedAnimeRows(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.extraSmall),
             ) {
                 items(relation.anime, key = { it.id }) { anime ->
-                    Box(modifier = Modifier.width(RelatedItemWidth)) {
+                    Box(modifier = Modifier.width(RELATED_ITEM_WIDTH)) {
                         RelatedAnimeItem(
                             anime = anime,
                             displayMode = displayMode,
@@ -155,7 +155,7 @@ private fun RelatedAnimeItem(
     when (displayMode) {
         LibraryDisplayMode.ComfortableGrid,
         LibraryDisplayMode.List,
-            -> {
+        -> {
             EntryComfortableGridItem(
                 title = anime.title,
                 titleMaxLines = 3,
