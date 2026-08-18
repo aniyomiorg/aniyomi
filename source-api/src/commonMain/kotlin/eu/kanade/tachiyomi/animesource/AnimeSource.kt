@@ -119,6 +119,7 @@ interface AnimeSource {
      * @since extensions-lib 17
      */
     val supportsRelatedAnime: Boolean
+        get() = false
 
     /**
      * Get anime related to [anime], grouped by relation label
