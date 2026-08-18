@@ -81,9 +81,10 @@ class MangaFetchIntervalTest {
     fun `returns interval of 7 days when multiple chapters in 2 days`() {
         val chapters = (1..2).map {
             chapterWithTime(chapter, 1.days)
-        } + (1..5).map {
-            chapterWithTime(chapter, 2.days)
-        }
+        } +
+            (1..5).map {
+                chapterWithTime(chapter, 2.days)
+            }
         fetchInterval.calculateInterval(chapters, testZoneId) shouldBe 7
     }
 

@@ -159,7 +159,8 @@ class MangaLibraryScreenModel(
                     prefs.filterBookmarked,
                     prefs.filterCompleted,
                     prefs.filterIntervalCustom,
-                ) + trackFilter.values
+                ) +
+                    trackFilter.values
                 ).any { it != TriState.DISABLED }
         }
             .distinctUntilChanged()

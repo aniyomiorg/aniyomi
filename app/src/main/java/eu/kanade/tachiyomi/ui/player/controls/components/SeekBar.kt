@@ -111,7 +111,8 @@ fun SeekbarWithTimers(
                         persistentListOf(Segment("", 0f)) + it
                     } else {
                         it
-                    } + it
+                    } +
+                        it
                 },
             modifier = Modifier.weight(1f),
             colors = SeekerDefaults.seekerColors(

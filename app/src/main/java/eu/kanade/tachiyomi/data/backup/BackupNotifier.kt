@@ -152,9 +152,10 @@ class BackupNotifier(private val context: Context) {
         val timeString = context.stringResource(
             MR.strings.restore_duration,
             TimeUnit.MILLISECONDS.toMinutes(time),
-            TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(
-                TimeUnit.MILLISECONDS.toMinutes(time),
-            ),
+            TimeUnit.MILLISECONDS.toSeconds(time) -
+                TimeUnit.MINUTES.toSeconds(
+                    TimeUnit.MILLISECONDS.toMinutes(time),
+                ),
         )
 
         with(completeNotificationBuilder) {
