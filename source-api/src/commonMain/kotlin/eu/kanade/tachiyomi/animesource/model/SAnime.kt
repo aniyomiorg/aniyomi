@@ -76,6 +76,7 @@ interface SAnime : Serializable {
         const val PUBLISHING_FINISHED = 4
         const val CANCELLED = 5
         const val ON_HIATUS = 6
+        const val UPCOMING = 7
 
         fun create(): SAnime {
             return SAnimeImpl()

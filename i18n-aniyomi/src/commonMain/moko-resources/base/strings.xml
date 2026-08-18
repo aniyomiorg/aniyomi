@@ -395,6 +395,7 @@
     <string name="http_server_is_running">Http server is running</string>
     <string name="http_server_start_failure">Failed to start http server</string>
     <!-- Other -->
+    <string name="upcoming">Upcoming</string>
     <string name="download_notifier_download_finish">Download completed</string>
     <string name="action_hide">Hide</string>
     <string name="label_all">All</string>

@@ -68,6 +68,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -88,6 +89,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeRelationGroup
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
@@ -527,6 +529,7 @@ private fun ColumnScope.AnimeContentInfo(
                 SAnime.PUBLISHING_FINISHED.toLong() -> Icons.Outlined.Done
                 SAnime.CANCELLED.toLong() -> Icons.Outlined.Close
                 SAnime.ON_HIATUS.toLong() -> Icons.Outlined.Pause
+                SAnime.UPCOMING.toLong() -> ImageVector.vectorResource(R.drawable.ic_calendar_clock_24dp)
                 else -> Icons.Outlined.Block
             },
             contentDescription = null,
@@ -543,6 +546,7 @@ private fun ColumnScope.AnimeContentInfo(
                     SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(MR.strings.publishing_finished)
                     SAnime.CANCELLED.toLong() -> stringResource(MR.strings.cancelled)
                     SAnime.ON_HIATUS.toLong() -> stringResource(MR.strings.on_hiatus)
+                    SAnime.UPCOMING.toLong() -> stringResource(AYMR.strings.upcoming)
                     else -> stringResource(MR.strings.unknown)
                 },
                 overflow = TextOverflow.Ellipsis,
