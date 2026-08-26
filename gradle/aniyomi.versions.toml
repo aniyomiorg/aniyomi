@@ -6,7 +6,7 @@ ffmpeg-kit = "1.18"
 media = "1.7.0"
 nanohttpd = "2.3.1"
 seeker = "1.2.2"
-torrserver = "0.1.0"
+torrserver = "0.1.1"
 truetypeparser = "2.1.4"
 
 [libraries]
