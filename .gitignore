@@ -8,6 +8,7 @@ build
 .idea/*
 !.idea/icon.png
 /captures
+/logs
 
 # Configuration files
 local.properties
