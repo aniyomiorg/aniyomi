@@ -2,14 +2,14 @@
 aboutlib_version = "11.6.3"
 leakcanary = "2.14"
 moko = "0.24.5"
-okhttp_version = "5.0.0-alpha.14"
+okhttp_version = "5.4.0"
 richtext = "0.20.0"
 shizuku_version = "13.1.0"
 sqldelight = "2.0.2"
 sqlite = "2.4.0"
 voyager = "2.2.21-1.10.3"
 spotless = "7.0.2"
-ktlint-core = "1.5.0"
+ktlint-core = "1.7.0"
 
 [libraries]
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
@@ -19,6 +19,7 @@ rxjava = "io.reactivex:rxjava:1.3.8"
 
 okhttp-core = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp_version" }
 okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp_version" }
+okhttp-zstd = { module = "com.squareup.okhttp3:okhttp-zstd", version.ref = "okhttp_version" }
 okhttp-brotli = { module = "com.squareup.okhttp3:okhttp-brotli", version.ref = "okhttp_version" }
 okhttp-dnsoverhttps = { module = "com.squareup.okhttp3:okhttp-dnsoverhttps", version.ref = "okhttp_version" }
 okio = "com.squareup.okio:okio:3.10.2"
@@ -27,7 +28,7 @@ conscrypt-android = "org.conscrypt:conscrypt-android:2.5.3"
 
 quickjs-android = "app.cash.quickjs:quickjs-android:0.9.2"
 
-jsoup = "org.jsoup:jsoup:1.19.1"
+jsoup = "org.jsoup:jsoup:1.22.2"
 
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:e0def6b3dc"
@@ -103,7 +104,7 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 moko = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "moko" }
 
 [bundles]
-okhttp = ["okhttp-core", "okhttp-logging", "okhttp-brotli", "okhttp-dnsoverhttps"]
+okhttp = ["okhttp-core", "okhttp-logging", "okhttp-brotli", "okhttp-dnsoverhttps", "okhttp-zstd"]
 js-engine = ["quickjs-android"]
 sqlite = ["sqlite-framework", "sqlite-ktx", "sqlite-android"]
 coil = ["coil-core", "coil-gif", "coil-compose", "coil-network-okhttp"]

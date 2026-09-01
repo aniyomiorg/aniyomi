@@ -16,10 +16,12 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
+import eu.kanade.domain.entries.anime.interactor.SyncRelatedAnimeWithSource
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.downloadedFilter
 import eu.kanade.domain.entries.anime.model.seasonDownloadedFilter
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.interactor.AddAnimeTracks
 import eu.kanade.domain.track.anime.interactor.RefreshAnimeTracks
 import eu.kanade.domain.track.anime.interactor.TrackEpisode
@@ -80,9 +82,11 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodesAndSeasons
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
+import tachiyomi.domain.entries.anime.interactor.GetRelatedAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.interactor.SetAnimeSeasonFlags
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.AnimeRelationGroup
 import tachiyomi.domain.entries.anime.model.NoSeasonsException
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.applyFilter
@@ -119,6 +123,7 @@ class AnimeScreenModel(
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     internal val gesturePreferences: GesturePreferences = Injekt.get(),
     private val torrentPreferences: TorrentPreferences = Injekt.get(),
+    private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val trackerManager: TrackerManager = Injekt.get(),
     private val trackEpisode: TrackEpisode = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
@@ -130,6 +135,8 @@ class AnimeScreenModel(
     private val setAnimeDefaultEpisodeFlags: SetAnimeDefaultEpisodeFlags = Injekt.get(),
     private val setAnimeSeasonFlags: SetAnimeSeasonFlags = Injekt.get(),
     private val setAnimeDefaultSeasonFlags: SetAnimeDefaultSeasonFlags = Injekt.get(),
+    private val getRelatedAnime: GetRelatedAnime = Injekt.get(),
+    private val syncRelatedAnimeWithSource: SyncRelatedAnimeWithSource = Injekt.get(),
     private val setSeenStatus: SetSeenStatus = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
@@ -168,6 +175,8 @@ class AnimeScreenModel(
     val showNextEpisodeAirTime = trackPreferences.showNextEpisodeAiringTime().get()
     val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
     val useExternalDownloader = downloadPreferences.useExternalDownloader().get()
+
+    val relatedAnimeDisplayMode = sourcePreferences.sourceDisplayMode().get()
 
     val isUpdateIntervalEnabled =
         LibraryPreferences.ENTRY_OUTSIDE_RELEASE_PERIOD in libraryPreferences.autoUpdateItemRestrictions().get()
@@ -255,6 +264,9 @@ class AnimeScreenModel(
             // Start observe tracking since it only needs animeId
             observeTrackers()
 
+            observeRelatedAnime()
+            syncRelatedAnime()
+
             // Fetch info-episodes when needed
             if ((needRefreshInfo || needRefreshEpisode || needRefreshSeason) && screenModelScope.isActive) {
                 fetchAllFromSource(
@@ -293,6 +305,10 @@ class AnimeScreenModel(
         val state = successState ?: return
 
         startTorrentServer(state.source)
+
+        if (fetchDetails) {
+            syncRelatedAnime(forceRefresh = true)
+        }
 
         try {
             withUIContext {
@@ -1440,6 +1456,37 @@ class AnimeScreenModel(
 
     // Episodes list - end
 
+    // Related anime - start
+
+    private fun observeRelatedAnime() {
+        screenModelScope.launchIO {
+            getRelatedAnime.subscribe(animeId)
+                .flowWithLifecycle(lifecycle)
+                .distinctUntilChanged()
+                .collectLatest { relations ->
+                    updateSuccessState { it.copy(relatedAnime = relations) }
+                }
+        }
+    }
+
+    fun syncRelatedAnime(forceRefresh: Boolean = false) {
+        val state = successState ?: return
+        if (!state.source.supportsRelatedAnime) return
+
+        screenModelScope.launchIO {
+            updateSuccessState { it.copy(isLoadingRelatedAnime = true) }
+            try {
+                syncRelatedAnimeWithSource.await(state.anime, forceRefresh)
+            } catch (e: Throwable) {
+                logcat(LogPriority.ERROR, e) { "Failed to fetch related anime" }
+            } finally {
+                updateSuccessState { it.copy(isLoadingRelatedAnime = false) }
+            }
+        }
+    }
+
+    // Related anime - end
+
     // Track sheet - start
 
     private fun observeTrackers() {
@@ -1565,6 +1612,8 @@ class AnimeScreenModel(
             val seasons: List<AnimeSeasonItem>,
             val trackingCount: Int = 0,
             val hasLoggedInTrackers: Boolean = false,
+            val relatedAnime: List<AnimeRelationGroup> = emptyList(),
+            val isLoadingRelatedAnime: Boolean = false,
             val isRefreshingData: Boolean = false,
             val dialog: Dialog? = null,
             val hasPromptedToAddBefore: Boolean = false,

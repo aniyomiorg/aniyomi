@@ -109,7 +109,8 @@ fun SubtitleDelayPanel(
             secondaryDelay = (
                 MPVLib.getPropertyDouble(
                     if (affectedSubtitle == SubtitleDelayType.Both) "sub-delay" else "secondary-sub-delay",
-                ) * 1000
+                ) *
+                    1000
                 ).toInt()
             delay = (MPVLib.getPropertyDouble("sub-delay") * 1000).toInt()
         }

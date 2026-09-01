@@ -2,6 +2,7 @@ package tachiyomi.domain.source.anime.model
 
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
+import eu.kanade.tachiyomi.animesource.model.AnimeRelation
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -43,6 +44,11 @@ class StubAnimeSource(
         fetchDetails: Boolean,
         fetchSeasons: Boolean,
     ): SAnimeSeasonUpdate = throw AnimeSourceNotInstalledException()
+
+    override val supportsRelatedAnime: Boolean = false
+
+    override suspend fun getRelatedAnimeList(anime: SAnime): List<AnimeRelation> =
+        throw AnimeSourceNotInstalledException()
 
     override suspend fun getHosterList(episode: SEpisode): List<Hoster> =
         throw AnimeSourceNotInstalledException()

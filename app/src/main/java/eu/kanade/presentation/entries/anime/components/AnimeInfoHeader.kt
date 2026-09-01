@@ -70,6 +70,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -88,7 +89,10 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.coil.useBackground
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.AnimeRelationGroup
+import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
@@ -248,6 +252,10 @@ fun ExpandableAnimeDescription(
     tagsProvider: () -> List<String>?,
     onTagSearch: (String) -> Unit,
     onCopyTagToClipboard: (tag: String) -> Unit,
+    relations: List<AnimeRelationGroup>,
+    onRelatedClick: (Anime) -> Unit,
+    onRelatedLongClick: (Anime) -> Unit,
+    relatedDisplayMode: LibraryDisplayMode,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -267,6 +275,10 @@ fun ExpandableAnimeDescription(
             expandedDescription = desc,
             shrunkDescription = trimmedDescription,
             expanded = expanded,
+            relations = relations,
+            onRelatedClick = onRelatedClick,
+            onRelatedLongClick = onRelatedLongClick,
+            relatedDisplayMode = relatedDisplayMode,
             modifier = Modifier
                 .padding(top = 8.dp)
                 .padding(horizontal = 16.dp)
@@ -538,6 +550,7 @@ private fun ColumnScope.AnimeContentInfo(
                 SAnime.PUBLISHING_FINISHED.toLong() -> Icons.Outlined.Done
                 SAnime.CANCELLED.toLong() -> Icons.Outlined.Close
                 SAnime.ON_HIATUS.toLong() -> Icons.Outlined.Pause
+                SAnime.UPCOMING.toLong() -> ImageVector.vectorResource(R.drawable.ic_calendar_clock_24dp)
                 else -> Icons.Outlined.Block
             },
             contentDescription = null,
@@ -554,6 +567,7 @@ private fun ColumnScope.AnimeContentInfo(
                     SAnime.PUBLISHING_FINISHED.toLong() -> stringResource(MR.strings.publishing_finished)
                     SAnime.CANCELLED.toLong() -> stringResource(MR.strings.cancelled)
                     SAnime.ON_HIATUS.toLong() -> stringResource(MR.strings.on_hiatus)
+                    SAnime.UPCOMING.toLong() -> stringResource(AYMR.strings.upcoming)
                     else -> stringResource(MR.strings.unknown)
                 },
                 overflow = TextOverflow.Ellipsis,
@@ -590,6 +604,10 @@ private fun AnimeSummary(
     expandedDescription: String,
     shrunkDescription: String,
     expanded: Boolean,
+    relations: List<AnimeRelationGroup>,
+    onRelatedClick: (Anime) -> Unit,
+    onRelatedLongClick: (Anime) -> Unit,
+    relatedDisplayMode: LibraryDisplayMode,
     modifier: Modifier = Modifier,
 ) {
     val animProgress by animateFloatAsState(if (expanded) 1f else 0f)
@@ -620,6 +638,18 @@ private fun AnimeSummary(
                 }
             },
             {
+                Column {
+                    if (relations.isNotEmpty()) {
+                        RelatedAnimeRows(
+                            relations = relations,
+                            onRelatedClick = onRelatedClick,
+                            onRelatedLongClick = onRelatedLongClick,
+                            displayMode = relatedDisplayMode,
+                        )
+                    }
+                }
+            },
+            {
                 val colors = listOf(Color.Transparent, MaterialTheme.colorScheme.background)
                 Box(
                     modifier = Modifier.background(Brush.verticalGradient(colors = colors)),
@@ -637,7 +667,7 @@ private fun AnimeSummary(
                 }
             },
         ),
-    ) { (shrunk, expanded, actual, scrim), constraints ->
+    ) { (shrunk, expanded, actual, related, scrim), constraints ->
         val shrunkHeight = shrunk.single()
             .measure(constraints)
             .height
@@ -649,14 +679,24 @@ private fun AnimeSummary(
 
         val actualPlaceable = actual.single()
             .measure(constraints)
+        val relatedPlaceable = related.single()
+            .measure(constraints)
         val scrimPlaceable = scrim.single()
             .measure(Constraints.fixed(width = constraints.maxWidth, height = scrimHeight))
 
-        val currentHeight = shrunkHeight + ((heightDelta + scrimHeight) * animProgress).roundToInt()
-        layout(constraints.maxWidth, currentHeight) {
-            actualPlaceable.place(0, 0)
+        val descriptionHeight = shrunkHeight + ((heightDelta + scrimHeight) * animProgress).roundToInt()
+        val relatedHeight = (relatedPlaceable.height * animProgress).roundToInt()
+        val bottomPadding = if (relatedPlaceable.height > 0) {
+            (16.dp.roundToPx() * animProgress).roundToInt()
+        } else {
+            0
+        }
 
-            val scrimY = currentHeight - scrimHeight
+        layout(constraints.maxWidth, descriptionHeight + relatedHeight + bottomPadding) {
+            actualPlaceable.place(0, 0)
+            relatedPlaceable.place(0, descriptionHeight)
+
+            val scrimY = descriptionHeight + relatedHeight + bottomPadding - scrimHeight
             scrimPlaceable.place(0, scrimY)
         }
     }

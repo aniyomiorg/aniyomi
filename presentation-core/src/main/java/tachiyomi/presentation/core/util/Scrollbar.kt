@@ -109,7 +109,9 @@ private fun Modifier.drawScrollbar(
         layoutInfo.viewportSize.width
     } else {
         layoutInfo.viewportSize.height
-    } - layoutInfo.beforeContentPadding - layoutInfo.afterContentPadding
+    } -
+        layoutInfo.beforeContentPadding -
+        layoutInfo.afterContentPadding
     val items = layoutInfo.visibleItemsInfo
     val itemsSize = items.fastSumBy { it.size }
     val showScrollbar = items.size < layoutInfo.totalItemsCount || itemsSize > viewportSize

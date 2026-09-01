@@ -12,6 +12,7 @@ class GetUpcomingAnime(
     private val includedStatuses = setOf(
         SAnime.ONGOING.toLong(),
         SAnime.PUBLISHING_FINISHED.toLong(),
+        SAnime.UPCOMING.toLong(),
     )
 
     suspend fun subscribe(): Flow<List<Anime>> {

@@ -68,7 +68,8 @@ fun MangaExtensionReposScreen(
         MangaExtensionReposContent(
             repos = state.repos,
             lazyListState = lazyListState,
-            paddingValues = paddingValues + topSmallPaddingValues +
+            paddingValues = paddingValues +
+                topSmallPaddingValues +
                 PaddingValues(horizontal = MaterialTheme.padding.medium),
             onOpenWebsite = onOpenWebsite,
             onClickDelete = onClickDelete,

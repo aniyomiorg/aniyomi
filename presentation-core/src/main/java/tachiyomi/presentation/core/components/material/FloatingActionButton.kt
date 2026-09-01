@@ -106,13 +106,14 @@ private val ExtendedFabCollapseAnimation = fadeOut(
         durationMillis = 100,
         easing = EasingLinearCubicBezier,
     ),
-) + shrinkHorizontally(
-    animationSpec = tween(
-        durationMillis = 500,
-        easing = EasingEmphasizedCubicBezier,
-    ),
-    shrinkTowards = Alignment.Start,
-)
+) +
+    shrinkHorizontally(
+        animationSpec = tween(
+            durationMillis = 500,
+            easing = EasingEmphasizedCubicBezier,
+        ),
+        shrinkTowards = Alignment.Start,
+    )
 
 private val ExtendedFabExpandAnimation = fadeIn(
     animationSpec = tween(
@@ -120,12 +121,13 @@ private val ExtendedFabExpandAnimation = fadeIn(
         delayMillis = 100,
         easing = EasingLinearCubicBezier,
     ),
-) + expandHorizontally(
-    animationSpec = tween(
-        durationMillis = 500,
-        easing = EasingEmphasizedCubicBezier,
-    ),
-    expandFrom = Alignment.Start,
-)
+) +
+    expandHorizontally(
+        animationSpec = tween(
+            durationMillis = 500,
+            easing = EasingEmphasizedCubicBezier,
+        ),
+        expandFrom = Alignment.Start,
+    )
 
 private val FabContainerWidth = 56.0.dp

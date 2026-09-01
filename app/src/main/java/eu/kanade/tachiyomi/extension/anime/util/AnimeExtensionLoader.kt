@@ -257,7 +257,10 @@ internal object AnimeExtensionLoader {
         }
 
         // Validate lib version
-        val libVersion = appInfo.metaData.getString(METADATA_EXTENSION_LIB)?.toDouble()
+        val libVersion = appInfo.metaData.getInt(METADATA_EXTENSION_LIB)
+            .takeUnless { it == 0 }
+            ?.toString()
+            ?.toDouble()
             ?: versionName.substringBeforeLast('.').toDoubleOrNull()
         if (libVersion == null || libVersion !in SUPPORTED_LIB_VERSIONS) {
             logcat(LogPriority.WARN) {

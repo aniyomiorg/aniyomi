@@ -1,0 +1,37 @@
+CREATE TABLE anime_relations(
+    anime_id INTEGER NOT NULL,
+    related_anime_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    sort_order INTEGER NOT NULL,
+    last_fetched_at INTEGER NOT NULL,
+    PRIMARY KEY(anime_id, related_anime_id, name),
+    FOREIGN KEY(anime_id) REFERENCES animes (_id)
+    ON DELETE CASCADE,
+    FOREIGN KEY(related_anime_id) REFERENCES animes (_id)
+    ON DELETE CASCADE
+);
+
+CREATE INDEX anime_relations_anime_id_index ON anime_relations(anime_id);
+CREATE INDEX anime_relations_related_anime_id_index ON anime_relations(related_anime_id);
+
+getRelatedAnimeByAnimeId:
+SELECT A.*, R.name
+FROM anime_relations AS R
+JOIN animes AS A
+ON A._id = R.related_anime_id
+WHERE R.anime_id = :animeId
+ORDER BY R.sort_order ASC;
+
+getLastFetchedAt:
+SELECT last_fetched_at
+FROM anime_relations
+WHERE anime_id = :animeId
+LIMIT 1;
+
+insert:
+INSERT OR REPLACE INTO anime_relations(anime_id, related_anime_id, name, sort_order, last_fetched_at)
+VALUES (:animeId, :relatedAnimeId, :name, :sortOrder, :lastFetchedAt);
+
+deleteByAnimeId:
+DELETE FROM anime_relations
+WHERE anime_id = :animeId;

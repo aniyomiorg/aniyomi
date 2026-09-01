@@ -761,7 +761,8 @@ class ReaderViewModel @JvmOverloads constructor(
             "${manga.title} - ${chapter.name}".takeBytes(
                 DiskUtil.MAX_FILE_NAME_BYTES - filenameSuffix.byteSize(),
             ),
-        ) + filenameSuffix
+        ) +
+            filenameSuffix
     }
 
     fun showMenus(visible: Boolean) {

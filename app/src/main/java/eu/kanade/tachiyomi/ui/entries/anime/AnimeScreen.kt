@@ -220,6 +220,13 @@ class AnimeScreen(
                     }
                 }
             },
+            onRelatedAnimeClicked = { relatedAnime ->
+                navigator.push(AnimeScreen(relatedAnime.id, fromSource = !relatedAnime.favorite))
+            },
+            onRelatedAnimeLongClicked = { relatedAnime ->
+                navigator.push(GlobalAnimeSearchScreen(relatedAnime.title))
+            },
+            relatedAnimeDisplayMode = screenModel.relatedAnimeDisplayMode,
         )
 
         val onDismissRequest = {

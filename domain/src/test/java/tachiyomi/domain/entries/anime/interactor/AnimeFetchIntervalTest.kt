@@ -81,9 +81,10 @@ class AnimeFetchIntervalTest {
     fun `returns interval of 7 days when multiple episodes in 2 days`() {
         val episodes = (1..2).map {
             episodeWithTime(episode, 1.days)
-        } + (1..5).map {
-            episodeWithTime(episode, 2.days)
-        }
+        } +
+            (1..5).map {
+                episodeWithTime(episode, 2.days)
+            }
         fetchInterval.calculateInterval(episodes, testZoneId) shouldBe 7
     }
 

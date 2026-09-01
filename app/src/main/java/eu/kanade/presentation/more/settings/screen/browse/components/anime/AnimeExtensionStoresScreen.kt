@@ -68,7 +68,8 @@ fun AnimeExtensionStoresScreen(
         AnimeExtensionStoresContent(
             repos = state.stores,
             lazyListState = lazyListState,
-            paddingValues = paddingValues + topSmallPaddingValues +
+            paddingValues = paddingValues +
+                topSmallPaddingValues +
                 PaddingValues(horizontal = MaterialTheme.padding.medium),
             onCopy = onCopy,
             onOpenWebsite = onOpenWebsite,
