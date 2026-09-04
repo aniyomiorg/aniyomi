@@ -67,7 +67,7 @@ object TorrentUtils {
                 TorrentFile(file.path, file.id ?: 0, file.length, torrent.hash!!, torrent.trackers ?: emptyList())
             } ?: emptyList(),
             torrent.hash!!,
-            torrent.torrentSize!!,
+            torrent.torrentSize ?: -1,
             torrent.trackers ?: emptyList(),
         )
     }
