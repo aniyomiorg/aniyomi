@@ -416,6 +416,11 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                     title = stringResource(AYMR.strings.pref_mark_duplicate_seen_episode_seen),
                 ),
+                Preference.PreferenceItem.SwitchPreference(
+                    preference = libraryPreferences.generateLocalThumbnails(),
+                    title = stringResource(AYMR.strings.pref_generate_local_thumbnails),
+                    subtitle = stringResource(AYMR.strings.pref_generate_local_thumbnails_summary),
+                ),
             ),
         )
     }

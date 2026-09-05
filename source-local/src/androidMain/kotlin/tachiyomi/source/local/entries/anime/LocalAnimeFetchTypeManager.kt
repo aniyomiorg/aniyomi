@@ -11,6 +11,7 @@ actual class LocalAnimeFetchTypeManager(
 ) {
     actual fun find(animeUrl: String): FetchType {
         val files = fileSystem.getFilesInAnimeDirectory(animeUrl)
+            .filterNot { it.name.orEmpty().startsWith('.') }
 
         return when {
             files.any { ArchiveAnime.isSupported(it) } -> FetchType.Episodes

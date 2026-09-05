@@ -227,6 +227,11 @@ class LibraryPreferences(
         Anime.EPISODE_SHOW_PREVIEWS,
     )
 
+    fun generateLocalThumbnails() = preferenceStore.getBoolean(
+        "generate_local_thumbnails",
+        true,
+    )
+
     fun showEpisodeSummaries() = preferenceStore.getLong(
         "default_episode_show_summaries",
         Anime.EPISODE_SHOW_SUMMARIES,

@@ -565,6 +565,8 @@
     <string name="pref_mark_duplicate_seen_episode_seen">Mark duplicate seen episode as seen</string>
     <string name="pref_mark_duplicate_seen_episode_seen_existing">After watching an episode</string>
     <string name="pref_mark_duplicate_seen_episode_seen_new">After fetching new episode</string>
+    <string name="pref_generate_local_thumbnails">Show thumbnails</string>
+    <string name="pref_generate_local_thumbnails_summary">Generate thumbnails from local anime episode files</string>
     <string name="pref_library_season">Season</string>
     <string name="pref_update_seasons_refresh">Update seasons with episodes on refresh</string>
     <string name="pref_update_seasons_update">Update seasons with episodes on library update</string>
