@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import dev.icerock.moko.resources.StringResource
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.channels.Channel
@@ -27,6 +28,7 @@ class MangaExtensionReposScreenModel(
     private val deleteExtensionRepo: DeleteMangaExtensionRepo = Injekt.get(),
     private val replaceExtensionRepo: ReplaceMangaExtensionRepo = Injekt.get(),
     private val updateExtensionRepo: UpdateMangaExtensionRepo = Injekt.get(),
+    private val extensionManager: MangaExtensionManager = Injekt.get(),
 ) : StateScreenModel<RepoScreenState>(RepoScreenState.Loading) {
 
     private val _events: Channel<RepoEvent> = Channel(Int.MAX_VALUE)
@@ -58,6 +60,7 @@ class MangaExtensionReposScreenModel(
                 is CreateMangaExtensionRepo.Result.DuplicateFingerprint -> {
                     showDialog(RepoDialog.Conflict(result.oldRepo, result.newRepo))
                 }
+                CreateMangaExtensionRepo.Result.Success -> extensionManager.findAvailableExtensions()
                 else -> {}
             }
         }
@@ -93,6 +96,7 @@ class MangaExtensionReposScreenModel(
     fun deleteRepo(baseUrl: String) {
         screenModelScope.launchIO {
             deleteExtensionRepo.await(baseUrl)
+            extensionManager.findAvailableExtensions()
         }
     }
 

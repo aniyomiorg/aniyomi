@@ -40,7 +40,7 @@ sealed class MangaExtension {
         override val lang: String,
         override val isNsfw: Boolean,
         val sources: List<MangaSource>,
-        val apkName: String,
+        val apkUrl: String,
         val iconUrl: String,
         val repoUrl: String,
     ) : MangaExtension() {

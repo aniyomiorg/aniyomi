@@ -384,7 +384,7 @@ class DomainModule : InjektModule {
         addFactory { TrustAnimeExtension(get(), get()) }
         addFactory { TrustMangaExtension(get(), get()) }
 
-        addFactory { ExtensionRepoService(get(), get()) }
+        addFactory { ExtensionRepoService(get(), get(), get()) }
 
         addSingletonFactory { AnimeExtensionStoreService(get(), get(), get()) }
         addSingletonFactory<AnimeExtensionStoreRepository> { AnimeExtensionStoreRepositoryImpl(get(), get()) }
