@@ -2,7 +2,10 @@ package eu.kanade.presentation.more.settings.screen.appearance
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +28,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.util.Screen
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import kotlinx.collections.immutable.ImmutableList
@@ -34,6 +38,7 @@ import tachiyomi.core.common.i18n.stringResource
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 
 class AppLanguageScreen : Screen() {
 
@@ -66,13 +71,21 @@ class AppLanguageScreen : Screen() {
             },
         ) { contentPadding ->
             LazyColumn(
-                modifier = Modifier.padding(contentPadding),
+                modifier = Modifier
+                    .padding(contentPadding)
+                    .focusGroup(),
             ) {
                 items(langs) {
+                    val interactionSource = remember { MutableInteractionSource() }
                     ListItem(
-                        modifier = Modifier.clickable {
-                            currentLanguage = it.langTag
-                        },
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = interactionSource,
+                                indication = LocalIndication.current,
+                            ) {
+                                currentLanguage = it.langTag
+                            }
+                            .tvFocusable(interactionSource, isTvUi()),
                         headlineContent = { Text(it.displayName) },
                         supportingContent = {
                             it.localizedDisplayName?.let {

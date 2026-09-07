@@ -1,9 +1,11 @@
 package eu.kanade.presentation.more.settings.widget
 
 import android.app.Activity
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +48,7 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.isDynamicColorAvailable
 import tachiyomi.core.common.preference.InMemoryPreferenceStore
@@ -53,6 +56,7 @@ import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import tachiyomi.presentation.core.util.tvFocusable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.fullType
 
@@ -132,6 +136,7 @@ fun AppThemePreviewItem(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -148,7 +153,14 @@ fun AppThemePreviewItem(
             .padding(4.dp)
             .clip(RoundedCornerShape(13.dp))
             .background(MaterialTheme.colorScheme.background)
-            .clickable(onClick = onClick),
+            .clickable(
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
+                onClick = onClick,
+            )
+            // Selected already shows its own colored border above; skip the focus ring there
+            // to avoid two competing borders on the same item.
+            .tvFocusable(interactionSource, isTvUi() && !selected),
     ) {
         // App Bar
         Row(

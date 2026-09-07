@@ -1,6 +1,9 @@
 package eu.kanade.presentation.more.settings.screen.player.editor.components
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,12 +32,14 @@ import eu.kanade.presentation.components.FloatingActionAddButton
 import eu.kanade.presentation.more.settings.screen.player.editor.EditorListItem
 import eu.kanade.presentation.more.settings.screen.player.editor.EditorListType
 import eu.kanade.presentation.more.settings.screen.player.editor.EditorScreenState
+import eu.kanade.presentation.util.isTvUi
 import kotlinx.collections.immutable.toPersistentList
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun EditorScreen(
@@ -107,6 +112,7 @@ private fun EditorListContent(
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
 
     LazyColumn(
+        modifier = Modifier.focusGroup(),
         state = lazyListState,
         contentPadding = paddingValues,
     ) {
@@ -139,9 +145,14 @@ private fun FileListItem(
     onRename: () -> Unit,
     onDelete: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     ListItem(
         modifier = modifier
-            .clickable { onClick() },
+            .clickable(
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
+            ) { onClick() }
+            .tvFocusable(interactionSource, isTvUi()),
         leadingContent = {
             Icon(
                 imageVector = when (item.name.substringAfterLast(".")) {

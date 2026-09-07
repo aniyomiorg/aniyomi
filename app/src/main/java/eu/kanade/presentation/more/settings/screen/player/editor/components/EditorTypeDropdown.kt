@@ -1,6 +1,8 @@
 package eu.kanade.presentation.more.settings.screen.player.editor.components
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,8 +20,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.more.settings.screen.player.editor.EditorListType
+import eu.kanade.presentation.util.isTvUi
 import kotlinx.collections.immutable.ImmutableList
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun EditorTypeDropDown(
@@ -34,12 +38,18 @@ fun EditorTypeDropDown(
         verticalArrangement = Arrangement.Center,
     ) {
         Box {
+            val interactionSource = remember { MutableInteractionSource() }
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                    isDropDownExpanded.value = !isDropDownExpanded.value
-                },
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = LocalIndication.current,
+                    ) {
+                        isDropDownExpanded.value = !isDropDownExpanded.value
+                    }
+                    .tvFocusable(interactionSource, isTvUi()),
             ) {
                 Text(text = stringResource(type.stringRes))
                 Icon(if (isDropDownExpanded.value) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown, null)

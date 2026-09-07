@@ -15,6 +15,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import eu.kanade.presentation.util.ScreenTransition
 import eu.kanade.presentation.util.isTabletUi
+import eu.kanade.presentation.util.isTvUi
 import tachiyomi.presentation.core.components.AdaptiveSheet as AdaptiveSheetImpl
 
 @OptIn(InternalVoyagerApi::class)
@@ -72,7 +73,8 @@ fun AdaptiveSheet(
     enableSwipeDismiss: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    val isTabletUi = isTabletUi()
+    // D-pad has no swipe gesture, so TV always uses the centered (non-draggable) sheet layout.
+    val isTabletUi = isTabletUi() || isTvUi()
 
     Dialog(
         onDismissRequest = onDismissRequest,

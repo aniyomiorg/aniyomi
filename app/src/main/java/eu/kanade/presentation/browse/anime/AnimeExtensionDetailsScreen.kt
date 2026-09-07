@@ -4,7 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -49,6 +51,7 @@ import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TrailingWidgetBuffer
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -63,6 +66,7 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun AnimeExtensionDetailsScreen(
@@ -225,6 +229,7 @@ private fun DetailsHeader(
     onExtIncognitoChange: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
+    val debugInfoInteractionSource = remember { MutableInteractionSource() }
 
     Column {
         Column(
@@ -235,7 +240,10 @@ private fun DetailsHeader(
                     top = MaterialTheme.padding.medium,
                     bottom = MaterialTheme.padding.small,
                 )
-                .clickable {
+                .clickable(
+                    interactionSource = debugInfoInteractionSource,
+                    indication = LocalIndication.current,
+                ) {
                     val extDebugInfo = buildString {
                         append(
                             """
@@ -261,7 +269,8 @@ private fun DetailsHeader(
                         }
                     }
                     context.copyToClipboard("Extension Debug information", extDebugInfo)
-                },
+                }
+                .tvFocusable(debugInfoInteractionSource, isTvUi()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AnimeExtensionIcon(
@@ -333,8 +342,12 @@ private fun DetailsHeader(
                 .padding(top = MaterialTheme.padding.small),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.medium),
         ) {
+            val uninstallInteractionSource = remember { MutableInteractionSource() }
             OutlinedButton(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .tvFocusable(uninstallInteractionSource, isTvUi()),
+                interactionSource = uninstallInteractionSource,
                 onClick = onClickUninstall,
             ) {
                 Text(stringResource(MR.strings.ext_uninstall))

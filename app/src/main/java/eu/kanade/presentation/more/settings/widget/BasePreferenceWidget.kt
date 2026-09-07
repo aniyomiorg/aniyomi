@@ -6,8 +6,10 @@ import androidx.compose.animation.core.StartOffset
 import androidx.compose.animation.core.StartOffsetType
 import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -32,7 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.more.settings.LocalPreferenceHighlighted
 import eu.kanade.presentation.more.settings.LocalPreferenceMinHeight
+import eu.kanade.presentation.util.isTvUi
 import kotlinx.coroutines.delay
+import tachiyomi.presentation.core.util.tvFocusable
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -46,11 +50,18 @@ internal fun BasePreferenceWidget(
 ) {
     val highlighted = LocalPreferenceHighlighted.current
     val minHeight = LocalPreferenceMinHeight.current
+    val interactionSource = remember { MutableInteractionSource() }
     Row(
         modifier = modifier
             .highlightBackground(highlighted)
             .sizeIn(minHeight = minHeight)
-            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
+            .clickable(
+                enabled = onClick != null,
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
+                onClick = { onClick?.invoke() },
+            )
+            .tvFocusable(interactionSource, isTvUi())
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -1,6 +1,8 @@
 package eu.kanade.presentation.more.settings.screen.advanced
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -18,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +36,7 @@ import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.util.Screen
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.collectLatest
@@ -53,6 +57,7 @@ import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.selectedBackground
+import tachiyomi.presentation.core.util.tvFocusable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -158,10 +163,16 @@ class ClearDatabaseScreen : Screen() {
         isSelected: Boolean,
         onClickSelect: () -> Unit,
     ) {
+        val interactionSource = remember { MutableInteractionSource() }
         Row(
             modifier = Modifier
                 .selectedBackground(isSelected)
-                .clickable(onClick = onClickSelect)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = LocalIndication.current,
+                    onClick = onClickSelect,
+                )
+                .tvFocusable(interactionSource, isTvUi())
                 .padding(horizontal = 8.dp)
                 .height(56.dp),
             verticalAlignment = Alignment.CenterVertically,

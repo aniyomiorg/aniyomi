@@ -1,9 +1,12 @@
 package eu.kanade.presentation.entries.components
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -12,8 +15,10 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.Role
 import coil3.compose.AsyncImage
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.util.tvFocusable
 
 enum class ItemCover(val ratio: Float) {
     Square(1f / 1f),
@@ -29,6 +34,7 @@ enum class ItemCover(val ratio: Float) {
         shape: Shape = MaterialTheme.shapes.extraSmall,
         onClick: (() -> Unit)? = null,
     ) {
+        val interactionSource = remember { MutableInteractionSource() }
         AsyncImage(
             model = data,
             placeholder = ColorPainter(CoverPlaceholderColor),
@@ -39,10 +45,14 @@ enum class ItemCover(val ratio: Float) {
                 .clip(shape)
                 .then(
                     if (onClick != null) {
-                        Modifier.clickable(
-                            role = Role.Button,
-                            onClick = onClick,
-                        )
+                        Modifier
+                            .clickable(
+                                interactionSource = interactionSource,
+                                indication = LocalIndication.current,
+                                role = Role.Button,
+                                onClick = onClick,
+                            )
+                            .tvFocusable(interactionSource, isTvUi())
                     } else {
                         Modifier
                     },

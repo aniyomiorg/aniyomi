@@ -1,6 +1,7 @@
 package eu.kanade.presentation.more.onboarding
 
 import android.content.ActivityNotFoundException
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,12 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.more.settings.screen.SettingsDataScreen
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.util.system.isTvBox
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
@@ -28,6 +31,7 @@ import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Button
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -64,8 +68,12 @@ internal class StorageStep : OnboardingStep {
 
             if (isTvBox) {
                 if (!storagePref.isSet()) {
+                    val interactionSource = remember { MutableInteractionSource() }
                     Button(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .tvFocusable(interactionSource, isTvUi()),
+                        interactionSource = interactionSource,
                         onClick = {
                             val storage = folderProvider.directory()
                             if (!storage.exists()) {
@@ -78,8 +86,12 @@ internal class StorageStep : OnboardingStep {
                     }
                 }
             } else {
+                val interactionSource = remember { MutableInteractionSource() }
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .tvFocusable(interactionSource, isTvUi()),
+                    interactionSource = interactionSource,
                     onClick = {
                         try {
                             pickStorageLocation.launch(null)
@@ -98,8 +110,12 @@ internal class StorageStep : OnboardingStep {
             )
 
             Text(stringResource(MR.strings.onboarding_storage_help_info, stringResource(MR.strings.app_name)))
+            val helpInteractionSource = remember { MutableInteractionSource() }
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .tvFocusable(helpInteractionSource, isTvUi()),
+                interactionSource = helpInteractionSource,
                 onClick = { handler.openUri(SettingsDataScreen.HELP_URL) },
             ) {
                 Text(stringResource(MR.strings.onboarding_storage_help_action))

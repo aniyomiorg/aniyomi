@@ -22,21 +22,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.controls.components.ControlsButton
 import `is`.xyz.mpv.Utils
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 import kotlin.math.abs
 
 @Composable
@@ -85,6 +90,13 @@ fun MiddlePlayerControls(
 
         val icon = AnimatedImageVector.animatedVectorResource(R.drawable.anim_play_to_pause)
         val interaction = remember { MutableInteractionSource() }
+        val isTv = isTvUi()
+        val playPauseFocusRequester = remember { FocusRequester() }
+        LaunchedEffect(controlsShown, isTv) {
+            if (isTv && controlsShown) {
+                playPauseFocusRequester.requestFocus()
+            }
+        }
         when {
             gestureSeekAmount != null -> {
                 Text(
@@ -114,11 +126,15 @@ fun MiddlePlayerControls(
                         modifier = Modifier
                             .size(96.dp)
                             .clip(CircleShape)
+                            // focusRequester must precede the focusable target it drives (the
+                            // one clickable() registers below), or requestFocus() is a no-op.
+                            .focusRequester(playPauseFocusRequester)
                             .clickable(
                                 interaction,
                                 ripple(),
                                 onClick = onPlayPauseClick,
                             )
+                            .tvFocusable(interaction, isTv)
                             .padding(MaterialTheme.padding.medium),
                         contentDescription = null,
                     )

@@ -20,6 +20,7 @@ import com.halilibo.richtext.ui.RichTextStyle
 import com.halilibo.richtext.ui.material3.RichText
 import com.halilibo.richtext.ui.string.RichTextStringStyle
 import eu.kanade.presentation.theme.TachiyomiPreviewTheme
+import eu.kanade.presentation.util.isTvUi
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
@@ -41,6 +42,7 @@ fun NewUpdateScreen(
         onAcceptClick = onAcceptUpdate,
         rejectText = stringResource(MR.strings.action_not_now),
         onRejectClick = onRejectUpdate,
+        isTvUi = isTvUi(),
     ) {
         RichText(
             modifier = Modifier

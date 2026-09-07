@@ -39,10 +39,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.ui.player.controls.LocalPlayerButtonsClickEvent
 import tachiyomi.presentation.core.components.material.Button
 import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun ControlsButton(
@@ -72,6 +74,7 @@ fun ControlsButton(
                 interactionSource = interactionSource,
                 indication = null,
             )
+            .tvFocusable(interactionSource, isTvUi())
             .clip(CircleShape)
             .indication(
                 interactionSource,
@@ -114,6 +117,7 @@ fun ControlsButton(
                 indication = null,
 
             )
+            .tvFocusable(interactionSource, isTvUi())
             .clip(CircleShape)
             .indication(
                 interactionSource,
@@ -156,7 +160,8 @@ fun FilledControlsButton(
                     onLongClick = onLongClick,
                     interactionSource = interactionSource,
                     indication = null,
-                ),
+                )
+                .tvFocusable(interactionSource, isTvUi()),
         )
     }
 }

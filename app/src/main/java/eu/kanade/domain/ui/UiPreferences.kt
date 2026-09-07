@@ -5,6 +5,7 @@ import eu.kanade.domain.ui.model.NavStyle
 import eu.kanade.domain.ui.model.StartScreen
 import eu.kanade.domain.ui.model.TabletUiMode
 import eu.kanade.domain.ui.model.ThemeMode
+import eu.kanade.domain.ui.model.TvUiMode
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.isDynamicColorAvailable
 import tachiyomi.core.common.preference.PreferenceStore
@@ -35,6 +36,8 @@ class UiPreferences(
     fun dateFormat() = preferenceStore.getString("app_date_format", "")
 
     fun tabletUiMode() = preferenceStore.getEnum("tablet_ui_mode", TabletUiMode.AUTOMATIC)
+
+    fun tvUiMode() = preferenceStore.getEnum("tv_ui_mode", TvUiMode.AUTOMATIC)
 
     fun startScreen() = preferenceStore.getEnum("start_screen", StartScreen.ANIME)
 

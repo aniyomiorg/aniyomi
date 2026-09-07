@@ -417,6 +417,7 @@
     <string name="label_watched_duration">Watched duration</string>
     <string name="label_watched_episodes">Watched</string>
     <string name="pref_start_screen">Start Screen</string>
+    <string name="pref_tv_ui_mode">Android TV UI</string>
     <string name="pref_library_manga_columns">Manga items per row</string>
     <string name="pref_library_anime_columns">Anime items per row</string>
     <string name="pref_bottom_nav_no_history">Move History to the More tab</string>
@@ -593,6 +594,9 @@
     <string name="label_manga_extension_repos">Manga extension repos</string>
     <string name="label_anime_extension_repos">Anime extension repos</string>
     <string name="onboarding_storage_action_create_folder">Create default Aniyomi folder</string>
+    <string name="onboarding_device_mode_info">Are you using a touch device or Android TV? This decides the interface layout — you can change it later in Settings.</string>
+    <string name="onboarding_device_mode_action_mobile">Mobile / Touch</string>
+    <string name="onboarding_device_mode_action_tv">Android TV</string>
     <string name="download_speed_limit">Chapter download speed limit</string>
     <string name="download_speed_limit_hint">Set to 0 to disable the speed limit.</string>
     <string name="filler">Filler</string>
