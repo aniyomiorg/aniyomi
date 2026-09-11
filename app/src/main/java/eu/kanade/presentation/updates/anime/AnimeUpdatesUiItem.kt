@@ -1,55 +1,32 @@
 package eu.kanade.presentation.updates.anime
 
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Label
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAll
 import eu.kanade.presentation.components.relativeDateText
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
-import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
-import eu.kanade.presentation.entries.components.DotSeparatorText
-import eu.kanade.presentation.entries.components.ItemCover
+import eu.kanade.presentation.updates.anime.components.AnimeUpdatesUiAnime
+import eu.kanade.presentation.updates.anime.components.AnimeUpdatesUiEpisode
+import eu.kanade.presentation.updates.anime.model.AnimeUpdatesUiModels
 import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.presentation.util.relativeTimeSpanString
-import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
-import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.ListGroupHeader
-import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
-import tachiyomi.presentation.core.util.selectedBackground
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
 internal fun LazyListScope.animeUpdatesLastUpdatedItem(
@@ -75,191 +52,171 @@ internal fun LazyListScope.animeUpdatesLastUpdatedItem(
 internal fun LazyListScope.animeUpdatesUiItems(
     uiModels: List<AnimeUpdatesUiModel>,
     selectionMode: Boolean,
+    openedAnimes: Set<Pair<Long, LocalDate>>,
+    onToggleAnime: (Long, LocalDate) -> Unit,
     onUpdateSelected: (AnimeUpdatesItem, Boolean, Boolean, Boolean) -> Unit,
     onClickCover: (AnimeUpdatesItem) -> Unit,
     onClickUpdate: (AnimeUpdatesItem, altPlayer: Boolean) -> Unit,
     onDownloadEpisode: (List<AnimeUpdatesItem>, EpisodeDownloadAction) -> Unit,
 ) {
+    val rows = uiModels.toRows(openedAnimes)
+
     items(
-        items = uiModels,
-        contentType = {
-            when (it) {
-                is AnimeUpdatesUiModel.Header -> "header"
-                is AnimeUpdatesUiModel.Item -> "item"
-            }
-        },
+        items = rows,
         key = {
             when (it) {
-                is AnimeUpdatesUiModel.Header -> "animeUpdatesHeader-${it.hashCode()}"
-                is AnimeUpdatesUiModel.Item -> "animeUpdates-${it.item.update.animeId}-${it.item.update.episodeId}"
+                is AnimeUpdatesRow.Header -> "animeUpdatesHeader-${it.date}"
+                is AnimeUpdatesRow.Anime -> "animeUpdatesAnime-${it.date}-${it.anime.animeId}"
+                is AnimeUpdatesRow.Episode -> {
+                    "animeUpdatesEpisode-${it.date}-${it.item.update.animeId}-${it.item.update.episodeId}"
+                }
             }
         },
-    ) { item ->
-        when (item) {
-            is AnimeUpdatesUiModel.Header -> {
+        contentType = {
+            when (it) {
+                is AnimeUpdatesRow.Header -> "header"
+                is AnimeUpdatesRow.Anime -> "anime"
+                is AnimeUpdatesRow.Episode -> "episode"
+            }
+        },
+    ) { row ->
+        when (row) {
+            is AnimeUpdatesRow.Header -> {
                 ListGroupHeader(
                     modifier = Modifier.animateItemFastScroll(),
-                    text = relativeDateText(item.date),
+                    text = relativeDateText(row.date),
                 )
             }
-            is AnimeUpdatesUiModel.Item -> {
-                val updatesItem = item.item
-                AnimeUpdatesUiItem(
+            is AnimeUpdatesRow.Anime -> {
+                val episodeAmount = row.episodes.size
+                val subText = pluralStringResource(
+                    AYMR.plurals.updated_amount_episodes,
+                    episodeAmount,
+                    episodeAmount,
+                )
+                AnimeUpdatesUiAnime(
                     modifier = Modifier.animateItemFastScroll(),
-                    update = updatesItem.update,
-                    selected = updatesItem.selected,
-                    watchProgress = updatesItem.update.lastSecondSeen
-                        .takeIf { !updatesItem.update.seen && it > 0L }
+                    anime = row.anime.copy(subText = subText),
+                    selected = row.episodes.isNotEmpty() && row.episodes.fastAll { it.selected },
+                    onClick = { onToggleAnime(row.anime.animeId, row.date) },
+                    onLongClick = {
+                        row.episodes.forEachIndexed { index, episode ->
+                            onUpdateSelected(episode, true, true, !selectionMode && index == 0)
+                        }
+                    },
+                    onClickCover = { onClickCover(row.episodes.first()) }.takeIf { !selectionMode },
+                    openAnime = row.open,
+                )
+            }
+            is AnimeUpdatesRow.Episode -> {
+                val episode = row.item
+                val indicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                AnimeUpdatesUiEpisode(
+                    modifier = Modifier
+                        .animateItemFastScroll()
+                        .padding(start = MaterialTheme.padding.large)
+                        .drawBehind {
+                            drawLine(
+                                color = indicatorColor,
+                                start = Offset(0f, 0f),
+                                end = Offset(0f, size.height),
+                                strokeWidth = 1.dp.toPx(),
+                            )
+                        },
+                    update = episode.update,
+                    selected = episode.selected,
+                    watchProgress = episode.update.lastSecondSeen
+                        .takeIf { it > 0 }
                         ?.let {
                             stringResource(
                                 AYMR.strings.episode_progress,
                                 formatProgress(it),
-                                formatProgress(updatesItem.update.totalSeconds),
+                                formatProgress(episode.update.totalSeconds),
                             )
                         },
-                    onLongClick = {
-                        onUpdateSelected(updatesItem, !updatesItem.selected, true, true)
-                    },
+                    onLongClick = { onUpdateSelected(episode, !episode.selected, true, true) },
                     onClick = {
                         when {
-                            selectionMode -> onUpdateSelected(
-                                updatesItem,
-                                !updatesItem.selected,
-                                true,
-                                false,
-                            )
-                            else -> onClickUpdate(updatesItem, false)
+                            selectionMode -> onUpdateSelected(episode, !episode.selected, true, false)
+                            else -> onClickUpdate(episode, false)
                         }
                     },
-                    onClickCover = { onClickCover(updatesItem) }.takeIf { !selectionMode },
+                    onClickCover = { onClickCover(episode) }.takeIf { !selectionMode },
                     onDownloadEpisode = { action: EpisodeDownloadAction ->
-                        onDownloadEpisode(listOf(updatesItem), action)
+                        onDownloadEpisode(listOf(episode), action)
                     }.takeIf { !selectionMode },
-                    downloadStateProvider = updatesItem.downloadStateProvider,
-                    downloadProgressProvider = updatesItem.downloadProgressProvider,
+                    downloadStateProvider = episode.downloadStateProvider,
+                    downloadProgressProvider = episode.downloadProgressProvider,
                 )
             }
         }
     }
 }
 
-@Composable
-private fun AnimeUpdatesUiItem(
-    update: AnimeUpdatesWithRelations,
-    selected: Boolean,
-    watchProgress: String?,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
-    onClickCover: (() -> Unit)?,
-    onDownloadEpisode: ((EpisodeDownloadAction) -> Unit)?,
-    // Download Indicator
-    downloadStateProvider: () -> AnimeDownload.State,
-    downloadProgressProvider: () -> Int,
-    modifier: Modifier = Modifier,
-) {
-    val haptic = LocalHapticFeedback.current
-    val textAlpha = if (update.seen) DISABLED_ALPHA else 1f
+private fun List<AnimeUpdatesUiModel>.toRows(
+    openedAnimes: Set<Pair<Long, LocalDate>>,
+): List<AnimeUpdatesRow> {
+    val groups = mutableListOf<Pair<LocalDate, MutableList<AnimeUpdatesItem>>>()
 
-    Row(
-        modifier = modifier
-            .selectedBackground(selected)
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = {
-                    onLongClick()
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                },
-            )
-            .height(56.dp)
-            .padding(horizontal = MaterialTheme.padding.medium),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        ItemCover.Square(
-            modifier = Modifier
-                .padding(vertical = 6.dp)
-                .fillMaxHeight(),
-            data = update.coverData,
-            onClick = onClickCover,
-        )
-        Column(
-            modifier = Modifier
-                .padding(horizontal = MaterialTheme.padding.medium)
-                .weight(1f),
-        ) {
-            Text(
-                text = update.animeTitle,
-                maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium,
-                color = LocalContentColor.current.copy(alpha = textAlpha),
-                overflow = TextOverflow.Ellipsis,
-            )
+    for (model in this) {
+        when (model) {
+            is AnimeUpdatesUiModel.Header -> groups.add(model.date to mutableListOf())
+            is AnimeUpdatesUiModel.Item -> groups.lastOrNull()?.second?.add(model.item)
+        }
+    }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                var textHeight by remember { mutableIntStateOf(0) }
-                if (!update.seen) {
-                    Icon(
-                        imageVector = Icons.Filled.Circle,
-                        contentDescription = stringResource(MR.strings.unread),
-                        modifier = Modifier
-                            .height(8.dp)
-                            .padding(end = 4.dp),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-                if (update.bookmark) {
-                    Icon(
-                        imageVector = Icons.Filled.Bookmark,
-                        contentDescription = stringResource(MR.strings.action_filter_bookmarked),
-                        modifier = Modifier
-                            .sizeIn(
-                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
-                            ),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                }
-                if (update.fillermark) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Label,
-                        contentDescription = stringResource(AYMR.strings.action_filter_fillermarked),
-                        modifier = Modifier
-                            .sizeIn(
-                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
-                            ),
-                        tint = MaterialTheme.colorScheme.tertiary,
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                }
-                Text(
-                    text = update.episodeName,
-                    maxLines = 1,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = LocalContentColor.current.copy(alpha = textAlpha),
-                    overflow = TextOverflow.Ellipsis,
-                    onTextLayout = { textHeight = it.size.height },
-                    modifier = Modifier
-                        .weight(weight = 1f, fill = false),
+    return buildList {
+        for ((date, items) in groups) {
+            add(AnimeUpdatesRow.Header(date))
+            val groupedItems = items.groupBy { it.update.animeId }
+
+            for ((animeId, episodes) in groupedItems) {
+                val firstEpisode = episodes.firstOrNull() ?: continue
+                val anime = AnimeUpdatesUiModels.Anime(
+                    animeId = animeId,
+                    animeTitle = firstEpisode.update.animeTitle,
+                    coverData = firstEpisode.update.coverData,
+                    subText = "",
                 )
-                if (watchProgress != null) {
-                    DotSeparatorText()
-                    Text(
-                        text = watchProgress,
-                        maxLines = 1,
-                        color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                val open = animeId to date in openedAnimes
+
+                add(
+                    AnimeUpdatesRow.Anime(
+                        date = date,
+                        anime = anime,
+                        episodes = episodes,
+                        open = open,
+                    ),
+                )
+
+                if (open) {
+                    for (episode in episodes) {
+                        add(
+                            AnimeUpdatesRow.Episode(
+                                date = date,
+                                item = episode,
+                            ),
+                        )
+                    }
                 }
             }
         }
-
-        EpisodeDownloadIndicator(
-            enabled = onDownloadEpisode != null,
-            modifier = Modifier.padding(start = 4.dp),
-            downloadStateProvider = downloadStateProvider,
-            downloadProgressProvider = downloadProgressProvider,
-            onClick = { onDownloadEpisode?.invoke(it) },
-        )
     }
+}
+
+private sealed interface AnimeUpdatesRow {
+    data class Header(val date: LocalDate) : AnimeUpdatesRow
+    data class Anime(
+        val date: LocalDate,
+        val anime: AnimeUpdatesUiModels.Anime,
+        val episodes: List<AnimeUpdatesItem>,
+        val open: Boolean,
+    ) : AnimeUpdatesRow
+
+    data class Episode(
+        val date: LocalDate,
+        val item: AnimeUpdatesItem,
+    ) : AnimeUpdatesRow
 }
 
 private fun formatProgress(milliseconds: Long): String {
