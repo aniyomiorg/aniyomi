@@ -32,7 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalUriHandler
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -109,6 +111,8 @@ data class BrowseAnimeSourceScreen(
         val scope = rememberCoroutineScope()
         val haptic = LocalHapticFeedback.current
         val uriHandler = LocalUriHandler.current
+        val focusManager = LocalFocusManager.current
+        val keyboardController = LocalSoftwareKeyboardController.current
         val snackbarHostState = remember { SnackbarHostState() }
 
         val onHelpClick = { uriHandler.openUri(LocalAnimeSource.HELP_URL) }
@@ -228,7 +232,13 @@ data class BrowseAnimeSourceScreen(
                 onWebViewClick = onWebViewClick,
                 onHelpClick = { uriHandler.openUri(Constants.URL_HELP) },
                 onLocalAnimeSourceHelpClick = onHelpClick,
-                onAnimeClick = { navigator.push((AnimeScreen(it.id, true))) },
+                onAnimeClick = {
+                    // Release focus from the search field before leaving the screen, otherwise
+                    // the restored focus reopens the keyboard on return (#2266)
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                    navigator.push(AnimeScreen(it.id, true))
+                },
                 onAnimeLongClick = { anime ->
                     scope.launchIO {
                         val duplicateAnime = screenModel.getDuplicateAnimelibAnime(anime)

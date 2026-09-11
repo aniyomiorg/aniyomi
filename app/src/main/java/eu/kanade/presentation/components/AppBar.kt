@@ -1,13 +1,16 @@
 package eu.kanade.presentation.components
 
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -316,6 +319,12 @@ fun SearchToolbar(
                 focusManager.clearFocus()
                 keyboardController?.hide()
             }
+
+            // On Android < P clearing focus in touch mode makes the framework immediately
+            // pass focus back to the first focusable node. If that node is the text field,
+            // the keyboard reopens right after every dismissal and can never be closed
+            // (#2266), so give the bounced focus a harmless place to land instead.
+            Box(modifier = Modifier.size(1.dp).focusable())
 
             BasicTextField(
                 value = searchQuery,
