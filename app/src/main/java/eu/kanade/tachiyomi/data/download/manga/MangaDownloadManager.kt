@@ -28,7 +28,6 @@ import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.storage.service.StorageManager
 import tachiyomi.i18n.MR
 import tachiyomi.source.local.entries.manga.LocalMangaSource
-import tachiyomi.source.local.io.ArchiveManga
 import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -221,12 +220,7 @@ class MangaDownloadManager(
      * @param manga the manga to check.
      */
     fun getDownloadCount(manga: Manga): Int {
-        return if (manga.source == LocalMangaSource.ID) {
-            LocalMangaSourceFileSystem(storageManager).getFilesInMangaDirectory(manga.url)
-                .count { it.isDirectory || ArchiveManga.isSupported(it) }
-        } else {
-            cache.getDownloadCount(manga)
-        }
+        return cache.getDownloadCount(manga)
     }
 
     /**
