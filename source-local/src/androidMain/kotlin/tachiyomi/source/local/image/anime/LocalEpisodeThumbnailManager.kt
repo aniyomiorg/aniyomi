@@ -19,8 +19,8 @@ actual class LocalEpisodeThumbnailManager(
 
     actual fun find(animeUrl: String, fileName: String): UniFile? {
         return fileSystem.getFilesInAnimeDirectory(animeUrl)
-            // Get all file whose names contain the episode name and the word 'thumbnail'
-            .filter { it.isFile && it.nameWithoutExtension.equals(fileName, ignoreCase = true) }
+            // Get all file whose names match the episode name with the DEFAULT_THUMBNAIL_NAME suffix
+            .filter { it.isFile && it.name.equals(fileName, ignoreCase = true) }
             // Get the first actual image
             .firstOrNull { ImageUtil.isImage(it.name) { it.openInputStream() } }
     }
