@@ -525,4 +525,5 @@
     <string name="action_remove_fillermark_episode">Снять пометку филлера с серии</string>
     <string name="pref_download_fillermarked_items">Разрешить загрузку серий помеченных как филлер</string>
     <string name="label_player">Плеер</string>
+    <string name="enable_horizontal_seek_gesture_summary">Проведите пальцем влево или вправо, чтобы перемотать вперёд или назад</string>
 </resources>
