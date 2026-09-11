@@ -68,17 +68,24 @@ class JellyfinApi(
 
     private fun getEpisodesUrl(url: HttpUrl): HttpUrl {
         val fragment = url.fragment!!
-
-        return url.newBuilder().apply {
+        val usersIndex = url.pathSegments.indexOf("Users")
+        val baseUrl = if(usersIndex != -1) url.newBuilder().apply {
+            fragment(null)
+            encodedQuery(null)
+            encodedPath("/" + url.pathSegments.subList(0, usersIndex).joinToString("/"))
+        } else url.newBuilder().apply {
             encodedPath("/")
             fragment(null)
             encodedQuery(null)
+        }
+        val userId = if(usersIndex != -1) url.pathSegments[usersIndex + 1] else url.pathSegments[1]
 
+        return baseUrl.apply {
             addPathSegment("Shows")
             addPathSegment(fragment.split(",").last())
             addPathSegment("Episodes")
             addQueryParameter("seasonId", url.pathSegments.last())
-            addQueryParameter("userId", url.pathSegments[1])
+            addQueryParameter("userId", userId)
             addQueryParameter("Fields", "Overview,MediaSources")
         }.build()
     }
@@ -140,19 +147,21 @@ class JellyfinApi(
         }
 
         if (itemId != null) {
-            val time = DATE_FORMATTER.format(Date())
-            val postUrl = httpUrl.newBuilder().apply {
-                fragment(null)
-                removePathSegment(3)
-                removePathSegment(2)
-                addPathSegment("PlayedItems")
-                addPathSegment(itemId)
-                addQueryParameter("DatePlayed", time)
-            }.build().toString()
+            val usersIndex = httpUrl.pathSegments.indexOf("Users")
+            if(usersIndex != -1) {
+                val time = DATE_FORMATTER.format(Date())
+                val postUrl = httpUrl.newBuilder().apply {
+                    fragment(null)
+                    encodedPath("/" + httpUrl.pathSegments.subList(0, usersIndex + 2).joinToString("/"))
+                    addPathSegment("PlayedItems")
+                    addPathSegment(itemId)
+                    addQueryParameter("DatePlayed", time)
+                }.build().toString()
 
-            client.newCall(
-                POST(postUrl),
-            ).awaitSuccess()
+                client.newCall(
+                    POST(postUrl),
+                ).awaitSuccess()
+            }
         }
 
         return getTrackSearch(track.tracking_url)
