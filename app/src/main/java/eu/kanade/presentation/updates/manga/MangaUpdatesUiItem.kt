@@ -1,53 +1,32 @@
 package eu.kanade.presentation.updates.manga
 
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAll
 import eu.kanade.presentation.components.relativeDateText
-import eu.kanade.presentation.entries.components.DotSeparatorText
-import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
-import eu.kanade.presentation.entries.manga.components.ChapterDownloadIndicator
+import eu.kanade.presentation.updates.manga.components.MangaUpdatesUiChapter
+import eu.kanade.presentation.updates.manga.components.MangaUpdatesUiManga
+import eu.kanade.presentation.updates.manga.model.MangaUpdatesUiModels
 import eu.kanade.presentation.util.animateItemFastScroll
 import eu.kanade.presentation.util.relativeTimeSpanString
-import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
-import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import tachiyomi.i18n.MR
+import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.ListGroupHeader
-import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
-import tachiyomi.presentation.core.util.selectedBackground
+import java.time.LocalDate
 
 internal fun LazyListScope.mangaUpdatesLastUpdatedItem(
     lastUpdated: Long,
@@ -69,175 +48,162 @@ internal fun LazyListScope.mangaUpdatesLastUpdatedItem(
 internal fun LazyListScope.mangaUpdatesUiItems(
     uiModels: List<MangaUpdatesUiModel>,
     selectionMode: Boolean,
+    openedMangas: Set<Pair<Long, LocalDate>>,
+    onToggleManga: (Long, LocalDate) -> Unit,
     onUpdateSelected: (MangaUpdatesItem, Boolean, Boolean, Boolean) -> Unit,
     onClickCover: (MangaUpdatesItem) -> Unit,
     onClickUpdate: (MangaUpdatesItem) -> Unit,
     onDownloadChapter: (List<MangaUpdatesItem>, ChapterDownloadAction) -> Unit,
 ) {
+    val rows = uiModels.toRows(openedMangas)
+
     items(
-        items = uiModels,
-        contentType = {
-            when (it) {
-                is MangaUpdatesUiModel.Header -> "header"
-                is MangaUpdatesUiModel.Item -> "item"
-            }
-        },
+        items = rows,
         key = {
             when (it) {
-                is MangaUpdatesUiModel.Header -> "mangaUpdatesHeader-${it.hashCode()}"
-                is MangaUpdatesUiModel.Item -> "mangaUpdates-${it.item.update.mangaId}-${it.item.update.chapterId}"
+                is MangaUpdatesRow.Header -> "mangaUpdatesHeader-${it.date}"
+                is MangaUpdatesRow.Manga -> "mangaUpdatesManga-${it.date}-${it.manga.mangaId}"
+                is MangaUpdatesRow.Chapter -> {
+                    "mangaUpdatesChapter-${it.date}-${it.item.update.mangaId}-${it.item.update.chapterId}"
+                }
             }
         },
-    ) { item ->
-        when (item) {
-            is MangaUpdatesUiModel.Header -> {
+        contentType = {
+            when (it) {
+                is MangaUpdatesRow.Header -> "header"
+                is MangaUpdatesRow.Manga -> "manga"
+                is MangaUpdatesRow.Chapter -> "chapter"
+            }
+        },
+    ) { row ->
+        when (row) {
+            is MangaUpdatesRow.Header -> {
                 ListGroupHeader(
                     modifier = Modifier.animateItemFastScroll(),
-                    text = relativeDateText(item.date),
+                    text = relativeDateText(row.date),
                 )
             }
-            is MangaUpdatesUiModel.Item -> {
-                val updatesItem = item.item
-                MangaUpdatesUiItem(
+            is MangaUpdatesRow.Manga -> {
+                val chapterAmount = row.chapters.size
+                val subText = pluralStringResource(
+                    AYMR.plurals.updated_amount_chapters,
+                    chapterAmount,
+                    chapterAmount,
+                )
+                MangaUpdatesUiManga(
                     modifier = Modifier.animateItemFastScroll(),
-                    update = updatesItem.update,
-                    selected = updatesItem.selected,
-                    readProgress = updatesItem.update.lastPageRead
-                        .takeIf { !updatesItem.update.read && it > 0L }
-                        ?.let {
-                            stringResource(
-                                MR.strings.chapter_progress,
-                                it + 1,
-                            )
-                        },
+                    manga = row.manga.copy(subText = subText),
+                    selected = row.chapters.isNotEmpty() && row.chapters.fastAll { it.selected },
+                    onClick = { onToggleManga(row.manga.mangaId, row.date) },
                     onLongClick = {
-                        onUpdateSelected(updatesItem, !updatesItem.selected, true, true)
-                    },
-                    onClick = {
-                        when {
-                            selectionMode -> onUpdateSelected(
-                                updatesItem,
-                                !updatesItem.selected,
-                                true,
-                                false,
-                            )
-                            else -> onClickUpdate(updatesItem)
+                        row.chapters.forEachIndexed { index, chapter ->
+                            onUpdateSelected(chapter, true, true, !selectionMode && index == 0)
                         }
                     },
-                    onClickCover = { onClickCover(updatesItem) }.takeIf { !selectionMode },
+                    onClickCover = { onClickCover(row.chapters.first()) }.takeIf { !selectionMode },
+                    openManga = row.open,
+                )
+            }
+            is MangaUpdatesRow.Chapter -> {
+                val chapter = row.item
+                val indicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                MangaUpdatesUiChapter(
+                    modifier = Modifier
+                        .animateItemFastScroll()
+                        .padding(start = MaterialTheme.padding.large)
+                        .drawBehind {
+                            drawLine(
+                                color = indicatorColor,
+                                start = Offset(0f, 0f),
+                                end = Offset(0f, size.height),
+                                strokeWidth = 1.dp.toPx(),
+                            )
+                        },
+                    update = chapter.update,
+                    selected = chapter.selected,
+                    readProgress = chapter.update.lastPageRead
+                        .takeIf { !chapter.update.read && it > 0L }
+                        ?.let { stringResource(MR.strings.chapter_progress, it + 1) },
+                    onLongClick = { onUpdateSelected(chapter, !chapter.selected, true, true) },
+                    onClick = {
+                        when {
+                            selectionMode -> onUpdateSelected(chapter, !chapter.selected, true, false)
+                            else -> onClickUpdate(chapter)
+                        }
+                    },
                     onDownloadChapter = { action: ChapterDownloadAction ->
-                        onDownloadChapter(listOf(updatesItem), action)
+                        onDownloadChapter(listOf(chapter), action)
                     }.takeIf { !selectionMode },
-                    downloadStateProvider = updatesItem.downloadStateProvider,
-                    downloadProgressProvider = updatesItem.downloadProgressProvider,
+                    downloadStateProvider = chapter.downloadStateProvider,
+                    downloadProgressProvider = chapter.downloadProgressProvider,
                 )
             }
         }
     }
 }
 
-@Composable
-private fun MangaUpdatesUiItem(
-    update: MangaUpdatesWithRelations,
-    selected: Boolean,
-    readProgress: String?,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
-    onClickCover: (() -> Unit)?,
-    onDownloadChapter: ((ChapterDownloadAction) -> Unit)?,
-    // Download Indicator
-    downloadStateProvider: () -> MangaDownload.State,
-    downloadProgressProvider: () -> Int,
-    modifier: Modifier = Modifier,
-) {
-    val haptic = LocalHapticFeedback.current
-    val textAlpha = if (update.read) DISABLED_ALPHA else 1f
+private fun List<MangaUpdatesUiModel>.toRows(
+    openedMangas: Set<Pair<Long, LocalDate>>,
+): List<MangaUpdatesRow> {
+    val groups = mutableListOf<Pair<LocalDate, MutableList<MangaUpdatesItem>>>()
 
-    Row(
-        modifier = modifier
-            .selectedBackground(selected)
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = {
-                    onLongClick()
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                },
-            )
-            .height(56.dp)
-            .padding(horizontal = MaterialTheme.padding.medium),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        ItemCover.Square(
-            modifier = Modifier
-                .padding(vertical = 6.dp)
-                .fillMaxHeight(),
-            data = update.coverData,
-            onClick = onClickCover,
-        )
-        Column(
-            modifier = Modifier
-                .padding(horizontal = MaterialTheme.padding.medium)
-                .weight(1f),
-        ) {
-            Text(
-                text = update.mangaTitle,
-                maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium,
-                color = LocalContentColor.current.copy(alpha = textAlpha),
-                overflow = TextOverflow.Ellipsis,
-            )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                var textHeight by remember { mutableIntStateOf(0) }
-                if (!update.read) {
-                    Icon(
-                        imageVector = Icons.Filled.Circle,
-                        contentDescription = stringResource(MR.strings.unread),
-                        modifier = Modifier
-                            .height(8.dp)
-                            .padding(end = 4.dp),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-                if (update.bookmark) {
-                    Icon(
-                        imageVector = Icons.Filled.Bookmark,
-                        contentDescription = stringResource(MR.strings.action_filter_bookmarked),
-                        modifier = Modifier
-                            .sizeIn(
-                                maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp },
-                            ),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                }
-                Text(
-                    text = update.chapterName,
-                    maxLines = 1,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = LocalContentColor.current.copy(alpha = textAlpha),
-                    overflow = TextOverflow.Ellipsis,
-                    onTextLayout = { textHeight = it.size.height },
-                    modifier = Modifier
-                        .weight(weight = 1f, fill = false),
+    for (model in this) {
+        when (model) {
+            is MangaUpdatesUiModel.Header -> groups.add(model.date to mutableListOf())
+            is MangaUpdatesUiModel.Item -> groups.lastOrNull()?.second?.add(model.item)
+        }
+    }
+
+    return buildList {
+        for ((date, items) in groups) {
+            add(MangaUpdatesRow.Header(date))
+            val groupedItems = items.groupBy { it.update.mangaId }
+
+            for ((mangaId, chapters) in groupedItems) {
+                val firstChapter = chapters.firstOrNull() ?: continue
+                val manga = MangaUpdatesUiModels.Manga(
+                    mangaId = mangaId,
+                    mangaTitle = firstChapter.update.mangaTitle,
+                    coverData = firstChapter.update.coverData,
+                    subText = "",
                 )
-                if (readProgress != null) {
-                    DotSeparatorText()
-                    Text(
-                        text = readProgress,
-                        maxLines = 1,
-                        color = LocalContentColor.current.copy(alpha = DISABLED_ALPHA),
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                val open = mangaId to date in openedMangas
+
+                add(
+                    MangaUpdatesRow.Manga(
+                        date = date,
+                        manga = manga,
+                        chapters = chapters,
+                        open = open,
+                    ),
+                )
+
+                if (open) {
+                    for (chapter in chapters) {
+                        add(
+                            MangaUpdatesRow.Chapter(
+                                date = date,
+                                item = chapter,
+                            ),
+                        )
+                    }
                 }
             }
         }
-
-        ChapterDownloadIndicator(
-            enabled = onDownloadChapter != null,
-            modifier = Modifier.padding(start = 4.dp),
-            downloadStateProvider = downloadStateProvider,
-            downloadProgressProvider = downloadProgressProvider,
-            onClick = { onDownloadChapter?.invoke(it) },
-        )
     }
+}
+
+private sealed interface MangaUpdatesRow {
+    data class Header(val date: LocalDate) : MangaUpdatesRow
+    data class Manga(
+        val date: LocalDate,
+        val manga: MangaUpdatesUiModels.Manga,
+        val chapters: List<MangaUpdatesItem>,
+        val open: Boolean,
+    ) : MangaUpdatesRow
+
+    data class Chapter(
+        val date: LocalDate,
+        val item: MangaUpdatesItem,
+    ) : MangaUpdatesRow
 }
