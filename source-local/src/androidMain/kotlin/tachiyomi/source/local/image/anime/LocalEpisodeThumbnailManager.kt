@@ -7,10 +7,9 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import tachiyomi.core.common.storage.nameWithoutExtension
 import tachiyomi.core.common.util.system.ImageUtil
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import java.io.InputStream
-
-private const val DEFAULT_THUMBNAIL_NAME = "thumbnail.jpg"
 
 actual class LocalEpisodeThumbnailManager(
     private val context: Context,
@@ -18,9 +17,22 @@ actual class LocalEpisodeThumbnailManager(
 ) {
 
     actual fun find(animeUrl: String, fileName: String): UniFile? {
-        return fileSystem.getFilesInAnimeDirectory(animeUrl)
-            // Get all file whose names contain the episode name and the word 'thumbnail'
-            .filter { it.isFile && it.nameWithoutExtension.equals(fileName, ignoreCase = true) }
+        val animeDir = fileSystem.getAnimeDirectory(animeUrl)
+        val thumbnailsDir = animeDir?.findFile(LocalAnimeSource.THUMBNAILS_DIR)
+        val files = thumbnailsDir?.listFiles().orEmpty().toList() +
+            fileSystem.getFilesInAnimeDirectory(animeUrl)
+
+        val nameToMatch = fileName.substringBeforeLast('.')
+
+        return files
+            // Get all file whose names match the episode thumbnail name
+            .filter {
+                it.isFile &&
+                    (
+                        it.name.equals(fileName, ignoreCase = true) ||
+                            it.nameWithoutExtension.equals(nameToMatch, ignoreCase = true)
+                        )
+            }
             // Get the first actual image
             .firstOrNull { ImageUtil.isImage(it.name) { it.openInputStream() } }
     }
@@ -32,8 +44,9 @@ actual class LocalEpisodeThumbnailManager(
             return null
         }
 
-        val fileName = "${episode.name}-$DEFAULT_THUMBNAIL_NAME"
-        val targetFile = find(anime.url, fileName) ?: directory.createFile(fileName)!!
+        val thumbnailsDir = directory.createDirectory(LocalAnimeSource.THUMBNAILS_DIR)!!
+        val fileName = "${episode.name}-${LocalAnimeSource.DEFAULT_THUMBNAIL_NAME}"
+        val targetFile = find(anime.url, fileName) ?: thumbnailsDir.createFile(fileName)!!
 
         inputStream.use { input ->
             targetFile.openOutputStream().use { output ->
@@ -41,7 +54,7 @@ actual class LocalEpisodeThumbnailManager(
             }
         }
 
-        DiskUtil.createNoMediaFile(directory, context)
+        DiskUtil.createNoMediaFile(thumbnailsDir, context)
 
         episode.preview_url = targetFile.uri.toString()
         return targetFile

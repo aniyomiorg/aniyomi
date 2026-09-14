@@ -3,13 +3,11 @@ package tachiyomi.source.local.image.anime
 import android.content.Context
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.util.storage.DiskUtil
 import tachiyomi.core.common.storage.nameWithoutExtension
 import tachiyomi.core.common.util.system.ImageUtil
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
 import java.io.InputStream
-
-private const val DEFAULT_COVER_NAME = "cover.jpg"
 
 actual class LocalAnimeCoverManager(
     private val context: Context,
@@ -31,15 +29,13 @@ actual class LocalAnimeCoverManager(
             return null
         }
 
-        val targetFile = find(anime.url) ?: directory.createFile(DEFAULT_COVER_NAME)!!
+        val targetFile = find(anime.url) ?: directory.createFile(LocalAnimeSource.DEFAULT_COVER_NAME)!!
 
         inputStream.use { input ->
             targetFile.openOutputStream().use { output ->
                 input.copyTo(output)
             }
         }
-
-        DiskUtil.createNoMediaFile(directory, context)
 
         anime.thumbnail_url = targetFile.uri.toString()
         return targetFile

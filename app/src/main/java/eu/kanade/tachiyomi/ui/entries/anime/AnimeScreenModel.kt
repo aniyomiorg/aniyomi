@@ -74,6 +74,7 @@ import tachiyomi.core.common.preference.TriState
 import tachiyomi.core.common.preference.mapAsCheckboxState
 import tachiyomi.core.common.util.lang.launchIO
 import tachiyomi.core.common.util.lang.launchNonCancellable
+import tachiyomi.core.common.util.lang.withIOContext
 import tachiyomi.core.common.util.lang.withUIContext
 import tachiyomi.core.common.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
@@ -311,7 +312,7 @@ class AnimeScreenModel(
         }
 
         try {
-            withUIContext {
+            withIOContext {
                 when (state.anime.fetchType) {
                     FetchType.Episodes -> {
                         val update = updateAnimeFromRemote.awaitEpisodesUpdate(
