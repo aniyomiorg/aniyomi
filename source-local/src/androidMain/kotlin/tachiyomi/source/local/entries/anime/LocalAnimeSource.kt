@@ -270,7 +270,7 @@ actual class LocalAnimeSource(
                     }
 
                     // Generate the preview from the episode if not available
-                    if (this.preview_url == null) {
+                    if (thumbnailManager.find(anime.url, "${this.name}-${DEFAULT_THUMBNAIL_NAME}") == null) {
                         try {
                             val tempFileSuffix = anime.title + this.name + DEFAULT_THUMBNAIL_NAME
                             val updateThumbnail: (InputStream) -> Unit = { thumbnailManager.update(anime, this, it) }
