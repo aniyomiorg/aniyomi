@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="confirm_exit">Premi di nuovo indietro per uscire</string>
+    <string name="confirm_exit">Abilita lo scorrimento orizzontale per avanzare/riavvolgere</string>
     <string name="action_filter_started">Iniziato</string>
     <string name="action_sort_airing_time">Orario di messa in onda</string>
     <string name="action_reorganize_by">Riordina</string>
@@ -527,4 +527,5 @@
     <string name="pref_download_fillermarked_items">Consenti il download degli episodi segnati come filler</string>
     <string name="show_episode_previews">Miniature episodi</string>
     <string name="show_episode_summaries">Riepiloghi episodi</string>
+    <string name="enable_horizontal_seek_gesture_summary">Scorri a sinistra o destra per mandare indietro o avanti</string>
 </resources>

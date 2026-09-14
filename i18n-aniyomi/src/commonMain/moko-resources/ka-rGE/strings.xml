@@ -9,4 +9,14 @@
     <string name="download_paused">დაპაუზებულია</string>
     <string name="download_notifier_download_paused_chapters">გადმოწერა დაპაუზებულია</string>
     <string name="channel_new_chapters_episodes">თავების განახლებები</string>
+    <string name="manga">მანგა</string>
+    <string name="pref_category_delete_chapters">თავების/ეპიზოდების წაშლა</string>
+    <string name="pref_remove_after_marked_as_read">წაკითხულად/ნანახად ხელით მონიშვნის შემდეგ</string>
+    <string name="pref_remove_after_read">ავტომატური წაშლა წაკითხვის/ყურების შემდეგ</string>
+    <string name="pref_remove_bookmarked_chapters">რჩეულებში ჩანიშნული თავების/ეპიზოდების წაშლის დაშვება</string>
+    <string name="pref_auto_update_manga_sync">მიმდინარეობის განახლება წაკითხვის/ყურების შემდეგ</string>
+    <string name="pref_clear_chapter_cache">თავებისა და ეპიზოდების კეშის გასუფთავება</string>
+    <string name="clear_database_confirmation">დარწმუნებული ბრძანდებით? დასრულებული ეპიზოდები და თავები და არაბიბლიოთეკის ჩანაწერების მიმდინარეობა დაიკარგება</string>
+    <string name="dialog_with_checkbox_reset">ყველა თავის ჩამოყრა ამ მანგასთვის</string>
+    <string name="download_insufficient_space">გადმოწერა შეუძლებელია დისკზე ადგილის უკმარისობის გამო</string>
 </resources>

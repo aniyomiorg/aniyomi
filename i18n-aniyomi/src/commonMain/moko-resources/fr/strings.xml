@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="confirm_exit">Appuyez à nouveau pour quitter</string>
+    <string name="confirm_exit">Activer la recherche horizontale</string>
     <string name="action_filter_started">Commencés</string>
     <string name="action_sort_airing_time">Période de diffusion</string>
     <string name="action_reorganize_by">Réorganiser</string>

@@ -14,4 +14,8 @@
     <string name="download_paused">Szünetel</string>
     <string name="download_notifier_download_paused_chapters">Letöltés szüneteltetve</string>
     <string name="channel_new_chapters_episodes">Fejezetfrissítések</string>
+    <string name="action_filter_started">Elkezdett</string>
+    <string name="action_sort_airing_time">Megjelenési idő</string>
+    <string name="relative_time_now">Most</string>
+    <string name="action_continue">Folytat</string>
 </resources>
