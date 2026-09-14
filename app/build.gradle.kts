@@ -20,7 +20,7 @@ android {
         applicationId = "xyz.jmir.tachiyomi.mi"
 
         versionCode = 131
-        versionName = "0.18.1.2"
+        versionName = "0.18.2.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
