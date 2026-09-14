@@ -1,7 +1,10 @@
 package eu.kanade.presentation.more.settings.widget
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,8 +32,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.util.isTvUi
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 
 private enum class State {
     CHECKED,
@@ -75,19 +80,27 @@ fun <T> TriStateListDialog(
 
                 Box {
                     val listState = rememberLazyListState()
-                    LazyColumn(state = listState) {
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier.focusGroup(),
+                    ) {
                         itemsIndexed(items = items) { index, item ->
                             val state = selected[index]
+                            val interactionSource = remember { MutableInteractionSource() }
                             Row(
                                 modifier = Modifier
                                     .clip(MaterialTheme.shapes.small)
-                                    .clickable {
+                                    .clickable(
+                                        interactionSource = interactionSource,
+                                        indication = LocalIndication.current,
+                                    ) {
                                         selected[index] = when (state) {
                                             State.UNCHECKED -> State.CHECKED
                                             State.CHECKED -> State.INVERSED
                                             State.INVERSED -> State.UNCHECKED
                                         }
                                     }
+                                    .tvFocusable(interactionSource, isTvUi())
                                     .defaultMinSize(minHeight = 48.dp)
                                     .fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,

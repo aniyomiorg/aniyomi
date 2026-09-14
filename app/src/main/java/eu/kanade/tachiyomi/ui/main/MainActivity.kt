@@ -44,8 +44,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.core.animation.doOnEnd
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen
@@ -70,6 +72,7 @@ import eu.kanade.presentation.more.settings.screen.browse.MangaExtensionReposScr
 import eu.kanade.presentation.more.settings.screen.data.RestoreBackupScreen
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.DefaultNavigatorScreenTransition
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.animesource.model.Hoster
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -105,6 +108,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.system.updaterEnabled
 import eu.kanade.tachiyomi.util.view.setComposeContent
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
@@ -226,6 +230,21 @@ class MainActivity : BaseActivity() {
                     (navigator.lastItem as? BrowseAnimeSourceScreen)?.sourceId
                         .let(getAnimeIncognitoState::subscribe)
                         .collectLatest { incognitoAnime = it }
+                }
+
+                // Voyager pushing a new screen doesn't move Compose focus onto it, so D-pad
+                // input has nothing to act on until the user establishes focus some other way.
+                // Nudge focus onto the newly shown screen's topmost focusable element. Retried
+                // a few times since the new screen's content may not be laid out yet on the
+                // first attempt (screen transition animation, subcomposition).
+                if (isTvUi()) {
+                    val focusManager = LocalFocusManager.current
+                    LaunchedEffect(navigator.lastItem) {
+                        repeat(5) { attempt ->
+                            delay(if (attempt == 0) 50L else 100L)
+                            if (focusManager.moveFocus(FocusDirection.Down)) return@LaunchedEffect
+                        }
+                    }
                 }
 
                 val scaffoldInsets = WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)

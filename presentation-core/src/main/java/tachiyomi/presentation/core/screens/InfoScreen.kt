@@ -1,6 +1,7 @@
 package tachiyomi.presentation.core.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -20,6 +21,7 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -31,6 +33,7 @@ import androidx.compose.ui.zIndex
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun InfoScreen(
@@ -42,6 +45,7 @@ fun InfoScreen(
     canAccept: Boolean = true,
     rejectText: String? = null,
     onRejectClick: (() -> Unit)? = null,
+    isTvUi: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Scaffold(
@@ -65,16 +69,24 @@ fun InfoScreen(
                         vertical = MaterialTheme.padding.small,
                     ),
             ) {
+                val acceptInteractionSource = remember { MutableInteractionSource() }
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .tvFocusable(acceptInteractionSource, isTvUi),
+                    interactionSource = acceptInteractionSource,
                     enabled = canAccept,
                     onClick = onAcceptClick,
                 ) {
                     Text(text = acceptText)
                 }
                 if (rejectText != null && onRejectClick != null) {
+                    val rejectInteractionSource = remember { MutableInteractionSource() }
                     OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .tvFocusable(rejectInteractionSource, isTvUi),
+                        interactionSource = rejectInteractionSource,
                         onClick = onRejectClick,
                     ) {
                         Text(text = rejectText)

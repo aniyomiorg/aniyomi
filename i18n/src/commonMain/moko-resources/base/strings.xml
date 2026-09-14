@@ -95,6 +95,8 @@
     <string name="action_edit_categories">Edit categories</string>
     <string name="action_rename_category">Rename category</string>
     <string name="action_move_category">Set categories</string>
+    <string name="action_move_up">Move up</string>
+    <string name="action_move_down">Move down</string>
     <string name="delete_category_confirmation">Do you wish to delete the category \"%s\"?</string>
     <string name="delete_category">Delete category</string>
     <string name="action_edit_cover">Edit cover</string>

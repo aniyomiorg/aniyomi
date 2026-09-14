@@ -7,6 +7,8 @@ import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -81,6 +83,7 @@ import coil3.request.crossfade
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.components.DotSeparatorText
 import eu.kanade.presentation.entries.components.ItemCover
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.coil.useBackground
@@ -95,8 +98,8 @@ import tachiyomi.presentation.core.components.material.TextButton
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.pluralStringResource
 import tachiyomi.presentation.core.i18n.stringResource
-import tachiyomi.presentation.core.util.clickableNoIndication
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import tachiyomi.presentation.core.util.tvFocusable
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
@@ -279,7 +282,7 @@ fun ExpandableAnimeDescription(
             modifier = Modifier
                 .padding(top = 8.dp)
                 .padding(horizontal = 16.dp)
-                .clickableNoIndication { onExpanded(!expanded) },
+                .clickableNoIndicationTvFocusable { onExpanded(!expanded) },
         )
         val tags = tagsProvider()
         if (!tags.isNullOrEmpty()) {
@@ -347,6 +350,24 @@ fun ExpandableAnimeDescription(
             }
         }
     }
+}
+
+// Same as tvFocusable's usual clickable pairing, but keeps indication=null (no ripple, preserving
+// the existing touch design of these text elements) while still drawing the D-pad focus border.
+@Composable
+private fun Modifier.clickableNoIndicationTvFocusable(
+    onLongClick: (() -> Unit)? = null,
+    onClick: () -> Unit,
+): Modifier {
+    val interactionSource = remember { MutableInteractionSource() }
+    return this
+        .combinedClickable(
+            interactionSource = interactionSource,
+            indication = null,
+            onLongClick = onLongClick,
+            onClick = onClick,
+        )
+        .tvFocusable(interactionSource, isTvUi())
 }
 
 @Composable
@@ -445,7 +466,7 @@ private fun ColumnScope.AnimeContentInfo(
     Text(
         text = title.ifBlank { stringResource(MR.strings.unknown_title) },
         style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.clickableNoIndication(
+        modifier = Modifier.clickableNoIndicationTvFocusable(
             onLongClick = {
                 if (title.isNotBlank()) {
                     context.copyToClipboard(
@@ -476,7 +497,7 @@ private fun ColumnScope.AnimeContentInfo(
                 ?: stringResource(MR.strings.unknown_author),
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier
-                .clickableNoIndication(
+                .clickableNoIndicationTvFocusable(
                     onLongClick = {
                         if (!author.isNullOrBlank()) {
                             context.copyToClipboard(
@@ -506,7 +527,7 @@ private fun ColumnScope.AnimeContentInfo(
                 text = artist,
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier
-                    .clickableNoIndication(
+                    .clickableNoIndicationTvFocusable(
                         onLongClick = { context.copyToClipboard(artist, artist) },
                         onClick = { doSearch(artist, true) },
                     ),
@@ -565,7 +586,7 @@ private fun ColumnScope.AnimeContentInfo(
             }
             Text(
                 text = sourceName,
-                modifier = Modifier.clickableNoIndication {
+                modifier = Modifier.clickableNoIndicationTvFocusable {
                     doSearch(
                         sourceName,
                         false,
@@ -690,10 +711,12 @@ private fun TagsChip(
     onClick: () -> Unit,
 ) {
     CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+        val interactionSource = remember { MutableInteractionSource() }
         SuggestionChip(
-            modifier = modifier,
+            modifier = modifier.tvFocusable(interactionSource, isTvUi()),
             onClick = onClick,
             label = { Text(text = text, style = MaterialTheme.typography.bodySmall) },
+            interactionSource = interactionSource,
         )
     }
 }
@@ -706,10 +729,14 @@ private fun RowScope.AnimeActionButton(
     onClick: () -> Unit,
     onLongClick: (() -> Unit)? = null,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     TextButton(
         onClick = onClick,
-        modifier = Modifier.weight(1f),
+        modifier = Modifier
+            .weight(1f)
+            .tvFocusable(interactionSource, isTvUi()),
         onLongClick = onLongClick,
+        interactionSource = interactionSource,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(

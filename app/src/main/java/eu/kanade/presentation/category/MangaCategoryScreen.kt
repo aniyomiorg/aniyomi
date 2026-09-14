@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -93,10 +93,10 @@ private fun CategoryContent(
         contentPadding = PaddingValues(MaterialTheme.padding.medium),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
-        items(
+        itemsIndexed(
             items = categoriesState,
-            key = { category -> category.key },
-        ) { category ->
+            key = { _, category -> category.key },
+        ) { index, category ->
             ReorderableItem(reorderableState, category.key) {
                 CategoryListItem(
                     modifier = Modifier.animateItem(),
@@ -104,6 +104,16 @@ private fun CategoryContent(
                     onRename = { onClickRename(category) },
                     onHide = { onClickHide(category) },
                     onDelete = { onClickDelete(category) },
+                    onMoveUp = if (index > 0) {
+                        { onChangeOrder(category, index - 1) }
+                    } else {
+                        null
+                    },
+                    onMoveDown = if (index < categoriesState.lastIndex) {
+                        { onChangeOrder(category, index + 1) }
+                    } else {
+                        null
+                    },
                 )
             }
         }

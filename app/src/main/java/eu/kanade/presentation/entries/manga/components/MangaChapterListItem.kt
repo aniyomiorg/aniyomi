@@ -1,6 +1,8 @@
 package eu.kanade.presentation.entries.manga.components
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,11 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.components.DotSeparatorText
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
+import eu.kanade.tachiyomi.util.system.isTvUiMode
 import me.saket.swipe.SwipeableActionsBox
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.i18n.MR
@@ -45,6 +50,7 @@ import tachiyomi.presentation.core.components.material.DISABLED_ALPHA
 import tachiyomi.presentation.core.components.material.SECONDARY_ALPHA
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.selectedBackground
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun MangaChapterListItem(
@@ -66,6 +72,10 @@ fun MangaChapterListItem(
     onChapterSwipe: (LibraryPreferences.ChapterSwipeAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val isTv = isTvUi()
+    // Swipe gestures should only be disabled on real TV hardware, not when the user
+    // manually forces TvUiMode.ALWAYS on a touch device — that would break swipe-to-mark.
+    val isTvHardware = LocalConfiguration.current.isTvUiMode()
     val start = getSwipeAction(
         action = chapterSwipeStartAction,
         read = read,
@@ -83,20 +93,25 @@ fun MangaChapterListItem(
         onSwipe = { onChapterSwipe(chapterSwipeEndAction) },
     )
 
+    // Swipe gestures have no D-pad equivalent; long-press (OK held) still opens selection mode.
     SwipeableActionsBox(
         modifier = Modifier.clipToBounds(),
-        startActions = listOfNotNull(start),
-        endActions = listOfNotNull(end),
+        startActions = if (isTvHardware) emptyList() else listOfNotNull(start),
+        endActions = if (isTvHardware) emptyList() else listOfNotNull(end),
         swipeThreshold = swipeActionThreshold,
         backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.surfaceContainerLowest,
     ) {
+        val interactionSource = remember { MutableInteractionSource() }
         Row(
             modifier = modifier
                 .selectedBackground(selected)
                 .combinedClickable(
+                    interactionSource = interactionSource,
+                    indication = LocalIndication.current,
                     onClick = onClick,
                     onLongClick = onLongClick,
                 )
+                .tvFocusable(interactionSource, isTv)
                 .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
         ) {
             Column(

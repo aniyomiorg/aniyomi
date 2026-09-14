@@ -1,5 +1,6 @@
 package eu.kanade.presentation.more.onboarding
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,14 +10,17 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.theme.TachiyomiPreviewTheme
+import eu.kanade.presentation.util.isTvUi
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 
 internal class GuidesStep(
     private val onRestoreBackup: () -> Unit,
@@ -33,8 +37,12 @@ internal class GuidesStep(
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
         ) {
             Text(stringResource(MR.strings.onboarding_guides_new_user, stringResource(MR.strings.app_name)))
+            val guideInteractionSource = remember { MutableInteractionSource() }
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .tvFocusable(guideInteractionSource, isTvUi()),
+                interactionSource = guideInteractionSource,
                 onClick = { handler.openUri(GETTING_STARTED_URL) },
             ) {
                 Text(stringResource(MR.strings.getting_started_guide))
@@ -46,8 +54,12 @@ internal class GuidesStep(
             )
 
             Text(stringResource(MR.strings.onboarding_guides_returning_user, stringResource(MR.strings.app_name)))
+            val restoreInteractionSource = remember { MutableInteractionSource() }
             Button(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .tvFocusable(restoreInteractionSource, isTvUi()),
+                interactionSource = restoreInteractionSource,
                 onClick = onRestoreBackup,
             ) {
                 Text(stringResource(MR.strings.pref_restore_backup))

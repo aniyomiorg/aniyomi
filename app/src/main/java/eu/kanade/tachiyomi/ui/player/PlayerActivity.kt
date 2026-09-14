@@ -863,16 +863,33 @@ class PlayerActivity : BaseActivity() {
             }
             KeyEvent.KEYCODE_DPAD_LEFT -> viewModel.handleLeftDoubleTap()
             KeyEvent.KEYCODE_DPAD_RIGHT -> viewModel.handleRightDoubleTap()
-            KeyEvent.KEYCODE_SPACE -> viewModel.pauseUnpause()
+            KeyEvent.KEYCODE_SPACE, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> viewModel.pauseUnpause()
             KeyEvent.KEYCODE_MEDIA_STOP -> finishAndRemoveTask()
 
             KeyEvent.KEYCODE_MEDIA_REWIND -> viewModel.handleLeftDoubleTap()
             KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> viewModel.handleRightDoubleTap()
 
+            // With controls hidden, D-pad OK/up/down reveal them; once shown, let the
+            // event fall through to Compose's focus system to navigate between buttons.
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                if (!viewModel.controlsShown.value) {
+                    viewModel.showControls()
+                } else {
+                    return super.onKeyDown(keyCode, event)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> {
+                if (!viewModel.controlsShown.value) {
+                    viewModel.showControls()
+                } else {
+                    return super.onKeyDown(keyCode, event)
+                }
+            }
+
             // other keys should be bound by the user in input.conf ig
             else -> {
                 event?.let { player.onKey(it) }
-                super.onKeyDown(keyCode, event)
+                return super.onKeyDown(keyCode, event)
             }
         }
         return true

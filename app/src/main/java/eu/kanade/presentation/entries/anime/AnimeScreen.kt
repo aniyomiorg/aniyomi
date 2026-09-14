@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -471,7 +472,9 @@ private fun AnimeScreenSmallImpl(
             ) {
                 val layoutDirection = LocalLayoutDirection.current
                 FastScrollLazyVerticalGrid(
-                    modifier = Modifier.fillMaxHeight(),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .focusGroup(),
                     state = itemListState,
                     columns = if (gridSize == 0) GridCells.Adaptive(128.dp) else GridCells.Fixed(gridSize),
                     contentPadding = PaddingValues(
@@ -860,7 +863,9 @@ fun AnimeScreenLargeImpl(
                     },
                     endContent = {
                         FastScrollLazyVerticalGrid(
-                            modifier = Modifier.fillMaxHeight(),
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .focusGroup(),
                             state = itemListState,
                             columns = if (gridSize == 0) GridCells.Adaptive(128.dp) else GridCells.Fixed(gridSize),
                             contentPadding = PaddingValues(

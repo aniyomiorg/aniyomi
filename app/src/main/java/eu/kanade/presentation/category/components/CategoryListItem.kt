@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.DragHandle
 import androidx.compose.material.icons.outlined.Edit
@@ -18,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import eu.kanade.presentation.util.isTvUi
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 import tachiyomi.domain.category.model.Category
 import tachiyomi.i18n.MR
@@ -32,6 +35,9 @@ fun ReorderableCollectionItemScope.CategoryListItem(
     onHide: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
+    // Drag handle has no D-pad equivalent; TV exposes these instead.
+    onMoveUp: (() -> Unit)? = null,
+    onMoveDown: (() -> Unit)? = null,
 ) {
     ElevatedCard(modifier = modifier) {
         Row(
@@ -80,6 +86,20 @@ fun ReorderableCollectionItemScope.CategoryListItem(
                     imageVector = Icons.Outlined.Delete,
                     contentDescription = stringResource(MR.strings.action_delete),
                 )
+            }
+            if (isTvUi()) {
+                IconButton(onClick = onMoveUp ?: {}, enabled = onMoveUp != null) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowUpward,
+                        contentDescription = stringResource(MR.strings.action_move_up),
+                    )
+                }
+                IconButton(onClick = onMoveDown ?: {}, enabled = onMoveDown != null) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDownward,
+                        contentDescription = stringResource(MR.strings.action_move_down),
+                    )
+                }
             }
         }
     }

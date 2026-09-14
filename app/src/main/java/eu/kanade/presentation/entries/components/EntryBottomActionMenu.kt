@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.presentation.entries.DownloadAction
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.Job
@@ -64,6 +66,7 @@ import kotlinx.coroutines.launch
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.seconds
@@ -255,16 +258,18 @@ private fun RowScope.Button(
         targetValue = if (toConfirm) 2f else 1f,
         label = "weight",
     )
+    val interactionSource = remember { MutableInteractionSource() }
     Column(
         modifier = Modifier
             .size(48.dp)
             .weight(animatedWeight)
             .combinedClickable(
-                interactionSource = null,
+                interactionSource = interactionSource,
                 indication = ripple(bounded = false),
                 onLongClick = onLongClick,
                 onClick = onClick,
-            ),
+            )
+            .tvFocusable(interactionSource, isTvUi()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

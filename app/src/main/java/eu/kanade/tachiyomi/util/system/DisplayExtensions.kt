@@ -21,6 +21,10 @@ fun Configuration.isTabletUi(): Boolean {
     return smallestScreenWidthDp >= TABLET_UI_REQUIRED_SCREEN_WIDTH_DP
 }
 
+fun Configuration.isTvUiMode(): Boolean {
+    return uiMode and Configuration.UI_MODE_TYPE_MASK == Configuration.UI_MODE_TYPE_TELEVISION
+}
+
 // TODO: move the logic to `isTabletUi()` when main activity is rewritten in Compose
 fun Context.prepareTabletUiContext(): Context {
     val configuration = resources.configuration

@@ -1,5 +1,6 @@
 package eu.kanade.presentation.browse.anime.components
 
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,6 +8,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -28,6 +30,7 @@ fun BrowseAnimeSourceList(
     contentPadding: PaddingValues,
     onAnimeClick: (Anime) -> Unit,
     onAnimeLongClick: (Anime) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val sourceListState = rememberLazyListState()
     BoxWithConstraints {
@@ -35,6 +38,7 @@ fun BrowseAnimeSourceList(
         val containerHeightPx = with(density) { this@BoxWithConstraints.maxHeight.roundToPx() }
 
         LazyColumn(
+            modifier = modifier.focusGroup(),
             state = sourceListState,
             contentPadding = contentPadding + PaddingValues(vertical = 8.dp),
         ) {

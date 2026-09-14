@@ -1,5 +1,6 @@
 package eu.kanade.presentation.more.settings.screen.player.custombutton.components
 
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -112,7 +113,9 @@ private fun CustomButtonContent(
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .focusGroup(),
         state = lazyListState,
         contentPadding = paddingValues +
             topSmallPaddingValues +

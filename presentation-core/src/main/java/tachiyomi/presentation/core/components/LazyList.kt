@@ -1,5 +1,6 @@
 package tachiyomi.presentation.core.components
 
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -42,7 +43,8 @@ fun ScrollbarLazyColumn(
                 state = state,
                 reverseScrolling = reverseLayout,
                 positionOffsetPx = positionOffset,
-            ),
+            )
+            .focusGroup(),
         state = state,
         contentPadding = contentPadding,
         reverseLayout = reverseLayout,
@@ -75,6 +77,7 @@ fun FastScrollLazyColumn(
         endContentPadding = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
     ) {
         LazyColumn(
+            modifier = Modifier.focusGroup(),
             state = state,
             contentPadding = contentPadding,
             reverseLayout = reverseLayout,

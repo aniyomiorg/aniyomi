@@ -9,6 +9,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,11 +35,13 @@ import androidx.core.net.toUri
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.presentation.util.rememberRequestPackageInstallsPermissionState
 import eu.kanade.tachiyomi.util.system.launchRequestPackageInstallsPermission
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import tachiyomi.presentation.core.util.tvFocusable
 
 internal class PermissionStep : OnboardingStep {
 
@@ -139,9 +143,12 @@ internal class PermissionStep : OnboardingStep {
             headlineContent = { Text(text = title) },
             supportingContent = { Text(text = subtitle) },
             trailingContent = {
+                val interactionSource = remember { MutableInteractionSource() }
                 OutlinedButton(
                     enabled = !granted,
                     onClick = onButtonClick,
+                    interactionSource = interactionSource,
+                    modifier = Modifier.tvFocusable(interactionSource, isTvUi()),
                 ) {
                     if (granted) {
                         Icon(

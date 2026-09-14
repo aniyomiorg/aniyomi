@@ -29,7 +29,7 @@ fun BrowseAnimeSourceToolbar(
     searchQuery: String?,
     onSearchQueryChange: (String?) -> Unit,
     source: AnimeSource?,
-    displayMode: LibraryDisplayMode,
+    displayMode: LibraryDisplayMode?,
     onDisplayModeChange: (LibraryDisplayMode) -> Unit,
     navigateUp: () -> Unit,
     onWebViewClick: () -> Unit,
@@ -38,6 +38,10 @@ fun BrowseAnimeSourceToolbar(
     onSearch: (String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
+    // Compose/R8 has been observed passing null here across recomposition despite the
+    // non-null screenModel.displayMode source, crashing the toolbar; fall back to the default.
+    val displayMode = displayMode ?: LibraryDisplayMode.default
+
     // Avoid capturing unstable source in actions lambda
     val title = source?.name
     val isLocalSource = source is LocalAnimeSource

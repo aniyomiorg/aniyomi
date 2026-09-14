@@ -1,5 +1,7 @@
 package eu.kanade.presentation.more.settings.screen.browse.components.manga
 
+import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,15 +20,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.collections.immutable.ImmutableSet
 import mihon.domain.extensionrepo.model.ExtensionRepo
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun MangaExtensionReposContent(
@@ -41,7 +46,7 @@ fun MangaExtensionReposContent(
         state = lazyListState,
         contentPadding = paddingValues,
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
-        modifier = modifier,
+        modifier = modifier.focusGroup(),
     ) {
         repos.forEach {
             item {
@@ -90,18 +95,26 @@ private fun ExtensionRepoListItem(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
-            IconButton(onClick = onOpenWebsite) {
+            val websiteInteractionSource = remember { MutableInteractionSource() }
+            IconButton(
+                onClick = onOpenWebsite,
+                interactionSource = websiteInteractionSource,
+                modifier = Modifier.tvFocusable(websiteInteractionSource, isTvUi()),
+            ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
                     contentDescription = stringResource(MR.strings.action_open_in_browser),
                 )
             }
 
+            val copyInteractionSource = remember { MutableInteractionSource() }
             IconButton(
                 onClick = {
                     val url = "${repo.baseUrl}/index.min.json"
                     context.copyToClipboard(url, url)
                 },
+                interactionSource = copyInteractionSource,
+                modifier = Modifier.tvFocusable(copyInteractionSource, isTvUi()),
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ContentCopy,
@@ -109,7 +122,12 @@ private fun ExtensionRepoListItem(
                 )
             }
 
-            IconButton(onClick = onDelete) {
+            val deleteInteractionSource = remember { MutableInteractionSource() }
+            IconButton(
+                onClick = onDelete,
+                interactionSource = deleteInteractionSource,
+                modifier = Modifier.tvFocusable(deleteInteractionSource, isTvUi()),
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.Delete,
                     contentDescription = stringResource(MR.strings.action_delete),

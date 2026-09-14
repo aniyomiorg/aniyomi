@@ -5,9 +5,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -72,6 +74,7 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.components.ItemCover
 import eu.kanade.presentation.theme.TachiyomiPreviewTheme
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import tachiyomi.i18n.MR
@@ -84,6 +87,7 @@ import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.plus
 import tachiyomi.presentation.core.util.runOnEnterKeyPressed
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun AnimeTrackerSearch(
@@ -249,6 +253,7 @@ private fun SearchResultItem(
     val shape = RoundedCornerShape(16.dp)
     val borderColor = if (selected) MaterialTheme.colorScheme.outline else Color.Transparent
     var dropDownMenuExpanded by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -261,12 +266,17 @@ private fun SearchResultItem(
                 shape = shape,
             )
             .combinedClickable(
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
                 onLongClick = { dropDownMenuExpanded = true },
                 onClick = {
                     focusManager.clearFocus()
                     onClick()
                 },
             )
+            // Selected already shows its own outline border above; skip the focus ring there
+            // to avoid two competing borders on the same item.
+            .tvFocusable(interactionSource, isTvUi() && !selected)
             .padding(12.dp),
     ) {
         if (selected) {

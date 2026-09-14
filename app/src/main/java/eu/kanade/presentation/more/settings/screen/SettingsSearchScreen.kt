@@ -1,7 +1,10 @@
 package eu.kanade.presentation.more.settings.screen
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -59,12 +62,14 @@ import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsPlayerSc
 import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsSubtitleScreen
 import eu.kanade.presentation.more.settings.screen.player.PlayerSettingsTorrentScreen
 import eu.kanade.presentation.util.Screen
+import eu.kanade.presentation.util.isTvUi
 import tachiyomi.i18n.MR
 import tachiyomi.i18n.aniyomi.AYMR
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.util.runOnEnterKeyPressed
+import tachiyomi.presentation.core.util.tvFocusable
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
 class SettingsSearchScreen(
@@ -248,7 +253,9 @@ private fun SearchResult(
             }
             else -> {
                 LazyColumn(
-                    modifier = modifier.fillMaxSize(),
+                    modifier = modifier
+                        .fillMaxSize()
+                        .focusGroup(),
                     state = listState,
                     contentPadding = contentPadding,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -257,10 +264,15 @@ private fun SearchResult(
                         items = it,
                         key = { i -> i.hashCode() },
                     ) { item ->
+                        val interactionSource = remember { MutableInteractionSource() }
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { onItemClick(item) }
+                                .clickable(
+                                    interactionSource = interactionSource,
+                                    indication = LocalIndication.current,
+                                ) { onItemClick(item) }
+                                .tvFocusable(interactionSource, isTvUi())
                                 .padding(horizontal = 24.dp, vertical = 14.dp),
                         ) {
                             Text(

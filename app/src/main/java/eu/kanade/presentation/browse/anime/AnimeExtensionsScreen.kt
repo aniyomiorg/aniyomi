@@ -2,7 +2,7 @@ package eu.kanade.presentation.browse.anime
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -53,6 +54,7 @@ import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.entries.components.DotSeparatorNoSpaceText
 import eu.kanade.presentation.more.settings.screen.browse.AnimeExtensionStoresScreen
 import eu.kanade.presentation.util.animateItemFastScroll
+import eu.kanade.presentation.util.isTvUi
 import eu.kanade.presentation.util.rememberRequestPackageInstallsPermissionState
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -74,6 +76,7 @@ import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
 import tachiyomi.presentation.core.util.plus
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun AnimeExtensionScreen(
@@ -287,11 +290,7 @@ private fun AnimeExtensionItem(
 ) {
     val (extension, installStep) = item
     BaseBrowseItem(
-        modifier = modifier
-            .combinedClickable(
-                onClick = { onClickItem(extension) },
-                onLongClick = { onLongClickItem(extension) },
-            ),
+        modifier = modifier,
         onClickItem = { onClickItem(extension) },
         onLongClickItem = { onLongClickItem(extension) },
         icon = {
@@ -446,70 +445,77 @@ private fun AnimeExtensionItemActions(
     ) {
         when {
             !isIdle -> {
-                IconButton(onClick = { onClickItemCancel(extension) }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Close,
-                        contentDescription = stringResource(MR.strings.action_cancel),
-                    )
-                }
+                ExtensionActionIconButton(
+                    onClick = { onClickItemCancel(extension) },
+                    icon = Icons.Outlined.Close,
+                    contentDescription = stringResource(MR.strings.action_cancel),
+                )
             }
             installStep == InstallStep.Error -> {
-                IconButton(onClick = { onClickItemAction(extension) }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Refresh,
-                        contentDescription = stringResource(MR.strings.action_retry),
-                    )
-                }
+                ExtensionActionIconButton(
+                    onClick = { onClickItemAction(extension) },
+                    icon = Icons.Outlined.Refresh,
+                    contentDescription = stringResource(MR.strings.action_retry),
+                )
             }
             installStep == InstallStep.Idle -> {
                 when (extension) {
                     is AnimeExtension.Installed -> {
-                        IconButton(onClick = { onClickItemSecondaryAction(extension) }) {
-                            Icon(
-                                imageVector = Icons.Outlined.Settings,
-                                contentDescription = stringResource(MR.strings.action_settings),
-                            )
-                        }
+                        ExtensionActionIconButton(
+                            onClick = { onClickItemSecondaryAction(extension) },
+                            icon = Icons.Outlined.Settings,
+                            contentDescription = stringResource(MR.strings.action_settings),
+                        )
 
                         if (extension.hasUpdate) {
-                            IconButton(onClick = { onClickItemAction(extension) }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.GetApp,
-                                    contentDescription = stringResource(MR.strings.ext_update),
-                                )
-                            }
+                            ExtensionActionIconButton(
+                                onClick = { onClickItemAction(extension) },
+                                icon = Icons.Outlined.GetApp,
+                                contentDescription = stringResource(MR.strings.ext_update),
+                            )
                         }
                     }
                     is AnimeExtension.Untrusted -> {
-                        IconButton(onClick = { onClickItemAction(extension) }) {
-                            Icon(
-                                imageVector = Icons.Outlined.VerifiedUser,
-                                contentDescription = stringResource(MR.strings.ext_trust),
-                            )
-                        }
+                        ExtensionActionIconButton(
+                            onClick = { onClickItemAction(extension) },
+                            icon = Icons.Outlined.VerifiedUser,
+                            contentDescription = stringResource(MR.strings.ext_trust),
+                        )
                     }
                     is AnimeExtension.Available -> {
                         if (extension.sources.isNotEmpty()) {
-                            IconButton(
+                            ExtensionActionIconButton(
                                 onClick = { onClickItemSecondaryAction(extension) },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Public,
-                                    contentDescription = stringResource(MR.strings.action_open_in_web_view),
-                                )
-                            }
-                        }
-
-                        IconButton(onClick = { onClickItemAction(extension) }) {
-                            Icon(
-                                imageVector = Icons.Outlined.GetApp,
-                                contentDescription = stringResource(MR.strings.ext_install),
+                                icon = Icons.Outlined.Public,
+                                contentDescription = stringResource(MR.strings.action_open_in_web_view),
                             )
                         }
+
+                        ExtensionActionIconButton(
+                            onClick = { onClickItemAction(extension) },
+                            icon = Icons.Outlined.GetApp,
+                            contentDescription = stringResource(MR.strings.ext_install),
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ExtensionActionIconButton(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    contentDescription: String,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    IconButton(
+        onClick = onClick,
+        interactionSource = interactionSource,
+        modifier = Modifier.tvFocusable(interactionSource, isTvUi()),
+    ) {
+        Icon(imageVector = icon, contentDescription = contentDescription)
     }
 }
 

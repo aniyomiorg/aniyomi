@@ -1,5 +1,7 @@
 package eu.kanade.presentation.more.settings.widget
 
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.util.isTvUi
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.ScrollbarLazyColumn
 import tachiyomi.presentation.core.i18n.stringResource
+import tachiyomi.presentation.core.util.tvFocusable
 
 @Composable
 fun <T> ListPreferenceWidget(
@@ -86,14 +90,18 @@ private fun DialogRow(
     isSelected: Boolean,
     onSelected: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clip(MaterialTheme.shapes.small)
             .selectable(
                 selected = isSelected,
+                interactionSource = interactionSource,
+                indication = LocalIndication.current,
                 onClick = { if (!isSelected) onSelected() },
             )
+            .tvFocusable(interactionSource, isTvUi())
             .fillMaxWidth()
             .minimumInteractiveComponentSize(),
     ) {
