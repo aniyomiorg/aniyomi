@@ -66,9 +66,17 @@ fun BottomLeftPlayerControls(
         ControlsButton(
             text = stringResource(AYMR.strings.player_speed, playbackSpeed),
             onClick = {
-                val newSpeed = if (playbackSpeed >= 2) 0.25f else playbackSpeed + 0.25f
+                val presets = playerPreferences.speedPresets().get()
+                    .map { it.toFloat() }
+                    .sorted()
+
+                val newSpeed = if (presets.isEmpty()) {
+                    if (playbackSpeed >= 2f) 0.25f else playbackSpeed + 0.25f
+                } else {
+                    val currentIndex = presets.indexOfFirst { kotlin.math.abs(it - playbackSpeed) < 0.001f }
+                    presets[(currentIndex + 1) % presets.size]
+                }
                 onPlaybackSpeedChange(newSpeed)
-                playerPreferences.playerSpeed().set(newSpeed)
             },
             onLongClick = { onOpenSheet(Sheets.PlaybackSpeed) },
         )
