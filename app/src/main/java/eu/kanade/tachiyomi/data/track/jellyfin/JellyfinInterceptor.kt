@@ -29,7 +29,12 @@ class JellyfinInterceptor : Interceptor {
             return chain.proceed(uaRequest)
         }
 
-        val userId = originalRequest.url.queryParameter("userId") ?: originalRequest.url.pathSegments[1]
+        val userId = originalRequest.url.queryParameter("userId")
+            ?: originalRequest.url.pathSegments
+                .windowed(2)
+                .firstOrNull { it[0] == "Users" }
+                ?.get(1)
+            ?: throw IOException("Please log in through the extension")
         val apiKey = apiKeys[userId] ?: getApiKey(userId)?.also { apiKeys[userId] = it }
             ?: throw IOException("Please log in through the extension")
 
