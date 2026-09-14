@@ -10,6 +10,12 @@ The format is a modified version of [Keep a Changelog](https://keepachangelog.co
 - `Fixed` - for any bug fixes.
 - `Other` - for technical stuff.
 
+## [v0.18.2.1] - 2026-09-14
+
+### Added
+
+- Added support for extensions-lib v17
+
 ## [v0.18.2.0] - 2026-09-14
 
 ### Added
