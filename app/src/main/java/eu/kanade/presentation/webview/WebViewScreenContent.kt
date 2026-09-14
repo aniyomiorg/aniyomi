@@ -104,8 +104,8 @@ fun WebViewScreenContent(
                         return false
                     }
 
-                    // Ignore intents urls
-                    if (it.url.toString().startsWith("intent://")) {
+                    val ignoreUriSchema = listOf("intent://", "market://", "data:text/html")
+                    if (ignoreUriSchema.any { schema -> it.url.toString().startsWith(schema) }) {
                         return true
                     }
 
