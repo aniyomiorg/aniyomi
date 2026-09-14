@@ -68,7 +68,6 @@ fun BottomLeftPlayerControls(
             onClick = {
                 val newSpeed = if (playbackSpeed >= 2) 0.25f else playbackSpeed + 0.25f
                 onPlaybackSpeedChange(newSpeed)
-                playerPreferences.playerSpeed().set(newSpeed)
             },
             onLongClick = { onOpenSheet(Sheets.PlaybackSpeed) },
         )
