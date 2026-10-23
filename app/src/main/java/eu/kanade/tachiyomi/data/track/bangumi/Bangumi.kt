@@ -193,7 +193,7 @@ class Bangumi(id: Long) : BaseTracker(id, "Bangumi"), MangaTracker, AnimeTracker
             interceptor.newAuth(oauth)
             // Users can set a 'username' (not nickname) once which effectively
             // replaces the stringified ID in certain queries.
-            // If no username is set, the API returns the user ID as a strings
+            // If no username is set, the API returns the user ID as a string
             var username = api.getUsername()
             saveCredentials(username, oauth.accessToken)
         } catch (_: Throwable) {
