@@ -66,6 +66,11 @@ enum class SingleActionGesture(val stringRes: StringResource) {
     Custom(stringRes = AYMR.strings.single_action_custom),
 }
 
+enum class PlayerLongPressAction(val titleRes: StringResource) {
+    DoubleSpeed(AYMR.strings.player_long_press_double_speed),
+    Screenshot(AYMR.strings.player_long_press_screenshot),
+}
+
 /**
  * Key codes sent through the `Custom` option in gestures
  */
