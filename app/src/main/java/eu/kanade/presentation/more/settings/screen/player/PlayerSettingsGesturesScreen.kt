@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.screen.SearchableSettings
+import eu.kanade.tachiyomi.ui.player.PlayerLongPressAction
 import eu.kanade.tachiyomi.ui.player.SingleActionGesture
 import eu.kanade.tachiyomi.ui.player.settings.GesturePreferences
 import kotlinx.collections.immutable.persistentListOf
@@ -74,6 +75,7 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
     private fun getSeekingGroup(gesturePreferences: GesturePreferences): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
         val enableHorizontalSeekGesture = gesturePreferences.gestureHorizontalSeek()
+        val playerLongPressAction = gesturePreferences.playerLongPressAction()
         val showSeekbar = gesturePreferences.showSeekBar()
         val defaultSkipIntroLength by gesturePreferences.defaultIntroLength().stateIn(scope).collectAsState()
         val skipLengthPreference = gesturePreferences.skipLengthPreference()
@@ -98,6 +100,12 @@ object PlayerSettingsGesturesScreen : SearchableSettings {
                     preference = enableHorizontalSeekGesture,
                     title = stringResource(AYMR.strings.enable_horizontal_seek_gesture),
                     subtitle = stringResource(AYMR.strings.enable_horizontal_seek_gesture_summary),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    preference = playerLongPressAction,
+                    entries = PlayerLongPressAction.entries.associateWith { stringResource(it.titleRes) }
+                        .toPersistentMap(),
+                    title = stringResource(AYMR.strings.pref_player_long_press_action),
                 ),
                 Preference.PreferenceItem.SwitchPreference(
                     preference = showSeekbar,

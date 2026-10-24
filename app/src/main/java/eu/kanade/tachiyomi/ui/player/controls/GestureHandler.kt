@@ -41,6 +41,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -57,6 +58,7 @@ import eu.kanade.presentation.player.components.LeftSideOvalShape
 import eu.kanade.presentation.player.components.RightSideOvalShape
 import eu.kanade.presentation.theme.playerRippleConfiguration
 import eu.kanade.tachiyomi.ui.player.Panels
+import eu.kanade.tachiyomi.ui.player.PlayerLongPressAction
 import eu.kanade.tachiyomi.ui.player.PlayerUpdates
 import eu.kanade.tachiyomi.ui.player.PlayerViewModel
 import eu.kanade.tachiyomi.ui.player.Sheets
@@ -105,9 +107,11 @@ fun GestureHandler(
     val gestureVolumeBrightness = gesturePreferences.gestureVolumeBrightness().get()
     val swapVolumeBrightness by gesturePreferences.swapVolumeBrightness().collectAsState()
     val seekGesture by gesturePreferences.gestureHorizontalSeek().collectAsState()
+    val longPressAction by gesturePreferences.playerLongPressAction().collectAsState()
     val preciseSeeking by gesturePreferences.playerSmoothSeek().collectAsState()
     val showSeekbar by gesturePreferences.showSeekBar().collectAsState()
     var isLongPressing by remember { mutableStateOf(false) }
+    var originalSpeed by remember { mutableFloatStateOf(viewModel.playbackSpeed.value) }
     val currentVolume by viewModel.currentVolume.collectAsState()
     val currentMPVVolume by viewModel.currentMPVVolume.collectAsState()
     val currentBrightness by viewModel.currentBrightness.collectAsState()
@@ -118,8 +122,7 @@ fun GestureHandler(
         modifier = modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeGestures)
-            .pointerInput(Unit) {
-                val originalSpeed = viewModel.playbackSpeed.value
+            .pointerInput(longPressAction) {
                 detectTapGestures(
                     onTap = {
                         if (controlsShown) viewModel.hideControls() else viewModel.showControls()
@@ -139,6 +142,7 @@ fun GestureHandler(
                         }
                     },
                     onPress = {
+                        originalSpeed = viewModel.playbackSpeed.value
                         if (panelShown != Panels.None && !allowGesturesInPanels) {
                             viewModel.panelShown.update { Panels.None }
                         }
@@ -162,8 +166,10 @@ fun GestureHandler(
                         tryAwaitRelease()
                         if (isLongPressing) {
                             isLongPressing = false
-                            MPVLib.setPropertyDouble("speed", originalSpeed.toDouble())
-                            viewModel.playerUpdate.update { PlayerUpdates.None }
+                            if (longPressAction == PlayerLongPressAction.DoubleSpeed) {
+                                MPVLib.setPropertyDouble("speed", originalSpeed.toDouble())
+                                viewModel.playerUpdate.update { PlayerUpdates.None }
+                            }
                         }
                         interactionSource.emit(PressInteraction.Release(press))
                     },
@@ -172,8 +178,16 @@ fun GestureHandler(
                         if (!isLongPressing) {
                             haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                             isLongPressing = true
-                            viewModel.pause()
-                            viewModel.sheetShown.update { Sheets.Screenshot }
+                            when (longPressAction) {
+                                PlayerLongPressAction.DoubleSpeed -> {
+                                    MPVLib.setPropertyDouble("speed", 2.0)
+                                    viewModel.playerUpdate.update { PlayerUpdates.DoubleSpeed }
+                                }
+                                PlayerLongPressAction.Screenshot -> {
+                                    viewModel.pause()
+                                    viewModel.sheetShown.update { Sheets.Screenshot }
+                                }
+                            }
                         }
                     },
                 )

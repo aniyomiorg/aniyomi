@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
+import eu.kanade.tachiyomi.ui.player.PlayerLongPressAction
 import eu.kanade.tachiyomi.ui.player.SingleActionGesture
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.preference.getEnum
@@ -21,6 +22,11 @@ class GesturePreferences(
     fun defaultIntroLength() = preferenceStore.getInt("pref_default_intro_length", 85)
     fun skipLengthPreference() = preferenceStore.getInt("pref_skip_length_preference", 10)
     fun playerSmoothSeek() = preferenceStore.getBoolean("pref_player_smooth_seek", false)
+
+    fun playerLongPressAction() = preferenceStore.getEnum(
+        "pref_player_long_press_action",
+        PlayerLongPressAction.DoubleSpeed,
+    )
 
     // Double tap
 
