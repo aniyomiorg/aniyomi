@@ -1,9 +1,11 @@
 package tachiyomi.data.items.chapter
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.serialization.json.JsonObject
 import logcat.LogPriority
 import tachiyomi.core.common.util.lang.toLong
 import tachiyomi.core.common.util.system.logcat
+import tachiyomi.data.MemoColumnAdapter
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
@@ -30,6 +32,7 @@ class ChapterRepositoryImpl(
                         chapter.dateFetch,
                         chapter.dateUpload,
                         chapter.version,
+                        chapter.memo,
                     )
                     val lastInsertId = chaptersQueries.selectLastInsertedRowId().executeAsOne()
                     chapter.copy(id = lastInsertId)
@@ -66,6 +69,7 @@ class ChapterRepositoryImpl(
                     dateUpload = chapterUpdate.dateUpload,
                     chapterId = chapterUpdate.id,
                     version = chapterUpdate.version,
+                    memo = chapterUpdate.memo?.let(MemoColumnAdapter::encode),
                     isSyncing = 0,
                 )
             }
@@ -142,8 +146,8 @@ class ChapterRepositoryImpl(
         dateUpload: Long,
         lastModifiedAt: Long,
         version: Long,
-        @Suppress("UNUSED_PARAMETER")
         isSyncing: Long,
+        memo: JsonObject,
     ): Chapter = Chapter(
         id = id,
         mangaId = mangaId,
@@ -159,5 +163,6 @@ class ChapterRepositoryImpl(
         scanlator = scanlator,
         lastModifiedAt = lastModifiedAt,
         version = version,
+        memo = memo,
     )
 }

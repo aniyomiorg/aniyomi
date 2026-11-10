@@ -3,6 +3,8 @@ package tachiyomi.domain.entries.manga.model
 import androidx.compose.runtime.Immutable
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import kotlinx.serialization.json.JsonObject
+import mihon.core.common.extensions.EMPTY
 import tachiyomi.core.common.preference.TriState
 import java.io.Serializable
 import java.time.Instant
@@ -32,6 +34,7 @@ data class Manga(
     val lastModifiedAt: Long,
     val favoriteModifiedAt: Long?,
     val version: Long,
+    val memo: JsonObject = JsonObject.EMPTY,
 ) : Serializable {
 
     val expectedNextUpdate: Instant?
@@ -126,6 +129,7 @@ data class Manga(
             lastModifiedAt = 0L,
             favoriteModifiedAt = null,
             version = 0L,
+            memo = JsonObject.EMPTY,
         )
     }
 }

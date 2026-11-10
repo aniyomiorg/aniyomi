@@ -3,6 +3,7 @@
 package eu.kanade.tachiyomi.data.database.models.manga
 
 import eu.kanade.tachiyomi.source.model.SChapter
+import kotlinx.serialization.json.JsonObject
 import java.io.Serializable
 import tachiyomi.domain.items.chapter.model.Chapter as DomainChapter
 
@@ -47,5 +48,6 @@ fun Chapter.toDomainChapter(): DomainChapter? {
         scanlator = scanlator,
         lastModifiedAt = last_modified,
         version = version,
+        memo = memo,
     )
 }

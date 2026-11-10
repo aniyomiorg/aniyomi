@@ -54,7 +54,7 @@ internal object MangaExtensionLoader {
     private const val METADATA_SOURCE_FACTORY = "tachiyomi.extension.factory"
     private const val METADATA_NSFW = "tachiyomi.extension.nsfw"
     const val LIB_VERSION_MIN = 1.4
-    const val LIB_VERSION_MAX = 1.5
+    const val LIB_VERSION_MAX = 1.6
 
     @Suppress("DEPRECATION")
     private val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or
@@ -314,7 +314,7 @@ internal object MangaExtensionLoader {
                 try {
                     when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor().newInstance()) {
                         is MangaSource -> listOf(obj)
-                        is SourceFactory -> obj.createSources()
+                        is SourceFactory -> obj.createSources().filterIsInstance<MangaSource>()
                         else -> throw Exception("Unknown source class type: ${obj.javaClass}")
                     }
                 } catch (e: LinkageError) {
@@ -330,7 +330,7 @@ internal object MangaExtensionLoader {
                             is MangaSource -> {
                                 listOf(obj)
                             }
-                            is SourceFactory -> obj.createSources()
+                            is SourceFactory -> obj.createSources().filterIsInstance<MangaSource>()
                             else -> throw Exception("Unknown source class type: ${obj.javaClass}")
                         }
                     } catch (e: Throwable) {

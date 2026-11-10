@@ -183,7 +183,12 @@ internal class MigrateMangaDialogScreenModel(
         mutableState.update { it.copy(isMigrating = true) }
 
         try {
-            val chapters = source.getChapterList(newManga.toSManga())
+            val chapters = source.getMangaUpdate(
+                manga = newManga.toSManga(),
+                chapters = emptyList(),
+                fetchDetails = false,
+                fetchChapters = true,
+            ).chapters
 
             migrateMangaInternal(
                 oldSource = prevSource,

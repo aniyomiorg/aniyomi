@@ -44,6 +44,7 @@ fun Manga.toSManga(): SManga = SManga.create().also {
     it.genre = genre.orEmpty().joinToString()
     it.status = status.toInt()
     it.thumbnail_url = thumbnailUrl
+    it.memo = memo
     it.initialized = initialized
 }
 
@@ -65,6 +66,7 @@ fun Manga.copyFrom(other: SManga): Manga {
         thumbnailUrl = thumbnailUrl,
         status = other.status.toLong(),
         updateStrategy = other.update_strategy,
+        memo = other.memo,
         initialized = other.initialized && initialized,
     )
 }
@@ -80,6 +82,7 @@ fun SManga.toDomainManga(sourceId: Long): Manga {
         status = status.toLong(),
         thumbnailUrl = thumbnail_url,
         updateStrategy = update_strategy,
+        memo = memo,
         initialized = initialized,
         source = sourceId,
     )

@@ -9,19 +9,19 @@ import rx.Observable
 /**
  * A basic interface for creating a source. It could be an online source, a local source, etc.
  */
-interface MangaSource {
+interface MangaSource : Source {
 
     /**
      * ID for the source. Must be unique.
      */
-    val id: Long
+    override val id: Long
 
     /**
      * Name of the source.
      */
-    val name: String
+    override val name: String
 
-    val lang: String
+    override val lang: String
         get() = ""
 
     /**
@@ -57,7 +57,7 @@ interface MangaSource {
      * @return the pages for the chapter.
      */
     @Suppress("DEPRECATION")
-    suspend fun getPageList(chapter: SChapter): List<Page> {
+    override suspend fun getPageList(chapter: SChapter): List<Page> {
         return fetchPageList(chapter).awaitSingle()
     }
 
