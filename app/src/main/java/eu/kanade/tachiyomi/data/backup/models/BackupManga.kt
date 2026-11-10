@@ -3,6 +3,8 @@ package eu.kanade.tachiyomi.data.backup.models
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
+import mihon.core.common.extensions.JsonObjectEmptyBytes
+import tachiyomi.data.MemoColumnAdapter
 import tachiyomi.domain.entries.manga.model.Manga
 
 @Suppress("DEPRECATION")
@@ -40,6 +42,7 @@ data class BackupManga(
     @ProtoNumber(107) var favoriteModifiedAt: Long? = null,
     @ProtoNumber(108) var excludedScanlators: List<String> = emptyList(),
     @ProtoNumber(109) var version: Long = 0,
+    @ProtoNumber(110) var memo: ByteArray = JsonObjectEmptyBytes,
 ) {
     fun getMangaImpl(): Manga {
         return Manga.create().copy(
@@ -60,6 +63,7 @@ data class BackupManga(
             lastModifiedAt = this@BackupManga.lastModifiedAt,
             favoriteModifiedAt = this@BackupManga.favoriteModifiedAt,
             version = this@BackupManga.version,
+            memo = MemoColumnAdapter.decode(this@BackupManga.memo),
         )
     }
 }

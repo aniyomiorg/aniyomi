@@ -7,3 +7,7 @@
 -keep class eu.kanade.tachiyomi.animesource.** extends eu.kanade.tachiyomi.animesource.AnimeSource { public protected *; }
 
 -keep,allowoptimization class eu.kanade.tachiyomi.util.JsoupExtensionsKt { public protected *; }
+
+-keepclassmembers class eu.kanade.tachiyomi.source.online.HttpSource {
+    private kotlin.Lazy headers$delegate;
+}

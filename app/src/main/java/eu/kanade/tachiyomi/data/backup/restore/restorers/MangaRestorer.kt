@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.data.backup.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupTracking
 import tachiyomi.data.MangaUpdateStrategyColumnAdapter
+import tachiyomi.data.MemoColumnAdapter
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.entries.manga.interactor.GetMangaByUrlAndSourceId
@@ -101,6 +102,7 @@ class MangaRestorer(
             status = newer.status,
             initialized = this.initialized || newer.initialized,
             version = newer.version,
+            memo = newer.memo,
         )
     }
 
@@ -128,6 +130,7 @@ class MangaRestorer(
                 mangaId = manga.id,
                 updateStrategy = manga.updateStrategy.let(MangaUpdateStrategyColumnAdapter::encode),
                 version = manga.version,
+                memo = manga.memo.let(MemoColumnAdapter::encode),
                 isSyncing = 1,
             )
         }
@@ -205,6 +208,7 @@ class MangaRestorer(
                     chapter.dateFetch,
                     chapter.dateUpload,
                     chapter.version,
+                    chapter.memo,
                 )
             }
         }
@@ -227,6 +231,7 @@ class MangaRestorer(
                     dateUpload = null,
                     chapterId = chapter.id,
                     version = chapter.version,
+                    memo = chapter.memo.let(MemoColumnAdapter::encode),
                     isSyncing = 0,
                 )
             }
@@ -261,6 +266,7 @@ class MangaRestorer(
                 dateAdded = manga.dateAdded,
                 updateStrategy = manga.updateStrategy,
                 version = manga.version,
+                memo = manga.memo,
             )
             mangasQueries.selectLastInsertedRowId()
         }

@@ -116,7 +116,7 @@ data class BrowseMangaSourceScreen(
             val source = screenModel.source as? HttpSource ?: return@f
             navigator.push(
                 WebViewScreen(
-                    url = source.baseUrl,
+                    url = source.getHomeUrl(),
                     initialTitle = source.name,
                     sourceId = source.id,
                 ),
@@ -124,7 +124,7 @@ data class BrowseMangaSourceScreen(
         }
 
         LaunchedEffect(screenModel.source) {
-            assistUrl = (screenModel.source as? HttpSource)?.baseUrl
+            assistUrl = (screenModel.source as? HttpSource)?.getHomeUrl()
         }
 
         var topBarHeight by remember { mutableIntStateOf(0) }

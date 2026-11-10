@@ -12,12 +12,21 @@ import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNames
+import kotlinx.serialization.json.okio.decodeFromBufferedSource
+import kotlinx.serialization.protobuf.ProtoBuf
+import kotlinx.serialization.protobuf.ProtoNumber
 import logcat.LogPriority
 import mihon.domain.extensionrepo.manga.interactor.GetMangaExtensionRepo
 import mihon.domain.extensionrepo.manga.interactor.UpdateMangaExtensionRepo
 import mihon.domain.extensionrepo.model.ExtensionRepo
+import okio.BufferedSource
+import okio.buffer
+import okio.gzip
 import tachiyomi.core.common.preference.Preference
 import tachiyomi.core.common.preference.PreferenceStore
 import tachiyomi.core.common.util.lang.withIOContext
@@ -34,6 +43,7 @@ internal class MangaExtensionApi {
     private val updateExtensionRepo: UpdateMangaExtensionRepo by injectLazy()
     private val extensionManager: MangaExtensionManager by injectLazy()
     private val json: Json by injectLazy()
+    private val protoBuf: ProtoBuf by injectLazy()
 
     private val lastExtCheck: Preference<Long> by lazy {
         preferenceStore.getLong("last_ext_check", 0)
@@ -51,18 +61,128 @@ internal class MangaExtensionApi {
     private suspend fun getExtensions(extRepo: ExtensionRepo): List<MangaExtension.Available> {
         val repoBaseUrl = extRepo.baseUrl
         return try {
-            val response = networkService.client
-                .newCall(GET("$repoBaseUrl/index.min.json"))
-                .awaitSuccess()
+            val indexV2 = try {
+                getIndexV2(repoBaseUrl)
+            } catch (e: Exception) {
+                null
+            }
 
-            with(json) {
-                response
-                    .parseAs<List<ExtensionJsonObject>>()
-                    .toExtensions(repoBaseUrl)
+            if (indexV2 != null) {
+                getExtensionsV2(repoBaseUrl, indexV2)
+            } else {
+                getExtensionsLegacy(repoBaseUrl)
             }
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Failed to get extensions from $repoBaseUrl" }
             emptyList()
+        }
+    }
+
+    private suspend fun getIndexV2(repoBaseUrl: String): String? {
+        val response = networkService.client
+            .newCall(GET("$repoBaseUrl/repo.json"))
+            .awaitSuccess()
+
+        return with(json) {
+            response.parseAs<RepoJson>().indexV2
+        }
+    }
+
+    private suspend fun getExtensionsLegacy(repoBaseUrl: String): List<MangaExtension.Available> {
+        val response = networkService.client
+            .newCall(GET("$repoBaseUrl/index.min.json"))
+            .awaitSuccess()
+
+        return with(json) {
+            response
+                .parseAs<List<ExtensionJsonObject>>()
+                .toExtensions(repoBaseUrl)
+        }
+    }
+
+    private suspend fun getExtensionsV2(
+        repoBaseUrl: String,
+        indexUrl: String,
+    ): List<MangaExtension.Available> {
+        val store = networkService.client
+            .newCall(GET(indexUrl))
+            .awaitSuccess()
+            .body
+            .source()
+            .decompressIfGzipped()
+            .use(::decodeStore)
+
+        val extensionList = store.extensionList ?: store.extensionListUrl?.let { extensionListUrl ->
+            networkService.client
+                .newCall(GET(extensionListUrl))
+                .awaitSuccess()
+                .body
+                .source()
+                .decompressIfGzipped()
+                .use(::decodeExtensionList)
+        } ?: return emptyList()
+
+        return extensionList.toMangaExtensions(repoBaseUrl)
+    }
+
+    private fun decodeStore(source: BufferedSource): NetworkMangaExtensionStore {
+        return when (source.peek().readByte()) {
+            0x7B.toByte() -> json.decodeFromBufferedSource(source)
+            else -> protoBuf.decodeFromByteArray(source.readByteArray())
+        }
+    }
+
+    private fun decodeExtensionList(source: BufferedSource): NetworkMangaExtensionStore.ExtensionList {
+        return when (source.peek().readByte()) {
+            0x7B.toByte() -> json.decodeFromBufferedSource(source)
+            else -> protoBuf.decodeFromByteArray(source.readByteArray())
+        }
+    }
+
+    private fun BufferedSource.decompressIfGzipped(): BufferedSource {
+        val isGzip = peek().use { peeked ->
+            try {
+                peeked.readShort().toInt() == 0x1f8b
+            } catch (_: Exception) {
+                false
+            }
+        }
+
+        return if (isGzip) gzip().buffer() else this
+    }
+
+    private fun NetworkMangaExtensionStore.ExtensionList.toMangaExtensions(
+        repoUrl: String,
+    ): List<MangaExtension.Available> {
+        return extensions.mapNotNull { extension ->
+            val libVersion = extension.extensionLib.toDoubleOrNull() ?: return@mapNotNull null
+            if (libVersion < MangaExtensionLoader.LIB_VERSION_MIN ||
+                libVersion > MangaExtensionLoader.LIB_VERSION_MAX
+            ) {
+                return@mapNotNull null
+            }
+
+            val languages = extension.sources.map { it.language }.toSet()
+            MangaExtension.Available(
+                name = extension.name,
+                pkgName = extension.packageName,
+                versionName = extension.versionName,
+                versionCode = extension.versionCode,
+                libVersion = libVersion,
+                lang = if (languages.size == 1) languages.first() else "all",
+                isNsfw = extension.contentWarning >= NetworkMangaExtensionStore.ContentWarning.MIXED,
+                sources = extension.sources.map {
+                    MangaExtension.Available.MangaSource(
+                        id = it.id,
+                        lang = it.language,
+                        name = it.name,
+                        baseUrl = it.homeUrl,
+                    )
+                },
+                apkName = extension.resources.apkUrl,
+                iconUrl = extension.resources.iconUrl,
+                repoUrl = repoUrl,
+            )
         }
     }
 
@@ -133,13 +253,86 @@ internal class MangaExtensionApi {
     }
 
     fun getApkUrl(extension: MangaExtension.Available): String {
-        return "${extension.repoUrl}/apk/${extension.apkName}"
+        return extension.apkName
+            .takeIf { it.startsWith("http://") || it.startsWith("https://") }
+            ?: "${extension.repoUrl}/apk/${extension.apkName}"
     }
 
     private fun ExtensionJsonObject.extractLibVersion(): Double {
         return version.substringBeforeLast('.').toDouble()
     }
 }
+
+@Serializable
+private data class NetworkMangaExtensionStore(
+    @ProtoNumber(1) val name: String,
+    @ProtoNumber(2) val badgeLabel: String,
+    @ProtoNumber(3) val signingKey: String,
+    @ProtoNumber(4) val contact: Contact,
+    @ProtoNumber(101) val extensionList: ExtensionList? = null,
+    @ProtoNumber(102) val extensionListUrl: String? = null,
+) {
+    @Serializable
+    data class Contact(
+        @ProtoNumber(1) val website: String,
+        @ProtoNumber(2) val discord: String? = null,
+    )
+
+    @Serializable
+    data class ExtensionList(@ProtoNumber(1) val extensions: List<Extension>)
+
+    @Serializable
+    data class Extension(
+        @ProtoNumber(1) val name: String,
+        @ProtoNumber(2) val packageName: String,
+        @ProtoNumber(3) val resources: Resources,
+        @ProtoNumber(4) val extensionLib: String,
+        @ProtoNumber(5) val versionCode: Long,
+        @ProtoNumber(6) val versionName: String,
+        @ProtoNumber(7) val contentWarning: ContentWarning,
+        @ProtoNumber(8) val sources: List<Source>,
+    )
+
+    @Serializable
+    data class Resources(
+        @ProtoNumber(1) val apkUrl: String,
+        @ProtoNumber(2) val iconUrl: String,
+    )
+
+    @Serializable
+    data class Source(
+        @ProtoNumber(1) val id: Long,
+        @ProtoNumber(2) val name: String,
+        @ProtoNumber(3) val language: String,
+        @ProtoNumber(4) val homeUrl: String = "",
+        @ProtoNumber(5) val mirrorUrls: List<String> = emptyList(),
+        @ProtoNumber(6) val message: String? = null,
+    )
+
+    @Suppress("Unused")
+    enum class ContentWarning {
+        @ProtoNumber(0)
+        @JsonNames("CONTENT_WARNING_UNSPECIFIED")
+        UNSPECIFIED,
+
+        @ProtoNumber(1)
+        @JsonNames("CONTENT_WARNING_SAFE")
+        SAFE,
+
+        @ProtoNumber(2)
+        @JsonNames("CONTENT_WARNING_MIXED")
+        MIXED,
+
+        @ProtoNumber(3)
+        @JsonNames("CONTENT_WARNING_NSFW")
+        NSFW,
+    }
+}
+
+@Serializable
+private data class RepoJson(
+    @SerialName("index_v2") val indexV2: String? = null,
+)
 
 @Serializable
 private data class ExtensionJsonObject(
